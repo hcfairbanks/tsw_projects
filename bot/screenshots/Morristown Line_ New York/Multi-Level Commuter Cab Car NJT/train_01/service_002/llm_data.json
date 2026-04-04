@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "6602 Dover Yard Move",
+    "start_time": "03:59",
+    "duration": "00:05",
+    "tonnage": 635.6,
+    "car_count": 10,
+    "train_length": 252.7
+  },
+  "location": {
+    "lat": 40.883722923973636,
+    "lng": -74.5506382124445,
+    "current_service_name": "NJT-6602-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 03:59:00",
+      "location": "",
+      "time1": "",
+      "time2": "3:59:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "04:00:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated - 04:05:00",
+      "location": "",
+      "time1": "04:05:00",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

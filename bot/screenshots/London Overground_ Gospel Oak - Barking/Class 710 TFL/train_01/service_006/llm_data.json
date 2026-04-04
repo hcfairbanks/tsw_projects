@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "5J06 Woodgrange Park to Barking Riverside",
+    "start_time": "05:44",
+    "duration": "00:10",
+    "tonnage": 151,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.549031018187634,
+    "lng": 0.04546918683045709,
+    "current_service_name": "5J06"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:44:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:44:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "05:46:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Riverside Platform 2 - 05:55:00",
+      "location": "Barking Riverside Platform 2",
+      "time1": "05:55:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "level_info": {
+    "service_name": "[BL3]Bishops Lydeard - Minehead",
+    "start_time": "12:15",
+    "duration": "01:40",
+    "tonnage": 383.9,
+    "car_count": 8,
+    "train_length": 160.4,
+    "section": "West Somerset Railway Diesel Gala 2017"
+  },
+  "location": {
+    "lat": 51.05401591208265,
+    "lng": -3.193994499083685,
+    "current_service_name": "BL3"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:15:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:15:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crowcombe Heathfield Main Platform - 12:34:00",
+      "location": "Crowcombe Heathfield Main Platform",
+      "time1": "12:34:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:35:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Stogumber Platform - 12:43:00",
+      "location": "Stogumber Platform",
+      "time1": "12:43:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:44:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Willton Down Platform - 13:01:00",
+      "location": "Willton Down Platform",
+      "time1": "13:01:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:02:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Doniford Halt Platform - 13:05:00",
+      "location": "Doniford Halt Platform",
+      "time1": "13:05:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:06:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Watchet Platform - 13:11:00",
+      "location": "Watchet Platform",
+      "time1": "13:11:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:12:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Washford Platform - 13:20:00",
+      "location": "Washford Platform",
+      "time1": "13:20:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:21:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Blue Anchor Down Platform - 13:37:00",
+      "location": "Blue Anchor Down Platform",
+      "time1": "13:37:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:38:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Dunster Platform - 13:46:00",
+      "location": "Dunster Platform",
+      "time1": "13:46:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:47:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Minehead Up Platform - 13:54:00",
+      "location": "Minehead Up Platform",
+      "time1": "13:54:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:55:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "UNCOUPLE VEHICLES",
+      "details": "7 vehicles",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 20
+    }
+  ]
+}

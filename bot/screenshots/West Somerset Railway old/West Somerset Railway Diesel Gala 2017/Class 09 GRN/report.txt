@@ -1,0 +1,15 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       West Somerset Railway
+Train:       Class 09 GRN
+Started:     2026-03-22 18:23:59
+Duration:    0:16:47
+Trains:      3
+Services:    8
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    7          0:11:47
+Train 2    0          0:00:50
+Train 3    1          0:01:17

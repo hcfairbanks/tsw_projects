@@ -1,0 +1,78 @@
+number,page,click,service_id,service_name,time,duration
+1,page 0,click (1391 865),,MBTA Providence #801 (Boston - Providence),05:28:00,01:01:00
+2,page 0,click (1391 938),,MBTA Providence #803 (Boston - Providence),06:29:00,01:07:00
+3,page 0,click (1391 1011),,MBTA Franklin #741 (Boston - Readville),06:38:00,00:17:00
+4,page 0,click (1391 1084),,MBTA Stoughton #903 (Boston - Stoughton),06:55:00,00:36:00
+5,page 0,click (1391 1157),,MBTA Providence #805 (Boston - Providence),07:23:00,01:05:00
+6,page 0,click (1391 1230),,MBTA Stoughton #905 (Boston - Stoughton),07:33:00,00:36:00
+7,page 0,click (1391 1303),,MBTA Kingston #034 (Mid-Day Storage),07:34:00,00:09:00
+8,page 0,click (1391 1376),,MBTA Providence #806 (Mid-Day Storage),07:52:00,00:09:00
+9,page 1,click (1391 1011),,MBTA Worcester #506 (Boston - Depot),07:54:00,00:09:00
+10,page 1,click (1391 1084),,MBTA Greenbush #074 (Mid-Day Storage),08:14:00,00:09:00
+11,page 1,click (1391 1157),,MBTA Attleboro #842 (Mid-Day Storage),08:15:00,00:13:00
+12,page 1,click (1391 1230),,MBTA Stoughton #907 (Boston - Stoughton),08:21:00,00:36:00
+13,page 1,click (1391 1303),,MBTA Franklin #706 (Mid-Day Storage),08:25:00,00:09:00
+14,page 1,click (1391 1376),,MBTA Providence #810 (Mid-Day Storage),08:39:00,00:13:00
+15,page 2,click (1391 1011),,MBTA Providence #808 (Mid-Day Storage),08:47:00,00:11:00
+16,page 2,click (1391 1084),,MBTA Franklin #740 (Mid-Day Storage),08:47:00,00:13:00
+17,page 2,click (1391 1157),,MBTA Needham #604 (Mid-Day Storage),08:59:00,00:13:00
+18,page 2,click (1391 1230),,MBTA Worcester #588 (Mid-Day Storage),09:05:00,00:08:00
+19,page 2,click (1391 1303),,MBTA Worcester #510 (S&I),09:16:00,00:06:00
+20,page 2,click (1391 1376),,MBTA Fairmount #756 (Mid-Day Storage),09:23:00,00:08:00
+21,page 3,click (1391 1011),,MBTA Providence #807 (Boston - Providence),09:33:00,01:06:00
+22,page 3,click (1391 1084),,MBTA Franklin #705 (Boston - Readville),09:38:00,00:17:00
+23,page 3,click (1391 1157),,MBTA Stoughton #909 (Boston - Stoughton),09:43:00,00:41:00
+24,page 3,click (1391 1230),,MBTA Needham #608 (Boston - Depot),09:47:00,00:09:00
+25,page 3,click (1391 1303),,MBTA Kingston #040 (Mid-Day Storage),09:52:00,00:09:00
+26,page 3,click (1391 1376),,MBTA Worcester #590 (Mid-Day Storage),10:00:00,00:08:00
+27,page 4,click (1391 1011),,MBTA Providence #809 (Boston - Providence),10:23:00,01:10:00
+28,page 4,click (1391 1084),,MBTA Franklin #710 (Mid-Day Storage),10:50:00,00:05:00
+29,page 4,click (1391 1157),,MBTA Worcester #512 (Boston - Depot),11:13:00,00:10:00
+30,page 4,click (1391 1230),,MBTA Providence #811 (Boston - Providence),11:23:00,01:03:00
+31,page 4,click (1391 1303),,MBTA Worcester #514 (Maintenance),12:13:00,00:09:00
+32,page 4,click (1391 1376),,MBTA Franklin #709 (Boston - Readville),12:18:00,00:20:00
+33,page 5,click (1391 1011),,MBTA Stoughton #911 (Boston - Stoughton),13:18:00,00:44:00
+34,page 5,click (1391 1084),,MBTA Franklin #711 (Boston - Readville),13:33:00,00:20:00
+35,page 5,click (1391 1157),,MBTA Franklin #714 (Boston - Depot),13:36:00,00:07:00
+36,page 5,click (1391 1230),,MBTA Providence #813 (Boston - Providence),13:41:00,01:04:00
+37,page 5,click (1391 1303),,MBTA Fairmount #764 (Boston - Depot),13:45:00,00:10:00
+38,page 5,click (1391 1376),,MBTA Providence #815 (Depot - Boston),13:45:00,00:07:00
+39,page 6,click (1391 1011),,MBTA Needham #614 (Mid-Day Storage),13:49:00,00:05:00
+40,page 6,click (1391 1084),,MBTA Providence #815 (Boston - Providence),14:28:00,01:06:00
+41,page 6,click (1391 1157),,MBTA Providence #820 (Boston - Depot),14:35:00,00:11:00
+42,page 6,click (1391 1230),,MBTA Franklin #713 (Boston - Readville),14:38:00,00:20:00
+43,page 6,click (1391 1303),,MBTA Franklin #716 (Boston - Depot),14:54:00,00:05:00
+44,page 6,click (1391 1376),,MBTA Providence #817 (Boston - Providence),15:23:00,01:02:00
+45,page 7,click (1391 1011),,MBTA Stoughton #913 (Boston - Stoughton),15:33:00,00:43:00
+46,page 7,click (1391 1084),,MBTA Providence #819 (Boston - Providence),15:53:00,01:00:00
+47,page 7,click (1391 1157),,MBTA Franklin #718 (Boston - Depot),16:07:00,00:08:00
+48,page 7,click (1391 1230),,MBTA Norwood Central #743 (Boston - Readville),16:13:00,00:22:00
+49,page 7,click (1391 1303),,MBTA Stoughton #915 (Boston - Stoughton),16:18:00,00:39:00
+50,page 7,click (1391 1376),,MBTA Providence #821 (Boston - Providence),16:28:00,01:05:00
+51,page 8,click (1391 1011),,MBTA Providence #823 (Boston - Providence),16:51:00,01:05:00
+52,page 8,click (1391 1084),,MBTA Franklin #745 (Boston - Readville),17:00:00,00:22:00
+53,page 8,click (1391 1157),,MBTA Stoughton #917 (Boston - Stoughton),17:10:00,00:46:00
+54,page 8,click (1391 1230),,MBTA Providence #825 (Boston - Providence),17:38:00,01:00:00
+55,page 8,click (1391 1303),,MBTA Stoughton #919 (Boston - Stoughton),17:49:00,00:50:00
+56,page 8,click (1391 1376),,MBTA Providence #827 (Boston - Providence),18:08:00,01:00:00
+57,page 9,click (1391 1011),,MBTA Franklin #723 (Boston - Readville),18:18:00,00:20:00
+58,page 9,click (1391 1084),,MBTA Stoughton #921 (Boston - Stoughton),18:26:00,00:45:00
+59,page 9,click (1391 1157),,MBTA Providence #829 (Boston - Providence),18:48:00,01:11:00
+60,page 9,click (1391 1230),,MBTA Stoughton #923 (Boston - Stoughton),19:18:00,00:42:00
+61,page 9,click (1391 1303),,MBTA Providence #831 (Boston - Providence),19:28:00,01:07:00
+62,page 9,click (1391 1376),,MBTA Providence #830 (Overnight Storage),19:36:00,00:09:00
+63,page 10,click (1391 1011),,MBTA Franklin #746 (Mid-Day Storage),19:39:00,00:05:00
+64,page 10,click (1391 1084),,MBTA Franklin #725 (Boston - Readville),19:43:00,00:20:00
+65,page 10,click (1391 1157),,MBTA Fairmount #780 (Overnight Storage),20:05:00,00:09:00
+66,page 10,click (1391 1230),,MBTA Providence #833 (Boston - Providence),20:28:00,01:14:00
+67,page 10,click (1391 1303),,MBTA Needham #626 (Overnight Storage),20:45:00,00:09:00
+68,page 10,click (1391 1376),,MBTA Franklin #727 (Boston - Readville),20:58:00,00:21:00
+69,page 11,click (1391 1011),,MBTA Stoughton #924 (Overnight Storage),21:28:00,00:09:00
+70,page 11,click (1391 1084),,MBTA Stoughton #925 (Boston - Stoughton),21:38:00,00:39:00
+71,page 11,click (1391 1157),,MBTA Providence #835 (Boston - Providence),21:59:00,01:12:00
+72,page 11,click (1391 1230),,MBTA Needham #628 (Boston - Depot),22:36:00,00:09:00
+73,page 11,click (1391 1303),,MBTA Stoughton #927 (Boston - Stoughton),22:38:00,00:39:00
+74,page 11,click (1391 1376),,MBTA Franklin #729 (Boston - Readville),22:45:00,00:23:00
+75,page 12,click (1391 1230),,MBTA Providence #836 (Overnight Storage),23:03:00,00:08:00
+76,page 12,click (1391 1303),,MBTA Providence #838 (Overnight Storage),23:44:00,00:08:00
+77,page 12,click (1391 1376),,MBTA Franklin #730 (Overnight Storage),23:48:00,00:08:00

@@ -1,0 +1,90 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6406 Gladstone - NY Penn Station",
+    "start_time": "06:47",
+    "duration": "00:40",
+    "tonnage": 575.3,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.7466962594545,
+    "lng": -74.25993960772901,
+    "current_service_name": "NJT-6406"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:52:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 1 - 06:55:30",
+      "location": "Orange Track 1",
+      "time1": "06:55:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:56:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 1 - 06:59:30",
+      "location": "Brick Church Track 1",
+      "time1": "06:59:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:00:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 1 - 07:05:30",
+      "location": "Newark Broad Street Track 1",
+      "time1": "07:05:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:06:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 9 - 07:28:00",
+      "location": "New York Penn Track 9",
+      "time1": "07:28:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

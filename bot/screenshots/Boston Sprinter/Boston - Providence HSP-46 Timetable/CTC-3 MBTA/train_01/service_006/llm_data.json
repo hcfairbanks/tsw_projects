@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Worcester #503 (Depot - Boston)",
+    "start_time": "05:20",
+    "duration": "00:09",
+    "tonnage": 480.3,
+    "car_count": 6,
+    "train_length": 496.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.333096382275116,
+    "lng": -71.05991062260847,
+    "current_service_name": "MBTA Worcester #503 (SHSY to Boston)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:20:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:20:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 01",
+      "location": "Boston South Station Track 01",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Stoughton #908 (Stoughton - Boston)",
+    "start_time": "09:13",
+    "duration": "00:37",
+    "tonnage": 461.5,
+    "car_count": 6,
+    "train_length": 148.8,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.124632374334425,
+    "lng": -71.10423062244897,
+    "current_service_name": "MBTA Stoughton #908 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:13:00",
+      "location": "",
+      "time1": "",
+      "time2": "9:13:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:14:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Center - 09:21:40",
+      "location": "Canton Center",
+      "time1": "09:21:40",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:22:25",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Junction - 09:24:48",
+      "location": "Canton Junction",
+      "time1": "09:24:48",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:25:33",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 2 - 09:30:02",
+      "location": "Route 128 Track 2",
+      "time1": "09:30:02",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:30:47",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 2 - 09:40:39",
+      "location": "Boston Back Bay Track 2",
+      "time1": "09:40:39",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:41:24",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 09 - 09:50:07",
+      "location": "Boston South Station Track 09",
+      "time1": "09:50:07",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 12
+    }
+  ]
+}

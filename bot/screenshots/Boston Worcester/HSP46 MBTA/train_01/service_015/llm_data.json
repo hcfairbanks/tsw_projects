@@ -1,0 +1,178 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P507 Boston South Station to Worcester",
+    "start_time": "07:18",
+    "duration": "01:12",
+    "tonnage": 530.7,
+    "car_count": 7,
+    "train_length": 177.2
+  },
+  "location": {
+    "lat": 42.34980786925947,
+    "lng": -71.05634209736456,
+    "current_service_name": "P507"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:18:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:18:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:20:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 7 - 07:24:30",
+      "location": "Boston Back Bay Track 7",
+      "time1": "07:24:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:25:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lansdowne Track 1 - 07:29:30",
+      "location": "Lansdowne Track 1",
+      "time1": "07:29:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:30:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Landing Track 1 - 07:34:30",
+      "location": "Boston Landing Track 1",
+      "time1": "07:34:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:35:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Framingham Track 1 - 07:54:00",
+      "location": "Framingham Track 1",
+      "time1": "07:54:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:54:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ashland Track 1 - 08:00:30",
+      "location": "Ashland Track 1",
+      "time1": "08:00:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:01:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southborough Track 1 - 08:04:30",
+      "location": "Southborough Track 1",
+      "time1": "08:04:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:05:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Westborough Track 1 - 08:12:30",
+      "location": "Westborough Track 1",
+      "time1": "08:12:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:13:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grafton Track 1 - 08:17:30",
+      "location": "Grafton Track 1",
+      "time1": "08:17:30",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:18:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Worcester - 08:31:00",
+      "location": "Worcester",
+      "time1": "08:31:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

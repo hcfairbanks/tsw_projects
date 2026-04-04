@@ -1,0 +1,194 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #835 (Boston - Providence)",
+    "start_time": "21:59",
+    "duration": "01:11",
+    "tonnage": 454.9,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.3500696801759,
+    "lng": -71.05604132113325,
+    "current_service_name": "MBTA Providence #835 (AI To Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 21:59:00",
+      "location": "",
+      "time1": "",
+      "time2": "21:59:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:00:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 22:06:47",
+      "location": "Boston Back Bay Track 1",
+      "time1": "22:06:47",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:07:17",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 1 - 22:10:27",
+      "location": "Ruggles Track 1",
+      "time1": "22:10:27",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:10:57",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hyde Park Track 3 - 22:18:19",
+      "location": "Hyde Park Track 3",
+      "time1": "22:18:19",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:19:04",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 22:24:22",
+      "location": "Route 128 Track 1",
+      "time1": "22:24:22",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:25:07",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Junction Track 1 - 22:30:17",
+      "location": "Canton Junction Track 1",
+      "time1": "22:30:17",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:31:02",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sharon Track 1 - 22:36:21",
+      "location": "Sharon Track 1",
+      "time1": "22:36:21",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:37:06",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mansfield Track 1 - 22:45:07",
+      "location": "Mansfield Track 1",
+      "time1": "22:45:07",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:45:52",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Attleboro Track 3 - 22:53:26",
+      "location": "Attleboro Track 3",
+      "time1": "22:53:26",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "22:54:26",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Attleboro Track 1 - 23:00:52",
+      "location": "South Attleboro Track 1",
+      "time1": "23:00:52",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "23:01:52",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Providence Track 1 - 23:10:03",
+      "location": "Providence Track 1",
+      "time1": "23:10:03",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 21
+    }
+  ]
+}

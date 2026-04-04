@@ -1,0 +1,115 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Stoughton #907 (Boston - Stoughton)",
+    "start_time": "08:21",
+    "duration": "00:36",
+    "tonnage": 512.6,
+    "car_count": 6,
+    "train_length": 489.6,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.350065426277475,
+    "lng": -71.05592903433286,
+    "current_service_name": "MBTA Stoughton #907 (Outbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:21:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:21:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:22:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 08:27:52",
+      "location": "Boston Back Bay Track 1",
+      "time1": "08:27:52",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:28:22",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 08:39:34",
+      "location": "Route 128 Track 1",
+      "time1": "08:39:34",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:40:19",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Junction - 08:45:33",
+      "location": "Canton Junction",
+      "time1": "08:45:33",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:46:18",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Center - 08:48:36",
+      "location": "Canton Center",
+      "time1": "08:48:36",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:49:21",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Stoughton - 08:57:29",
+      "location": "Stoughton",
+      "time1": "08:57:29",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 11
+    }
+  ]
+}

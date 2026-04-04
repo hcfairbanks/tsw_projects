@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "MT504EQ Worcester Yard - Worcester (Part 1)",
+    "start_time": "05:27",
+    "duration": "00:03",
+    "tonnage": 440.6,
+    "car_count": 6,
+    "train_length": 150.5
+  },
+  "location": {
+    "lat": 42.26245427196528,
+    "lng": -71.78980393644507,
+    "current_service_name": "MT504EQ"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:27:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:27:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "05:28:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated - 05:31:00",
+      "location": "",
+      "time1": "05:31:00",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "level_info": {
+    "service_name": "Amtrak Northeast Regional #94 (Boston - Depot)",
+    "start_time": "22:20",
+    "duration": "00:26",
+    "tonnage": 497.8,
+    "car_count": 9,
+    "train_length": 229.2,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.35131495921097,
+    "lng": -71.0551053901498,
+    "current_service_name": "AMTK94_PORTAL_PVD"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 22:20:00",
+      "location": "",
+      "time1": "",
+      "time2": "22:20:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Amtrak Runner",
+      "location": "Amtrak Runner",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 10",
+      "location": "Southampton Street Yard Track 10",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

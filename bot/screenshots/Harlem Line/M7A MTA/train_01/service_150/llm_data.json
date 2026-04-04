@@ -1,0 +1,89 @@
+{
+  "level_info": {
+    "service_name": "Train 670 Southeast to GCT",
+    "start_time": "17:18",
+    "duration": "00:51",
+    "tonnage": 510,
+    "car_count": 8,
+    "train_length": 208
+  },
+  "location": {
+    "lat": 41.04932686519908,
+    "lng": -73.77318671497824,
+    "current_service_name": "670"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:20:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 17:23:30",
+      "location": "White Plains Track 2",
+      "time1": "17:23:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:24:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Fordham Track 4 - 17:44:00",
+      "location": "Fordham Track 4",
+      "time1": "17:44:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:44:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 17:53:00",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "17:53:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:53:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 25 - 18:10:00",
+      "location": "Grand Central Track 25",
+      "time1": "18:10:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

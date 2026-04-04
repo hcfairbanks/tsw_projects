@@ -1,0 +1,477 @@
+{
+  "provider": "claude",
+  "pages": 9,
+  "total_boxes": 75,
+  "duplicates_removed": 20,
+  "unique_count": 52,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "Leave Depot",
+      "start_time": "05:11:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 437,
+      "name": "TGV 6102 Paris Gare de Lyon",
+      "start_time": "05:16:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6136 Paris Gare de Lyon",
+      "start_time": "06:02:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 9854 Bruxelles Midi",
+      "start_time": "06:36:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Leave Depot",
+      "start_time": "06:55:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 6106 Paris Gare de Lyon",
+      "start_time": "07:00:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6801 Nice Ville",
+      "start_time": "07:39:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 9583 Frankfurt(Main)Hbf",
+      "start_time": "08:16:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6112 Paris Gare de Lyon",
+      "start_time": "09:02:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 6101 Marseille-St-Charles",
+      "start_time": "09:22:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6811 Marseille-St-Charles",
+      "start_time": "09:30:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Leave Depot",
+      "start_time": "09:40:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 5516 Nancy Ville",
+      "start_time": "09:46:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 5102 Marseille-St-Charles",
+      "start_time": "10:14:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6103 Marseille-St-Charles",
+      "start_time": "10:28:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Return to Depot",
+      "start_time": "11:10:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6077 Nice Ville",
+      "start_time": "11:50:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 5010 Marseille-St-Charles",
+      "start_time": "11:54:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6116 Paris Gare de Lyon",
+      "start_time": "12:02:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 9866 Bruxelles Midi",
+      "start_time": "12:07:00",
+      "duration": "00:35:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 5332 Marseille-St-Charles",
+      "start_time": "12:46:00",
+      "duration": "00:35:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 6175 Nice Ville",
+      "start_time": "12:52:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6109 Marseille-St-Charles",
+      "start_time": "13:37:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 5316 Marseille-St-Charles",
+      "start_time": "13:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6120 Paris Gare de Lyon",
+      "start_time": "14:00:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 9877 Marseille-St-Charles",
+      "start_time": "14:22:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6111 Marseille-St-Charles",
+      "start_time": "14:30:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 5386 Rennes",
+      "start_time": "14:33:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6122 Paris Gare de Lyon",
+      "start_time": "15:01:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 9868 Bruxelles Midi",
+      "start_time": "15:10:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6803 Marseille-St-Charles",
+      "start_time": "15:10:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 5376 Le Havre",
+      "start_time": "15:33:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6124 Paris Gare de Lyon",
+      "start_time": "15:49:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 9896 Metz Ville",
+      "start_time": "16:02:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6077 Nice Ville",
+      "start_time": "16:50:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 6128 Paris Gare de Lyon",
+      "start_time": "17:00:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 9882 Bruxelles Midi",
+      "start_time": "17:07:00",
+      "duration": "00:38:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Leave Depot",
+      "start_time": "17:40:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 5306 Marseille-St-Charles",
+      "start_time": "17:44:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 6850 Lyon Part Dieu",
+      "start_time": "17:49:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 9830 Marseille-St-Charles",
+      "start_time": "18:14:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 6117 Marseille-St-Charles",
+      "start_time": "18:29:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6132 Paris Gare de Lyon",
+      "start_time": "18:59:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "TGV 6169 Nice Ville",
+      "start_time": "19:00:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "TGV 6862 Lyon Part Dieu",
+      "start_time": "19:09:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "TGV 5537 Nice Ville",
+      "start_time": "19:10:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "TGV 6121 Nice Ville",
+      "start_time": "19:22:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "TGV 6852 Lyon Part Dieu",
+      "start_time": "20:14:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "TGV 6123 Marseille-St-Charles",
+      "start_time": "20:30:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Return to Depot",
+      "start_time": "21:10:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Return to Depot",
+      "start_time": "21:45:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Return to Depot",
+      "start_time": "22:00:00",
+      "duration": "00:03:00"
+    }
+  ]
+}

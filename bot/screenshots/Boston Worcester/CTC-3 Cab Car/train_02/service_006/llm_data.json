@@ -1,0 +1,242 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P582 Framingham to Boston South Station",
+    "start_time": "05:58",
+    "duration": "00:59",
+    "tonnage": 494.7,
+    "car_count": 7,
+    "train_length": 177.0
+  },
+  "location": {
+    "lat": 42.27493584842632,
+    "lng": -71.42857757613486,
+    "current_service_name": "P582"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:58:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:58:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "06:00:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Framingham Track 2 - 06:03:00",
+      "location": "Framingham Track 2",
+      "time1": "06:03:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:04:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Natick Track 2 - 06:08:30",
+      "location": "West Natick Track 2",
+      "time1": "06:08:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:09:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Natick Center Track 2 - 06:13:30",
+      "location": "Natick Center Track 2",
+      "time1": "06:13:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:14:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Square Track 2 - 06:18:30",
+      "location": "Wellesley Square Track 2",
+      "time1": "06:18:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:19:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Hills Track 2 - 06:22:30",
+      "location": "Wellesley Hills Track 2",
+      "time1": "06:22:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:23:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Farms Track 2 - 06:25:30",
+      "location": "Wellesley Farms Track 2",
+      "time1": "06:25:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:26:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Auburndale - 06:30:30",
+      "location": "Auburndale",
+      "time1": "06:30:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:31:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Newton - 06:33:30",
+      "location": "West Newton",
+      "time1": "06:33:30",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:34:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newtonville - 06:36:30",
+      "location": "Newtonville",
+      "time1": "06:36:30",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:37:00",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Landing Track 2 - 06:41:30",
+      "location": "Boston Landing Track 2",
+      "time1": "06:41:30",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:42:00",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lansdowne Track 2 - 06:46:30",
+      "location": "Lansdowne Track 2",
+      "time1": "06:46:30",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:47:00",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 5 - 06:51:30",
+      "location": "Boston Back Bay Track 5",
+      "time1": "06:51:30",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:52:00",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 02 - 06:58:00",
+      "location": "Boston South Station Track 02",
+      "time1": "06:58:00",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 27
+    }
+  ]
+}

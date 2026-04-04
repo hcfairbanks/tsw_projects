@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "Train 610 Southeast to GCT",
+    "start_time": "06:45",
+    "duration": "00:41",
+    "tonnage": 501.4,
+    "car_count": 8,
+    "train_length": 208.0
+  },
+  "location": {
+    "lat": 41.049326864669716,
+    "lng": -73.77318671483194,
+    "current_service_name": "610"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:47:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 06:49:30",
+      "location": "White Plains Track 2",
+      "time1": "06:49:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:50:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 1 - 07:15:00",
+      "location": "Harlem 125th Street Track 1",
+      "time1": "07:15:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:16:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 38 - 07:27:00",
+      "location": "Grand Central Track 38",
+      "time1": "07:27:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

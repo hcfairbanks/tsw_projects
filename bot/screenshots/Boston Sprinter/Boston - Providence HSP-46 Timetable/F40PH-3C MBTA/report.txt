@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Sprinter
+Train:       F40PH-3C MBTA
+Started:     2026-03-22 00:24:16
+Duration:    0:04:27
+Trains:      2
+Services:    2
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 2    2          0:04:27

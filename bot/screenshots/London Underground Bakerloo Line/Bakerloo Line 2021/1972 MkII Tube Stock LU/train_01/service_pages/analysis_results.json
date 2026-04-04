@@ -1,0 +1,5877 @@
+{
+  "provider": "claude",
+  "pages": 108,
+  "total_boxes": 913,
+  "duplicates_removed": 243,
+  "unique_count": 652,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 371,
+      "name": "201D-1 Stonebridge Park Depot - Stonebridge Park",
+      "start_time": "05:02:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 440,
+      "name": "201D-2 Stonebridge Park - Harrow & Wealdstone",
+      "start_time": "05:13:00",
+      "duration": "00:18:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "231-1 London Road - Lambeth North Shunt",
+      "start_time": "05:18:00",
+      "duration": "00:04:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "202D-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "05:19:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "232-1 London Road - Lambeth North Shunt",
+      "start_time": "05:26:00",
+      "duration": "00:04:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "221D-1 Queen's Park - Stonebridge Depot",
+      "start_time": "05:28:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "231-2 Lambeth North Shunt - Elephant & Castle",
+      "start_time": "05:29:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "222-1 Queen's Park - Harrow & Wealdstone",
+      "start_time": "05:31:00",
+      "duration": "00:28:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "245-1 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "05:35:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "201D-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "05:35:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-1 London Road - Lambeth North Shunt",
+      "start_time": "05:36:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "232-2 Lambeth North Shunt - Elephant & Castle",
+      "start_time": "05:37:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "231-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "05:44:00",
+      "duration": "00:58:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "234-1 London Road - Lambeth North Shunt",
+      "start_time": "05:45:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-2 Queen's Park to Elephant & Castle",
+      "start_time": "05:46:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-2 Lambeth North Shunt - Elephant & Castle",
+      "start_time": "05:47:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-3 Stonebridge Park - Elephant & Castle",
+      "start_time": "05:48:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "224D-1 Queen's Park - Harrow & Wealdstone",
+      "start_time": "05:51:00",
+      "duration": "00:28:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-3 Elephant & Castle to Queen's Park",
+      "start_time": "05:54:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "234-2 Lambeth North Shunt - Elephant & Castle",
+      "start_time": "05:56:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "203-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "05:57:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "06:01:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "204-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:02:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "222-2 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "06:04:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "234-3 Elephant & Castle - Stonebridge Park",
+      "start_time": "06:09:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-2 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "06:17:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "205-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:18:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "235-1 London Road Depot to Queen's Park",
+      "start_time": "06:20:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "225-2 Queen's Park to Elephant & Castle",
+      "start_time": "06:21:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "206D-1 Stonebridge Park - Kilburn High Road",
+      "start_time": "06:22:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "224D-2 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "06:23:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "226D-1 Queen's Park South Shed - Queen's Park North Sh",
+      "start_time": "06:24:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-4 Elephant & Castle to Queen's Park",
+      "start_time": "06:24:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "236-1 London Road Depot - Harrow & Wealdstone",
+      "start_time": "06:28:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "207-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:28:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "232-4 Queen's Park to Elephant & Castle",
+      "start_time": "06:30:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "201D-4 Elephant & Castle to Queen's Park",
+      "start_time": "06:33:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "210-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:34:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-1 London Road Depot to Queen's Park",
+      "start_time": "06:35:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "06:37:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "226D-2 Queen's Park to Elephant & Castle",
+      "start_time": "06:37:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "227-1 Queen's Park South Shed - Queen's Park North Shed",
+      "start_time": "06:40:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "221D-4 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "06:40:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "211-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:41:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "240 London Road Depot to Queen's Park",
+      "start_time": "06:43:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "203-2 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "06:47:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-2 Kilburn High Road - Stonebridge Park",
+      "start_time": "06:47:00",
+      "duration": "00:11:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "241-1 London Road Depot to Queen's Park",
+      "start_time": "06:49:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "231-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "06:51:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "204-2 Elephant & Castle to Queen's Park",
+      "start_time": "06:53:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "227-2 Queen's Park to Elephant & Castle",
+      "start_time": "06:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-1 London Road Depot - Harrow & Wealdstone",
+      "start_time": "06:55:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 53,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "212-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "06:56:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 54,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "225-4 Elephant & Castle to Queen's Park",
+      "start_time": "06:58:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 55,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "235-2 Queen's Park to Elephant & Castle",
+      "start_time": "06:59:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 56,
+      "page": 8,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "222-3 Elephant & Castle - Stonebridge Park",
+      "start_time": "07:01:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 57,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "233-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:05:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 58,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "223-5 Queen's Park to Elephant & Castle",
+      "start_time": "07:05:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 59,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "232-5 Elephant & Castle to Queen's Park",
+      "start_time": "07:05:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 60,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "243-1 London Road Depot to Queen's Park",
+      "start_time": "07:07:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 61,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "206D-3 Stonebridge Park - Elephant & Castle",
+      "start_time": "07:07:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 62,
+      "page": 9,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-5 Queen's Park to Elephant & Castle",
+      "start_time": "07:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 63,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "205-2 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "07:10:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 64,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "226D-3 Elephant & Castle to Queen's Park",
+      "start_time": "07:13:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 65,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "237D-2 Queen's Park to Elephant & Castle",
+      "start_time": "07:16:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 66,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "207-2 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "07:17:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 67,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "234-4 Stonebridge Park - Elephant & Castle",
+      "start_time": "07:18:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 68,
+      "page": 10,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 69,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "224D-3 Elephant & Castle to Queen's Park",
+      "start_time": "07:20:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 70,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-2 Queen's Park to Elephant & Castle",
+      "start_time": "07:22:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 71,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "210-2 Elephant & Castle to Queen's Park",
+      "start_time": "07:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 72,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-2 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:25:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 73,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "241-2 Queen's Park to Elephant & Castle",
+      "start_time": "07:25:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 74,
+      "page": 11,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "227-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "07:26:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 75,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "211-2 Elephant & Castle to Queen's Park",
+      "start_time": "07:29:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 76,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "204-3 Queen's Park to Elephant & Castle",
+      "start_time": "07:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 77,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "235-3 Elephant & Castle - Stonebridge Park",
+      "start_time": "07:32:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 78,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "245-4 Elephant & Castle to Queen's Park",
+      "start_time": "07:35:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 79,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "07:36:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 80,
+      "page": 12,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "225-5 Queen's Park to Elephant & Castle",
+      "start_time": "07:36:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 81,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "223-6 Elephant & Castle to Queen's Park",
+      "start_time": "07:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 82,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-5 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:38:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 83,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "232-6 Queen's Park to Elephant & Castle",
+      "start_time": "07:39:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 84,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "201D-6 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "07:41:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 85,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "212-2 Elephant & Castle - Stonebridge Park",
+      "start_time": "07:44:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 86,
+      "page": 13,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "243-2 Queen's Park to Elephant & Castle",
+      "start_time": "07:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 87,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "231-5 Elephant & Castle to Queen's Park",
+      "start_time": "07:46:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 88,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "203-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:49:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 89,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "237D-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "07:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 90,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-4 Queen's Park to Elephant & Castle",
+      "start_time": "07:50:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 91,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "222-4 Stonebridge Park - Elephant & Castle",
+      "start_time": "07:51:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 92,
+      "page": 14,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "206D-4 Elephant & Castle to Queen's Park",
+      "start_time": "07:52:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 93,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-2 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "07:55:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 94,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "240-3 Elephant & Castle to Queen's Park",
+      "start_time": "07:55:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 95,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "224D-4 Queen's Park to Elephant & Castle",
+      "start_time": "07:55:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 96,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "241-3 Elephant & Castle - Stonebridge Park",
+      "start_time": "07:58:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 97,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "210-3 Queen's Park to Elephant & Castle",
+      "start_time": "07:58:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 98,
+      "page": 15,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "233-5 Elephant & Castle to Queen's Park",
+      "start_time": "08:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 99,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "204-4 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "08:03:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 100,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "211-3 Queen's Park to Elephant & Castle",
+      "start_time": "08:03:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 101,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-5 Elephant & Castle to Queen's Park",
+      "start_time": "08:05:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 102,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "214-1 Stonebridge Park - Elephant & Castle",
+      "start_time": "08:06:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 103,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "205-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:08:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 104,
+      "page": 16,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "225-6 Elephant & Castle to Queen's Park",
+      "start_time": "08:08:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 105,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-5 Queen's Park to Elephant & Castle",
+      "start_time": "08:09:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 106,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "232-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "08:11:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 107,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "202D-4 Elephant & Castle to Queen's Park",
+      "start_time": "08:14:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 108,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "223-7 Queen's Park to Elephant & Castle",
+      "start_time": "08:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 109,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "243-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "08:17:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 110,
+      "page": 17,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "207-3 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 111,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "236-3 Elephant & Castle to Queen's Park",
+      "start_time": "08:19:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 112,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "231-6 Queen's Park to Elephant & Castle",
+      "start_time": "08:20:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 113,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "226D-5 Elephant & Castle to Queen's Park",
+      "start_time": "08:22:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 114,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "235-4 Stonebridge Park - Elephant & Castle",
+      "start_time": "08:22:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 115,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-2 Elephant & Castle - Stonebridge Park",
+      "start_time": "08:25:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 116,
+      "page": 18,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "227-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:25:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 117,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "227-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:25:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 118,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "206D-5 Queen's Park to Elephant & Castle",
+      "start_time": "08:25:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 119,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "224D-5 Elephant & Castle to Queen's Park",
+      "start_time": "08:28:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 120,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "240-4 Queen's Park to Elephant & Castle",
+      "start_time": "08:28:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 121,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "210-4 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "08:30:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 122,
+      "page": 19,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-6 Elephant & Castle to Queen's Park",
+      "start_time": "08:33:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 123,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "211-4 Elephant & Castle to Queen's Park",
+      "start_time": "08:36:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 124,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-6 Queen's Park to Elephant & Castle",
+      "start_time": "08:36:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 125,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "201D-7 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:38:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 126,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "212-3 Stonebridge Park - Elephant & Castle",
+      "start_time": "08:39:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 127,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "222-5 Elephant & Castle - Stonebridge Park",
+      "start_time": "08:39:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 128,
+      "page": 20,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "234-6 Queen's Park to Elephant & Castle",
+      "start_time": "08:39:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 129,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "245-6 Elephant & Castle to Queen's Park",
+      "start_time": "08:41:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 130,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "203-4 Elephant & Castle - Stonebridge Park",
+      "start_time": "08:44:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 131,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "225-7 Queen's Park to Elephant & Castle",
+      "start_time": "08:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 132,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-8 Elephant & Castle to Queen's Park",
+      "start_time": "08:47:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 133,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "237D-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "08:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 134,
+      "page": 21,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "242D-3 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "08:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 135,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "202D-5 Queen's Park to Elephant & Castle",
+      "start_time": "08:50:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 136,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "241-4 Stonebridge Park - Elephant & Castle",
+      "start_time": "08:52:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 137,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "231-7 Elephant & Castle to Queen's Park",
+      "start_time": "08:52:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 138,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-4 Queen's Park to Elephant & Castle",
+      "start_time": "08:55:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 139,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "214-2 Elephant & Castle - Stonebridge Park",
+      "start_time": "08:55:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 140,
+      "page": 22,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "206D-6 Elephant & Castle to Queen's Park",
+      "start_time": "08:58:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 141,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "226D-6 Queen's Park to Elephant & Castle",
+      "start_time": "08:58:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 142,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-5 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "09:00:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 143,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "205-4 Elephant & Castle to Queen's Park",
+      "start_time": "09:03:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 144,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "224D-6 Queen's Park to Elephant & Castle",
+      "start_time": "09:03:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 145,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "204-5 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "09:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 146,
+      "page": 23,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "232-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "09:04:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 147,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "235-5 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:05:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 148,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "221D-7 Queen's Park to Elephant & Castle",
+      "start_time": "09:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 149,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-7 Elephant & Castle to Queen's Park",
+      "start_time": "09:08:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 150,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:11:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 151,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "207-4 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "09:14:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 152,
+      "page": 24,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "211-5 Queen's Park to Elephant & Castle",
+      "start_time": "09:14:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 153,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "225-8 Elephant & Castle to Queen's Park",
+      "start_time": "09:17:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 154,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "243-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "09:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 155,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "227-5 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:19:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 156,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "245-7 Queen's Park to Elephant & Castle",
+      "start_time": "09:21:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 157,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-3 Stonebridge Park - Elephant & Castle",
+      "start_time": "09:21:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 158,
+      "page": 25,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-6 Elephant & Castle to Queen's Park",
+      "start_time": "09:22:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 159,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-9 Queen's Park to Elephant & Castle",
+      "start_time": "09:24:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 160,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "212-4 Elephant & Castle to Queen's Park",
+      "start_time": "09:25:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 161,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "236-5 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:27:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 162,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "231-8 Queen's Park to Elephant & Castle",
+      "start_time": "09:30:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 163,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-7 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "09:31:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 164,
+      "page": 26,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-8 Elephant & Castle to Queen's Park",
+      "start_time": "09:32:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 165,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "210-5 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "09:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 166,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "224-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:35:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 167,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "222-6 Stonebridge Park - Elephant & Castle",
+      "start_time": "09:35:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 168,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "206D-7 Queen's Park to Elephant & Castle",
+      "start_time": "09:36:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 169,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "241-5 Elephant & Castle to Queen's Park",
+      "start_time": "09:38:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 170,
+      "page": 27,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "205-5 Queen's Park to Waterloo",
+      "start_time": "09:39:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 171,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "221D-8 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:41:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 172,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "237D-5 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "09:44:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 173,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-8 Queen's Park to Elephant & Castle",
+      "start_time": "09:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 174,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "211-6 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:47:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 175,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "242D-4 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "09:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 176,
+      "page": 28,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "214-3 Stonebridge Park - Elephant & Castle",
+      "start_time": "09:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 177,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "232-9 Elephant & Castle to Queen's Park",
+      "start_time": "09:50:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 178,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-9 Queen's Park to Elephant & Castle",
+      "start_time": "09:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 179,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "245-8 Elephant & Castle to Queen's Park",
+      "start_time": "09:53:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 180,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "09:57:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 181,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "204-6 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "10:00:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 182,
+      "page": 29,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-7 Queen's Park to Elephant & Castle",
+      "start_time": "10:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 183,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "240-6 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "10:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 184,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "231-9 Elephant & Castle - Stonebridge Park",
+      "start_time": "10:04:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 185,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "212-5 Queen's Park to Elephant & Castle",
+      "start_time": "10:05:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 186,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "10:05:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 187,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-4 Elephant & Castle to Queen's Park",
+      "start_time": "10:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 188,
+      "page": 30,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "206D-8 Elephant & Castle - Stonebridge Park",
+      "start_time": "10:12:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 189,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "201D-9 Queen's Park to Elephant & Castle",
+      "start_time": "10:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 190,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "243-5 Elephant & Castle to Queen's Park",
+      "start_time": "10:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 191,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "207-5 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "10:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 192,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "233-9 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "10:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 193,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "236-6 Stonebridge Park - Elephant & Castle",
+      "start_time": "10:20:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 194,
+      "page": 31,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "241-6 Queen's Park to Elephant & Castle",
+      "start_time": "10:22:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 195,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "222-7 Elephant & Castle to Queen's Park",
+      "start_time": "10:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 196,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "10:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 197,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "232-10 Queen's Park to Elephant & Castle",
+      "start_time": "10:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 198,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "210-6 Elephant & Castle to Queen's Park",
+      "start_time": "10:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 199,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "221D-9 Stonebridge Park - Elephant & Castle",
+      "start_time": "10:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 200,
+      "page": 32,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "226D-8 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "10:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 201,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "202D-8 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "10:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 202,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-9 Queen's Park to Elephant & Castle",
+      "start_time": "10:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 203,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "214-4 Elephant & Castle to Queen's Park",
+      "start_time": "10:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 204,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "212-6 Elephant & Castle - Stonebridge Park",
+      "start_time": "10:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 205,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "242D-5 Elephant & Castle to Queen's Park",
+      "start_time": "10:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 206,
+      "page": 33,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-5 Queen's Park to Elephant & Castle",
+      "start_time": "10:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 207,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "201D-10 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "10:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 208,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "237D-6 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "10:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 209,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "223-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "10:51:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 210,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "243-6 Queen's Park to Elephant & Castle",
+      "start_time": "10:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 211,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "234-9 Elephant & Castle to Queen's Park",
+      "start_time": "10:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 212,
+      "page": 34,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "241-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "10:57:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 213,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "745-1 Stonebridge Park Depot - London Road Depot",
+      "start_time": "11:00:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 214,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-7 Elephant & Castle to Queen's Park",
+      "start_time": "11:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 215,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "222-8 Queen's Park to Elephant & Castle",
+      "start_time": "11:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 216,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "204-7 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "11:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 217,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "11:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 218,
+      "page": 35,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "2060-9 Stonebridge Park - Elephant & Castle",
+      "start_time": "11:06:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 219,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "210-7 Queen's Park to Elephant & Castle",
+      "start_time": "11:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 220,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "236-7 Elephant & Castle to Queen's Park",
+      "start_time": "11:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 221,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "245-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "11:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 222,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "207-6 Elephant & Castle to Queen's Park",
+      "start_time": "11:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 223,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "214-5 Queen's Park to Elephant & Castle",
+      "start_time": "11:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 224,
+      "page": 36,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "225-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "11:19:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 225,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-10 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "11:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 226,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "213-6 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "11:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 227,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "242D-6 Queen's Park to Elephant & Castle",
+      "start_time": "11:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 228,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "221D-10 Elephant & Castle to Queen's Park",
+      "start_time": "11:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 229,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "243-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "11:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 230,
+      "page": 37,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "234-10 Queen's Park to Elephant & Castle",
+      "start_time": "11:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 231,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "226D-9 Elephant & Castle to Queen's Park",
+      "start_time": "11:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 232,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "212-7 Stonebridge Park - Elephant & Castle",
+      "start_time": "11:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 233,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "2020-9 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "11:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 234,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "222-9 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "11:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 235,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-8 Queen's Park to Elephant & Castle",
+      "start_time": "11:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 236,
+      "page": 38,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "223-12 Elephant & Castle to Queen's Park",
+      "start_time": "11:39:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 237,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-12 Elephant & Castle to Queen's Park",
+      "start_time": "11:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 238,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "210-8 Elephant & Castle - Stonebridge Park",
+      "start_time": "11:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 239,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "237D-7 Elephant & Castle to Queen's Park",
+      "start_time": "11:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 240,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-8 Queen's Park to Elephant & Castle",
+      "start_time": "11:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 241,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "201D-11 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "11:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 242,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "241-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "11:49:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 243,
+      "page": 39,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "214-8 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "11:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 244,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-7 Queen's Park to Elephant & Castle",
+      "start_time": "11:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 245,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-10 Elephant & Castle to Queen's Park",
+      "start_time": "11:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 246,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "242D-7 Elephant & Castle - Stonebridge Park",
+      "start_time": "11:57:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 247,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "204-8 Elephant & Castle to Queen's Park",
+      "start_time": "12:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 248,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-11 Queen's Park to Elephant & Castle",
+      "start_time": "12:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 249,
+      "page": 40,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "245-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "12:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 250,
+      "page": 41,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "232-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "12:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 251,
+      "page": 41,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "234-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "12:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 252,
+      "page": 41,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "225-12 Elephant & Castle to Queen's Park",
+      "start_time": "12:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 253,
+      "page": 41,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-10 Queen's Park to Elephant & Castle",
+      "start_time": "12:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 254,
+      "page": 41,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-9 Elephant & Castle - Stonebridge Park",
+      "start_time": "12:12:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 255,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-13 Queen's Park to Elephant & Castle",
+      "start_time": "12:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 256,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-11 Elephant & Castle to Queen's Park",
+      "start_time": "12:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 257,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "243-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "12:19:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 258,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "213-7 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "12:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 259,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "236-9 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "12:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 260,
+      "page": 42,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "212-8 Elephant & Castle to Queen's Park",
+      "start_time": "12:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 261,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-8 Queen's Park to Elephant & Castle",
+      "start_time": "12:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 262,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-8 Elephant & Castle - Stonebridge Park",
+      "start_time": "12:27:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 263,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "202D-10 Elephant & Castle to Queen's Park",
+      "start_time": "12:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 264,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "206D-11 Queen's Park to Elephant & Castle",
+      "start_time": "12:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 265,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "210-9 Stonebridge Park - Elephant & Castle",
+      "start_time": "12:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 266,
+      "page": 43,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "222-10 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "12:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 267,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "221D-12 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "12:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 268,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "204-9 Queen's Park to Elephant & Castle",
+      "start_time": "12:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 269,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "241-9 Elephant & Castle to Queen's Park",
+      "start_time": "12:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 270,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "745-2 London Road Depot - Stonebridge Park Depot",
+      "start_time": "12:42:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 271,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-11 Elephant & Castle - Stonebridge Park",
+      "start_time": "12:42:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 272,
+      "page": 44,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-12 Elephant & Castle to Queen's Park",
+      "start_time": "12:45:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 273,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "225-13 Queen's Park to Elephant & Castle",
+      "start_time": "12:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 274,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "214-7 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "12:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 275,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "223-14 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "12:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 276,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "242D-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "12:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 277,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "233-12 Queen's Park to Elephant & Castle",
+      "start_time": "12:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 278,
+      "page": 45,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "245-12 Elephant & Castle to Queen's Park",
+      "start_time": "12:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 279,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-9 Elephant & Castle - Stonebridge Park",
+      "start_time": "12:57:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 280,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "232-13 Elephant & Castle to Queen's Park",
+      "start_time": "13:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 281,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "212-9 Queen's Park to Elephant & Castle",
+      "start_time": "13:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 282,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "13:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 283,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "206D-12 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "13:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 284,
+      "page": 46,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-10 Stonebridge Park - Elephant & Castle",
+      "start_time": "13:06:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 285,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "243-9 Elephant & Castle to Queen's Park",
+      "start_time": "13:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 286,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "2020-11 Queen's Park to Elephant & Castle",
+      "start_time": "13:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 287,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "204-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "13:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 288,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "241-10 Queen's Park to Elephant & Castle",
+      "start_time": "13:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 289,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-8 Elephant & Castle to Queen's Park",
+      "start_time": "13:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 290,
+      "page": 47,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "236-10 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "13:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 291,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "225-14 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "13:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 292,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-9 Stonebridge Park - Elephant & Castle",
+      "start_time": "13:20:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 293,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "2010-13 Queen's Park to Elephant & Castle",
+      "start_time": "13:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 294,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "210-10 Elephant & Castle to Queen's Park",
+      "start_time": "13:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 295,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "233-13 Elephant & Castle - Stonebridge Park",
+      "start_time": "13:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 296,
+      "page": 48,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "245-13 Queen's Park to Elephant & Castle",
+      "start_time": "13:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 297,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "222-11 Elephant & Castle to Queen's Park",
+      "start_time": "13:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 298,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "226D-12 Stonebridge Park - Elephant & Castle",
+      "start_time": "13:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 299,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-13 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "13:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 300,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "212-10 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "13:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 301,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-14 Queen's Park to Elephant & Castle",
+      "start_time": "13:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 302,
+      "page": 49,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "242D-9 Elephant & Castle to Queen's Park",
+      "start_time": "13:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 303,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "202D-12 Elephant & Castle - Stonebridge Park",
+      "start_time": "13:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 304,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "214-8 Elephant & Castle to Queen's Park",
+      "start_time": "13:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 305,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "243-10 Queen's Park to Elephant & Castle",
+      "start_time": "13:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 306,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-15 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "13:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 307,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "241-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "13:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 308,
+      "page": 50,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "237D-10 Stonebridge Park - Elephant & Castle",
+      "start_time": "13:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 309,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "213-9 Queen's Park to Elephant & Castle",
+      "start_time": "13:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 310,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-11 Elephant & Castle to Queen's Park",
+      "start_time": "13:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 311,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "201D-14 Elephant & Castle - Stonebridge Park",
+      "start_time": "13:57:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 312,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "210-11 Queen's Park to Elephant & Castle",
+      "start_time": "14:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 313,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "234-13 Elephant & Castle to Queen's Park",
+      "start_time": "14:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 314,
+      "page": 51,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "204-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "14:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 315,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "206D-13 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "14:04:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 316,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-14 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "14:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 317,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "207-10 Elephant & Castle to Queen's Park",
+      "start_time": "14:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 318,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "222-12 Queen's Park to Elephant & Castle",
+      "start_time": "14:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 319,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-15 Elephant & Castle - Stonebridge Park",
+      "start_time": "14:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 320,
+      "page": 52,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "242D-10 Queen's Park to Elephant & Castle",
+      "start_time": "14:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 321,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "236-11 Elephant & Castle to Queen's Park",
+      "start_time": "14:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 322,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-15 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "14:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 323,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-14 Stonebridge Park - Elephant & Castle",
+      "start_time": "14:19:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 324,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "243-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "14:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 325,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-13 Elephant & Castle to Queen's Park",
+      "start_time": "14:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 326,
+      "page": 53,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "214-9 Queen's Park to Elephant & Castle",
+      "start_time": "14:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 327,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "213-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "14:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 328,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-12 Queen's Park to Elephant & Castle",
+      "start_time": "14:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 329,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-14 Elephant & Castle to Queen's Park",
+      "start_time": "14:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 330,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "212-11 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "14:34:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 331,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "202D-13 Stonebridge Park - Elephant & Castle",
+      "start_time": "14:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 332,
+      "page": 54,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "210-12 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "14:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 333,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-11 Elephant & Castle to Queen's Park",
+      "start_time": "14:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 334,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "234-14 Queen's Park to Elephant & Castle",
+      "start_time": "14:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 335,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "222-13 Elephant & Castle - Stonebridge Park",
+      "start_time": "14:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 336,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-16 Elephant & Castle to Queen's Park",
+      "start_time": "14:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 337,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "207-11 Queen's Park to Elephant & Castle",
+      "start_time": "14:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 338,
+      "page": 55,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-15 Stonebridge Park - Elephant & Castle",
+      "start_time": "14:49:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 339,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "241-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "14:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 340,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "14:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 341,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "204-12 Elephant & Castle to Queen's Park",
+      "start_time": "14:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 342,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-12 Queen's Park to Elephant & Castle",
+      "start_time": "14:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 343,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "214-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "14:57:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 344,
+      "page": 56,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "206D-14 Elephant & Castle to Queen's Park",
+      "start_time": "15:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 345,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "226D-14 Queen's Park to Elephant & Castle",
+      "start_time": "15:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 346,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "232-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "15:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 347,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "245-15 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "15:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 348,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "240-13 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "15:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 349,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "233-15 Elephant & Castle to Queen's Park",
+      "start_time": "15:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 350,
+      "page": 57,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-15 Queen's Park to Elephant & Castle",
+      "start_time": "15:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 351,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 371,
+      "name": "248-16 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "15:04:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 352,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "234-15 Elephant & Castle - Stonebridge Park",
+      "start_time": "15:12:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 353,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "237D-12 Queen's Park to Elephant & Castle",
+      "start_time": "15:15:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 354,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "225-16 Elephant & Castle to Queen's Park",
+      "start_time": "15:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 355,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "243-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "15:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 356,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "15:19:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 357,
+      "page": 58,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "207-12 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "15:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 358,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "202D-14 Elephant & Castle to Queen's Park",
+      "start_time": "15:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 359,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "223-17 Queen's Park to Elephant & Castle",
+      "start_time": "15:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 360,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-13 Elephant & Castle - Stonebridge Park",
+      "start_time": "15:27:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 361,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "212-12 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "15:30:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 362,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "204-13 Queen's Park to Elephant & Castle",
+      "start_time": "15:30:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 363,
+      "page": 59,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "210-13 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "15:33:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 364,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "222-14 Stonebridge Park - Elephant & Castle",
+      "start_time": "15:34:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 365,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "226D-15 Elephant & Castle to Queen's Park",
+      "start_time": "15:34:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 366,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "201D-16 Elephant & Castle to Queen's Park",
+      "start_time": "15:37:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 367,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "206D-15 Queen's Park to Elephant & Castle",
+      "start_time": "15:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 368,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "15:41:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 369,
+      "page": 60,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "241-13 Elephant & Castle to Queen's Park",
+      "start_time": "15:44:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 370,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-16 Queen's Park to Elephant & Castle",
+      "start_time": "15:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 371,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "237D-13 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "15:48:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 372,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "214-11 Stonebridge Park - Elephant & Castle",
+      "start_time": "15:48:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 373,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "242D-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "15:48:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 374,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "203-5 Stonebridge Park - Elephant & Castle",
+      "start_time": "15:49:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 375,
+      "page": 61,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "205-6 London Road Depot to Queen's Park",
+      "start_time": "15:50:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 376,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "205-6 London Road Depot to Queen's Park",
+      "start_time": "15:50:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 377,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-17 Queen's Park to Elephant & Castle",
+      "start_time": "15:52:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 378,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "232-17 Elephant & Castle - Stonebridge Park",
+      "start_time": "15:54:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 379,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-18 Elephant & Castle to Queen's Park",
+      "start_time": "15:58:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 380,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "2020-15 Queen's Park to Elephant & Castle",
+      "start_time": "15:59:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 381,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "245-16 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:02:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 382,
+      "page": 62,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "294-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:03:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 383,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "234-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:03:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 384,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-14 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "16:03:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 385,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "235-6 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 386,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "204-14 Elephant & Castle to Queen's Park",
+      "start_time": "16:05:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 387,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "226D-16 Queen's Park to Elephant & Castle",
+      "start_time": "16:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 388,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-12 Elephant & Castle to Queen's Park",
+      "start_time": "16:09:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 389,
+      "page": 63,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "202D-10 Elephant & Castle - Stonebridge Park",
+      "start_time": "16:10:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 390,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "206D-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "16:12:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 391,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "201D-17 Queen's Park to Elephant & Castle",
+      "start_time": "16:13:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 392,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "243-13 Elephant & Castle to Queen's Park",
+      "start_time": "16:16:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 393,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "236-14 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:17:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 394,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "227-6 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:18:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 395,
+      "page": 64,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "207-13 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "16:18:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 396,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "233-17 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 397,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "222-15 Elephant & Castle to Queen's Park",
+      "start_time": "16:21:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 398,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "241-14 Queen's Park to Elephant & Castle",
+      "start_time": "16:21:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 399,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "205-7 Queen's Park to Elephant & Castle",
+      "start_time": "16:24:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 400,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "225-18 Elephant & Castle to Queen's Park",
+      "start_time": "16:24:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 401,
+      "page": 65,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "210-14 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:27:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 402,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "202D-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "16:30:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 403,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "221D-17 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:32:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 404,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "214-12 Elephant & Castle to Queen's Park",
+      "start_time": "16:33:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 405,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "212-13 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "16:33:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 406,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "211-7 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:34:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 407,
+      "page": 66,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "223-19 Queen's Park to Elephant & Castle",
+      "start_time": "16:35:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 408,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "203-6 Elephant & Castle to Queen's Park",
+      "start_time": "16:36:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 409,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "204-13 Queen's Park to Elephant & Castle",
+      "start_time": "16:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 410,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "226D-17 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:39:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 411,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "242D-13 Elephant & Castle - Stonebridge Park",
+      "start_time": "16:42:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 412,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-13 Queen's Park to Elephant & Castle",
+      "start_time": "16:43:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 413,
+      "page": 67,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-18 Elephant & Castle to Queen's Park",
+      "start_time": "16:44:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 414,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "234-17 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:47:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 415,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "232-18 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:48:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 416,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "237D-14 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "16:49:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 417,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "224D-8 Stonebridge Park - Elephant & Castle",
+      "start_time": "16:49:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 418,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "235-7 Elephant & Castle to Queen's Park",
+      "start_time": "16:50:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 419,
+      "page": 68,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "243-14 Queen's Park to Elephant & Castle",
+      "start_time": "16:52:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 420,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "241-15 Elephant & Castle to Queen's Park",
+      "start_time": "16:53:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 421,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "205-8 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "16:56:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 422,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "222-16 Queen's Park to Elephant & Castle",
+      "start_time": "16:58:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 423,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "240-15 Elephant & Castle to Queen's Park",
+      "start_time": "16:59:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 424,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "236-15 Elephant & Castle - Stonebridge Park",
+      "start_time": "17:02:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 425,
+      "page": 69,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "225-19 Queen's Park to Elephant & Castle",
+      "start_time": "17:03:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 426,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "227-7 Elephant & Castle to Queen's Park",
+      "start_time": "17:04:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 427,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-17 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:05:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 428,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-17 Stonebridge Park - Elephant & Castle",
+      "start_time": "17:05:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 429,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "231-10 Stonebridge Park - Elephant & Castle",
+      "start_time": "17:06:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 430,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "223-20 Elephant & Castle to Queen's Park",
+      "start_time": "17:07:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 431,
+      "page": 70,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "214-13 Queen's Park to Elephant & Castle",
+      "start_time": "17:09:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 432,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "204-16 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:10:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 433,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-14 Elephant & Castle to Queen's Park",
+      "start_time": "17:13:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 434,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "203-7 Queen's Park to Elephant & Castle",
+      "start_time": "17:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 435,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "213-14 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:16:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 436,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "233-18 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:18:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 437,
+      "page": 71,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-18 Elephant & Castle - Stonebridge Park",
+      "start_time": "17:19:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 438,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "201D-19 Queen's Park to Elephant & Castle",
+      "start_time": "17:20:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 439,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "211-8 Elephant & Castle to Queen's Park",
+      "start_time": "17:22:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 440,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "202D-17 Stonebridge Park - Elephant & Castle",
+      "start_time": "17:22:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 441,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "243-15 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:24:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 442,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "210-15 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:25:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 443,
+      "page": 72,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "235-8 Queen's Park to Elephant & Castle",
+      "start_time": "17:25:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 444,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "212-14 Elephant & Castle to Queen's Park",
+      "start_time": "17:27:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 445,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "222-17 Elephant & Castle - Stonebridge Park",
+      "start_time": "17:30:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 446,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "241-16 Queen's Park to Elephant & Castle",
+      "start_time": "17:30:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 447,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "232-19 Elephant & Castle to Queen's Park",
+      "start_time": "17:33:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 448,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "225-20 Elephant & Castle to Queen's Park",
+      "start_time": "17:36:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 449,
+      "page": 73,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-16 Queen's Park to Elephant & Castle",
+      "start_time": "17:37:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 450,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "242D-14 Stonebridge Park - Elephant & Castle",
+      "start_time": "17:37:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 451,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "226D-18 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:38:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 452,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "224D-9 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:39:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 453,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "227-8 Queen's Park to Elephant & Castle",
+      "start_time": "17:40:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 454,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "214-14 Elephant & Castle to Queen's Park",
+      "start_time": "17:42:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 455,
+      "page": 74,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "237D-15 Elephant & Castle - Stonebridge Park",
+      "start_time": "17:44:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 456,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "223-21 Queen's Park to Elephant & Castle",
+      "start_time": "17:46:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 457,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "203-8 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:47:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 458,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-18 Elephant & Castle to Queen's Park",
+      "start_time": "17:49:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 459,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-18 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:49:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 460,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "201D-20 Elephant & Castle to Queen's Park",
+      "start_time": "17:52:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 461,
+      "page": 75,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "236-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "17:52:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 462,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "231-11 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "17:55:00",
+      "duration": "00:58:00"
+    },
+    {
+      "global_index": 463,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-15 Queen's Park to Elephant & Castle",
+      "start_time": "17:55:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 464,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "205-9 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "17:56:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 465,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "211-9 Queen's Park to Elephant & Castle",
+      "start_time": "17:57:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 466,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "235-9 Elephant & Castle to Queen's Park",
+      "start_time": "17:57:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 467,
+      "page": 76,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "245-18 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:00:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 468,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "212-15 Queen's Park to Elephant & Castle",
+      "start_time": "18:03:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 469,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "241-17 Elephant & Castle to Queen's Park",
+      "start_time": "18:03:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 470,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "2020-18 Elephant & Castle to Queen's Park",
+      "start_time": "18:06:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 471,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "204-17 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:07:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 472,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-20 Queen's Park to Elephant & Castle",
+      "start_time": "18:09:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 473,
+      "page": 77,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-17 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "18:09:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 474,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "227-9 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 475,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-21 Queen's Park to Elephant & Castle",
+      "start_time": "18:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 476,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-19 Elephant & Castle to Queen's Park",
+      "start_time": "18:15:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 477,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "214-15 Queen's Park to Elephant & Castle",
+      "start_time": "18:18:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 478,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "213-15 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:18:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 479,
+      "page": 78,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "223-22 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "18:18:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 480,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "221D-19 Stonebridge Park - Elephant & Castle",
+      "start_time": "18:20:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 481,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "210-16 Elephant & Castle to Queen's Park",
+      "start_time": "18:21:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 482,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-19 Queen's Park to Elephant & Castle",
+      "start_time": "18:24:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 483,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "242D-15 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:24:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 484,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "243-16 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:25:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 485,
+      "page": 79,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-21 Queen's Park to Elephant & Castle",
+      "start_time": "18:27:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 486,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 371,
+      "name": "242B-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:24:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 487,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-16 Elephant & Castle to Queen's Park",
+      "start_time": "18:27:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 488,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "211-10 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "18:30:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 489,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "226D-19 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:32:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 490,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "235-10 Queen's Park to Elephant & Castle",
+      "start_time": "18:32:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 491,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "212-16 Elephant & Castle to Queen's Park",
+      "start_time": "18:35:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 492,
+      "page": 80,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "236-17 Elephant & Castle to Queen's Park",
+      "start_time": "18:38:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 493,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "241-18 Queen's Park to Elephant & Castle",
+      "start_time": "18:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 494,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "224D-10 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:38:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 495,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "237D-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "18:39:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 496,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "232-21 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:41:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 497,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-19 Queen's Park to Elephant & Castle",
+      "start_time": "18:44:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 498,
+      "page": 81,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "234-19 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "18:44:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 499,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-22 Elephant & Castle to Queen's Park",
+      "start_time": "18:47:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 500,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "245-19 Stonebridge Park - Elephant & Castle",
+      "start_time": "18:47:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 501,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "203-9 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:49:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 502,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "214-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:50:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 503,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "205-10 Elephant & Castle to Queen's Park",
+      "start_time": "18:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 504,
+      "page": 82,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "233-20 Queen's Park to Elephant & Castle",
+      "start_time": "18:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 505,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "206D-20 Elephant & Castle - Stonebridge Park",
+      "start_time": "18:56:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 506,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "231-12 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "18:56:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 507,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "210-17 Queen's Park to Elephant & Castle",
+      "start_time": "18:56:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 508,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "201D-22 Elephant & Castle to Queen's Park",
+      "start_time": "18:58:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 509,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "204-18 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "19:01:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 510,
+      "page": 83,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "235-11 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:04:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 511,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-17 Queen's Park to Elephant & Castle",
+      "start_time": "19:05:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 512,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "240-18 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "19:07:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 513,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "221D-20 Elephant & Castle to Queen's Park",
+      "start_time": "19:07:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 514,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "212-17 Queen's Park to Elephant & Castle",
+      "start_time": "19:09:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 515,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "241-19 Elephant & Castle to Queen's Park",
+      "start_time": "19:10:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 516,
+      "page": 84,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "213-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:13:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 517,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "213-16 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:13:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 518,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "2020-20 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "19:16:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 519,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "236-18 Queen's Park to Waterloo",
+      "start_time": "19:16:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 520,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-23 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "19:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 521,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "243-17 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:19:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 522,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "2420-16 Stonebridge Park - Elephant & Castle",
+      "start_time": "19:22:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 523,
+      "page": 85,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "2070-17 Elephant & Castle to Queen's Park",
+      "start_time": "19:22:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 524,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-17 Elephant & Castle to Queen's Park",
+      "start_time": "19:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 525,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "225-23 Queen's Park to Elephant & Castle",
+      "start_time": "19:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 526,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "233-21 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:27:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 527,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "205-11 Queen's Park to Elephant & Castle",
+      "start_time": "19:27:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 528,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "210-18 Elephant & Castle to Queen's Park",
+      "start_time": "19:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 529,
+      "page": 86,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "211-11 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "19:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 530,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "245-20 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "19:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 531,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "214-17 Stonebridge Park - Elephant & Castle",
+      "start_time": "19:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 532,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "201D-23 Queen's Park to Elephant & Castle",
+      "start_time": "19:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 533,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "224D-11 Elephant & Castle to Queen's Park",
+      "start_time": "19:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 534,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "207-18 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:42:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 535,
+      "page": 87,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "221D-21 Queen's Park to Elephant & Castle",
+      "start_time": "19:45:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 536,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "212-18 Elephant & Castle to Queen's Park",
+      "start_time": "19:46:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 537,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "234-20 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "19:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 538,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "203-10 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "19:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 539,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "206D-21 Stonebridge Park - Elephant & Castle",
+      "start_time": "19:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 540,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "241-20 Queen's Park to Elephant & Castle",
+      "start_time": "19:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 541,
+      "page": 88,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "231-13 Elephant & Castle to Queen's Park",
+      "start_time": "19:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 542,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "225-24 Elephant & Castle - Stonebridge Park",
+      "start_time": "19:57:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 543,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "237D-18 Queen's Park to Elephant & Castle",
+      "start_time": "20:00:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 544,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "205-12 Elephant & Castle to Queen's Park",
+      "start_time": "20:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 545,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "204-19 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "20:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 546,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "240-19 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "20:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 547,
+      "page": 89,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-17 Stonebridge Park - Elephant & Castle",
+      "start_time": "20:05:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 548,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "210-19 Queen's Park to Elephant & Castle",
+      "start_time": "20:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 549,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-17 Elephant & Castle to Queen's Park",
+      "start_time": "20:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 550,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "201D-24 Elephant & Castle - Stonebridge Park",
+      "start_time": "20:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 551,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "223-24 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "20:15:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 552,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "224D-12 Queen's Park to Elephant & Castle",
+      "start_time": "20:15:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 553,
+      "page": 90,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "233-22 Stonebridge Park - Elephant & Castle",
+      "start_time": "20:19:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 554,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "221D-22 Elephant & Castle to Queen's Park",
+      "start_time": "20:19:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 555,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "202D-21 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "20:20:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 556,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "212-19 Queen's Park to Elephant & Castle",
+      "start_time": "20:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 557,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "214-18 Elephant & Castle to Queen's Park",
+      "start_time": "20:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 558,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "243-18 Stonebridge Park - Kilburn High Road",
+      "start_time": "20:25:00",
+      "duration": "00:10:00"
+    },
+    {
+      "global_index": 559,
+      "page": 91,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "241-21 Elephant & Castle - Stonebridge Park",
+      "start_time": "20:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 560,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "231-14 Queen's Park to Elephant & Castle",
+      "start_time": "20:30:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 561,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "211-12 Elephant & Castle to Queen's Park",
+      "start_time": "20:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 562,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "245-21 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "20:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 563,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "237D-19 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "20:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 564,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "207-19 Stonebridge Park - Elephant & Castle",
+      "start_time": "20:35:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 565,
+      "page": 92,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "205-13 Queen's Park to Elephant & Castle",
+      "start_time": "20:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 566,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "206D-22 Elephant & Castle to Queen's Park",
+      "start_time": "20:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 567,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-18 Queen's Park to Elephant & Castle",
+      "start_time": "20:41:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 568,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "210-20 Elephant & Castle - Stonebridge Park",
+      "start_time": "20:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 569,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "234-21 Elephant & Castle to Queen's Park",
+      "start_time": "20:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 570,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "243-19 Kilburn High Road - Stonebridge Park",
+      "start_time": "20:47:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 571,
+      "page": 93,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "225-25 Stonebridge Park - Elephant & Castle",
+      "start_time": "20:49:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 572,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "203-11 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "20:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 573,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "224D-13 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "20:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 574,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-23 Queen's Park to Elephant & Castle",
+      "start_time": "20:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 575,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "213-18 Elephant & Castle to Queen's Park",
+      "start_time": "20:53:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 576,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "212-20 Elephant & Castle - Stonebridge Park",
+      "start_time": "20:57:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 577,
+      "page": 94,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "214-19 Queen's Park to Elephant & Castle",
+      "start_time": "21:00:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 578,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "204-20 Elephant & Castle to Queen's Park",
+      "start_time": "21:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 579,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-20 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "21:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 580,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "2010-25 Stonebridge Park - Elephant & Castle",
+      "start_time": "21:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 581,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "231-15 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "21:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 582,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "211-13 Queen's Park to Elephant & Castle",
+      "start_time": "21:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 583,
+      "page": 95,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "233-23 Elephant & Castle to Queen's Park",
+      "start_time": "21:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 584,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "205-14 Elephant & Castle - Stonebridge Park",
+      "start_time": "21:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 585,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "242D-19 Elephant & Castle to Queen's Park",
+      "start_time": "21:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 586,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "206D-23 Queen's Park to Elephant & Castle",
+      "start_time": "21:15:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 587,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "241-22 Stonebridge Park - Elephant & Castle",
+      "start_time": "21:18:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 588,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "223-25 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "21:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 589,
+      "page": 96,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "202D-22 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "21:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 590,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "234-22 Queen's Park to Elephant & Castle",
+      "start_time": "21:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 591,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "207-20 Elephant & Castle to Queen's Park",
+      "start_time": "21:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 592,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "221D-24 Elephant & Castle - Stonebridge Park",
+      "start_time": "21:27:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 593,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "213-19 Queen's Park to Elephant & Castle",
+      "start_time": "21:30:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 594,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "245-22 Elephant & Castle to Queen's Park",
+      "start_time": "21:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 595,
+      "page": 97,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "237D-20 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "21:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 596,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "210-21 Stonebridge Park - Elephant & Castle",
+      "start_time": "21:34:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 597,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "214-20 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "21:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 598,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "204-21 Queen's Park to Elephant & Castle",
+      "start_time": "21:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 599,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "225-26 Elephant & Castle to Queen's Park",
+      "start_time": "21:38:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 600,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "211-14 Elephant & Castle - Stonebridge Park",
+      "start_time": "21:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 601,
+      "page": 98,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "203-12 Elephant & Castle to Queen's Park",
+      "start_time": "21:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 602,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "233-24 Queen's Park to Elephant & Castle",
+      "start_time": "21:45:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 603,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "212-21 Stonebridge Park - Elephant & Castle",
+      "start_time": "21:49:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 604,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "224D-14 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "21:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 605,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "206D-24 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "21:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 606,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "242D-20 Queen's Park to Elephant & Castle",
+      "start_time": "21:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 607,
+      "page": 99,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-26 Elephant & Castle to Queen's Park",
+      "start_time": "21:53:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 608,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "234-23 Elephant & Castle - Stonebridge Park",
+      "start_time": "21:57:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 609,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "240-21 Elephant & Castle to Queen's Park",
+      "start_time": "22:00:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 610,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "207-21 Queen's Park to Elephant & Castle",
+      "start_time": "22:00:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 611,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "205-15 Stonebridge Park - Elephant & Castle",
+      "start_time": "22:04:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 612,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "231-16 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "22:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 613,
+      "page": 100,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "213-20 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "22:04:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 614,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "245-23 Queen's Park to Elephant & Castle",
+      "start_time": "22:08:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 615,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "241-23 Elephant & Castle to Queen's Park",
+      "start_time": "22:08:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 616,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "204-22 Elephant & Castle - Stonebridge Park",
+      "start_time": "22:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 617,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "225-27 Queen's Park to Elephant & Castle",
+      "start_time": "22:15:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 618,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "223-26 Elephant & Castle to Queen's Park",
+      "start_time": "22:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 619,
+      "page": 101,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "2020-23 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "22:19:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 620,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "221D-25 Stonebridge Park - Elephant & Castle",
+      "start_time": "22:19:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 621,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "233-25 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "22:19:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 622,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "210-22 Elephant & Castle to Queen's Park",
+      "start_time": "22:23:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 623,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "203-13 Queen's Park to Elephant & Castle",
+      "start_time": "22:23:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 624,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "242D-21 Elephant & Castle - Stonebridge Park",
+      "start_time": "22:27:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 625,
+      "page": 102,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "201D-27 Queen's Park to Elephant & Castle",
+      "start_time": "22:30:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 626,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 509,
+      "name": "237D-21 Elephant & Castle to Queen's Park",
+      "start_time": "22:30:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 627,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "214-21 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "22:34:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 628,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "211-15 Stonebridge Park - Elephant & Castle",
+      "start_time": "22:34:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 629,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "207-22 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "22:34:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 630,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "212-22 Elephant & Castle to Queen's Park",
+      "start_time": "22:38:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 631,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-22 Queen's Park to Elephant & Castle",
+      "start_time": "22:38:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 632,
+      "page": 103,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "205-16 Queen's Park to Elephant & Castle",
+      "start_time": "22:23:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 633,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "245-24 Elephant & Castle - Stonebridge Park",
+      "start_time": "22:42:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 634,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "224D-15 Elephant & Castle to Queen's Park",
+      "start_time": "22:45:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 635,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "241-24 Queen's Park to Elephant & Castle",
+      "start_time": "22:46:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 636,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "206D-25 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "22:49:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 637,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "234-24 Stonebridge Park - Elephant & Castle",
+      "start_time": "22:49:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 638,
+      "page": 104,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "225-28 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "22:49:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 639,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "205-16 Elephant & Castle to Queen's Park",
+      "start_time": "22:53:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 640,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "223-27 Queen's Park to Elephant & Castle",
+      "start_time": "22:54:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 641,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "203-14 Elephant & Castle - Stonebridge Park",
+      "start_time": "22:57:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 642,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "231-17 Elephant & Castle - Harrow & Wealdstone",
+      "start_time": "23:00:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 643,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "204-23 Stonebridge Park - Elephant & Castle",
+      "start_time": "23:04:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 644,
+      "page": 105,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "213-21 Harrow & Wealdstone to Elephant & Castle",
+      "start_time": "23:04:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 645,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 578,
+      "name": "201D-28 Elephant & Castle to Queen's Park",
+      "start_time": "23:04:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 646,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 647,
+      "name": "210-23 Queen's Park to Waterloo",
+      "start_time": "23:06:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 647,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 716,
+      "name": "221D-26 Elephant & Castle to Queen's Park",
+      "start_time": "23:08:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 648,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "237D-22 Queen's Park to Elephant & Castle",
+      "start_time": "23:10:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 649,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "240-23 Elephant & Castle - Stonebridge Park",
+      "start_time": "23:12:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 650,
+      "page": 106,
+      "click_x": 2411,
+      "click_y": 923,
+      "name": "212-23 Queen's Park to Waterloo",
+      "start_time": "23:22:00",
+      "duration": "00:33:00"
+    },
+    {
+      "global_index": 651,
+      "page": 107,
+      "click_x": 2411,
+      "click_y": 785,
+      "name": "211-16 Elephant & Castle to Queen's Park",
+      "start_time": "23:24:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 652,
+      "page": 107,
+      "click_x": 2411,
+      "click_y": 854,
+      "name": "224D-16 Queen's Park to Elephant & Castle",
+      "start_time": "23:30:00",
+      "duration": "00:29:00"
+    }
+  ]
+}

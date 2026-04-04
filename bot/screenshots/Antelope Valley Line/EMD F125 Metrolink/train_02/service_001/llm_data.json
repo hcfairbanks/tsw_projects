@@ -1,0 +1,129 @@
+{
+  "level_info": {
+    "service_name": "AV 200: Lancaster - LA Union (Part 1)",
+    "start_time": "03:41",
+    "duration": "01:12",
+    "tonnage": 392.9,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.69632463030878,
+    "lng": -118.13604609209088,
+    "current_service_name": "P_AV_200_A"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 03:41:00",
+      "location": "",
+      "time1": "",
+      "time2": "3:41:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "03:42:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Palmdale Track 1 - 03:50:00",
+      "location": "Palmdale Track 1",
+      "time1": "03:50:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "03:51:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Vincent Grade Acton Track 1 - 04:01:00",
+      "location": "Vincent Grade Acton Track 1",
+      "time1": "04:01:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:02:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Vista Canyon Track 1 - 04:37:00",
+      "location": "Vista Canyon Track 1",
+      "time1": "04:37:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:38:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Via Princessa Track 1 - 04:41:00",
+      "location": "Via Princessa Track 1",
+      "time1": "04:41:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:42:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Santa Clarita Track 1 - 04:47:00",
+      "location": "Santa Clarita Track 1",
+      "time1": "04:47:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:48:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newhall Track 1 - 04:54:00",
+      "location": "Newhall Track 1",
+      "time1": "04:54:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 13
+    }
+  ]
+}

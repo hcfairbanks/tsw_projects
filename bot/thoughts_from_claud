@@ -1,0 +1,38 @@
+Iam thinking of creating a bot for Train Sim World to record timetables. However, there is a section in which the bot will need to scroll the timetable and take screenshots. Iam struggleing with figuring out how to get it to scroll the complete list. I was thinking of using Python and PyAutoGUI for this project, although Iam not stuck on any given technology or stack. What are your thoughts about this project and problem?
+This is a fun project. Here are my thoughts:
+
+The Core Scrolling Problem
+The tricky part isn't the scrolling itself — it's knowing when you're done and not missing entries between screenshots. There are a few reliable strategies:
+
+Screenshot comparison to detect the end: After each scroll, take a screenshot and compare it to the previous one. If they're nearly identical (pixel diff below a threshold), you've hit the bottom. OpenCV or Pillow can do this easily.
+
+Overlap between captures: Scroll less than a full "page" each time so consecutive screenshots share some rows. This prevents missing entries that fall between frames. You can later deduplicate using image comparison or OCR on the overlapping region.
+
+Tech Stack Thoughts
+Python + PyAutoGUI is a solid starting point. I'd layer on a few things:
+
+Pillow or OpenCV — for screenshot comparison (detecting end-of-scroll, deduplication of overlapping regions)
+pytesseract (Tesseract OCR) — if you want to extract the actual text data from the screenshots rather than just saving images, this would let you build structured timetable data
+time.sleep() — you'll need deliberate pauses between scroll actions for the UI to settle before capturing
+A rough loop would look like:
+
+
+1. Take screenshot of visible timetable area
+2. Save/process it
+3. Scroll down by a fixed amount (less than one full page)
+4. Wait for UI to settle
+5. Take another screenshot
+6. Compare with previous — if ~identical, stop; otherwise goto 2
+Before Building the Bot
+One thing worth investigating first: does TSW store timetable data in files on disk? Many games keep this kind of data in XML, JSON, SQLite, or proprietary formats in their install directory. If so, you could skip the screenshot approach entirely and just parse the files directly — much simpler and more reliable.
+
+Typical places to check:
+
+The game's install folder (Steam: steamapps/common/Train Sim World ...)
+%AppData% or %LocalAppData% for saved data
+Any .pak, .xml, .json, or .db files in the game directory
+Potential Pitfalls
+Fullscreen vs windowed — PyAutoGUI works best with windowed/borderless mode since it operates on screen coordinates
+Coordinate brittleness — hardcoded pixel positions break if the window moves or resolution changes. Consider using image-based region detection (PyAutoGUI's locateOnScreen) to find the timetable area dynamically
+Scroll distance consistency — mouse wheel scrolling can be inconsistent across apps. Test how many "clicks" of scroll TSW responds to and calibrate accordingly
+Would you like to start building this out, or would you prefer to first check the game files for accessible timetable data?

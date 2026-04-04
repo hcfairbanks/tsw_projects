@@ -1,0 +1,2 @@
+Service #1 |  Rotem Bi-Level Cab Car Me Antelope Valley | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_02\service_001
+Service #1 | ADDED (train) | LA Union - Metrolink CMF (Non-Revenue) 05:21 00:17 | timetable_id=33896

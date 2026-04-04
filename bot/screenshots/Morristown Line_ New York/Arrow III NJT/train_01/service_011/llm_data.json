@@ -1,0 +1,90 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "404 Gladstone - Hoboken",
+    "start_time": "06:24",
+    "duration": "00:38",
+    "tonnage": 225.9,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.71635373874769,
+    "lng": -74.35725465707529,
+    "current_service_name": "NJT-404"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:26:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 1 - 06:30:30",
+      "location": "Short Hills Track 1",
+      "time1": "06:30:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:31:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Millburn Track 1 - 06:33:30",
+      "location": "Millburn Track 1",
+      "time1": "06:33:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:34:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 2 - 06:46:00",
+      "location": "Newark Broad Street Track 2",
+      "time1": "06:46:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:46:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 12 - 07:03:00",
+      "location": "Hoboken Terminal Track 12",
+      "time1": "07:03:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

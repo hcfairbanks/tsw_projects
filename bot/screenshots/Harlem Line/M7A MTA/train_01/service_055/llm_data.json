@@ -1,0 +1,129 @@
+{
+  "level_info": {
+    "service_name": "Train 611 GCT to Southeast",
+    "start_time": "08:19",
+    "duration": "00:46",
+    "tonnage": 460.1,
+    "car_count": 8,
+    "train_length": 208.0
+  },
+  "location": {
+    "lat": 40.75475379768946,
+    "lng": -73.9756328341491,
+    "current_service_name": "611"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:19:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:19:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:21:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 3 - 08:30:30",
+      "location": "Harlem 125th Street Track 3",
+      "time1": "08:30:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:31:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Fordham Track 3 - 08:37:30",
+      "location": "Fordham Track 3",
+      "time1": "08:37:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:38:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Williams Bridge Track 3 - 08:41:00",
+      "location": "Williams Bridge Track 3",
+      "time1": "08:41:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:41:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mount Vernon West Track 3 - 08:48:00",
+      "location": "Mount Vernon West Track 3",
+      "time1": "08:48:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:48:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 1 - 09:00:30",
+      "location": "White Plains Track 1",
+      "time1": "09:00:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:01:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 1 - 09:05:30",
+      "location": "North White Plains Track 1",
+      "time1": "09:05:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 13
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "5J38 Gospel Oak to Upper Holloway",
+    "start_time": "23:53",
+    "duration": "00:06",
+    "tonnage": 151,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.55556924018687,
+    "lng": -0.15122507232706184,
+    "current_service_name": "5J38"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 23:53:00",
+      "location": "",
+      "time1": "",
+      "time2": "23:53:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "23:55:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Upper Holloway Platform 2 - 23:58:00",
+      "location": "Upper Holloway Platform 2",
+      "time1": "23:58:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

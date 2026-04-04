@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "Y918 Flank Road Loading",
+    "start_time": "18:15",
+    "duration": "00:46",
+    "tonnage": 553.8,
+    "car_count": 12,
+    "train_length": 220.5
+  },
+  "location": {
+    "lat": 43.258166614774964,
+    "lng": -79.80930359151876,
+    "current_service_name": "Y918"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:15:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:15:00",
+      "sort_order": 0
+    },
+    {
+      "action": "UNCOUPLE VEHICLES",
+      "details": "All the cars",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Victoria Avenue facility",
+      "location": "Victoria Avenue facility",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "COUPLE TO FORMATION",
+      "details": "5 vehicles",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellington Street crossing",
+      "location": "Wellington Street crossing",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Flank Road facility",
+      "location": "Flank Road facility",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "McAnulty Yard",
+      "location": "McAnulty Yard",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

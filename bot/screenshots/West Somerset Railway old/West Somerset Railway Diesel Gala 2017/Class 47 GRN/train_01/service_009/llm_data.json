@@ -1,0 +1,171 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "[MD3]Minehead - Bishops Lydeard",
+    "start_time": "12:15",
+    "duration": "01:28",
+    "tonnage": 385.6,
+    "car_count": 8,
+    "train_length": 160.4,
+    "section": "West Somerset Railway Diesel Gala 2017"
+  },
+  "location": {
+    "lat": 51.20585091273481,
+    "lng": -3.4667411992620005,
+    "current_service_name": "MD3"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:15:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:15:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Dunster Platform - 12:22:00",
+      "location": "Dunster Platform",
+      "time1": "12:22:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:23:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Blue Anchor Up Platform - 12:31:00",
+      "location": "Blue Anchor Up Platform",
+      "time1": "12:31:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:32:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Washford Platform - 12:39:00",
+      "location": "Washford Platform",
+      "time1": "12:39:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:40:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Watchet Platform - 12:49:00",
+      "location": "Watchet Platform",
+      "time1": "12:49:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:50:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Doniford Halt Platform - 12:53:00",
+      "location": "Doniford Halt Platform",
+      "time1": "12:53:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "12:54:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Williton Up Platform - 13:04:00",
+      "location": "Williton Up Platform",
+      "time1": "13:04:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:05:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Stogumber Platform - 13:16:00",
+      "location": "Stogumber Platform",
+      "time1": "13:16:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:17:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crowcombe Heathfield Loop Platform - 13:31:00",
+      "location": "Crowcombe Heathfield Loop Platform",
+      "time1": "13:31:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:32:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Bishops Lydeard Up Platform - 13:43:00",
+      "location": "Bishops Lydeard Up Platform",
+      "time1": "13:43:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 18
+    }
+  ]
+}

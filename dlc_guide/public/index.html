@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSW DLC Guide</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header class="topnav">
+    <div class="nav-brand">TSW DLC Guide</div>
+    <nav class="topnav-links">
+      <a class="nav-link" href="/dlc"              data-route="/dlc">DLC</a>
+      <a class="nav-link" href="/trains"           data-route="/trains">Trains</a>
+      <a class="nav-link" href="/library"           data-route="/library">My Library</a>
+      <a class="nav-link" href="/cart"             data-route="/cart">Cart <span id="cart-badge" class="cart-badge hidden">0</span></a>
+      <a class="nav-link" href="/admin/countries"  data-route="/admin">Admin</a>
+    </nav>
+  </header>
+
+  <main id="root"></main>
+
+  <div id="modal-simple" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-simple-title"></h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-simple-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btn-simple-cancel">Cancel</button>
+        <button class="btn btn-primary" id="btn-simple-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-confirm" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-sm">
+      <div class="modal-header">
+        <h2>Confirm Delete</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-confirm-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btn-confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="btn-confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

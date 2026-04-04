@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "TGV 9868 Bruxelles Midi",
+    "start_time": "15:10",
+    "duration": "00:36",
+    "tonnage": 816,
+    "car_count": 20,
+    "train_length": 399.3
+  },
+  "location": {
+    "lat": 43.30504439829365,
+    "lng": 5.384326469981126,
+    "current_service_name": "TGV_9868_p"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 15:10:00",
+      "location": "",
+      "time1": "",
+      "time2": "15:10:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:12:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Power Changeover Location",
+      "location": "Power Changeover Location",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Aix-en-Provence TGV 4 - 15:23:00",
+      "location": "Aix-en-Provence TGV 4",
+      "time1": "15:23:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:24:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Avignon TGV 4 - 15:46:00",
+      "location": "Avignon TGV 4",
+      "time1": "15:46:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

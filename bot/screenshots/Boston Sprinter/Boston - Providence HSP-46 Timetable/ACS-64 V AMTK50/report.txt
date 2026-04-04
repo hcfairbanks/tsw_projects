@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Sprinter
+Train:       ACS-64 V AMTK50
+Started:     2026-03-20 14:07:50
+Duration:    0:04:44
+Trains:      2
+Services:    1
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    1          0:01:57
+Train 2    0          0:01:16

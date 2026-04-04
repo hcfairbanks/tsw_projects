@@ -1,0 +1,33 @@
+{
+  "level_info": {
+    "service_name": "Leave Depot",
+    "start_time": "09:40",
+    "duration": "00:02",
+    "tonnage": 759.3,
+    "car_count": 20,
+    "train_length": 399.3
+  },
+  "location": {
+    "lat": 43.30739054335691,
+    "lng": 5.387884187318855,
+    "current_service_name": "TGV_Depot_05"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:40:00",
+      "location": "",
+      "time1": "",
+      "time2": "9:40:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Marseille Saint-Charles G",
+      "location": "Marseille Saint-Charles G",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Stoughton #906 (Stoughton - Boston)",
+    "start_time": "08:28",
+    "duration": "00:36",
+    "tonnage": 477.6,
+    "car_count": 6,
+    "train_length": 151.7,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.12465702595337,
+    "lng": -71.10426160617955,
+    "current_service_name": "MBTA Stoughton #906 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:28:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:28:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:29:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Center - 08:36:39",
+      "location": "Canton Center",
+      "time1": "08:36:39",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:37:24",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Junction - 08:39:48",
+      "location": "Canton Junction",
+      "time1": "08:39:48",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:40:33",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 2 - 08:45:02",
+      "location": "Route 128 Track 2",
+      "time1": "08:45:02",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:45:47",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hyde Park Track 2 - 08:50:03",
+      "location": "Hyde Park Track 2",
+      "time1": "08:50:03",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:50:48",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 2 - 08:58:12",
+      "location": "Boston Back Bay Track 2",
+      "time1": "08:58:12",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:58:57",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 08 - 09:05:00",
+      "location": "Boston South Station Track 08",
+      "time1": "09:05:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 14
+    }
+  ]
+}

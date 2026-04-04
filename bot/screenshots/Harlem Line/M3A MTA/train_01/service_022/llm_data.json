@@ -1,0 +1,137 @@
+{
+  "level_info": {
+    "service_name": "Train 538 North White Plains to GCT",
+    "start_time": "09:43",
+    "duration": "00:51",
+    "tonnage": 538.6,
+    "car_count": 10,
+    "train_length": 259.1
+  },
+  "location": {
+    "lat": 41.05497267587469,
+    "lng": -73.7710382598878,
+    "current_service_name": "538"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:43:00",
+      "location": "",
+      "time1": "",
+      "time2": "9:43:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 3 - 09:48:00",
+      "location": "North White Plains Track 3",
+      "time1": "09:48:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:49:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 09:52:30",
+      "location": "White Plains Track 2",
+      "time1": "09:52:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:53:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hartsdale Track 2 - 09:57:30",
+      "location": "Hartsdale Track 2",
+      "time1": "09:57:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:58:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Scarsdale Track 2 - 10:01:30",
+      "location": "Scarsdale Track 2",
+      "time1": "10:01:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:02:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crestwood Track 4 - 10:05:30",
+      "location": "Crestwood Track 4",
+      "time1": "10:05:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:06:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 1 - 10:24:00",
+      "location": "Harlem 125th Street Track 1",
+      "time1": "10:24:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:24:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 11 - 10:35:00",
+      "location": "Grand Central Track 11",
+      "time1": "10:35:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 14
+    }
+  ]
+}

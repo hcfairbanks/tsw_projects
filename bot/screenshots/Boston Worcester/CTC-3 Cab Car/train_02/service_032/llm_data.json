@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "MT023EQ Southampton Street Yard - Boston South Station",
+    "start_time": "17:35",
+    "duration": "00:00",
+    "tonnage": 433,
+    "car_count": 6,
+    "train_length": 150.8
+  },
+  "location": {
+    "lat": 42.33407559239244,
+    "lng": -71.0616840309231,
+    "current_service_name": "MT023EQ"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:35:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:35:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "17:36:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 12",
+      "location": "Boston South Station Track 12",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

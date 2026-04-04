@@ -1,0 +1,15 @@
+{
+  "name": "dlc-guide",
+  "version": "1.0.0",
+  "description": "Train Simulator World DLC Database GUI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "import": "node import.js",
+    "setup": "node import.js && node server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.1",
+    "xlsx": "^0.18.5"
+  }
+}

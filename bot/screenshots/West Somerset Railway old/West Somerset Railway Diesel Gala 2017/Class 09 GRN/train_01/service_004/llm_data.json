@@ -1,0 +1,107 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "[MD4]Minehead - Bishops Lydeard",
+    "start_time": "13:15",
+    "duration": "01:30",
+    "tonnage": 201.5,
+    "car_count": 5,
+    "train_length": 89.1,
+    "section": "West Somerset Railway Diesel Gala 2017"
+  },
+  "location": {
+    "lat": 51.2057654820094,
+    "lng": -3.4667907608325064,
+    "current_service_name": "MD4"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 13:15:00",
+      "location": "",
+      "time1": "",
+      "time2": "13:15:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Blue Anchor Up Platform - 13:31:00",
+      "location": "Blue Anchor Up Platform",
+      "time1": "13:31:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:32:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Watchet Platform - 13:49:00",
+      "location": "Watchet Platform",
+      "time1": "13:49:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:50:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Williton Up Platform - 14:04:00",
+      "location": "Williton Up Platform",
+      "time1": "14:04:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:05:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crowcombe Heathfield Loop Platform - 14:31:00",
+      "location": "Crowcombe Heathfield Loop Platform",
+      "time1": "14:31:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:32:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Bishops Lydeard Up Platform - 14:45:00",
+      "location": "Bishops Lydeard Up Platform",
+      "time1": "14:45:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 10
+    }
+  ]
+}

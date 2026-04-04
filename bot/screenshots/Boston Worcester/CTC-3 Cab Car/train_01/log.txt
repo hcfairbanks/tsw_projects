@@ -1,0 +1,14 @@
+Service #1 | MT504EQ Worcester Yard - Worcester (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_001
+Service #1 | OK | MT504EQ Worcester Yard - Worcester (Part 1) 05:27 00:03 | timetable_id=2883
+Service #2 | P504 Worcester to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_002
+Service #2 | OK | P504 Worcester to Boston South Station 05:48 01:21 | timetable_id=2884
+Service #3 | P590 Ashland to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_003
+Service #3 | OK | P590 Ashland to Boston South Station 08:32 01:06 | timetable_id=2885
+Service #4 | MT811EQ Southampton Street Yard - Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_004
+Service #4 | OK | MT811EQ Southampton Street Yard - Boston South Station 11:03 00:00 | timetable_id=2886
+Service #5 | P516 Worcester to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_005
+Service #5 | OK | P516 Worcester to Boston South Station 12:03 01:34 | timetable_id=2887
+Service #6 | MT525EQ Southampton Street Yard - Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_006
+Service #6 | OK | MT525EQ Southampton Street Yard - Boston South Station 17:58 00:00 | timetable_id=2888
+Service #7 | MT525EQ Worcester - Worcester Yard (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\CTC-3 Cab Car\train_01\service_007
+Service #7 | OK | MT525EQ Worcester - Worcester Yard (Part 1) 19:54 00:03 | timetable_id=2889

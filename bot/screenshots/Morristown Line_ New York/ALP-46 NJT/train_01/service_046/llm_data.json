@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "6636 NY Penn Station - Sunnyside Yard",
+    "start_time": "12:38",
+    "duration": "00:24",
+    "tonnage": 631.7,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.74983559149342,
+    "lng": -73.99265044497308,
+    "current_service_name": "NJT-6636-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:38:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:38:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "12:40:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sunnyside Yard Siding 26",
+      "location": "Sunnyside Yard Siding 26",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

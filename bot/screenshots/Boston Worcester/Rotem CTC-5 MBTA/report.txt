@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Worcester
+Train:       Rotem CTC-5 MBTA
+Started:     2026-03-20 19:02:30
+Duration:    1:48:26
+Trains:      2
+Services:    49
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    49         1:43:55
+Train 2    0          0:03:04

@@ -1,0 +1,98 @@
+Service #1 |  Train 500 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_001
+Service #1 | OK | Train 500 North White Plains to GCT 04:42 01:02 | timetable_id=34497
+Service #2 |  Train 2307 GCT to Crestwood | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_002
+Service #2 | OK | Train 2307 GCT to Crestwood 05:56 00:26 | timetable_id=34498
+Service #3 |  Train 508 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_003
+Service #3 | OK | Train 508 North White Plains to GCT 06:31 00:49 | timetable_id=34499
+Service #4 |  Train 308 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_004
+Service #4 | OK | Train 308 Crestwood to GCT 06:34 00:37 | timetable_id=34500
+Service #5 |  Train 512 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_005
+Service #5 | OK | Train 512 North White Plains to GCT 06:53 00:50 | timetable_id=34501
+Service #6 |  Train 616 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_006
+Service #6 | OK | Train 616 Southeast to GCT 07:17 00:51 | timetable_id=34502
+Service #7 |  Train 514 Hartsdale to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_007
+Service #7 | OK | Train 514 Hartsdale to GCT 07:21 00:50 | timetable_id=34503
+Service #8 |  Train 2325 GCT to Crestwood | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_008
+Service #8 | OK | Train 2325 GCT to Crestwood 07:28 00:32 | timetable_id=34504
+Service #9 |  Train 618 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_009
+Service #9 | OK | Train 618 Southeast to GCT 07:33 00:48 | timetable_id=34507
+Service #10 |  Train 620 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_010
+Service #10 | OK | Train 620 Southeast to GCT 07:39 00:46 | timetable_id=34508
+Service #11 |  Train 522 Hartsdale to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_011
+Service #11 | OK | Train 522 Hartsdale to GCT 07:46 00:50 | timetable_id=34509
+Service #12 |  Train 326 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_012
+Service #12 | OK | Train 326 Crestwood to GCT 08:09 00:49 | timetable_id=34510
+Service #13 |  Train 2331 GCT to Crestwood | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_013
+Service #13 | OK | Train 2331 GCT to Crestwood 08:14 00:29 | timetable_id=34511
+Service #14 |  GCT Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_014
+Service #14 | OK | GCT Yard Move (Part 1) 08:16 00:03 | timetable_id=34512
+Service #15 |  GCT Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_015
+Service #15 | OK | GCT Yard Move (Part 2) 08:24 00:02 | timetable_id=34513
+Service #16 |  Train 630 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_016
+Service #16 | OK | Train 630 Southeast to GCT 08:34 00:48 | timetable_id=34514
+Service #17 |  Train 2519 GCT to North White Plains Yard | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_017
+Service #17 | OK | Train 2519 GCT to North White Plains Yard 08:40 00:46 | timetable_id=34515
+Service #18 |  Train 2521 GCT to North White Plains Yard | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_018
+Service #18 | OK | Train 2521 GCT to North White Plains Yard 08:52 00:36 | timetable_id=34516
+Service #19 |  Train 332 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_019
+Service #19 | OK | Train 332 Crestwood to GCT 09:00 00:42 | timetable_id=34517
+Service #20 |  GCT Yard Move | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_020
+Service #20 | OK | GCT Yard Move 09:03 00:02 | timetable_id=34518
+Service #21 |  Train 2523 GCT to North White Plains Yard | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_021
+Service #21 | OK | Train 2523 GCT to North White Plains Yard 09:14 00:42 | timetable_id=34519
+Service #22 |  Train 538 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_022
+Service #22 | OK | Train 538 North White Plains to GCT 09:43 00:51 | timetable_id=34520
+Service #23 |  Train 544 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_023
+Service #23 | OK | Train 544 North White Plains to GCT 10:54 01:06 | timetable_id=34521
+Service #24 |  GCT Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_024
+Service #24 | OK | GCT Yard Move (Part 1) 12:17 00:02 | timetable_id=34522
+Service #25 |  GCT Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_025
+Service #25 | OK | GCT Yard Move (Part 2) 12:24 00:04 | timetable_id=34523
+Service #26 |  GCT Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_026
+Service #26 | OK | GCT Yard Move (Part 1) 12:30 00:02 | timetable_id=34524
+Service #27 |  GCT Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_027
+Service #27 | OK | GCT Yard Move (Part 2) 12:37 00:03 | timetable_id=34525
+Service #28 |  Train 629 GCT to Southeast | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_028
+Service #28 | OK | Train 629 GCT to Southeast 12:50 00:43 | timetable_id=34526
+Service #29 |  Train 543 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_029
+Service #29 | OK | Train 543 GCT to North White Plains 15:18 00:53 | timetable_id=34527
+Service #30 |  Train 664 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_030
+Service #30 | OK | Train 664 Southeast to GCT 15:47 00:45 | timetable_id=34528
+Service #31 |  Train 2572 North White Plains Yard to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_031
+Service #31 | OK | Train 2572 North White Plains Yard to GCT 15:51 00:46 | timetable_id=34529
+Service #32 |  Train 545 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_032
+Service #32 | OK | Train 545 GCT to North White Plains 15:54 00:47 | timetable_id=34530
+Service #33 |  Train 366 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_033
+Service #33 | OK | Train 366 North White Plains to GCT 16:24 01:03 | timetable_id=34531
+Service #34 |  Train 368 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_034
+Service #34 | OK | Train 368 North White Plains to GCT 16:54 01:05 | timetable_id=34532
+Service #35 |  Train 355 GCT to Crestwood | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_035
+Service #35 | OK | Train 355 GCT to Crestwood 17:04 00:45 | timetable_id=34533
+Service #36 |  Train 772 Croton-Harmon to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_036
+Service #36 | OK | Train 772 Croton-Harmon to GCT 17:13 00:22 | timetable_id=34534
+Service #37 |  Train 657 GCT to Southeast | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_037
+Service #37 | OK | Train 657 GCT to Southeast 17:28 00:43 | timetable_id=34535
+Service #38 |  GCT Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_038
+Service #38 | OK | GCT Yard Move (Part 1) 17:31 00:03 | timetable_id=34536
+Service #39 |  Train 557 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_039
+Service #39 | OK | Train 557 GCT to North White Plains 17:34 00:47 | timetable_id=34537
+Service #40 |  GCT Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_040
+Service #40 | OK | GCT Yard Move (Part 2) 17:39 00:06 | timetable_id=34538
+Service #41 |  Train 559 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_041
+Service #41 | OK | Train 559 GCT to North White Plains 17:51 00:47 | timetable_id=34539
+Service #42 |  Train 363 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_042
+Service #42 | OK | Train 363 GCT to North White Plains 17:54 01:14 | timetable_id=34540
+Service #43 |  Train 2356 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_043
+Service #43 | OK | Train 2356 Crestwood to GCT 17:56 00:41 | timetable_id=34541
+Service #44 |  Train 663 GCT to Brewster | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_044
+Service #44 | OK | Train 663 GCT to Brewster 18:09 00:34 | timetable_id=34542
+Service #45 |  GCT Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_045
+Service #45 | DUPLICATE | Train 663 GCT to Brewster 18:09 00:34
+Service #46 |  Train 563 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_046
+Service #46 | OK | GCT Yard Move (Part 1) 18:10 00:05 | timetable_id=34543
+Service #47 |  GCT Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_047
+Service #47 | OK | Train 563 GCT to North White Plains 18:15 00:48 | timetable_id=34544
+Service #48 |  Train 565 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_048
+Service #48 | OK | GCT Yard Move (Part 2) 18:20 00:05 | timetable_id=34545
+Service #49 |  Train 573 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M3A MTA\train_01\service_049
+Service #49 | OK | Train 565 GCT to North White Plains 18:35 00:46 | timetable_id=34546

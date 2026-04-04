@@ -1,0 +1,3 @@
+Service 062 | DUPLICATE | U77221-05 Oakville - Aldershot 19:12 00:22 | Train 1 | GP38-2 CN
+Service 063 | DUPLICATE | U79321-05 Aldershot - Oakville 19:20 00:21 | Train 1 | GP38-2 CN
+Service 064 | DUPLICATE | U55831-05 Hamilton - Oakville 19:40 00:29 | Train 1 | GP38-2 CN

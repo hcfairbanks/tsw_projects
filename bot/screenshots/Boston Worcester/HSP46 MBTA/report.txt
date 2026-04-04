@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Worcester
+Train:       HSP46 MBTA
+Started:     2026-03-20 18:58:58
+Duration:    0:02:15
+Trains:      3
+Services:    2
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 3    2          0:02:15

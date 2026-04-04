@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "3512 NY Penn Station - Sunnyside Yard",
+    "start_time": "19:42",
+    "duration": "00:26",
+    "tonnage": 628.6,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.750181277114656,
+    "lng": -73.9928101216506,
+    "current_service_name": "NJT-3512-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 19:42:00",
+      "location": "",
+      "time1": "",
+      "time2": "19:42:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "19:44:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sunnyside Yard Siding 20",
+      "location": "Sunnyside Yard Siding 20",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

@@ -1,0 +1,3377 @@
+"Add-On Name","Gameplay Guide","Developer","Short Name","Type","Region","Release Date","TSW 1","TSW 2","TSW 3","TSW 4","TSW 5","TSW 6","Requirements","Expansions","New Lighting","New Track Shadows","Route Hopping","Conductor Mode 🎟️","Annoucements 🔊","Train Faults ⚙️","Gen 8 Compatible?","Base Locos","Additional Playable Locos","Layer Requirements","Platform Differences"
+"Amtrak Acela Express Loco Add-On","Click Here","Dovetail Games","Acela","Loco 🚆","US 🇺🇲","21/02/23","No","No","Yes","Yes","Yes","Yes","New York Trenton
+or
+Boston - Providence
+","N/A","No","N/A","N/A","No","No","No","Yes","Acela Express Amtrak","N/A","N/A",""
+"Amtrak SW1000R Loco Add-On (TSW 2020 Only)","N/A","Dovetail Games","SW1000R","Loco 🚆","US 🇺🇲","20/05/19","Yes","No","No","No","No","No","NEC: New York","N/A","No","No","No","No","No","No","Yes","SW1000R","N/A","N/A",""
+"Antelope Valley Line: Los Angeles - Lancaster Route Add-On","Click Here","Dovetail Games","ALV","Route 🛤️","US 🇺🇲","26/09/23","No","No","No","Yes","Yes","Yes","N/A","Metrolink F59PHR Loco Add-On","Yes","Yes","Yes","No","No","No","Yes","EMD F125 Metrolink
+Rotem Bi-Level Cab Car","[Original Timetable] 
+AC4400CW UP (CC)
+F7 (CJP)
+EMD F125 Metrolink (SBD)
+BNSF ES44C4 (CJP)
+BNSF SD70ACe (CJP, SMH, Heritage Collection)
+F59PHR ML (ALV)","[Original Timetable]
+Union Pacific Freight (SMH)
+BNSF Freight (CJP)
+F7 Extras (CJP F7)",""
+"Arosalinie: Arosa Aggregates Pack Add-On","N/A","Rivet Games","ARL Pack","Expansion ➕","CH 🇨🇭","21/11/23","No","No","No","Yes","Yes","Yes","Arosa Line","N/A","Yes","N/A","N/A","No","No","No","Yes","Ge 4/4 II RhB (2 Liveries)","N/A","N/A",""
+"Arosalinie: Chur - Arosa Route Add-On","N/A","Rivet Games","ARL","Route 🛤️","CH 🇨🇭","25/03/21","No","Yes","Yes","Yes","Yes","Yes","N/A","Arosalinie: Arosa Aggregates Pack Add-On
+RhB Anniversary Collection","No","No","No","No","No","No","Yes","Ge 4/4 II RhB","[Arosa Line RhB Anniversary Collection Timetable] 
+Ge 4/4 II RhB (8 Liveries)
+
+[Arosa Line Timetable]
+Ge 4/4 II RhB (8 Liveries)
+
+[Arosa Line Vehicle Pack 02 Timetable]
+Ge 4/4 RhB (8 Liveries)","N/A",""
+"Avanti West Coast BR Class 390 Pendolino EMU Loco Add-on","Click Here","Dovetail Games","AWC 390","Loco 🚆","UK 🇬🇧","17/09/24","No","No","No","No","Yes","Yes","WCML: London Euston - Milton Keynes","N/A","Yes","N/A","N/A","No","No","No","Yes","BR Class 390 Pendolino","N/A","N/A",""
+"Avanti West Coast BR Class 805 Evero BMU Add-On","Click Here","All Aboard Studios","AWC 805","Loco 🚆","UK 🇬🇧","27/01/26","No","No","No","No","No","Yes","WCML: London Euston - Milton Keynes
+or
+WCML: Birmingham - Crewe","N/A","Yes","N/A","N/A","Yes","Yes","Yes","No","BR Class 805","N/A","N/A",""
+"Bahnstrecke Bremen – Oldenburg Add-On","Click Here","Dovetail Games","BRO","Route 🛤️","DE 🇩🇪","06/12/22","No","No","Yes","Yes","Yes","Yes","N/A","N/A","Yes","Yes","No","No","No","No","Yes","DB BR 425
+BR 110 DB
+BR 155 PRESS
+DB Bnrdzf 463.0","[Bremen - Oldenburg 2008 (BR101 Expert) Timetable] 
+BR 642 DB (MTB)
+DB BR 612 (DCZ)
+DB ICE 1 (KWG)
+Bpmmbdzf 286.1 Expert
+DB BR 101 Expert (x3)
+BR 182 (HML, KWG, RT)
+DB BR 187 (SKA)
+DB G6 Shunter (RRO)
+BR 185 (DCZ, MKN, SRM)
+BR 363 DBB (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 155 (RSN) 
+BR 193 Vectron (FTF, DRA)
+
+[Bremen - Oldenburg 2008 Timetable] 
+BR 642 (MTB)
+BR 612 (DCZ), 
+DB ICE 1 (KWG)
+DB BR 101 Expert (x3)
+BR 103 (LFR)
+BR 182 (HML, KWG, RT)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+BR 185 (DCZ, MKN, SRM)
+BR 363 DBB (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 185.5 (DRA, RRO)
+BR 155 (RSN)
+BR 193 Vectron (FTF, DRA)
+","[Bremen - Oldenburg 2008 Timetable] 
+BR 101 (DB BR 101, HRR)
+Dresden - Chemnitz (DCZ)
+Kassel - Wurzburg (KWG)
+Freight Services (None)
+Dresden - Riesa (DRA, RSN)
+Kassel & Dresden Freight (KWG, DRA)
+BR 101 + Kassel - Wurzburg (KWG, DB BR 101, HRR)
+BSW (None)
+BR 155 + Dresden - Riesa (DB BR 155, RSN, DRA)
+Dispolok 182 (Dispolok BR 182)
+MRCE 182 (HML)
+155 + Ruhr Sieg Nord Falns (DB BR 155, RSN)
+Static Stock (None)
+BR 363 (Dresden Riesa) (DRA)
+
+[Bremen - Oldenburg 2008 (BR101 Expert) Timetable]
+CRG-101 (None)
+DCZ (DCZ)
+KWG (KWG)
+FR8 (None)
+DRA (DRA, RSN)
+KWG-DRA (KWG, DRA)
+KWG-101 (KWG)
+DRA-155 (DB BR 155, RSN, DRA)
+KWG-182 (Dispolok BR 182)
+HBK (HML)
+RSN-155 (DB BR 155, RSN)
+Static Stock (None)
+363-Gen9 (DRA)
+",""
+"Bahnstrecke Leipzig - Dresden Route Add-On","Click Here","Dovetail Games","BLD","Route 🛤️","DE 🇩🇪","30/09/25","No","No","No","No","No","Yes","N/A","DB BR 294
+Expert DB BR 145","Yes","Yes","Yes","Yes","Yes","Yes","Yes","DB BR 411⚙️
+DB BR 442🎟️⚙️
+DB BR 146.2🎟️⚙️
+DB BR 143🎟️
+DB BR 185.2🎟️⚙️
+DB BR 363
+766.2 DBpbzfa DB 🎟️","[Original Timetable]
+BR 642 (MTB)
+BR 442 (DRA, KWG)
+BR 612 (DCZ)
+BR 1442 (RT)
+766.2 DBpbzfa (HML, DCZ, DRA, FTF, FSN, MKN, MSB, RT, RSN, SRM, KWG)
+BR 103 (LFR)
+BR 112.1 (HML)
+BR 143 (FSN)
+BR 146.2 (FTF, DRA, MSB, KWG)
+BR 193 Vectron (FTF, DRA)
+BR 218 (HML)
+BR 101 (HRR)
+BR 155 (BRO, RSN)
+BR 182 (HML, KWG, RT)
+BR 185 (DCZ, MKN, SRM)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 187 (SKA)
+Bnrdzf 463.0 (BR 218)
+G6 Shunter (RRO)
+OBB 116 (SBN)
+BR 143 (DRA, DCZ, RSN)
+BR 185.5 (DRA, RRO)
+BR 363 (DRA, DCZ, MTB, RSN)
+BR 294 (BLD)
+BR 145 Expert (BLD)
+
+[Expert Timetable]
+766.2 DBpbzfa (HML, DCZ, DRA, FTF, FSN, MKN, MSB, RT, RSN, SRM, KWG)
+BR 103 (LFR)
+BR 112.1 (HML)
+BR 114 (FTF)
+BR 143 (FSN)
+BR 193 Vectron (FTF, DRA)
+BR 218 (HML)
+BR 294 (BLD)
+BR 642 (MTB)
+BR 146.2 (FTF, DRA, MSB, KWG)
+BR 155 (BRO, RSN)
+BR 182 (HML, KWG, RT)
+BR 185 (DCZ, MKN, SRM)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 185.5 (DRA, RRO)
+BR 187 (SKA)
+BR 363 (DRA, DCZ, MTB, RSN, SBH)
+Bpmmbdzf 286.1 Expert
+BR 101 Expert
+BR 442 (DRA, KWG)
+BR 612 (DCZ)
+Bnrdzf 463.0 Diesel
+DB G6 Shunter (RRO)
+OBB 1116 (SRM)
+BR 145 Expert (BLD)
+BR 1442 Talent 2 (RT)","[Original Timetable]
+S1-Leipzig (RT)
+S2-Leipzig (RT)
+S3-Leipzig (RT)
+S4-Leipzig (RT)
+S5-Leipzig (RT)
+S6-Leipzig (RT)
+S1-Dresden (None)
+S2-Dresden (None)
+S3-Dresden (None)
+RE15+RE18 (None)
+RB31 (None)
+ICE-T (None)
+RB110 (MTB)
+EC (Vectron, DB BR 101, HRR)
+Intermodal (None)
+IC (DB BR 101, HRR)
+EC+363 (Vectron, DB BR 101, HRR)
+Cars (None)
+Manifest (None)
+103 (LFR)
+Local Freight (DB BR 294)
+218 (None)
+Eanos (None)
+LocoSwap (None)
+RB34 (DB BR 218)
+RB60 (DCZ)
+Tankers (None)
+RE1+RE2 (DCZ)
+ICE1 (KWG)
+IC+363 (DB BR 101, HRR)
+RB113 (MTB)
+294 (DB BR 294)
+RE13 (None)
+RE10 (None)
+RB22+RE12 (MTB)
+RE6 (DB BR 218)
+RE3 (None)
+RB30 (None)
+RB45 (None)
+E-94 (BR 194 & E49)
+E-94+110 (BR 194 & E94, LFR)
+628 (NID)
+RB33 (DCZ)
+Statics (None)
+StaticIC (DB BR 101, HRR)
+
+[Expert Timetable]
+S1-Leipzig (RT)
+S2-Leipzig (RT)
+S3-Leipzig (RT)
+S4-Leipzig (RT)
+S5-Leipzig (RT)
+S6-Leipzig (RT)
+S1-Dresden (None)
+S2-Dresden (None)
+S3-Dresden (None)
+RE15+RE18 (None)
+RB31 (None)
+ICE-T (None)
+RB110 (MTB)
+EC (Vectron, Expert 101)
+Intermodal (None)
+IC (Expert 101)
+EC+363 (Vectron, Expert 101)
+Cars (None)
+Manifest (None)
+103 (LFR)
+LocalFreight (BR 294)
+218 (None)
+Eanos (None)
+LOCOSWAP (None)
+RB34 (BR 218)
+RB60 (DCZ)
+Tankers (None)
+RE1+RE2 (DCZ)
+ICE1 (KWG)
+IC+363 (Expert 101)
+RB113 (MTB)
+294 (BR 294)
+RE13 (None)
+RE10 (None)
+RB22+RE12 (MTB)
+RE6 (BR 218)
+RE3 (None)
+RB30 (None)
+RB45 (None)
+RB33 (DCZ)
+Statics (None)
+StaticIC (Expert 101)
+Trailers (None)
+
+
+
+
+
+","PS4 & Xbox One
+Leipzig-Dresden will have no additional AI layers, and a reduced number of playable services.
+All playable services will use the BR 442. Other included trains (ICE-T, BR 143, BR 146, BR 185) will be available to operate in Scenarios.
+The only additional layer will be for a selection of playable BR 294 services
+There will be no AI-only traffic (services that are not otherwise playable) or freight services.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Bahnstrecke Salzburg - Rosenheim Route Add-On","Click Here","Dovetail Games","SRM","Route 🛤️","AT 🇦🇹","27/02/24","No","No","No","Yes","Yes","Yes","N/A","Expert DB BR 101 & IC Steuerwagen","Yes","No","No","No","No","No","Yes","OBB 4024
+766.2  DBpbzfa
+BR 111
+BR 185.2","[Salzburg Rosenheim - BR 101 Expert Timetable] 
+DB BR 628.2 VR (NID)
+Bpmmbdzf 286.1 Expert
+DB BR 101 Expert (x3)
+BR 103 (LFR)
+BR 182 (HML, KWG, RT)
+OBB 1116 (SBN)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, RT, KWG)
+BR 185 (DCZ)
+BR 363 DBB (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 185.5 (DRA, RRO)
+BR 155 (BRO, RSN), 
+BR 193 Vectron (FTF, DRA)
+
+[Salzburg Rosenheim Timetable] 
+DB BR 628.2 VR (NID)
+BR 103 (LFR)
+BR 182 (HML, KWG, RT)
+OBB 1116 (SBN)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, RT, RSN, KWG)
+BR 185 (DCZ)
+BR 363 DBB (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 185.5 (DRA, RRO)
+BR 155 (BRO, RSN)
+BR 193 Vectron (FTF, DRA)","[Salzburg Rosenheim - BR 101 Expert Timetable] 
+111 (None)
+IC (None)
+628 (NID)
+103 (LFR)
+Museum 103 (LFR)
+185 (None)
+Manifest-1 (VBRG)
+Manifest-2 (DRA, RSN)
+Laaers (VBRG)
+Eanos (Vectron)
+Vectron Eanos (Vectron)
+Manifest-3 (Vectron, RSN)
+TADGS (BRO)
+Manifest-4 (DRA)
+Tankers (DB BR 363, RSN, DRA)
+Manifest-5 (VBRG, Vectron, DRA)
+Manifest-6 (DRA, RSN)
+363 (DB BR 363, RSN, Vectron, DRA)
+Falns (DB BR 155, RSN)
+Manifest-7 (RSN, Vectron, VBRG)
+425-AI (BRO)
+1116 (SBN)
+Museum110 (LFR)
+Museum155 (DB BR 155, RSN)
+CarraigeMove (None)
+
+[Salzburg Rosenheim Timetable] 
+BR 111 Passengers services (None)
+BD BR 101 passenger services (DB BR 101, HRR)
+628 AI and passenger services (NID)
+103 Railtour (LFR)
+103 Statics (LFR)
+185 Freight Sggmrss (None)
+Manifest 1 (VBRG)
+Laaers (VBRG)
+Eanos (KWG) (Vectron)
+Vectron with Eanos (Vectron)
+Manifest 3 (Vectron, RSN)
+TADGS (BRO)
+Manifest 4 (DRA)
+Tankers (DRA, DB BR 363, RSN)
+Manifest 5 (VBRG, Vectron, DRA)
+Manifest 6 (DRA, RSN)
+363 Shunting services (DB BR 363, RSN, Vectron, DRA)
+Falns (DB BR 155, RSN)
+Manifest 7 (RSN, Vectron, VBRG)
+DB BR 425 AI (BRO)
+KWG ICE 3 AI (KWG)
+OBB 1116 (SBN)
+DB BR 110 Static Museum (LFR)
+DB BR 155 Static Museum (DB BR 155, RSN)
+Empty Carriage Move (DB BR 101, HRR)
+",""
+"Bakerloo Line Route Add-On","N/A","Dovetail Games","BKL","Route 🛤️","UK 🇬🇧","20/08/20","No","Yes","Yes","Yes","Yes","Yes","N/A","LU 1938 Stock
+NJ Silver 1972 Stock
+","No","No","Yes","No","No","No","Yes","1972 MkII Tube Stock","[1938 Heritage Tube Stock Timetable] 
+1938 Tube Stock LT
+
+[Bakerloo Line 2021 Timetable] 
+1938 Tube Stock LT 
+1972 MkII Tube Stock (5 Liveries)
+
+[London Underground Bakerloo Line Timetable] 
+1972 MkII Tube Stock (4 Liveries)","[1938 Heritage Tube Stock Timetable] 
+No Layers
+
+[Bakerloo Line 2021 Timetable] 
+Silver 72TS Railtour (NJ 1972 Stock)
+38TS Railtour (1938 Stock)
+Freight (FKA) (GWE)
+Freight (HKA) (ECW)
+Static 375 (SEH)
+Static BR Stock (NTP)
+Railtour (SoS, WSR)
+Static 09 (WSR)
+
+[London Underground Bakerloo Line Timetable] 
+Heritage 72 Stock (NJ 1972 Stock)",""
+"Berninalinie: Tirano - Ospizio Bernina","Click Here","Rivet Games","BLE","Route 🛤️","CH 🇨🇭","16/06/24","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","No","No","No","No","No","Yes","Allegra 8/12 RhB","N/A","[Original Timetable]
+Arosa Vehicle Pacl 01 (RhB Pack)",""
+"Birmingham Cross-City Line: Lichfield - Bromsgrove & Redditch Route Add-On","Click Here","Dovetail Games","BCC","Route 🛤️","UK 🇬🇧","17/11/22","No","No","Yes","Yes","Yes","Yes","N/A","BR Class 323
+BR Class 170
+","Yes","No","No","Yes","No","No","Yes","Class 323 WMR 🎟️","[Original Timetable] 
+Class 323 RR 🎟️
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+High Speed Train (GWE)
+Class 37/5 RF (TVL)
+
+[Class 170 Timetable]
+Class 170
+Class 350 (EMK)
+Class 390 (EMK)
+HST Class 43 (GWE)
+Voyager Class 220 XC (RLE)
+Class 37/5 (TVL)
+Class 66 (MAC, CLA, CLI, ECW, PDB, EDN, SEH, EMK, SEH, GWE)","[Original Timetable]
+RHTT (RHTT)
+SEH Class 66 (SEH)
+Class 37 Railtour (TVL, NTP)
+GWR HST (GWE, NTP)
+EMT HST (None)
+HKA Freight (SEH, GWE)
+PCA Freight (SEH, TVL, Class 31)
+BBA Freight (SEH, TVL)
+FKA Freight (SEH, GWE)
+
+[Class 170 Timetable]
+Railhead Treatment Train (RHTT)
+Freight - JNA Aggregates (AI) (SEH)
+Railtour - Class 37 (TVL, NTP)
+HST - GWR (GWE, NTP)
+Freight - HKA Aggregates (SEH, GWE)
+Freight - Cement (SEH, TVL, Class 31)
+Freight - Steel (SEH, TVL)
+Freight - Containers (SEH, GWE)
+CrossCountry Class 170 (None)
+West Midlands Trains Class 170 (None)
+West Midlands Trains Class 350 (EMK)
+Avanti West Coast Class 390 (AI) (Class 390)
+Transport for Wales Class 150 (AI) (CCN)
+Rail Operations Group Class 37 - Class 350 drags (EMK, ROG Class 37)
+RHTT_Static (RHTT)
+CrossCountry Class 220 (XC Class 220)",""
+"Blackpool Branches: Preston - Blackpool & Ormskirk Route Add-On","Click Here","Just Trains","BPO","Route 🛤️","UK 🇬🇧","14/11/23","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","No","Yes","Yes","No","No","Yes","Class 08
+Class 142 🎟️ 
+Class 47/4 🎟️","[Original Timetable]
+Class 08 (PSC)
+Class 101 BLG (TVL, PSC) 🎟️
+LMS Stainer 8F (SoS)
+Class 40 BLU (NTP) 🎟️
+Class 31/1 BLU (TVL) 🎟️
+Class 45/1 BLU (NTP) 🎟️
+Class 47/4 (PSC, NTP) 🎟️
+Class 20 RF (TVL) 🎟️","[Original Timetable]
+Mixed Freight (TVL, Class 31)
+BBA Freight (TVL)
+PCA Freight (Class 31, TVL)
+Seacow Freight (WCL)
+HEA and PCA Freight (TVL, Class 31)
+BBA and Turbot Freight (WCL)
+Summer (None)
+Winter (SoS)
+Autumn (None)
+WCML (None)
+Summer (TVL)
+Freight (None)
+Loco Hauled (None)
+DMU Blackpool North (None)
+DMU Blackpool South (None)
+Route Learner (None)
+Railtours (TVL, Class 20)
+Sleepers (None)
+Class 31 (TVL, Class 31)
+Class 45 (NTP)
+Class 40 (BR Heavy Freight Pack, NTP)
+Class 20 (TVL, Class 20)
+Class 37 (WCL)
+",""
+"BNSF SD70ACe Loco Add-On","Click Here","Dovetail Games","BNSF SD70ACe","Loco 🚆","US 🇺🇲","21/03/23","No","No","Yes","Yes","Yes","Yes","Cajon Pass","N/A","No","N/A","N/A","No","No","No","Yes","BNSF SD70ACe","N/A","N/A",""
+"BR 194 & E94 Railtour Pack","Click Here","TSG","E94 Pack","Loco 🚆","DE 🇩🇪","24/06/25","No","No","No","No","Yes","Yes","Linke Rhienstrecke
+or
+Pfälzische Ludwigsbahn
+","N/A","Yes","N/A","N/A","No","No","No","No","BR 194
+E94","N/A","N/A",""
+"BR Class 20 'Chopper' Loco Add-On","N/A","Dovetail Games","Class 20","Loco 🚆","UK 🇬🇧","18/05/20","Yes","Yes","Yes","Yes","Yes","Yes","Tees Valley Line","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 20","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"BR Class 31 Loco Add-On","N/A","Dovetail Games","Class 31","Loco 🚆","UK 🇬🇧","14/11/19","Yes","Yes","Yes","Yes","Yes","Yes","Tees Valley Line","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 31","N/A","N/A",""
+"BR Class 33 Loco Add-On","Click Here","Dovetail Games","Class 33","Loco 🚆","UK 🇬🇧","27/11/18","Yes","Yes","Yes","Yes","Yes","Yes","West Somerset Railway","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 33","N/A","N/A",""
+"BR Class 52 'Western' Loco Add-On","Click Here","Dovetail Games","Class 52","Loco 🚆","UK 🇬🇧","02/05/19","Yes","Yes","Yes","Yes","Yes","Yes","West Somerset Railway","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 52","N/A","N/A",""
+"BR Class 86/2 & Mk2F Coaches Loco Add-On","Click Here","Just Trains","Class 86","Loco 🚆","UK 🇬🇧","15/07/25","No","No","No","No","Yes","Yes","WCML: Preston - Carlisle","N/A","Yes","N/A","N/A","Yes","No","No","Yes","BR Class 86","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"BR Class 90 Loco Add-On","Click Here","Alan Thomson Simulation","Class 90","Loco 🚆","UK 🇬🇧","30/03/26","No","No","No","No","No","Yes","WCML: London Euston - Milton Keynes","N/A","Yes","N/A","N/A","No","No","Yes","No","BR Class 90","N/A","N/A","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"BR Heavy Freight Pack Loco Add-On","N/A","Dovetail Games","BR Heavy Freight","Expansion ➕","UK 🇬🇧","06/06/19","Yes","Yes","Yes","Yes","Yes","Yes","Northern Trans-Pennine","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 40
+BR Class 08","N/A","N/A",""
+"Brighton Main Line: London Victoria - Brighton Route Add-On","N/A","Dovetail Games","LBN","Route 🛤️","UK 🇬🇧","07/10/21","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","Yes","No","No","No","Yes","Class 377/4 SN
+Class 387 GX","[Original Timetable]
+Class 313/2 SN (ECW)
+Class 375/9 SEB (SEH)
+Class 166 (GWE)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)","[Original Timetable]
+SN Class 313 Services (Class 313, ECW)
+Addtional SN Class 377 Services ( None)
+SE Class 375 AI (SEH)
+SE Class 375 Diverts (SEH)
+Southern AI (None)
+GWR 166 Services (GWE)
+GWR Clapham AI (GWE)
+SE Class 465 AI (SEH)
+Additional SN Class 377 Services (None)
+SN Class 377 Services (None)
+Additional Croydon AI (None)
+Static Class 09 (WSR)
+AI Freight (ECW)
+Class 66 Freight (ECW)
+Class 66 Freight (GWE, ECW) ",""
+"Cajon Pass: Barstow - San Bernardino Route Add-On","Click Here","Dovetail Games","CJP","Route 🛤️","US 🇺🇲","06/09/22","No","No","Yes","Yes","Yes","Yes","N/A","BNSF SD70ACe
+Sante Fe on Cajon Pass
+Sante Fe F7","Yes","Yes","Yes","No","No","No","Yes","BNSF ES44C4 
+BNSF SD40-2","[Original Timetable]
+F7 (CJP)
+BNSF SD70ACe (CJP)
+
+[Santa Fe in the 1990s]
+C40-8W (CJP)
+SD40-2 (CJP, SMH, CCB)","[Original Timetable]
+Sante Fe F7
+BNSF SD70ACe
+
+[Santa Fe in the 1990s]
+Santa Fe CJP
+SMH","[Original Timetable]
+Local Services (None)
+Switching (None)
+AI San Bernardino (None)
+Union Pacific Services (SMH)
+AI Barstow Shop Switching (None)
+F7 Extras (CJP F7)
+
+[Santa Fe in the 1990s]
+AI-Only Traffic at Barstow (None)
+Union Pacific Player-Drivable Traffic (SMH)
+Static Freight Cars in Yards/Sidings (None)
+Static Locomotives in Yards/Sidings (None)"
+"MP15DC Diesel Switcher Loco Add-On (Caltrain branded content removed from sale due to expired licence on February 27th 2025. Re-released as an unbranded add-on for TSW 6)","N/A","Dovetail Games","MP15DC","Loco 🚆","US 🇺🇲","19/03/20","Yes","Yes","Yes","Yes","Yes","Yes","Peninsula Corridor","N/A","No","N/A","N/A","No","No","No","Yes","MP15DC CT97","N/A","N/A",""
+"MP36PH-3C ‘Baby Bullet’ Loco Add-On (Caltrain branded content removed from sale due to expired licence on February 27th 2025. Re-released as an unbranded add-on for TSW 6)","N/A","Dovetail Games","MP36PH-3C","Loco 🚆","US 🇺🇲","13/02/20","Yes","Yes","Yes","Yes","Yes","Yes","Peninsula Corridor","N/A","No","N/A","N/A","No","No","No","Yes","MP36PH-3C
+Bi-Level Cab Car","N/A","N/A",""
+"Canadian National Oakville Subdivision: Hamilton - Oakville Route Add-On","N/A","Dovetail Games","OSD","Route 🛤️","CA 🇨🇦","20/02/20","Yes","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","GP38-2 CN
+GP9RM CN","N/A","N/A",""
+"Cane Creek: Thompson - Potash Route Add-On","N/A","Skyhook Games","CCB","Route 🛤️","US 🇺🇲","08/07/21","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","Yes","No","No","No","No","Yes","AC4400CW UP
+SD40-2 UP","[Original Timetable]
+SD40-2 UP (SMH)","N/A",""
+"Cardiff City Network: Radur & Coryton to Penarth & Bae Caerdydd Route Add-On","Click Here","Dovetail Games","CCN","Route 🛤️","UK 🇬🇧","18/03/25","No","No","No","No","Yes","Yes","N/A","BR Class 142","Yes","Yes","No","Yes","No","No","Yes","Class 150/2 🎟️
+Class 153 🎟️","[Original Timetable]
+Class 66 (CLA, CLP, PDB, ECW, SEH, GWE, EMK)
+High Speed Train (GWE)
+
+[2019 Timetable]
+Class 142 (CCN)
+Class 37/5 (TVL)
+Class 66 (ECW, CLA, PDB, CLP, SEH, EMK, GWE)","[Original Timetable]
+AI Class 150/153 (None)
+West Coast Mainline South - Class 66 (EMK, CLP)
+Great Western Express - London to Reading (GWE)
+TfW - FLIRT Services (None)
+BR Class 1977 Services (None)
+Railhead Treament Train (RHTT)
+BR Class 67 Services (None)
+Diesel Legends of the Great Western (Diesel Legends)
+West Coast Mainline South - Class 66 - Static (EMK)
+BR Class 231 Services - Static (None)
+BR Class 197 Services - Static (None)
+Railhead Treatment Train - Static (RHTT)
+Great Western Express - London to Reading - Static (GWE)
+Class 150/153 (None) 
+Flying Scotsman Rail Tour Services (PDB, BPO, Flying Scotsman)
+Class 20 Rail Tour Services (BPO, Class 20, TVL)
+Class 66 Rail Tour Services (BPO, EMK)
+
+[2019 Timetable]
+Class 37 (TVL, Class 86/2)
+GWR (GWE, RLE)
+XC (Class 170)
+TfW_AI (None)
+RHTT (RHTT)
+Steel (GWE, PSC)
+TEA (GWE, CLP)
+PCA (GWE, Class 31, TVL)
+XC_Voyager (Class 220)","PS4 & Xbox One
+This timetable will not feature any additional service layers outside of the playable 150 and 153 services.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Cargo Line Vol. 1: Petroleum Add-On","Click Here","Skyhook Games","CLP","Expansion ➕","UK 🇬🇧","12/12/23","No","No","No","Yes","Yes","Yes","Midland Main Line
+or
+Great Western Express
+or
+Southeastern High Speed
+","N/A","Yes","N/A","N/A","No","No","No","Yes","Class 66 EWS","N/A","N/A",""
+"Cargo Line Vol. 2: Aggregates Add-on","Click Here","Skyhook Games","CLA","Expansion ➕","UK 🇬🇧","09/05/24","No","No","No","Yes","Yes","Yes","Midland Main Line
+or
+Great Western Express
+or
+Southeastern High Speed
+","N/A","Yes","N/A","N/A","No","No","No","Yes","Class 66 EWS","N/A","N/A",""
+"Cargo Line Vol 3: Intermodal Add-on","Click Here","Skyhook Games","CLI","Expansion ➕","UK 🇬🇧","30/05/25","No","No","No","No","Yes","Yes","ECML: Peterborough - Doncaster
+WCML: London Euston - Milton Keynes","N/A","Yes","N/A","N/A","No","No","No","Yes","Class 66 EWS","N/A","N/A",""
+"Cargo Line Vol. 4 - Military Add-On","Click Here","Skyhook Games","CLM","Expansion ➕","UK 🇬🇧","05/06/25","No","No","No","No","Yes","Yes","Great Western Express
+or
+WCML: Preston - Carlisle","N/A","Yes","N/A","N/A","No","No","No","Yes","Class 66 EWS","N/A","N/A","PS4 & Xbox One
+AI traffic has been reduced to provide acceptable performance.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Cargo Line Vol. 5: Nuclear Add-On","Click Here","Skyhook Games","CLN","Expansion ➕","UK 🇬🇧","18/11/25","No","No","No","No","No","Yes","WCML: Preston - Carlisle
+or
+WCML: London Euston - Milton Keynes
+","N/A","Yes","N/A","N/A","No","No","No","Yes","Class 20/3","N/A","N/A","PS4 & Xbox One
+The spread of other trains running around has been reduced to provide acceptable performance.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Cathcart Circle Line: Glasgow - Newton & Neilston Route Add-On","Click Here","Dovetail Games","CCL","Route 🛤️","UK 🇬🇧","10/05/21","No","Yes","Yes","Yes","Yes","Yes","N/A","ScotRail Class 380","Yes","No","Yes","No","No","No","Yes","Class 314 ScR","[Cathcart Circle 2024 Timetable]
+Class 158 ScR (EDN)
+Class 170 ScR (FCE)
+Class 380 ScR (CCL)
+Class 385 ScR (EDN)
+Class 33 GRN (WSR)
+Class 52 BLUE (GWE)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 40 BLU (NTP)
+Class 31/1 BLU (TVL)
+Class 45/1 BLU (NTP)
+Class 47/4 (NTP, BPO, PSC)
+Class 20 RF (TVL)
+Class 37/5 (TVL, WCL)
+
+[Cathcart Circle 2019 Timetable]
+Class 66 (CLA, CLP, PDB, ECW, SEH, RHTT, GWE, EMK)
+Class 31/1 BLU (TVL)
+Class 47/4 (NTP, BPO, PSC)
+Class 20 RF (TVL)
+Class 37/5 (TVL, WCL)
+
+","[Cathcart Circle 2024 Timetable]
+LNER (PDB)
+ScotRail Class 170 (FCE)
+ScotRail Class 158 (Class 158)
+TPE (EMK)
+AWC (Class 390)
+Scotrail Class 385 (EDN)
+ScotRail 158+385 Services (Class 158, EDN)
+158+TPE (Class 158, EMK)
+385+TPE (EDN, EMK)
+Engineering Works (SEH)
+Failed Class 385 (EDN, EDN Pack)
+RHTT (RHTT)
+Railtour AI (Flying Scotsman (Flying Scotsman, PDB, BPO)
+Railtour (1Z33) (Class 33, WSR, PDB, BPO)
+Railtour (1Z55) (PDB, BR Heavy Freight Pack, NTP)
+Railtour (1Z97) (PDB, BPO)
+
+[Cathcart Circle 2019 Timetable]
+Railtour (NTP)
+Engineering Train (ECW)",""
+"Centro Regional Railways BR Class 323 Add-On","Click Here","SimTrack Studios","Centro 323","Loco 🚆","UK 🇬🇧","14/12/23","No","No","No","Yes","Yes","Yes","Birmingham Cross-City","N/A","Yes","N/A","N/A","No","No","No","Yes","BR Class 323 RR","N/A","N/A",""
+"Clinchfield Railroad: Elkhorn - Dante Route Add-On","N/A","Dovetail Games","CCR","Route 🛤️","US 🇺🇲","08/04/21","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","F7
+SD40","N/A","N/A",""
+"CrossCountry BR Class 220 Voyager DEMU Loco Add-On","Click Here","Dovetail Games","XC Class 220","Loco 🚆","UK 🇬🇧","30/09/25","No","No","No","No","No","Yes","Riviera Line","N/A","Yes","N/A","N/A","Yes","Yes","Yes","Yes","XC Class 220 🎟️⚙️","N/A","N/A",""
+"CSX C40-8W Loco Add-On","Click Here","Dovetail Games","C40-8W","Loco 🚆","US 🇺🇲","26/10/20","No","Yes","Yes","Yes","Yes","Yes","Sand Patch Grade","N/A","No","N/A","N/A","No","No","No","Yes","CSX C40-8W YN2","N/A","N/A",""
+"CSX GP40-2 Loco Add-On (TSW 2020 Only)","N/A","Dovetail Games","GP40","Loco 🚆","US 🇺🇲","29/11/17","Yes","No","No","No","No","No","CSX Heavy Haul","N/A","No","No","No","No","No","No","No","CSX GP40-2","N/A","N/A",""
+"CSX Heavy Haul (TSW 2020 & PC Only)","N/A","Dovetail Games","CSX Heavy Haul","Route 🛤️","US 🇺🇲","16/03/17","Yes","No","No","No","No","No","N/A","N/A","No","No","No","No","No","No","No","SD40-2 
+GP38-2
+AC4400CW","[Original Timetable]
+CSX GP40-2","N/A","PC
+CSX Heavy Haul was a PC exclusive, which later became Sand Patch Grade with the introduction of Train Sim World 2"
+"DB BR 101 Loco Add-On","N/A","Dovetail Games","DB BR 101","Loco 🚆","DE 🇩🇪","22/04/21","No","Yes","Yes","Yes","Yes","Yes","Hauptstrecke Rhien Ruhr","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 101","N/A","N/A",""
+"DB BR 111 & n-Wagen Pack","Click Here","Dovetail Games","FTF Pack","Expansion ➕","DE 🇩🇪","12/12/24","No","No","No","No","Yes","Yes","Frankfurt - Fulda","N/A","Yes","N/A","N/A","No","No","No","No","DB BR 111 
+DB Bnrdzf 463.0","N/A","N/A",""
+"DB BR 155 Loco Add-On","N/A","Dovetail Games","DB BR 155","Loco 🚆","DE 🇩🇪","25/04/19","Yes","Yes","Yes","Yes","Yes","Yes","Ruhr Sieg Nord","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 155","N/A","N/A",""
+"DB BR 182 Loco Add-On","N/A","Dovetail Games","DB BR 182","Loco 🚆","DE 🇩🇪","11/04/19","Yes","Yes","Yes","Yes","Yes","Yes","Rapid Transit","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 182 
+767.2 DABpbzfa DB","N/A","N/A",""
+"DB BR 187 Loco Add-On","N/A","Skyhook Games","DB BR 187","Loco 🚆","DE 🇩🇪","14/10/21","No","Yes","Yes","Yes","Yes","Yes","Koln - Aachen","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 187","N/A","N/A",""
+"DB BR 204 Loco Add-On","N/A","Rivet Games","DB BR 204","Loco 🚆","DE 🇩🇪","21/04/20","Yes","Yes","Yes","Yes","Yes","Yes","Main Spessart Bahn","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 204","N/A","N/A",""
+"DB BR 218 Diesel Loco Add-On","Click Here","TSG","BR 218","Loco 🚆","DE 🇩🇪","25/06/24","No","No","No","Yes","Yes","Yes","Hamburg - Lubeck","N/A","Yes","N/A","N/A","No","No","No","Yes","DB BR 218
+DB Bnrdzf 463.0","N/A","N/A",""
+"DB BR 294 Diesel Shunter Loco Add-On","Click Here","Dovetail Games","DB BR 294","Loco 🚆","DE 🇩🇪","30/09/25","No","No","No","No","No","Yes","Leipzig - Dresden","N/A","Yes","N/A","N/A","No","N/A","Yes","Yes","DB BR 294 ⚙️","N/A","N/A",""
+"DB BR 363 Loco Add-On","N/A","Dovetail Games","DB BR 363","Loco 🚆","DE 🇩🇪","05/10/20","No","Yes","Yes","Yes","Yes","Yes","Ruhr Sieg Nord","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 363","N/A","N/A",""
+"DB BR 403 ICE 3 Railbow Loco Add-On","Click Here","Dovetail Games","ICE3 Railbow","Loco 🚆","DE 🇩🇪","21/03/23","No","No","Yes","Yes","Yes","Yes","Kassel - Wurzburg
+","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 403 ICE 3 Railbow 
+DB BR 401 ICE 1","N/A","N/A",""
+"DB G6 Diesel Shunter Add-On","N/A","TSG","DB G6","Loco 🚆","DE 🇩🇪","02/12/21","No","Yes","Yes","Yes","Yes","Yes","Rhien Ruhr Osten","N/A","No","N/A","N/A","No","No","No","Yes","DB G6 Shunter","N/A","N/A",""
+"Diesel Legends of the Great Western Add-On","Click Here","Dovetail Games","Diesel Legends","Expansion ➕","UK 🇬🇧","11/03/21","No","Yes","Yes","Yes","Yes","Yes","Great Western Express","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 52 
+BR Class 101 
+BR Class 08","N/A","N/A",""
+"Dispolok BR 182 Add-On","Click Here","Dovetail Games","Dispolok BR 182","Loco 🚆","DE 🇩🇪","04/10/22","No","No","Yes","Yes","Yes","Yes","Kassel - Wurzburg
+","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 182 Dispolok","N/A","N/A",""
+"East Coast Main Line: Peterborough - Doncaster Route Add-On","Click Here","Dovetail Games","PDB","Route 🛤️","UK 🇬🇧","26/09/23","No","No","No","Yes","Yes","Yes","N/A","Cargo Line Vol 3: Intermodal
+ECML Diesel Railtour Gameplay Pack
+Flying Scotsman","Yes","No","No","No","No","No","Yes","Class 801 LNER
+Class 66 EWS","[ECML Doncaster - Peterborough Timetable]
+Class 158/0 EMT (MML)
+Class 700/0 TL (SEH)
+Flying Scotsman (PDB)
+Class 47 GRN (WSR)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+High Speed Train EMT (MML)
+
+[ECML Doncaster - Peterborough - Reduced Timetable]
+Flying Scotsman (PDB)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+
+[ECML: Cargo Line 2024 (Intermodal)]
+Class 158 (MML)
+Class 700 (SEH)
+Flying Scotsman (PDB)
+High Speed Train (MML)
+Class 47 (WSR)
+Class 52 (GWE, WSR)
+Class 66 (MAC)
+Class 66 (CLA, CLI, ECW, CLM, EDN, CLP, SEH, EMK, GWE)
+","[ECML Doncaster - Peterborough Timetable]
+EMT Services (MML)
+Class 700 TL AI (Class 700)
+Class 158 EMT + Class 700 TL Services (MML, Class 700)
+Class 323 Northern AI (MGP)
+LNER IC225 (Run by LNER Azuma) (None)
+TPE Services (Run by LNER Azuma) (None)
+Hull Train Services (Run by LNER Azuma) (None)
+Lumo Services (Run by LNER Azuma) (None)
+Grand Central Services (Run by LNER Azuma) (None)
+Flying Scotsman Railtour (Jan/Feb) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Mar/Apr) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (May/June) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (July/Aug) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Sep/Oct) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Nov/Dec) (Flying Scotsman, PDB)
+Freight Services (FKA) (None)
+RHTT Services (RHTT)
+Freight Services (JNA/MFA) (SEH)
+Freight Services (BBA) (TVL)
+Light Engine Class 47 Service (WSR)
+Freight Services (HKA) (GWE)
+Freight Services (PGA) (Class 20, TVL)
+Freight Services (TEA) (BR Heavy Freight Pack, NTP)
+AI Railtour (May/June) (SoS)
+Relief EMT Service (MML)
+Doncaster Static EMT (Feb-June) (MML)
+Doncaster Static EMT (Jan-Apr) (GWE)
+Doncaster Static EMT (Mar-Nov) (MML)
+Doncaster Static EMT (Mar-Oct) (MML)
+Doncaster Static EMT (Jan-Mar) (MML)
+Doncaster Static EMT (Feb-May) (MML)
+Doncaster Static EMT (Jan-Apr) (MML)
+Doncaster Static EMT (Jan-May) (MML)
+Doncaster Static EMT (Feb-June) (MML)
+Doncaster Static EMT (Feb-July) (MML)
+Doncaster Static SE (Feb-May) (SEH)
+Doncaster Static EMT (Feb-Apr) (MML)
+Doncaster Static 47 (Jan-Dec) (NTP)
+Doncaster Static GWR (Jan-Apr) (GWE)
+Doncaster Static EMT (Jan-June) (MML)
+Doncaster Static HKA (Jan-June) (GWE)
+Doncaster Static EMT (Feb-May) (MML)
+Doncaster Static EMT (Jan-Dec) (MML)
+Doncaster Static GWR (June-Oct) (GWE)
+Doncaster Static EMT (Sep-Nov) (MML)
+Doncaster Static EMT (June-Dec) (MML)
+Doncaster Staic EMT (Apr-July) (MML)
+Doncaster Static EMT (July-Sep) (MML)
+Doncaster Static SE (June-Oct) (SEH)
+Doncaster Static EMT (June-Sep) (MML)
+Doncaster Static EMT (July-Sep) (MML)
+Doncaster Static EMT (Aug-Oct) (MML)
+Doncaster Static EMT (July-Sep) (MML)
+Doncaster Static GWR (June-Oct) (GWE)
+Doncaster Static EMT (Nov-Dec) (MML)
+Doncaster Static GWR (Nov-Dec) (SEH)
+Doncaster Static EMT (Nov-Dec) (MML)
+Doncaster Static EMT (Oct-Dec) (MML)
+Doncaster Static HKA (Oct-Dec) (GWE)
+Doncaster Static EMT (Sep-Dec) (MML)
+Doncaster Static WMR (Oct-Dec) (BCC)
+
+[ECML Doncaster - Peterborough - Reduced Timetable]
+LNER IC225 (Run by LNER Azuma) (None)
+TPE Services (Run by LNER Azuma) (None)
+Hull Train Services (Run by LNER Azuma) (None)
+Lumo Services (Run by LNER Azuma) (None)
+Grand Central Services (Run by LNER Azuma) (None)
+Flying Scotsman Railtour (Jan/Feb) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Mar/Apr) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (May/June) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (July/Aug) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Sep/Oct) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Nov/Dec) (Flying Scotsman, PDB)
+Freight Services (FKA) (None)
+
+[ECML: Cargo Line 2024 (Intermodal)] 
+Midland Main Line (HST/158) (MML)
+Thameslink 700 (Class 700)
+Midland Main Line (158/700) (MML, Class 700)
+Northern 323 (MGP)
+LNER IC225 (801) (None)
+Trans Pennine Express (801) (None)
+Hull Trains (801) (None)
+London Midland (801) (None)
+Grand Central (801) (None)
+Flying Scotsman Railtour (Jan/Feb) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Mar/Apr) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (May/June) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (July/Aug) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Sep/Oct) (Flying Scotsman, PDB)
+Flying Scotsman Railtour (Nov/Dec) (Flying Scotsman, PDB)
+Cargo Line Intermodal (FCA) (None)
+Railhead Treatment Trains (RHTT)
+Southern High Speed (JNA) (SEH)
+Tees Valley Line (BBA) (TVL)
+West Somerset Railway 47 (WSR)
+Great Western Express HKA (GWE)
+Tees Valley Line PGA (Class 31, TVL)
+Cargo Line Petroleum TEA (CLP)
+Spirit of Steam Jub (SoS)
+Midland Main Line Jun/Jul HST (MML)
+Doncaster Static EMT (Jan-Apr) (GWE)
+Doncaster Static EMT (Mar-Nov) (MML)
+Doncaster Static EMT (Mar-Oct) (MML)
+Doncaster Static EMT (Jan-Mar) (MML)
+Doncaster Static EMT (Feb-May) (MML)
+Doncaster Static EMT (Jan-Apr) (MML)
+Doncaster Static EMT (Jan-May) (MML)
+Doncaster Static EMT (Feb-July) (MML)
+Doncaster Static SE (Feb-May) (SEH)
+Doncaster Static HST (Feb-Apr) (MML)
+Doncaster Static 47 (Jan-Dec) (PSC)
+Doncaster Static 166 (Jan-Apr) (GWE)
+Doncaster Static HST (Jan-June) (MML)
+Doncaster Static HKA (Jan-June) (GWE)
+Doncaster Static HST (Feb/May) (MML)
+Doncaster Static HST (Jan/Dec) (MML)
+Doncaster Static 166 (Jun/Oct) (GWE)
+Doncaster Static HST (Sep/Nov) (MML)
+Doncaster Static HST (Jun/Dec) (MML)
+Doncaster Static HST (Apr/Jul) (MML)
+Doncaster Static HST (Jul/Sep) (MML)
+Doncaster Static 465 (Jun/Oct) (SEH)
+Doncaster Static HST (Jun/Sep) (MML)
+Doncaster Static HST (Jul/Sep) (MML)
+Doncaster Static HST (Aug/Oct) (MML)
+Doncaster Static HST (Jul/Sep) (MML)
+Doncaster Static 166 (Jul/Oct) (GWE)
+Doncaster Static HST (Nov/Dec) (MML)
+Doncaster Static 465 (Nov/Dec) (SEH)
+Doncaster Static HST (Nov/Dec) (MML)
+Doncaster Static HST (Oct/Dec) (MML)
+Doncaster Static HKA (Oct/Dec) (GWE)
+Doncaster Static HST (Sep/Dec) (MML)
+Doncaster Static 323 (Oct/Dec) (None)
+Cargo Line Aggregates HOA (CLA)
+
+
+",""
+"East Coastway: Brighton - Eastbourne & Seaford Route Add-On","Click Here","Dovetail Games","ECW","Route 🛤️","UK 🇬🇧","12/12/19","Yes","Yes","Yes","Yes","Yes","Yes","N/A","Southern BR Class 313 EMU Add-On
+Southern BR Class 171 & BR Class 377/3 Add-On","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Class 377/4 SN ⚙️🎟️
+Class 66 EWS","[East Coastway 313 Timetable]
+Class 313/2 SN (ECW)
+Class 87 (PSC)
+Class 52 BLU (GWE)
+Class 66 (CLA, CLP, PDB, EDN, SEH, RHTT, GWE, EMK)
+Class 40 BLU (NTP)
+Class 31/1 BLU (TVL)
+Class 45/1 BLU (NTP)
+Class 47/4 (NTP, BPO, PSC)
+Class 37/5 (TVL, WCL)
+
+[East Coastway 2020 Timetable]
+Class 87 (PSC)
+Class 52 BLU (GWE)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 40 BLU (NTP)
+Class 31/1 BLU (TVL)
+Class 45/1 BLU (NTP)
+Class 47/4 (NTP, BPO, PSC)
+Class 37/5 (TVL, WCL)
+
+[East Coastway Class 377/3 Timetable]
+Class 377/3
+Class 171
+Class 20 (TVL)
+Class 31 (TVL)
+Class 33 (WSR)
+Class 37/5 (TVL, WCL, SEH)
+Class 375/9 (SEH)
+Class 377/2 (EMK)
+Class 377/4 (LBN)
+Class 387 GX (LBN)
+Class 395 (SEH)
+Class 40 (NTP)
+Class 45/1 (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 66 (MAC, CLP, EDN, PDB, CLA, CLI, SEH, EMK, GWE)
+Class 700/0 (SEH)
+Flying Scotsman (PDB)
+
+[East Coastway 2018 Timetable]
+Class 171
+Class 20 (TVL)
+Class 31 (TVL)
+Class 313/2
+Class 33 (WSR)
+Class 37/5 (TVL, WCL, SEH)
+Class 375/9 (SEH)
+Class 377/2 (EMK)
+Class 377/4 (LBN)
+Class 387 GX (LBN)
+Class 395 (SEH)
+Class 40 (NTP)
+Class 45/1 (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 66 (MAC, CLP, EDN, PDB, CLA, CLI, SEH, EMK, GWE)
+Class 700/0 (SEH)
+Flying Scotsman (PDB)","[East Coastway 313 Timetable]
+Railtour (NTP Mk2s) (NTP)
+
+[East Coastway 2020 Timetable]
+Railtour (NTP Mk2s) (NTP)
+
+[East Coastway Class 377/3 Timetable]
+Southern Class 377 and Class 171 (None)
+Thameslink Clas 700 (Class 700)
+Southern Class 377 West Coastway AI (None)
+Gatwick Express Class 387 AI (LBN)
+Thameslink Class 700 AI (Class 700)
+EWS Class 66 - Aggregates (None)
+Southern Class 377 AI (None)
+GWR Class 150 AI (RLE)
+Southeastern Class 395 Railtour (SEH)
+Railhead Treatment Train (RHTT)
+BR Class 37 - Driver Training (TVL)
+BR Class 20 - Railtour (Class 20, TVL, Class 86)
+Gatwick Express Class 387 - Football Extra (LBN)
+Thameslink Class 700 - Lewes Diversion (Class 700)
+Gatwick Express Class 387 - Lewes Diversion (LBN)
+Flying Scotsman Railtour (Flying Scotsman, PDB, Class 33, WSR)
+ROG Class 37 and Southern Class 377 Rescue (ROG Class 37)
+Southeastern Class 375 (SEH)
+
+[East Coastway 2018 Timetable]
+Southern Class 377 and Class 171 (None)
+Thameslink Clas 700 (Class 700)
+Southern Class 377 West Coastway AI (None)
+Gatwick Express Class 387 AI (LBN)
+Thameslink Class 700 AI (Class 700)
+EWS Class 66 - Aggregates (None)
+Southern Class 377 AI (None)
+GWR Class 150 AI (RLE)
+Southeastern Class 395 Railtour (SEH)
+Railhead Treatment Train (RHTT)
+BR Class 37 - Driver Training (TVL)
+BR Class 20 - Railtour (Class 20, TVL, Class 86)
+Gatwick Express Class 387 - Football Extra (LBN)
+Thameslink Class 700 - Lewes Diversion (Class 700)
+Gatwick Express Class 387 - Lewes Diversion (LBN)
+Flying Scotsman Railtour (Flying Scotsman, PDB, Class 33, WSR)
+ROG Class 37 and Southern Class 377 Rescue (ROG Class 37)
+Southeastern Class 375 (SEH)","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"ECML Diesel Railtour Gameplay Pack","Click Here","Athena Simulations","ECML Pack","Expansion ➕","UK 🇬🇧","03/04/25","No","No","No","No","Yes","Yes","ECML: Peterborough - Doncaster","N/A","Yes","N/A","N/A","No","No","No","Yes","N/A","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Edinburgh - Glasgow: Engineering Express Pack","Click Here","Rivet Games","EDN Pack","Expansion ➕","UK 🇬🇧","23/01/24","No","No","No","Yes","Yes","Yes","Edinburgh - Glasgow","N/A","Yes","N/A","N/A","No","No","No","Yes","BR Class 66 (2 Liveries)","N/A","N/A",""
+"Expert DB BR 101 & IC Steuerwagen Loco Add-On","Click Here","TSG","Expert 101","Loco 🚆","DE 🇩🇪","08/08/24","No","No","No","Yes","Yes","Yes","Salzburg - Rosenheim
+or
+Nahverkehr Dresdenn","N/A","Yes","N/A","N/A","No","No","No","Yes","DB BR 101 Expert
+Bpmmbdzf 286.1 Cab Car","N/A","N/A",""
+"Expert DB BR 101 on Kassel - Würzburg Gameplay Pack","Click Here","TSG","Expert 101 Gameplay Pack","Expansion ➕","DE 🇩🇪","31/07/25","No","No","No","No","Yes","Yes","Kassel - Wurzburg
+Expert 101
+","N/A","Yes","N/A","N/A","No","No","No","No","N/A","N/A","N/A","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & Steam
+You will get the complete experience.
+
+Epic Games Store
+Not available"
+"Expert DB BR 145 Loco Add-On","Click Here","TSG","Expert 145","Loco 🚆","DE 🇩🇪","13/03/26","No","No","No","No","No","Yes","Bahnstrecke Leipzig - Dresden","N/A","Yes","N/A","N/A","No","No","Yes","No","Expert DB BR 145","N/A","N/A","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & Steam
+You will get the complete experience"
+"Fife Circle Line: Edinburgh - Markinch via Dunfermline & Kirkcaldy","Click Here","Rivet Games","FCE","Route 🛤️","UK 🇬🇧","26/03/24","No","No","No","Yes","Yes","Yes","N/A","ScotRail BR Class 158","Yes","No","Yes","Yes","No","No","Yes","Class 170 🎟️","[Sprinter Timetable]
+Class 158 (EDN) 🎟️
+Class 380 (CCL)
+Class 385 (EDN)
+Flying Scotsman (PDB)
+Class 66 (CLA, ECW, PDB, CLP, SEH, EMK, GWE)
+
+[Class 170 Timetable]
+Class 385 (EDN)
+Flying Scotsman (PDB)
+LMS Jubilee Black (WCL)
+Class 40 (NTP)","[Sprinter Timetable]
+LNER Class 801 (PDB)
+Avanti West Coast Class 390 (Class 390)
+ScotRail Class 385 (None)
+ScotRail Class 380 (Class 380)
+Express Freight DLC (EDN Pack)
+Railhead Treatment Trains (RHTT)
+Flying Scotsman Rail Tour (Flying Scotsman, PDB)
+Edinburgh Trams (None)
+
+[Class 170 Timetable]
+Edinburgh Glasgow Layer (EDN)
+LNER801_Layer (PDB)
+Jubilee_Circular (SoS)
+Flying Scotsman Rail Tour (Flying Scotsman, PDB, BPO)
+Winter Whistler Wonder (BR Heavy Freight Pack, NTP, SoS)
+Leven_Branch (None)",""
+"FlixTrain BR 193 Vectron Loco Add-On","Click Here","Dovetail Games","Flixtrain","Loco 🚆","DE 🇩🇪","17/09/24","No","No","No","No","Yes","Yes","Frankfurt - Fulda","N/A","Yes","N/A","N/A","No","No","No","Yes","BR 193 Vectron FT","N/A","N/A",""
+"Frankenbahn: Stuttgart - Heilbronn Route Add-On","Click Here","Dovetail Games","SHB","Route 🛤️","DE 🇩🇪","09/12/25","No","No","No","No","No","Yes","N/A","N/A","Yes","Yes","No","Yes","Yes","Yes","No","BR 140 ⚙️
+Bnrdzf 463.0 🎟️🔊⚙️
+BR 111 🎟️
+BR 363","[Original Timetable]
+BR 111 (FTF)
+BR 425 (MKN)
+BR 423 (FSN, FTF, HMA)
+BR 628 (NID)
+BR 111 (FTF, MKN)
+BR 218 (HML)
+BR 101 (HRR)
+BR 110 (BRO)
+BR 155 (BRO, RSN)
+DB G6 Shunter (RRO)
+BR 294 (BLD)
+766.2 (BLD, DRA, DCZ, HML, FSN, FTF, MSN, MKN, RT, RSN, SRM, KWG)
+BR 363 (BLD, DRA, DCZ, MTB, RSN)","[Original Timetable]
+IR Services (DB BR 218, LFR)
+S-Bahn Stuttgart S5 (FSN)
+S-Bahn Stuttgart S4 (FSN)
+S-Bahn Stuttgart S6 (FSN)
+S-Bahn Stuttgart S1 AI (FSN)
+RB 628 Services (NID)
+S-Bahn Stuttgart S2 AI (FSN)
+S-Bahn Stuttgart S3 AI (FSN)
+Expo Train (DB BR 101, HRR, LFR)
+ICE 1 & Expo Express Services (KWG)
+ICE T Services (FTF)
+DB IC & EC Services (DB BR 101, HRR)
+OBB EC Services (SBN)
+Autozug (BRO, LFR)
+MKN (MKN)
+Intermodal (None)
+Mixed (RSN)
+","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Frankfurt - Fulda: Kinzigtalbahn Route Add-On","Click Here","Dovetail Games","FTF","Route 🛤️","DE 🇩🇪","17/09/24","No","No","No","No","Yes","Yes","N/A","DB BR 111 & n-Wagen Pack
+FlixTrain BR 193 Vectron Loco Add-On","Yes","Yes","Yes","Yes","No","No","Yes","DB BR 411
+DB BR 423
+766.2 DBpbzfa 🎟️
+DB BR 114 🎟️
+DB BR 146.2 🎟️
+DB BR 193 Vectron","[Frankfurt-Fulda BR 111 & n-Wagen Timetable]
+BR  642 (MTB)
+BR 425 (BRO)
+BR 403 ICE 3 (KWG)
+BR 401 ICE 1 (KWG)
+BR 111 (FTF)
+BR 103 (LFR)
+BR 182 (MHL, KWG, RT)
+OBB 1116 (SRM)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+BR 185 (DCZ, SRM)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 185.5 (DRA, RRO)
+BR 155 (BRO, RSN)
+Bnrdzf 463.0 (FTF)
+BR 193 Vectron (DRA)
+
+[Frankfurt-Fulda BR 101 Expert Timetable]
+BR 642 (MTB)
+BR 425 (BRO)
+BR 403 ICE 3 (KWG)
+BR 401 ICE 1 (KWG)
+Bpmmbdzf 286.1 Expert
+DB BR 101 Expert
+BR 103 (LFR)
+BR 112.1 (HML) 🎟️
+BR 182 (HML, KWG, RT)
+OBB 1116 (SRM)
+BR187 (SKA)
+DB G6 Shunter (RRO)
+766.2 Dbpbzfa (DCZ, DRA, HML, MSB, RT, SRM, KWG, MKN) 🎟️
+BR 185 (DCZ, SRM)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG) 
+BR 146.2 (DRA, MSB< KWG) 🎟️
+BR 185.5 (DRA, RRO)
+BR 193 Vectron (FTF, DRA)
+BR 155 (BRO, RSN)
+
+[Frankfurt-Fulda Timetable]
+BR 642 (MTB)
+BR 425 (BRO)
+BR 403 ICE 3 ( KWG)
+BR 401 ICE 1 (KWG)
+BR 103 (LFR)
+BR 182 (HML, KWG, RT)
+OBB 116 (SRM)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 Dbpbzfa (DCZ, DRA, HML, MSB, RT, RSN, SRM, KWG, MKN) 🎟️
+BR 185 (DCZ, SRM, MKN)
+BR 363 ( DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 146.2 (DRA, MSB, KWG) 🎟️
+BR 185.5 (DRA, RRO)
+BR 193 Vectron (FTF, DRA)
+BR 155 (BRO, RSN)","[Frankfurt-Fulda BR 111 & n-Wagen Timetable]
+RB5 (KWG)
+BR85 (MTB)
+ICE (KWG)
+ICE3 (KWG)
+IC (DB BR 101, HRR)
+363+IC (DB BR 101, HRR, DB BR 363, RSN)
+Intermodal-1 (None)
+Intermodal-2 (SRM)
+TGV (LGV)
+RE59 (BRO)
+IC+Taurus (DB BR 101, HRR, SBN)
+ICET (None)
+Manifest-1 (VBRG, Vectron, RSN, MTB, SRM)
+Manifest-2 (Vectron, SRM)
+Manifest-3 (FTF, DRA, SRM)
+Manifest-4 (VBRG, DB BR 363, RSN, MTB, DRA, SRM)
+Manifest-5 (FTF, DRA, LFR, SRM)
+Tankers (DRA, SRM)
+Habbins (SRM)
+RB56 (MTB)
+Uacns (None)
+Roos-T (None)
+LocalManifest (DB BR 363, RSN, DRA)
+RB58 (BRO)
+S8 (None)
+S9 (None)
+Laaers (VBRG, SRM)
+103 (LFR)
+RE5 (None)
+Eanos (Vectron, SRM)
+RB41 (None)
+RB59 (None)
+EmptyCarraige (None)
+LightLoco (None)
+RB46 (MTB)
+218 (DB BR 218)
+RB49 (BRO)
+RB10 (KWG)
+Tankers+363 (DRA, DB BR 363, RSN)
+RB45 (MTB)
+RB12 (NID)
+RB61 (MTB)
+RE2 (KWG)
+RB53 (BRO)
+S1 (None)
+S2 (None)
+S3 (None)
+S4 (None)
+S5 (None)
+S6 (None)
+S7 (None)
+RB34 (MTB)
+RB52 (MTB)
+RE30 (None)
+RE70+68 (BRO)
+RE9 (BRO)
+TADGS (None)
+Blue363 (MTB)
+RB22+20 (None)
+RB21 (MTB)
+
+[Frankfurt-Fulda BR 101 Expert Timetable]
+RB5 (KWG)
+RB85 (MTB)
+ICE (KWG)
+ICE3 (KWG)
+IC (None)
+363+IC (DB BR 363, RSN)
+Intermodal-1 (None)
+Intermodal-2 (None)
+TGV (LGV)
+RE59 (BRO)
+IC+Taurus (SBN)
+NJ (SBN, VBRG)
+ICET (None)
+Manifest-1 (VBRG, Vectron, RSN, MTB)
+Manifest-2 (Vectron)
+Manifest-3 (FTF, DRA)
+Manifest-4 (VBRG, RSN, MTB, DRA)
+Manifest-5 (FTF, DRA, LFR)
+Tankers (DRA)
+Habbiins (None)
+RB56 (MTB)
+Flix (Flixtrain)
+Uacns (None)
+Roos-T (None)
+LocalManifest (DB BR 363, RSN, DRA)
+RB58 (BRO)
+S8 (None)
+S9 (None)
+Laaers (VBRG)
+103 (LFR)
+RE5 (None)
+Eanos (Vectron)
+RB41 (None)
+RB59 (None)
+EmptyCarriage (None)
+LightLoco (None)
+RB46 (MTB)
+218 (DB BR 218)
+RB49 (BRO)
+RB10 (KWG)
+Tankers+363 (DRA, DB BR 363, RSN)
+RB45 (MTB)
+RB12 (NID)
+RB61 (MTB)
+RE2 (KWG)
+RE14 (KWG)
+RB53 (BRO)
+S1 (None)
+S2 (None)
+S3 (None)
+S4 (None)
+S5 (None)
+S6 (None)
+S7 (None)
+RB34 (MTB)
+RB52 (MTB)
+RE30 (None)
+RE70+68 (BRO)
+RE9 (BRO)
+
+[Frankfurt-Fulda Timetable]
+RB5 (KWG)
+RB85 (MTB)
+ICE (KWG)
+ICE3 (KWG)
+IC (DB BR 101, HRR)
+363+IC (DB BR 101, HRR, DB BR 363, RSN)
+Intermodal-1 (None)
+Intermodal-2 (None)
+TGV (LGV)
+RE59 (BRO)
+IC+Taurus (DB BR 101, HRR, SBN)
+NJ (SBN, DB BR 101, HRR, VBRG)
+ICET (None)
+Manifest-1 (VBRG, Vectron, RSN, MTB)
+Manifest-2 (Vectron)
+Manifest-3 (DRA)
+Manifest-4 (VBRG, RSN, MTB, DRA)
+Manifest-5 (DRA, LFR)
+Tankers (DRA)
+Habbiins (None)
+RE56 (MTB)
+Flix (Flixtrain)
+Uacns (None)
+Roos-T (None)
+LocalManifest (DB BR 363, RSN, DRA)
+RB58 (BRO)
+S8 (None)
+S9 (None)
+Laaers (VBRG)
+103 (LFR)
+RE5 (None)
+Eanos (Vectron)
+RB41 (None)
+RB59 (None)
+EmptyCarraige (None)
+LightLoco (None)
+RB46 (MTB)
+218 (DB BR 218)
+RB49 (BRO)
+RB10 (KWG)
+Tankers+363 (DRA, DB BR 363, RSN)
+RB45 (MTB)
+RB12 (NID)
+RB61 (MTB)
+RE2 (KWG)
+RE14 (KWG)
+RB53 (BRO)
+S1 (None)
+S2 (None)
+S3 (None)
+S4 (None)
+S5 (None)
+S6 (None)
+S7 (None)
+RB34 (MTB)
+RB52 (MTB)
+RE30 (None)
+RE70+68 (BRO)
+RE9 (BRO)
+TADGS (LFR)
+MuseumLFR (LFR)
+Blue363 (MTB)
+RB22+20 (None)
+RB21 (MTB)","PS4 & Xbox One
+Timetable services included for 8th gen consoles are formed of DB BR 114 + Dostos (RB51, RE51, RE50, RE54 and RE55 services) and ICE-T services, with additional FlixTrain Vectron layers for owners of Deluxe /Special Edition. Other locos such as the DB Vectron will not have playable services.
+
+Xbox Series S
+Will be limited to the following layers:
+- FlixTrain BR 193 Vectron
+- DB BR 411 ICE-T
+- RB12, RB34, RB52, RB53, RB61, RE2, RE9, RE14, RE30, RE68, RE70 (Passenger services using DB BR 114 and 146 locomotives with Dostos between Frankfurt Hbf and Fulda.)
+- S8, S9 (DB BR 423 S-Bahn services – Internal layers within Frankfurt)
+- Intermodel-2 Layer (Vectron services – Internal layers within Frankfurt)
+- Sggmrss, Habbiins, Kijls and Tadgs wagons (DB BR 193 Vectron freight services)
+- AI Layers: S1, S2, S3, S4, S5, S6, S7 (DB BR 423 S-Bahn services – Internal layers within Frankfurt)
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Frankfurt S-Bahn: S1, S8 & S9 Route Add-On","Click Here","Dovetail Games","FSN","Route 🛤️","DE 🇩🇪","20/05/25","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","Yes","Yes","No","No","No","BR 423
+BR 430.1
+766.2 DBpbzfa🎟️
+BR 143🎟️","[Original Timetable]
+BR 411 (FTF)
+BR 642 (MTB)
+BR 425 (BRO)
+BR 403 (KWG)
+BR 401 (KWG)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 101 (HRR)
+BR 193 Vectron (FTF, DRA)
+
+[Reduced Timetable]
+BR 411 (FTF)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)","[Original Timetable]
+S1 (None)
+S2 (None)
+S7 (None)
+S8 (None)
+S9 (None)
+RB21-AI (MTB)
+RB75 (None)
+S4 (None)
+S3 (None)
+S5 (None)
+S6 (None)
+RB26-AI (BRO)
+RB12 (NID)
+RB10 (BRO)
+Intermodal (FTF)
+Manifest-1 (None)
+NJ (SBN, VBRG, DB BR 101, HRR)
+Laaers (VBRG, FTF)
+Tankers (DRA, FTF)
+RE3 (MTB)
+RB31+RE13 (MTB)
+RB44 (BRO)
+RE2 (BRO)
+RE4 (BRO)
+LocalFreight (FTF, DRA, DB BR 363, RSN)
+LocalFreight-2 (DRA, Vectron, DB BR 363, RSN)
+LocalFreight-3 (FTF, DRA, DB BR 363, RSN)
+ICE3 (KWG)
+RB22 (None)
+ICE-T (FTF)
+IC (DB BR 101, HRR)
+EC (DB BR 110, HRR)
+Habiins (None)
+ICE1 (KWG)
+Frankfurt-DostoAI (None)
+IC+363 (DB BR 101, HRR, DB BR 363, RSN)
+RB34 (MTB)
+RE30 (None)
+RB61 (MTB)
+RB59 (BRO)
+RE60 (BRO)
+RB98 (BRO)
+RB33 (MTB)
+RB11 (None)
+RE70 (BRO)
+
+[Frankfurt S-Bahn Reduced]
+S1 (None)
+S2 (None)
+S7 (None)
+S8 (None)
+S9 (None)
+S4 (None)
+S3 (None)
+S5 (None)
+S6 (None)
+RB75 (None)
+ICE-T (FTF)","PS4 & Xbox One
+Not Compatible.
+
+Xbox Series S, PS5, & Xbox Series X
+These consoles will have a reduced timetable.
+
+PC
+You will get the complete experience."
+"Glossop Line: Manchester - Hadfield & Glossop","Click Here","Dovetail Games","MGP","Route 🛤️","UK 🇬🇧","27/06/23","No","No","Yes","Yes","Yes","Yes","N/A","N/A","Yes","No","No","No","No","No","Yes","Class 323 NT","[Original Timetable]
+Class 158 EMT (MML)
+LMS Jubilee (SoS)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 40 BLU (NTP)
+Class 20 RF (TVL)
+Class 37/5 RF (TVL)","[Original Timetable]
+EMT Series (MML)
+Freight Services FKA/HKA (SEH, GWE)
+Freight Services JNA/MFA (SEH)
+Freight Services HEA (SEH, TVL)
+RHTT Services (RHTT)
+Railtour Mar/Apr (TVL, NTP)
+Railtour May/June (NTP, Class 20, TVL)
+Railtour July/Aug (TVL, NTP)
+Railtour Apr/May (NTP, BR Heavy Freight Pack)
+Railtour All Year (SoS)
+Class 66 Railtour All Year (SEH, NTP)
+Charted AI Apr/May (WSR, NTP)
+Class 20 AI Jan/Feb (Class 20, TVL)
+Class 47 AI Mar/Apr (WSR)
+Stock Move AI June/July (SEH, MML)
+ROG Stock Move AI Aug/Sep (ROG Class 37, WSR)
+Static Class 33 Nov/Dec (Class 33, WSR)
+ROG Jan/Mar (ROG Class 37)
+Static Mk1 Jan/Mar (SoS)
+Guide Bridge Static Stock (GWE)
+RHTT Guide Bridge Static Stock (RHTT)",""
+"Great Western Express Route Add-On","Click Here","Dovetail Games","GWE","Route 🛤️","UK 🇬🇧","14/09/17","Yes","Yes","Yes","Yes","Yes","Yes","N/A","Cargo Line Vol. 1: Petroleum
+Cargo Line Vol. 2: Aggregates
+Cargo Line Vol. 4 - Military
+Diesel Legends of the Great Western","Yes","Yes","Yes","No","Yes","No","Yes","Class 166 GWG
+High Speed Train GWG
+Class 66 (2 Liveries)","[2017 Timetable]
+Class 47 (NTP, BPO, PSC)
+Class 350 (EMK)
+Class 37 (SEH)
+Class 66 (MAC, PDB, ECW, CLP, CLA, EDN, CLI, SEH, EMK)
+Class 802 (RLE)
+Flying Scotsman (PDB)
+Class 484 (Island Line)
+Voyager Class 220 (RLE)
+
+[2016 Timetable]
+Class 47 GRN (WSR)
+Class 52 BLU (GWE, WSR)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+
+[Diesel legands of the Great Western Timetable]
+Class 101 (GWE)
+Class 87 (PSC)
+Class 52 (GWE)
+Class 31/1 BLU (NTP)
+Class 45/1 BLU (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 08 BLU (TVL, NTP, GWE)","[2017 Timetable]
+GWR - Intercity Service (None)
+Static  - Diesel Legends of the Great Western (Diesel Legends)
+LU - Circle and Hammersmith & City Line (Island Line)
+LU - Central Line (EMK)
+GWR - Intercity Summer Services May/September (None)
+LU - District Line (Island Line)
+SWT - Salisbury Services (MML)
+Railtour - Flying Scotsman May/June (Flying Scotsman, PDB)
+Railtour -1938 Stock February/March (BKL, 1938 Stock)
+GWR - Networker Services (None)
+Freight - Class 66 (None)
+LO - Mildmay Line (NNL)
+HC - Heathrow Airport Connect Services (EMK)
+GWR - IET Test Services (RLE)
+Freight - Class 66 + HKA (None)
+GWR - Night Sleeper Services (PSC)
+CH - Parliamentary Train (NNL)
+SN - West London Line (EMK)
+Freight - Class 37 (ROG Class 37)
+XC - Class 220 (Class 220)
+RHTT - Railhead Treatment Train October /November (RHTT)
+Railtour - The Woodham's Phoenix August/September (Class 86)
+Freight - Class 66 + JNA (SEH)
+Freight - Class 66 + TEA (CLP)
+Freight - Class 66 + HOA (CLA)
+Freight - Class 66 + FKA (None)
+Freight - Class 66 + JNA + HOA (SEH, CLA)
+LU - Piccadilly Line (EMK)
+
+[2016 Timetable]
+Static 72TS Eailing Broadway (BKL)
+PCA Wagons Freight (Class 31, TVL)
+Cargo Line Petroleum Freight (CLP)
+EWS Class 66 Freight Services JNA (SEH)
+Cargo Line Aggregates Freight (CLA)
+CL-Military (CLM)
+
+[Diesel Legends of the Great Western]
+Class 31 (Class 31, TVL)
+Freight (BR Heavy Freight Pack, NTP)",""
+"Harlem Line: Grand Central Terminal - North White Plains Route Add-On","Click Here","Dovetail Games","HAR","Route 🛤️","US 🇺🇲","17/03/22","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","Yes","No","No","No","Yes","M3A
+M7A","N/A","[Original Timetable]
+Harlem River Freight (SPG)
+Static Twin Bay/Tank Cars (SFJ, SPG)
+Static Twin Bay/Centerbeam Cars (SFJ)
+Harlem River Freight (SFJ, SPG, SMH)
+Harlem River Freight (SJF, SPG, HSC, SHM)
+Static Flatcars (HSC)
+",""
+"Hauptstrecke Hamburg - Lübeck Route Add-On","Click Here","Dovetail Games","HML","Route 🛤️","DE 🇩🇪","13/05/21","No","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 218","No","No","No","No","No","No","Yes","766.2 DBpbzfa
+BR 112.1
+BR 182 MRCE","[Original Timetable]
+BR 406 ICE 3M (SKA)
+BR 218 (HML)
+DB Bnrdzf 463.0
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, MSB, MKN, RT, RSN, SRM, KWG)
+BR 185 (DCZ, MKN, SRM)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 182 (KWG, RT)
+BR 101 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)","[Original Timetable]
+RB 8 (None)
+RE 80 (None)
+Freight Services (None)
+IC Services 101 (DB BR 101, HRR)
+ICE Services KAH (SKA)
+RE 70 (None)
+RE 1 (None)
+RE 7 (None)
+ME Services (None)
+Coach Move Service 101+363 (DB BR 363, DB BR 101, HRR, RSN)
+RB 61 (None)
+RB 82 (NID)
+RE 93+RB 84 (NID)
+RB 85 (NID)
+RB 86 (NID)
+RE 6 (NID)
+218 Freight (DB BR 218)
+BR 218 RE83/85 (DB BR 218)
+BR 218 Extras (DB BR 218)
+",""
+"Hauptstrecke München - Augsburg Route Add-On","N/A","Dovetail Games","HMA","Route 🛤️","DE 🇩🇪","22/10/20","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","BR 403 ICE 3M
+BR 423","[Original Timetable]
+BR 425 (HRR)
+BR 185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, DRA, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)
+BR 423 (FTF)","[Original Timetable]
+S3 (None)
+S4 (None)
+Dostos (MSB)
+BR 425 (HRR)
+Freight (MSB)
+Freight (RRO)",""
+"Hauptstrecke Rhein-Ruhr: Duisburg - Bochum Route Add-On","N/A","Dovetail Games","HRR","Route 🛤️","DE 🇩🇪","24/03/20","Yes","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 101","No","No","No","No","No","No","Yes","BR 425
+BR 422","[Original Timetable]
+BR 185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 182 (KWG, RT)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, DRA, RSN)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 112.1 (HML)
+BR 101 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)
+","[Original Timetable]
+Regional Express/Freight (MSB)
+IC Services (DB BR 101)",""
+"HKA Bogie Hopper Wagon Pack","Click Here","Dovetail Games","WCML Pack","Expansion ➕","UK 🇬🇧","12/12/24","No","No","No","No","Yes","Yes","WCML: London Euston - Milton Keynes","N/A","Yes","N/A","N/A","No","No","No","No","N/A","N/A","N/A",""
+"Horseshoe Curve: Altoona - Johnstown & South Fork Route Add-On","N/A","Skyhook Games","HSC","Route 🛤️","US 🇺🇲","12/04/22","No","Yes","Yes","Yes","Yes","Yes","N/A","Norfolk Southern Heritage Livery Collection
+Union Pacific Heritage Collection","No","Yes","No","No","No","No","Yes","ES44AC NS 
+GP38-2 NS","[Original Timetable]
+ES44AC (10 Liveries)
+GP38-2 UP (SFJ)","N/A",""
+"Island Line 2022: BR Class 484 EMU Add-On","N/A","Rivet Games","Island Line","Loco 🚆","UK 🇬🇧","19/07/22","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 484","N/A","N/A",""
+"Isle Of Wight: Ryde - Shanklin Route Add-On","N/A","Rivet Games","IOW","Route 🛤️","UK 🇬🇧","15/10/20","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","Class 483","N/A","N/A",""
+"LGV Méditerranée: Marseille - Avignon Route Add-On","N/A","Dovetail Games","LGV","Route 🛤️","FR 🇫🇷","17/12/20","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","Yes","No","No","No","No","Yes","TGV Duplex 200 CM","N/A","N/A",""
+"Liberec - Stará Paka Route Add-On","Click Here","Vector Simulations","LBSP","Route 🛤️","CZ 🇨🇿","10/03/26","No","No","No","No","No","Yes","N/A","N/A","Yes","Yes","No","Yes","Yes","Yes","No","CD 750 ⚙️
+CD 843 🎟️🔊⚙️","[Original Timetable]
+BR 642 (MTB)","[Original Timetable]
+843 (None)
+750 (None)
+642 (MTB)
+854 (None)
+642_Tanvald (MTB)","PS4 & Xbox One
+Not Compatible.
+
+Xbox Series S, PS5, & Xbox Series X
+You will get the complete experience.
+
+PC
+You will get the complete experience."
+"Linke Rheinstrecke: Mainz - Koblenz Add-On","Click Here","Dovetail Games","LFR","Route 🛤️","DE 🇩🇪","16/03/23","No","No","Yes","Yes","Yes","Yes","N/A","BR 194 & E94 Railtour Pack","Yes","Yes","No","No","No","No","Yes","BR 103
+BR 110
+Bnrdzf 463.0","[Original Timetable]
+BR 628.2 (NID)
+BR 401 ICE 1 (KWG)
+
+[1984 Timetable]
+BR 628.2 (NID)
+BR 218 (HML)
+BR 194
+BR 111 (MITT)
+BR 365 (NID)","[Koblenz - Mainz 1984]
+BR 194 Freight (None)
+LocalTrains (None)
+Eilzug (MITT)
+IC (MITT)
+FD (None)
+Diesel (NID)
+Diesel640 (NID)
+WiesbadenLocal (None)
+Diesel655 (NID)
+KoblenzLocal (MITT)
+BR194Freight_365 (None)
+BR218 (MITT, DB BR 218)
+
+[Koblenz - Mainz 1997]
+BR 628 Regional Services (NID)
+BR 110/n-Wagen Regional Services (None)
+BR 103 IC Services (None)
+BR 401 ICE Services (KWG)
+BR 110 SE Services (None)
+BR 103 IR Services (None)
+BR 110 D Services (None)
+BR 110 Freight Services (None)
+AI (None)",""
+"LIRR Commuter: New York - Long Beach, Hemstead & Hicksville","Click Here","Dovetail Games","LIC","Route 🛤️","US 🇺🇲","30/04/24","No","No","No","Yes","Yes","Yes","N/A","LIRR M3 EMU","Yes","No","Yes","No","No","No","Yes","M7 LIRR
+M9 LIRR","[Original Timetable]
+M3 LIRR","[Original Timetable]
+26-50 (None)
+51-75 (None)
+Belmont Park Services (None)
+M3 Services (LIRR_M3)
+October Seasonal (None)
+NJT (NYT)
+Amtrak (NYT)
+Acela (Amtrak Acela)",""
+"LIRR M3 EMU Loco Add-On","N/A","Dovetail Games","LIRR M3","Loco 🚆","US 🇺🇲","14/05/20","Yes","Yes","Yes","Yes","Yes","Yes","Long Island Rail Road
+or
+LIRR Commuter","N/A","No","N/A","N/A","No","No","No","Yes","M3 LIRR ","N/A","N/A",""
+"LNER Class A3 60103 Flying Scotsman Steam Loco Add-On","Click Here","Dovetail Games","Scotsman","Loco 🚆","UK 🇬🇧","26/10/23","No","No","No","Yes","Yes","Yes","ECML: Peterborough - Doncaster","N/A","Yes","N/A","N/A","No","No","No","Yes","LNER Flying Scotsman","N/A","N/A",""
+"London Overground: Gospel Oak - Barking Riverside Add-On","Click Here","Dovetail Games","BKG","Route 🛤️","UK 🇬🇧","19/03/24","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","Yes","No","No","No","No","Yes","Class 710 TFL","[Original Timetable]
+LMS Jubilee (PFR)
+Class 33 GRN (WSR)
+Class 37 (SEH, WCL)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 20 RF (TVL)
+","[Original Timetable]
+ECML (PDB)
+Peak Forest - May/June (PFR)
+Flying Scotsman - June (Flying Scotsman, PDB)
+Class 700 (Class 700)
+Class 710 - North London Line (None)
+38 Stock Railtour (1938 Stock, BKL)
+RHTT (RHTT)
+Freight (PDB, SEH)
+Freight (PDB, VBRG)
+BBA Wagons (TVL)
+Gatwick Express (LBN)
+Class 710 - South Tottenham (None)
+Class 710 - GEML (None)
+Class 710 - Enfield Town (None)
+Class 710 - Chingford (None)
+Freight (PDB)
+Class 710 - Cheshunt (None)
+Flying Scotsman - July (Flying Scotsman, PDB)
+Freight (PDB, GWE)
+Great Western Express (GWE)
+Cargo Line Vol.2 - HOA (CLA)
+Freight - PCA (PDB, Class 31, TVL)
+Railtour - March/April (SEH, PDB)
+Class 20 -  August/September (Class 20, TVL)
+Freight - May/June (WCL, SEH)
+Freight - September/October (WCL, PDB)
+AI EMT - April/May (MML)
+Railtour - April/May (Class 33, WSR, PDB)
+ROG Class 37 Jan/Feb (ROG Class 37)
+AI Railtour November/December (BPO, PFR)",""
+"London Overground Mildmay line: Stratford - Willesden Junction Route Add-On","Click Here","Incredible Trains","NLL","Route 🛤️","UK 🇬🇧","04/03/25","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","Yes","No","No","No","Yes","Class 378 TFL","[Original Timetable]
+Class 710 (BKG)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, GWE, EMK)","[Original Timetable]
+ChingfordLine (BKG)
+CentralLine (BKL)
+GoblinLine (BKG)
+EastLondonLIne (BKG)
+LionessLine (BKG)
+BakerlooLine (BKL)
+ElizabethLine (BKG)
+ECML (PDB)
+Thameslink (Class 700)
+SouthEasterHighSpeed (SEH)
+MML (MML)
+WCML_Avanti (Class 390)
+Chiltern (GWE)
+Jubilee (BKL)
+Freight (PDB)
+DLR (None)
+CentralLine2 (BKL)
+BakerlooLine2 (BKL)
+Chiltern2 (GWE)
+GreatNorthern (LBN)
+DLR2 (None)
+GreaterAnglia (BKG)
+GreaterAnglia2 (BKG)
+JubileeLine2 (BKG)
+Thameslink2 (Class 700)
+WCML_LNR_2 (EMK)
+Southern (EMK)
+WillesdenTMD (BKG)","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"London Underground 1938 Stock EMU Loco Add-On","N/A","Rivet Games","1938 Stock","Loco 🚆","UK 🇬🇧","14/10/21","No","Yes","Yes","Yes","Yes","Yes","Bakerloo Line","N/A","No","N/A","N/A","No","No","No","Yes","1938 Tube Stock LT","N/A","N/A",""
+"Long Island Rail Road: New York - Hicksville Route Add-On","N/A","Dovetail Games","LIRR","Route 🛤️","US 🇺🇲","20/11/18","Yes","Yes","Yes","Yes","Yes","Yes","N/A","LIRR M3 EMU","No","No","No","No","No","No","Yes","M7 LIRR (4 Liveries)","[Original Timetable]
+M3 LIRR","N/A",""
+"Main Spessart Bahn: Aschaffenburg - Gemünden Route Add-On","N/A","Dovetail Games","MSB","Route 🛤️","DE 🇩🇪","21/02/19","Yes","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 204","No","No","Yes","No","No","No","Yes","766.2 DBpbzfa
+BR 146.2
+BR 185.2","[Original Timetable]
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MKN, RT, RSN, SRM, KWG)
+BR 204 (MSB)
+BR 185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 182 (KWG, RT)
+BR 187 (SKA)
+BR 143 (DCZ, DRA, RSN)
+BR 112.1 (HML)
+BR 185.2 (RSN, KWG, VBRG)
+BR 146.2 (DRA, FTF, KWG)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)","[Original Timetable]
+BR 204 (DB BR 204)
+",""
+"Maintalbahn: Aschaffenburg - Miltenberg Route Add-On","Click Here","Dovetail Games","MTB","Route 🛤️","DE 🇩🇪","28/11/23","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","No","Yes","No","No","No","Yes","BR642
+BR 363","[Maintalbahn Timetable]
+BR 628.2 (NID)
+BR 612 (DCZ)
+DB G6 Shunter (RRO)
+BR 363 (DCZ, DRA, RSN)
+
+[BR 218 Timetable]
+BR 628.2 (NID)
+BR 612 (DCZ)
+BR 218 (HML)
+DB G6 Shunter (RRO)
+BR 363 (DCZ, DRA, RSN)","[BR 218 Timetable]
+Freight (None)
+Tankers (DRA)
+Vectron_ai (Vectron)
+185_ai (VBRG)
+425_AI (BRO)
+RE55_AI (MSB)
+ICE (KWG)
+628 (NID)
+363_RED (DB BR 363, RSN)
+BR218 (HML)
+
+[Maintalbahn Timetable]
+Freight (None)
+Tankers (DRA)
+KWG Vectron AI (Vectron)
+185 AI (VBRG)
+DB BR 425 AI (BRO)
+RE 55 AI (MSB)
+ICE 3 AI (KWG)
+DB BR 628 Static (NID)
+DB BR 363 (DB BR 363, RSN)
+",""
+"Manchester Airport Commuter: Manchester - Alderley Edge Route Add-On","Click Here","Alan Thomson Simulation","MAC","Route 🛤️","UK 🇬🇧","01/07/25","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","Yes","Yes","Yes","No","No","Class 323🔊, Class 66","[Sunday Timetable]
+Class 150/2 (CCN)
+Class 153 (CCN)
+Class 158 (MML)
+Class 350 (EMK)
+Class 390 (EMK)
+
+Weekday Timetable]
+Class 150/2 (CCN)
+Class 153 (CCN)
+Class 158 (EDN, MML)
+Class 350 (EMK)
+Class 390 (EMK)
+Class 87 (PSC)
+Class 66 (CLA, CLP, PDB, ECW, SEH, GWE, EMK)
+Voyager Class 220 XC (RLE)","[Manchester Sunday Timetable]
+NT_Eletric_2018 (None)
+NT ex-SR 158 Layer (Class 158)
+Class 390 Layer (Class 390)
+EMT 158 Layer (MML)
+Transpenine 350 Layer (EMK)
+TFW Layer (CCN)
+
+[Manchester Weekday Timetable]
+AWC 390 Services (Class 390)
+323_Main (None)
+Freight Services (None)
+NT ex-SR 158 Layer (Class 158)
+87 Railtour (PDB)
+Class08 (PDB)
+66_RHTT (RHTT)
+TPE 350 Layer (EMK)
+158 EMT Layer (MML)
+TFW (CCN)
+220 (Class 220)
+Northern Class 156 Operated by 158s (Class 158)
+Class 156 & 158 Combo (Class 158)
+
+","PS4 & Xbox One
+Not Compatible.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"MBTA Commuter: Boston - Framingham/Worcester Line Route Add-On","Click Here","Dovetail Games","BOW","Route 🛤️","US 🇺🇲","12/11/24","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","Yes","Yes","No","No","Yes","HSP46 🎟️
+Rotem CTC-5 Cab Car 🎟️
+CTC-3 Cab Car 🎟️
+F40PH-3C 🎟️","[Original Timetable]
+Acela Express Amtrak (BPE)
+SD40 CSX-S (SPG)
+C40-8W YN2 (SPG)
+ACS-64 (BPE, NYT)
+CTC-3 Cab Car (BPE) 🎟️
+AC4400CW (SPG)
+GP38-2 (SPG)
+SD40-2 (SPG)","[Original Timetable]
+Amtrak (None)
+Amtrak-LL (None)
+Acela (Amtrak Acela)
+MBTA-AI (None)
+HSC (HSC)
+FR8 (SPG, BNSF SD70ACe, SMH, HSC, CJP)
+CSX-IM (HSC, CJP, SPG)",""
+"MBTA Providence/Stoughton Line HSP46 Pack","Click Here","Dovetail Games","HSP46","Expansion ➕","US 🇺🇲","03/07/25","No","No","No","No","Yes","Yes","Boston - Providence","N/A","Yes","N/A","N/A","Yes","No","No","Yes","HSP46 🎟️","N/A","N/A",""
+"Medway Valley Line Route Add-On","Click Here","Firefly Simulations","MVL","Route 🛤️","UK 🇬🇧","26/03/26","No","No","No","No","No","Yes","N/A","N/A","Yes","Yes","Yes","Yes","Yes","Yes","No","Class 375/3
+Class 375/6","[Original Timetable]
+Class 33 (WSR)
+Class 395 (SEH)
+Class 465 (SEH)
+Class 66 (CLA. CLP. PDB. SEH, GWE, EMK)
+Class 700 (SEH)","[Original Timetable]
+Class 395 Medway Valley (SEH)
+Class 395 CML Services (SEH)
+Thameslink Services (Class 700)
+Southeastern Victoria Services (None)
+Southeastern SEML Services (None)
+Southern Hasting AI (None)
+Misc Freight (SEH)
+Cargoline Aggregates (CLA)
+RHTT Services (RHTT)
+Cargoline Petroleum (CLP)
+Class 465 (SEH)
+Rememberance Class 395 Railtour (SEH)
+Medway Valley Venturer (Class 33, WSR)
+Class 375 Maidstone East (None)
+Class 375 Statics (None)
+CL Aggregates Statics (None)
+Freight Statics (SEH)
+Class 47 Evening Rounder (WSR)
+The Flying Kentishman (WSR, Flying Scotsman)","PS4 & Xbox One
+Not Compatible.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Metrolink F59PHR Loco Add-On","Click Here","Dovetail Games","F59PHR","Loco 🚆","US 🇺🇲","20/02/25","No","No","No","No","Yes","Yes","Antelope Valley Line
+or
+San Bernardino Line
+","N/A","Yes","N/A","N/A","N/A","No","No","No","Metrolink F59PHR","N/A","N/A",""
+"Metrolink Holiday Train Pack","Click Here","Dovetail Games","SBD Pack","Expansion ➕","US 🇺🇲","12/12/24","No","No","No","No","Yes","Yes","San Bernardino Line","N/A","Yes","N/A","N/A","No","No","No","No","Metrolink F125 (Christmas Livery)","N/A","N/A",""
+"Midland Main Line: Leicester - Derby & Nottingham Route Add-On","Click Here","Skyhook Games","MML","Route 🛤️","UK 🇬🇧","18/04/23","No","No","Yes","Yes","Yes","Yes","N/A","Cargo Line Vol. 1: Petroleum
+Cargo Line Vol. 2: Aggregates","Yes","No","No","No","No","No","Yes","Class 158/0 EMT
+High Speed Train EMT (2 Liveries)","[Original Timetable]
+Flying Scotsman (PDB)
+LMS Jubilee Black Festive (WCL)
+Class 47 GRN (WSR)
+Class 52 (GWE, WSR)
+Class 37/7 EPX (SEH)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 45/1 BLU (NTP)","[Original Timetable]
+Southeastern High Speed Aggregates (SEH)
+Southeastern & Trans-Pennine Railtour (SEH, NTP)
+Northern Trans-Pennine Railtour (NTP)
+Railhead Treatment Trains (RHTT)
+Train Deliveries September/October (ROG Class 37, LBN)
+LMS Jubilee Railtour (SoS)
+Train Deliveries May/June (ROG Class 37, SEH)
+Train Deliveries January/February (ROG Class 37)
+Train Deliveries March/April (ROG Class 37)
+Train Deliveries November/December (ROG Class 37, LBN)
+Train Deliveries July/August (ROG Class 37, WCL, NTP)
+Cement Trains (SEH, Class 31, TVL)
+East Midlands Express Passenger Trains (None)
+Cargo Line Petroleum Trains (CLP)
+Cargo Line Aggregate Trains (CLA)
+Northern Trans-Pennine Rolling Stock (NTP)
+Blackpool Branches Rolling Stock (BPO)
+Rail Operations Group Locomotives (ROG Class 37)
+Flying Scotsman Railtour (Flying Scotsman, PDB)
+Cargo Line Intermodal Trains (CLI)
+CL-Nuclear (CLN)
+",""
+"Mittenwaldbahn: Innsbruck - Garmisch-Partenkirchen Route Add-On","Click Here","TSG","MITT","Route 🛤️","AT 🇦🇹","11/02/25","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","No","Yes","No","No","Yes","BR 111 🎟️
+OBB 1020 🎟️","[Original Timetable]
+BR 365 (NID)
+BR 103 (LFR)","[Original Timetable]
+Freight (None)
+Long Distance Trains (None)
+Landesk Services (None)
+Munich (None)
+NIddertalbahn BR 365 (NID)
+TowardsKufstein (None)
+BR 103 (LFR)","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Morristown Line: New York & Hoboken - Dover Route Add-On","Click Here","Dovetail Games","MTN","Route 🛤️","US 🇺🇲","30/09/25","No","No","No","No","No","Yes","N/A","NJ TRANSIT ALP-45DP","Yes","Yes","Yes","Yes","Yes","Yes","Yes","NJ Transit Arrow III🎟️⚙️
+NJ Transit ALP46🎟️⚙️
+Multilevel Cab Car🎟️","[Original Timetable]
+Acela Express
+ACS-64 (BPE, NYT)
+Amfleet Cab Car (NYT)
+Multilevel Cab Car (NYT)
+","[Original Timetable]
+MTA LIRR Services (LIRR Commuter)
+NJT Hoboken Division (None)
+Amtrak Northeast Regional Services (NYT)
+Amtrak Acela Express Services (Amtrak Acela)
+NJT ALP-45DP Services (ALP-45DP)
+","PS4 & Xbox One
+No additional AI service layers will appear in the schedule for these platforms. All ALP-46 services have been removed. The ALP-46 will still be available to play in Scenarios.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Nahverkehr Dresden -Riesa Route Add-On","Click Here","Dovetail Games","DRA","Route 🛤️","DE 🇩🇪","09/09/21","No","Yes","Yes","Yes","Yes","Yes","N/A","Expert DB BR 101 & IC Steuerwagen
+Railpool BR 193 Vectron","Yes","Yes","Yes","No","No","No","Yes","BR 442 Talent 2
+766.2 DBpbzfa
+BR 143
+BR 146.2
+BR 185.5
+BR 363","[Nahverkehr Dresden Timetable]
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 406 (SKA)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, RSN)
+BR 185 (DCZ, MKN, SRM)
+BR 363 (DCZ, MTB)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)
+
+[BR 101  Expert Timetable]
+BR 411 (FTF)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+Bpmmbdzf 286.1 Expert
+DB BR 101 Expert
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, RSN)
+BR 185 (DCZ,, MKN, SRM)
+BR 185 (DCZ, MKN, SRM)
+BR 363 (DCZ, MTB)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 146.2 (FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR193 Vectron (FTF)","[Nahverkehr Dresden BR 101 Expert]
+S3 (None)
+S2 (None)
+RE50 (None)
+RE15+RE18 (None)
+RB31 (None)
+FR8 (None)
+ICE (FTF)
+IC (None)
+Vectron (Vectron)
+
+[Nahverkehr Dresden]
+S3 AI (None)
+S2 Services (None)
+RE50 Services (None)
+RE15/18 (None)
+RB31 Services (None)
+Freight Services (None)
+BR 406 ICE Services (SKA)
+BR 101 IC Services (DB BR 101, HRR)
+Vectron/Eanos Freight Services (Vectron)",""
+"New Journeys - CSX SD40 Add-On","N/A","Dovetail Games","NJ CSX SD40","Loco 🚆","US 🇺🇲","25/10/22","No","No","Yes","Yes","Yes","Yes","Sand Patch Grade
+","N/A","No","N/A","N/A","No","No","No","Yes","CSX SD40 (2 Liveries)","N/A","N/A",""
+"New Journeys - S-Bahn Köln BR 423 Add-On","N/A","Dovetail Games","NJ BR 423","Loco 🚆","DE 🇩🇪","25/10/22","No","No","Yes","Yes","Yes","Yes","Koln - Aachen","N/A","No","N/A","N/A","No","No","No","Yes","DB BR 423","N/A","N/A",""
+"New Journeys - Silver 1972 Stock Add-On","N/A","Dovetail Games","NJ 1972 Stock","Loco 🚆","UK 🇬🇧","25/10/22","No","No","Yes","Yes","Yes","Yes","Bakerloo Line","N/A","No","N/A","N/A","No","No","No","Yes","1972 MkII Tube Stock LT","N/A","N/A",""
+"New Journeys Expansion (TSW 2 Only)","N/A","Dovetail Games","EHP","Expansion ➕","N/A 🌐","17/02/22","No","Yes","No","No","No","No","Sand Patch Grade
+Koln - Aachen
+Bakerloo Line
+","N/A","No","N/A","N/A","No","No","No","Yes","CSX SD40 (2 Liveries)
+DB BR 423
+1972 MkII Tube Stock LT","N/A","N/A",""
+"Niddertalbahn: Bad Vilbel - Glauburg-Stockheim Route Add-On","Click Here","TSG","NID","Route 🛤️","DE 🇩🇪","23/03/23","No","No","Yes","Yes","Yes","Yes","N/A","N/A","Yes","Yes","No","No","No","No","Yes","BR  628.2
+BR 365","N/A","[Original Timetable]
+BR 365 (None)
+Left Rhine Valley (LFR)
+",""
+"NJ TRANSIT ALP-45DP Electro-Diesel Loco Add-On","Click Here","Dovetail Games","ALP-45DP","Loco 🚆","US 🇺🇲","30/09/25","No","No","No","No","No","Yes","Morristown Line","N/A","Yes","N/A","N/A","Yes","Yes","Yes","Yes","NJ ALP-45DP🎟️⚙️","N/A","N/A",""
+"Norfolk Southern Heritage Livery Collection Add-On","N/A","Skyhook Games","NS Heritage","Expansion ➕","US 🇺🇲","26/09/23","No","No","No","Yes","Yes","Yes","Horseshoe Curve","N/A","Yes","N/A","N/A","No","No","No","Yes","NS ES44AC (9 Liveries)","N/A","N/A",""
+"Northeast Corridor: Boston - Providence Route Add-On","Click Here","Dovetail Games","BPE","Route 🛤️","US 🇺🇲","19/08/21","No","Yes","Yes","Yes","Yes","Yes","N/A","Amtrak Acela Express
+HSP46 Pack","Yes","Yes","No","No","No","No","Yes","ACS-64 (2 Liveries)
+F40PH-3C
+CTC-3 Cab Car","[Original Timetable]
+Acela Express Amtrak
+
+[HSP-46 Timetable]
+Acela Express Amtrak 
+HSP46
+CTC-5
+","[Original Timetable]
+Acela Express (Amtrak Acela)
+CSX (SPG)
+
+[HSP-46 Timetable]
+Acela Express (Amtrak Acela)
+CSX (SPG)","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Northeast Corridor Metro-North: New York - Stamford Route Add-On","Click Here","Dovetail Games","NYS","Route 🛤️","US 🇺🇲","19/03/26","No","No","No","No","No","Yes","N/A","N/A","Yes","Yes","Yes","Yes","Yes","Yes","No","ACS-64 🎟️
+MNR M8 🎟️🔊
+SD40-2 ","[Original Timetable]
+ACS-64 (BPE, NYT)
+ALP-46 (MTN, NYT)
+Acela (BPE)
+M3A (HAR)
+M7A (HAR)
+Multi-Level Commuter Cab (MTN, NYT)
+","[Original Timetable]
+Metro-North M8 Grand Central (None)
+Amtrak Northeast Regional (None)
+Amtrak Acela (Acela)
+Metro-North M7A Static (HAR)
+Metro-North M8 Stamford (None)
+Metro-North M8 Bridgeport (None)
+Long Island Rail Road M7 AI (LIC)
+Metro-North M8 New Haven (None)
+Metro-North Ballast Hoppers Stamford Static (None)
+Metro-North Ballast Hoppers New RochelleStatic (None)
+Metro-North Ballast Hoppers Mott Haven Static (None)
+Metro-North Tank Car Stamford Static (None)
+New Jersey Transit Train to the Game (MTN)
+Long Island Rail Road M3 AI (LIRR M3)
+Metro-North M8 Static (None)
+CSX SD40-2 Trash (None)
+CSX SD40-2 Oak Point Yard (BNSF SD70ACe)
+New Jersey Transit Penn Station AI (MTN)
+CSX SD40-2 P&W Stone Trains (None)
+Metro-North M8 Baseball Specials (None)
+Metro-North M7A Baseball Specials (HAR)
+Amtrak WorkTrain (HSC)
+Metro-North M8 Harrison (None)
+Metro-North M7A Brewster (HAR)
+New Jersey Transit Penn Stattion AI (ALP-45DP)
+Metro-North M7A Grand Central (HAR)
+","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Northeast Corridor: New York - Trenton Route Add-On","Click Here","Dovetail Games","NYT","Route 🛤️","US 🇺🇲","21/02/23","No","No","Yes","Yes","Yes","Yes","N/A","Amtrak Acela Express
+","Yes","No","Yes","Yes","No","No","Yes","ALP-46 🎟️
+ACS-64, Multi-level Cab Car 🎟️
+Amfleet Cab Car","[New York -Trenton Timetable]
+Acela Express Amtrak (BPE)
+ACS-64 (BPE)
+
+[New York - Trenton Reduced Timetable]
+Acela Express Amtrak (BPE)
+ACS-64 (BPE)
+","[Original Timetable]
+LIRR (LIRR)
+ME-2 (SPG)
+HSC (HSC)
+NJT-AI (None)
+Amtrak (None)
+Acela (Amtrak Acela)
+Croxton (HSC)
+SPG (SPG)
+
+[Reduced Timetable]
+NJT AI Traffic (None)
+Amtrak KS & NER Services
+Acela Express (Amtrak Acela)",""
+"Northeast Corridor: New York Route Add-On (TSW 2020 Only)","N/A","Dovetail Games","NEC","Route 🛤️","US 🇺🇲","20/03/18","Yes","No","No","No","No","No","N/A","Amtrak SW1000R","No","No","No","No","No","No","Yes","ACS-64
+GP38-2","[Original Timetable]
+GP40-2
+SW1000R
+Ex-Metroliner Cab Car","N/A",""
+"Northern Trans-Pennine: Manchester - Leeds Route Add-On","N/A","Dovetail Games","NTP","Route 🛤️","UK 🇬🇧","13/12/18","Yes","Yes","Yes","Yes","Yes","Yes","N/A","BR Heavy Freight Pack","No","No","No","No","No","No","Yes","Class 45/1
+Class 47/4
+Classs 101","[Original Timetable]
+Class 40 BLU (NTP)
+Class 47 (BPO, PSC)
+Class 08 (NTP, TVL, GWE)","[Original Timetable]
+Freight Services (BR Heavy Freight Pack)",""
+"Peak Forest Railway: Ambergate - Chinley & Buxton Route Add-On","Click Here","Dovetail Games","PFR","Route 🛤️","UK 🇬🇧","09/05/23","No","No","Yes","Yes","Yes","Yes","N/A","N/A","Yes","No","No","No","No","No","Yes","LMS Fowler 4F
+LMS Jubilee
+LMS Stainer 8F","[No Additional Layers]","[Original Timetable]
+Freight (None)",""
+"Peninsula Corridor: San Francisco - San Jose Route Add-On 
+(Caltrain branded content removed from sale due to expired licence on February 27th 2025. Re-released as an unbranded add-on for TSW 6)","N/A","Dovetail Games","SFJ","Route 🛤️","US 🇺🇲","15/08/19","Yes","Yes","Yes","Yes","Yes","Yes","N/A","MP15DC Diesel Switcher
+MP36PH-3C ‘Baby Bullet’","No","No","No","No","No","No","Yes","F40PH-2CAT
+Gallery Cab Car
+GP38-2 UP","[Standard Timetable]
+MP36-3C (SFJ)
+MP15DC (SFJ)
+
+[Baby Bullet Timetable]
+MP36PH-3C (SFJ)
+Bi-Level Cab Car (SFJ)
+MP15DC (SFJ)","[Standard Timetable]
+Switching (MP15DC)
+
+[Baby Bullet Timetable]
+Switching (MP15DC)",""
+"Pfälzische Ludwigsbahn: Mannheim – Kaiserslautern Route Add-On","Click Here","Dovetail Games","MKN","Route 🛤️","DE 🇩🇪","28/01/25","No","No","No","No","Yes","Yes","N/A","BR 194 & E94 Railtour Pack","Yes","Yes","No","Yes","No","No","Yes","​766.2 DBpbzfa 🎟️
+DB BR 111 🎟️
+DB BR 185.2
+DB BR 406
+BR 425 DBTR","[Original Timetable]
+BR 411 (FTF)
+BR 628.2 (NID)
+BR 612 (DCZ)
+TGV Duplex 200 CM (LGV)
+BR 111 (FTF) 🎟️
+BR 218 (HML)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, RT, RSN, SRM, KWG) 🎟️
+BR 185 (DCZ, SRM)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 182 (HML, KWG, RT)
+BR 103 (LFR)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 185.5 DRA, RRO)
+BR 155 (BRO, RSN)
+BR 193 Vectron (FTF, DRA)
+
+[BR 101 Expert Timetable]
+BR 411 (FTF)
+BR 642 (MTB)
+BR 628.2 (NID)
+BR 612 (DCZ)
+TGV Duplex 200 CM (LGV)
+BR 143 (FSN)
+BR 111 (FTF)
+BR 185 (DCZ, SRM)
+BR 363 (DCZ, DRA, RSN)
+BR 103 (LFR)
+Bpmmbdzf 286.1 Expert
+BR 101 Expert
+BR 155 (BRO, RSN)
+BR 185.5 (DRA, RRO)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 193 Vectron (FTF, DRA)","[Mannheim - Kaiserslautern]
+S-Bahn (None)
+NID (NID)
+DCZ (DCZ)
+642 (MTB)
+IC (DB BR 101, HRR)
+ICE3 (None)
+ICET (FTF)
+TGV (LGV)
+KWG-218 (DB BR 218, KWG)
+Included Freight (None)
+Mixed (KWG, RSN)
+Port (KWG)
+Mixed+363 (DB BR 363, RSN)
+Cars (KWG)
+KWG (KWG)
+Falns (DB BR 155, RSN)
+363+Habbins (DB BR 363, RSN, KWG)
+LFR+MITT (LFR, MITT)
+ICE1 (KWG)
+OBB (SBN)
+RNV1 (EDN)
+RNV3 (EDN)
+RNV4 (EDN)
+RNV5 (EDN)
+RNV6 (EDN)
+RNV7 (EDN)
+RNV8 (EDN)
+ENV9 (EDN)
+RNV10 (EDN)
+KWG-363 (DB BR 363, RSN, KWG)
+
+[Mannheim - Kaiserslautern BR 101 Expert]
+S-Bahn (None)
+NID (NID)
+DCZ (DCZ)
+642 (MTB)
+IC (DB BR 101, HRR)
+ICE3 (None)
+ICET (FTF)
+TGV (LGV)
+KWG-218 (DB BR 218, KWG)
+Included Freight (None)
+Mixed (KWG, RSN)
+Port (KWG)
+Mixed+363 (DB BR 363, RSN)
+Cars (KWG)
+KWG (KWG)
+Falns (DB BR 155, RSN)
+363+Habbins (DB BR 363, RSN, KWG)
+LFR+MITT (LFR, MITT)
+ICE1 (KWG)
+OBB (SBN)
+RNV1 (EDN)
+RNV3 (EDN)
+RNV4 (EDN)
+RNV5 (EDN)
+RNV6 (EDN)
+RNV7 (EDN)
+RNV8 (EDN)
+ENV9 (EDN)
+RNV10 (EDN)
+KWG-363 (DB BR 363, RSN, KWG)
+CNL-AI (HML, LFR)
+Mixed2 (KWG, BRO)","PS4 & Xbox One
+Will not feature any additional service layers, or services for the BR 111
+
+Xbox Series S
+Will not feature any additional service layers, or services for the BR 111
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Rail Head Treatment Train Add-On","Click Here","Dovetail Games","RHTT","Loco 🚆","UK 🇬🇧","04/10/22","No","No","Yes","Yes","Yes","Yes","Southeastern High Speed","N/A","No","N/A","N/A","No","No","No","Yes","Class 66 EWS (RHTT)","N/A","N/A",""
+"Rail Operations Group BR Class 37/7 Loco Add-On","Click Here","Dovetail Games","ROG Class 37","Loco 🚆","UK 🇬🇧","21/03/23","No","No","Yes","Yes","Yes","Yes","Southeastern High Speed","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 37 EPX
+Class 375/9 SEW","N/A","N/A",""
+"Railpool BR 193 Vectron Loco Add-On","Click Here","Dovetail Games","Vectron","Loco 🚆","DE 🇩🇪","26/10/23","No","No","No","Yes","Yes","Yes","Nahverkehr Dresden","N/A","Yes","N/A","N/A","No","No","No","Yes","BR 193 Vectron RP","N/A","N/A",""
+"Rapid Transit Route Add-On","N/A","Dovetail Games","RT","Route 🛤️","DE 🇩🇪","14/12/17","Yes","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 182","No","No","No","No","No","No","Yes","BR 1442 Talent 2","[Leipzig S-Bahn 2017 Timetable]
+BR 182 (RT)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+
+[Leipzig S-Bahn 2021 Timetable]
+BR 182 (RT)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, DRA, RSN)","[Leipzig S-Bahn 2017]
+BR 182 Services (DB BR 182)
+
+[Leipzig S-Bahn 2021]
+S1 Services (None)
+S2 Services (DB BR 182)
+S6 Services (None)
+S8 Services (RSN)
+ICE Services (SKA)
+ICE Services (SKA)
+S2 Services (None)",""
+"RhB Anniversary Collection","N/A","Rivet Games","RhB Pack","Expansion ➕","CH 🇨🇭","16/12/21","No","Yes","Yes","Yes","Yes","Yes","Arosa Line","N/A","No","No","N/A","No","No","No","Yes","GE 4/4 II (5 Liveries)","N/A","N/A",""
+"Rhein-Ruhr Osten: Wuppertal - Hagen Route Add-On","N/A","Dovetail Games","RRO","Route 🛤️","DE 🇩🇪","10/10/19","Yes","Yes","Yes","Yes","Yes","Yes","N/A","DB G6 Diesel Shunter","No","No","Yes","No","No","No","Yes","BR 422 
+BR 185.5","[Original Timetable]
+BR 185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+BR 143 (DCZ, DRA, RSN)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 422 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA)
+BR 110 (BRO, LFR)
+BR 155 (BRO, RSN)
+BR 114 (FTF)
+BR 193 Vectron (FTF)","[Original Timetable]
+Regional Express Services MSB BR 146 (MSB)
+Regional Express Services RSN BR 143 (RSN)
+Freight/Shunting Services DB G6 (DB G6)
+
+",""
+"Riviera Line: Exeter - Plymouth & Paignton Route Add-On","Click Here","Dovetail Games","RLE","Route 🛤️","UK 🇬🇧","30/09/25","No","No","No","No","No","Yes","N/A","XC BR Class 220 Voyager","Yes","Yes","No","Yes","Yes","Yes","Yes","BR Class 802🎟️⚙️
+BR Class 150/2🎟️⚙️","[Original Timetable]
+Voyager Class 220 XC
+Class 158 EMT (MML)
+Flying Scotsman
+Class 166 (GWE)
+HST (GWE)
+LMS Jubilee (PFR, WCL)
+Class 08 (PSC)
+Class 37/5 (WCL)
+Class 40 (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 52 (GWE)
+Class 66 (CLA, PDB, CLP, ECW, SEH, RHTT, EMK, GWE)","[Original Timetable]
+GWR Class 166 (GWE)
+GWR Class 802 (None)
+GWR Class 150 (None)
+GWR Class 150 AI (None)
+SWR Class 159 (MML)
+GWR Class 43 Castle (GWE)
+CrossCoutnry Class 220 (Class 220)
+Paignton Heritage Railway (PFR, WSR)
+Totnes Heritage Railway Standard AI (WSR, Class 33)
+Tones Hertiage Railway Peak AI (PSC)
+Night Riviera (PSC)
+Railtour Class 52 Western Sunrise (Class 52, WSR, PDB)
+Railtour Class 52 Western Pilgrim (Diesel Legends, GWE, Class 86, PSC)
+Railtour Jubiless (SoS)
+Railhead Treatment Train (RHTT)
+DB Class 66 Aggregates (EMK, SEH)
+DB Class 66 Clay Base (Class 20, TVL, EMK)
+DB Class 66 Clay Peak (Class 20, TVL, EMK)
+DRS Class 66 Nuclear (CLN, EDN Pack, Class 86)
+Railtour Class 40 (BR Heavy Freight Pack, GWE, PSC, Class 86)
+Railtour Flying Scotsman (Flying Scotsman, PDB, PSC)
+Ultrasonic Test Train (WCL, PSC, Class 86)
+Railtour Class 47 (WSR)
+GWR Class 43 Static A (GWE)
+GWR Class 43 Static B (GWE)
+GWR HKA Static (GWE)
+Paignton Heritage Railway Satic Class 08 (PSC)
+Paignton Heritage Railway Static Class 08 (PSC)","PS4 & Xbox One
+There will be no additional playable or AI layers.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Ruhr-Sieg Nord: Hagen - Finnentrop Route Add-On","N/A","Dovetail Games","RSN","Route 🛤️","DE 🇩🇪","16/08/18","Yes","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 155
+DB BR 363","No","No","Yes","No","No","No","Yes","BR 185.2
+BR 143
+766.2 DBpbzfa ","[Original Timetable]
+BR 185.2 (MKN, SRM)
+BR 218 (HML)
+BR 182 (KWG, RT)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, SRM, KWG)
+BR 143 (DCZ, DRA)
+BR 112.1 (HML)
+BR 185.2 (MSB, KWG, VBRG)
+BR 363 (RSN)
+BR 155 (BRO)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)","[Original Timetable]
+BR 155 Freight (DB BR 155)
+BR 363 Shunting (DB BR 363)
+",""
+"S-Bahn Vorarlberg: Lindau - Bludenz Route Add-On","Click Here","Dovetail Games","VBRG","Route 🛤️","AT 🇦🇹","26/09/23","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","Yes","No","No","No","No","Yes","OBB 4024
+BR 185.2","[Original Timetable]
+RABe 523 (LZN)
+OBB 1116 (SBN)
+BR 182 (HML)
+BR 185 (KWG)
+BR 193 Vectron (FTF, DRA)","[Original Timetable]
+S3 Services (None)
+R5 Services (None)
+REX1 Services (None)
+R1 Services (None)
+REX7 Services RABe 523 (LZN)
+EC Services BR 182 + BR 101 IC Coaches (DB BR 101, HRR, HML)
+Freight Services BR 185 (None)
+BR 612 AI (DCZ)
+BR 628 AI (NID)
+Freight Services (Vectron)
+Freight Services Zacns (DRA)",""
+"S-Bahn Zentralschweiz: Luzern - Sursee Route Add-On","Click Here","Rivet Games","LZN","Route 🛤️","CH 🇨🇭","24/03/22","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","RABe 523","N/A","N/A",""
+"San Bernardino Line: Los Angeles - San Bernardino Route Add-On","Click Here","Dovetail Games","SBD","Route 🛤️","US 🇺🇲","17/09/24","No","No","No","No","Yes","Yes","N/A","Metrolink F59PHR
+Metrolink Holiday Train Pack","Yes","Yes","Yes","Yes","No","No","Yes","MP36PH-3C 🎟️
+Rotem Bi-Level Cab Car 🎟️
+EMD F125 🎟️","[San Bernardino Timetable]
+F59PHR (ALV) 🎟️
+EMD F125 (ALV) 🎟️
+BNSF ES44C4 (CJP)
+BNSF SD40-2 (CJP)
+BNSF SD70ACe (CJP)
+
+[San Bernardino Weekend Timetable]
+F59PHR (ALV) 🎟️
+EMD F125 (SBD, ALV) 🎟️
+BNSF ES44C4 (CJP)
+BNSF SD40-2 (CJP)
+BNSF SD70ACe (CJP)","[San Bernardino Timetable]
+FR8_CajonPass (CJP)
+FR8_ShermanHill (SMH)
+Holiday Train (SBD Pack)
+
+[San Bernardino Weekend Timetable]
+Speedway Extra (None)
+BNSF Freight (CJP)
+Holiday Train (SBD Pack)
+Union Pacific Freight (SMH)
+","PS4 & Xbox One
+Will not have playable/AI freight services, or the Santa Fe F7 AI Railtour. Freight formations will also be shorter in length
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Sand Patch Grade Route Add-On","N/A","Dovetail Games","SPG","Route 🛤️","US 🇺🇲","16/03/17","Yes","Yes","Yes","Yes","Yes","Yes","N/A","CSX C40-8W
+NJ - CSX SD40","No","No","No","No","No","No","Yes","AC4400CW (2 Liveries 
+SD40-2 (2 Liveries)
+GP38-2 (2 Liveries)","[Original Timetable]
+SD40 CSX-s (SPG)
+C40-8W YN2 (SPG)
+BNSF SD40-2 (CJP)","[Original Timetable]
+C408W (CSX C40-8W)",""
+"Santa Fe on Cajon Pass Add-On","Click Here","High Iron Simulations","Santa Fe CJP","Expansion ➕","US 🇺🇲","13/11/25","No","No","No","No","No","Yes","Cajon Pass","N/A","Yes","N/A","N/A","No","No","No","No","C40-8W
+SD40-2","N/A","N/A","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Santa Fe F7 Add-On","Click Here","Dovetail Games","Santa Fe F7","Loco 🚆","US 🇺🇲","04/10/22","No","No","Yes","Yes","Yes","Yes","Cajon Pass","N/A","No","N/A","N/A","No","No","No","Yes","Santa Fe F7 ","N/A","N/A",""
+"Schnellfahrstrecke Kassel - Würzburg Route Add-On","Click Here","Dovetail Games","KWG","Route 🛤️","DE 🇩🇪","06/09/22","No","No","Yes","Yes","Yes","Yes","N/A","DB BR 403 ICE 3 Railbow
+Dispolok BR 182
+Expert DB BR 101 on Kassel - Würzburg Gameplay Pack","Yes","Yes","Yes","No","No","No","Yes","BR 401 ICE 1
+BR 403 ICE 3
+BR 185.2","[Original Timetable]
+BR 401 ICE 1 (KWG)
+BR 403 RBW (KWG)
+BR 101 Expert
+BR 187 (SKA)
+BR 185 (DCZ, MKN, SRM)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, VBRG)
+BR 101 (HRR)
+BR 185.5 (DRA, RRO)
+BR 155 (BRO, RSN)
+BR 193 Vectron (FTF, DRA)
+
+[Kassel-Wurzburg 2018 Expert]
+BR 411 (FTF)
+BR 187 (SKA)
+OBB 1116 (SBN)
+BR 185 (DCZ, MKN, SRM)
+BR 103 (LFR)
+Bpmmbdzf 286.1 Expert
+DB BR 101 Expert
+BR 193 Vectron (FTF, DRA)
+BR 155 (BRO, RSN)
+BR 185.5 (DRA, RRO)
+BR 182 (HML, RT)
+BR 185.2 (MSB, RSN, VBRG)","[Kassel-Wurzburg 2018 Expert]
+BR612 AI (DCZ)
+BR442 AI (SKA)
+BR425 AI (BRO)
+BR101 IC (Expert 101)
+Player Freight (None)
+BR101 NJ (Expert 101)
+Surprise Layer (None)
+ICE-T (FTF)
+FLX (Flixtrain)
+BR103 TEE (LFR, MITT)
+BR628/BR642 AI (NID)
+PbZ (Expert 101, BRO)
+Zacns Player & AI Freight (DRA)
+BR101 Light Loco (Expert 101)
+VW AI (DRA, KWG)
+High Speed Intermodal (Expert 101)
+Player Freight Sggmrs (None)
+RB45 BR642 AI (MTB)
+RB52 BR642 AI (MTB)
+Freight AI (None)
+Vectron Static Fulda (Vectron)
+Tadgs AI (KWG, BRO)
+RB4 BR218 AI (DB BR 218)
+RE50 BR111 AI (MKN)
+RE30 BR114 AI (FTF)
+RE50 BR114 AI (FTF)
+Falns AI (DB BR 155, RSN)
+
+[Kassel - Wurzburg 2022]
+BR 612 AI (DCZ)
+BR 442 AI (SKA)
+BR425 (HRR)
+IC Services (DB BR 101, HRR)
+Freight (None)
+NJ BR 101 (DB BR 101, HRR)
+Dispolok (Dispolok BR 182)",""
+"Schnellfahrstrecke Koln-Aachen Route","N/A","Dovetail Games","SKA","Route 🛤️","DE 🇩🇪","20/08/20","No","Yes","Yes","Yes","Yes","Yes","N/A","DB BR 187
+NJ - S-Bahn Köln BR 423
+
+","No","No","No","No","No","No","Yes","BR 406 ICE 3M
+BR 442 Talent 2","[Original Timetable]
+BR185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, DRA, RSN)
+BR 112.1 (HML)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 422 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 110 (BRO, LFR)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)
+
+[New Journeys Timetable]
+BR 423 (SKA)
+BR 425 (HRR)
+BR 185.2 (MKN, SRM)
+BR 111 (FTF, MKN, SRM)
+BR 218 (HML)
+BR 187 (SKA)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DCZ, DRA, RSN)
+BR 112.1 (HML)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 101 (HRR)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 110 (BRO, LFR)
+BR 114 (FTF)
+BR 193 Vectron (FTF, DRA)
+
+[Koln-Aachen Revamp]
+DB BR 642 (MTB)
+DB BR 423 (SKA)
+ICE3M (SKA)
+DB ICE1 (SKA)
+DB BR 425 (HRR)
+DB BR 111 (FTF, MKN, SRM)
+DB BR 218 (HML)
+DB BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DCZ, DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+DB BR 143 (DCZ, DRA, RSN)
+BR 185 (DCZ, MKN, SRM)
+BR 363 (DCZ, DRA, MTB, RSN)
+BR 103 (LFR)
+DB BR 101 Expert
+DB BR 101 (HRR)
+BR 193 Vectron (FTF, DRA)
+BR 155 (BRO, RSN)
+BR 146.2 (DRA, FTF, MSB, KWG)
+BR 185.5 (DRA, RRO)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 114 (FTF)
+","[Original Timetable]
+RE1/Freight Services (MSB)
+S-Bahn/Freight Services (RRO)
+BR 187 Freight Services (DB BR 187)
+Static BR 363 (DB BR 363, RSN)
+Static IC Coaches (DB BR 101, HRR)
+
+[New Journeys Timetable]
+MSB (MSB)
+S19 (None)
+BR 187 (DB BR 187)
+S12 (None)
+Freight (RRO)
+S11 (None)
+S6 (None)
+BR 425 (HRR)
+IC BR101 (DB BR 101, HRR)
+Shunter (DRA)
+
+[Koln-Aachen Revamp]
+S12 Services (NJ BR 423)
+S19 (NJ BR 423)
+DMU Services (MTB)
+S6 Services (HRR)
+Dosto Services (MSB)
+Thalys (LGV)
+IC Services 101 (DB BR 101, HRR)
+NJ Services (Vectron, DB BR 101, HRR)
+ICE 1 & Freight Services (KWG)
+Mixed Freight Services (KWG, DRA, RSN)
+Local /Shunting 363 Services (DB BR 363, RSN, KWG)
+Zacns Freight (DRA)
+Eanos Freight (Vectron)
+RE9 (MSB, RSN)
+RB48+RE4 n-wagen Services (BRO)
+Railtour (LFR)
+??? September (Class 700)
+Static Zacns September (DRA)
+Vectron September (Vectron)
+Koln Depot Shunting Service (DB BR 101, HRR, DB BR 363, RSN)
+AI Zacns Services (DB BR 363, RSN, DRA)
+Static 363s (DB BR 363, RSN)
+Static Zacns (DRA)
+Static Falns Wagons (DB BR 155, RSN)
+Static Roos-t (HML)
+Static IC Coaches (LFR)
+Tadgs Freight (BRO, KWG)
+Uacns Freight 363 (DB BR 363, RSN, KWG)
+Shimmns Freight (KWG, RSN)
+RE 4 (SRM)
+FLX (Flixtrain)
+TRI (None)
+FTF (FTF)
+BR 218 Freight (DB BR 218, DB BR 155, RSN)",""
+"ScotRail BR Class 158 Sprinter DMU Add-On","Click Here","Skyhook Games","Class 158","Loco 🚆","UK 🇬🇧","25/07/24","No","No","No","Yes","Yes","Yes","Fife Circle Line
+or
+Edinburgh - Glasgow
+","N/A","Yes","N/A","N/A","No","No","No","Yes","BR Class 158 Sprinter","N/A","N/A",""
+"Scotrail Class 380 Loco Add-On","Click Here","Dovetail Games","Class 380","Loco 🚆","UK 🇬🇧","11/07/24","No","No","No","Yes","Yes","Yes","Cathcart Circle Line","N/A","Yes","N/A","N/A","No","No","No","Yes","BR Class 380 ScR","N/A","N/A",""
+"ScotRail Express: Edinburgh - Glasgow Route Add-On","Click Here","Rivet Games","EDN","Route 🛤️","UK 🇬🇧","26/01/23","No","No","Yes","Yes","Yes","Yes","N/A","Edinburgh - Glasgow: Engineering Express Pack
+ScotRail BR Class 158","Yes","No","Yes","Yes","No","No","Yes","Class 385 ScR","[Edinburgh - Glasgow Timetable]
+Class 314 (CCL)
+LMS Jubilee Black (WCL)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+Class 37 (WCL)
+
+[Sprinter Express Timetable]
+Class 158 (EDN) 🎟️
+Class 170 (FCE) 🎟️
+Class 380 (CCL)
+Class 801 LNER (PDB)
+Flying Scotsman (PDB)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE, EMK)
+High Speed Train (GWE)","[Edinburgh - Glasgow Timetable]
+Class 314 (CCL)
+Steam Railtour (WCL, WCS, SoS)
+RHTT (RHTT)
+Freight/Class 385 Drags (EDN Pack)
+
+[Sprinter Express Timetable]
+ScotRail Class 170 (FCE)
+ScotRail Inter7City HST (GWE)
+LNER Class 801 (PDB)
+Railhead Treatment (RHTT)
+ScotRail Class 380 (Class 380)
+Flying Scotsman (Flying Scotsman, PDB)
+Avanti West Coast Class 390 (Class 390)
+Express Freight (EDN Pack)",""
+"Semmeringbahn: Mürzzuschlag - Wiener Neustadt","Click Here","Dovetail Games","SBN","Route 🛤️","AT 🇦🇹","18/04/24","No","No","No","Yes","Yes","Yes","N/A","N/A","Yes","Yes","No","No","No","No","Yes","OBB 1116
+OBB 4024","[Original Timetable]
+BR 193 Vectron (FTF, DRA)
+BR 103 (LFR)
+Class 47 (NTP, BPO, PSC)","[Original Timetable]
+IC-EC (None)
+NJ (None)
+RJ (None)
+Intermodal (None)
+SplitAI (VBRG)
+Laaers (VBRG)
+Manifest-1 (DRA)
+Roos-T (MTB)
+Tankers (DRA)
+Eanos (Vectron)
+Manifest-2 (None)
+Manifest-3 (DB BR 155, RSN, DRA)
+Uacns (DB BR 363, RSN)
+Manifest-4 (None)
+Railtour-47 (BPO, LFR)
+Manifest-5 (DRA)
+Manifest-6 (Vectron, MTB)
+Railtour-103 (LFR)
+Manifest-7 (DB BR 155, RSN, DRA, MTB, Vectron)
+Railtour-Vectron (LFR, Vectron)
+AI-4024 (None)
+1116-Static (None)
+4024-StaticPC (None)
+Manifest-StaticPC (None)","PS4 & Xbox One
+There are no additional layers available.
+
+Xbox Series S
+There are no additional layers available.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Sherman Hill: Cheyenne - Laramie Route Add-On","Click Here","Dovetail Games","SMH","Route 🛤️","US 🇺🇲","25/11/21","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","Yes","No","No","No","No","No","Yes","SD40-2 UP
+SD70ACe UP","[Original Timetable]
+AC440CW (CCB)
+SD40-2 (CCB)
+SD70ACe (SMH)","N/A",""
+"Southern BR Class 171 & BR Class 377/3 Add-On","Click Here","Rivet Games","Class 171","Loco 🚆","UK 🇬🇧","26/02/26","No","No","No","No","No","Yes","East Coastway","N/A","Yes","N/A","N/A","Yes","Yes","Yes","Yes","Class 171 🎟️🔊⚙️
+Class 377/3 🔊⚙️","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Southeastern BR Class 465 EMU Add-On (TSW 2 Only)","Click Here","Dovetail Games","Class 465","Loco 🚆","UK 🇬🇧","04/03/21","No","Yes","No","No","No","No","Southeastern High Speed","N/A","No","N/A","N/A","No","No","No","Yes","BR 465/9 SEW","N/A","N/A",""
+"Southeastern Highspeed: London St Pancras – Ashford Intl & Faversham Route Add-On","Click Here","Dovetail Games","SEH","Route 🛤️","UK 🇬🇧","04/02/21","No","Yes","Yes","Yes","Yes","Yes","N/A","Cargo Line Vol. 1: Petroleum
+Cargo Line Vol. 2: Aggregates
+Rail Head Treatment Train
+Rail Operations Group BR Class 37/7
+Thameslink BR Class 700/0","Yes","Yes","Yes","No","No","No","Yes","Class 395
+Class 375/9
+Class 465/9 
+Class 66","[Southeastern Highspeed Full Timetable]
+Class 375 SEW (SEH)
+Class 700/0 TL (SEH)
+TGV Duplex 200 CM (LGV)
+LMS Jubilee (SoS)
+Class 33 GRN (WSR)
+Class 37 (SEH)
+Class 66 (CLA, CLP, PDB, ECW, EDN, RHTT, GWE, EMK)
+Class 47 (NTP, BPO, PSC)
+
+[Southeastern Highspeed Reduced Timetable]
+Class 375 SEW (SEH)
+Class 700/0 TL (SEH)
+TGV Duplex 200 CM (LGV)
+LMS Jubilee (SoS)
+Class 33 GRN (WSR)
+Class 37 (SEH)
+Class 66 (CLA, CLP, PDB, ECW, EDN, RHTT, GWE, EMK)
+Class 47 (NTP, BPO, PSC)","[Original Timetable]
+SE Isle of Sheppey AI (None)
+SE Medway Valley Line AI (None)
+SE Ashford Intl AI (None)
+Chatham Main Line Services (None)
+RHTT Services (RHTT)
+66 + JNA & MFA Freight (None)
+66 + HKA Freight (GWE)
+66 + TEA Freight (BR Heavy Freight Pack, NTP)
+Static Car Carriers (KWG)
+PCA Cement Wagons (Class 31, WSR)
+Spirit of Steam Jubilee Railtour (SoS)
+North Kent Services (None)
+Summer Only North Kent Services (None)
+AI Railtour (NTP, TVL)
+AI Railtour (NTP, Class 20, TVL, SoS)
+Static Mk1 Coaches (NTP)
+Special TGV Services (LGV)
+October ICE3 AI (SKA)
+Static RHTT Wagons (RHTT)
+EMT HST AI (MML)
+TL Class 700 Services (Class 700)
+Static BBA Wagons (TVL)
+ROG Class 37 Jan/Feb (ROG Class 37)
+ROG Class 37 Mar/Apr (ROG Class 37)
+ROG Class 37 + 47 Sep/Oct (ROG Class 37, NTP)
+ROG Class 37 Nov/Dec (ROG Class 37)
+Class 47 Railtour Services (NTP)
+ROG Service (ROG Class 37)
+Static Class 385 Jan/Feb (EDN)
+TL Class 700 AI (Class 700)
+Railtour Jan/Feb (NTP, Class 33, WSR)
+Railtour Nov/Dec (SoS, WSR)
+Railtour AI Jan/Feb (NTP, TVL)
+Railtour AI Sep/Oct (SoS, WSR)
+Static ROG Sep/Dec (ROG Class 37)
+Freight TEA (BR Heavy Freight Pack, NTP)
+Freight HKA (GWE)
+RHTT Wagons (RHTT, Class 20, TVL, GWE)
+
+[Reduced Timetable]
+SE Isle of Sheppey AI (None)
+SE Medway Valley Line AI (None)
+SE Ashford Intl AI (None)
+Chatham Main Line Services (None)
+RHTT Services (RHTT)
+66 + JNA & MFA Freight (None)
+66 + HKA Freight (GWE)
+66 + TEA Freight (BR Heavy Freight Pack, NTP)
+Static Car Carriers (KWG)
+PCA Cement Wagons (Class 31, WSR)
+Spirit of Steam Jubilee Railtour (SoS)
+North Kent Services (None)
+Summer Only North Kent Services (None)
+AI Railtour (NTP, TVL)
+AI Railtour (NTP, Class 20, TVL, SoS)
+Static Mk1 Coaches (NTP)
+Special TGV Services (LGV)
+October ICE3 AI (SKA)
+Static RHTT Wagons (RHTT)
+EMT HST AI (MML)
+TL Class 700 Services (Class 700)
+Static BBA Wagons (TVL)
+ROG Class 37 Jan/Feb (ROG Class 37)
+ROG Class 37 Mar/Apr (ROG Class 37)
+ROG Class 37 + 47 Sep/Oct (ROG Class 37, NTP)
+ROG Class 37 Nov/Dec (ROG Class 37)
+Class 47 Railtour Services (NTP)
+ROG Service (ROG Class 37)
+Static Class 385 Jan/Feb (EDN)
+TL Class 700 AI (Class 700)
+Railtour Jan/Feb (NTP, Class 33, WSR)
+Railtour Nov/Dec (SoS, WSR)
+Railtour Mar/May (SoS, Class 33, WSR)
+Railtour AI Jan/Feb (None)
+Railtour AI June/July (NTP)
+Railtour AI Sep/Oct (SoS, WSR)
+Static RGO Sep/Dec (ROG Class 37)
+Freight TEA (BR Heavy Freight Pack, NTP)
+Freight HKA (GWE)
+RHTT Wagons (RHTT, Class 20, TVL, GWE)",""
+"Southern BR Class 313 EMU Add-On","Click Here","Dovetail Games","Class 313","Loco 🚆","UK 🇬🇧","28/10/21","No","Yes","Yes","Yes","Yes","Yes","East Coastway","N/A","No","N/A","N/A","Yes","Yes","Yes","Yes","BR Class 313/2 🎟️🔊⚙️","N/A","N/A",""
+"Spirit of Steam: Liverpool Lime Street - Crewe Route Add-On","Click Here","Dovetail Games","SoS","Route 🛤️","UK 🇬🇧","31/05/22","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","Yes","No","No","No","No","No","Yes","LMS Jubilee
+LMS Stainer 8F","N/A","[Original Timetable]
+Passenger Services (None)
+Freight (None)
+Passenger Services via Widnes (None)",""
+"Spoorlijn Zwolle - Groningen Route Add-On","Click Here","Dovetail Games","ZGN","Route 🛤️","NL 🇳🇱","25/03/25","No","No","No","No","Yes","Yes","N/A","N/A","Yes","Yes","No","Yes","No","No","Yes","ICM3 🎟️
+SNG3 🎟️","[Original Timetable]
+DB G6 Shunter (RRO)
+BR 193 Vectron (FTF)","[Original Timetable]
+SNG (None)
+Freight (FTF, DRA)
+Freight_Tankers (FTF, DRA, DB G6, RRO)
+G6 (DB G6, DRA, RRO)
+StaticICM3 (None)
+StaticFalns (DB BR 155, RSN)",""
+"Tees Valley Line: Darlington – Saltburn-by-the-Sea Route Add-On","N/A","Dovetail Games","TVL","Route 🛤️","UK 🇬🇧","23/05/19","Yes","Yes","Yes","Yes","Yes","Yes","N/A","BR Class 20 'Chopper'
+BR Class 31","No","No","No","No","No","No","Yes","Class 101
+Class 08
+Class 37/5","[Original Timetable]
+Class 101 (PSC)
+Class 31/1 BLU (TVL)
+Class 20 RF (TVL)
+Class 08 BLU (NTP, GWE)","[Original Timetable]
+Class 31 Passenger and Freight (Class 31)
+Class 20 Freight (Class 20)",""
+"Thameslink BR Class 700/0 Loco Add-On","Click Here","Dovetail Games","Class 700","Loco 🚆","UK 🇬🇧","11/07/23","No","No","Yes","Yes","Yes","Yes","Southeastern High Speed","N/A","No","N/A","N/A","No","No","No","Yes","BR Class 700/0","N/A","N/A",""
+"Tharandter Rampe: Dresden - Chemnitz Route Add-On","N/A","Dovetail Games","DCZ","Route 🛤️","DE 🇩🇪","13/01/22","No","Yes","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","BR 612
+BR 143
+BR 185.2
+BR 363","[Original Timetable]
+BR 442 (DRA, KWG)
+BR 1442 Talent 2 (RT)
+BR 101 Expert
+OBB 1116 (SRM)
+BR 187 (SKA)
+DB G6 Shunter (RRO)
+766.2 DBpbzfa (DRA, FTF, HML, MSB, MKN, RT, RSN, SRM, KWG)
+BR 143 (DRA, RSN)
+BR 185 (MKN, SRM)
+BR 363 (DRA, MTB, RSN)
+BR 112.1 (HML)
+BR 182 (HML, KWG, RT)
+BR 185.2 (MSB, RSN, KWG, VBRG)
+BR 185.5 (DRA, RRO)
+BR 193 Vectron (FTF, DRA)
+BR 155 (BRo, RSN)","[Orignial Timetable]
+S3 Services (None)
+RB30 Services (None)
+IRE1 Services (None)
+Dosto/BR 612 Regional AI (None)
+BR 101 IC AI (DB BR 101, HRR)
+BR 403 ICE AI (HMA)
+Freight Services (None)
+BR 442 AI (DRA)
+BR 101/182 EC AI (DB BR 101, HRR, HML)
+BR 363 Passenger (None)
+Freight AI Sggmrss (DRA)
+
+",""
+"The Holiday Express - Runaway Elf Add-On","Click Here","Dovetail Games","HDX","Route 🛤️","US 🇺🇲","13/12/22","No","No","Yes","Yes","Yes","Yes","N/A","N/A","No","No","No","No","No","No","Yes","F7 RR","N/A","N/A",""
+"Thomas & Friends™ Visit the West Somerset Railway Add-On","Click Here","Dovetail Games","TWS","Expansion ➕","UK 🇬🇧","20/03/25","No","No","No","No","Yes","Yes","West Somerset Railway","Thomas & Friends 80th Anniversary Expansion","Yes","N/A","N/A","No","No","No","Yes","Thomas the Tank Engine
+Diesel","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Thomas & Friends 80th Anniversary Expansion","Click Here","Dovetail Games","Thomas80th","Expansion ➕","UK 🇬🇧","29/05/25","No","No","No","No","Yes","Yes","Thomas & Friends™ Visit the West Somerset Railway
+West Somerset Railway","N/A","Yes","N/A","N/A","No","No","No","Yes","Thomas the Tank Engine (Green Livery)
+Diesel","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Transport for Wales BR Class 142 Pacer DMU Add-On ","Click Here","Just Trains","Class 142","Loco 🚆","UK 🇬🇧","25/11/25","No","No","No","No","No","Yes","Cardiff City Network","N/A","Yes","N/A","N/A","Yes","Yes","No","Yes","Class 142 🎟️","N/A","N/A","PS4 & Xbox One
+There will be no additional services (playable or AI) from layered content from other Add-ons.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"Union Pacific Heritage Collection","N/A","Dovetail Games","UP Heritage","Loco 🚆","US 🇺🇲","21/02/23","No","No","Yes","Yes","Yes","Yes","Horseshoe Curve","N/A","No","N/A","N/A","No","No","No","Yes","UP SD30ACe (6 Liveries)","N/A","N/A",""
+"WCML: Preston - Carlisle Route Add-On","Click Here","Just Trains","PSC","Route 🛤️","UK 🇬🇧","26/11/24","No","No","No","No","Yes","Yes","N/A","BR Class 86/2 & Mk2F Coaches
+Cargo Line Vol. 4 - Military
+Cargo Line Vol. 5: Nuclear","Yes","Yes","Yes","Yes","No","No","Yes","Class 87 🎟️
+Class 47/4
+Class 08
+Class 101 🎟️","[Original Timetable]
+Class 142 (BPO) 🎟️
+Flying Scotsman (PDB)
+LMS Jubiless (PFR, SoS)
+Class 40 BLU (NTP)
+Class 31/1  BLU (TVL)
+Class 45/1 BLU (NTP)
+Class 47/4 BLU (NTP)
+Class 08 (BPO)
+Class 20 RF (TVL)
+Class 37/5 RF (TVL)
+
+[Cargo Line 1986 Military]
+Class 08 (BPO)
+Class 142 (BPO)
+Class 20  (TVL)
+Class 31 (TVL)
+Class 37/5 (TVL)
+Class 40 (NTP)
+Class 45 (NTP)
+Class 47 (NTP, BPO)
+Class 86 (PSC)
+Flying Scotsman 
+LMS Jubilee (PFR, SoS)
+
+[Cargo Line 1986 Nuclear]
+Class 142 (BPO)
+Flying Scotsman(PDB)
+LMS Jubilee (PFR, SoS)
+Class 08 (BPO)
+Class 20 (TVL)
+Class 31 (TVL)
+Class 37 (TVL)
+Class 40 (NTP)
+Class 45 (NTP)
+Class 47 (NTP, BPO)","[Original Timetable]
+Windermere (None)
+MorecambeDMU (None)
+PrestonBarrow (None)
+Colne (None)
+BlackpoolSouth (None)
+BlackpoolNorthDMU (None)
+EustonGlasgow (None)
+CrossCountry (None)
+EustonCarlisle (None)
+CarlisleBarrow (None)
+CarlisleNewcastle (None)
+MainShunting (None)
+SleeperMail (None)
+Intermodal (None)
+Class37BBA (TVL)
+Teatime (BPO)
+SpeedlinkHEABBA (TVL)
+SpeedlinkPCABBA (Class 31, TVL)
+SpeedlinkHEABBASeacow (WCL, TVL)
+SpeedlinkHEAPCA (Class 31, TVL)
+Class37PCA (Class 31, TVL)
+KingmoorShunting (Class 20, TVL, WCL)
+Ballast (WCL)
+Vans (BR Heavy Freight Pack, NTP)
+KingmoorWagons (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+SteamtownWagons (WCL, Class 31, Class 20, TVL)
+CarlisleTripWorkings (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+EdinburghAddex (None)
+MidDayScot (SoS)
+WestHighlandWanderer (BR Heavy Freight Pack, NTP)
+TheCumbrianChoppers (Class 20, TVL)
+StoneScratcher (None)
+
+[Cargo Line 1986 Military]
+Windermere (None)
+MorecambeDMU (None)
+PrestonBarrow (None)
+Colne (None)
+BlackpoolSouth (None)
+BlackpoolNorthDMU (None)
+EustonGlasgow (None)
+CrossCountry (None)
+EustonCarlisle (None)
+CarlisleBarrow (None)
+CarlisleNewcastle (None)
+MainShunting (None)
+SleeperMail (None)
+Intermodal (None)
+Class37BBA (TVL)
+Teatime (BPO)
+SpeedlinkHEABBA (TVL)
+SpeedlinkPCABBA (Class 31, TVL)
+SpeedlinkHEABBASeacow (WCL, TVL)
+SpeedlinkHEAPCA (Class 31, TVL)
+Class37PCA (Class 31, TVL)
+KingmoorShunting (Class 20, TVL, WCL)
+Ballast (WCL)
+Vans (BR Heavy Freight Pack, NTP)
+KingmoorWagons (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+SteamtownWagons (WCL, Class 31, Class 20, TVL)
+CarlisleTripWorkings (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+EdinburghAddex (None)
+MidDayScot (SoS)
+WestHighlandWanderer (BR Heavy Freight Pack, NTP)
+TheCumbrianChoppers (Class 20, TVL)
+StoneScratcher (None)
+CL-Military (None)
+CL-Nuclear (CLN)
+
+[Cargo Line 1986 Nuclear]
+Windermere (None)
+MorecambeDMU (None)
+PrestonBarrow (None)
+Colne (None)
+BlackpoolSouth (None)
+BlackpoolNorthDMU (None)
+EustonGlasgow (None)
+CrossCountry (None)
+EustonCarlisle (None)
+CarlisleBarrow (None)
+CarlisleNewcastle (None)
+MainShunting (None)
+SleeperMail (None)
+Intermodal (None)
+Class37BBA (TVL)
+Teatime (BPO)
+SpeedlinkHEABBA (TVL)
+SpeedlinkPCABBA (Class 31, TVL)
+SpeedlinkHEABBASeacow (WCL, TVL)
+SpeedlinkHEAPCA (Class 31, TVL)
+Class37PCA (Class 31, TVL)
+KingmoorShunting (Class 20, TVL, WCL)
+Ballast (WCL)
+Vans (BR Heavy Freight Pack, NTP)
+KingmoorWagons (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+SteamtownWagons (WCL, Class 31, Class 20, TVL)
+CarlisleTripWorkings (BR Heavy Freight Pack, NTP, WCL, BPO, TVL, Class 31, Class 20, SoS)
+EdinburghAddex (None)
+MidDayScot (SoS)
+WestHighlandWanderer (BR Heavy Freight Pack, NTP)
+TheCumbrianChoppers (Class 20, TVL)
+StoneScratcher (None)
+CL-Military (CLM)
+CL-Nuclear (None)",""
+"West Coast Main Line: Birmingham - Crewe Route Add-On","Click Here","All Aboard Studios","BMC","Route 🛤️","UK 🇬🇧","21/10/25","No","No","No","No","No","Yes","N/A","AWC BR Class 805 Evero","Yes","Yes","Yes","Yes","Yes","Yes","No","Class 350 🎟️⚙️","[GJR 2019 Timetable]
+Class 323 (BCC)
+Class 150/2 (CCN)
+Class 153 (CCN)
+Class 158 (MML)
+Class 170 (BCC)
+Class 390 (EMK)
+Flying Scotsman (PDB)
+LMS Jubilee (SoS)
+Voyager Class 220 XC (RLE)
+Class 66 (MAC, CLA, ECW, CLI, PDB, EMK, CLM, EDN, PSC, CLP, SEH, GWE)
+Class 86 (PSC)
+Class 87 (PSC)
+
+[GJR Modern Timetable]
+Class 150/2 (CCN)
+Class 153 (CCN)
+Class 158 (MML)
+Class 170 (BCC)
+Class 323 (BCC, MGP)
+Class 390 (EMK)
+Class 66 (MAC, CLA, ECW, CLI, PDB, EMK, CLM, EDN, PSC, CLP, SEH, GWE)
+Class 805 (EMK)
+Flying Scotsman (PDB)
+LMS Jubilee (WCL)
+Voyager Class 220 XC (RLE)","[GJR 2019 Timetable]
+Main Services (None)
+WMR Class 323 (BBC)
+AWC Class 390 (Class 390)
+NT Class 323 (MGP)
+EMT 158 (MML)
+Class 87 Railtour (PSC)
+Flying Scotsman Railtour (Flying Scotsman, PDB)
+WMR_350 (None)
+DB Freight (EMK, CLA)
+DRS Freight (RHTT, EMK)
+FKA_Static (EMK)
+CL-A_Static (CLA)
+LSL_Static (Class 86, PSC)
+Cross Country 170 (Class 170)
+WMT 170 (Class 170)
+LMS Jubilee Railtour (SoS)
+Class 86 Railtour (Class 86)
+Transport for Wales (CCN)
+Class 220 XC Voyager (Class 220)
+Fl_Intermodal (EMK, CLI)
+FL_Aggregates (EMK, CLA)
+
+[GJR Modern Timetable]
+LNWR Class 350/2/3 (BMC)
+AWC Class 390 (Class 390)
+Northern Class 323 (MGP)
+LNWR Class 350 (BCC)
+WMR Class 170 (Class 170)
+TfW Class 150/153 (CCN)
+Class 66 RHTT (RHTT, SEH)
+DB Class 66 (EMK)
+DRS Class 66 (EDN Pack)
+XC Class 220 (Class 220)
+EMT Class 158 (MML)
+XC Class 170 (Class 170)
+AWC Class 805 (None)
+The Flying Scotsman (FlyingScotsman, PDB)
+Freightliner Containers (None)
+LMS Jubilee (SoS)
+Class 323 Farewell Tour (BCC)
+Cargoline HOA (CLA)
+DRS 66 + MFA Wagons (EDN Pack, SEH)
+Southeastern High Speed JNA Wagons (SEH)
+Cargoline FCA (CLI)
+LNWR Class 350/1 (EMK)","PS4 & Xbox One
+Not Compatible
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience"
+"West Coast Main Line: London Euston - Milton Keynes Route Add-On","Click Here","Dovetail Games","EMK","Route 🛤️","UK 🇬🇧","17/09/24","No","No","No","No","Yes","Yes","N/A","AWC BR Class 390 Pendolino
+AWC BR Class 805 Evero
+Cargo Line Vol 3: Intermodal
+Cargo Line Vol. 5: Nuclear
+HKA Bogie Hopper Wagon Pack
+","Yes","Yes","Yes","Yes","No","No","Yes","1972 MkII Tube Stock
+Class 350/1 🎟️
+Class 377/2
+Class 66","[Original Timetable]
+Class 390 AWC (EMK) 🎟️
+Class 710 TFL (BKG)
+Class 66 (CLA, CLP, PDB, ECW, EDN, SEH, RHTT, GWE)
+
+[Cargo Line 2024 Intermodal]
+Class 378 (NNL)
+Class 390 AWC (EMK) 🎟️
+Class 710 (BKG)
+Class 20 (CLN)
+Class 47 (WSR)
+Class 52 (GWE, WSR)
+Class 66 (MAC, ECW, CLA, CLI, PDB, EDN, CLP, SEH, GWE)
+
+[Cargo Line 2024 Nuclear]
+Class 378 (NNL)
+Class 390 AWC (EMK) 🎟️
+Class 710 (BKG)
+Class 20 (CLN)
+Class 47 (WSR)
+Class 52 (GWE, WSR)
+Class 66 (MAC, ECW, CLA, CLI, PDB, EDN, CLP, SEH, GWE)
+
+[Evero 2025 Timetable]
+Class 350-3 (BMC)
+Class 350-2 (BMC)
+Class 390 AWC (EMK)
+Class 66 (CLP, PDB, ECW, CLA, SEH, GWE)
+Class 710 (BKG)
+Class 805 (EMK)","[Original Timetable]
+Avanti West Coast - Class 390 (Class 390)
+Longond Overground  - Lioness Line (BKG)
+London Underground  - Bakerloo line (BKL)
+Southern  - West London Line (None)
+Freight - FKA (None)
+Freight - HKA (WCML Pack)
+Freight - HOA (CLA)
+Freight - TEA (CLP)
+London Underground  -Bakerloo Line Sleet (None)
+Class 710 - Test Runs January/May (BKG)
+
+[Cargo Line 2024 Intermodal]
+Avanti West Coast - Class 390 (Class 390)
+Longond Overground  - Lioness Line (BKG)
+London Underground  - Bakerloo line (BKL)
+Southern  - West London Line (None)
+Freight - Intermodal FKA (None)
+Freight - Aggregates HOA (CLA)
+Freight - Petroleum TEA (CLP)
+London Underground - Bakerloo Line Sleet (None)
+Class 710 - Test Runs January/May (BKG)
+Freight - Aggregates HKA (WCML Pack)
+Freight - Intermodal FCA (None)
+Freight - Nuclear FNA (CLN)
+
+[Cargo Line 2024 Nuclear]
+Avanti West Coast - Class 390 (Class 390)
+Longond Overground  - Lioness Line (BKG)
+London Underground  - Bakerloo line (BKL)
+Southern  - West London Line (None)
+Freight - Intermodal FKA (None)
+Freight - Aggregates HOA (CLA)
+Freight - Petroleum TEA (CLP)
+London Underground - Bakerloo Line Sleet (None)
+Class 710 - Test Runs January/May (BKG)
+Freight - Aggregates HKA (WCML Pack)
+Freight - Intermodal FCA (CLI)
+Freight - Nuclear FNA (None)
+
+[Evero 2025 Timetable]
+Bakerloo Line - 1972 Stock (None)
+Lioness Line - Class 710 (BKG)
+Avanti West Coast Class 390 (Class 390)
+Southern Class 377/2 (None)
+Avanti West Coast Class 805 (None)
+Bakerloo Line - 1972 Stock (None)
+Freightliner Diesel Intermodal (None)
+Freightliner  Diesel Coal (None)
+Freightliner  Diesel Cement (None)
+DB_Cargo-Diesel-Intermodal (None)
+GBRF-Diesel-Intermodal (None)
+Southeastern High Speed (SEH)
+HKA (WCML Pack)
+LNWR Class 350/2/3 (BMC)
+LNWR Class 350/4 (BMC)
+","PS4 & Xbox One
+Will not have playable services for the Class 377/2, 1972 MkII Tube Stock, DB Class 66, and Class 710/2.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"West Cornwall Local: Penzance - St Austell & St Ives Route Add-On","Click Here","Rivet Games","WCL","Route 🛤️","UK 🇬🇧","04/11/21","No","Yes","Yes","Yes","Yes","Yes","N/A","West Cornwall Steam Railtour","No","No","No","No","No","No","Yes","Class 150/2
+Class 37/5 RSR","[Original Timetable]
+Class 101 (NTP, GWE)
+Class 142 (BPO)
+LMS Jubilee  (WCL)
+Class 40 BLU (NTP)
+Class 45/1 BLU (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 08 (TVL, NTP, GWE)
+Class 37/5 (TVL)","[Original Timetable]
+BR Blue (NTP, BR Heavy Freight Pack)
+Steam Special (WCS)",""
+"West Cornwall Steam Railtour Add-On","Click Here","Rivet Games","WCS","Expansion ➕","UK 🇬🇧","14/03/23","No","No","Yes","Yes","Yes","Yes","West Cornwall Local","N/A","No","N/A","N/A","No","No","No","Yes","LMS Jubilee (4 Liveries)","N/A","N/A",""
+"West Midlands Railway & CrossCountry BR Class 170 DMU Add-On","Click Here","Rivet Games","Class 170","Loco 🚆","UK 🇬🇧","29/07/25","No","No","No","No","Yes","Yes","Birmingham Cross-City","N/A","Yes","N/A","N/A","Yes","No","No","Yes","Class 170 🎟️","N/A","N/A","PS4 & Xbox One
+You will get the complete experience.
+
+Xbox Series S
+You will get the complete experience.
+
+PS5, Xbox Series X & PC
+You will get the complete experience."
+"West Somerset Railway Route Add-On","Click Here","Dovetail Games","WSR","Route 🛤️","UK 🇬🇧","24/05/18","Yes","Yes","Yes","Yes","Yes","Yes","N/A","BR Class 33
+BR Class 52 'Western'
+Thomas & Friends™ Visit the West Somerset Railway
+Thomas & Friends 80th Anniversary Expansion","Yes","No","No","No","No","No","Yes","Class 47
+Class 09","[Thomas at the WSR]
+Diesel
+Thomas the Tank Engine
+
+[WSR Diesel Gala 2017 Timetable]
+Class 33 GRN (WSR)
+Class 52 MAR (WSR)
+Class 40 BLU (NTP)
+Class 31/1 BLU (TVL)
+Class 45/1 BLU (NTP)
+Class 47 (NTP, BPO, PSC)
+Class 20 RF (TVL)
+Class 08 (TVL, NTP, BPO, PSC)
+Class 101 BLG (TVL)
+Class 37/5 (TVL, WCL)
+
+[WSR Steam Gala 2023 Timetable]
+Flying Scotsman (PDB)
+LMS Fowler 4F (PFR)
+LMS Jubilee (PFR, WCL)
+LMS Stainer 8F (PFR)
+Class 150 (WCL)","[Thomas at the WSR]
+None
+
+[WSR Diesel Gala 2017 Timetable]
+Class 101 & Class 37/5 Passenger Services (TVL)
+Class 40 & Class 08 (BR Heavy Freight Pack, NTP)
+Class 45 (NTP)
+Class 52 (Class 52)
+Class 33 (Class 33)
+
+[WSR Steam Gala 2023 Timetable]
+Class 20 Railtour (Class 20, TVL)
+GWR Class 43 & Class 16 Passenger Services (GWE)
+Class 150 Passenger Services (WCL)
+LMS 4F & LMS 8F & LMS Juiblee Steam Services (PFR)
+DB Class 66 Freight Services TEA (GWE, BR Heavy Freight Pack, NTP)
+BR 12t Van (BR Heavy Freight Pack, NTP)
+Class 33 & Class 52 (Class 33, Class 52)
+EWS Class 66 Freight Services JNA (SEH)
+EWS Class 66 Freight Services MFA & FKA (SEH, GWE)
+RHTT Services (RHTT)
+Flying Scotsman Railtour Services (Flying Scotsman, PDB)
+Flying Scotsman Passenger Services (Flying Scotsman, PDB)
+Class 52 Railtour (Class 52)
+LMS Jubilee Festive Service (SoS)
+Class 101 (Class 101, TVL)
+XC Class 43 Passenger Services (GWE)
+DB Class 66 Freight Services FKA (GWE)
+
+
+",""

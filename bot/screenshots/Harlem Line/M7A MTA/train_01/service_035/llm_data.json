@@ -1,0 +1,81 @@
+{
+  "level_info": {
+    "service_name": "Train 507 GCT to North White Plains",
+    "start_time": "07:11",
+    "duration": "00:43",
+    "tonnage": 345.1,
+    "car_count": 6,
+    "train_length": 156
+  },
+  "location": {
+    "lat": 40.7542277065725,
+    "lng": -73.9753885969993,
+    "current_service_name": "507"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:11:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:11:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:13:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 3 - 07:22:30",
+      "location": "Harlem 125th Street Track 3",
+      "time1": "07:22:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:23:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 1 - 07:47:30",
+      "location": "White Plains Track 1",
+      "time1": "07:47:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:48:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 1 - 07:55:00",
+      "location": "North White Plains Track 1",
+      "time1": "07:55:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 7
+    }
+  ]
+}

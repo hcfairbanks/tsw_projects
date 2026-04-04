@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "MT806EQ Boston South Station - Southampton Street Yard",
+    "start_time": "07:42",
+    "duration": "00:10",
+    "tonnage": 680.4,
+    "car_count": 9,
+    "train_length": 229.6
+  },
+  "location": {
+    "lat": 42.34950583034791,
+    "lng": -71.05584869236829,
+    "current_service_name": "MT806EQ"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:42:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:42:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "07:43:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Amtrak Runner - 07:53:00",
+      "location": "Amtrak Runner",
+      "time1": "07:53:00",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

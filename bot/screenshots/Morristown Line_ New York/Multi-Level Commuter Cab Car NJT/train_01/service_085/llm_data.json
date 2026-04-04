@@ -1,0 +1,66 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6270 Montclair State University - NY Penn Station",
+    "start_time": "20:33",
+    "duration": "00:26",
+    "tonnage": 619.8,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.74746714384407,
+    "lng": -74.17143077866949,
+    "current_service_name": "NJT-6270"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:35:30",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track A - 20:46:30",
+      "location": "Secaucus Junction Track A",
+      "time1": "20:46:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:47:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 10 - 21:00:00",
+      "location": "New York Penn Track 10",
+      "time1": "21:00:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

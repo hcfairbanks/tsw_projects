@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #838 (Overnight Storage)",
+    "start_time": "23:44",
+    "duration": "00:08",
+    "tonnage": 514.1,
+    "car_count": 6,
+    "train_length": 489.4,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.35009765458256,
+    "lng": -71.05567102622734,
+    "current_service_name": "MBTA Providence #838 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 23:44:00",
+      "location": "",
+      "time1": "23:44:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 15",
+      "location": "Southampton Street Yard Track 15",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

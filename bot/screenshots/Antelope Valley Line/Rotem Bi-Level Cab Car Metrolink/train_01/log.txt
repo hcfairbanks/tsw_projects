@@ -1,0 +1,82 @@
+Service #1 |  AV 200: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_001
+Service #1 | ADDED (train) | AV 200: Lancaster - LA Union (Part 1) 03:41 01:12 | timetable_id=33936
+Service #2 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_002
+Service #2 | OK | Lancaster Siding - Lancaster (Non-Revenue) 04:25 00:03 | timetable_id=33953
+Service #3 |  AV 202: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_003
+Service #3 | OK | AV 202: Lancaster - LA Union (Part 1) 04:41 01:26 | timetable_id=33954
+Service #4 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_004
+Service #4 | ADDED (train) | Lancaster Siding - Lancaster (Non-Revenue) 04:55 00:05 | timetable_id=33937
+Service #5 |  AV 204: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_005
+Service #5 | ADDED (train) | AV 204: Lancaster - LA Union (Part 1) 05:09 01:22 | timetable_id=33938
+Service #6 |  AV 200: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_006
+Service #6 | ADDED (train) | AV 200: Lancaster - LA Union (Part 2) 05:09 00:50 | timetable_id=33939
+Service #7 |  VC 100: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_007
+Service #7 | OK | VC 100: Ventura - LA Union 05:55 00:19 | timetable_id=33955
+Service #8 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_008
+Service #8 | ADDED (train) | Lancaster Siding - Lancaster (Non-Revenue) 05:55 00:06 | timetable_id=33940
+Service #9 |  AV 206: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_009
+Service #9 | ADDED (train) | AV 206: Lancaster - LA Union (Part 1) 06:11 01:12 | timetable_id=33941
+Service #10 |  AV 202: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_010
+Service #10 | OK | AV 202: Lancaster - LA Union (Part 2) 06:11 00:57 | timetable_id=33956
+Service #11 |  AV 204: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_011
+Service #11 | ADDED (train) | AV 204: Lancaster - LA Union (Part 2) 06:34 00:57 | timetable_id=33942
+Service #12 |  VC 102: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_012
+Service #12 | OK | VC 102: Ventura - LA Union 06:50 00:19 | timetable_id=33957
+Service #13 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_013
+Service #13 | ADDED (train) | Lancaster Siding - Lancaster (Non-Revenue) 06:55 00:08 | timetable_id=33943
+Service #14 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_014
+Service #14 | OK | Metrolink CMF - LA Union (Non-Revenue) 07:00 00:16 | timetable_id=33958
+Service #15 |  AV 208: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_015
+Service #15 | ADDED (train) | AV 208: Lancaster - LA Union (Part 1) 07:11 01:12 | timetable_id=33944
+Service #16 |  AV 206: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_016
+Service #16 | ADDED (train) | AV 206: Lancaster - LA Union (Part 2) 07:37 00:51 | timetable_id=33945
+Service #17 |  AV 208: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_017
+Service #17 | ADDED (train) | AV 208: Lancaster - LA Union (Part 2) 08:37 00:51 | timetable_id=33946
+Service #18 |  VC 108: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_018
+Service #18 | OK | VC 108: Ventura - LA Union 08:55 00:19 | timetable_id=33959
+Service #19 |  AV 212: Lancaster - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_019
+Service #19 | ADDED (train) | AV 212: Lancaster - LA Union 09:11 02:04 | timetable_id=33947
+Service #20 |  AV 210: Via Princessa - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_020
+Service #20 | OK | AV 210: Via Princessa - LA Union 09:15 01:06 | timetable_id=33960
+Service #21 |  VC 100: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_021
+Service #21 | OK | VC 100: Ventura - LA Union 09:22 00:18 | timetable_id=33961
+Service #22 |  VC 112: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_022
+Service #22 | OK | VC 112: Ventura - LA Union 11:27 00:19 | timetable_id=33962
+Service #23 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_023
+Service #23 | OK | Metrolink CMF - LA Union (Non-Revenue) 12:00 00:12 | timetable_id=33963
+Service #24 |  AV 218: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_024
+Service #24 | ADDED (train) | AV 218: Lancaster - LA Union (Part 1) 12:05 02:22 | timetable_id=33948
+Service #25 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_025
+Service #25 | OK | Metrolink CMF - LA Union (Non-Revenue) 12:20 00:15 | timetable_id=33964
+Service #26 |  AV 222: Lancaster - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_026
+Service #26 | ADDED (train) | AV 222: Lancaster - LA Union 14:11 01:20 | timetable_id=33949
+Service #27 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_027
+Service #27 | OK | Metrolink CMF - LA Union (Non-Revenue) 15:00 00:12 | timetable_id=33965
+Service #28 |  VC 116: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_028
+Service #28 | OK | VC 116: Ventura - LA Union 15:13 00:19 | timetable_id=33966
+Service #29 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_029
+Service #29 | OK | Metrolink CMF - LA Union (Non-Revenue) 15:15 00:14 | timetable_id=33967
+Service #30 |  AV 222: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_030
+Service #30 | ADDED (train) | AV 222: Lancaster - LA Union (Part 2) 15:34 00:49 | timetable_id=33950
+Service #31 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_031
+Service #31 | OK | Metrolink CMF - LA Union (Non-Revenue) 16:00 00:10 | timetable_id=33968
+Service #32 |  AV 224: Via Princessa - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_032
+Service #32 | OK | AV 224: Via Princessa - LA Union 16:15 01:06 | timetable_id=33969
+Service #33 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_033
+Service #33 | OK | Metrolink CMF - LA Union (Non-Revenue) 17:30 00:14 | timetable_id=33970
+Service #34 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_034
+Service #34 | OK | Metrolink CMF - LA Union (Non-Revenue) 17:50 00:10 | timetable_id=33971
+Service #35 |  VC 118: Ventura - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_035
+Service #35 | OK | VC 118: Ventura - LA Union 18:06 00:19 | timetable_id=33972
+Service #36 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_036
+Service #36 | OK | Metrolink CMF - LA Union (Non-Revenue) 18:10 00:10 | timetable_id=33973
+Service #37 |  AV 230: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_037
+Service #37 | ADDED (train) | AV 230: Lancaster - LA Union (Part 1) 18:11 01:12 | timetable_id=33951
+Service #38 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_038
+Service #38 | OK | Metrolink CMF - LA Union (Non-Revenue) 18:30 00:12 | timetable_id=33974
+Service #39 |  AV 230: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_039
+Service #39 | DUPLICATE | Metrolink CMF - LA Union (Non-Revenue) 18:30 00:12
+Service #40 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_040
+Service #40 | ADDED (train) | AV 230: Lancaster - LA Union (Part 2) 19:26 00:50 | timetable_id=33952
+Service #41 |  Metrolink CMF - LA Union (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\Rotem Bi-Level Cab Car Metrolink\train_01\service_041
+Service #41 | OK | Metrolink CMF - LA Union (Non-Revenue) 20:15 00:17 | timetable_id=33975

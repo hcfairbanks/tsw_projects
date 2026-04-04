@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Worcester #588 (Mid-Day Storage)",
+    "start_time": "09:05",
+    "duration": "00:08",
+    "tonnage": 522.8,
+    "car_count": 6,
+    "train_length": 488.8,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.35006131501317,
+    "lng": -71.05593109476246,
+    "current_service_name": "MBTA Worcester #588 (AI From Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:05:00",
+      "location": "",
+      "time1": "9:05:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 16",
+      "location": "Southampton Street Yard Track 16",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

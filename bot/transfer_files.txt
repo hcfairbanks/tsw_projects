@@ -1,0 +1,8 @@
+
+
+config.py
+calibration.json
+refrences\*
+Cick Registrey ???
+
+"C:\Users\hcfai\Desktop\tsw_hud_project_downstairs\bot\screenshots\London Underground Bakerloo Line\*"

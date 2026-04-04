@@ -1,0 +1,200 @@
+Service #1 | 3809 3809 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_001
+Service #1 | OK | 3809 Sunnyside Yard - NY Penn Station 03:29 00:12 | timetable_id=33976
+Service #2 | 6602 6602 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_002
+Service #2 | OK | 6602 Dover - NY Penn Station 04:13 01:29 | timetable_id=33977
+Service #3 | 3813 3813 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_003
+Service #3 | OK | 3813 Sunnyside Yard - NY Penn Station 04:26 00:13 | timetable_id=33978
+Service #4 | 6604 6604 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_004
+Service #4 | OK | 6604 Dover Yard Move 04:44 00:05 | timetable_id=33979
+Service #5 | 6606 6606 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_005
+Service #5 | OK | 6606 Dover - NY Penn Station 05:30 01:25 | timetable_id=33980
+Service #6 | 6610 6610 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_006
+Service #6 | OK | 6610 Dover - NY Penn Station 05:51 01:24 | timetable_id=33981
+Service #7 | 6612 6612 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_007
+Service #7 | OK | 6612 Dover Yard Move 05:53 00:05 | timetable_id=33982
+Service #8 | 6209 6209 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_008
+Service #8 | OK | 6209 NY Penn Station - Montclair State University 05:54 00:16 | timetable_id=33983
+Service #9 | 607 607 Hoboken - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_009
+Service #9 | OK | 607 Hoboken - Dover 06:14 01:33 | timetable_id=33984
+Service #10 | 6614 6614 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_010
+Service #10 | OK | 6614 Dover Yard Move 06:24 00:05 | timetable_id=33985
+Service #11 | 6616 6616 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_011
+Service #11 | OK | 6616 Dover Yard Move 06:45 00:05 | timetable_id=33986
+Service #12 | 6406 6406 Gladstone - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_012
+Service #12 | OK | 6406 Gladstone - NY Penn Station 06:47 00:40 | timetable_id=33987
+Service #13 | 6213 6213 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_013
+Service #13 | OK | 6213 NY Penn Staion - Montclair State University 06:50 00:17 | timetable_id=33988
+Service #14 | 204 204 Montclair State University - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_014
+Service #14 | OK | 204 Montclair State University - Hoboken 06:58 00:18 | timetable_id=33989
+Service #15 | 6607 6607 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_015
+Service #15 | OK | 6607 NY Penn Station - Dover 07:07 01:28 | timetable_id=33990
+Service #16 | 6314 6314 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_016
+Service #16 | OK | 6314 Summit - NY Penn Station 07:09 00:50 | timetable_id=33991
+Service #17 | 6410 6410 Gladstone - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_017
+Service #17 | OK | 6410 Gladstone - NY Penn Station 07:24 00:48 | timetable_id=33992
+Service #18 | 6620 6620 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_018
+Service #18 | OK | 6620 Dover - NY Penn Station 07:30 01:24 | timetable_id=33993
+Service #19 | 6318 6318 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_019
+Service #19 | OK | 6318 Summit - NY Penn Station 07:47 00:54 | timetable_id=33994
+Service #20 | 3918 3918 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_020
+Service #20 | OK | 3918 NY Penn Station - Sunnyside Yard 07:53 00:25 | timetable_id=33995
+Service #21 | 6613 6613 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_021
+Service #21 | OK | 6613 NY Penn Station - Dover 08:00 01:35 | timetable_id=33996
+Service #22 | 6320 6320 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_022
+Service #22 | OK | 6320 Summit - NY Penn Station 08:17 00:51 | timetable_id=33997
+Service #23 | 3922 3922 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_023
+Service #23 | OK | 3922 NY Penn Station - Sunnyside Yard 08:26 00:27 | timetable_id=33998
+Service #24 | 3222 3222 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_024
+Service #24 | OK | 3222 NY Penn Station - Sunnyside Yard 08:40 00:33 | timetable_id=33999
+Service #25 | 3126 3126 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_025
+Service #25 | OK | 3126 NY Penn Station - Sunnyside Yard 08:50 00:25 | timetable_id=34000
+Service #26 | 6324 6324 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_026
+Service #26 | OK | 6324 Dover - NY Penn Station 08:54 00:47 | timetable_id=34001
+Service #27 | 6318 6318 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_027
+Service #27 | OK | 6318 NY Penn Station - Sunnyside Yard 08:55 00:26 | timetable_id=34002
+Service #28 | 6620 6620 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_028
+Service #28 | OK | 6620 NY Penn Station - Sunnyside Yard 09:07 00:25 | timetable_id=34003
+Service #29 | 6317 6317 NY Penn Station - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_029
+Service #29 | OK | 6317 NY Penn Station - Summit 09:22 00:45 | timetable_id=34004
+Service #30 | 3231 3231 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_030
+Service #30 | OK | 3231 Sunnyside Yard - NY Penn Station 09:29 00:11 | timetable_id=34005
+Service #31 | 6231 6231 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_031
+Service #31 | OK | 6231 NY Penn Station - Montclair State University 09:43 00:19 | timetable_id=34006
+Service #32 | 6328 6328 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_032
+Service #32 | OK | 6328 Summit - NY Penn Station 09:48 00:51 | timetable_id=34007
+Service #33 | 3228 3228 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_033
+Service #33 | OK | 3228 NY Penn Station - Sunnyside Yard 10:02 00:24 | timetable_id=34008
+Service #34 | 3718 3718 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_034
+Service #34 | OK | 3718 NY Penn Station - Sunnyside Yard 10:03 00:26 | timetable_id=34009
+Service #35 | 6619 6619 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_035
+Service #35 | OK | 6619 NY Penn Station - Dover 10:04 01:29 | timetable_id=34010
+Service #36 | X667 X667 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_036
+Service #36 | OK | X667 NY Penn Station - Dover 10:27 01:17 | timetable_id=34011
+Service #37 | 6222 6222 Montclair State University - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_037
+Service #37 | OK | 6222 Montclair State University - NY Penn Station 10:32 00:23 | timetable_id=34012
+Service #38 | 6621 6621 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_038
+Service #38 | OK | 6621 NY Penn Station - Dover 10:46 01:26 | timetable_id=34013
+Service #39 | 6636 6636 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_039
+Service #39 | OK | 6636 Dover - NY Penn Station 10:47 01:33 | timetable_id=34014
+Service #40 | 6328 6328 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_040
+Service #40 | OK | 6328 NY Penn Station - Sunnyside Yard 10:53 00:26 | timetable_id=34015
+Service #41 | 6237 6237 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_041
+Service #41 | OK | 6237 Sunnyside Yard - NY Penn Station 11:07 00:13 | timetable_id=34016
+Service #42 | 6237 6237 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_042
+Service #42 | OK | 6237 NY Penn Station - Montclair State University 11:29 00:19 | timetable_id=34017
+Service #43 | 6625 6625 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_043
+Service #43 | OK | 6625 NY Penn Station - Dover 11:46 01:28 | timetable_id=34018
+Service #44 | 3836 3836 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_044
+Service #44 | OK | 3836 NY Penn Station - Sunnyside Yard 11:56 00:25 | timetable_id=34019
+Service #45 | 6241 6241 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_045
+Service #45 | OK | 6241 NY Penn Station - Montclair State University 12:29 00:19 | timetable_id=34020
+Service #46 | 6636 6636 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_046
+Service #46 | OK | 6636 NY Penn Station - Sunnyside Yard 12:38 00:24 | timetable_id=34021
+Service #47 | 6627 6627 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_047
+Service #47 | OK | 6627 NY Penn Station - Dover 12:46 01:31 | timetable_id=34022
+Service #48 | 6844 6844 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_048
+Service #48 | OK | 6644 Dover - NY Penn Station 12:56 01:30 | timetable_id=34023
+Service #49 | 3759 3759 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_049
+Service #49 | OK | 3759 Sunnyside Yard - NY Penn Station 12:58 00:13 | timetable_id=34024
+Service #50 | 3840/3247 3840/3247 NY Penn Station - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_050
+Service #50 | OK | 3840/3247 NY Penn Station - NY Penn Station 13:05 00:36 | timetable_id=34025
+Service #51 | 6245 6245 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_051
+Service #51 | OK | 6245 NY Penn Station - Montclair State University 13:29 00:19 | timetable_id=34026
+Service #52 | 3849 3849 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_052
+Service #52 | OK | 3849 Sunnyside Yard - NY Penn Station 13:33 00:12 | timetable_id=34027
+Service #53 | 3842 3842 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_053
+Service #53 | OK | 3842 NY Penn Station - Sunnyside Yard 13:39 00:25 | timetable_id=34028
+Service #54 | 6631 6631 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_054
+Service #54 | OK | 6631 NY Penn Station - Dover 13:51 01:33 | timetable_id=34029
+Service #55 | 3251 3251 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_055
+Service #55 | OK | 3251 Sunnyside Yard - NY Penn Station 14:11 00:13 | timetable_id=34030
+Service #56 | 6635 6635 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_056
+Service #56 | OK | 6635 NY Penn Station - Dover 14:30 01:34 | timetable_id=34031
+Service #57 | 6339 6339 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_057
+Service #57 | OK | 6339 Sunnyside Yard - NY Penn Station 14:41 00:12 | timetable_id=34032
+Service #58 | 3855 3855 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_058
+Service #58 | OK | 3855 Sunnyside Yard - NY Penn Station 14:53 00:12 | timetable_id=34033
+Service #59 | 3848 3848 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_059
+Service #59 | OK | 3848 NY Penn Station - Sunnyside Yard 14:58 00:25 | timetable_id=34034
+Service #60 | 6339 6339 NY Penn Station - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_060
+Service #60 | OK | 6339 NY Penn Station - Summit 15:21 00:45 | timetable_id=34035
+Service #61 | 3943 3943 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_061
+Service #61 | OK | 3943 Sunnyside Yard - NY Penn Station 15:39 00:13 | timetable_id=34036
+Service #62 | 6253 6253 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_062
+Service #62 | OK | 6253 NY Penn Station - Montclair State University 15:47 00:18 | timetable_id=34037
+Service #63 | 3861 3861 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_063
+Service #63 | OK | 3861 Sunnyside Yard - NY Penn Station 15:51 00:13 | timetable_id=34038
+Service #64 | 6641 6641 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_064
+Service #64 | OK | 6641 NY Penn Station - Dover 16:18 01:09 | timetable_id=34039
+Service #65 | 3725 3725 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_065
+Service #65 | OK | 3725 Sunnyside Yard - NY Penn Station 16:35 00:15 | timetable_id=34040
+Service #66 | 6343 6343 NY Penn Station - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_066
+Service #66 | OK | 6343 NY Penn Station - Summit 16:38 01:01 | timetable_id=34041
+Service #67 | X630 X630 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_067
+Service #67 | OK | X630 Summit - NY Penn Station 17:12 00:41 | timetable_id=34042
+Service #68 | 6664 6664 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_068
+Service #68 | OK | 6664 Dover - NY Penn Station 17:13 01:34 | timetable_id=34043
+Service #69 | 6431 6431 NY Penn Station - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_069
+Service #69 | OK | 6431 NY Penn Station - Gladstone 17:18 00:43 | timetable_id=34044
+Service #70 | 6273 6273 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_070
+Service #70 | OK | 6273 NY Penn Station - Montclair State University 17:30 00:17 | timetable_id=34045
+Service #71 | 3871 3871 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_071
+Service #71 | OK | 3871 Sunnyside Yard - NY Penn Station 17:31 00:15 | timetable_id=34046
+Service #72 | 6252 6252 Montclair State University - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_072
+Service #72 | OK | 6252 Montclair State University - NY Penn Station 17:33 00:23 | timetable_id=34047
+Service #73 | 3959 3959 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_073
+Service #73 | OK | 3959 Sunnyside Yard - NY Penn Station 17:34 00:13 | timetable_id=34048
+Service #74 | 6665 6665 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_074
+Service #74 | OK | 6665 Sunnyside Yard - NY Penn Station 17:48 00:15 | timetable_id=34049
+Service #75 | 6653 6653 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_075
+Service #75 | OK | 6653 NY Penn Station - Dover 17:50 01:25 | timetable_id=34050
+Service #76 | 275 275 Hoboken - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_076
+Service #76 | OK | 275 Hoboken - Montclair State University 17:55 00:16 | timetable_id=34051
+Service #77 | 6437 6437 NY Penn Station - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_077
+Service #77 | OK | 6437 NY Penn Station - Gladstone 18:05 00:38 | timetable_id=34052
+Service #78 |   | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_078
+Service #78 | OK | Operate this local revenue service from New York Penn to Newark Broad St. 18:10 00:19 | timetable_id=34053
+Service #79 | 6655 6655 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_079
+Service #79 | OK | 6655 NY Penn Station - Dover 18:20 01:22 | timetable_id=34054
+Service #80 | 6668 6668 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_080
+Service #80 | OK | 6668 Dover - NY Penn Station 18:24 01:29 | timetable_id=34055
+Service #81 | 6238 6238 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_081
+Service #81 | OK | 6238 NY Penn Station - Montclair State University 18:41 00:19 | timetable_id=34056
+Service #82 | 6359 6359 NY Penn Station - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_082
+Service #82 | OK | 6359 NY Penn Station - Summit 18:49 00:53 | timetable_id=34057
+Service #83 | 6670 6670 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_083
+Service #83 | OK | 6670 Dover - NY Penn Station 19:00 01:26 | timetable_id=34058
+Service #84 | X634 X634 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_084
+Service #84 | OK | X634 Summit - NY Penn Station 19:23 00:46 | timetable_id=34059
+Service #85 | 6672 6672 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_085
+Service #85 | OK | 6672 Dover - NY Penn Station 19:56 01:26 | timetable_id=34060
+Service #86 | 6667 6667 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_086
+Service #86 | OK | 6667 NY Penn Station - Dover 20:05 01:29 | timetable_id=34061
+Service #86 | 6667 6667 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_086
+Service #86 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'
+Service #86 | 6667 6667 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_086
+Service #86 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'
+Service #87 | X638 X638 Summit - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_087
+Service #87 | OK | X638 Summit - NY Penn Station 20:24 00:52 | timetable_id=34062
+Service #88 | 6876 6876 Dover - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_088
+Service #88 | OK | 6676 Dover - NY Penn Station 21:30 01:31 | timetable_id=34063
+Service #89 | 3876/6677 3876/6677 NY Penn Station - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_089
+Service #89 | OK | 3876/6677 NY Penn Station - NY Penn Station 21:33 00:36 | timetable_id=34064
+Service #90 | 3278/3893 3278/3893 NY Penn Station - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_090
+Service #90 | OK | 3278/3893 NY Penn Station - NY Penn Station 21:52 00:36 | timetable_id=34065
+Service #91 | 6677 6677 NY Penn State - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_091
+Service #91 | OK | 6677 NY Penn State - Dover 22:13 01:31 | timetable_id=34066
+Service #92 | 682 682 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_092
+Service #92 | OK | 682 Dover - Hoboken 22:30 01:27 | timetable_id=34250
+Service #93 | 6671 6671 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_093
+Service #93 | OK | 6671 Dover Yard Move 22:32 00:05 | timetable_id=34251
+Service #94 | 6297 6297 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_094
+Service #94 | OK | 6297 NY Penn Station - Montclair State University 22:41 00:18 | timetable_id=34252
+Service #95 | 3984 3984 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_095
+Service #95 | OK | 3984 NY Penn Station - Sunnyside Yard 22:46 00:26 | timetable_id=34253
+Service #96 | 6679 6679 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_096
+Service #96 | OK | 6679 NY Penn Station - Dover 22:56 01:30 | timetable_id=34254
+Service #97 | 6675 6675 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_097
+Service #97 | OK | 6675 Dover Yard Move 23:31 00:03 | timetable_id=34255
+Service #98 | 6299 6299 NY Penn Station - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_01\service_098
+Service #98 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'

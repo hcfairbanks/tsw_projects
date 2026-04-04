@@ -1,0 +1,2 @@
+Service 003 | DUPLICATE | [LE4]Locomotive Run Around at Minehead 12:55 00:05 | Train 1 | Class 09 GRN
+Service 001 | DUPLICATE | [ECS3]Empty Stock Move to Bishops Lydeard 10:45 00:15 | Train 1 | Class 09 GRN

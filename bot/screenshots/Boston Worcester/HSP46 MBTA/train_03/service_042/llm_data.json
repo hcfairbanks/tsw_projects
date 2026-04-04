@@ -1,0 +1,16 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P521 Boston South Station to Worcester",
+    "start_time": "16:58",
+    "duration": "01:26",
+    "tonnage": 750.7,
+    "car_count": 10,
+    "train_length": 255.6
+  },
+  "location": {
+    "lat": 42.34916773556477,
+    "lng": -71.05637178993025,
+    "current_service_name": "P521"
+  }
+}

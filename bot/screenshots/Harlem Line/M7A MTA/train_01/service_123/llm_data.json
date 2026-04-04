@@ -1,0 +1,105 @@
+{
+  "level_info": {
+    "service_name": "Train 662 Southeast to GCT",
+    "start_time": "15:17",
+    "duration": "00:48",
+    "tonnage": 380.1,
+    "car_count": 6,
+    "train_length": 156
+  },
+  "location": {
+    "lat": 41.04979472430389,
+    "lng": -73.77304829158302,
+    "current_service_name": "662"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:19:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 15:22:30",
+      "location": "White Plains Track 2",
+      "time1": "15:22:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:23:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hartsdale Track 2 - 15:26:30",
+      "location": "Hartsdale Track 2",
+      "time1": "15:26:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:27:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Scarsdale Track 2 - 15:30:30",
+      "location": "Scarsdale Track 2",
+      "time1": "15:30:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:31:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 1 - 15:54:00",
+      "location": "Harlem 125th Street Track 1",
+      "time1": "15:54:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:55:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 39 - 16:06:00",
+      "location": "Grand Central Track 39",
+      "time1": "16:06:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 10
+    }
+  ]
+}

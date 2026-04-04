@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Morristown Line: New York
+Train:       Arrow III NJT
+Started:     2026-04-02 04:40:26
+Duration:    0:24:07
+Trains:      1
+Services:    8
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    8          0:24:02

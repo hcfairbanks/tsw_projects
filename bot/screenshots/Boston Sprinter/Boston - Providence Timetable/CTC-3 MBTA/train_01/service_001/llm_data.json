@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Franklin #701 (Depot - Boston)",
+    "start_time": "03:00",
+    "duration": "00:08",
+    "tonnage": 454.9,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.33488925051976,
+    "lng": -71.05982485838754,
+    "current_service_name": "MBTA Franklin #701 (AI To Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 03:00:00",
+      "location": "",
+      "time1": "",
+      "time2": "3:00:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 04",
+      "location": "Boston South Station Track 04",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+number,page,click,service_id,service_name,time,duration
+1,page 0,click (2373 368),,Worcester Yard - Worcester (Part 2),04:25:00,00:06:00
+2,page 0,click (2373 437),,Boston South Station to Framingham,05:11:00,00:31:00
+3,page 0,click (2373 506),,Boston South Station to Framingham,05:28:00,00:49:00
+4,page 0,click (2373 575),,Boston South Station to Worcester,05:53:00,01:13:00
+5,page 0,click (2373 644),,Boston South Station to Worcester,06:08:00,01:23:00
+6,page 0,click (2373 713),,Boston South Station to Framingham,06:28:00,00:32:00
+7,page 0,click (2373 782),,Boston South Station - Southampton Street Yard,07:11:00,00:10:00
+8,page 0,click (2373 851),,Boston South Station - Southampton Street Yard,07:12:00,00:10:00
+9,page 1,click (2373 506),,Boston South Station to Worcester,07:18:00,01:12:00
+10,page 1,click (2373 575),,Boston South Station - Southampton Street Yard,07:22:00,00:10:00
+11,page 1,click (2373 644),,Boston South Station - Southampton Street Yard,08:12:00,00:10:00
+12,page 1,click (2373 713),,Boston South Station - Southampton Street Yard,08:16:00,00:10:00
+13,page 1,click (2373 782),,Boston South Station - Southampton Street Yard,08:44:00,00:10:00
+14,page 1,click (2373 851),,Boston South Station to Worcester,08:48:00,01:24:00
+15,page 2,click (2373 506),,Boston South Station - Southampton Street Yard,09:22:00,00:09:00
+16,page 2,click (2373 575),,Boston South Station - Southampton Street Yard,09:42:00,00:10:00
+17,page 2,click (2373 644),,"Geometry Extra Boston, MA - Worcester, MA",09:54:00,00:00:00
+18,page 2,click (2373 713),,Boston South Station - Southampton Street Yard,10:32:00,00:10:00
+19,page 2,click (2373 782),,Boston South Station - Southampton Street Yard,10:37:00,00:08:00
+20,page 2,click (2373 851),,Boston South Station - Southampton Street Yard,11:27:00,00:10:00
+21,page 3,click (2373 506),,"Extra Southampton, MA - Worcester, MA",11:37:00,00:19:00
+22,page 3,click (2373 575),,"Extra Grafton, MA - Readville Yard, MA",11:47:00,00:00:00
+23,page 3,click (2373 644),,Boston South Station to Worcester,11:53:00,01:31:00
+24,page 3,click (2373 713),,Boston South Station - Southampton Street Yard,12:17:00,00:05:00
+25,page 3,click (2373 782),,Geometry Extra Boston South Station - Southampton Stre,12:41:00,00:10:00
+26,page 3,click (2373 851),,Boston South Station - Southampton Street Yard,13:46:00,00:10:00
+27,page 4,click (2373 506),,Boston South Station to Worcester,13:53:00,01:31:00
+28,page 4,click (2373 575),,Boston South Station to Worcester,15:28:00,01:35:00
+29,page 4,click (2373 644),,Boston South Station to Framingham,16:28:00,00:54:00
+30,page 4,click (2373 713),,Boston South Station to Framingham,17:08:00,00:58:00
+31,page 4,click (2373 782),,Boston South Station to Framingham,17:48:00,00:55:00
+32,page 4,click (2373 851),,Boston South Station to Worcester,18:43:00,01:31:00
+33,page 5,click (2373 644),,Boston South Station to Worcester,19:33:00,01:11:00
+34,page 5,click (2373 713),,Boston South Station to Worcester,20:33:00,01:31:00
+35,page 5,click (2373 782),,Worcester - Worcester Yard (Part 2),22:26:00,00:06:00
+36,page 5,click (2373 851),,Boston South Station to Worcester,22:28:00,01:31:00

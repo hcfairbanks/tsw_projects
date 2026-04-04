@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Kingston #040 (Mid-Day Storage)",
+    "start_time": "09:52",
+    "duration": "00:09",
+    "tonnage": 446,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.3496909890081,
+    "lng": -71.05558480120902,
+    "current_service_name": "MBTA Kingston #040 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:52:00",
+      "location": "",
+      "time1": "9:52:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Front Yard Track 5",
+      "location": "Front Yard Track 5",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

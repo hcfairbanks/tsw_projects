@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "5J04 East Ham E.M.U.D. to Barking Riverside",
+    "start_time": "05:38",
+    "duration": "00:14",
+    "tonnage": 151,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.54446584163549,
+    "lng": 0.06499097932707043,
+    "current_service_name": "5J04"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:38:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:38:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "05:40:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Platform 7 - 05:43:00",
+      "location": "Barking Platform 7",
+      "time1": "05:43:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "05:48:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Riverside Platform 1 - 05:53:00",
+      "location": "Barking Riverside Platform 1",
+      "time1": "05:53:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

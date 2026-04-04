@@ -1,0 +1,178 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #823 (Boston - Providence)",
+    "start_time": "16:51",
+    "duration": "01:03",
+    "tonnage": 463.8,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.350034088350675,
+    "lng": -71.05605913975522,
+    "current_service_name": "MBTA Providence #823 (Outbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:51:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:51:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:52:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 16:57:45",
+      "location": "Boston Back Bay Track 1",
+      "time1": "16:57:45",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:58:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 1 - 17:01:27",
+      "location": "Ruggles Track 1",
+      "time1": "17:01:27",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:02:27",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 17:12:12",
+      "location": "Route 128 Track 1",
+      "time1": "17:12:12",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:12:57",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sharon Track 1 - 17:20:02",
+      "location": "Sharon Track 1",
+      "time1": "17:20:02",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:20:47",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mansfield Track 1 - 17:28:07",
+      "location": "Mansfield Track 1",
+      "time1": "17:28:07",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:28:52",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Attleboro Track 3 - 17:36:23",
+      "location": "Attleboro Track 3",
+      "time1": "17:36:23",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:37:23",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "East Limits Thatcher",
+      "location": "East Limits Thatcher",
+      "time1": "",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Attleboro Track 1 - 17:44:41",
+      "location": "South Attleboro Track 1",
+      "time1": "17:44:41",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:45:41",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "East Limits Orms",
+      "location": "East Limits Orms",
+      "time1": "",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Providence Track 5 - 17:54:53",
+      "location": "Providence Track 5",
+      "time1": "17:54:53",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

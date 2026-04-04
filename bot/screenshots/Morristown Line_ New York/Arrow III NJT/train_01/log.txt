@@ -1,0 +1,186 @@
+Service #1 | XT16 XT16 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_001
+Service #1 | OK | XT16 Hoboken Yard Move 04:09 00:02 | timetable_id=34256
+Service #2 | XB04 XB04 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_002
+Service #2 | OK | XB04 Hoboken Yard Move 04:13 00:05 | timetable_id=34257
+Service #3 | X31 X31 Hoboken - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_003
+Service #3 | OK | X31 Hoboken - Summit 04:29 00:32 | timetable_id=34258
+Service #4 | 301 301 Hoboken - Murray Hill | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_004
+Service #4 | OK | 301 Hoboken - Murray Hill 04:37 00:50 | timetable_id=34259
+Service #5 | 400 400 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_005
+Service #5 | OK | 400 Gladstone - Hoboken 05:17 00:32 | timetable_id=34260
+Service #6 | 300 300 Summit - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_006
+Service #6 | OK | 300 Summit - Hoboken 05:21 00:49 | timetable_id=34261
+Service #7 | XB22 XB22 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_007
+Service #7 | OK | XB22 Hoboken Yard Move 05:37 00:05 | timetable_id=34262
+Service #8 | 608 608 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_008
+Service #8 | OK | 608 Dover - Hoboken 05:41 01:24 | timetable_id=34263
+Service #9 | 402 402 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_009
+Service #9 | OK | 402 Gladstone - Hoboken 05:53 00:39 | timetable_id=34264
+Service #10 | X33 X33 Hoboken - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_010
+Service #10 | OK | X33 Hoboken - Summit 05:57 00:33 | timetable_id=34265
+Service #11 | 404 404 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_011
+Service #11 | OK | 404 Gladstone - Hoboken 06:24 00:38 | timetable_id=34266
+Service #12 | 211 211 Hoboken - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_012
+Service #12 | OK | 211 Hoboken - Montclair State University 06:36 00:17 | timetable_id=34267
+Service #13 | 481 481 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_013
+Service #13 | OK | 481 Hoboken - Gladstone 06:53 00:52 | timetable_id=34268
+Service #14 | 308 308 Summit - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_014
+Service #14 | OK | 308 Summit - Hoboken 06:54 00:48 | timetable_id=34269
+Service #15 | 408 408 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_015
+Service #15 | OK | 408 Gladstone - Hoboken 06:59 00:50 | timetable_id=34270
+Service #16 | 309 309 Hoboken - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_016
+Service #16 | OK | 309 Hoboken - Summit 07:33 00:51 | timetable_id=34271
+Service #17 | 412 412 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_017
+Service #17 | OK | 412 Gladstone - Hoboken 07:35 00:37 | timetable_id=34272
+Service #18 | 208 208 Montclair State University - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_018
+Service #18 | OK | 208 Montclair State University - Hoboken 07:38 00:18 | timetable_id=34273
+Service #19 | 409 409 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_019
+Service #19 | OK | 409 Hoboken - Gladstone 07:52 00:51 | timetable_id=34274
+Service #20 | XT21 XT21 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_020
+Service #20 | OK | XT21 Hoboken Yard Move 07:54 00:05 | timetable_id=34275
+Service #21 | 414 414 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_021
+Service #21 | OK | 414 Gladstone - Hoboken 08:07 00:38 | timetable_id=34276
+Service #22 | XT626 XT626 Dover Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_022
+Service #22 | OK | XT626 Dover Yard Move 08:15 00:03 | timetable_id=34277
+Service #23 | 212 212 Montclair State University - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_023
+Service #23 | OK | 212 Montclair State University - Hoboken 08:18 00:18 | timetable_id=34278
+Service #24 | XT31 XT31 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_024
+Service #24 | OK | XT31 Hoboken Yard Move 08:27 00:05 | timetable_id=34279
+Service #25 | 626 626 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_025
+Service #25 | OK | 626 Dover - Hoboken 08:29 01:16 | timetable_id=34280
+Service #26 | XT309 XT309 Summit Yard Move (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_026
+Service #26 | OK | XT309 Summit Yard Move (Part 1) 08:29 00:06 | timetable_id=34281
+Service #27 | 3710 3710 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_027
+Service #27 | OK | 3710 NY Penn Station - Sunnyside Yard 08:31 00:26 | timetable_id=34282
+Service #28 | 416 416 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_028
+Service #28 | OK | 416 Gladstone - Hoboken 08:36 00:36 | timetable_id=34283
+Service #29 | XT309 XT309 Summit Yard Move (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_029
+Service #29 | OK | XT309 Summit Yard Move (Part 2) 08:38 00:01 | timetable_id=34284
+Service #30 | XT25 XT25 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_030
+Service #30 | OK | XT25 Hoboken Yard Move 08:46 00:05 | timetable_id=34285
+Service #31 | 411 411 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_031
+Service #31 | OK | 411 Hoboken - Gladstone 08:52 00:49 | timetable_id=34286
+Service #32 | 3712 3712 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_032
+Service #32 | OK | 3712 NY Penn Station - Sunnyside Yard 08:53 00:26 | timetable_id=34287
+Service #33 | 3714 3714 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_033
+Service #33 | OK | 3714 NY Penn Station - Sunnyside Yard 09:14 00:24 | timetable_id=34288
+Service #34 | XT27 XT27 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_034
+Service #34 | OK | XT27 Hoboken Yard Move 09:24 00:05 | timetable_id=34289
+Service #35 | 480 480 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_035
+Service #35 | OK | 480 Gladstone - Hoboken 09:25 00:47 | timetable_id=34290
+Service #36 | 413 413 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_036
+Service #36 | OK | 413 Hoboken - Gladstone 09:34 00:50 | timetable_id=34291
+Service #37 | XT53 XT53 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_037
+Service #37 | OK | XT53 Hoboken Yard Move 09:53 00:05 | timetable_id=34292
+Service #38 | 3720 3720 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_038
+Service #38 | OK | 3720 NY Penn Station - Sunnyside Yard 10:05 00:29 | timetable_id=34293
+Service #39 | 415 415 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_039
+Service #39 | OK | 415 Hoboken - Gladstone 10:34 00:50 | timetable_id=34294
+Service #40 | 3508 3508 NY Penn Station - Sunnyside Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_040
+Service #40 | OK | 3508 NY Penn Station - Sunnyside Yard 10:36 00:24 | timetable_id=34295
+Service #41 | 418 418 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_041
+Service #41 | OK | 418 Gladstone - Hoboken 10:48 00:49 | timetable_id=34296
+Service #42 | 417 417 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_042
+Service #42 | OK | 417 Hoboken - Gladstone 11:34 00:50 | timetable_id=34297
+Service #43 | 420 420 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_043
+Service #43 | OK | 420 Gladstone - Hoboken 11:39 00:49 | timetable_id=34298
+Service #44 | 419 419 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_044
+Service #44 | OK | 419 Hoboken - Gladstone 12:34 00:50 | timetable_id=34299
+Service #45 | 422 422 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_045
+Service #45 | OK | 422 Gladstone - Hoboken 12:41 00:50 | timetable_id=34300
+Service #46 | 421 421 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_046
+Service #46 | OK | 421 Hoboken - Gladstone 13:37 00:50 | timetable_id=34301
+Service #47 | 424 424 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_047
+Service #47 | OK | 424 Gladstone - Hoboken 13:41 00:50 | timetable_id=34302
+Service #48 | 423 423 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_048
+Service #48 | OK | 423 Hoboken - Gladstone 14:38 00:50 | timetable_id=34303
+Service #49 | 426 426 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_049
+Service #49 | OK | 426 Gladstone - Hoboken 14:41 00:48 | timetable_id=34304
+Service #50 | 475 475 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_050
+Service #50 | OK | 475 Hoboken - Gladstone 15:27 00:48 | timetable_id=34305
+Service #51 | 428 428 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_051
+Service #51 | OK | 428 Gladstone - Hoboken 15:43 00:48 | timetable_id=34306
+Service #52 | XT26 XT26 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_052
+Service #52 | OK | XT26 Hoboken Yard Move 15:59 00:05 | timetable_id=34307
+Service #53 | 3723 3723 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_053
+Service #53 | OK | 3723 Sunnyside Yard - NY Penn Station 16:00 00:16 | timetable_id=34308
+Service #54 | 3165 3165 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_054
+Service #54 | OK | 3165 Sunnyside Yard - NY Penn Station 16:12 00:15 | timetable_id=34309
+Service #55 | 427 427 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_055
+Service #55 | OK | 427 Hoboken - Gladstone 16:23 00:40 | timetable_id=34310
+Service #56 | 430 430 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_056
+Service #56 | OK | 430 Gladstone - Hoboken 16:28 00:44 | timetable_id=34311
+Service #57 | 643 643 Hoboken - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_057
+Service #57 | OK | 643 Hoboken - Dover 16:31 01:27 | timetable_id=34312
+Service #58 | XT28 XT28 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_058
+Service #58 | OK | XT28 Hoboken Yard Move 16:34 00:05 | timetable_id=34313
+Service #59 | 3513 3513 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_059
+Service #59 | OK | 3513 Sunnyside Yard - NY Penn Station 16:41 00:13 | timetable_id=34314
+Service #60 | XT32 XT32 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_060
+Service #60 | OK | XT32 Hoboken Yard Move 16:59 00:05 | timetable_id=34315
+Service #61 | 3727 3727 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_061
+Service #61 | OK | 3727 Sunnyside Yard - NY Penn Station 17:01 00:21 | timetable_id=34316
+Service #62 | 429 429 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_062
+Service #62 | OK | 429 Hoboken - Gladstone 17:04 00:38 | timetable_id=34317
+Service #63 | XT36 XT36 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_063
+Service #63 | OK | XT36 Hoboken Yard Move 17:04 00:05 | timetable_id=34318
+Service #64 | 645 645 Hoboken - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_064
+Service #64 | OK | 645 Hoboken - Dover 17:06 01:18 | timetable_id=34319
+Service #65 | 267 267 Hoboken - Montclair State University | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_065
+Service #65 | OK | 267 Hoboken - Montclair State University 17:23 00:17 | timetable_id=34320
+Service #66 | 337 337 Hoboken - Summit | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_066
+Service #66 | OK | 337 Hoboken - Summit 17:32 00:46 | timetable_id=34321
+Service #67 | XT20 XT20 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_067
+Service #67 | OK | XT20 Hoboken Yard Move 17:34 00:05 | timetable_id=34322
+Service #68 | 433 433 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_068
+Service #68 | OK | 433 Hoboken - Gladstone 17:36 00:36 | timetable_id=34323
+Service #69 | 432 432 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_069
+Service #69 | OK | 432 Gladstone - Hoboken 17:37 00:41 | timetable_id=34324
+Service #70 | 330 330 Summit - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_070
+Service #70 | OK | 330 Summit - Hoboken 17:38 00:43 | timetable_id=34325
+Service #71 | 3873 3873 Sunnyside Yard - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_071
+Service #71 | OK | 3873 Sunnyside Yard - NY Penn Station 17:53 00:13 | timetable_id=34326
+Service #72 | 435 435 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_072
+Service #72 | OK | 435 Hoboken - Gladstone 18:02 00:35 | timetable_id=34327
+Service #73 | X62 X62 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_073
+Service #73 | OK | X62 Dover - Hoboken 18:11 01:01 | timetable_id=34328
+Service #74 | 657 657 Hoboken - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_074
+Service #74 | OK | 657 Hoboken - Dover 18:36 01:30 | timetable_id=34329
+Service #75 | 439 439 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_075
+Service #75 | OK | 439 Hoboken - Gladstone 18:39 00:34 | timetable_id=34330
+Service #76 | 334 334 Summit - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_076
+Service #76 | OK | 334 Summit - Hoboken 18:40 00:46 | timetable_id=34331
+Service #77 | X64 X64 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_077
+Service #77 | OK | X64 Dover - Hoboken 18:47 01:05 | timetable_id=34332
+Service #78 | 262 262 Montclair State University - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_078
+Service #78 | OK | 262 Montclair State University - Hoboken 19:03 00:18 | timetable_id=34333
+Service #79 | 665 665 Hoboken - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_079
+Service #79 | OK | 665 Hoboken - Dover 19:32 01:28 | timetable_id=34334
+Service #80 | 443 443 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_080
+Service #80 | OK | 443 Hoboken - Gladstone 19:43 00:34 | timetable_id=34335
+Service #81 | 674 674 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_081
+Service #81 | OK | 674 Dover - Hoboken 20:24 01:21 | timetable_id=34336
+Service #82 | 447 447 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_082
+Service #82 | OK | 447 Hoboken - Gladstone 20:42 00:49 | timetable_id=34337
+Service #83 | 434 434 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_083
+Service #83 | OK | 434 Gladstone - Hoboken 20:49 00:34 | timetable_id=34338
+Service #84 | X68 X68 Dover - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_084
+Service #84 | OK | X68 Dover - Hoboken 21:20 00:55 | timetable_id=34339
+Service #85 | XT39 XT39 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_085
+Service #85 | OK | XT39 Hoboken Yard Move 21:34 00:05 | timetable_id=34340
+Service #86 | 449 449 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_086
+Service #86 | OK | 449 Hoboken - Gladstone 21:42 00:50 | timetable_id=34341
+Service #87 | XT57 XT57 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_087
+Service #87 | OK | XT57 Hoboken Yard Move 21:55 00:10 | timetable_id=34342
+Service #88 | 438 438 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_088
+Service #88 | OK | 438 Gladstone - Hoboken 22:13 00:48 | timetable_id=34343
+Service #89 | 451 451 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_089
+Service #89 | OK | 451 Hoboken - Gladstone 22:47 00:50 | timetable_id=34344
+Service #90 | 440 440 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_090
+Service #90 | OK | 440 Gladstone - Hoboken 23:30 00:48 | timetable_id=34345
+Service #91 | 453 453 Hoboken - Gladstone | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_091
+Service #91 | OK | 453 Hoboken - Gladstone 23:54 00:48 | timetable_id=34346
+Service #92 | XT59 XT59 Hoboken Yard Move | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_092
+Service #92 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'
+Service #93 | 442 442 Gladstone - Hoboken | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\Arrow III NJT\train_01\service_093
+Service #93 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'

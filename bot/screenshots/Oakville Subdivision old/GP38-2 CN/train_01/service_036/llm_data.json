@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "M39431-03 Oakville - Aldershot",
+    "start_time": "14:12",
+    "duration": "00:22",
+    "tonnage": 930.7,
+    "car_count": 26,
+    "train_length": 500.8
+  },
+  "location": {
+    "lat": 43.46778079277322,
+    "lng": -79.6718019213953,
+    "current_service_name": "M39431-03"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 14:12:00",
+      "location": "",
+      "time1": "",
+      "time2": "14:12:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Bronte",
+      "location": "Bronte",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Appleby",
+      "location": "Appleby",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Aldershot Yard",
+      "location": "Aldershot Yard",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

@@ -1,0 +1,313 @@
+{
+  "level_info": {
+    "service_name": "Train 552 North White Plains to GCT",
+    "start_time": "12:54",
+    "duration": "01:06",
+    "tonnage": 460.1,
+    "car_count": 8,
+    "train_length": 208.0
+  },
+  "location": {
+    "lat": 41.055414698703856,
+    "lng": -73.77086696330248,
+    "current_service_name": "552"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:54:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:54:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 3 - 12:59:00",
+      "location": "North White Plains Track 3",
+      "time1": "12:59:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:00:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 13:03:30",
+      "location": "White Plains Track 2",
+      "time1": "13:03:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:04:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hartsdale Track 2 - 13:08:30",
+      "location": "Hartsdale Track 2",
+      "time1": "13:08:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:09:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Scarsdale Track 2 - 13:12:30",
+      "location": "Scarsdale Track 2",
+      "time1": "13:12:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:13:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crestwood Track 4 - 13:16:30",
+      "location": "Crestwood Track 4",
+      "time1": "13:16:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:17:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Tuckahoe Track 4 - 13:19:30",
+      "location": "Tuckahoe Track 4",
+      "time1": "13:19:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:20:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Bronxville Track 4 - 13:21:30",
+      "location": "Bronxville Track 4",
+      "time1": "13:21:30",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:22:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Fleetwood Track 4 - 13:24:30",
+      "location": "Fleetwood Track 4",
+      "time1": "13:24:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:25:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mount Vernon West Track 4 - 13:27:00",
+      "location": "Mount Vernon West Track 4",
+      "time1": "13:27:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:27:30",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wakefield Track 4 - 13:29:00",
+      "location": "Wakefield Track 4",
+      "time1": "13:29:00",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:29:30",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Woodlawn Track 4 - 13:31:30",
+      "location": "Woodlawn Track 4",
+      "time1": "13:31:30",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:32:00",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Williams Bridge Track 4 - 13:34:30",
+      "location": "Williams Bridge Track 4",
+      "time1": "13:34:30",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:35:00",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Botanical Garden Track 4 - 13:37:00",
+      "location": "Botanical Garden Track 4",
+      "time1": "13:37:00",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:37:30",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Fordham Track 4 - 13:39:00",
+      "location": "Fordham Track 4",
+      "time1": "13:39:00",
+      "time2": "",
+      "sort_order": 27
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:39:30",
+      "time2": "",
+      "sort_order": 28
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Tremont Track 4 - 13:42:00",
+      "location": "Tremont Track 4",
+      "time1": "13:42:00",
+      "time2": "",
+      "sort_order": 29
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:42:30",
+      "time2": "",
+      "sort_order": 30
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Melrose Track 4 - 13:45:00",
+      "location": "Melrose Track 4",
+      "time1": "13:45:00",
+      "time2": "",
+      "sort_order": 31
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:45:30",
+      "time2": "",
+      "sort_order": 32
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 13:49:30",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "13:49:30",
+      "time2": "",
+      "sort_order": 33
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:50:00",
+      "time2": "",
+      "sort_order": 34
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 38 - 14:01:00",
+      "location": "Grand Central Track 38",
+      "time1": "14:01:00",
+      "time2": "",
+      "sort_order": 35
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 36
+    }
+  ]
+}

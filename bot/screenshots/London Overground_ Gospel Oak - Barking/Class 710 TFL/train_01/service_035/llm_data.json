@@ -1,0 +1,225 @@
+{
+  "level_info": {
+    "service_name": "2J25 Gospel Oak to Barking Riverside",
+    "start_time": "09:06",
+    "duration": "00:42",
+    "tonnage": 161.1,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.55558488163886,
+    "lng": -0.15129748820812194,
+    "current_service_name": "2J25"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:06:00",
+      "location": "",
+      "time1": "",
+      "time2": "9:06:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:08:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Upper Holloway Platform 2 - 09:11:00",
+      "location": "Upper Holloway Platform 2",
+      "time1": "09:11:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:11:20",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crouch Hill Platform 2 - 09:14:00",
+      "location": "Crouch Hill Platform 2",
+      "time1": "09:14:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:14:20",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harringay Green Lanes Platform 2 - 09:17:00",
+      "location": "Harringay Green Lanes Platform 2",
+      "time1": "09:17:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:17:20",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Tottenham Platform 2 - 09:21:00",
+      "location": "South Tottenham Platform 2",
+      "time1": "09:21:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:21:20",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Blackhorse Road Platform 2 - 09:24:00",
+      "location": "Blackhorse Road Platform 2",
+      "time1": "09:24:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:24:20",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Walthamstow Queens Road Platform 2 - 09:26:00",
+      "location": "Walthamstow Queens Road Platform 2",
+      "time1": "09:26:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:26:20",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Leyton Midland Road Platform 2 - 09:29:00",
+      "location": "Leyton Midland Road Platform 2",
+      "time1": "09:29:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:29:20",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Leytonstone High Road Platform 2 - 09:31:00",
+      "location": "Leytonstone High Road Platform 2",
+      "time1": "09:31:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:31:20",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wanstead Park Platform 2 - 09:34:00",
+      "location": "Wanstead Park Platform 2",
+      "time1": "09:34:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:34:20",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Woodgrange Park Platform 2 - 09:37:00",
+      "location": "Woodgrange Park Platform 2",
+      "time1": "09:37:00",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:37:20",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Platform 7 - 09:41:00",
+      "location": "Barking Platform 7",
+      "time1": "09:41:00",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:41:30",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Riverside Platform 1 - 09:49:00",
+      "location": "Barking Riverside Platform 1",
+      "time1": "09:49:00",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 25
+    }
+  ]
+}

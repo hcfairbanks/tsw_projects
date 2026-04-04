@@ -1,0 +1,2625 @@
+{
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "DriverInput",
+  "discoveredAt": "2025-12-31T03:13:49.589Z",
+  "maxDepth": 20,
+  "maxDepthAchieved": 1,
+  "totalRequests": 298,
+  "totalEndpoints": 289,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.10000000149011612
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.10000000149011612
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.UnlockLeverRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetNotchCount",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 9
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetCurrentNotchIndex",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.CalcTargetOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.CalcTargetInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.375
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 8
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.375
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.375
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 8
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.375
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": -3.75,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "Throttle"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "IrregularLeverComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.InputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "InputValue": 0.375
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Throttle.Interacting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Interacting": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.10000000149011612
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.UnlockLeverRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetNotchCount",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetCurrentNotchIndex",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.CalcTargetOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.CalcTargetInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": -10,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "Reverser"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "IrregularLeverComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.InputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "InputValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/Reverser.Interacting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Interacting": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.75
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.05000000074505806
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.UnlockLeverRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetNotchCount",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetCurrentNotchIndex",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.CalcTargetOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.CalcTargetInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 9
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 8
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": 0,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "DynamicBrake"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "IrregularLeverComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.InputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "InputValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/DynamicBrake.Interacting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Interacting": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.8500000238418579
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.05000000074505806
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.UnlockLeverRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetNotchCount",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 8
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetCurrentNotchIndex",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.CalcTargetOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.CalcTargetInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 4
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.8500000238418579
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": 0,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "AutomaticBrake"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "IrregularLeverComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.InputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "InputValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/AutomaticBrake.Interacting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Interacting": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.DefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.DigitalSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.NotchSnapSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.AnalogueSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.10000000149011612
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bIsRotationalLever",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bCustomOutputValueMapping",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.UnlockLeverRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetNotchCount",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetCurrentNotchIndex",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.CalcTargetOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.CalcTargetInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": -1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": -2.5,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "IndependentBrake"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "IrregularLeverComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.InputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "InputValue": 0.25
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/IndependentBrake.Interacting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Interacting": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bDefaultToPressed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bUseDecreaseInputToOperate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.OutputToggleInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.PushSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 15
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.ReleasedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.PressedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bPressAndLock",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bInputEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.BindControllerMethods",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bCanEnterGuardModeFromHere",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bIsSlaveLinked",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bTrackUsageStats",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsSet",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetPushSensitivity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 15
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetPushedState",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetDefaultToPressed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.RequiresTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsDigitalIncreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsDigitalDecreasing",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsDigitalChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsChanging",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetOutputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetNormalisedOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetNormalisedInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetMinimumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetMinimumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetMaximumOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetMaximumInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetInputRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetDefaultInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetCurrentOutputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetCurrentInputValue",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetCurrentAnalogueMovementRange",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutMinDelta": 0,
+          "OutMaxDelta": -0.000003159046173095703
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.ConditionalEndTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.ConditionalBeginTick",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.CanDrag",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverInput/GeneratorField.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    }
+  ],
+  "completedPaths": [
+    "DriverInput/Throttle",
+    "DriverInput/Reverser",
+    "DriverInput/DynamicBrake",
+    "DriverInput/AutomaticBrake",
+    "DriverInput/IndependentBrake"
+  ]
+}

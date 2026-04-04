@@ -1,0 +1,35 @@
+{
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "TimeOfDay",
+  "discoveredAt": "2025-12-29T23:45:59.426Z",
+  "maxDepth": 3,
+  "totalRequests": 2,
+  "totalEndpoints": 1,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/TimeOfDay.Data",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "LocalTime": 639025996400655000,
+          "LocalTimeISO8601": "2025-12-29T10:07:20.065+01:00",
+          "GMTOffset": 1,
+          "WorldTime": 639025960400655000,
+          "WorldTimeISO8601": "2025-12-29T09:07:20.065Z",
+          "DayPercentage": 0.1757541298866272,
+          "SunriseTime": "+08:45:56.064",
+          "SolarNoonTime": "+12:37:30.478",
+          "SunsetTime": "+16:29:04.892",
+          "SunPositionAzimuth": 235.54763793945312,
+          "SunPositionAltitude": 8.696670532226562,
+          "MoonPositionAzimuth": 121.43559265136719,
+          "MoonPositionAltitude": -17.12538719177246,
+          "OriginLatitude": 51.11568832397461,
+          "OriginLongitude": 6.209702968597412,
+          "SystemTime": 639026487591660000,
+          "SystemTimeISO8601": "2025-12-29T23:45:59.166Z"
+        }
+      }
+    }
+  ]
+}

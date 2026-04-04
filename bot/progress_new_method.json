@@ -1,0 +1,8 @@
+{
+  "route": "Harlem Line",
+  "choice": null,
+  "train": "M7A MTA",
+  "train_num": 1,
+  "service": 174,
+  "trains_per_class": 3
+}

@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #806 (Mid-Day Storage)",
+    "start_time": "07:52",
+    "duration": "00:09",
+    "tonnage": 519.5,
+    "car_count": 6,
+    "train_length": 496.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.35012224899934,
+    "lng": -71.05554032496521,
+    "current_service_name": "MBTA Providence #806 (AI From Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:52:00",
+      "location": "",
+      "time1": "7:52:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

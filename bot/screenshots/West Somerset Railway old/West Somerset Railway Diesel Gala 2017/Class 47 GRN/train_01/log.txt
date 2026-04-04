@@ -1,0 +1,48 @@
+Service #1 | [ECS0]Empty Stock Move to Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_001
+Service #1 | OK | [ECS0]Empty Stock Move to Minehead 09:20 00:33 | timetable_id=2844
+Service #2 | [ECS1]Empty Stock Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_002
+Service #2 | OK | [ECS1]Empty Stock Move at Minehead 10:00 00:05 | timetable_id=2845
+Service #3 | [ECS2]Empty Stock Move at Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_003
+Service #3 | OK | [ECS2]Empty Stock Move at Bishops Lydeard 10:00 00:10 | timetable_id=2846
+Service #4 | [MD1]Minehead - Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_004
+Service #4 | OK | [MD1]Minehead - Bishops Lydeard 10:15 01:28 | timetable_id=2847
+Service #5 | [BL1]Bishops Lydeard - Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_005
+Service #5 | OK | [BL1]Bishops Lydeard - Minehead 10:15 01:34 | timetable_id=2848
+Service #6 | [LE1]Locomotive Run Around at Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_006
+Service #6 | OK | [LE1]Locomotive Run Around at Bishops Lydeard 11:50 00:04 | timetable_id=2849
+Service #7 | [LE5]Locomotive Exchange at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_007
+Service #7 | OK | [LE5]Locomotive Exchange at Minehead 11:55 00:04 | timetable_id=2850
+Service #8 | [LE3]Locomotive Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_008
+Service #8 | OK | [LE3]Locomotive Move at Minehead 11:57 00:00 | timetable_id=2851
+Service #9 | [MD3]Minehead - Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_009
+Service #9 | OK | [MD3]Minehead - Bishops Lydeard 12:15 01:28 | timetable_id=2852
+Service #10 | [BL3]Bishops Lydeard - Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_010
+Service #10 | OK | [BL3]Bishops Lydeard - Minehead 12:15 01:40 | timetable_id=2853
+Service #11 | [LE5]Locomotive Run Around at Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_011
+Service #11 | OK | [LE5]Locomotive Run Around at Bishops Lydeard 13:50 00:04 | timetable_id=2854
+Service #12 | [LE6]Locomotive Exchange at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_012
+Service #12 | OK | [LE6]Locomotive Exchange at Minehead 13:55 00:04 | timetable_id=2855
+Service #13 | [LE7]Light Locomotive Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_013
+Service #13 | OK | [LE7]Light Locomotive Move at Minehead 13:57 00:01 | timetable_id=2856
+Service #14 | [BL5]Bishops Lydeard - Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_014
+Service #14 | OK | [BL5]Bishops Lydeard - Minehead 14:15 01:34 | timetable_id=2857
+Service #15 | [MO5]Minehead - Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_015
+Service #15 | OK | [MD5]Minehead - Bishops Lydeard 14:15 01:28 | timetable_id=2858
+Service #16 | [LE9]Locomotive Run Around at Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_016
+Service #16 | OK | [LE9]Locomotive Run Around at Bishops Lydeard 15:50 00:04 | timetable_id=2859
+Service #17 | [LE10]Locomotive Exchange at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_017
+Service #17 | OK | [LE10]Locomotive Exchange at Minehead 15:55 00:04 | timetable_id=2860
+Service #18 | [LE11]Light Locomotive Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_018
+Service #18 | OK | [LE11]Light Locomotive Move at Minehead 16:07 00:00 | timetable_id=2861
+Service #19 | [BL7]Bishops Lydeard - Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_019
+Service #19 | OK | [BL7]Bishops Lydeard - Minehead 16:15 01:33 | timetable_id=2862
+Service #20 | [MO7]Minehead - Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_020
+Service #20 | OK | [MD7]Minehead - Bishops Lydeard 16:15 01:28 | timetable_id=2863
+Service #21 | [ECS4]Empty Stock Move at Bishops Lydeard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_021
+Service #21 | OK | [ECS4]Empty Stock Move at Bishops Lydeard 17:50 00:06 | timetable_id=2864
+Service #22 | [LE13]Locomotive Exchange at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_022
+Service #22 | OK | [LE13]Locomotive Exchange at Minehead 17:55 00:04 | timetable_id=2865
+Service #23 | [ECS5]Empty Stock Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_023
+Service #23 | OK | [ECS5]Empty Stock Move at Minehead 18:05 00:04 | timetable_id=2866
+Service #24 | [LE14]Light Locomotive Move at Minehead | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\West Somerset Railway\West Somerset Railway Diesel Gala 2017\Class 47 GRN\train_01\service_024
+Service #24 | OK | [LE14]Light Locomotive Move at Minehead 18:07 00:00 | timetable_id=2867

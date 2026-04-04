@@ -1,0 +1,178 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P594 Framingham to Boston South Station",
+    "start_time": "18:20",
+    "duration": "00:49",
+    "tonnage": 494.7,
+    "car_count": 7,
+    "train_length": 177.0
+  },
+  "location": {
+    "lat": 42.27634825101546,
+    "lng": -71.41922743875762,
+    "current_service_name": "P594"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:20:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:20:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:22:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Natick Track 1 - 18:26:30",
+      "location": "West Natick Track 1",
+      "time1": "18:26:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:27:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Natick Center Track 1 - 18:31:30",
+      "location": "Natick Center Track 1",
+      "time1": "18:31:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:32:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Square Track 1 - 18:36:00",
+      "location": "Wellesley Square Track 1",
+      "time1": "18:36:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:36:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Hills Track 1 - 18:39:30",
+      "location": "Wellesley Hills Track 1",
+      "time1": "18:39:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:40:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Farms Track 1 - 18:42:30",
+      "location": "Wellesley Farms Track 1",
+      "time1": "18:42:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:43:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Landing Track 1 - 18:54:30",
+      "location": "Boston Landing Track 1",
+      "time1": "18:54:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:55:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lansdowne Track 1 - 18:59:30",
+      "location": "Lansdowne Track 1",
+      "time1": "18:59:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:00:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 7 - 19:04:30",
+      "location": "Boston Back Bay Track 7",
+      "time1": "19:04:30",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:05:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 06 - 19:10:00",
+      "location": "Boston South Station Track 06",
+      "time1": "19:10:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

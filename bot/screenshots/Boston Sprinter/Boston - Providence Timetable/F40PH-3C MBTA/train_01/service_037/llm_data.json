@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Fairmount #764 (Boston - Depot)",
+    "start_time": "13:45",
+    "duration": "00:10",
+    "tonnage": 454.9,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.35015539627124,
+    "lng": -71.05546210040185,
+    "current_service_name": "MBTA Fairmount #764 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 13:45:00",
+      "location": "",
+      "time1": "",
+      "time2": "13:45:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 09",
+      "location": "Southampton Street Yard Track 09",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

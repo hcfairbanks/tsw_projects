@@ -1,0 +1,50 @@
+Service #1 |  Amtrak Northeast Regional #95 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_001
+Service #1 | DUPLICATE | Amtrak Northeast Regional #95 (Boston - Providence) 06:09 00:42
+Service #2 |  Amtrak Northeast Regional #66 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_002
+Service #2 | DUPLICATE | Amtrak Northeast Regional #66 (Providence - Boston) 06:57 00:42
+Service #3 |  Amtrak Northeast Regional #171 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_003
+Service #3 | DUPLICATE | Amtrak Northeast Regional #171 (Boston - Providence) 07:59 00:39
+Service #4 |  Amtrak Northeast Regional #66 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_004
+Service #4 | DUPLICATE | Amtrak Northeast Regional #66 (Boston - Depot) 08:14 00:17
+Service #5 |  Amtrak Northeast Regional #93 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_005
+Service #5 | DUPLICATE | Amtrak Northeast Regional #93 (Boston - Providence) 09:29 00:39
+Service #6 |  Amtrak Northeast Regional #190 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_006
+Service #6 | DUPLICATE | Amtrak Northeast Regional #190 (Providence - Boston) 10:30 00:48
+Service #7 |  Amtrak Northeast Regional #173 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_007
+Service #7 | DUPLICATE | Amtrak Northeast Regional #173 (Boston - Providence) 11:09 00:36
+Service #8 |  Amtrak Northeast Regional #190 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_008
+Service #8 | DUPLICATE | Amtrak Northeast Regional #190 (Boston - Depot) 11:56 00:21
+Service #9 |  Amtrak Northeast Regional #170 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_009
+Service #9 | OK | Amtrak Northeast Regional #170 (Providence - Boston) 12:09 00:45 | timetable_id=3123
+Service #10 |  Amtrak Northeast Regional #170 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_010
+Service #10 | DUPLICATE | Amtrak Northeast Regional #170 (Boston - Depot) 13:14 00:22
+Service #11 |  Amtrak Northeast Regional #172 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_011
+Service #11 | OK | Amtrak Northeast Regional #172 (Providence - Boston) 14:33 00:47 | timetable_id=3124
+Service #12 |  Amtrak Northeast Regional #175 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_012
+Service #12 | DUPLICATE | Amtrak Northeast Regional #175 (Boston - Providence) 15:14 00:39
+Service #13 |  Amtrak Northeast Regional #172 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_013
+Service #13 | DUPLICATE | Amtrak Northeast Regional #172 (Boston - Depot) 15:34 00:24
+Service #14 |  Amtrak Northeast Regional #86 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_014
+Service #14 | DUPLICATE | Amtrak Northeast Regional #86 (Providence - Boston) 15:56 00:42
+Service #15 |  Amtrak Northeast Regional #86 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_015
+Service #15 | DUPLICATE | Amtrak Northeast Regional #86 (Boston - Depot) 16:50 00:28
+Service #16 |  Amtrak Northeast Regional #174 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_016
+Service #16 | DUPLICATE | Amtrak Northeast Regional #174 (Providence - Boston) 17:35 00:49
+Service #17 |  Amtrak Northeast Regional #177 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_017
+Service #17 | OK | Amtrak Northeast Regional #177 (Boston - Providence) 17:48 00:57 | timetable_id=3125
+Service #17 |  Amtrak Northeast Regional #177 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_017
+Service #17 | DUPLICATE | Amtrak Northeast Regional #177 (Boston - Providence) 17:48 00:57
+Service #18 |  Amtrak Northeast Regional #179 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_018
+Service #18 | DUPLICATE | Amtrak Northeast Regional #179 (Boston - Providence) 18:44 00:39
+Service #19 |  Amtrak Northeast Regional #174 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_019
+Service #19 | OK | Amtrak Northeast Regional #174 (Boston - Depot) 18:49 00:26 | timetable_id=3126
+Service #20 |  Amtrak Northeast Regional #176 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_020
+Service #20 | DUPLICATE | Amtrak Northeast Regional #176 (Providence - Boston) 19:30 00:45
+Service #21 |  Amtrak Northeast Regional #176 (Boston - Southampton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_021
+Service #21 | DUPLICATE | Amtrak Northeast Regional #176 (Boston - Southampton Street Yard) 20:24 00:21
+Service #22 |  Amtrak Lake Shore Limited (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_022
+Service #22 | DUPLICATE | Amtrak Lake Shore Limited (Boston - Depot) 20:40 00:25
+Service #23 |  Amtrak Northeast Regional #94 (Providence - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_023
+Service #23 | DUPLICATE | Amtrak Northeast Regional #94 (Providence - Boston) 21:23 00:39
+Service #24 |  Amtrak Northeast Regional #94 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Sprinter\Boston - Providence Timetable\ACS-64 V AMTK50\train_02\service_024
+Service #24 | DUPLICATE | Amtrak Northeast Regional #94 (Boston - Depot) 22:20 00:26

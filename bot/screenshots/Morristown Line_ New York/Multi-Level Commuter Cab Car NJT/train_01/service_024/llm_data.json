@@ -1,0 +1,66 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6219 NY Penn Station - Montclair State University",
+    "start_time": "08:20",
+    "duration": "00:17",
+    "tonnage": 701.3,
+    "car_count": 10,
+    "train_length": 252.7
+  },
+  "location": {
+    "lat": 40.75053353090855,
+    "lng": -73.99472085610837,
+    "current_service_name": "NJT-6219"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:20:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:20:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:21:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track B - 08:28:30",
+      "location": "Secaucus Junction Track B",
+      "time1": "08:28:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:29:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 3 - 08:38:00",
+      "location": "Newark Broad Street Track 3",
+      "time1": "08:38:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

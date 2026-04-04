@@ -1,0 +1,225 @@
+{
+  "level_info": {
+    "service_name": "2J20 Barking Riverside to Gospel Oak",
+    "start_time": "08:01",
+    "duration": "00:42",
+    "tonnage": 160.2,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.51991271334654,
+    "lng": 0.11622527875316457,
+    "current_service_name": "2J20"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:01:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:01:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:03:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Barking Platform 8 - 08:08:00",
+      "location": "Barking Platform 8",
+      "time1": "08:08:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:08:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Woodgrange Park Platform 1 - 08:12:00",
+      "location": "Woodgrange Park Platform 1",
+      "time1": "08:12:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:12:20",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wanstead Park Platform 1 - 08:15:00",
+      "location": "Wanstead Park Platform 1",
+      "time1": "08:15:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:15:20",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Leytonstone High Road Platform 1 - 08:18:00",
+      "location": "Leytonstone High Road Platform 1",
+      "time1": "08:18:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:18:20",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Leyton Midland Road Platform 1 - 08:20:00",
+      "location": "Leyton Midland Road Platform 1",
+      "time1": "08:20:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:20:20",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Walthamstow Queens Road Platform 1 - 08:23:00",
+      "location": "Walthamstow Queens Road Platform 1",
+      "time1": "08:23:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:23:20",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Blackhorse Road Platform 1 - 08:25:00",
+      "location": "Blackhorse Road Platform 1",
+      "time1": "08:25:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:25:20",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Tottenham Platform 1 - 08:28:00",
+      "location": "South Tottenham Platform 1",
+      "time1": "08:28:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:28:20",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harringay Green Lanes Platform 1 - 08:31:00",
+      "location": "Harringay Green Lanes Platform 1",
+      "time1": "08:31:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:31:20",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Crouch Hill Platform 1 - 08:35:00",
+      "location": "Crouch Hill Platform 1",
+      "time1": "08:35:00",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:35:20",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Upper Holloway Platform 1 - 08:37:00",
+      "location": "Upper Holloway Platform 1",
+      "time1": "08:37:00",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:37:20",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Gospel Oak Platform 3 - 08:44:00",
+      "location": "Gospel Oak Platform 3",
+      "time1": "08:44:00",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 25
+    }
+  ]
+}

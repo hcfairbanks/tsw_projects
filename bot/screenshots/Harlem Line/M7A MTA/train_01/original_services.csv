@@ -1,0 +1,217 @@
+number,page,click,service_id,service_name,time,duration
+1,page 0,click (2373 368),,Train 696 Southeast to GCT,00:04:00,00:45:00
+2,page 0,click (2373 437),,Train 695 GCT to Mount Kisco,00:09:00,00:43:00
+3,page 0,click (2373 506),,Train 796 Croton-Harmon to GCT,00:45:00,00:21:00
+4,page 0,click (2373 575),,Train 799 GCT to Croton-Harmon,00:59:00,00:14:00
+5,page 0,click (2373 644),,Train 599 GCT to North White Plains,01:19:00,01:04:00
+6,page 0,click (2373 713),,Train 701 GCT to Croton-Harmon,01:49:00,00:15:00
+7,page 0,click (2373 782),,Train 699 GCT to Southeast,01:55:00,00:57:00
+8,page 0,click (2373 851),,Train 2500 North White Plains Yard to GCT,04:25:00,00:36:00
+9,page 1,click (2373 506),,Train 502 North White Plains to GCT,05:07:00,01:06:00
+10,page 1,click (2373 575),,Train 602 Southeast to GCT,05:07:00,00:42:00
+11,page 1,click (2373 644),,Train 604 Southeast to GCT,05:26:00,00:41:00
+12,page 1,click (2373 713),,Train 304 North White Plains to GCT,05:28:00,01:02:00
+13,page 1,click (2373 782),,Train 703 GCT to Croton-Harmon,05:37:00,00:17:00
+14,page 1,click (2373 851),,Train 501 GCT to North White Plains,05:37:00,01:07:00
+15,page 2,click (2373 506),,Train 504 North White Plains to GCT,05:43:00,00:49:00
+16,page 2,click (2373 575),,Train 306 North White Plains to GCT,05:56:00,01:08:00
+17,page 2,click (2373 644),,Train 606 Southeast to GCT,05:56:00,00:40:00
+18,page 2,click (2373 713),,Train 601 GCT to Southeast,06:01:00,00:42:00
+19,page 2,click (2373 782),,Train 2309 GCT to Crestwood,06:07:00,00:31:00
+20,page 2,click (2373 851),,Train 503 GCT to North White Plains,06:07:00,00:55:00
+21,page 3,click (2373 506),,Train 506 North White Plains to GCT,06:12:00,00:49:00
+22,page 3,click (2373 575),,Train 705 GCT to Croton-Harmon,06:14:00,00:19:00
+23,page 3,click (2373 644),,Train 603 GCT to Southeast,06:22:00,00:40:00
+24,page 3,click (2373 713),,Train 608 Southeast to GCT,06:22:00,00:41:00
+25,page 3,click (2373 782),,Train 505 GCT to North White Plains,06:27:00,01:02:00
+26,page 3,click (2373 851),,Train 2313 GCT to Crestwood,06:30:00,00:25:00
+27,page 4,click (2373 506),,Train 312 North White Plains to GCT,06:36:00,01:05:00
+28,page 4,click (2373 575),,Train 605 GCT to Southeast,06:41:00,00:51:00
+29,page 4,click (2373 644),,Train 307 GCT to North White Plains,06:44:00,01:06:00
+30,page 4,click (2373 713),,Train 610 Southeast to GCT,06:45:00,00:41:00
+31,page 4,click (2373 782),,Train 310 Crestwood to GCT,06:48:00,00:37:00
+32,page 4,click (2373 851),,Train 2323 GCT to Mount Vernon West Yard,06:53:00,00:29:00
+33,page 5,click (2373 506),,Train 614 Southeast to GCT,07:01:00,00:47:00
+34,page 5,click (2373 575),,Train 316 North White Plains to GCT,07:08:00,01:06:00
+35,page 5,click (2373 644),,Train 507 GCT to North White Plains,07:11:00,00:43:00
+36,page 5,click (2373 713),,Train 607 GCT to Southeast,07:14:00,00:46:00
+37,page 5,click (2373 782),,Train 518 Crestwood to GCT,07:16:00,01:01:00
+38,page 5,click (2373 851),,Train 309 GCT to North White Plains,07:17:00,01:02:00
+39,page 6,click (2373 506),,Train 314 Crestwood to GCT,07:17:00,00:37:00
+40,page 6,click (2373 575),,Train 709 GCT to Croton-Harmon,07:22:00,00:15:00
+41,page 6,click (2373 644),,Train 520 Crestwood to GCT,07:25:00,01:08:00
+42,page 6,click (2373 713),,Train 516 North White Plains to GCT,07:27:00,00:49:00
+43,page 6,click (2373 782),,GCT Yard Move (Part 1),07:29:00,00:02:00
+44,page 6,click (2373 851),,Train 416 Greystone to GCT,07:31:00,00:21:00
+45,page 7,click (2373 506),,GCT Yard Move (Part 2),07:36:00,00:03:00
+46,page 7,click (2373 575),,Train 2329 GCT to Crestwood,07:49:00,00:32:00
+47,page 7,click (2373 644),,Train 724 Croton-Harmon to GCT,07:51:00,00:22:00
+48,page 7,click (2373 713),,Train 609 GCT to Southeast,07:52:00,00:43:00
+49,page 7,click (2373 782),,Train 324 Mount Vernon West Yard to GCT,07:54:00,00:50:00
+50,page 7,click (2373 851),,Train 511 GCT to North White Plains,07:56:00,01:01:00
+51,page 8,click (2373 506),,Train 624 Southeast to GCT,07:58:00,00:44:00
+52,page 8,click (2373 575),,Train 328 North White Plains to GCT,08:04:00,01:05:00
+53,page 8,click (2373 644),,Train 626 Southeast to GCT,08:08:00,00:41:00
+54,page 8,click (2373 713),,Train 713 GCT to Croton-Harmon,08:14:00,00:15:00
+55,page 8,click (2373 782),,Train 611 GCT to Southeast,08:19:00,00:46:00
+56,page 8,click (2373 851),,Train 513 GCT to North White Plains,08:22:00,01:02:00
+57,page 9,click (2373 506),,Train 628 Southeast to GCT,08:23:00,00:45:00
+58,page 9,click (2373 575),,Train 2333 GCT to Crestwood,08:32:00,00:34:00
+59,page 9,click (2373 644),,Train 528 North White Plains to GCT,08:33:00,00:48:00
+60,page 9,click (2373 713),,Train 436 Greystone to GCT,08:37:00,00:21:00
+61,page 9,click (2373 782),,Train 330 Crestwood to GCT,08:39:00,00:37:00
+62,page 9,click (2373 851),,Train 632 Southeast to GCT,08:41:00,00:44:00
+63,page 10,click (2373 506),,Train 613 GCT to Mount Kisco,08:43:00,00:41:00
+64,page 10,click (2373 575),,Train 634 Southeast to GCT,08:45:00,00:44:00
+65,page 10,click (2373 644),,GCT Yard Move,08:49:00,00:02:00
+66,page 10,click (2373 713),,Train 515 GCT to North White Plains,08:54:00,01:06:00
+67,page 10,click (2373 782),,Train 636 Southeast to GCT,09:09:00,00:42:00
+68,page 10,click (2373 851),,Train 2335 GCT to Crestwood,09:11:00,00:28:00
+69,page 11,click (2373 506),,Train 2525 GCT to North White Plains Yard,09:17:00,00:41:00
+70,page 11,click (2373 575),,Train 717 GCT to Croton-Harmon,09:19:00,00:14:00
+71,page 11,click (2373 644),,Train 615 GCT to Mount Kisco,09:21:00,00:42:00
+72,page 11,click (2373 713),,Train 334 Crestwood to GCT,09:24:00,00:42:00
+73,page 11,click (2373 782),,Train 536 North White Plains to GCT,09:26:00,00:50:00
+74,page 11,click (2373 851),,Train 638 Southeast to GCT,09:34:00,00:45:00
+75,page 12,click (2373 506),,Train 617 GCT to Southeast,09:50:00,00:46:00
+76,page 12,click (2373 575),,Train 336 Crestwood to GCT,09:50:00,00:41:00
+77,page 12,click (2373 644),,Train 319 GCT to Crestwood,09:53:00,00:43:00
+78,page 12,click (2373 713),,Train 640 Southeast to GCT,09:56:00,00:46:00
+79,page 12,click (2373 782),,Train 540 North White Plains to GCT,09:57:00,01:05:00
+80,page 12,click (2373 851),,Train 442 Croton-Harmon to GCT,10:03:00,00:19:00
+81,page 13,click (2373 506),,Train 721 GCT to Croton-Harmon,10:19:00,00:15:00
+82,page 13,click (2373 575),,Train 521 GCT to North White Plains,10:21:00,01:15:00
+83,page 13,click (2373 644),,Train 444 Greystone to GCT,10:31:00,00:20:00
+84,page 13,click (2373 713),,Train 642 Southeast to GCT,10:35:00,00:55:00
+85,page 13,click (2373 782),,Train 621 GCT to Southeast,10:50:00,00:43:00
+86,page 13,click (2373 851),,Train 323 GCT to Crestwood,10:53:00,00:43:00
+87,page 14,click (2373 506),,Train 2529 GCT to North White Plains Yard,10:53:00,00:53:00
+88,page 14,click (2373 575),,Train 644 Southeast to GCT,10:54:00,00:50:00
+89,page 14,click (2373 644),,Train 342 Crestwood to GCT,10:59:00,00:41:00
+90,page 14,click (2373 713),,Train 525 GCT to North White Plains,11:21:00,01:15:00
+91,page 14,click (2373 782),,Train 646 Southeast to GCT,11:33:00,00:51:00
+92,page 14,click (2373 851),,Train 625 GCT to Southeast,11:50:00,00:43:00
+93,page 15,click (2373 575),,Train 327 GCT to Crestwood,11:53:00,00:40:00
+94,page 15,click (2373 644),,Train 648 Southeast to GCT,11:54:00,00:48:00
+95,page 15,click (2373 713),,Train 346 Crestwood to GCT,11:57:00,00:42:00
+96,page 15,click (2373 782),,Train 627 GCT to Southeast,12:10:00,00:45:00
+97,page 15,click (2373 851),,Train 729 GCT to Croton-Harmon,12:19:00,00:14:00
+98,page 15,click (2373 920),,Train 529 GCT to North White Plains,12:21:00,01:18:00
+99,page 16,click (2373 575),,Train 350 Crestwood to GCT,12:44:00,00:41:00
+100,page 16,click (2373 644),,Train 754 Croton-Harmon to GCT,12:45:00,00:21:00
+101,page 16,click (2373 713),,Train 331 GCT to Crestwood,12:53:00,00:43:00
+102,page 16,click (2373 782),,Train 552 North White Plains to GCT,12:54:00,01:06:00
+103,page 16,click (2373 851),,Train 652 Southeast to GCT,12:54:00,00:44:00
+104,page 17,click (2373 506),,Train 631 GCT to Southeast,13:05:00,00:50:00
+105,page 17,click (2373 575),,Train 533 GCT to North White Plains,13:21:00,01:15:00
+106,page 17,click (2373 644),,Train 354 Crestwood to GCT,13:44:00,00:41:00
+107,page 17,click (2373 713),,Train 758 Croton-Harmon to GCT,13:47:00,00:19:00
+108,page 17,click (2373 782),,Train 633 GCT to Southeast,13:48:00,00:45:00
+109,page 17,click (2373 851),,Train 335 GCT to Crestwood,13:53:00,00:43:00
+110,page 18,click (2373 506),,Train 556 North White Plains to GCT,13:54:00,01:08:00
+111,page 18,click (2373 575),,Train 656 Southeast to GCT,13:54:00,00:44:00
+112,page 18,click (2373 644),,Train 635 GCT to Southeast,14:10:00,00:45:00
+113,page 18,click (2373 713),,Train 737 GCT to Croton-Harmon,14:19:00,00:14:00
+114,page 18,click (2373 782),,Train 2564 North White Plains Yard to GCT,14:22:00,00:48:00
+115,page 18,click (2373 851),,Train 358 Crestwood to GCT,14:44:00,00:41:00
+116,page 18,click (2373 920),,Train 907 GCT to Mount Kisco,14:49:00,00:54:00
+117,page 19,click (2373 506),,Train 637 GCT to Mount Kisco,14:46:00,00:34:00
+118,page 19,click (2373 575),,Train 2566 North White Plains Yard to GCT,14:47:00,00:45:00
+119,page 19,click (2373 644),,Train 639 GCT to Mount Kisco,14:52:00,00:42:00
+120,page 19,click (2373 713),,Train 660 Southeast to GCT,14:54:00,00:48:00
+121,page 19,click (2373 782),,Train 541 GCT to North White Plains,14:55:00,01:02:00
+122,page 19,click (2373 851),,Train 560 North White Plains to GCT,14:56:00,01:05:00
+123,page 19,click (2373 920),,Train 611 GCT to Southeast,15:15:00,00:37:00
+124,page 20,click (2373 575),,Train 662 Southeast to GCT,15:17:00,00:48:00
+125,page 20,click (2373 644),,Train 741 GCT to Croton-Harmon,15:20:00,00:14:00
+126,page 20,click (2373 713),,Train 343 GCT to North White Plains,15:21:00,01:06:00
+127,page 20,click (2373 782),,Train 562 North White Plains to GCT,15:22:00,01:03:00
+128,page 20,click (2373 851),,Train 2568 North White Plains Yard to GCT,15:24:00,01:03:00
+129,page 21,click (2373 506),,Train 743 GCT to Croton-Harmon,15:42:00,00:14:00
+130,page 21,click (2373 575),,Train 766 Croton-Harmon to GCT,15:47:00,00:19:00
+131,page 21,click (2373 644),,Train 443 GCT to Greystone,15:51:00,00:15:00
+132,page 21,click (2373 713),,Train 643 GCT to Southeast,15:51:00,00:38:00
+133,page 21,click (2373 782),,Train 564 North White Plains to GCT,15:56:00,01:08:00
+134,page 21,click (2373 851),,Train 345 GCT to North White Plains,15:56:00,01:06:00
+135,page 21,click (2373 920),,,,
+136,page 22,click (2373 506),,Train 745 GCT to Croton-Harmon,16:07:00,00:15:00
+137,page 22,click (2373 575),,Train 566 North White Plains to GCT,16:11:00,00:53:00
+138,page 22,click (2373 644),,Train 547 GCT to North White Plains,16:23:00,00:54:00
+139,page 22,click (2373 713),,Train 600 Southeast to GCT,16:24:00,00:41:00
+140,page 22,click (2373 782),,Train 349 GCT to North White Plains,16:29:00,01:08:00
+141,page 22,click (2373 851),,Train 749 GCT to Croton-Harmon,16:35:00,00:16:00
+142,page 23,click (2373 506),,Train 2640 Mount Kisco to GCT,16:36:00,01:00:00
+143,page 23,click (2373 575),,Train 649 GCT to Mount Kisco,16:40:00,00:38:00
+144,page 23,click (2373 644),,Train 568 North White Plains to GCT,16:42:00,00:50:00
+145,page 23,click (2373 713),,Train 551 GCT to North White Plains,16:43:00,00:47:00
+146,page 23,click (2373 782),,Train 351 GCT to Crestwood,16:47:00,00:36:00
+147,page 23,click (2373 851),,Train 668 Southeast to GCT,16:49:00,00:49:00
+148,page 24,click (2373 506),,Train 353 GCT to North White Plains,16:53:00,01:06:00
+149,page 24,click (2373 575),,Train 651 GCT to Mount Kisco,16:56:00,00:34:00
+150,page 24,click (2373 644),,Train 2642 Southeast to GCT,17:05:00,00:57:00
+151,page 24,click (2373 713),,Train 570 North White Plains to GCT,17:10:00,00:56:00
+152,page 24,click (2373 782),,Train 670 Southeast to GCT,17:18:00,00:51:00
+153,page 24,click (2373 851),,Train 370 North White Plains to GCT,17:23:00,01:03:00
+154,page 25,click (2373 506),,Train 2352 Crestwood to GCT,17:36:00,00:35:00
+155,page 25,click (2373 575),,Train 357 GCT to Crestwood,17:37:00,00:35:00
+156,page 25,click (2373 644),,Train 359 GCT to North White Plains,17:39:00,01:06:00
+157,page 25,click (2373 713),,GCT Yard Move (Part 1),17:44:00,00:02:00
+158,page 25,click (2373 782),,Train 672 Southeast to GCT,17:47:00,00:52:00
+159,page 25,click (2373 851),,Train 774 Croton-Harmon to GCT,17:49:00,00:22:00
+160,page 26,click (2373 506),,Train 2550 North White Plains Yard to GCT,17:51:00,00:52:00
+161,page 26,click (2373 575),,GCT Yard Move (Part 2),17:51:00,00:05:00
+162,page 26,click (2373 644),,Train 361 GCT to Crestwood,17:57:00,00:36:00
+163,page 26,click (2373 713),,Train 572 North White Plains to GCT,17:59:00,01:06:00
+164,page 26,click (2373 782),,Train 665 GCT to Southeast,18:12:00,00:37:00
+165,page 26,click (2373 851),,Train 776 Croton-Harmon to GCT,18:19:00,00:25:00
+166,page 27,click (2373 506),,Train 365 GCT to Crestwood,18:22:00,00:36:00
+167,page 27,click (2373 575),,Train 674 Southeast to GCT,18:22:00,00:50:00
+168,page 27,click (2373 644),,Train 771 GCT to Croton-Harmon,18:27:00,00:17:00
+169,page 27,click (2373 713),,Train 2358 Crestwood to GCT,18:28:00,00:38:00
+170,page 27,click (2373 782),,Train 667 GCT to Mount Kisco,18:28:00,00:34:00
+171,page 27,click (2373 851),,Train 574 North White Plains to GCT,18:29:00,01:02:00
+172,page 28,click (2373 506),,Train 669 GCT to Mount Kisco,18:31:00,00:37:00
+173,page 28,click (2373 575),,Train 567 GCT to North White Plains,18:37:00,00:55:00
+174,page 28,click (2373 644),,Train 2362 Crestwood to GCT,18:43:00,00:34:00
+175,page 28,click (2373 713),,Train 367 GCT to Mount Vernon West,18:48:00,00:39:00
+176,page 28,click (2373 782),,Train 676 Southeast to GCT,18:49:00,00:46:00
+177,page 28,click (2373 851),,Train 778 Croton-Harmon to GCT,18:52:00,00:21:00
+178,page 29,click (2373 506),,Train 775 GCT to Croton-Harmon,18:54:00,00:15:00
+179,page 29,click (2373 575),,Train 671 GCT to Mount Kisco,18:55:00,00:34:00
+180,page 29,click (2373 644),,Train 673 GCT to Mount Kisco,18:58:00,00:43:00
+181,page 29,click (2373 713),,Train 576 North White Plains to GCT,18:59:00,01:03:00
+182,page 29,click (2373 782),,Train 373 GCT to North White Plains,19:04:00,00:54:00
+183,page 29,click (2373 851),,Train 2366 Crestwood to GCT,19:08:00,00:32:00
+184,page 30,click (2373 506),,Train 678 Southeast to GCT,19:21:00,00:44:00
+185,page 30,click (2373 575),,Train 677 GCT to Mount Kisco,19:23:00,00:37:00
+186,page 30,click (2373 644),,Train 577 GCT to North White Plains,19:27:00,00:49:00
+187,page 30,click (2373 713),,Train 579 GCT to North White Plains,19:30:00,01:06:00
+188,page 30,click (2373 782),,Train 2368 Mount Vernon West to GCT,19:34:00,00:36:00
+189,page 30,click (2373 851),,Train 2666 Southeast to GCT,19:41:00,00:50:00
+190,page 31,click (2373 506),,Train 679 GCT to Southeast,19:53:00,00:39:00
+191,page 31,click (2373 575),,Train 680 Southeast to GCT,19:56:00,00:50:00
+192,page 31,click (2373 644),,Train 581 GCT to North White Plains,19:57:00,00:56:00
+193,page 31,click (2373 713),,Train 781 GCT to Croton-Harmon,20:00:00,00:14:00
+194,page 31,click (2373 782),,Train 580 North White Plains to GCT,20:00:00,01:02:00
+195,page 31,click (2373 851),,Train 682 Mount Kisco to GCT,20:29:00,00:57:00
+196,page 32,click (2373 506),,Train 783 GCT to Croton-Harmon,20:32:00,00:15:00
+197,page 32,click (2373 575),,Train 485 GCT to Greystone,20:36:00,00:16:00
+198,page 32,click (2373 644),,Train 683 GCT to Southeast,20:51:00,00:45:00
+199,page 32,click (2373 713),,Train 684 Southeast to GCT,20:53:00,00:51:00
+200,page 32,click (2373 782),,Train 2694 Southeast to GCT,21:07:00,00:44:00
+201,page 32,click (2373 851),,Train 785 GCT to Croton-Harmon,21:12:00,00:15:00
+202,page 33,click (2373 506),,Train 685 GCT to Mount Kisco,21:15:00,00:41:00
+203,page 33,click (2373 575),,Train 787 GCT to Croton-Harmon,21:19:00,00:14:00
+204,page 33,click (2373 644),,Train 387 GCT to Crestwood,21:24:00,00:46:00
+205,page 33,click (2373 713),,Train 790 Croton-Harmon to GCT,21:46:00,00:20:00
+206,page 33,click (2373 782),,Train 687 GCT to Southeast,21:51:00,00:44:00
+207,page 33,click (2373 851),,Train 789 GCT to Croton-Harmon,21:53:00,00:15:00
+208,page 34,click (2373 506),,Train 688 Southeast to GCT,21:57:00,00:52:00
+209,page 34,click (2373 575),,Train 587 GCT to North White Plains,21:59:00,01:03:00
+210,page 34,click (2373 644),,Train 791 GCT to Croton-Harmon,22:19:00,00:14:00
+211,page 34,click (2373 713),,Train 388 Crestwood to GCT,22:20:00,00:48:00
+212,page 34,click (2373 782),,Train 591 GCT to North White Plains,22:31:00,01:06:00
+213,page 34,click (2373 851),,Train 792 Croton-Harmon to GCT,22:47:00,00:21:00
+214,page 35,click (2373 713),,Train 592 North White Plains to GCT,22:50:00,01:08:00
+215,page 35,click (2373 782),,Train 692 Southeast to GCT,23:00:00,00:48:00
+216,page 35,click (2373 851),,Train 691 GCT to Mount Kisco,23:03:00,00:41:00

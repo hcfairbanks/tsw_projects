@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "Metrolink CMF - LA Union (Non-Revenue)",
+    "start_time": "12:00",
+    "duration": "00:12",
+    "tonnage": 392.9,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.08456471180741,
+    "lng": -118.22666963547735,
+    "current_service_name": "P_CMF_17"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:00:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:00:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for 2m",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "LA Union Station Track 09",
+      "location": "LA Union Station Track 09",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

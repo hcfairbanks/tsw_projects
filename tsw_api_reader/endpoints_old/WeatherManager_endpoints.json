@@ -1,0 +1,89 @@
+{
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "WeatherManager",
+  "discoveredAt": "2025-12-29T23:40:53.189Z",
+  "maxDepth": 3,
+  "totalRequests": 9,
+  "totalEndpoints": 8,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/WeatherManager.Reset",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Reset": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.Temperature",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Temperature": -7.308662414550781,
+          "TemperatureOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.Cloudiness",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Cloudiness": 0,
+          "CloudinessOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.Precipitation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Precipitation": 0,
+          "PrecipitationOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.Wetness",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Wetness": 0,
+          "WetnessOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.GroundSnow",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "GroundSnow": 0,
+          "GroundSnowOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.PiledSnow",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "PiledSnow": 0,
+          "PiledSnowOveridden": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/WeatherManager.FogDensity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "FogDensity": 0,
+          "FogDensityOveridden": 0
+        }
+      }
+    }
+  ]
+}

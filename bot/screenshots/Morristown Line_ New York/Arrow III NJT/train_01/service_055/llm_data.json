@@ -1,0 +1,114 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "427 Hoboken - Gladstone",
+    "start_time": "16:23",
+    "duration": "00:40",
+    "tonnage": 247.1,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.7350039779495,
+    "lng": -74.02933970527104,
+    "current_service_name": "NJT-427"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:23:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:23:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:25:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 3 - 16:41:00",
+      "location": "Newark Broad Street Track 3",
+      "time1": "16:41:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:41:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 3 - 16:46:30",
+      "location": "Brick Church Track 3",
+      "time1": "16:46:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:47:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 3 - 16:49:30",
+      "location": "Orange Track 3",
+      "time1": "16:49:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:50:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Orange Track 3 - 16:54:30",
+      "location": "South Orange Track 3",
+      "time1": "16:54:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:55:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Track 1 - 17:04:00",
+      "location": "Summit Track 1",
+      "time1": "17:04:00",
+      "time2": "",
+      "sort_order": 11
+    }
+  ]
+}

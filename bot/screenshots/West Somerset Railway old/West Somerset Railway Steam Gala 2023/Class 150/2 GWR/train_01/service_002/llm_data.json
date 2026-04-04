@@ -1,0 +1,50 @@
+{
+  "level_info": {
+    "service_name": "Taunton Shuttle: Bishops Lydeard - Norton Fitzwarren",
+    "start_time": "09:43",
+    "duration": "00:10",
+    "tonnage": 83.3,
+    "car_count": 2,
+    "train_length": 40.9,
+    "section": "West Somerset Railway Steam Gala 2023"
+  },
+  "location": {
+    "lat": 51.05414126735124,
+    "lng": -3.1940929209994198,
+    "current_service_name": "Taunton"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:43:00",
+      "location": "",
+      "time1": "9:43:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:45:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Norton Platform - 09:53:00",
+      "location": "Norton Platform",
+      "time1": "09:53:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

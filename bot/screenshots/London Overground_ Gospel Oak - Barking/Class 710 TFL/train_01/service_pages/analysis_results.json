@@ -1,0 +1,1404 @@
+{
+  "provider": "claude",
+  "pages": 26,
+  "total_boxes": 211,
+  "duplicates_removed": 55,
+  "unique_count": 155,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "5L03 Willesden T.M.D to Barking",
+      "start_time": "04:55:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 437,
+      "name": "2J00 Barking Riverside to Gospel Oak",
+      "start_time": "05:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "5J05 Barking to Woodgrange Park",
+      "start_time": "05:33:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "5J04 East Ham E.M.U.D. to Barking Riverside",
+      "start_time": "05:38:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "5L08 Willesden T.M.D to Barking Riverside",
+      "start_time": "05:40:00",
+      "duration": "00:24:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "5J06 Woodgrange Park to Barking Riverside",
+      "start_time": "05:44:00",
+      "duration": "00:10:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J02 Barking Riverside to Gospel Oak",
+      "start_time": "05:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J04 Barking Riverside to Gospel Oak",
+      "start_time": "06:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "5J09 Barking to Woodgrange Park",
+      "start_time": "06:02:00",
+      "duration": "00:04:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J01 Gospel Oak to Barking Riverside",
+      "start_time": "06:07:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J06 Barking Riverside to Gospel Oak",
+      "start_time": "06:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "5J10 Woodgrange Park to Barking Riverside",
+      "start_time": "06:19:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J03 Gospel Oak to Barking Riverside",
+      "start_time": "06:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J08 Barking Riverside to Gospel Oak",
+      "start_time": "06:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J05 Gospel Oak to Barking Riverside",
+      "start_time": "06:37:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J10 Barking Riverside to Gospel Oak",
+      "start_time": "06:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J07 Gospel Oak to Barking Riverside",
+      "start_time": "06:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J12 Barking Riverside to Gospel Oak",
+      "start_time": "06:59:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J09 Gospel Oak to Barking Riverside",
+      "start_time": "07:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J14 Barking Riverside to Gospel Oak",
+      "start_time": "07:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J11 Gospel Oak to Barking Riverside",
+      "start_time": "07:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J16 Barking Riverside to Gospel Oak",
+      "start_time": "07:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J13 Gospel Oak to Barking Riverside",
+      "start_time": "07:36:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J18 Barking Riverside to Gospel Oak",
+      "start_time": "07:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J15 Gospel Oak to Barking Riverside",
+      "start_time": "07:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J20 Barking Riverside to Gospel Oak",
+      "start_time": "08:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J17 Gospel Oak to Barking Riverside",
+      "start_time": "08:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J22 Barking Riverside to Gospel Oak",
+      "start_time": "08:16:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J19 Gospel Oak to Barking Riverside",
+      "start_time": "08:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J24 Barking Riverside to Gospel Oak",
+      "start_time": "08:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J21 Gospel Oak to Barking Riverside",
+      "start_time": "08:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J26 Barking Riverside to Gospel Oak",
+      "start_time": "08:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J23 Gospel Oak to Barking Riverside",
+      "start_time": "08:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J28 Barking Riverside to Gospel Oak",
+      "start_time": "09:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J25 Gospel Oak to Barking Riverside",
+      "start_time": "09:06:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J30 Barking Riverside to Gospel Oak",
+      "start_time": "09:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J27 Gospel Oak to Barking Riverside",
+      "start_time": "09:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J32 Barking Riverside to Gospel Oak",
+      "start_time": "09:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J29 Gospel Oak to Barking Riverside",
+      "start_time": "09:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J34 Barking Riverside to Gospel Oak",
+      "start_time": "09:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J31 Gospel Oak to Barking Riverside",
+      "start_time": "09:51:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J36 Barking Riverside to Gospel Oak",
+      "start_time": "10:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J33 Gospel Oak to Barking Riverside",
+      "start_time": "10:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J38 Barking Riverside to Gospel Oak",
+      "start_time": "10:16:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J35 Gospel Oak to Barking Riverside",
+      "start_time": "10:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J40 Barking Riverside to Gospel Oak",
+      "start_time": "10:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J37 Gospel Oak to Barking Riverside",
+      "start_time": "10:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J42 Barking Riverside to Gospel Oak",
+      "start_time": "10:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J39 Gospel Oak to Barking Riverside",
+      "start_time": "10:52:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J44 Barking Riverside to Gospel Oak",
+      "start_time": "11:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J41 Gospel Oak to Barking Riverside",
+      "start_time": "11:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J50 Barking Riverside to Gospel Oak",
+      "start_time": "11:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 53,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J43 Gospel Oak to Barking Riverside",
+      "start_time": "11:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 54,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J48 Barking Riverside to Gospel Oak",
+      "start_time": "11:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 55,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J45 Gospel Oak to Barking Riverside",
+      "start_time": "11:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 56,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J50 Barking Riverside to Gospel Oak",
+      "start_time": "11:46:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 57,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J47 Gospel Oak to Barking Riverside",
+      "start_time": "11:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 58,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J52 Barking Riverside to Gospel Oak",
+      "start_time": "12:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 59,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J49 Gospel Oak to Barking Riverside",
+      "start_time": "12:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 60,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J54 Barking Riverside to Gospel Oak",
+      "start_time": "12:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 61,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J51 Gospel Oak to Barking Riverside",
+      "start_time": "12:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 62,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J56 Barking Riverside to Gospel Oak",
+      "start_time": "12:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 63,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J53 Gospel Oak to Barking Riverside",
+      "start_time": "12:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 64,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J58 Barking Riverside to Gospel Oak",
+      "start_time": "12:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 65,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J55 Gospel Oak to Barking Riverside",
+      "start_time": "12:50:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 66,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J60 Barking Riverside to Gospel Oak",
+      "start_time": "13:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 67,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J57 Gospel Oak to Barking Riverside",
+      "start_time": "13:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 68,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J62 Barking Riverside to Gospel Oak",
+      "start_time": "13:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 69,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J59 Gospel Oak to Barking Riverside",
+      "start_time": "13:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 70,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J64 Barking Riverside to Gospel Oak",
+      "start_time": "13:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 71,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J61 Gospel Oak to Barking Riverside",
+      "start_time": "13:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 72,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J66 Barking Riverside to Gospel Oak",
+      "start_time": "13:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 73,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J63 Gospel Oak to Barking Riverside",
+      "start_time": "13:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 74,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J68 Barking Riverside to Gospel Oak",
+      "start_time": "14:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 75,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J65 Gospel Oak to Barking Riverside",
+      "start_time": "14:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 76,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J70 Barking Riverside to Gospel Oak",
+      "start_time": "14:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 77,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J67 Gospel Oak to Barking Riverside",
+      "start_time": "14:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 78,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J72 Barking Riverside to Gospel Oak",
+      "start_time": "14:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 79,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J69 Gospel Oak to Barking Riverside",
+      "start_time": "14:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 80,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J74 Barking Riverside to Gospel Oak",
+      "start_time": "14:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 81,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "2J72 Barking Riverside to Gospel Oak",
+      "start_time": "14:31:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 82,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J71 Gospel Oak to Barking Riverside",
+      "start_time": "14:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 83,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J76 Barking Riverside to Gospel Oak",
+      "start_time": "15:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 84,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J73 Gospel Oak to Barking Riverside",
+      "start_time": "15:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 85,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J78 Barking Riverside to Gospel Oak",
+      "start_time": "15:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 86,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J75 Gospel Oak to Barking Riverside",
+      "start_time": "15:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 87,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "2J80 Barking Riverside to Gospel Oak",
+      "start_time": "15:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 88,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J77 Gospel Oak to Barking Riverside",
+      "start_time": "15:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 89,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J82 Barking Riverside to Gospel Oak",
+      "start_time": "15:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 90,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J79 Gospel Oak to Barking Riverside",
+      "start_time": "15:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 91,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J84 Barking Riverside to Gospel Oak",
+      "start_time": "16:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 92,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J81 Gospel Oak to Barking Riverside",
+      "start_time": "16:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 93,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J86 Barking Riverside to Gospel Oak",
+      "start_time": "16:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 94,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J83 Gospel Oak to Barking Riverside",
+      "start_time": "16:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 95,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J88 Barking Riverside to Gospel Oak",
+      "start_time": "16:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 96,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J85 Gospel Oak to Barking Riverside",
+      "start_time": "16:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 97,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J90 Barking Riverside to Gospel Oak",
+      "start_time": "16:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 98,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J87 Gospel Oak to Barking Riverside",
+      "start_time": "16:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 99,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "2J92 Barking Riverside to Gospel Oak",
+      "start_time": "17:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 100,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J89 Gospel Oak to Barking Riverside",
+      "start_time": "17:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 101,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J94 Barking Riverside to Gospel Oak",
+      "start_time": "17:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 102,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J91 Gospel Oak to Barking Riverside",
+      "start_time": "17:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 103,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J96 Barking Riverside to Gospel Oak",
+      "start_time": "17:31:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 104,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J93 Gospel Oak to Barking Riverside",
+      "start_time": "17:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 105,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J98 Barking Riverside to Gospel Oak",
+      "start_time": "17:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 106,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J95 Gospel Oak to Barking Riverside",
+      "start_time": "17:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 107,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J00 Barking Riverside to Gospel Oak",
+      "start_time": "18:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 108,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J97 Gospel Oak to Barking Riverside",
+      "start_time": "18:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 109,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J02 Barking Riverside to Gospel Oak",
+      "start_time": "18:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 110,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J99 Gospel Oak to Barking Riverside",
+      "start_time": "18:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 111,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J04 Barking Riverside to Gospel Oak",
+      "start_time": "18:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 112,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J01 Gospel Oak to Barking Riverside",
+      "start_time": "18:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 113,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J06 Barking Riverside to Gospel Oak",
+      "start_time": "18:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 114,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J03 Gospel Oak to Barking Riverside",
+      "start_time": "18:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 115,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J08 Barking Riverside to Gospel Oak",
+      "start_time": "19:01:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 116,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J05 Gospel Oak to Barking Riverside",
+      "start_time": "19:05:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 117,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J10 Barking Riverside to Gospel Oak",
+      "start_time": "19:16:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 118,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J07 Gospel Oak to Barking Riverside",
+      "start_time": "19:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 119,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J12 Barking Riverside to Gospel Oak",
+      "start_time": "19:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 120,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J09 Gospel Oak to Barking Riverside",
+      "start_time": "19:37:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 121,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J14 Barking Riverside to Gospel Oak",
+      "start_time": "19:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 122,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J11 Gospel Oak to Barking Riverside",
+      "start_time": "19:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 123,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J16 Barking Riverside to Gospel Oak",
+      "start_time": "20:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 124,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J13 Gospel Oak to Barking Riverside",
+      "start_time": "20:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 125,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J18 Barking Riverside to Gospel Oak",
+      "start_time": "20:16:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 126,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J15 Gospel Oak to Barking Riverside",
+      "start_time": "20:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 127,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J20 Barking Riverside to Gospel Oak",
+      "start_time": "20:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 128,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J17 Gospel Oak to Barking Riverside",
+      "start_time": "20:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 129,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J22 Barking Riverside to Gospel Oak",
+      "start_time": "20:46:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 130,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J19 Gospel Oak to Barking Riverside",
+      "start_time": "20:52:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 131,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J24 Barking Riverside to Gospel Oak",
+      "start_time": "21:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 132,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J21 Gospel Oak to Barking Riverside",
+      "start_time": "21:07:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 133,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J26 Barking Riverside to Gospel Oak",
+      "start_time": "21:15:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 134,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J23 Gospel Oak to Barking Riverside",
+      "start_time": "21:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 135,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J28 Barking Riverside to Gospel Oak",
+      "start_time": "21:31:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 136,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J25 Gospel Oak to Upper Holloway",
+      "start_time": "21:37:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 137,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J30 Barking Riverside to Gospel Oak",
+      "start_time": "21:45:00",
+      "duration": "00:40:00"
+    },
+    {
+      "global_index": 138,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J27 Gospel Oak to Barking Riverside",
+      "start_time": "21:50:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 139,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J32 Barking Riverside to Gospel Oak",
+      "start_time": "22:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 140,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J29 Gospel Oak to Barking Riverside",
+      "start_time": "22:05:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 141,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "5J28 Gospel Oak to Upper Holloway",
+      "start_time": "22:19:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 142,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J34 Barking Riverside to Gospel Oak",
+      "start_time": "22:21:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 143,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J31 Gospel Oak to Barking Riverside",
+      "start_time": "22:27:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 144,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "5M28 Upper Holloway to Upper Holloway Reception Sidin",
+      "start_time": "22:27:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 145,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "5J25 Barking Riverside to East Ham E.M.U.D.",
+      "start_time": "22:32:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 146,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J36 Barking Riverside to Gospel Oak",
+      "start_time": "22:41:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 147,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "2J33 Gospel Oak to Barking Riverside",
+      "start_time": "22:48:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 148,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "2J38 Barking Riverside to Gospel Oak",
+      "start_time": "23:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 149,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "2J35 Gospel Oak to Barking Riverside",
+      "start_time": "23:08:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 150,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "2J40 Barking Riverside to Gospel Oak",
+      "start_time": "23:21:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 151,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "2J37 Gospel Oak to Barking Riverside",
+      "start_time": "23:28:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 152,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "2J42 Barking Riverside to Gospel Oak",
+      "start_time": "23:41:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 153,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "5J38 Gospel Oak to Upper Holloway",
+      "start_time": "23:53:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 154,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "5J39 Upper Holloway to Upper Holloway Reception Siding",
+      "start_time": "00:04:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 155,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "5J40 Gospel Oak to Upper Holloway",
+      "start_time": "00:05:00",
+      "duration": "00:07:00"
+    }
+  ]
+}

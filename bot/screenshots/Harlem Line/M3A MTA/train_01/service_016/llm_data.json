@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "Train 630 Southeast to GCT",
+    "start_time": "08:34",
+    "duration": "00:48",
+    "tonnage": 323.2,
+    "car_count": 6,
+    "train_length": 155.5
+  },
+  "location": {
+    "lat": 41.032145085070056,
+    "lng": -73.77519787017596,
+    "current_service_name": "630"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:35:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 2 - 09:01:00",
+      "location": "Harlem 125th Street Track 2",
+      "time1": "09:01:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:02:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 41 - 09:15:00",
+      "location": "Grand Central Track 41",
+      "time1": "09:15:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:20:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 57",
+      "location": "Grand Central Track 57",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

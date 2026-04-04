@@ -1,0 +1,161 @@
+{
+  "level_info": {
+    "service_name": "AV 224: Via Princessa - LA Union",
+    "start_time": "16:15",
+    "duration": "01:06",
+    "tonnage": 412.2,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.40876174039753,
+    "lng": -118.46928252792499,
+    "current_service_name": "P_AV_224"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:15:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:15:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:16:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Santa Clarita Track 1 - 16:22:00",
+      "location": "Santa Clarita Track 1",
+      "time1": "16:22:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:23:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newhall Track 1 - 16:30:00",
+      "location": "Newhall Track 1",
+      "time1": "16:30:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:31:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sylmar/San Fernando Track 1 - 16:45:00",
+      "location": "Sylmar/San Fernando Track 1",
+      "time1": "16:45:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:46:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sun Valley Track 1 - 16:53:00",
+      "location": "Sun Valley Track 1",
+      "time1": "16:53:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:54:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Burbank Airport-North Track 1 - 16:57:00",
+      "location": "Burbank Airport-North Track 1",
+      "time1": "16:57:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:58:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Burbank-Downtown Track 1 - 17:02:00",
+      "location": "Burbank-Downtown Track 1",
+      "time1": "17:02:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:03:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Glendale Track 2 - 17:09:00",
+      "location": "Glendale Track 2",
+      "time1": "17:09:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:10:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "LA Union Station Track 05 - 17:22:00",
+      "location": "LA Union Station Track 05",
+      "time1": "17:22:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 17
+    }
+  ]
+}

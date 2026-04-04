@@ -1,0 +1,306 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P517 Boston South Station to Worcester",
+    "start_time": "15:28",
+    "duration": "01:35",
+    "tonnage": 543.3,
+    "car_count": 7,
+    "train_length": 177.4
+  },
+  "location": {
+    "lat": 42.349823573800826,
+    "lng": -71.05640024597713,
+    "current_service_name": "P517"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 15:28:00",
+      "location": "",
+      "time1": "",
+      "time2": "15:28:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:30:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 5 - 15:35:30",
+      "location": "Boston Back Bay Track 5",
+      "time1": "15:35:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:36:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lansdowne Track 2 - 15:40:30",
+      "location": "Lansdowne Track 2",
+      "time1": "15:40:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:41:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Landing Track 2 - 15:45:30",
+      "location": "Boston Landing Track 2",
+      "time1": "15:45:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:46:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newtonville - 15:50:30",
+      "location": "Newtonville",
+      "time1": "15:50:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:51:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Newton - 15:54:30",
+      "location": "West Newton",
+      "time1": "15:54:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:55:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Auburndale - 15:57:30",
+      "location": "Auburndale",
+      "time1": "15:57:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:58:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Farms Track 2 - 16:01:30",
+      "location": "Wellesley Farms Track 2",
+      "time1": "16:01:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:02:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Hills Track 2 - 16:04:00",
+      "location": "Wellesley Hills Track 2",
+      "time1": "16:04:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:04:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wellesley Square Track 2 - 16:07:00",
+      "location": "Wellesley Square Track 2",
+      "time1": "16:07:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:07:30",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Natick Center Track 2 - 16:11:30",
+      "location": "Natick Center Track 2",
+      "time1": "16:11:30",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:12:00",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Natick Track 2 - 16:15:30",
+      "location": "West Natick Track 2",
+      "time1": "16:15:30",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:16:00",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Framingham Track 2 - 16:21:30",
+      "location": "Framingham Track 2",
+      "time1": "16:21:30",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:22:00",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ashland Track 1 - 16:28:30",
+      "location": "Ashland Track 1",
+      "time1": "16:28:30",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:29:00",
+      "time2": "",
+      "sort_order": 27
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southborough Track 1 - 16:33:30",
+      "location": "Southborough Track 1",
+      "time1": "16:33:30",
+      "time2": "",
+      "sort_order": 28
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:34:00",
+      "time2": "",
+      "sort_order": 29
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Westborough Track 1 - 16:42:30",
+      "location": "Westborough Track 1",
+      "time1": "16:42:30",
+      "time2": "",
+      "sort_order": 30
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:43:00",
+      "time2": "",
+      "sort_order": 31
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grafton Track 1 - 16:48:30",
+      "location": "Grafton Track 1",
+      "time1": "16:48:30",
+      "time2": "",
+      "sort_order": 32
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:49:00",
+      "time2": "",
+      "sort_order": 33
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Worcester - 17:04:00",
+      "location": "Worcester",
+      "time1": "17:04:00",
+      "time2": "",
+      "sort_order": 34
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 35
+    }
+  ]
+}

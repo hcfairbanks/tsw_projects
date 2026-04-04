@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       West Somerset Railway
+Train:       Class 150/2 GWR
+Started:     2026-03-22 19:19:41
+Duration:    0:10:03
+Trains:      1
+Services:    6
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    6          0:09:57

@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "AM178EQ Boston South Station to Southampton Yard",
+    "start_time": "00:39",
+    "duration": "00:23",
+    "tonnage": 547.8,
+    "car_count": 10,
+    "train_length": 255.2
+  },
+  "location": {
+    "lat": 42.35137429429312,
+    "lng": -71.05489750745741,
+    "current_service_name": "AM178EQ"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 00:39:00",
+      "location": "",
+      "time1": "",
+      "time2": "39:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "00:40:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 16",
+      "location": "Southampton Street Yard Track 16",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "X62 Dover - Hoboken",
+    "start_time": "18:11",
+    "duration": "01:01",
+    "tonnage": 225.9,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.88307005939325,
+    "lng": -74.55961478748954,
+    "current_service_name": "NJT-X62"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:11:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:11:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "18:12:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 13 - 19:13:00",
+      "location": "Hoboken Terminal Track 13",
+      "time1": "19:13:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

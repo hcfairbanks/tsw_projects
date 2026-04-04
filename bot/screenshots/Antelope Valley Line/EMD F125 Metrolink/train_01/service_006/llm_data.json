@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "VC 103: LA Union - Burbank",
+    "start_time": "06:58",
+    "duration": "00:40",
+    "tonnage": 392.9,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.05557431185889,
+    "lng": -118.23422536372458,
+    "current_service_name": "P_VC_103"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 06:58:00",
+      "location": "",
+      "time1": "6:58:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:59:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Glendale Track 1 - 07:32:00",
+      "location": "Glendale Track 1",
+      "time1": "07:32:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:33:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Burbank-Downtown Track 2 - 07:39:00",
+      "location": "Burbank-Downtown Track 2",
+      "time1": "07:39:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

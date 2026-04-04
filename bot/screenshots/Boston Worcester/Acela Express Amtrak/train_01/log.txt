@@ -1,0 +1,16 @@
+Service #1 | AM2155EQ Southampton Yard to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_001
+Service #1 | OK | AM2155EQ Southampton Yard to Boston South Station 06:47 00:09 | timetable_id=2721
+Service #2 | AM2159EQ Southampton Yard to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_002
+Service #2 | OK | AM2159EQ Southampton Yard to Boston South Station 08:33 00:09 | timetable_id=2722
+Service #3 | AM2163EQ Southampton Yard to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_003
+Service #3 | OK | AM2163EQ Southampton Yard to Boston South Station 10:27 00:09 | timetable_id=2723
+Service #4 | AM2171EQ Southampton Yard to Boston South Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_004
+Service #4 | OK | AM2171EQ Southampton Yard to Boston South Station 14:37 00:00 | timetable_id=2724
+Service #5 | AM2160EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_005
+Service #5 | OK | AM2160EQ Boston South Station to Southampton Yard 17:12 00:09 | timetable_id=2725
+Service #6 | AM2164EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_006
+Service #6 | OK | AM2164EQ Boston South Station to Southampton Yard 19:02 00:09 | timetable_id=2726
+Service #7 | AM2166EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_007
+Service #7 | OK | AM2166EQ Boston South Station to Southampton Yard 20:19 00:09 | timetable_id=2727
+Service #8 | AM2168EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\Acela Express Amtrak\train_01\service_008
+Service #8 | OK | AM2168EQ Boston South Station to Southampton Yard 21:17 00:09 | timetable_id=2728

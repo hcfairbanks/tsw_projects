@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Fairmount #756 (Mid-Day Storage)",
+    "start_time": "09:23",
+    "duration": "00:08",
+    "tonnage": 472.8,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.35014836282365,
+    "lng": -71.05546562013065,
+    "current_service_name": "MBTA Fairmount #756 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:23:00",
+      "location": "",
+      "time1": "9:23:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 13",
+      "location": "Southampton Street Yard Track 13",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

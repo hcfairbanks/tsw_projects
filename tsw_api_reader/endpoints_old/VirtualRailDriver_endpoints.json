@@ -1,0 +1,123 @@
+{
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "VirtualRailDriver",
+  "discoveredAt": "2025-12-30T00:10:15.360Z",
+  "maxDepth": 5,
+  "totalRequests": 54,
+  "totalEndpoints": 7,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Data",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Reverser": 0,
+          "Throttle": 0,
+          "Auto Brake": 0,
+          "Independent Brake": 0,
+          "Bail Off": 0,
+          "Rotary Switch 1": 0,
+          "Rotary Switch 2": 0,
+          "Front Top Row 1  (0)": 0,
+          "Front Top Row 2  (1)": 0,
+          "Front Top Row 3  (2)": 0,
+          "Front Top Row 4  (3)": 0,
+          "Front Top Row 5  (4)": 0,
+          "Front Top Row 6  (5)": 0,
+          "Front Top Row 7  (6)": 0,
+          "Front Top Row 8  (7)": 0,
+          "Front Top Row 9  (8)": 0,
+          "Front Top Row 10 (9)": 0,
+          "Front Top Row 11 (10)": 0,
+          "Front Top Row 12 (11)": 0,
+          "Front Top Row 13 (12)": 0,
+          "Front Top Row 14 (13)": 0,
+          "Front Bottom Row 1  (14)": 0,
+          "Front Bottom Row 2  (15)": 0,
+          "Front Bottom Row 3  (16)": 0,
+          "Front Bottom Row 4  (17)": 0,
+          "Front Bottom Row 5  (18)": 0,
+          "Front Bottom Row 6  (19)": 0,
+          "Front Bottom Row 7  (20)": 0,
+          "Front Bottom Row 8  (21)": 0,
+          "Front Bottom Row 9  (22)": 0,
+          "Front Bottom Row 10 (23)": 0,
+          "Front Bottom Row 11 (24)": 0,
+          "Front Bottom Row 12 (25)": 0,
+          "Front Bottom Row 13 (26)": 0,
+          "Front Bottom Row 14 (27)": 0,
+          "Rocker Up": 0,
+          "Rocker Down": 0,
+          "D-Pad Up": 0,
+          "D-Pad Right": 0,
+          "D-Pad Down": 0,
+          "D-Pad Left": 0,
+          "Range Forward": 0,
+          "Range Back": 0,
+          "E-Stop Forward": 0,
+          "E-Stop Back": 0,
+          "Alerter": 0,
+          "Sand": 0,
+          "P Button": 0,
+          "Bell": 0,
+          "Horn Forward": 0,
+          "Horn Back": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Enabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Enabled": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Reverser",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Reverser": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Throttle",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Throttle": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Alerter",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Alerter": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Sand",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Sand": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/VirtualRailDriver.Bell",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Bell": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "level_info": {
+    "service_name": "Train 664 Southeast to GCT",
+    "start_time": "15:47",
+    "duration": "00:45",
+    "tonnage": 485.7,
+    "car_count": 8,
+    "train_length": 207.3
+  },
+  "location": {
+    "lat": 41.049322957682044,
+    "lng": -73.77318760070408,
+    "current_service_name": "664"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:49:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 15:52:30",
+      "location": "White Plains Track 2",
+      "time1": "15:52:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:53:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Fordham Track 4 - 16:11:30",
+      "location": "Fordham Track 4",
+      "time1": "16:11:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:12:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 16:19:00",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "16:19:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:20:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 17 - 16:33:00",
+      "location": "Grand Central Track 17",
+      "time1": "16:33:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

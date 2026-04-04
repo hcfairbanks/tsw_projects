@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Worcester
+Train:       CTC-3 Cab Car
+Started:     2026-03-22 21:31:35
+Duration:    0:06:38
+Trains:      3
+Services:    2
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 2    2          0:03:34
+Train 3    0          0:01:43

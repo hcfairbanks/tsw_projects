@@ -1,0 +1,50 @@
+{
+  "level_info": {
+    "service_name": "Amtrak Northeast Regional #176 (Boston - Southampton Street Yard)",
+    "start_time": "20:24",
+    "duration": "00:21",
+    "tonnage": 497.8,
+    "car_count": 9,
+    "train_length": 229.2,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 42.35129412890336,
+    "lng": -71.05504946121596,
+    "current_service_name": "AMTK176_BOS_PORTAL"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 20:24:00",
+      "location": "",
+      "time1": "",
+      "time2": "20:24:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Widett Circle Crossing (Dry Loop)",
+      "location": "Widett Circle Crossing (Dry Loop)",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Amtrak Runner",
+      "location": "Amtrak Runner",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southampton Street Yard Track 09",
+      "location": "Southampton Street Yard Track 09",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

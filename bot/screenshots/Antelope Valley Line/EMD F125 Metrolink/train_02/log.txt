@@ -1,0 +1,34 @@
+Service #1 |  AV 200: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_001
+Service #1 | OK | AV 200: Lancaster - LA Union (Part 1) 03:41 01:12 | timetable_id=33936
+Service #2 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_002
+Service #2 | OK | Lancaster Siding - Lancaster (Non-Revenue) 04:55 00:05 | timetable_id=33937
+Service #3 |  AV 204: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_003
+Service #3 | OK | AV 204: Lancaster - LA Union (Part 1) 05:09 01:22 | timetable_id=33938
+Service #4 |  AV 200: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_004
+Service #4 | OK | AV 200: Lancaster - LA Union (Part 2) 05:09 00:50 | timetable_id=33939
+Service #5 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_005
+Service #5 | OK | Lancaster Siding - Lancaster (Non-Revenue) 05:55 00:06 | timetable_id=33940
+Service #6 |  AV 206: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_006
+Service #6 | OK | AV 206: Lancaster - LA Union (Part 1) 06:11 01:12 | timetable_id=33941
+Service #7 |  AV 204: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_007
+Service #7 | OK | AV 204: Lancaster - LA Union (Part 2) 06:34 00:57 | timetable_id=33942
+Service #9 |  Lancaster Siding - Lancaster (Non-Revenue) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_009
+Service #9 | OK | Lancaster Siding - Lancaster (Non-Revenue) 06:55 00:08 | timetable_id=33943
+Service #10 |  AV 208: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_010
+Service #10 | OK | AV 208: Lancaster - LA Union (Part 1) 07:11 01:12 | timetable_id=33944
+Service #11 |  AV 206: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_011
+Service #11 | OK | AV 206: Lancaster - LA Union (Part 2) 07:37 00:51 | timetable_id=33945
+Service #13 |  AV 208: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_013
+Service #13 | OK | AV 208: Lancaster - LA Union (Part 2) 08:37 00:51 | timetable_id=33946
+Service #14 |  AV 212: Lancaster - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_014
+Service #14 | OK | AV 212: Lancaster - LA Union 09:11 02:04 | timetable_id=33947
+Service #17 |  AV 218: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_017
+Service #17 | OK | AV 218: Lancaster - LA Union (Part 1) 12:05 02:22 | timetable_id=33948
+Service #18 |  AV 222: Lancaster - LA Union | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_018
+Service #18 | OK | AV 222: Lancaster - LA Union 14:11 01:20 | timetable_id=33949
+Service #19 |  AV 222: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_019
+Service #19 | OK | AV 222: Lancaster - LA Union (Part 2) 15:34 00:49 | timetable_id=33950
+Service #26 |  AV 230: Lancaster - LA Union (Part 1) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_026
+Service #26 | OK | AV 230: Lancaster - LA Union (Part 1) 18:11 01:12 | timetable_id=33951
+Service #29 |  AV 230: Lancaster - LA Union (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_02\service_029
+Service #29 | OK | AV 230: Lancaster - LA Union (Part 2) 19:26 00:50 | timetable_id=33952

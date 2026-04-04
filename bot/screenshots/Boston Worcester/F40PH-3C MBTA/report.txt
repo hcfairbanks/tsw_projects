@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Worcester
+Train:       F40PH-3C MBTA
+Started:     2026-03-20 03:24:25
+Duration:    1:57:53
+Trains:      2
+Services:    58
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    36         1:09:54
+Train 2    22         0:46:36

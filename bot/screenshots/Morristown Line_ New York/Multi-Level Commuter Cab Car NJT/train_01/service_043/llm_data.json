@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "3244 NY Penn Station - Sunnyside Yard",
+    "start_time": "13:50",
+    "duration": "00:25",
+    "tonnage": 695.9,
+    "car_count": 11,
+    "train_length": 278.6
+  },
+  "location": {
+    "lat": 40.750028798958574,
+    "lng": -73.99291198410519,
+    "current_service_name": "NJT-3244-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 13:50:00",
+      "location": "",
+      "time1": "",
+      "time2": "13:50:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "13:52:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sunnyside Yard Siding 26",
+      "location": "Sunnyside Yard Siding 26",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

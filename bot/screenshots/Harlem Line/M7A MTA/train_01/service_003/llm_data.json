@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "Train 796 Croton-Harmon to GCT",
+    "start_time": "00:45",
+    "duration": "00:21",
+    "tonnage": 460.1,
+    "car_count": 8,
+    "train_length": 208.0
+  },
+  "location": {
+    "lat": 40.824596880020934,
+    "lng": -73.92942834117564,
+    "current_service_name": "796"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "00:49:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 00:53:30",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "00:53:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "00:54:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 20 - 01:07:00",
+      "location": "Grand Central Track 20",
+      "time1": "01:07:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

@@ -1,0 +1,1044 @@
+{
+	"info": {
+		"_postman_id": "176e5a50-7a03-412a-97c6-7ee120ef9db1",
+		"name": "TSW5_API_CALLS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1257627"
+	},
+	"item": [
+		{
+			"name": "Driver Aid",
+			"item": [
+				{
+					"name": "Driver Aid Data",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "DTGCommKey",
+								"value": "{{DTGCommKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/get/DriverAid.Data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"DriverAid.Data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Driver Input",
+			"item": [
+				{
+					"name": "CabLight_F Is Active",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "DTGCommKey",
+								"value": "{{DTGCommKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/get/DriverInput/CabLight_F.Function.IsActive",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"DriverInput",
+								"CabLight_F.Function.IsActive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Driver Input",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/DriverInput/CabLight_F",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"DriverInput",
+								"CabLight_F"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Current Drivable Actor",
+			"item": [
+				{
+					"name": "Speed",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor.Function.HUD_GetSpeed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor.Function.HUD_GetSpeed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GameplayTasksComponent0",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor/GameplayTasksComponent0.ObjectName",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor",
+								"GameplayTasksComponent0.ObjectName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Slipping",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor.Function.HUD_GetIsSlipping",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor.Function.HUD_GetIsSlipping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Power Handle",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor.Function.HUD_GetPowerHandle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor.Function.HUD_GetPowerHandle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alerter",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor.Function.HUD_GetAlerter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor.Function.HUD_GetAlerter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetFarLocation",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor.Function.GetFarLocation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor.Function.GetFarLocation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get BP (AirPipe) Pressure_BAR_G",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentDrivableActor/Simulation/BP (AirPipe).Pressure_BAR_G",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentDrivableActor",
+								"Simulation",
+								"BP (AirPipe).Pressure_BAR_G"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Current Drivable Actor",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/CurrentDrivableActor",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"CurrentDrivableActor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Current Formation",
+			"item": [
+				{
+					"name": "0/Simulation/Sandbox.MaximumSandCapacity",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/CurrentFormation/0/Simulation/Sandbox.MaximumSandCapacity",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"CurrentFormation",
+								"0",
+								"Simulation",
+								"Sandbox.MaximumSandCapacity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list Current Formation",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/CurrentFormation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"CurrentFormation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "List Player",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/Player",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"Player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Player DriverInputComponent_2147367922",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/Player/DriverInputComponent_2147367922",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"Player",
+								"DriverInputComponent_2147367922"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Create Subscription",
+					"item": [
+						{
+							"name": "Add Speed To Subscription",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{DTGCommKey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "DTGCommKey",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/subscription/CurrentDrivableActor.Function.HUD_GetSpeed?Subscription=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"subscription",
+										"CurrentDrivableActor.Function.HUD_GetSpeed"
+									],
+									"query": [
+										{
+											"key": "Subscription",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add DriverAid.Data To Subscription",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{DTGCommKey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "DTGCommKey",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/subscription/DriverAid.Data?Subscription=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"subscription",
+										"DriverAid.Data"
+									],
+									"query": [
+										{
+											"key": "Subscription",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Power Handle To Subscription",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{DTGCommKey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "DTGCommKey",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/subscription/CurrentDrivableActor.Function.HUD_GetPowerHandle?Subscription=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"subscription",
+										"CurrentDrivableActor.Function.HUD_GetPowerHandle"
+									],
+									"query": [
+										{
+											"key": "Subscription",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Slipping To Subscription",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{DTGCommKey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "DTGCommKey",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/subscription/CurrentDrivableActor.Function.HUD_GetIsSlipping?Subscription=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"subscription",
+										"CurrentDrivableActor.Function.HUD_GetIsSlipping"
+									],
+									"query": [
+										{
+											"key": "Subscription",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Subscription",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscription?Subscription=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscription"
+							],
+							"query": [
+								{
+									"key": "Subscription",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Subscription",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscription/?Subscription=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscription",
+								""
+							],
+							"query": [
+								{
+									"key": "Subscription",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Time of day",
+			"item": [
+				{
+					"name": "Time Of Day",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "DTGCommKey",
+								"value": "{{DTGCommKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/get/TimeOfDay.Data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"TimeOfDay.Data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Virtual Rail Driver",
+			"item": [
+				{
+					"name": "Virtual Rail Driver Data",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/VirtualRailDriver.Data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"VirtualRailDriver.Data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Virtual Rail Driver Bell",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/VirtualRailDriver.Bell",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"VirtualRailDriver.Bell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Virtual Rail Driver",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/list/VirtualRailDriver",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"VirtualRailDriver"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Weather Manager",
+			"item": [
+				{
+					"name": "WeatherManager",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{DTGCommKey}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "DTGCommKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/get/WeatherManager.Data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"get",
+								"WeatherManager.Data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Info",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{DTGCommKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "DTGCommKey",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/info",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{DTGCommKey}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "DTGCommKey",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/list",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

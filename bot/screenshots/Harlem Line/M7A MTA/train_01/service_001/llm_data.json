@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "Train 696 Southeast to GCT",
+    "start_time": "00:04",
+    "duration": "00:45",
+    "tonnage": 460.1,
+    "car_count": 8,
+    "train_length": 208.0
+  },
+  "location": {
+    "lat": 41.04932686630383,
+    "lng": -73.77318672475846,
+    "current_service_name": "696"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "00:06:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 00:08:30",
+      "location": "White Plains Track 2",
+      "time1": "00:08:30",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "00:09:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 00:33:00",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "00:33:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "00:34:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 32 - 00:50:00",
+      "location": "Grand Central Track 32",
+      "time1": "00:50:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

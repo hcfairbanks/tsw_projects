@@ -1,0 +1,4 @@
+Service #75 | 3262 3262 Montclair State University - NY Penn Station | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_02\service_075
+Service #75 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'
+Service #87 | 6667 6667 NY Penn Station - Dover | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Morristown Line_ New York\ALP-46 NJT\train_02\service_087
+Service #87 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\Morristown Line: New York\\duplicate_services.txt'

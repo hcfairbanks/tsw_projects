@@ -1,0 +1,2201 @@
+{
+  "completed": true,
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "Player",
+  "discoveredAt": "2025-12-31T13:45:45.997Z",
+  "maxDepth": 20,
+  "maxDepthAchieved": 1,
+  "totalRequests": 187,
+  "totalEndpoints": 181,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/Player.Property.LastPosition",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.CurrentPosition",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.FootDistanceThreshold",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 500
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.FootMaxDistance",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1000
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.IsWalking",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.IsDriving",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.DrivingDistanceThreshold",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2500
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.DrivingMaxDistance",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 10000
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.IsSpeedingInSegment",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.SpeedingTolerance",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "value": 1.3411200046539307
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bCameraMode",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bLockVHIDInteraction",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bLockTransition",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bIsInPhotoMode",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bTestToGetLookAtRailVehicleComponent",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.SmoothTargetViewRotationSpeed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 20
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bPlayerIsWaiting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.InputYawScale",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.InputPitchScale",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": -2.5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.InputRollScale",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bShowMouseCursor",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bEnableClickEvents",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bEnableTouchEvents",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bEnableMouseOverEvents",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bEnableTouchOverEvents",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bForceFeedbackEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.DefaultMouseCursor",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.CurrentMouseCursor",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.DefaultClickTraceChannel",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.CurrentClickTraceChannel",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.HitResultTraceDistance",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2500
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bShouldPerformFullTickWhenPaused",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bOnlyRelevantToOwner",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bAlwaysRelevant",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bHidden",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bNetUseOwnerRelevancy",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bAutoDestroyWhenFinished",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bCanBeDamaged",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bFindCameraComponentWhenViewTarget",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bGenerateOverlapEventsDuringLevelStreaming",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bEnableAutoLODGeneration",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.InitialLifeSpan",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.CustomTimeDilation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.NetDormancy",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.NetCullDistanceSquared",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 225000000
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.NetUpdateFrequency",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 100
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.MinNetUpdateFrequency",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Property.NetPriority",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsDrivableActorSpeeding",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "IsSpeeding": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.ShouldShowCrosshair",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.ShouldForceInternalCamera",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.RecordStopLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Stop": {
+            "dueTime": "+00000000.00:00:00.000000000",
+            "arrivalTime": "+00000000.00:00:00.000000000",
+            "name": "",
+            "stopAccuracy": 0,
+            "num": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.JumpToRailVehicle",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "RailVehicleID": {}
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsZoomRestricted",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsSelecting",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsOnCampaignServiceModeEvent",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsMouseHovering",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsInteractionEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsGamepadMovementRestricted",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsControllingCursor",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetTrackData",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutData": {
+            "lastPlayerPosition": {
+              "height": 9221.7197265625,
+              "distanceToHeight": 186952.25,
+              "bTunnelFound": false
+            },
+            "trackHeights": [
+              {
+                "height": 9218.349609375,
+                "distanceToHeight": 0,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9241.54296875,
+                "distanceToHeight": 21495.28125,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9265.357421875,
+                "distanceToHeight": 43806.703125,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9301.353515625,
+                "distanceToHeight": 77170.1484375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9309.380859375,
+                "distanceToHeight": 99300.2421875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9308.7314453125,
+                "distanceToHeight": 100164.21875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9293.9833984375,
+                "distanceToHeight": 119776.0390625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9278.2099609375,
+                "distanceToHeight": 140736.6875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9270.068359375,
+                "distanceToHeight": 151563.15625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9255.3515625,
+                "distanceToHeight": 171133.96875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9221.7197265625,
+                "distanceToHeight": 186952.25,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9210.8798828125,
+                "distanceToHeight": 201366.90625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9180.5908203125,
+                "distanceToHeight": 241645.765625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9179.7158203125,
+                "distanceToHeight": 250307.015625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9190.1181640625,
+                "distanceToHeight": 258968.5625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9241.9365234375,
+                "distanceToHeight": 286948.34375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9411.09375,
+                "distanceToHeight": 378286.0625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9429.892578125,
+                "distanceToHeight": 386948.53125,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9454.2001953125,
+                "distanceToHeight": 395608.90625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9493.2724609375,
+                "distanceToHeight": 408112.03125,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9521.47265625,
+                "distanceToHeight": 417136.1875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9556.076171875,
+                "distanceToHeight": 428209.21875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9594.4697265625,
+                "distanceToHeight": 440495.1875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9688.26953125,
+                "distanceToHeight": 470511.09375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9705.0615234375,
+                "distanceToHeight": 475884.625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9768.0322265625,
+                "distanceToHeight": 496035.34375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9806.9072265625,
+                "distanceToHeight": 508475.1875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9831.2177734375,
+                "distanceToHeight": 517136.65625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9941.642578125,
+                "distanceToHeight": 575277,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9960.17578125,
+                "distanceToHeight": 583938.875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 9983.6923828125,
+                "distanceToHeight": 592599.875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10007.423828125,
+                "distanceToHeight": 600502.375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10043.5224609375,
+                "distanceToHeight": 612510.0625,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10120.65234375,
+                "distanceToHeight": 638194.25,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10284.2109375,
+                "distanceToHeight": 692659.375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10539.5927734375,
+                "distanceToHeight": 762889.5,
+                "bTunnelFound": false
+              },
+              {
+                "height": 10839.8935546875,
+                "distanceToHeight": 862889.875,
+                "bTunnelFound": false
+              },
+              {
+                "height": 11140.1943359375,
+                "distanceToHeight": 962890.375,
+                "bTunnelFound": false
+              },
+              {
+                "height": 11170.73828125,
+                "distanceToHeight": 971133.875,
+                "bTunnelFound": false
+              }
+            ],
+            "stations": [
+              {
+                "stationName": "Cheddington",
+                "distanceToStation": {
+                  "x": 651036.5625,
+                  "y": 10159.2177734375
+                },
+                "distanceToStationCM": 477971.78125,
+                "platformLength": 28558.201171875,
+                "markerType": "Platform",
+                "markerName": ""
+              }
+            ],
+            "markers": [
+              {
+                "stationName": "Cheddington 2",
+                "distanceToStation": {
+                  "x": 651036.5625,
+                  "y": 10159.2177734375
+                },
+                "distanceToStationCM": 506529.96875,
+                "platformLength": 28558.201171875,
+                "markerType": "Platform",
+                "markerName": "Cheddington Platform 2"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetRotationLimits",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "pitch": 170,
+            "yaw": 360,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetKeyCursorSpeed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 5
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetKeyCursorDelta",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetDriverAidData",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutData": {
+            "signalSeen": true,
+            "speedLimitSeen": false,
+            "distanceToSignal": 96127.609375,
+            "distanceToNextSpeedLimit": 0,
+            "gradient": -0.07526543736457825,
+            "signalAspectClass": "Clear",
+            "signalPropertyGuid": "29E2007444591CEEF3BB67B2B4D5668F",
+            "bSignalIsPermissive": false,
+            "speedLimit": {
+              "value": 55.87999725341797
+            },
+            "nextSpeedLimit": {
+              "value": 0
+            },
+            "currentSpeedLimitSource": "TrackSpeedLimit",
+            "trackMaxSpeed": {
+              "value": 55.87999725341797
+            },
+            "serviceMaxSpeed": {
+              "value": 3.4028234663852886e+38
+            },
+            "formationMaxSpeed": {
+              "value": 62.58559799194336
+            },
+            "nextSignalPosition": {
+              "x": 16090.349609375,
+              "y": 185128.296875,
+              "z": 9205.4765625
+            },
+            "nextSpeedLimitPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "nextSpeedLimits": [],
+            "nextSignals": [
+              {
+                "value": "Clear",
+                "distanceToNextSignal": 96122.609375,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "value": "Clear",
+                "distanceToNextSignal": 217956.90625,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "value": "Clear",
+                "distanceToNextSignal": 348269.90625,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "value": "Clear",
+                "distanceToNextSignal": 458907.78125,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "value": "Clear",
+                "distanceToNextSignal": 595495.6875,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "value": "Approach",
+                "distanceToNextSignal": 723217.1875,
+                "nextSignalPosition": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              }
+            ],
+            "nextSignalProperty": {
+              "ribbonReference": "67C47DF54637257CC2442B8305C0046A",
+              "propertyReference": "29E2007444591CEEF3BB67B2B4D5668F"
+            },
+            "trackRestrictionQuery": {
+              "maxSearchDistance": {
+                "value": 10000
+              },
+              "searchDirection": "Forwards",
+              "bWholeFormation": true,
+              "bUseOverrideAncillarySpeedClasses": false,
+              "maxReturnedSignals": 4,
+              "signalFlags": 7,
+              "maxReturnedSpeedLimits": 4,
+              "speedLimitFlags": 1,
+              "speedCurveQueries": [],
+              "speedCurveFlags": 515,
+              "overrideAncillarySpeedClasses": [],
+              "foundSignals": [],
+              "foundSpeedLimits": [],
+              "outCurrentTrackSpeedLimit": 3.3999999521443642e+38
+            }
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.CanShowLockUnlockDoorsShortcuts",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.AskFastTravel",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "SpawnPoint": {
+            "pointTag": "None",
+            "pointName": "",
+            "bAvailableInFrontEnd": true,
+            "bAvailableInFastTravel": true
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetViewportSize",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "SizeX": 5760,
+          "SizeY": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetMousePosition",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true,
+          "LocationX": 4010,
+          "LocationY": 1.401298464324817e-45
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetInputMouseDelta",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "DeltaX": 0,
+          "DeltaY": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetInputMotionState",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Tilt": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "RotationRate": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "Gravity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "Acceleration": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetFocalLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1718.21484375,
+            "y": 98298.53125,
+            "z": 9371.275390625
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.DeprojectMousePositionToWorld",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true,
+          "WorldLocation": {
+            "x": 1934.3734130859375,
+            "y": 99907.78125,
+            "z": 9493.8642578125
+          },
+          "WorldDirection": {
+            "x": -0.6630806922912598,
+            "y": 0.738406240940094,
+            "z": -0.12280070781707764
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.CanRestartPlayer",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.SetInitialLocationAndRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "NewLocation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "NewRotation": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.SetControlRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "NewRotation": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsPlayerController",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsMoveInputIgnored",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsLookInputIgnored",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsLocalPlayerController",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsLocalController",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetDesiredRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetControlRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.K2_GetActorRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.K2_GetActorLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsChildActor",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsActorTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.IsActorBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.HasAuthority",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetVelocity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetTransform",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "translation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale3D": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetTickableWhenPaused",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetRemoteRole",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetLocalRole",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 3
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetLifeSpan",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetGameTimeSinceCreation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 622.2530517578125
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorUpVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorTimeDilation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorScale3D",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorRightVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorRelativeScale3D",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorForwardVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorEyesViewPoint",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "OutLocation": {
+            "x": 7878.052734375,
+            "y": 48032.6015625,
+            "z": 9420.4169921875
+          },
+          "OutRotation": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.Function.GetActorEnableCollision",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "TS2DefaultPlayerController_C_2147476957"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "TS2DefaultPlayerController_C"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.RelativeLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.RelativeRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.RelativeScale3D",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bAbsoluteLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bAbsoluteRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bAbsoluteScale",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bVisible",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bShouldUpdatePhysicsVolume",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bHiddenInGame",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bUseAttachParentBound",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.Mobility",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 2
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.DetailMode",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.K2_GetComponentToWorld",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "translation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale3D": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.K2_GetComponentScale",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.K2_GetComponentRotation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.K2_GetComponentLocation",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.IsVisible",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": true
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.IsAnySimulatingPhysics",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetUpVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetShouldUpdatePhysicsVolume",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetRightVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetRelativeTransform",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "translation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale3D": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetNumChildrenComponents",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetForwardVector",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetComponentVelocity",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "TransformComponent0"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/TransformComponent0.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "SceneComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Function.GetControllerMouseDelta",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "DeltaX": 0,
+          "DeltaY": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "PC_InputComponent0"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PC_InputComponent0.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "InputComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Function.GetControllerMouseDelta",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "DeltaX": 0,
+          "DeltaY": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "GamepadCursorInput"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/GamepadCursorInput.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "InputComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Function.GetControllerMouseDelta",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "DeltaX": 0,
+          "DeltaY": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "PhotoModeInputComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/PhotoModeInputComponent.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "InputComponent"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Property.bReplicates",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Property.bAutoActivate",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Property.bIsEditorOnly",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "Value": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Function.IsComponentTickEnabled",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Function.IsBeingDestroyed",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Function.IsActive",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": false
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.Function.GetComponentTickInterval",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ReturnValue": 0
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.ObjectName",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectName": "DriverInputComponent_2147464407"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/Player/DriverInputComponent_2147464407.ObjectClass",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "ObjectClass": "DriverInputComponent"
+        }
+      }
+    }
+  ],
+  "completedPaths": [
+    "Player/TransformComponent0",
+    "Player/PC_InputComponent0",
+    "Player/GamepadCursorInput",
+    "Player/PhotoModeInputComponent",
+    "Player/DriverInputComponent_2147464407",
+    "Player"
+  ]
+}

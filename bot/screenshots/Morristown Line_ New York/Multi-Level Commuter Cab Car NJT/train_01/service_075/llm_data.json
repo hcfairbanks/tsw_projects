@@ -1,0 +1,202 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6659 NY Penn Station - Dover",
+    "start_time": "18:47",
+    "duration": "01:26",
+    "tonnage": 624.3,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.7503753023086,
+    "lng": -73.99469841946059,
+    "current_service_name": "NJT-6659"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:47:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:47:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:49:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track B - 18:59:30",
+      "location": "Secaucus Junction Track B",
+      "time1": "18:59:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:00:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 2 - 19:11:30",
+      "location": "Newark Broad Street Track 2",
+      "time1": "19:11:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:12:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Track 1 - 19:30:00",
+      "location": "Summit Track 1",
+      "time1": "19:30:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:31:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Chatham Track 1 - 19:37:30",
+      "location": "Chatham Track 1",
+      "time1": "19:37:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:38:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Madison Track 1 - 19:41:30",
+      "location": "Madison Track 1",
+      "time1": "19:41:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:42:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Convent Track 1 - 19:47:30",
+      "location": "Convent Track 1",
+      "time1": "19:47:30",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:48:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morristown Track 1 - 19:51:30",
+      "location": "Morristown Track 1",
+      "time1": "19:51:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:52:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morris Plains Track 1 - 19:56:30",
+      "location": "Morris Plains Track 1",
+      "time1": "19:56:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "19:57:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Denville Track 1 - 20:04:30",
+      "location": "Denville Track 1",
+      "time1": "20:04:30",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:05:00",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Dover Track 2 - 20:14:00",
+      "location": "Dover Track 2",
+      "time1": "20:14:00",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 22
+    }
+  ]
+}

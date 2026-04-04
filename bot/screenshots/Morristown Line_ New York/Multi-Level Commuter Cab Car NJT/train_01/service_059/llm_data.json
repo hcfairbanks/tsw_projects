@@ -1,0 +1,42 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "246 Montclair State University - Hoboken",
+    "start_time": "16:34",
+    "duration": "00:17",
+    "tonnage": 626.2,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.74744520146125,
+    "lng": -74.171071023654,
+    "current_service_name": "NJT-246"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:36:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 08 - 16:52:00",
+      "location": "Hoboken Terminal Track 08",
+      "time1": "16:52:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

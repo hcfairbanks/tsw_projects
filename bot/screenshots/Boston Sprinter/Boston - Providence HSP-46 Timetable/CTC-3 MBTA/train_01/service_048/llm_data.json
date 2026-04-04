@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "MBTA Norwood Central #743 (Depot - Boston)",
+    "start_time": "15:50",
+    "duration": "00:10",
+    "tonnage": 509.8,
+    "car_count": 6,
+    "train_length": 494.6,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.33350417708168,
+    "lng": -71.06032686736424
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 15:50:00",
+      "location": "",
+      "time1": "",
+      "time2": "15:50:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 04",
+      "location": "Boston South Station Track 04",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

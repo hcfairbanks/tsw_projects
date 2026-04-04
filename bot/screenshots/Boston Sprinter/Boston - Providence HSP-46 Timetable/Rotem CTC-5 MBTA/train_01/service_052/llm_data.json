@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #821 (Depot - Boston)",
+    "start_time": "16:05",
+    "duration": "00:10",
+    "tonnage": 475.1,
+    "car_count": 6,
+    "train_length": 151.4,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.3330901132388,
+    "lng": -71.0599099137662,
+    "current_service_name": "MBTA Providence #821 (SHSY to Boston)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:05:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:05:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 05",
+      "location": "Boston South Station Track 05",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

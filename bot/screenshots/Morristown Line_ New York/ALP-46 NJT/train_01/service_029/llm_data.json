@@ -1,0 +1,178 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6317 NY Penn Station - Summit",
+    "start_time": "09:22",
+    "duration": "00:45",
+    "tonnage": 626.1,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.75108317381046,
+    "lng": -73.99522260175952,
+    "current_service_name": "NJT-6317"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 09:22:00",
+      "location": "",
+      "time1": "",
+      "time2": "9:22:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:23:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track B - 09:30:30",
+      "location": "Secaucus Junction Track B",
+      "time1": "09:30:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:31:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 3 - 09:40:00",
+      "location": "Newark Broad Street Track 3",
+      "time1": "09:40:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:40:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 3 - 09:45:00",
+      "location": "Brick Church Track 3",
+      "time1": "09:45:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:45:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 3 - 09:47:30",
+      "location": "Orange Track 3",
+      "time1": "09:47:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:48:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Orange Track 3 - 09:52:30",
+      "location": "South Orange Track 3",
+      "time1": "09:52:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:53:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Maplewood Track 3 - 09:55:30",
+      "location": "Maplewood Track 3",
+      "time1": "09:55:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:56:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Millburn Track 2 - 09:58:30",
+      "location": "Millburn Track 2",
+      "time1": "09:58:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:59:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 2 - 10:01:30",
+      "location": "Short Hills Track 2",
+      "time1": "10:01:30",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:02:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Wall Track - 10:08:00",
+      "location": "Summit Wall Track",
+      "time1": "10:08:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

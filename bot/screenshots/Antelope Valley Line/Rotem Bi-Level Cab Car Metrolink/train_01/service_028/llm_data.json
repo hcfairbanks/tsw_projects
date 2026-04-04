@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "VC 116: Ventura - LA Union",
+    "start_time": "15:13",
+    "duration": "00:19",
+    "tonnage": 414.8,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.17894177695032,
+    "lng": -118.31284215496498,
+    "current_service_name": "P_VC_116"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 15:13:00",
+      "location": "",
+      "time1": "",
+      "time2": "15:13:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:14:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Glendale Track 2 - 15:20:00",
+      "location": "Glendale Track 2",
+      "time1": "15:20:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:21:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "LA Union Station Track 07 - 15:33:00",
+      "location": "LA Union Station Track 07",
+      "time1": "15:33:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

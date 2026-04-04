@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Sprinter
+Train:       Acela Express Amtrak
+Started:     2026-03-20 14:14:00
+Duration:    0:44:02
+Trains:      1
+Services:    20
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    20         0:43:56

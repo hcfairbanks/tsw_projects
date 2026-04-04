@@ -1,0 +1,91 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Franklin #704 (Readville - Boston)",
+    "start_time": "07:24",
+    "duration": "00:18",
+    "tonnage": 510.6,
+    "car_count": 6,
+    "train_length": 488,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.239733517527284,
+    "lng": -71.1331589736855,
+    "current_service_name": "MBTA Franklin #704 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:24:56",
+      "location": "",
+      "time1": "",
+      "time2": "7:24:56",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:25:26",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 3 - 07:33:55",
+      "location": "Ruggles Track 3",
+      "time1": "07:33:55",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:34:40",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 3 - 07:37:33",
+      "location": "Boston Back Bay Track 3",
+      "time1": "07:37:33",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:38:18",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 05 - 07:43:47",
+      "location": "Boston South Station Track 05",
+      "time1": "07:43:47",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

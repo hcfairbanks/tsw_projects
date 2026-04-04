@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "MT521EQ Worcester - Worcester Yard (Part 2)",
+    "start_time": "18:47",
+    "duration": "00:04",
+    "tonnage": 682.5,
+    "car_count": 10,
+    "train_length": 255.6
+  },
+  "location": {
+    "lat": 42.2668746315281,
+    "lng": -71.77956967555755,
+    "current_service_name": "MT521EQ"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:47:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:47:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "18:48:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Worcester Layover Yard Siding 3",
+      "location": "Worcester Layover Yard Siding 3",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

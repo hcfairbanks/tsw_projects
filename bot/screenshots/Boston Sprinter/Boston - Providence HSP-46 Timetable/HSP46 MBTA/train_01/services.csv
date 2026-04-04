@@ -1,0 +1,4 @@
+number,page,click,service_id,service_name,time,duration
+75,page 12,click (1391 1230),,MBTA Providence #836 (Overnight Storage),23:03:00,00:08:00
+76,page 12,click (1391 1303),,MBTA Providence #838 (Overnight Storage),23:44:00,00:08:00
+77,page 12,click (1391 1376),,MBTA Franklin #730 (Overnight Storage),23:48:00,00:08:00

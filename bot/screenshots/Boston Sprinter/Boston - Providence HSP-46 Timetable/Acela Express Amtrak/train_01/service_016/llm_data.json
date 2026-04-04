@@ -1,0 +1,90 @@
+{
+  "level_info": {
+    "service_name": "Amtrak Acela Express #2164 (Providence - Boston)",
+    "start_time": "17:58",
+    "duration": "00:48",
+    "tonnage": 585.5,
+    "car_count": 8,
+    "train_length": 663.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 41.82953140833253,
+    "lng": -71.41277832395801,
+    "current_service_name": "AMTK2164_BOS_PORTAL"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:58:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:58:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:01:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 2 - 18:28:00",
+      "location": "Route 128 Track 2",
+      "time1": "18:28:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:29:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 2 - 18:39:00",
+      "location": "Boston Back Bay Track 2",
+      "time1": "18:39:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:40:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 07 - 18:46:30",
+      "location": "Boston South Station Track 07",
+      "time1": "18:46:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

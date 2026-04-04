@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "Train 600 Southeast to GCT",
+    "start_time": "16:24",
+    "duration": "00:41",
+    "tonnage": 378.2,
+    "car_count": 6,
+    "train_length": 156.0
+  },
+  "location": {
+    "lat": 41.03214913000611,
+    "lng": -73.7751984677448,
+    "current_service_name": "600"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:24:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 1 - 16:47:00",
+      "location": "Harlem 125th Street Track 1",
+      "time1": "16:47:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:48:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 38 - 17:06:00",
+      "location": "Grand Central Track 38",
+      "time1": "17:06:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

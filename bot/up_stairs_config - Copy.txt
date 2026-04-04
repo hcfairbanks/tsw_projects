@@ -1,0 +1,244 @@
+import json
+import os
+
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REFERENCES_DIR = os.path.join(BASE_DIR, "references")
+SCREENSHOTS_DIR = os.path.join(BASE_DIR, "screenshots")
+CALIBRATION_FILE = os.path.join(BASE_DIR, "calibration.json")
+
+# Parent app server URL (for OCR and database uploads)
+SERVER_URL = "http://localhost:3000"
+
+# Steam
+STEAM_APP_ID = "3656800"
+GAME_PROCESS_NAME = "BootstrapPackagedGame.exe"
+
+# Timeouts (seconds)
+GAME_LAUNCH_TIMEOUT = 120   # TSW takes a while to start
+SCREEN_TIMEOUT = 60         # waiting for a menu screen to appear
+CLICK_SETTLE_DELAY = 2.0    # pause after clicking before looking for next screen
+
+# Image matching confidence thresholds
+CONFIDENCE = 0.8            # default for menu tiles
+CONFIDENCE_LOW = 0.6        # for warning/splash screens (simpler visuals)
+
+# Reference image paths
+REF_WARNING_CONTINUE = os.path.join(REFERENCES_DIR, "warning_continue.png")
+REF_SPLASH_CONTINUE = os.path.join(REFERENCES_DIR, "splash_continue.png")
+REF_TO_THE_TRAINS = os.path.join(REFERENCES_DIR, "to_the_trains.png")
+REF_CHOOSE_A_ROUTE = os.path.join(REFERENCES_DIR, "choose_a_route.png")
+REF_CHOOSE_A_ROUTE_SCREEN = os.path.join(REFERENCES_DIR, "choose_a_route_screen.png")
+REF_ROUTE_FILTER = os.path.join(REFERENCES_DIR, "route_filter.png")
+REF_TIMETABLE = os.path.join(REFERENCES_DIR, "timetable.png")
+REF_CLASS_FILTER = os.path.join(REFERENCES_DIR, "class_filter.png")
+REF_EXIT_TO_MAIN_MENU = os.path.join(REFERENCES_DIR, "exit_to_main_menu.png")
+REF_GET_STARTED_1 = os.path.join(REFERENCES_DIR, "get_started_1.png")
+REF_GET_STARTED_2 = os.path.join(REFERENCES_DIR, "get_started_2.png")
+REF_DRIVER_1 = os.path.join(REFERENCES_DIR, "driver_1.png")
+REF_DRIVER_2 = os.path.join(REFERENCES_DIR, "driver_2.png")
+REF_EXIT_GAME_1 = os.path.join(REFERENCES_DIR, "exit_game_1.png")
+REF_EXIT_GAME_2 = os.path.join(REFERENCES_DIR, "exit_game_2.png")
+REF_EXIT_GAME_DIALOGBOX = os.path.join(REFERENCES_DIR, "exit_game_dialogbox.png")
+REF_EXIT_GAME_YES_1 = os.path.join(REFERENCES_DIR, "exit_game_yes_1.png")
+REF_EXIT_GAME_YES_2 = os.path.join(REFERENCES_DIR, "exit_game_yes_2.png")
+REF_SERVICE_FILTER = os.path.join(REFERENCES_DIR, "service_filter.png")
+REF_SERVICE_NAME_SEARCH = os.path.join(REFERENCES_DIR, "service_name_search.png")
+REF_EXTRA_SECTION_FILTER = os.path.join(REFERENCES_DIR, "extra_section.png")
+
+# Spreadsheet directory
+SPREADSHEETS_DIR = os.path.join(BASE_DIR, "spreadsheets")
+
+################################################################################
+
+# Route to select
+
+
+# ROUTE_NAME = "Boston Sprinter"
+# ROUTE_NAME = "Antelope Valley Line"
+
+# Next 
+ROUTE_NAME = "Boston Worcester"
+# ROUTE_NAME = "LGV Mediterranee"
+# ROUTE_NAME = "River Line"
+# ROUTE_NAME = "Morristown Line: New York"
+# ROUTE_NAME = "Berninalinie"
+# ROUTE_NAME = "Spirit of Steam: Liverpool - Crewe"
+
+# Finished
+#ROUTE_NAME = "WCML South - London Euston to Milton Keynes"
+
+# Extra section — some routes have an additional selection page between
+# clicking Timetable and the train selection (e.g. choosing a
+# specific timetable variant).  Set EXTRA_SECTION = True and list the
+# choices the bot should cycle through.  For each choice every train
+# on the route is checked; trains with no services for a given
+# choice are skipped automatically.
+
+
+EXTRA_SECTION = False
+# EXTRA_SECTION_CHOICES = [
+#     "Boston - Providence HSP-46 Timetable",
+#     "Boston - Providence Timetable",
+# ]
+
+
+
+
+
+# Game screen region (x, y, width, height) — game is on the middle monitor
+GAME_REGION = (1920, 0, 1920, 1080)
+
+# Game window position — move window here after launch (None = don't reposition)
+GAME_WINDOW_X = None
+GAME_WINDOW_Y = None
+
+EXTRA_SECTION_TILE_X = 2235  # absolute screen X to click the first result tile
+EXTRA_SECTION_TILE_Y = 400   # absolute screen Y to click the first result tile
+
+################################################################################
+
+
+# Trains are resolved dynamically from the database at runtime.
+# Trains are resolved by name from the database.
+
+# Service list scroll area (pixel coordinates)
+SERVICE_LIST_LEFT = 2072
+SERVICE_LIST_TOP = 320
+SERVICE_LIST_RIGHT = 2750
+SERVICE_LIST_BOTTOM = 950
+SERVICE_BOX_HEIGHT = 58       # actual box height in pixels
+SERVICE_BOX_STRIDE = 69       # distance between box tops (58 box + 11 gap)
+SCROLL_PER_BOX = -268         # scroll clicks to move one box down (may need re-tuning)
+FIRST_BOX_TOP = 19            # row offset from SERVICE_LIST_TOP to top of first box
+BOXES_PER_PAGE = 8            # visible boxes on one page
+BOXES_TO_SCROLL = 6           # boxes to scroll per page advance
+OVERLAP_BOXES = 2             # boxes to skip on subsequent pages (overlap)
+SCROLL_AMOUNT = SCROLL_PER_BOX * BOXES_TO_SCROLL  # -1608
+BOX_EXTRA_RIGHT = 20          # extra px on right for wider box crop
+BOX_EXTRA_TOP = 20            # extra px above box for taller crop
+SERVICE_BOX_RIGHT_TRIM = 75   # px to trim from right edge of 1_service.png to exclude clock icon
+SERVICE_BOX_BORDER_RGB = (0x57, 0xa6, 0xd0)  # #57a6d0 — border color of service rectangles
+SERVICE_BOX_COLOR_TOLERANCE = 20              # per-channel tolerance for color matching
+
+# Per-page Y drift correction (pixels to add to click_y after scrolling)
+# Page 0 has no scroll so no drift. Positive = click lower, negative = click higher.
+PAGE_Y_DRIFT = {
+    6: 3,
+    7: 3,
+    8: 4,
+    9: 4,
+    10: 5,
+}
+LEVEL_LOAD_TIMEOUT = 180     # seconds to wait for a level to load
+
+# Schedule screen area (pixel coordinates)
+REF_SCHEDULE = os.path.join(REFERENCES_DIR, "schedule.png")
+SCHEDULE_LEFT = 2050
+SCHEDULE_TOP = 230
+SCHEDULE_RIGHT = 3540
+SCHEDULE_BOTTOM = 920
+SCHEDULE_TOP_BORDER_RGB = (0x05, 0x97, 0x44)     # #059744 — top border of schedule
+SCHEDULE_BOTTOM_BORDER_RGB = (0xc5, 0xe4, 0xe9)  # #c5e4e9 — bottom border of schedule
+SCHEDULE_COLOR_TOLERANCE = 20
+
+# Train scroll box (pixel coordinates)
+TRAIN_BOX_LEFT = 3212
+TRAIN_BOX_TOP = 400
+TRAIN_BOX_WIDTH = 476
+TRAIN_BOX_HEIGHT = 270
+TRAIN_SCROLL_PER_BOX = -310   # scroll clicks to move one train box down
+TRAIN_VISIBLE_COUNT = 4       # trains visible without scrolling
+TRAIN_FIRST_Y_OFFSET = 60     # Y offset from TRAIN_BOX_TOP to center of first train
+TRAIN_BOX_STRIDE = 85         # distance between train box centers
+
+# Level splash screen region (x, y, width, height) — the info panel on the "Get Started" screen
+LEVEL_SCREEN_LEFT = 2488
+LEVEL_SCREEN_TOP = 301
+LEVEL_SCREEN_RIGHT = 3271
+LEVEL_SCREEN_BOTTOM = 825
+LEVEL_SCREEN_REGION = (LEVEL_SCREEN_LEFT, LEVEL_SCREEN_TOP,
+                       LEVEL_SCREEN_RIGHT - LEVEL_SCREEN_LEFT,
+                       LEVEL_SCREEN_BOTTOM - LEVEL_SCREEN_TOP)
+
+# Level info crop regions (x, y, width, height) — captured from the "Get Started" screen
+LEVEL_CROP_TONNAGE = (2836, 557, 55, 58)
+LEVEL_CROP_CAR_COUNT = (2985, 554, 25, 59)
+LEVEL_CROP_CAR_LENGTH = (3085, 557, 60, 58)
+LEVEL_CROP_SERVICE_NAME = (2492, 305, 784, 70)
+
+# Schedule extraction method
+# USE_LLM_SCHEDULE: True = use LLM to parse schedule into structured JSON, False = use OCR
+# SCHEDULE_LLM_PROVIDER: "local" = local LM Studio, "claude" = Claude API
+USE_LLM_SCHEDULE = True
+SCHEDULE_LLM_PROVIDER = "claude"    # "local" or "claude"
+
+
+# Level info extraction method
+# USE_LLM_LEVEL_INFO: True = use LLM to extract level info from full screen, False = use OCR crops
+# LEVEL_INFO_LLM_PROVIDER: "local" = local LM Studio, "claude" = Claude API
+USE_LLM_LEVEL_INFO = True
+LEVEL_INFO_LLM_PROVIDER = "claude"   # "local" or "claude"
+
+# Train counting method
+# TRAIN_COUNT_LLM_PROVIDER: "local" = local LM Studio, "claude" = Claude API
+TRAIN_COUNT_LLM_PROVIDER = "claude"  # "local" or "claude"
+
+# OCR level info crops (tonnage, car count, train length)
+# When False, skips capturing 2a/2b/2c crop images — LLM extracts these from llm_level_info.json instead
+USE_OCR_LEVEL_CROPS = False
+
+# Limits (None = unlimited)
+MAX_TRAINS_PER_CLASS = None   # cap trains per train for faster testing
+MAX_SERVICES_PER_TRAIN = None   # cap services per train for faster testing
+
+# Retry settings (when a click doesn't register and the screen doesn't change)
+RETRY_MAX = 3                # total click attempts before giving up
+RETRY_WAIT = 30              # seconds to wait for screen change before retrying click
+
+# Auto-restart settings
+MAX_RETRIES_PER_SERVICE = 3  # max restart attempts for the same train+service
+BATCH_SIZE = 85              # restart game after this many services (None = no restart)
+
+################################################################################
+# Calibration override — load values from calibration.json if it exists
+################################################################################
+
+_CALIBRATION_KEYS = [
+    "GAME_WINDOW_X", "GAME_WINDOW_Y",
+    "EXTRA_SECTION_TILE_X", "EXTRA_SECTION_TILE_Y",
+    "SERVICE_LIST_LEFT", "SERVICE_LIST_TOP", "SERVICE_LIST_RIGHT", "SERVICE_LIST_BOTTOM",
+    "SERVICE_BOX_HEIGHT", "SERVICE_BOX_STRIDE", "SCROLL_PER_BOX",
+    "FIRST_BOX_TOP", "BOXES_PER_PAGE",
+    "SCHEDULE_LEFT", "SCHEDULE_TOP", "SCHEDULE_RIGHT", "SCHEDULE_BOTTOM",
+    "TRAIN_BOX_LEFT", "TRAIN_BOX_TOP", "TRAIN_BOX_WIDTH", "TRAIN_BOX_HEIGHT",
+    "TRAIN_SCROLL_PER_BOX", "TRAIN_VISIBLE_COUNT",
+    "TRAIN_FIRST_Y_OFFSET", "TRAIN_BOX_STRIDE",
+    "LEVEL_SCREEN_LEFT", "LEVEL_SCREEN_TOP",
+    "LEVEL_SCREEN_RIGHT", "LEVEL_SCREEN_BOTTOM",
+]
+
+_CALIBRATION_TUPLE_KEYS = [
+    "GAME_REGION",
+    "LEVEL_SCREEN_REGION",
+    "LEVEL_CROP_TONNAGE", "LEVEL_CROP_CAR_COUNT",
+    "LEVEL_CROP_CAR_LENGTH", "LEVEL_CROP_SERVICE_NAME",
+]
+
+if os.path.isfile(CALIBRATION_FILE):
+    with open(CALIBRATION_FILE, "r") as _f:
+        _cal = json.load(_f)
+    _g = globals()
+    for _key in _CALIBRATION_KEYS:
+        if _key in _cal:
+            _g[_key] = _cal[_key]
+    for _key in _CALIBRATION_TUPLE_KEYS:
+        if _key in _cal:
+            _g[_key] = tuple(_cal[_key])
+    # Recompute derived values
+    BOXES_TO_SCROLL = BOXES_PER_PAGE - OVERLAP_BOXES
+    SCROLL_AMOUNT = SCROLL_PER_BOX * BOXES_TO_SCROLL
+    LEVEL_SCREEN_REGION = (LEVEL_SCREEN_LEFT, LEVEL_SCREEN_TOP,
+                           LEVEL_SCREEN_RIGHT - LEVEL_SCREEN_LEFT,
+                           LEVEL_SCREEN_BOTTOM - LEVEL_SCREEN_TOP)
+    print(f"[config] Loaded calibration from {CALIBRATION_FILE}")

@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "6665 Sunnyside Yard - NY Penn Station",
+    "start_time": "17:48",
+    "duration": "00:15",
+    "tonnage": 635.6,
+    "car_count": 10,
+    "train_length": 252.7
+  },
+  "location": {
+    "lat": 40.748191587612276,
+    "lng": -73.932893182163,
+    "current_service_name": "NJT-6665-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:48:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:48:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "17:50:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "East River Tunnels Track 2 West - 17:59:00",
+      "location": "East River Tunnels Track 2 West",
+      "time1": "17:59:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 12",
+      "location": "New York Penn Track 12",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

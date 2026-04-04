@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Needham #619 (Depot to Boston)",
+    "start_time": "16:55",
+    "duration": "00:05",
+    "tonnage": 480.3,
+    "car_count": 6,
+    "train_length": 496.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.33975540749981,
+    "lng": -71.06013313420881,
+    "current_service_name": "MBTA Needham #619 (Outbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:55:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:55:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 06",
+      "location": "Boston South Station Track 06",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

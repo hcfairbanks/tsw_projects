@@ -1,0 +1,3863 @@
+{
+  "_format": "relative_to_game_window",
+  "entries": {
+    "1": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 371
+    },
+    "2": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 440
+    },
+    "3": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "4": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "5": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "6": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "7": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "8": {
+      "page": 0,
+      "scrolls": 0,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "9": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "10": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "11": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "12": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "13": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "14": {
+      "page": 1,
+      "scrolls": 6,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "15": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "16": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "17": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "18": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "19": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "20": {
+      "page": 2,
+      "scrolls": 12,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "21": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "22": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "23": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "24": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "25": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "26": {
+      "page": 3,
+      "scrolls": 18,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "27": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "28": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "29": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "30": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "31": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "32": {
+      "page": 4,
+      "scrolls": 24,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "33": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "34": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "35": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "36": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "37": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "38": {
+      "page": 5,
+      "scrolls": 30,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "39": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "40": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "41": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "42": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "43": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "44": {
+      "page": 6,
+      "scrolls": 36,
+      "click_x": 491,
+      "click_y": 859
+    },
+    "45": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "46": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "47": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "48": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "49": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "50": {
+      "page": 7,
+      "scrolls": 42,
+      "click_x": 491,
+      "click_y": 869
+    },
+    "51": {
+      "page": 8,
+      "scrolls": 48,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "52": {
+      "page": 8,
+      "scrolls": 48,
+      "click_x": 491,
+      "click_y": 593
+    },
+    "53": {
+      "page": 8,
+      "scrolls": 48,
+      "click_x": 491,
+      "click_y": 662
+    },
+    "54": {
+      "page": 8,
+      "scrolls": 48,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "55": {
+      "page": 8,
+      "scrolls": 48,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "56": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 459
+    },
+    "57": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 524
+    },
+    "58": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "59": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "60": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "61": {
+      "page": 9,
+      "scrolls": 54,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "62": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 459
+    },
+    "63": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "64": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "65": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "66": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "67": {
+      "page": 10,
+      "scrolls": 60,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "68": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 459
+    },
+    "69": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 539
+    },
+    "70": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "71": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "72": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "73": {
+      "page": 11,
+      "scrolls": 66,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "74": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 474
+    },
+    "75": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "76": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "77": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "78": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "79": {
+      "page": 12,
+      "scrolls": 72,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "80": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 449
+    },
+    "81": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "82": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "83": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 681
+    },
+    "84": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "85": {
+      "page": 13,
+      "scrolls": 78,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "86": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "87": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "88": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "89": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "90": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "91": {
+      "page": 14,
+      "scrolls": 84,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "92": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "93": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "94": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 622
+    },
+    "95": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 691
+    },
+    "96": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "97": {
+      "page": 15,
+      "scrolls": 90,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "98": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "99": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "100": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "101": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 681
+    },
+    "102": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "103": {
+      "page": 16,
+      "scrolls": 96,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "104": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 483
+    },
+    "105": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "106": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "107": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "108": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "109": {
+      "page": 17,
+      "scrolls": 102,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "110": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 493
+    },
+    "111": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "112": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 622
+    },
+    "113": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 691
+    },
+    "114": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "115": {
+      "page": 18,
+      "scrolls": 108,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "116": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "117": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 563
+    },
+    "118": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "119": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "120": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 770
+    },
+    "121": {
+      "page": 19,
+      "scrolls": 114,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "122": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "123": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 563
+    },
+    "124": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "125": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "126": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 770
+    },
+    "127": {
+      "page": 20,
+      "scrolls": 120,
+      "click_x": 491,
+      "click_y": 839
+    },
+    "128": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "129": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "130": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "131": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "132": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 770
+    },
+    "133": {
+      "page": 21,
+      "scrolls": 126,
+      "click_x": 491,
+      "click_y": 839
+    },
+    "134": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "135": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "136": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "137": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "138": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "139": {
+      "page": 22,
+      "scrolls": 132,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "140": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "141": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 573
+    },
+    "142": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 642
+    },
+    "143": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 711
+    },
+    "144": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 780
+    },
+    "145": {
+      "page": 23,
+      "scrolls": 138,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "146": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "147": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 573
+    },
+    "148": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 642
+    },
+    "149": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 711
+    },
+    "150": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 780
+    },
+    "151": {
+      "page": 24,
+      "scrolls": 144,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "152": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "153": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "154": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "155": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "156": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "157": {
+      "page": 25,
+      "scrolls": 150,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "158": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "159": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "160": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "161": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "162": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "163": {
+      "page": 26,
+      "scrolls": 156,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "164": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "165": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "166": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "167": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "168": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "169": {
+      "page": 27,
+      "scrolls": 162,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "170": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "171": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "172": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "173": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "174": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "175": {
+      "page": 28,
+      "scrolls": 168,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "176": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "177": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "178": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 657
+    },
+    "179": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "180": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "181": {
+      "page": 29,
+      "scrolls": 174,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "182": {
+      "page": 30,
+      "scrolls": 180,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "183": {
+      "page": 30,
+      "scrolls": 180,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "184": {
+      "page": 30,
+      "scrolls": 180,
+      "click_x": 491,
+      "click_y": 657
+    },
+    "185": {
+      "page": 30,
+      "scrolls": 180,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "186": {
+      "page": 30,
+      "scrolls": 180,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "187": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 454
+    },
+    "188": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "189": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "190": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "191": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "192": {
+      "page": 31,
+      "scrolls": 186,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "193": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 454
+    },
+    "194": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "195": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "196": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "197": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "198": {
+      "page": 32,
+      "scrolls": 192,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "199": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 454
+    },
+    "200": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "201": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "202": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "203": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "204": {
+      "page": 33,
+      "scrolls": 198,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "205": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 469
+    },
+    "206": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "207": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 603
+    },
+    "208": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 672
+    },
+    "209": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 741
+    },
+    "210": {
+      "page": 34,
+      "scrolls": 204,
+      "click_x": 491,
+      "click_y": 810
+    },
+    "211": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 464
+    },
+    "212": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "213": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 603
+    },
+    "214": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 677
+    },
+    "215": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 746
+    },
+    "216": {
+      "page": 35,
+      "scrolls": 210,
+      "click_x": 491,
+      "click_y": 815
+    },
+    "217": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 474
+    },
+    "218": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 543
+    },
+    "219": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "220": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 681
+    },
+    "221": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 750
+    },
+    "222": {
+      "page": 36,
+      "scrolls": 216,
+      "click_x": 491,
+      "click_y": 819
+    },
+    "223": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "224": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 543
+    },
+    "225": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "226": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "227": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "228": {
+      "page": 37,
+      "scrolls": 222,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "229": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "230": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "231": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "232": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "233": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "234": {
+      "page": 38,
+      "scrolls": 228,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "235": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 483
+    },
+    "236": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 554
+    },
+    "237": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 622
+    },
+    "238": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "239": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "240": {
+      "page": 39,
+      "scrolls": 234,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "241": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 483
+    },
+    "242": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "243": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 622
+    },
+    "244": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "245": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "246": {
+      "page": 40,
+      "scrolls": 240,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "247": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 488
+    },
+    "248": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "249": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "250": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "251": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "252": {
+      "page": 41,
+      "scrolls": 246,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "253": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 494
+    },
+    "254": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 563
+    },
+    "255": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "256": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "257": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "258": {
+      "page": 42,
+      "scrolls": 252,
+      "click_x": 491,
+      "click_y": 839
+    },
+    "259": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "260": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "261": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "262": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "263": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "264": {
+      "page": 43,
+      "scrolls": 258,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "265": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "266": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "267": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "268": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "269": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "270": {
+      "page": 44,
+      "scrolls": 264,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "271": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "272": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "273": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "274": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "275": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "276": {
+      "page": 45,
+      "scrolls": 270,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "277": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "278": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 573
+    },
+    "279": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 642
+    },
+    "280": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "281": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 780
+    },
+    "282": {
+      "page": 46,
+      "scrolls": 276,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "283": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "284": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "285": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "286": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "287": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "288": {
+      "page": 47,
+      "scrolls": 282,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "289": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "290": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "291": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "292": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "293": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "294": {
+      "page": 48,
+      "scrolls": 288,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "295": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "296": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "297": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "298": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "299": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "300": {
+      "page": 49,
+      "scrolls": 294,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "301": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "302": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 583
+    },
+    "303": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 652
+    },
+    "304": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 721
+    },
+    "305": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 790
+    },
+    "306": {
+      "page": 50,
+      "scrolls": 300,
+      "click_x": 491,
+      "click_y": 859
+    },
+    "307": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "308": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "309": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "310": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "311": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "312": {
+      "page": 51,
+      "scrolls": 306,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "313": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 514
+    },
+    "314": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "315": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 657
+    },
+    "316": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "317": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "318": {
+      "page": 52,
+      "scrolls": 312,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "319": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 524
+    },
+    "320": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 593
+    },
+    "321": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 662
+    },
+    "322": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "323": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "324": {
+      "page": 53,
+      "scrolls": 318,
+      "click_x": 491,
+      "click_y": 869
+    },
+    "325": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "326": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "327": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "328": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "329": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "330": {
+      "page": 54,
+      "scrolls": 324,
+      "click_x": 491,
+      "click_y": 874
+    },
+    "331": {
+      "page": 55,
+      "scrolls": 330,
+      "click_x": 491,
+      "click_y": 524
+    },
+    "332": {
+      "page": 55,
+      "scrolls": 330,
+      "click_x": 491,
+      "click_y": 593
+    },
+    "333": {
+      "page": 55,
+      "scrolls": 330,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "334": {
+      "page": 55,
+      "scrolls": 330,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "335": {
+      "page": 55,
+      "scrolls": 330,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "336": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 464
+    },
+    "337": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "338": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "339": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "340": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "341": {
+      "page": 56,
+      "scrolls": 336,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "342": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 464
+    },
+    "343": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "344": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 603
+    },
+    "345": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 672
+    },
+    "346": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 741
+    },
+    "347": {
+      "page": 57,
+      "scrolls": 342,
+      "click_x": 491,
+      "click_y": 810
+    },
+    "348": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 474
+    },
+    "349": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 543
+    },
+    "350": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "351": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 681
+    },
+    "352": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 820
+    },
+    "353": {
+      "page": 58,
+      "scrolls": 348,
+      "click_x": 491,
+      "click_y": 819
+    },
+    "354": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 403
+    },
+    "355": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "356": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "357": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "358": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "359": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "360": {
+      "page": 59,
+      "scrolls": 354,
+      "click_x": 491,
+      "click_y": 819
+    },
+    "361": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "362": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 543
+    },
+    "363": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "364": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "365": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "366": {
+      "page": 60,
+      "scrolls": 360,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "367": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "368": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "369": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "370": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "371": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "372": {
+      "page": 61,
+      "scrolls": 366,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "373": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 488
+    },
+    "374": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "375": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "376": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 691
+    },
+    "377": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "378": {
+      "page": 62,
+      "scrolls": 372,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "379": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 488
+    },
+    "380": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "381": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "382": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "383": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "384": {
+      "page": 63,
+      "scrolls": 378,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "385": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 494
+    },
+    "386": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 563
+    },
+    "387": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "388": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "389": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 770
+    },
+    "390": {
+      "page": 64,
+      "scrolls": 384,
+      "click_x": 491,
+      "click_y": 839
+    },
+    "391": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 489
+    },
+    "392": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "393": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "394": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "395": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "396": {
+      "page": 65,
+      "scrolls": 390,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "397": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "398": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "399": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "400": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "401": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "402": {
+      "page": 66,
+      "scrolls": 396,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "403": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "404": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "405": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "406": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "407": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "408": {
+      "page": 67,
+      "scrolls": 402,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "409": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "410": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 573
+    },
+    "411": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 642
+    },
+    "412": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 711
+    },
+    "413": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 780
+    },
+    "414": {
+      "page": 68,
+      "scrolls": 408,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "415": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "416": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "417": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "418": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "419": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "420": {
+      "page": 69,
+      "scrolls": 414,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "421": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "422": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "423": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "424": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "425": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "426": {
+      "page": 70,
+      "scrolls": 420,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "427": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "428": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "429": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "430": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "431": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "432": {
+      "page": 71,
+      "scrolls": 426,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "433": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "434": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "435": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "436": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "437": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "438": {
+      "page": 72,
+      "scrolls": 432,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "439": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 514
+    },
+    "440": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 583
+    },
+    "441": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 652
+    },
+    "442": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "443": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "444": {
+      "page": 73,
+      "scrolls": 438,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "445": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "446": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "447": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 657
+    },
+    "448": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "449": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "450": {
+      "page": 74,
+      "scrolls": 444,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "451": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 524
+    },
+    "452": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "453": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 662
+    },
+    "454": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "455": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "456": {
+      "page": 75,
+      "scrolls": 450,
+      "click_x": 491,
+      "click_y": 869
+    },
+    "457": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "458": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "459": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "460": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "461": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "462": {
+      "page": 76,
+      "scrolls": 456,
+      "click_x": 491,
+      "click_y": 874
+    },
+    "463": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "464": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "465": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "466": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "467": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "468": {
+      "page": 77,
+      "scrolls": 462,
+      "click_x": 491,
+      "click_y": 874
+    },
+    "469": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "470": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 603
+    },
+    "471": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 672
+    },
+    "472": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 741
+    },
+    "473": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 810
+    },
+    "474": {
+      "page": 78,
+      "scrolls": 468,
+      "click_x": 491,
+      "click_y": 879
+    },
+    "475": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 534
+    },
+    "476": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 603
+    },
+    "477": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 672
+    },
+    "478": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 741
+    },
+    "479": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 810
+    },
+    "480": {
+      "page": 79,
+      "scrolls": 474,
+      "click_x": 491,
+      "click_y": 879
+    },
+    "481": {
+      "page": 80,
+      "scrolls": 480,
+      "click_x": 491,
+      "click_y": 538
+    },
+    "482": {
+      "page": 80,
+      "scrolls": 480,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "483": {
+      "page": 80,
+      "scrolls": 480,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "484": {
+      "page": 80,
+      "scrolls": 480,
+      "click_x": 491,
+      "click_y": 750
+    },
+    "485": {
+      "page": 80,
+      "scrolls": 480,
+      "click_x": 491,
+      "click_y": 819
+    },
+    "486": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "487": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 543
+    },
+    "488": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "489": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 681
+    },
+    "490": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 750
+    },
+    "491": {
+      "page": 81,
+      "scrolls": 486,
+      "click_x": 491,
+      "click_y": 819
+    },
+    "492": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "493": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "494": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "495": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "496": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "497": {
+      "page": 82,
+      "scrolls": 492,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "498": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "499": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "500": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "501": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "502": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "503": {
+      "page": 83,
+      "scrolls": 498,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "504": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 483
+    },
+    "505": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "506": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "507": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "508": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "509": {
+      "page": 84,
+      "scrolls": 504,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "510": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 489
+    },
+    "511": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "512": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "513": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "514": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "515": {
+      "page": 85,
+      "scrolls": 510,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "516": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 488
+    },
+    "517": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 558
+    },
+    "518": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 627
+    },
+    "519": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 696
+    },
+    "520": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 765
+    },
+    "521": {
+      "page": 86,
+      "scrolls": 516,
+      "click_x": 491,
+      "click_y": 834
+    },
+    "522": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 494
+    },
+    "523": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 563
+    },
+    "524": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 632
+    },
+    "525": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 701
+    },
+    "526": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 770
+    },
+    "527": {
+      "page": 87,
+      "scrolls": 522,
+      "click_x": 491,
+      "click_y": 839
+    },
+    "528": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "529": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "530": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "531": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "532": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "533": {
+      "page": 88,
+      "scrolls": 528,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "534": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 499
+    },
+    "535": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "536": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "537": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "538": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "539": {
+      "page": 89,
+      "scrolls": 534,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "540": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "541": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 568
+    },
+    "542": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 637
+    },
+    "543": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 706
+    },
+    "544": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 775
+    },
+    "545": {
+      "page": 90,
+      "scrolls": 540,
+      "click_x": 491,
+      "click_y": 844
+    },
+    "546": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 504
+    },
+    "547": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "548": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 642
+    },
+    "549": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 711
+    },
+    "550": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 780
+    },
+    "551": {
+      "page": 91,
+      "scrolls": 546,
+      "click_x": 491,
+      "click_y": 849
+    },
+    "552": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "553": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "554": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "555": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "556": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "557": {
+      "page": 92,
+      "scrolls": 552,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "558": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "559": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "560": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "561": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "562": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "563": {
+      "page": 93,
+      "scrolls": 558,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "564": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 509
+    },
+    "565": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 578
+    },
+    "566": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 647
+    },
+    "567": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 716
+    },
+    "568": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 785
+    },
+    "569": {
+      "page": 94,
+      "scrolls": 564,
+      "click_x": 491,
+      "click_y": 854
+    },
+    "570": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 514
+    },
+    "571": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 583
+    },
+    "572": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 652
+    },
+    "573": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 721
+    },
+    "574": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 790
+    },
+    "575": {
+      "page": 95,
+      "scrolls": 570,
+      "click_x": 491,
+      "click_y": 859
+    },
+    "576": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 519
+    },
+    "577": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 588
+    },
+    "578": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 657
+    },
+    "579": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 726
+    },
+    "580": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 795
+    },
+    "581": {
+      "page": 96,
+      "scrolls": 576,
+      "click_x": 491,
+      "click_y": 864
+    },
+    "582": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 524
+    },
+    "583": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 593
+    },
+    "584": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 662
+    },
+    "585": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "586": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "587": {
+      "page": 97,
+      "scrolls": 582,
+      "click_x": 491,
+      "click_y": 869
+    },
+    "588": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "589": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 593
+    },
+    "590": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 662
+    },
+    "591": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "592": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 800
+    },
+    "593": {
+      "page": 98,
+      "scrolls": 588,
+      "click_x": 491,
+      "click_y": 869
+    },
+    "594": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "595": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "596": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "597": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 731
+    },
+    "598": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "599": {
+      "page": 99,
+      "scrolls": 594,
+      "click_x": 491,
+      "click_y": 874
+    },
+    "600": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 529
+    },
+    "601": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "602": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 667
+    },
+    "603": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "604": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 805
+    },
+    "605": {
+      "page": 100,
+      "scrolls": 600,
+      "click_x": 491,
+      "click_y": 874
+    },
+    "606": {
+      "page": 101,
+      "scrolls": 606,
+      "click_x": 491,
+      "click_y": 539
+    },
+    "607": {
+      "page": 101,
+      "scrolls": 606,
+      "click_x": 491,
+      "click_y": 598
+    },
+    "608": {
+      "page": 101,
+      "scrolls": 606,
+      "click_x": 491,
+      "click_y": 672
+    },
+    "609": {
+      "page": 101,
+      "scrolls": 606,
+      "click_x": 491,
+      "click_y": 736
+    },
+    "610": {
+      "page": 101,
+      "scrolls": 606,
+      "click_x": 491,
+      "click_y": 815
+    },
+    "611": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 464
+    },
+    "612": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 539
+    },
+    "613": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 608
+    },
+    "614": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 677
+    },
+    "615": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 746
+    },
+    "616": {
+      "page": 102,
+      "scrolls": 612,
+      "click_x": 491,
+      "click_y": 815
+    },
+    "617": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 474
+    },
+    "618": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 539
+    },
+    "619": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 608
+    },
+    "620": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 677
+    },
+    "621": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 746
+    },
+    "622": {
+      "page": 103,
+      "scrolls": 618,
+      "click_x": 491,
+      "click_y": 815
+    },
+    "623": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 474
+    },
+    "624": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 548
+    },
+    "625": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 612
+    },
+    "626": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "627": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 755
+    },
+    "628": {
+      "page": 104,
+      "scrolls": 624,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "629": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 473
+    },
+    "630": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "631": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 617
+    },
+    "632": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 686
+    },
+    "633": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "634": {
+      "page": 105,
+      "scrolls": 630,
+      "click_x": 491,
+      "click_y": 824
+    },
+    "635": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 478
+    },
+    "636": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 553
+    },
+    "637": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 622
+    },
+    "638": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 691
+    },
+    "639": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 760
+    },
+    "640": {
+      "page": 106,
+      "scrolls": 636,
+      "click_x": 491,
+      "click_y": 829
+    },
+    "641": {
+      "page": 107,
+      "scrolls": 642,
+      "click_x": 491,
+      "click_y": 723
+    },
+    "642": {
+      "page": 107,
+      "scrolls": 642,
+      "click_x": 491,
+      "click_y": 790
+    },
+    "643": {
+      "page": 107,
+      "scrolls": 642,
+      "click_x": 491,
+      "click_y": 859
+    }
+  }
+}

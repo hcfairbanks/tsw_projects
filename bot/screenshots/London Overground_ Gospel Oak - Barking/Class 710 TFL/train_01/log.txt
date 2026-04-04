@@ -1,0 +1,310 @@
+Service #1 | 5L03 5L03 Willesden T.M.D to Barking | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_001
+Service #1 | OK | 5LO3 Willesden T.M.D to Barking 04:55 00:26 | timetable_id=3975
+Service #2 | 2J00 2J00 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_002
+Service #2 | OK | 2J00 Barking Riverside to Gospel Oak 05:31 00:42 | timetable_id=3976
+Service #3 | 5J05 5J05 Barking to Woodgrange Park | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_003
+Service #3 | OK | 5J05 Barking to Woodgrange Park 05:33 00:06 | timetable_id=3977
+Service #4 | 5J04 5J04 East Ham E.M.U.D. to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_004
+Service #4 | OK | 5J04 East Ham E.M.U.D. to Barking Riverside 05:38 00:14 | timetable_id=3978
+Service #5 | 5L08 5L08 Willesden T.M.D to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_005
+Service #5 | OK | 5LO8 Willesden T.M.D to Barking Riverside 05:40 00:24 | timetable_id=3979
+Service #6 | 5J06 5J06 Woodgrange Park to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_006
+Service #6 | OK | 5J06 Woodgrange Park to Barking Riverside 05:44 00:10 | timetable_id=3980
+Service #7 | 2J02 2J02 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_007
+Service #7 | OK | 2J02 Barking Riverside to Gospel Oak 05:46 00:42 | timetable_id=3981
+Service #8 | 2J04 2J04 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_008
+Service #8 | OK | 2J04 Barking Riverside to Gospel Oak 06:01 00:42 | timetable_id=3982
+Service #9 | 5J09 5J09 Barking to Woodgrange Park | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_009
+Service #9 | OK | 5J09 Barking to Woodgrange Park 06:02 00:04 | timetable_id=3983
+Service #10 | 2J01 2J01 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_010
+Service #10 | OK | 2J01 Gospel Oak to Barking Riverside 06:07 00:45 | timetable_id=3984
+Service #11 | 2J06 2J06 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_011
+Service #11 | OK | 2J06 Barking Riverside to Gospel Oak 06:16 00:42 | timetable_id=3985
+Service #12 | 5J10 5J10 Woodgrange Park to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_012
+Service #12 | OK | 5J10 Woodgrange Park to Barking Riverside 06:19 00:08 | timetable_id=3986
+Service #13 | 2J03 2J03 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_013
+Service #13 | OK | 2J03 Gospel Oak to Barking Riverside 06:22 00:41 | timetable_id=3987
+Service #14 | 2J08 2J08 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_014
+Service #14 | OK | 2J08 Barking Riverside to Gospel Oak 06:31 00:42 | timetable_id=3988
+Service #15 | 2J05 2J05 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_015
+Service #15 | OK | 2J05 Gospel Oak to Barking Riverside 06:37 00:42 | timetable_id=3989
+Service #16 | 2J10 2J10 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_016
+Service #16 | OK | 2J10 Barking Riverside to Gospel Oak 06:46 00:42 | timetable_id=3990
+Service #17 | 2J07 2J07 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_017
+Service #17 | OK | 2J07 Gospel Oak to Barking Riverside 06:52 00:41 | timetable_id=3991
+Service #18 | 2J12 2J12 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_018
+Service #18 | OK | 2J12 Barking Riverside to Gospel Oak 06:59 00:43 | timetable_id=3992
+Service #19 | 2J09 2J09 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_019
+Service #19 | OK | 2J09 Gospel Oak to Barking Riverside 07:07 00:41 | timetable_id=3993
+Service #20 | 2J14 2J14 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_020
+Service #20 | OK | 2J14 Barking Riverside to Gospel Oak 07:16 00:42 | timetable_id=3994
+Service #21 | 2J11 2J11 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_021
+Service #21 | OK | 2J11 Gospel Oak to Barking Riverside 07:22 00:41 | timetable_id=3995
+Service #22 | 2J16 2J16 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_022
+Service #22 | OK | 2J16 Barking Riverside to Gospel Oak 07:31 00:42 | timetable_id=3996
+Service #23 | 2J13 2J13 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_023
+Service #23 | OK | 2J13 Gospel Oak to Barking Riverside 07:36 00:42 | timetable_id=3997
+Service #24 | 2J18 2J18 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_024
+Service #24 | OK | 2J18 Barking Riverside to Gospel Oak 07:46 00:42 | timetable_id=3998
+Service #25 | 2J15 2J15 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_025
+Service #25 | OK | 2J15 Gospel Oak to Barking Riverside 07:52 00:41 | timetable_id=3999
+Service #26 | 2J20 2J20 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_026
+Service #26 | OK | 2J20 Barking Riverside to Gospel Oak 08:01 00:42 | timetable_id=4000
+Service #27 | 2J17 2J17 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_027
+Service #27 | OK | 2J17 Gospel Oak to Barking Riverside 08:07 00:41 | timetable_id=4001
+Service #28 | 2J22 2J22 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_028
+Service #28 | OK | 2J22 Barking Riverside to Gospel Oak 08:16 00:43 | timetable_id=4002
+Service #29 | 2J19 2J19 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_029
+Service #29 | OK | 2J19 Gospel Oak to Barking Riverside 08:22 00:41 | timetable_id=4003
+Service #30 | 2J24 2J24 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_030
+Service #30 | OK | 2J24 Barking Riverside to Gospel Oak 08:31 00:42 | timetable_id=4004
+Service #31 | 2J21 2J21 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_031
+Service #31 | OK | 2J21 Gospel Oak to Barking Riverside 08:37 00:41 | timetable_id=4005
+Service #32 | 2J26 2J26 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_032
+Service #32 | OK | 2J26 Barking Riverside to Gospel Oak 08:46 00:42 | timetable_id=4006
+Service #33 | 2J23 2J23 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_033
+Service #33 | OK | 2J23 Gospel Oak to Barking Riverside 08:52 00:41 | timetable_id=4007
+Service #34 | 2J28 2J28 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_034
+Service #34 | OK | 2J28 Barking Riverside to Gospel Oak 09:01 00:42 | timetable_id=4008
+Service #35 | 2J25 2J25 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_035
+Service #35 | OK | 2J25 Gospel Oak to Barking Riverside 09:06 00:42 | timetable_id=4009
+Service #36 | 2J30 2J30 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_036
+Service #36 | OK | 2J30 Barking Riverside to Gospel Oak 09:16 00:42 | timetable_id=4010
+Service #37 | 2J27 2J27 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_037
+Service #37 | OK | 2J27 Gospel Oak to Barking Riverside 09:22 00:41 | timetable_id=4011
+Service #38 | 2J32 2J32 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_038
+Service #38 | OK | 2J32 Barking Riverside to Gospel Oak 09:31 00:42 | timetable_id=4012
+Service #39 | 2J29 2J29 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_039
+Service #39 | OK | 2J29 Gospel Oak to Barking Riverside 09:37 00:41 | timetable_id=4013
+Service #40 | 2J34 2J34 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_040
+Service #40 | OK | 2J34 Barking Riverside to Gospel Oak 09:46 00:42 | timetable_id=4014
+Service #41 | 2J31 2J31 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_041
+Service #41 | OK | 2J31 Gospel Oak to Barking Riverside 09:51 00:42 | timetable_id=4015
+Service #42 | 2J36 2J36 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_042
+Service #42 | OK | 2J36 Barking Riverside to Gospel Oak 10:01 00:42 | timetable_id=4016
+Service #43 | 2J33 2J33 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_043
+Service #43 | OK | 2J33 Gospel Oak to Barking Riverside 10:07 00:41 | timetable_id=4017
+Service #44 | 2J38 2J38 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_044
+Service #44 | OK | 2J38 Barking Riverside to Gospel Oak 10:16 00:43 | timetable_id=4018
+Service #45 | 2J35 2J35 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_045
+Service #45 | OK | 2J35 Gospel Oak to Barking Riverside 10:22 00:41 | timetable_id=4019
+Service #46 | 2J40 2J40 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_046
+Service #46 | OK | 2J40 Barking Riverside to Gospel Oak 10:31 00:42 | timetable_id=4020
+Service #47 | 2J37 2J37 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_047
+Service #47 | OK | 2J37 Gospel Oak to Barking Riverside 10:37 00:41 | timetable_id=4021
+Service #48 | 2J42 2J42 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_048
+Service #48 | OK | 2J42 Barking Riverside to Gospel Oak 10:46 00:42 | timetable_id=4022
+Service #49 | 2J39 2J39 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_049
+Service #49 | OK | 2J39 Gospel Oak to Barking Riverside 10:52 00:42 | timetable_id=4023
+Service #50 | 2J44 2J44 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_050
+Service #50 | OK | 2J44 Barking Riverside to Gospel Oak 11:01 00:42 | timetable_id=4024
+Service #51 | 2J41 2J41 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_051
+Service #51 | OK | 2J41 Gospel Oak to Barking Riverside 11:07 00:41 | timetable_id=4025
+Service #52 | 2J50 2J50 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_052
+Service #52 | OK | 2J50 Barking Riverside to Gospel Oak 11:16 00:42 | timetable_id=4026
+Service #53 | 2J43 2J43 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_053
+Service #53 | OK | 2J43 Gospel Oak to Barking Riverside 11:22 00:41 | timetable_id=4027
+Service #54 | 2J48 2J48 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_054
+Service #54 | OK | 2J48 Barking Riverside to Gospel Oak 11:31 00:42 | timetable_id=4028
+Service #55 | 2J45 2J45 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_055
+Service #55 | OK | 2J45 Gospel Oak to Barking Riverside 11:37 00:41 | timetable_id=4029
+Service #56 | 2J50 2J50 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_056
+Service #56 | OK | 2J50 Barking Riverside to Gospel Oak 11:46 00:43 | timetable_id=4030
+Service #57 | 2J47 2J47 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_057
+Service #57 | OK | 2J47 Gospel Oak to Barking Riverside 11:52 00:41 | timetable_id=4031
+Service #58 | 2J52 2J52 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_058
+Service #58 | OK | 2J52 Barking Riverside to Gospel Oak 12:01 00:42 | timetable_id=4032
+Service #59 | 2J49 2J49 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_059
+Service #59 | OK | 2J49 Gospel Oak to Barking Riverside 12:07 00:41 | timetable_id=4033
+Service #60 | 2J54 2J54 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_060
+Service #60 | OK | 2J54 Barking Riverside to Gospel Oak 12:16 00:42 | timetable_id=4034
+Service #61 | 2J51 2J51 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_061
+Service #61 | OK | 2J51 Gospel Oak to Barking Riverside 12:22 00:41 | timetable_id=4035
+Service #62 | 2J56 2J56 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_062
+Service #62 | OK | 2J56 Barking Riverside to Gospel Oak 12:31 00:43 | timetable_id=4036
+Service #63 | 2J53 2J53 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_063
+Service #63 | OK | 2J53 Gospel Oak to Barking Riverside 12:37 00:41 | timetable_id=4037
+Service #64 | 2J58 2J58 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_064
+Service #64 | OK | 2J58 Barking Riverside to Gospel Oak 12:46 00:42 | timetable_id=4038
+Service #65 | 2J55 2J55 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_065
+Service #65 | OK | 2J55 Gospel Oak to Barking Riverside 12:50 00:41 | timetable_id=4039
+Service #66 | 2J60 2J60 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_066
+Service #66 | OK | 2J60 Barking Riverside to Gospel Oak 13:01 00:42 | timetable_id=4040
+Service #67 | 2J57 2J57 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_067
+Service #67 | OK | 2J57 Gospel Oak to Barking Riverside 13:07 00:41 | timetable_id=4041
+Service #68 | 2J62 2J62 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_068
+Service #68 | OK | 2J62 Barking Riverside to Gospel Oak 13:16 00:42 | timetable_id=4042
+Service #69 | 2J59 2J59 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_069
+Service #69 | OK | 2J59 Gospel Oak to Barking Riverside 13:22 00:41 | timetable_id=4043
+Service #70 | 2J64 2J64 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_070
+Service #70 | OK | 2J64 Barking Riverside to Gospel Oak 13:31 00:43 | timetable_id=4044
+Service #71 | 2J61 2J61 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_071
+Service #71 | OK | 2J61 Gospel Oak to Barking Riverside 13:37 00:41 | timetable_id=4045
+Service #72 | 2J66 2J66 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_072
+Service #72 | OK | 2J66 Barking Riverside to Gospel Oak 13:46 00:42 | timetable_id=4046
+Service #73 | 2J63 2J63 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_073
+Service #73 | OK | 2J63 Gospel Oak to Barking Riverside 13:52 00:41 | timetable_id=4047
+Service #74 | 2J68 2J68 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_074
+Service #74 | OK | 2J68 Barking Riverside to Gospel Oak 14:01 00:42 | timetable_id=4048
+Service #75 | 2J65 2J65 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_075
+Service #75 | OK | 2J65 Gospel Oak to Barking Riverside 14:07 00:41 | timetable_id=4049
+Service #76 | 2J70 2J70 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_076
+Service #76 | OK | 2J70 Barking Riverside to Gospel Oak 14:16 00:42 | timetable_id=4050
+Service #77 | 2J67 2J67 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_077
+Service #77 | OK | 2J67 Gospel Oak to Barking Riverside 14:22 00:41 | timetable_id=4051
+Service #78 | 2J72 2J72 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_078
+Service #78 | OK | 2J72 Barking Riverside to Gospel Oak 14:31 00:43 | timetable_id=4052
+Service #79 | 2J69 2J69 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_079
+Service #79 | OK | 2J69 Gospel Oak to Barking Riverside 14:37 00:41 | timetable_id=4053
+Service #80 | 2J74 2J74 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_080
+Service #80 | OK | 2J74 Barking Riverside to Gospel Oak 14:46 00:42 | timetable_id=4054
+Service #81 | 2J72 2J72 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_081
+Service #81 | OK | 2J71 Gospel Oak to Barking Riverside 14:52 00:41 | timetable_id=4055
+Service #82 | 2J71 2J71 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_082
+Service #82 | OK | 2J76 Barking Riverside to Gospel Oak 15:01 00:42 | timetable_id=4056
+Service #83 | 2J76 2J76 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_083
+Service #83 | OK | 2J73 Gospel Oak to Barking Riverside 15:07 00:41 | timetable_id=4057
+Service #84 | 2J73 2J73 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_084
+Service #84 | OK | 2J78 Barking Riverside to Gospel Oak 15:16 00:42 | timetable_id=4058
+Service #85 | 2J78 2J78 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_085
+Service #85 | OK | 2J75 Gospel Oak to Barking Riverside 15:22 00:41 | timetable_id=4059
+Service #86 | 2J75 2J75 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_086
+Service #86 | OK | 2J80 Barking Riverside to Gospel Oak 15:31 00:43 | timetable_id=4060
+Service #87 | 2J80 2J80 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_087
+Service #87 | OK | 2J77 Gospel Oak to Barking Riverside 15:37 00:41 | timetable_id=4061
+Service #88 | 2J77 2J77 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_088
+Service #88 | OK | 2J82 Barking Riverside to Gospel Oak 15:46 00:42 | timetable_id=4062
+Service #89 | 2J82 2J82 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_089
+Service #89 | OK | 2J79 Gospel Oak to Barking Riverside 15:52 00:41 | timetable_id=4063
+Service #90 | 2J79 2J79 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_090
+Service #90 | OK | 2J84 Barking Riverside to Gospel Oak 16:01 00:42 | timetable_id=4064
+Service #91 | 2J84 2J84 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_091
+Service #91 | OK | 2J81 Gospel Oak to Barking Riverside 16:07 00:41 | timetable_id=4065
+Service #92 | 2J81 2J81 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_092
+Service #92 | OK | 2J86 Barking Riverside to Gospel Oak 16:16 00:42 | timetable_id=4066
+Service #93 | 2J86 2J86 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_093
+Service #93 | OK | 2J83 Gospel Oak to Barking Riverside 16:22 00:41 | timetable_id=4067
+Service #94 | 2J83 2J83 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_094
+Service #94 | OK | 2J88 Barking Riverside to Gospel Oak 16:31 00:43 | timetable_id=4068
+Service #95 | 2J88 2J88 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_095
+Service #95 | OK | 2J85 Gospel Oak to Barking Riverside 16:37 00:41 | timetable_id=4069
+Service #96 | 2J85 2J85 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_096
+Service #96 | OK | 2J90 Barking Riverside to Gospel Oak 16:46 00:42 | timetable_id=4070
+Service #97 | 2J90 2J90 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_097
+Service #97 | OK | 2J87 Gospel Oak to Barking Riverside 16:52 00:41 | timetable_id=4071
+Service #98 | 2J87 2J87 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_098
+Service #98 | OK | 2J92 Barking Riverside to Gospel Oak 17:01 00:42 | timetable_id=4072
+Service #99 | 2J92 2J92 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_099
+Service #99 | OK | 2J89 Gospel Oak to Barking Riverside 17:07 00:41 | timetable_id=4073
+Service #100 | 2J89 2J89 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_100
+Service #100 | OK | 2J94 Barking Riverside to Gospel Oak 17:16 00:42 | timetable_id=4074
+Service #101 | 2J94 2J94 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_101
+Service #101 | OK | 2J91 Gospel Oak to Barking Riverside 17:22 00:41 | timetable_id=4075
+Service #102 | 2J91 2J91 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_102
+Service #102 | OK | 2J96 Barking Riverside to Gospel Oak 17:31 00:43 | timetable_id=4076
+Service #103 | 2J96 2J96 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_103
+Service #103 | OK | 2J93 Gospel Oak to Barking Riverside 17:37 00:41 | timetable_id=4077
+Service #104 | 2J93 2J93 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_104
+Service #104 | OK | 2J98 Barking Riverside to Gospel Oak 17:46 00:42 | timetable_id=4078
+Service #105 | 2J98 2J98 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_105
+Service #105 | OK | 2J95 Gospel Oak to Barking Riverside 17:52 00:41 | timetable_id=4079
+Service #106 | 2J95 2J95 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_106
+Service #106 | OK | 2J00 Barking Riverside to Gospel Oak 18:01 00:42 | timetable_id=4080
+Service #107 | 2J00 2J00 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_107
+Service #107 | OK | 2J97 Gospel Oak to Barking Riverside 18:07 00:41 | timetable_id=4081
+Service #108 | 2J97 2J97 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_108
+Service #108 | OK | 2J02 Barking Riverside to Gospel Oak 18:16 00:42 | timetable_id=4082
+Service #109 | 2J02 2J02 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_109
+Service #109 | OK | 2J99 Gospel Oak to Barking Riverside 18:22 00:41 | timetable_id=4083
+Service #110 | 2J99 2J99 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_110
+Service #110 | OK | 2J04 Barking Riverside to Gospel Oak 18:31 00:42 | timetable_id=4084
+Service #111 | 2J04 2J04 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_111
+Service #111 | OK | 2J01 Gospel Oak to Barking Riverside 18:37 00:41 | timetable_id=4085
+Service #112 | 2J01 2J01 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_112
+Service #112 | OK | 2J06 Barking Riverside to Gospel Oak 18:46 00:42 | timetable_id=4086
+Service #113 | 2J06 2J06 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_113
+Service #113 | OK | 2J03 Gospel Oak to Barking Riverside 18:52 00:41 | timetable_id=4087
+Service #114 | 2J03 2J03 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_114
+Service #114 | OK | 2J08 Barking Riverside to Gospel Oak 19:01 00:43 | timetable_id=4088
+Service #115 | 2J08 2J08 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_115
+Service #115 | OK | 2J05 Gospel Oak to Barking Riverside 19:05 00:42 | timetable_id=4089
+Service #116 | 2J05 2J05 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_116
+Service #116 | OK | 2J10 Barking Riverside to Gospel Oak 19:16 00:42 | timetable_id=4090
+Service #117 | 2J10 2J10 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_117
+Service #117 | OK | 2J07 Gospel Oak to Barking Riverside 19:22 00:41 | timetable_id=4091
+Service #118 | 2J07 2J07 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_118
+Service #118 | OK | 2J12 Barking Riverside to Gospel Oak 19:31 00:42 | timetable_id=4092
+Service #119 | 2J12 2J12 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_119
+Service #119 | OK | 2J09 Gospel Oak to Barking Riverside 19:37 00:42 | timetable_id=4093
+Service #120 | 2J09 2J09 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_120
+Service #120 | OK | 2J14 Barking Riverside to Gospel Oak 19:46 00:42 | timetable_id=4094
+Service #121 | 2J14 2J14 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_121
+Service #121 | OK | 2J11 Gospel Oak to Barking Riverside 19:52 00:41 | timetable_id=4095
+Service #122 | 2J11 2J11 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_122
+Service #122 | OK | 2J16 Barking Riverside to Gospel Oak 20:01 00:42 | timetable_id=4096
+Service #123 | 2J16 2J16 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_123
+Service #123 | OK | 2J13 Gospel Oak to Barking Riverside 20:07 00:41 | timetable_id=4097
+Service #124 | 2J13 2J13 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_124
+Service #124 | OK | 2J18 Barking Riverside to Gospel Oak 20:16 00:43 | timetable_id=4098
+Service #125 | 2J18 2J18 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_125
+Service #125 | OK | 2J15 Gospel Oak to Barking Riverside 20:22 00:41 | timetable_id=4099
+Service #126 | 2J15 2J15 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_126
+Service #126 | OK | 2J20 Barking Riverside to Gospel Oak 20:31 00:42 | timetable_id=4100
+Service #127 | 2J20 2J20 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_127
+Service #127 | OK | 2J17 Gospel Oak to Barking Riverside 20:37 00:41 | timetable_id=4101
+Service #128 | 2J17 2J17 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_128
+Service #128 | OK | 2J22 Barking Riverside to Gospel Oak 20:46 00:42 | timetable_id=4102
+Service #129 | 2J22 2J22 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_129
+Service #129 | OK | 2J19 Gospel Oak to Barking Riverside 20:52 00:41 | timetable_id=4103
+Service #130 | 2J19 2J19 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_130
+Service #130 | OK | 2J24 Barking Riverside to Gospel Oak 21:01 00:42 | timetable_id=4104
+Service #131 | 2J24 2J24 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_131
+Service #131 | OK | 2J21 Gospel Oak to Barking Riverside 21:07 00:41 | timetable_id=4105
+Service #132 | 2J21 2J21 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_132
+Service #132 | OK | 2J26 Barking Riverside to Gospel Oak 21:15 00:42 | timetable_id=4106
+Service #133 | 2J26 2J26 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_133
+Service #133 | OK | 2J23 Gospel Oak to Barking Riverside 21:22 00:41 | timetable_id=4107
+Service #134 | 2J23 2J23 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_134
+Service #134 | OK | 2J28 Barking Riverside to Gospel Oak 21:31 00:42 | timetable_id=4108
+Service #135 | 2J28 2J28 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_135
+Service #135 | OK | 2J25 Gospel Oak to Upper Holloway 21:37 00:41 | timetable_id=4109
+Service #136 | 2J25 2J25 Gospel Oak to Upper Holloway | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_136
+Service #136 | OK | 2J30 Barking Riverside to Gospel Oak 21:45 00:40 | timetable_id=4110
+Service #137 | 2J30 2J30 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_137
+Service #137 | OK | 2J27 Gospel Oak to Barking Riverside 21:50 00:41 | timetable_id=4111
+Service #138 | 2J27 2J27 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_138
+Service #138 | OK | 2J32 Barking Riverside to Gospel Oak 22:01 00:42 | timetable_id=4112
+Service #139 | 2J32 2J32 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_139
+Service #139 | OK | 2J29 Gospel Oak to Barking Riverside 22:05 00:42 | timetable_id=4113
+Service #140 | 2J29 2J29 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_140
+Service #140 | OK | 5J28 Gospel Oak to Upper Holloway 22:19 00:06 | timetable_id=4114
+Service #141 | 5J28 5J28 Gospel Oak to Upper Holloway | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_141
+Service #141 | OK | 2J34 Barking Riverside to Gospel Oak 22:21 00:43 | timetable_id=4115
+Service #142 | 2J34 2J34 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_142
+Service #142 | OK | 2J31 Gospel Oak to Barking Riverside 22:27 00:41 | timetable_id=4116
+Service #143 | 2J31 2J31 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_143
+Service #143 | OK | 5M28 Upper Holloway to Upper Holloway Reception Siding 22:27 00:05 | timetable_id=4117
+Service #144 | 5M28 5M28 Upper Holloway to Upper Holloway Reception Sidin | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_144
+Service #144 | OK | 5J25 Barking Riverside to East Ham E.M.U.D. 22:32 00:12 | timetable_id=4118
+Service #145 | 5J25 5J25 Barking Riverside to East Ham E.M.U.D. | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_145
+Service #145 | OK | 2J36 Barking Riverside to Gospel Oak 22:41 00:42 | timetable_id=4119
+Service #146 | 2J36 2J36 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_146
+Service #146 | OK | 2J33 Gospel Oak to Barking Riverside 22:48 00:41 | timetable_id=4120
+Service #147 | 2J33 2J33 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_147
+Service #147 | OK | 2J38 Barking Riverside to Gospel Oak 23:01 00:42 | timetable_id=4121
+Service #148 | 2J38 2J38 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_148
+Service #148 | OK | 2J35 Gospel Oak to Barking Riverside 23:08 00:41 | timetable_id=4122
+Service #149 | 2J35 2J35 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_149
+Service #149 | OK | 2J40 Barking Riverside to Gospel Oak 23:21 00:42 | timetable_id=4123
+Service #150 | 2J40 2J40 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_150
+Service #150 | OK | 2J37 Gospel Oak to Barking Riverside 23:28 00:42 | timetable_id=4124
+Service #151 | 2J37 2J37 Gospel Oak to Barking Riverside | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_151
+Service #151 | OK | 2J42 Barking Riverside to Gospel Oak 23:41 00:42 | timetable_id=4125
+Service #152 | 2J42 2J42 Barking Riverside to Gospel Oak | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_152
+Service #152 | OK | 5J38 Gospel Oak to Upper Holloway 23:53 00:06 | timetable_id=4126
+Service #153 | 5J38 5J38 Gospel Oak to Upper Holloway | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_153
+Service #153 | OK | 5J39 Upper Holloway to Upper Holloway Reception Siding 00:04 00:05 | timetable_id=4127
+Service #154 | 5J39 5J39 Upper Holloway to Upper Holloway Reception Siding | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_154
+Service #154 | OK | 5J40 Gospel Oak to Upper Holloway 00:05 00:07 | timetable_id=4128
+Service #155 | 5J40 5J40 Gospel Oak to Upper Holloway | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\London Overground_ Gospel Oak - Barking\Class 710 TFL\train_01\service_155
+Service #155 | ERROR | [Errno 22] Invalid argument: 'C:\\Users\\hcfai\\Desktop\\tsw_hud_project_wtf_3\\bot\\screenshots\\London Overground: Gospel Oak - Barking\\duplicate_services.txt'

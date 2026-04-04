@@ -1,0 +1,41 @@
+{
+  "level_info": {
+    "service_name": "XT57 Hoboken Yard Move",
+    "start_time": "21:55",
+    "duration": "00:10",
+    "tonnage": 225.9,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.7345267402239,
+    "lng": -74.0293281939076,
+    "current_service_name": "NJT-XT57"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 21:55:00",
+      "location": "",
+      "time1": "",
+      "time2": "21:55:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "21:56:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hill Yard Track 06 - 22:06:00",
+      "location": "Hill Yard Track 06",
+      "time1": "22:06:00",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "level_info": {
+    "service_name": "XT309 Summit Yard Move (Part 2)",
+    "start_time": "08:38",
+    "duration": "00:01",
+    "tonnage": 225.9,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.71534342110964,
+    "lng": -74.35278618941233,
+    "current_service_name": "NJT-XT309-2"
+  },
+  "schedule": [
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Yard Track 03",
+      "location": "Summit Yard Track 03",
+      "time1": "",
+      "time2": "",
+      "sort_order": 0
+    }
+  ]
+}

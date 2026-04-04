@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Franklin #715 (Depot - Boston)",
+    "start_time": "14:50",
+    "duration": "00:05",
+    "tonnage": 518.7,
+    "car_count": 6,
+    "train_length": 496.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.33982322588718,
+    "lng": -71.06013623749068,
+    "current_service_name": "MBTA Franklin #715 (SHSY to Boston)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 14:50:00",
+      "location": "",
+      "time1": "",
+      "time2": "14:50:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 05",
+      "location": "Boston South Station Track 05",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

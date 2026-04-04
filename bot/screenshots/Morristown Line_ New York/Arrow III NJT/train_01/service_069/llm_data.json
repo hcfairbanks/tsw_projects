@@ -1,0 +1,170 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "432 Gladstone - Hoboken",
+    "start_time": "17:37",
+    "duration": "00:41",
+    "tonnage": 249.2,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.71638566450454,
+    "lng": -74.35700644388746,
+    "current_service_name": "NJT-432"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:38:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Orange Track 1 - 17:46:00",
+      "location": "South Orange Track 1",
+      "time1": "17:46:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:46:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mountain Track 1 - 17:48:00",
+      "location": "Mountain Track 1",
+      "time1": "17:48:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:48:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Highland Avenue Track 1 - 17:51:00",
+      "location": "Highland Avenue Track 1",
+      "time1": "17:51:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:51:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 1 - 17:53:00",
+      "location": "Orange Track 1",
+      "time1": "17:53:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:53:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 1 - 17:55:30",
+      "location": "Brick Church Track 1",
+      "time1": "17:55:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:56:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "East Orange Track 1 - 17:57:30",
+      "location": "East Orange Track 1",
+      "time1": "17:57:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:58:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 1 - 18:02:00",
+      "location": "Newark Broad Street Track 1",
+      "time1": "18:02:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:02:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Meadows Track 3 - 18:08:30",
+      "location": "Meadows Track 3",
+      "time1": "18:08:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:09:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 12 - 18:19:00",
+      "location": "Hoboken Terminal Track 12",
+      "time1": "18:19:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 18
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Worcester
+Train:       ACS-64 V AMTK50
+Started:     2026-03-20 04:24:39
+Duration:    -1 day, 21:18:42
+Trains:      2
+Services:    13
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    10         -1 day, 21:12:15
+Train 2    3          0:05:07

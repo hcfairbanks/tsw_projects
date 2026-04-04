@@ -1,0 +1,432 @@
+{
+  "level_info": {
+    "service_name": "207-3 Harrow & Wealdstone to Elephant & Castle",
+    "start_time": "08:19",
+    "duration": "00:53",
+    "tonnage": 164.2,
+    "car_count": 7,
+    "train_length": 113.9
+  },
+  "location": {
+    "lat": 51.59280636063823,
+    "lng": -0.33630617626486314
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 08:19:00",
+      "location": "",
+      "time1": "",
+      "time2": "8:19:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "08:21:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harrow & Wealdstone Platform 2 - 08:22:00",
+      "location": "Harrow & Wealdstone Platform 2",
+      "time1": "08:22:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:23:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Kenton Platform 1 - 08:25:00",
+      "location": "Kenton Platform 1",
+      "time1": "08:25:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:25:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Kenton Platform 1 - 08:27:00",
+      "location": "South Kenton Platform 1",
+      "time1": "08:27:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:27:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North Wembley Platform 1 - 08:29:00",
+      "location": "North Wembley Platform 1",
+      "time1": "08:29:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:29:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Wembley Central Platform 2 - 08:31:00",
+      "location": "Wembley Central Platform 2",
+      "time1": "08:31:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:31:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Stonebridge Park Platform 1 - 08:33:30",
+      "location": "Stonebridge Park Platform 1",
+      "time1": "08:33:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:34:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlesden Platform 1 - 08:36:00",
+      "location": "Harlesden Platform 1",
+      "time1": "08:36:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:36:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Willesden Junction Platform 1 - 08:38:00",
+      "location": "Willesden Junction Platform 1",
+      "time1": "08:38:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:38:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Kensal Green Platform 1 - 08:41:00",
+      "location": "Kensal Green Platform 1",
+      "time1": "08:41:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:41:30",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Queens Park Platform 2 - 08:45:00",
+      "location": "Queens Park Platform 2",
+      "time1": "08:45:00",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:45:30",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Kilburn Park Platform 2 - 08:47:00",
+      "location": "Kilburn Park Platform 2",
+      "time1": "08:47:00",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:47:10",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Maida Vale Platform 2 - 08:48:30",
+      "location": "Maida Vale Platform 2",
+      "time1": "08:48:30",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:48:40",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Warwick Avenue Platform 2 - 08:50:00",
+      "location": "Warwick Avenue Platform 2",
+      "time1": "08:50:00",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:50:10",
+      "time2": "",
+      "sort_order": 27
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Paddington Platform 4 - 08:52:00",
+      "location": "Paddington Platform 4",
+      "time1": "08:52:00",
+      "time2": "",
+      "sort_order": 28
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:52:30",
+      "time2": "",
+      "sort_order": 29
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Edgware Road Platform 2 - 08:54:00",
+      "location": "Edgware Road Platform 2",
+      "time1": "08:54:00",
+      "time2": "",
+      "sort_order": 30
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:54:10",
+      "time2": "",
+      "sort_order": 31
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Marylebone Platform 2 - 08:55:00",
+      "location": "Marylebone Platform 2",
+      "time1": "08:55:00",
+      "time2": "",
+      "sort_order": 32
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:55:10",
+      "time2": "",
+      "sort_order": 33
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Baker Street Platform 8 - 08:56:30",
+      "location": "Baker Street Platform 8",
+      "time1": "08:56:30",
+      "time2": "",
+      "sort_order": 34
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:57:00",
+      "time2": "",
+      "sort_order": 35
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Regents Park Platform 2 - 08:58:30",
+      "location": "Regents Park Platform 2",
+      "time1": "08:58:30",
+      "time2": "",
+      "sort_order": 36
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:58:40",
+      "time2": "",
+      "sort_order": 37
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Oxford Circus Platform 3 - 09:00:30",
+      "location": "Oxford Circus Platform 3",
+      "time1": "09:00:30",
+      "time2": "",
+      "sort_order": 38
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:01:00",
+      "time2": "",
+      "sort_order": 39
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Piccadilly Circus Platform 2 - 09:03:00",
+      "location": "Piccadilly Circus Platform 2",
+      "time1": "09:03:00",
+      "time2": "",
+      "sort_order": 40
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:03:30",
+      "time2": "",
+      "sort_order": 41
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Charing Cross Platform 2 - 09:05:00",
+      "location": "Charing Cross Platform 2",
+      "time1": "09:05:00",
+      "time2": "",
+      "sort_order": 42
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:05:10",
+      "time2": "",
+      "sort_order": 43
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Embankment Platform 6 - 09:06:00",
+      "location": "Embankment Platform 6",
+      "time1": "09:06:00",
+      "time2": "",
+      "sort_order": 44
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:06:10",
+      "time2": "",
+      "sort_order": 45
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Waterloo Platform 4 - 09:07:30",
+      "location": "Waterloo Platform 4",
+      "time1": "09:07:30",
+      "time2": "",
+      "sort_order": 46
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:08:00",
+      "time2": "",
+      "sort_order": 47
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lambeth North Platform 2 - 09:10:00",
+      "location": "Lambeth North Platform 2",
+      "time1": "09:10:00",
+      "time2": "",
+      "sort_order": 48
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "09:10:10",
+      "time2": "",
+      "sort_order": 49
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Elephant & Castle Platform 4 - 09:12:30",
+      "location": "Elephant & Castle Platform 4",
+      "time1": "09:12:30",
+      "time2": "",
+      "sort_order": 50
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 51
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+Service #4 | AM170EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_004
+Service #4 | OK | AM170EQ Boston South Station to Southampton Yard 13:22 00:00 | timetable_id=2714
+Service #5 | AM172EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_005
+Service #5 | OK | AM172EQ Boston South Station to Southampton Yard 15:37 00:00 | timetable_id=2715
+Service #6 | AM86EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_006
+Service #6 | OK | AM86EQ Boston South Station to Southampton Yard 17:07 00:16 | timetable_id=2716
+Service #7 | AM174EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_007
+Service #7 | OK | AM174EQ Boston South Station to Southampton Yard 18:52 00:00 | timetable_id=2717
+Service #8 | AM176EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_008
+Service #8 | OK | AM176EQ Boston South Station to Southampton Yard 20:44 00:12 | timetable_id=2718
+Service #9 | AM94EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_009
+Service #9 | OK | AM94EQ Boston South Station to Southampton Yard 22:34 00:00 | timetable_id=2719
+Service #10 | AM178EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_01\service_010
+Service #10 | OK | AM178EQ Boston South Station to Southampton Yard 00:39 00:00 | timetable_id=2720

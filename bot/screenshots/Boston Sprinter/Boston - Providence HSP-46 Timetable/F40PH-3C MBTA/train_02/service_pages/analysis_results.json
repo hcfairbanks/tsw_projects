@@ -1,0 +1,702 @@
+{
+  "provider": "claude",
+  "pages": 13,
+  "total_boxes": 105,
+  "duplicates_removed": 27,
+  "unique_count": 77,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 865,
+      "name": "MBTA Providence #801 (Boston - Providence)",
+      "start_time": "05:28:00",
+      "duration": "01:01:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 938,
+      "name": "MBTA Providence #803 (Boston - Providence)",
+      "start_time": "06:29:00",
+      "duration": "01:07:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Franklin #741 (Boston - Readville)",
+      "start_time": "06:38:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Stoughton #903 (Boston - Stoughton)",
+      "start_time": "06:55:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Providence #805 (Boston - Providence)",
+      "start_time": "07:23:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Stoughton #905 (Boston - Stoughton)",
+      "start_time": "07:33:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Kingston #034 (Mid-Day Storage)",
+      "start_time": "07:34:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #806 (Mid-Day Storage)",
+      "start_time": "07:52:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Worcester #506 (Boston - Depot)",
+      "start_time": "07:54:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Greenbush #074 (Mid-Day Storage)",
+      "start_time": "08:14:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Attleboro #842 (Mid-Day Storage)",
+      "start_time": "08:15:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Stoughton #907 (Boston - Stoughton)",
+      "start_time": "08:21:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Franklin #706 (Mid-Day Storage)",
+      "start_time": "08:25:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #810 (Mid-Day Storage)",
+      "start_time": "08:39:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Providence #808 (Mid-Day Storage)",
+      "start_time": "08:47:00",
+      "duration": "00:11:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #740 (Mid-Day Storage)",
+      "start_time": "08:47:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Needham #604 (Mid-Day Storage)",
+      "start_time": "08:59:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Worcester #588 (Mid-Day Storage)",
+      "start_time": "09:05:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Worcester #510 (S&I)",
+      "start_time": "09:16:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Fairmount #756 (Mid-Day Storage)",
+      "start_time": "09:23:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Providence #807 (Boston - Providence)",
+      "start_time": "09:33:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #705 (Boston - Readville)",
+      "start_time": "09:38:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Stoughton #909 (Boston - Stoughton)",
+      "start_time": "09:43:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Needham #608 (Boston - Depot)",
+      "start_time": "09:47:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Kingston #040 (Mid-Day Storage)",
+      "start_time": "09:52:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Worcester #590 (Mid-Day Storage)",
+      "start_time": "10:00:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Providence #809 (Boston - Providence)",
+      "start_time": "10:23:00",
+      "duration": "01:10:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #710 (Mid-Day Storage)",
+      "start_time": "10:50:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Worcester #512 (Boston - Depot))",
+      "start_time": "11:13:00",
+      "duration": "00:10:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Providence #811 (Boston - Providence)",
+      "start_time": "11:23:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Worcester #514 (Maintenance)",
+      "start_time": "12:13:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Franklin #709 (Boston - Readville)",
+      "start_time": "12:18:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Stoughton #911 (Boston - Stoughton)",
+      "start_time": "13:18:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #711 (Boston - Readville)",
+      "start_time": "13:33:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Franklin #714 (Boston - Depot)",
+      "start_time": "13:36:00",
+      "duration": "00:07:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Providence #813 (Boston - Providence)",
+      "start_time": "13:41:00",
+      "duration": "01:04:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Fairmount #764 (Boston - Depot)",
+      "start_time": "13:45:00",
+      "duration": "00:10:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #815 (Depot - Boston)",
+      "start_time": "13:45:00",
+      "duration": "00:07:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Needham #614 (Mid-Day Storage)",
+      "start_time": "13:49:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Providence #815 (Boston - Providence)",
+      "start_time": "14:28:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Providence #820 (Boston - Depot)",
+      "start_time": "14:35:00",
+      "duration": "00:11:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Franklin #713 (Boston - Readville)",
+      "start_time": "14:38:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Franklin #716 (Boston - Depot)",
+      "start_time": "14:54:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #817 (Boston - Providence)",
+      "start_time": "15:23:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Stoughton #913 (Boston - Stoughton)",
+      "start_time": "15:33:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Providence #819 (Boston - Providence)",
+      "start_time": "15:53:00",
+      "duration": "01:00:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Franklin #718 (Boston - Depot)",
+      "start_time": "16:07:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Norwood Central #743 (Boston - Readville)",
+      "start_time": "16:13:00",
+      "duration": "00:22:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Stoughton #915 (Boston - Stoughton)",
+      "start_time": "16:18:00",
+      "duration": "00:39:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #821 (Boston - Providence)",
+      "start_time": "16:28:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Providence #823 (Boston - Providence)",
+      "start_time": "16:51:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #745 (Boston - Readville)",
+      "start_time": "17:00:00",
+      "duration": "00:22:00"
+    },
+    {
+      "global_index": 53,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Stoughton #917 (Boston - Stoughton)",
+      "start_time": "17:10:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 54,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Providence #825 (Boston - Providence)",
+      "start_time": "17:38:00",
+      "duration": "01:00:00"
+    },
+    {
+      "global_index": 55,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Stoughton #919 (Boston - Stoughton)",
+      "start_time": "17:49:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 56,
+      "page": 8,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #827 (Boston - Providence)",
+      "start_time": "18:08:00",
+      "duration": "01:00:00"
+    },
+    {
+      "global_index": 57,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Franklin #723 (Boston - Readville)",
+      "start_time": "18:18:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 58,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Stoughton #921 (Boston - Stoughton)",
+      "start_time": "18:26:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 59,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Providence #829 (Boston - Providence)",
+      "start_time": "18:48:00",
+      "duration": "01:11:00"
+    },
+    {
+      "global_index": 60,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Stoughton #923 (Boston - Stoughton)",
+      "start_time": "19:18:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 61,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Providence #831 (Boston - Providence)",
+      "start_time": "19:28:00",
+      "duration": "01:07:00"
+    },
+    {
+      "global_index": 62,
+      "page": 9,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Providence #830 (Overnight Storage)",
+      "start_time": "19:36:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 63,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Franklin #746 (Mid-Day Storage)",
+      "start_time": "19:39:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 64,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Franklin #725 (Boston - Readville)",
+      "start_time": "19:43:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 65,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Fairmount #780 (Overnight Storage)",
+      "start_time": "20:05:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 66,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Providence #833 (Boston - Providence)",
+      "start_time": "20:28:00",
+      "duration": "01:14:00"
+    },
+    {
+      "global_index": 67,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Needham #626 (Overnight Storage)",
+      "start_time": "20:45:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 68,
+      "page": 10,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Franklin #727 (Boston - Readville)",
+      "start_time": "20:58:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 69,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1011,
+      "name": "MBTA Stoughton #924 (Overnight Storage)",
+      "start_time": "21:28:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 70,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1084,
+      "name": "MBTA Stoughton #925 (Boston - Stoughton)",
+      "start_time": "21:38:00",
+      "duration": "00:39:00"
+    },
+    {
+      "global_index": 71,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1157,
+      "name": "MBTA Providence #835 (Boston - Providence)",
+      "start_time": "21:59:00",
+      "duration": "01:12:00"
+    },
+    {
+      "global_index": 72,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Needham #628 (Boston - Depot)",
+      "start_time": "22:36:00",
+      "duration": "00:09:00"
+    },
+    {
+      "global_index": 73,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Stoughton #927 (Boston - Stoughton)",
+      "start_time": "22:38:00",
+      "duration": "00:39:00"
+    },
+    {
+      "global_index": 74,
+      "page": 11,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Franklin #729 (Boston - Readville)",
+      "start_time": "22:45:00",
+      "duration": "00:23:00"
+    },
+    {
+      "global_index": 75,
+      "page": 12,
+      "click_x": 1391,
+      "click_y": 1230,
+      "name": "MBTA Providence #836 (Overnight Storage)",
+      "start_time": "23:03:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 76,
+      "page": 12,
+      "click_x": 1391,
+      "click_y": 1303,
+      "name": "MBTA Providence #838 (Overnight Storage)",
+      "start_time": "23:44:00",
+      "duration": "00:08:00"
+    },
+    {
+      "global_index": 77,
+      "page": 12,
+      "click_x": 1391,
+      "click_y": 1376,
+      "name": "MBTA Franklin #730 (Overnight Storage)",
+      "start_time": "23:48:00",
+      "duration": "00:08:00"
+    }
+  ]
+}

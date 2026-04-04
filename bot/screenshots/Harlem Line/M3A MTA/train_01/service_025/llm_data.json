@@ -1,0 +1,25 @@
+{
+  "level_info": {
+    "service_name": "GCT Yard Move (Part 2)",
+    "start_time": "12:24",
+    "duration": "00:04",
+    "tonnage": 430.9,
+    "car_count": 8,
+    "train_length": 207.3
+  },
+  "location": {
+    "lat": 40.75752673362609,
+    "lng": -73.97362510251439,
+    "current_service_name": "629DH2"
+  },
+  "schedule": [
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 38",
+      "location": "Grand Central Track 38",
+      "time1": "",
+      "time2": "",
+      "sort_order": 0
+    }
+  ]
+}

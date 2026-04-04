@@ -1,0 +1,42 @@
+{
+  "level_info": {
+    "service_name": "MBTA Worcester #505 (Depot - Boston)",
+    "start_time": "05:35",
+    "duration": "00:09",
+    "tonnage": 435,
+    "car_count": 6,
+    "train_length": 149,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.33308186697543,
+    "lng": -71.05982217701596,
+    "current_service_name": "MBTA Worcester #505 (AI To Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:35:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:35:00",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 02",
+      "location": "Boston South Station Track 02",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    }
+  ]
+}

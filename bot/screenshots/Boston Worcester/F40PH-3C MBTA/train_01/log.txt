@@ -1,0 +1,72 @@
+Service #1 | MT500EQ Worcester Yard - Worcester (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_001
+Service #1 | OK | MT500EQ Worcester Yard - Worcester (Part 2) 04:25 00:06 | timetable_id=2770
+Service #2 | 6581 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_002
+Service #2 | OK | 6581 Boston South Station to Framingham 05:11 00:31 | timetable_id=2771
+Service #3 | P583 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_003
+Service #3 | OK | P583 Boston South Station to Framingham 05:28 00:49 | timetable_id=2772
+Service #4 | P503 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_004
+Service #4 | OK | P503 Boston South Station to Worcester 05:53 01:13 | timetable_id=2773
+Service #5 | P505 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_005
+Service #5 | OK | P505 Boston South Station to Worcester 06:08 01:23 | timetable_id=2774
+Service #6 | 6585 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_006
+Service #6 | OK | 6585 Boston South Station to Framingham 06:28 00:32 | timetable_id=2775
+Service #7 | MT600EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_007
+Service #7 | OK | MT600EQ Boston South Station - Southampton Street Yard 07:11 00:10 | timetable_id=2776
+Service #8 | MT004EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_008
+Service #8 | OK | MT004EQ Boston South Station - Southampton Street Yard 07:12 00:10 | timetable_id=2777
+Service #9 | P507 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_009
+Service #9 | OK | P507 Boston South Station to Worcester 07:18 01:12 | timetable_id=2778
+Service #10 | MT034EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_010
+Service #10 | OK | MT034EQ Boston South Station - Southampton Street Yard 07:22 00:10 | timetable_id=2779
+Service #11 | T074EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_011
+Service #11 | OK | MT074EQ Boston South Station - Southampton Street Yard 08:12 00:10 | timetable_id=2780
+Service #12 | MT036EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_012
+Service #12 | OK | MT036EQ Boston South Station - Southampton Street Yard 08:16 00:10 | timetable_id=2781
+Service #13 | MT740EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_013
+Service #13 | OK | MT740EQ Boston South Station - Southampton Street Yard 08:44 00:10 | timetable_id=2782
+Service #14 | P509 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_014
+Service #14 | OK | P509 Boston South Station to Worcester 08:48 01:24 | timetable_id=2783
+Service #15 | MT756EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_015
+Service #15 | OK | MT756EQ Boston South Station - Southampton Street Yard 09:22 00:09 | timetable_id=2784
+Service #16 | MT608EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_016
+Service #16 | OK | MT608EQ Boston South Station - Southampton Street Yard 09:42 00:10 | timetable_id=2785
+Service #17 |  Geometry Extra Boston, MA - Worcester, MA | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_017
+Service #17 | OK | Geometry Extra Boston, MA - Worcester, MA 09:54 00:00 | timetable_id=2786
+Service #18 | MT710EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_018
+Service #18 | OK | MT710EQ Boston South Station - Southampton Street Yard 10:32 00:10 | timetable_id=2787
+Service #19 | MT512EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_019
+Service #19 | OK | MT512EQ Boston South Station - Southampton Street Yard 10:37 00:08 | timetable_id=2788
+Service #20 | MT910EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_020
+Service #20 | OK | MT910EQ Boston South Station - Southampton Street Yard 11:27 00:10 | timetable_id=2789
+Service #21 |  Extra Southampton, MA - Worcester, MA | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_021
+Service #21 | OK | Extra Southampton, MA - Worcester, MA 11:37 00:19 | timetable_id=2790
+Service #22 |  Extra Grafton, MA - Readville Yard, MA | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_022
+Service #22 | OK | Extra Grafton, MA - Readville Yard, MA 11:47 00:00 | timetable_id=2791
+Service #23 | P513 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_023
+Service #23 | OK | P513 Boston South Station to Worcester 11:53 01:31 | timetable_id=2792
+Service #24 | MT514EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_024
+Service #24 | OK | MT514EQ Boston South Station - Southampton Street Yard 12:17 00:05 | timetable_id=2793
+Service #25 |  Geometry Extra Boston South Station - Southampton Stre | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_025
+Service #25 | OK | Geometry Extra Boston South Station - Southampton Street Yard 12:41 00:10 | timetable_id=2794
+Service #26 | MT714EQ Boston South Station - Southampton Street Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_026
+Service #26 | OK | MT714EQ Boston South Station - Southampton Street Yard 13:46 00:10 | timetable_id=2795
+Service #27 | P515 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_027
+Service #27 | OK | P515 Boston South Station to Worcester 13:53 01:31 | timetable_id=2796
+Service #28 | P517 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_028
+Service #28 | OK | P517 Boston South Station to Worcester 15:28 01:35 | timetable_id=2797
+Service #29 | P591 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_029
+Service #29 | OK | P591 Boston South Station to Framingham 16:28 00:54 | timetable_id=2798
+Service #30 | P593 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_030
+Service #30 | OK | P593 Boston South Station to Framingham 17:08 00:58 | timetable_id=2799
+Service #31 | P595 Boston South Station to Framingham | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_031
+Service #31 | OK | P595 Boston South Station to Framingham 17:48 00:55 | timetable_id=2800
+Service #32 | P527 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_032
+Service #32 | OK | P527 Boston South Station to Worcester 18:43 01:31 | timetable_id=2801
+Service #33 | P551 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_033
+Service #33 | OK | P551 Boston South Station to Worcester 19:33 01:11 | timetable_id=2802
+Service #34 | P531 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_034
+Service #34 | OK | P531 Boston South Station to Worcester 20:33 01:31 | timetable_id=2803
+Service #35 | MT531EQ Worcester - Worcester Yard (Part 2) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_035
+Service #35 | OK | MT531EQ Worcester - Worcester Yard (Part 2) 22:26 00:06 | timetable_id=2804
+Service #36 | P535 Boston South Station to Worcester | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\F40PH-3C MBTA\train_01\service_036
+Service #36 | OK | P535 Boston South Station to Worcester 22:28 01:31 | timetable_id=2805

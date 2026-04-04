@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "TGV 6128 Paris Gare de Lyon",
+    "start_time": "17:00",
+    "duration": "00:33",
+    "tonnage": 813.9,
+    "car_count": 20,
+    "train_length": 399.3
+  },
+  "location": {
+    "lat": 43.304933810039266,
+    "lng": 5.384442720729613,
+    "current_service_name": "TGV_6128_p"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:00:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:00:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:02:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Power Changeover Location",
+      "location": "Power Changeover Location",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Aix-en-Provence TGV 4 - 17:13:00",
+      "location": "Aix-en-Provence TGV 4",
+      "time1": "17:13:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:14:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Avignon TGV 4 - 17:33:00",
+      "location": "Avignon TGV 4",
+      "time1": "17:33:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

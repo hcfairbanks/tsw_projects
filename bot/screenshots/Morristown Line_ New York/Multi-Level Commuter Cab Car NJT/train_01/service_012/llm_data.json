@@ -1,0 +1,50 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6204 Montclair State University - NY Penn Station",
+    "start_time": "06:22",
+    "duration": "00:23",
+    "tonnage": 575.3,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.747467163360554,
+    "lng": -74.1714308897354,
+    "current_service_name": "NJT-6204"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:25:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 7 - 06:46:00",
+      "location": "New York Penn Track 7",
+      "time1": "06:46:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

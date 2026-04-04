@@ -1,0 +1,14 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Boston Sprinter
+Train:       Rotem CTC-5 MBTA
+Started:     2026-03-22 23:17:12
+Duration:    2:40:40
+Trains:      2
+Services:    74
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    74         2:36:10
+Train 2    0          0:03:02

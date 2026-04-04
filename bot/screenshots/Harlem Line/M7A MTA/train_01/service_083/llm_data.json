@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "Train 444 Greystone to GCT",
+    "start_time": "10:31",
+    "duration": "00:20",
+    "tonnage": 345.1,
+    "car_count": 6,
+    "train_length": 156
+  },
+  "location": {
+    "lat": 40.82459709092222,
+    "lng": -73.92942851426022,
+    "current_service_name": "444"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:35:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 10:40:00",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "10:40:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "10:41:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 13 - 10:52:00",
+      "location": "Grand Central Track 13",
+      "time1": "10:52:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

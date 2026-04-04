@@ -1,0 +1,98 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6410 Gladstone - NY Penn Station",
+    "start_time": "07:24",
+    "duration": "00:48",
+    "tonnage": 575.3,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.71633163733355,
+    "lng": -74.35675162365683,
+    "current_service_name": "NJT-6410"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:24:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:24:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:26:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 1 - 07:32:30",
+      "location": "Short Hills Track 1",
+      "time1": "07:32:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:33:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 2 - 07:47:00",
+      "location": "Newark Broad Street Track 2",
+      "time1": "07:47:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:47:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track A - 07:59:30",
+      "location": "Secaucus Junction Track A",
+      "time1": "07:59:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:00:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 3 - 08:13:00",
+      "location": "New York Penn Track 3",
+      "time1": "08:13:00",
+      "time2": "",
+      "sort_order": 9
+    }
+  ]
+}

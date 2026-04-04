@@ -1,0 +1,155 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Providence #804 (Providence - Boston)",
+    "start_time": "05:58",
+    "duration": "01:03",
+    "tonnage": 439.9,
+    "car_count": 6,
+    "train_length": 151.4,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 41.82966404328059,
+    "lng": -71.41289311260863,
+    "current_service_name": "MBTA Providence #804 (Inbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:58:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:58:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:59:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Attleboro Track 2 - 06:08:19",
+      "location": "South Attleboro Track 2",
+      "time1": "06:08:19",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:09:19",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Attleboro Track 4 - 06:17:57",
+      "location": "Attleboro Track 4",
+      "time1": "06:17:57",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:18:57",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mansfield Track 2 - 06:26:49",
+      "location": "Mansfield Track 2",
+      "time1": "06:26:49",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:27:49",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sharon Track 2 - 06:35:11",
+      "location": "Sharon Track 2",
+      "time1": "06:35:11",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:36:11",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 2 - 06:43:41",
+      "location": "Route 128 Track 2",
+      "time1": "06:43:41",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:44:41",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 2 - 06:55:13",
+      "location": "Boston Back Bay Track 2",
+      "time1": "06:55:13",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:55:58",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 05 - 07:01:54",
+      "location": "Boston South Station Track 05",
+      "time1": "07:01:54",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 16
+    }
+  ]
+}

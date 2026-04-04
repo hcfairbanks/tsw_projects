@@ -1,0 +1,4 @@
+Service #1 |  EMD F125 Metrolink Antelope Valley | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_04\service_001
+Service #1 | DUPLICATE | LA Union - Metrolink CMF (Non-Revenue) 05:21 00:17
+Service #2 |  ML EMD F125 Antelope Valley | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Antelope Valley Line\EMD F125 Metrolink\train_04\service_002
+Service #2 | DUPLICATE | LA Union - Metrolink CMF (Non-Revenue) 05:52 00:38

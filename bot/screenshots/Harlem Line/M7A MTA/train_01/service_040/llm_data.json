@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "Train 709 GCT to Croton-Harmon",
+    "start_time": "07:22",
+    "duration": "00:15",
+    "tonnage": 345.1,
+    "car_count": 6,
+    "train_length": 156
+  },
+  "location": {
+    "lat": 40.75472676726093,
+    "lng": -73.97642694864776,
+    "current_service_name": "709"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:22:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:22:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:24:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 2 - 07:33:30",
+      "location": "Harlem 125th Street Track 2",
+      "time1": "07:33:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:34:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Yankees East 153rd Street Track 1 - 07:38:00",
+      "location": "Yankees East 153rd Street Track 1",
+      "time1": "07:38:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

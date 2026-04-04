@@ -1,0 +1,177 @@
+{
+  "level_info": {
+    "service_name": "AV 223: LA Union - Lancaster (Part 1)",
+    "start_time": "16:39",
+    "duration": "01:16",
+    "tonnage": 392.9,
+    "car_count": 5,
+    "train_length": 125.2
+  },
+  "location": {
+    "lat": 34.05557748648824,
+    "lng": -118.23450171321633,
+    "current_service_name": "P_AV_223_A"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:39:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:39:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:40:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Glendale Track 1 - 16:54:00",
+      "location": "Glendale Track 1",
+      "time1": "16:54:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:55:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Burbank-Downtown Track 2 - 17:01:00",
+      "location": "Burbank-Downtown Track 2",
+      "time1": "17:01:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:02:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Burbank Airport-North Track 1 - 17:09:00",
+      "location": "Burbank Airport-North Track 1",
+      "time1": "17:09:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:10:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sun Valley Track 1 - 17:13:00",
+      "location": "Sun Valley Track 1",
+      "time1": "17:13:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:14:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sylmar/San Fernando Track 1 - 17:21:00",
+      "location": "Sylmar/San Fernando Track 1",
+      "time1": "17:21:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:22:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newhall Track 2 - 17:36:00",
+      "location": "Newhall Track 2",
+      "time1": "17:36:00",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:37:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Santa Clarita Track 1 - 17:44:00",
+      "location": "Santa Clarita Track 1",
+      "time1": "17:44:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:45:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Via Princessa Track 1 - 17:50:00",
+      "location": "Via Princessa Track 1",
+      "time1": "17:50:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:51:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Vista Canyon Track 2 - 17:56:00",
+      "location": "Vista Canyon Track 2",
+      "time1": "17:56:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

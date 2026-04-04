@@ -1,0 +1,106 @@
+Service #1 |  Leave Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_001
+Service #1 | OK | Leave Depot 05:11 00:02 | timetable_id=34446
+Service #2 |  TGV 6102 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_002
+Service #2 | OK | TGV 6102 Paris Gare de Lyon 05:16 00:33 | timetable_id=34447
+Service #3 |  TGV 6136 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_003
+Service #3 | OK | TGV 6136 Paris Gare de Lyon 06:02 00:33 | timetable_id=34448
+Service #4 |  TGV 9854 Bruxelles Midi | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_004
+Service #4 | OK | TGV 9854 Bruxelles Midi 06:36 00:33 | timetable_id=34449
+Service #4 |  TGV 9854 Bruxelles Midi | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_004
+Service #4 | DUPLICATE | TGV 9854 Bruxelles Midi 06:36 00:33
+Service #5 |  Leave Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_005
+Service #5 | OK | Leave Depot 06:55 00:02 | timetable_id=34450
+Service #6 |  TGV 6106 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_006
+Service #6 | OK | TGV 6106 Paris Gare de Lyon 07:00 00:33 | timetable_id=34451
+Service #7 |  TGV 6801 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_007
+Service #7 | OK | TGV 6801 Nice Ville 07:39 00:33 | timetable_id=34452
+Service #8 |  TGV 9583 Frankfurt(Main)Hbf | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_008
+Service #8 | OK | TGV 9583 Frankfurt(Main)Hbf 08:16 00:33 | timetable_id=34453
+Service #9 |  TGV 6112 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_009
+Service #9 | OK | TGV 6112 Paris Gare de Lyon 09:02 00:33 | timetable_id=34454
+Service #10 |  TGV 6101 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_010
+Service #10 | OK | TGV 6101 Marseille-St-Charles 09:22 00:33 | timetable_id=34455
+Service #11 |  TGV 6811 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_011
+Service #11 | OK | TGV 6811 Marseille-St-Charles 09:30 00:33 | timetable_id=34456
+Service #12 |  Leave Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_012
+Service #12 | OK | Leave Depot 09:40 00:02 | timetable_id=34457
+Service #13 |  TGV 5516 Nancy Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_013
+Service #13 | OK | TGV 5516 Nancy Ville 09:46 00:33 | timetable_id=34458
+Service #14 |  TGV 5102 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_014
+Service #14 | OK | TGV 5102 Marseille-St-Charles 10:14 00:33 | timetable_id=34459
+Service #15 |  TGV 6103 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_015
+Service #15 | OK | TGV 6103 Marseille-St-Charles 10:28 00:33 | timetable_id=34460
+Service #16 |  Return to Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_016
+Service #16 | OK | Return to Depot 11:10 00:03 | timetable_id=34461
+Service #17 |  TGV 6077 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_017
+Service #17 | OK | TGV 6077 Nice Ville 11:50 00:29 | timetable_id=34462
+Service #18 |  TGV 5010 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_018
+Service #18 | OK | TGV 5010 Marseille-St-Charles 11:54 00:29 | timetable_id=34463
+Service #19 |  TGV 6116 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_019
+Service #19 | OK | TGV 6116 Paris Gare de Lyon 12:02 00:33 | timetable_id=34464
+Service #20 |  TGV 9866 Bruxelles Midi | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_020
+Service #20 | OK | TGV 9866 Bruxelles Midi 12:07 00:35 | timetable_id=34465
+Service #21 |  TGV 5332 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_021
+Service #21 | OK | TGV 5332 Marseille-St-Charles 12:46 00:35 | timetable_id=34466
+Service #22 |  TGV 6175 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_022
+Service #22 | OK | TGV 6175 Nice Ville 12:52 00:29 | timetable_id=34467
+Service #23 |  TGV 6109 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_023
+Service #23 | OK | TGV 6109 Marseille-St-Charles 13:37 00:33 | timetable_id=34468
+Service #24 |  TGV 5316 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_024
+Service #24 | OK | TGV 5316 Marseille-St-Charles 13:53 00:29 | timetable_id=34469
+Service #25 |  TGV 6120 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_025
+Service #25 | OK | TGV 6120 Paris Gare de Lyon 14:00 00:33 | timetable_id=34470
+Service #26 |  TGV 9877 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_026
+Service #26 | OK | TGV 9877 Marseille-St-Charles 14:22 00:33 | timetable_id=34471
+Service #27 |  TGV 6111 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_027
+Service #27 | OK | TGV 6111 Marseille-St-Charles 14:30 00:33 | timetable_id=34472
+Service #28 |  TGV 5386 Rennes | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_028
+Service #28 | OK | TGV 5386 Rennes 14:33 00:33 | timetable_id=34473
+Service #29 |  TGV 6122 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_029
+Service #29 | OK | TGV 6122 Paris Gare de Lyon 15:01 00:33 | timetable_id=34474
+Service #30 |  TGV 9868 Bruxelles Midi | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_030
+Service #30 | OK | TGV 9868 Bruxelles Midi 15:10 00:36 | timetable_id=34475
+Service #31 |  TGV 6803 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_031
+Service #31 | OK | TGV 6803 Marseille-St-Charles 15:10 00:33 | timetable_id=34476
+Service #32 |  TGV 5376 Le Havre | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_032
+Service #32 | OK | TGV 5376 Le Havre 15:33 00:33 | timetable_id=34477
+Service #33 |  TGV 6124 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_033
+Service #33 | OK | TGV 6124 Paris Gare de Lyon 15:49 00:33 | timetable_id=34478
+Service #34 |  TGV 9896 Metz Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_034
+Service #34 | OK | TGV 9896 Metz Ville 16:02 00:37 | timetable_id=34479
+Service #35 |  TGV 6077 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_035
+Service #35 | OK | TGV 6077 Nice Ville 16:50 00:29 | timetable_id=34480
+Service #36 |  TGV 6128 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_036
+Service #36 | OK | TGV 6128 Paris Gare de Lyon 17:00 00:33 | timetable_id=34481
+Service #37 |  TGV 9882 Bruxelles Midi | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_037
+Service #37 | OK | TGV 9882 Bruxelles Midi 17:07 00:38 | timetable_id=34482
+Service #38 |  Leave Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_038
+Service #38 | OK | Leave Depot 17:40 00:02 | timetable_id=34483
+Service #39 |  TGV 5306 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_039
+Service #39 | OK | TGV 5306 Marseille-St-Charles 17:44 00:29 | timetable_id=34484
+Service #40 |  TGV 6850 Lyon Part Dieu | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_040
+Service #40 | OK | TGV 6850 Lyon Part Dieu 17:49 00:33 | timetable_id=34485
+Service #41 |  TGV 9830 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_041
+Service #41 | OK | TGV 9830 Marseille-St-Charles 18:14 00:33 | timetable_id=34486
+Service #42 |  TGV 6117 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_042
+Service #42 | OK | TGV 6117 Marseille-St-Charles 18:29 00:33 | timetable_id=34487
+Service #43 |  TGV 6132 Paris Gare de Lyon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_043
+Service #43 | OK | TGV 6132 Paris Gare de Lyon 18:59 00:34 | timetable_id=34488
+Service #44 |  TGV 6169 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_044
+Service #44 | OK | TGV 6169 Nice Ville 19:00 00:29 | timetable_id=34489
+Service #45 |  TGV 6862 Lyon Part Dieu | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_045
+Service #45 | OK | TGV 6862 Lyon Part Dieu 19:09 00:34 | timetable_id=34490
+Service #46 |  TGV 5537 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_046
+Service #46 | OK | TGV 5537 Nice Ville 19:10 00:33 | timetable_id=34491
+Service #47 |  TGV 6121 Nice Ville | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_047
+Service #47 | OK | TGV 6121 Nice Ville 19:22 00:33 | timetable_id=34492
+Service #48 |  TGV 6852 Lyon Part Dieu | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_048
+Service #48 | OK | TGV 6852 Lyon Part Dieu 20:14 00:33 | timetable_id=34493
+Service #49 |  TGV 6123 Marseille-St-Charles | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_049
+Service #49 | OK | TGV 6123 Marseille-St-Charles 20:30 00:33 | timetable_id=34494
+Service #50 |  Return to Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_050
+Service #50 | OK | Return to Depot 21:10 00:03 | timetable_id=34495
+Service #51 |  Return to Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_051
+Service #51 | DUPLICATE | Return to Depot 21:10 00:03
+Service #52 |  Return to Depot | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\LGV Mediterranee\TGV Duplex\train_01\service_052
+Service #52 | OK | Return to Depot 21:45 00:03 | timetable_id=34496

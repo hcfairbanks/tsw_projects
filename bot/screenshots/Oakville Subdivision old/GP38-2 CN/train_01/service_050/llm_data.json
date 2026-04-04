@@ -1,0 +1,65 @@
+{
+  "level_info": {
+    "service_name": "Y916 Industrial Zone Switching",
+    "start_time": "16:25",
+    "duration": "00:18",
+    "tonnage": 241,
+    "car_count": 2,
+    "train_length": 36.5
+  },
+  "location": {
+    "lat": 43.268870807362745,
+    "lng": -79.87176107634407,
+    "current_service_name": "Y916"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:25:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:25:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hamilton Yard East Lead",
+      "location": "Hamilton Yard East Lead",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "COUPLE TO FORMATION",
+      "details": "15 vehicles",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Victoria Avenue facility",
+      "location": "Victoria Avenue facility",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "UNCOUPLE VEHICLES",
+      "details": "The rear 5 cars",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "McAnulty Yard",
+      "location": "McAnulty Yard",
+      "time1": "",
+      "time2": "",
+      "sort_order": 5
+    }
+  ]
+}

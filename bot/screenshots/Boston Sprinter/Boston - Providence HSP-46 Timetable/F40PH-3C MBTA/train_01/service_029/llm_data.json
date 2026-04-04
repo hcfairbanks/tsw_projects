@@ -1,0 +1,34 @@
+{
+  "level_info": {
+    "service_name": "MBTA Worcester #514 (Maintenance)",
+    "start_time": "12:13",
+    "duration": "00:09",
+    "tonnage": 529.7,
+    "car_count": 6,
+    "train_length": 489.6,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.350101379692276,
+    "lng": -71.05566921500669,
+    "current_service_name": "MBTA Worcester #514 (Maintenance)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 12:13:00",
+      "location": "",
+      "time1": "",
+      "time2": "12:13:00",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Front Yard Track 2",
+      "location": "Front Yard Track 2",
+      "time1": "",
+      "time2": "",
+      "sort_order": 1
+    }
+  ]
+}

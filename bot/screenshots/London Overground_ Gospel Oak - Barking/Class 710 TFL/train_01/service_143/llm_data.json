@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "5M28 Upper Holloway to Upper Holloway Reception Siding",
+    "start_time": "22:27",
+    "duration": "00:05",
+    "tonnage": 160.8,
+    "car_count": 4,
+    "train_length": 82.5
+  },
+  "location": {
+    "lat": 51.563134933655626,
+    "lng": -0.13016199264465422,
+    "current_service_name": "5M28"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 22:27:00",
+      "location": "",
+      "time1": "",
+      "time2": "22:27:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "22:29:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Upper Holloway Reception Siding - 22:31:00",
+      "location": "Upper Holloway Reception Siding",
+      "time1": "22:31:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

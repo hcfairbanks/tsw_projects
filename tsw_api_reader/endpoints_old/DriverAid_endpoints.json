@@ -1,0 +1,650 @@
+{
+  "baseUrl": "http://localhost:31270",
+  "targetNode": "DriverAid",
+  "discoveredAt": "2025-12-31T03:15:19.834Z",
+  "maxDepth": 20,
+  "maxDepthAchieved": 0,
+  "totalRequests": 8,
+  "totalEndpoints": 6,
+  "endpoints": [
+    {
+      "url": "http://localhost:31270/get/DriverAid.Data",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "signalSeen": true,
+          "speedLimitSeen": false,
+          "distanceToSignal": 80248.5078125,
+          "distanceToNextSpeedLimit": 0,
+          "gradient": -0.1219794899225235,
+          "signalAspectClass": "Clear",
+          "signalPropertyGuid": "E0620F4C445E7FEFFB003F995777E7E9",
+          "bSignalIsPermissive": true,
+          "speedLimit": {
+            "value": 35.76319885253906
+          },
+          "nextSpeedLimit": {
+            "value": 0
+          },
+          "currentSpeedLimitSource": "FormationSpeedLimit",
+          "trackMaxSpeed": {
+            "value": 67.05599975585938
+          },
+          "serviceMaxSpeed": {
+            "value": 3.4028234663852886e+38
+          },
+          "formationMaxSpeed": {
+            "value": 35.76319885253906
+          },
+          "nextSignalPosition": {
+            "x": -60201.90625,
+            "y": 107272.125,
+            "z": 4168.94482421875
+          },
+          "nextSpeedLimitPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "nextSpeedLimits": [],
+          "nextSignals": [
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 80243.5078125,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 215080.890625,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 296319.9375,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 404949.5,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 554966.5625,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            {
+              "value": "Clear",
+              "distanceToNextSignal": 568719.375,
+              "nextSignalPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          ],
+          "nextSignalProperty": {
+            "ribbonReference": "0A2F5FB6477352B087D0B5B709FB2EFB",
+            "propertyReference": "E0620F4C445E7FEFFB003F995777E7E9"
+          },
+          "trackRestrictionQuery": {
+            "maxSearchDistance": {
+              "value": 10000
+            },
+            "searchDirection": "Forwards",
+            "bWholeFormation": true,
+            "bUseOverrideAncillarySpeedClasses": false,
+            "maxReturnedSignals": 4,
+            "signalFlags": 7,
+            "maxReturnedSpeedLimits": 4,
+            "speedLimitFlags": 1,
+            "speedCurveQueries": [],
+            "speedCurveFlags": 515,
+            "overrideAncillarySpeedClasses": [],
+            "foundSignals": [],
+            "foundSpeedLimits": [],
+            "outCurrentTrackSpeedLimit": 3.3999999521443642e+38
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverAid.TrackData",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "lastPlayerPosition": {
+            "height": 4209.09521484375,
+            "distanceToHeight": 245326.84375,
+            "bTunnelFound": false
+          },
+          "trackHeights": [
+            {
+              "height": 4245.21435546875,
+              "distanceToHeight": -0.015625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4245.84521484375,
+              "distanceToHeight": 5668.625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4262.18017578125,
+              "distanceToHeight": 47663.359375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4282.6240234375,
+              "distanceToHeight": 97663.359375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4306.74609375,
+              "distanceToHeight": 155996.703125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4300.60791015625,
+              "distanceToHeight": 172663.375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4270.0849609375,
+              "distanceToHeight": 197663.40625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4209.09521484375,
+              "distanceToHeight": 245326.84375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4157.75439453125,
+              "distanceToHeight": 286993.53125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4145.107421875,
+              "distanceToHeight": 295326.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4127.703125,
+              "distanceToHeight": 303660.25,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4026.91455078125,
+              "distanceToHeight": 345327.03125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3927.122314453125,
+              "distanceToHeight": 386993.8125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3913.498291015625,
+              "distanceToHeight": 395327.15625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3912.54345703125,
+              "distanceToHeight": 403660.5,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3921.285400390625,
+              "distanceToHeight": 417808.3125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3938.2890625,
+              "distanceToHeight": 445327.1875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3948.716064453125,
+              "distanceToHeight": 461993.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3959.409912109375,
+              "distanceToHeight": 470327.1875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3971.3662109375,
+              "distanceToHeight": 475429.0625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4012.798095703125,
+              "distanceToHeight": 488521.53125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4030.3388671875,
+              "distanceToHeight": 495327.21875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4044.219482421875,
+              "distanceToHeight": 503988.625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4078.753173828125,
+              "distanceToHeight": 536665.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4084.20068359375,
+              "distanceToHeight": 545327.25,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4055.17578125,
+              "distanceToHeight": 595327.25,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4036.123779296875,
+              "distanceToHeight": 627846.0625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4027.091552734375,
+              "distanceToHeight": 636507.5,
+              "bTunnelFound": false
+            },
+            {
+              "height": 4010.1435546875,
+              "distanceToHeight": 645168.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3910.365966796875,
+              "distanceToHeight": 686507.625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3794.646484375,
+              "distanceToHeight": 736507.75,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3730.466064453125,
+              "distanceToHeight": 764490,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3679.9658203125,
+              "distanceToHeight": 786507.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3564.873779296875,
+              "distanceToHeight": 836508,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3467.185546875,
+              "distanceToHeight": 886508,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3369.23974609375,
+              "distanceToHeight": 936508.125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3294.2646484375,
+              "distanceToHeight": 986508.25,
+              "bTunnelFound": false
+            },
+            {
+              "height": 3280.388916015625,
+              "distanceToHeight": 997663.375,
+              "bTunnelFound": false
+            }
+          ],
+          "stations": [],
+          "markers": [
+            {
+              "stationName": "Norton Dead Section Track 1",
+              "distanceToStation": {
+                "x": 303660.25,
+                "y": 4127.703125
+              },
+              "distanceToStationCM": 135225.75,
+              "platformLength": 37141.33203125,
+              "markerType": "Destination",
+              "markerName": "Norton Dead Section Track 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverAid.PlayerInfo",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "geoLocation": {
+            "longitude": -71.25866726513648,
+            "latitude": 41.978089742681
+          },
+          "currentTile": {
+            "x": -18,
+            "y": 41
+          },
+          "playerProfileName": "Joe",
+          "cameraMode": "FirstPerson_Driving"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverAid.Data",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "signalSeen": false,
+          "speedLimitSeen": false,
+          "distanceToSignal": 0,
+          "distanceToNextSpeedLimit": 0,
+          "gradient": 0.19999460875988007,
+          "signalAspectClass": "Clear",
+          "signalPropertyGuid": "00000000000000000000000000000000",
+          "bSignalIsPermissive": false,
+          "speedLimit": {
+            "value": 6.705599784851074
+          },
+          "nextSpeedLimit": {
+            "value": 0
+          },
+          "currentSpeedLimitSource": "TrackSpeedLimit",
+          "trackMaxSpeed": {
+            "value": 6.705599784851074
+          },
+          "serviceMaxSpeed": {
+            "value": 3.4028234663852886e+38
+          },
+          "formationMaxSpeed": {
+            "value": 3.4028234663852886e+38
+          },
+          "nextSignalPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "nextSpeedLimitPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "nextSpeedLimits": [],
+          "nextSignals": [],
+          "nextSignalProperty": {
+            "ribbonReference": "00000000000000000000000000000000",
+            "propertyReference": "00000000000000000000000000000000"
+          },
+          "trackRestrictionQuery": {
+            "maxSearchDistance": {
+              "value": 10000
+            },
+            "searchDirection": "Forwards",
+            "bWholeFormation": true,
+            "bUseOverrideAncillarySpeedClasses": false,
+            "maxReturnedSignals": 4,
+            "signalFlags": 7,
+            "maxReturnedSpeedLimits": 4,
+            "speedLimitFlags": 1,
+            "speedCurveQueries": [],
+            "speedCurveFlags": 515,
+            "overrideAncillarySpeedClasses": [],
+            "foundSignals": [],
+            "foundSpeedLimits": [],
+            "outCurrentTrackSpeedLimit": 3.3999999521443642e+38
+          }
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverAid.TrackData",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "lastPlayerPosition": {
+            "height": 218128.875,
+            "distanceToHeight": 56666.31640625,
+            "bTunnelFound": false
+          },
+          "trackHeights": [
+            {
+              "height": 217868.03125,
+              "distanceToHeight": 0,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217872.84375,
+              "distanceToHeight": 2406.2265625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217914.390625,
+              "distanceToHeight": 23179.921875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217917.203125,
+              "distanceToHeight": 24487.8046875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217933.203125,
+              "distanceToHeight": 31907.984375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217936.015625,
+              "distanceToHeight": 33215.8671875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 217974.828125,
+              "distanceToHeight": 52624.71875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218128.875,
+              "distanceToHeight": 56666.31640625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218162.21875,
+              "distanceToHeight": 73343.578125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218179.953125,
+              "distanceToHeight": 92964.515625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 135620.765625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 139046.59375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 155542.25,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 172981.046875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 205504.71875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 213576.40625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180,
+              "distanceToHeight": 272187.9375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218180.4375,
+              "distanceToHeight": 273416.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218183.09375,
+              "distanceToHeight": 275463.9375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218260.484375,
+              "distanceToHeight": 295773.0625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218665.21875,
+              "distanceToHeight": 396957.71875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218672.578125,
+              "distanceToHeight": 399402.0625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 401834.625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 472638.375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 477245.5,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 484973.21875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 487813.6875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 489029.40625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 492302.9375,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 494986.15625,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 515600.03125,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 533354.875,
+              "bTunnelFound": false
+            },
+            {
+              "height": 218675,
+              "distanceToHeight": 583178.625,
+              "bTunnelFound": false
+            }
+          ],
+          "stations": [],
+          "markers": [
+            {
+              "stationName": "",
+              "distanceToStation": {
+                "x": 110727.1875,
+                "y": 218180
+              },
+              "distanceToStationCM": 84462.84375,
+              "platformLength": 27627.1953125,
+              "markerType": "Siding",
+              "markerName": "Laramie Stub Track 4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "http://localhost:31270/get/DriverAid.PlayerInfo",
+      "data": {
+        "Result": "Success",
+        "Values": {
+          "geoLocation": {
+            "longitude": -105.59684919606141,
+            "latitude": 41.31392497755593
+          },
+          "currentTile": {
+            "x": -66,
+            "y": -20
+          },
+          "playerProfileName": "Joe",
+          "cameraMode": "FirstPerson_Driving"
+        }
+      }
+    }
+  ],
+  "completedPaths": [
+    "DriverAid"
+  ]
+}

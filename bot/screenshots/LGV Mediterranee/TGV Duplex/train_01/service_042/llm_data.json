@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "TGV 6117 Marseille-St-Charles",
+    "start_time": "18:29",
+    "duration": "00:33",
+    "tonnage": 811.4,
+    "car_count": 20,
+    "train_length": 399.3
+  },
+  "location": {
+    "lat": 43.92124944906465,
+    "lng": 4.788250591140237,
+    "current_service_name": "TGV_6117_p"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:29:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:29:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:31:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Aix-en-Provence TGV 3 - 18:50:00",
+      "location": "Aix-en-Provence TGV 3",
+      "time1": "18:50:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:51:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Power Changeover Location",
+      "location": "Power Changeover Location",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Marseille Saint-Charles E - 19:02:00",
+      "location": "Marseille Saint-Charles E",
+      "time1": "19:02:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

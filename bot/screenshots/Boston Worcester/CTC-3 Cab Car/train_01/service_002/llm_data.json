@@ -1,0 +1,178 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "P504 Worcester to Boston South Station",
+    "start_time": "05:48",
+    "duration": "01:21",
+    "tonnage": 440.6,
+    "car_count": 6,
+    "train_length": 150.5
+  },
+  "location": {
+    "lat": 42.26125622937429,
+    "lng": -71.7938728180002,
+    "current_service_name": "P504"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 05:48:00",
+      "location": "",
+      "time1": "",
+      "time2": "5:48:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:50:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grafton Track 2 - 06:02:30",
+      "location": "Grafton Track 2",
+      "time1": "06:02:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:03:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Westborough Track 2 - 06:06:30",
+      "location": "Westborough Track 2",
+      "time1": "06:06:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:07:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Southborough Track 2 - 06:16:30",
+      "location": "Southborough Track 2",
+      "time1": "06:16:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:17:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ashland Track 2 - 06:21:30",
+      "location": "Ashland Track 2",
+      "time1": "06:21:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:22:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Framingham Track 2 - 06:30:30",
+      "location": "Framingham Track 2",
+      "time1": "06:30:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:31:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "West Natick Track 2 - 06:35:30",
+      "location": "West Natick Track 2",
+      "time1": "06:35:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:36:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Lansdowne Track 2 - 06:58:30",
+      "location": "Lansdowne Track 2",
+      "time1": "06:58:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:59:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 5 - 07:03:30",
+      "location": "Boston Back Bay Track 5",
+      "time1": "07:03:30",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:04:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 01 - 07:10:00",
+      "location": "Boston South Station Track 01",
+      "time1": "07:10:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 19
+    }
+  ]
+}

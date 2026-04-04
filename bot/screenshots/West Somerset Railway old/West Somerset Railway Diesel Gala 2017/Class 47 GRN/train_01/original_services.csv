@@ -1,0 +1,25 @@
+number,page,click,service_id,service_name,time,duration
+1,page 0,click (2373 368),[ECS0]Empty,[ECS0]Empty Stock Move to Minehead,09:20:00,00:33:00
+2,page 0,click (2373 437),[ECS1]Empty,[ECS1]Empty Stock Move at Minehead,10:00:00,00:05:00
+3,page 0,click (2373 506),[ECS2]Empty,[ECS2]Empty Stock Move at Bishops Lydeard,10:00:00,00:10:00
+4,page 0,click (2373 575),[MD1]Minehead,[MD1]Minehead - Bishops Lydeard,10:15:00,01:28:00
+5,page 0,click (2373 644),[BL1]Bishops,[BL1]Bishops Lydeard - Minehead,10:15:00,01:34:00
+6,page 0,click (2373 713),[LE1]Locomotive,[LE1]Locomotive Run Around at Bishops Lydeard,11:50:00,00:04:00
+7,page 0,click (2373 782),[LE5]Locomotive,[LE5]Locomotive Exchange at Minehead,11:55:00,00:04:00
+8,page 0,click (2373 851),[LE3]Locomotive,[LE3]Locomotive Move at Minehead,11:57:00,00:00:00
+9,page 1,click (2373 506),[MD3]Minehead,[MD3]Minehead - Bishops Lydeard,12:15:00,01:28:00
+10,page 1,click (2373 575),[BL3]Bishops,[BL3]Bishops Lydeard - Minehead,12:15:00,01:40:00
+11,page 1,click (2373 644),[LE5]Locomotive,[LE5]Locomotive Run Around at Bishops Lydeard,13:50:00,00:04:00
+12,page 1,click (2373 713),[LE6]Locomotive,[LE6]Locomotive Exchange at Minehead,13:55:00,00:04:00
+13,page 1,click (2373 782),[LE7]Light,[LE7]Light Locomotive Move at Minehead,13:57:00,00:01:00
+14,page 1,click (2373 851),[BL5]Bishops,[BL5]Bishops Lydeard - Minehead,14:15:00,01:34:00
+15,page 2,click (2373 506),[MO5]Minehead,[MO5]Minehead - Bishops Lydeard,14:15:00,01:28:00
+16,page 2,click (2373 575),[LE9]Locomotive,[LE9]Locomotive Run Around at Bishops Lydeard,15:50:00,00:04:00
+17,page 2,click (2373 644),[LE10]Locomotive,[LE10]Locomotive Exchange at Minehead,15:55:00,00:04:00
+18,page 2,click (2373 713),[LE11]Light,[LE11]Light Locomotive Move at Minehead,16:07:00,00:00:00
+19,page 2,click (2373 782),[BL7]Bishops,[BL7]Bishops Lydeard - Minehead,16:15:00,01:33:00
+20,page 2,click (2373 851),[MO7]Minehead,[MO7]Minehead - Bishops Lydeard,16:15:00,01:28:00
+21,page 3,click (2373 644),[ECS4]Empty,[ECS4]Empty Stock Move at Bishops Lydeard,17:50:00,00:06:00
+22,page 3,click (2373 713),[LE13]Locomotive,[LE13]Locomotive Exchange at Minehead,17:55:00,00:04:00
+23,page 3,click (2373 782),[ECS5]Empty,[ECS5]Empty Stock Move at Minehead,18:05:00,00:04:00
+24,page 3,click (2373 851),[LE14]Light,[LE14]Light Locomotive Move at Minehead,18:07:00,00:00:00

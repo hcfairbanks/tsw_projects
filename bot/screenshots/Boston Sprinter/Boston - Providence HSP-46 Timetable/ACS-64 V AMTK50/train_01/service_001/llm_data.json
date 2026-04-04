@@ -1,0 +1,82 @@
+{
+  "level_info": {
+    "service_name": "Amtrak Northeast Regional #95 (Boston - Providence)",
+    "start_time": "06:09",
+    "duration": "00:42",
+    "tonnage": 548.7,
+    "car_count": 9,
+    "train_length": 751.9,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.34939996531985,
+    "lng": -71.05619108685397,
+    "current_service_name": "Amtrak Northeast Regional #95 (SHSY to Boston)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 06:09:00",
+      "location": "",
+      "time1": "",
+      "time2": "6:09:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:10:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 06:15:47",
+      "location": "Boston Back Bay Track 1",
+      "time1": "06:15:47",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:16:47",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 06:28:40",
+      "location": "Route 128 Track 1",
+      "time1": "06:28:40",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:29:40",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Providence Track 1 - 06:51:00",
+      "location": "Providence Track 1",
+      "time1": "06:51:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 7
+    }
+  ]
+}

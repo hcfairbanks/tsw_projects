@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "3251 Sunnyside Yard - NY Penn Station",
+    "start_time": "14:11",
+    "duration": "00:13",
+    "tonnage": 626.4,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.74856451316817,
+    "lng": -73.93123700710905,
+    "current_service_name": "NJT-3251-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 14:11:00",
+      "location": "",
+      "time1": "",
+      "time2": "14:11:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "14:13:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 6",
+      "location": "New York Penn Track 6",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

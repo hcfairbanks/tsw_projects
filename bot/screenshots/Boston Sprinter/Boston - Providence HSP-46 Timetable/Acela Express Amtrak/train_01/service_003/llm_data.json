@@ -1,0 +1,82 @@
+{
+  "level_info": {
+    "service_name": "Amtrak Acela Express #2155 (Boston - Providence)",
+    "start_time": "07:12",
+    "duration": "00:39",
+    "tonnage": 585.5,
+    "car_count": 8,
+    "train_length": 663.1,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.349816872330976,
+    "lng": -71.05569203251201,
+    "current_service_name": "AMTK2155_BOS_PVD"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 07:12:00",
+      "location": "",
+      "time1": "",
+      "time2": "7:12:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:14:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 07:20:44",
+      "location": "Boston Back Bay Track 1",
+      "time1": "07:20:44",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:21:29",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 07:30:12",
+      "location": "Route 128 Track 1",
+      "time1": "07:30:12",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:30:57",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Providence Track 1 - 07:51:24",
+      "location": "Providence Track 1",
+      "time1": "07:51:24",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 7
+    }
+  ]
+}

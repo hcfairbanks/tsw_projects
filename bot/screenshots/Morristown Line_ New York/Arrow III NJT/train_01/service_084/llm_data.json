@@ -1,0 +1,49 @@
+{
+  "level_info": {
+    "service_name": "X68 Dover - Hoboken",
+    "start_time": "21:20",
+    "duration": "00:55",
+    "tonnage": 251.2,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.883557058586646,
+    "lng": -74.55520179284636,
+    "current_service_name": "NJT-X68"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 21:20:00",
+      "location": "",
+      "time1": "",
+      "time2": "21:20:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "21:21:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 13 - 22:16:00",
+      "location": "Hoboken Terminal Track 13",
+      "time1": "22:16:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    }
+  ]
+}

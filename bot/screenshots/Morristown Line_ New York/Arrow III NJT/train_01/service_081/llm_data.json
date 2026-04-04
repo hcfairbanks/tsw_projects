@@ -1,0 +1,322 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "674 Dover - Hoboken",
+    "start_time": "20:24",
+    "duration": "01:21",
+    "tonnage": 250.5,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.883557075259205,
+    "lng": -74.55520179419814,
+    "current_service_name": "NJT-674"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 20:24:00",
+      "location": "",
+      "time1": "",
+      "time2": "20:24:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:26:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Denville Track 2 - 20:32:30",
+      "location": "Denville Track 2",
+      "time1": "20:32:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:33:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morris Plains Track 2 - 20:39:30",
+      "location": "Morris Plains Track 2",
+      "time1": "20:39:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:40:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morristown Track 2 - 20:43:30",
+      "location": "Morristown Track 2",
+      "time1": "20:43:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:44:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Convent Track 2 - 20:47:00",
+      "location": "Convent Track 2",
+      "time1": "20:47:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:47:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Madison Track 2 - 20:51:00",
+      "location": "Madison Track 2",
+      "time1": "20:51:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:51:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Chatham Track 2 - 20:54:30",
+      "location": "Chatham Track 2",
+      "time1": "20:54:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "20:55:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Track 2 - 21:00:00",
+      "location": "Summit Track 2",
+      "time1": "21:00:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:00:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 1 - 21:04:00",
+      "location": "Short Hills Track 1",
+      "time1": "21:04:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:04:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Millburn Track 1 - 21:07:00",
+      "location": "Millburn Track 1",
+      "time1": "21:07:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:07:30",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Maplewood Track 1 - 21:10:30",
+      "location": "Maplewood Track 1",
+      "time1": "21:10:30",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:11:00",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Orange Track 1 - 21:13:30",
+      "location": "South Orange Track 1",
+      "time1": "21:13:30",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:14:00",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mountain Track 1 - 21:15:30",
+      "location": "Mountain Track 1",
+      "time1": "21:15:30",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:16:00",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Highland Avenue Track 1 - 21:18:00",
+      "location": "Highland Avenue Track 1",
+      "time1": "21:18:00",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:18:30",
+      "time2": "",
+      "sort_order": 27
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 1 - 21:20:30",
+      "location": "Orange Track 1",
+      "time1": "21:20:30",
+      "time2": "",
+      "sort_order": 28
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:21:00",
+      "time2": "",
+      "sort_order": 29
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 1 - 21:23:00",
+      "location": "Brick Church Track 1",
+      "time1": "21:23:00",
+      "time2": "",
+      "sort_order": 30
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:23:30",
+      "time2": "",
+      "sort_order": 31
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "East Orange Track 1 - 21:25:00",
+      "location": "East Orange Track 1",
+      "time1": "21:25:00",
+      "time2": "",
+      "sort_order": 32
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:25:30",
+      "time2": "",
+      "sort_order": 33
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 1 - 21:29:30",
+      "location": "Newark Broad Street Track 1",
+      "time1": "21:29:30",
+      "time2": "",
+      "sort_order": 34
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "21:30:00",
+      "time2": "",
+      "sort_order": 35
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hoboken Terminal Track 14 - 21:46:00",
+      "location": "Hoboken Terminal Track 14",
+      "time1": "21:46:00",
+      "time2": "",
+      "sort_order": 36
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 37
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "level_info": {
+    "service_name": "Train 557 GCT to North White Plains",
+    "start_time": "17:34",
+    "duration": "00:47",
+    "tonnage": 646.4,
+    "car_count": 12,
+    "train_length": 311.0
+  },
+  "location": {
+    "lat": 40.75567647198711,
+    "lng": -73.97524102598533,
+    "current_service_name": "557"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:34:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:34:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:36:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Scarsdale Track 1 - 18:03:30",
+      "location": "Scarsdale Track 1",
+      "time1": "18:03:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:04:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hartsdale Track 1 - 18:06:30",
+      "location": "Hartsdale Track 1",
+      "time1": "18:06:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:07:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 1 - 18:10:30",
+      "location": "White Plains Track 1",
+      "time1": "18:10:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:11:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 3 - 18:17:00",
+      "location": "North White Plains Track 3",
+      "time1": "18:17:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:18:00",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 10
+    }
+  ]
+}

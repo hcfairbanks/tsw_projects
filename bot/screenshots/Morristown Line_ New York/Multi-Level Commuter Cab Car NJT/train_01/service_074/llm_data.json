@@ -1,0 +1,57 @@
+{
+  "level_info": {
+    "service_name": "3866/6663 NY Penn Station - NY Penn Station",
+    "start_time": "18:41",
+    "duration": "00:36",
+    "tonnage": 624.6,
+    "car_count": 9,
+    "train_length": 226.7
+  },
+  "location": {
+    "lat": 40.7498228811106,
+    "lng": -73.99262630968909,
+    "current_service_name": "NJT-3866/6663-DH"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:41:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:41:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "18:43:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 8",
+      "location": "New York Penn Track 8",
+      "time1": "",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 4
+    }
+  ]
+}

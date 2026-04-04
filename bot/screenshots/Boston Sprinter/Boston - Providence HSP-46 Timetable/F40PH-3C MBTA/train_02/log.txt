@@ -1,0 +1,86 @@
+Service #4 |  MBTA Stoughton #903 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_004
+Service #4 | OK | MBTA Stoughton #903 (Boston - Stoughton) 06:55 00:36 | timetable_id=2889
+Service #25 |  MBTA Kingston #040 (Mid-Day Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_025
+Service #25 | OK | MBTA Kingston #040 (Mid-Day Storage) 09:52 00:09 | timetable_id=2890
+Service #38 |  MBTA Providence #815 (Depot - Boston) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_038
+Service #38 | OK | MBTA Providence #815 (Depot - Boston) 13:45 00:07 | timetable_id=2891
+Service #40 |  MBTA Providence #815 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_040
+Service #40 | OK | MBTA Providence #815 (Boston - Providence) 14:28 01:06 | timetable_id=2892
+Service #41 |  MBTA Providence #820 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_041
+Service #41 | DUPLICATE | MBTA Providence #820 (Boston - Depot) 14:35 00:11
+Service #42 |  MBTA Franklin #713 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_042
+Service #42 | DUPLICATE | MBTA Franklin #713 (Boston - Readville) 14:38 00:20
+Service #43 |  MBTA Franklin #716 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_043
+Service #43 | DUPLICATE | MBTA Franklin #716 (Boston - Depot) 14:54 00:05
+Service #44 |  MBTA Providence #817 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_044
+Service #44 | DUPLICATE | MBTA Providence #817 (Boston - Providence) 15:23 01:02
+Service #44 |  MBTA Providence #817 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_044
+Service #44 | DUPLICATE | MBTA Providence #817 (Boston - Providence) 15:23 01:02
+Service #45 |  MBTA Stoughton #913 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_045
+Service #45 | DUPLICATE | MBTA Stoughton #913 (Boston - Stoughton) 15:33 00:43
+Service #46 |  MBTA Providence #819 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_046
+Service #46 | DUPLICATE | MBTA Providence #819 (Boston - Providence) 15:53 01:00
+Service #47 |  MBTA Franklin #718 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_047
+Service #47 | DUPLICATE | MBTA Franklin #718 (Boston - Depot) 16:07 00:08
+Service #48 |  MBTA Norwood Central #743 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_048
+Service #48 | DUPLICATE | MBTA Norwood Central #743 (Boston - Readville) 16:13 00:22
+Service #49 |  MBTA Stoughton #915 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_049
+Service #49 | DUPLICATE | MBTA Stoughton #915 (Boston - Stoughton) 16:18 00:39
+Service #50 |  MBTA Providence #821 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_050
+Service #50 | DUPLICATE | MBTA Providence #821 (Boston - Providence) 16:28 01:05
+Service #51 |  MBTA Providence #823 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_051
+Service #51 | DUPLICATE | MBTA Providence #823 (Boston - Providence) 16:51 01:05
+Service #52 |  MBTA Franklin #745 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_052
+Service #52 | DUPLICATE | MBTA Franklin #745 (Boston - Readville) 17:00 00:22
+Service #53 |  MBTA Stoughton #917 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_053
+Service #53 | DUPLICATE | MBTA Stoughton #917 (Boston - Stoughton) 17:10 00:46
+Service #54 |  MBTA Providence #825 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_054
+Service #54 | DUPLICATE | MBTA Providence #825 (Boston - Providence) 17:38 01:00
+Service #55 |  MBTA Stoughton #919 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_055
+Service #55 | DUPLICATE | MBTA Stoughton #919 (Boston - Stoughton) 17:49 00:50
+Service #56 |  MBTA Providence #827 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_056
+Service #56 | DUPLICATE | MBTA Providence #827 (Boston - Providence) 18:08 01:00
+Service #57 |  MBTA Franklin #723 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_057
+Service #57 | DUPLICATE | MBTA Franklin #723 (Boston - Readville) 18:18 00:20
+Service #58 |  MBTA Stoughton #921 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_058
+Service #58 | DUPLICATE | MBTA Stoughton #921 (Boston - Stoughton) 18:26 00:45
+Service #59 |  MBTA Providence #829 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_059
+Service #59 | DUPLICATE | MBTA Providence #829 (Boston - Providence) 18:48 01:11
+Service #60 |  MBTA Stoughton #923 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_060
+Service #60 | DUPLICATE | MBTA Stoughton #923 (Boston - Stoughton) 19:18 00:42
+Service #61 |  MBTA Providence #831 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_061
+Service #61 | DUPLICATE | MBTA Providence #831 (Boston - Providence) 19:28 01:07
+Service #62 |  MBTA Providence #830 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_062
+Service #62 | DUPLICATE | MBTA Providence #830 (Overnight Storage) 19:36 00:09
+Service #63 |  MBTA Franklin #746 (Mid-Day Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_063
+Service #63 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:05
+Service #64 |  MBTA Franklin #725 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_064
+Service #64 | DUPLICATE | MBTA Franklin #725 (Boston - Readville) 19:43 00:20
+Service #65 |  MBTA Fairmount #780 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_065
+Service #65 | DUPLICATE | MBTA Fairmount #780 (Overnight Storage) 20:05 00:09
+Service #66 |  MBTA Providence #833 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_066
+Service #66 | DUPLICATE | MBTA Providence #833 (Boston - Providence) 20:28 01:14
+Service #67 |  MBTA Needham #626 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_067
+Service #67 | DUPLICATE | MBTA Needham #626 (Overnight Storage) 20:45 00:09
+Service #68 |  MBTA Franklin #727 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_068
+Service #68 | DUPLICATE | MBTA Franklin #727 (Boston - Readville) 20:58 00:21
+Service #69 |  MBTA Stoughton #924 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_069
+Service #69 | DUPLICATE | MBTA Stoughton #924 (Overnight Storage) 21:28 00:09
+Service #70 |  MBTA Stoughton #925 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_070
+Service #70 | DUPLICATE | MBTA Stoughton #925 (Boston - Stoughton) 21:38 00:39
+Service #71 |  MBTA Providence #835 (Boston - Providence) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_071
+Service #71 | DUPLICATE | MBTA Providence #835 (Boston - Providence) 21:59 01:12
+Service #72 |  MBTA Needham #628 (Boston - Depot) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_072
+Service #72 | DUPLICATE | MBTA Needham #628 (Boston - Depot) 22:36 00:09
+Service #73 |  MBTA Stoughton #927 (Boston - Stoughton) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_073
+Service #73 | DUPLICATE | MBTA Stoughton #927 (Boston - Stoughton) 22:38 00:39
+Service #74 |  MBTA Franklin #729 (Boston - Readville) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_074
+Service #74 | DUPLICATE | MBTA Franklin #729 (Boston - Readville) 22:45 00:23
+Service #75 |  MBTA Providence #836 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_075
+Service #75 | DUPLICATE | MBTA Providence #836 (Overnight Storage) 23:03 00:08
+Service #76 |  MBTA Providence #838 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_076
+Service #76 | DUPLICATE | MBTA Providence #838 (Overnight Storage) 23:44 00:08
+Service #76 |  MBTA Providence #838 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_076
+Service #76 | DUPLICATE | MBTA Providence #838 (Overnight Storage) 23:44 00:08
+Service #77 |  MBTA Franklin #730 (Overnight Storage) | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_2\bot\screenshots\Boston Sprinter\Boston - Providence HSP-46 Timetable\F40PH-3C MBTA\train_02\service_077
+Service #77 | DUPLICATE | MBTA Franklin #730 (Overnight Storage) 23:48 00:08

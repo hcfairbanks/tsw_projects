@@ -1,0 +1,171 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Providence #813 (Boston - Providence)",
+    "start_time": "13:41",
+    "duration": "01:04",
+    "tonnage": 518,
+    "car_count": 6,
+    "train_length": 495.4,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.35003075087045,
+    "lng": -71.0558752823687,
+    "current_service_name": "MBTA Providence #813 (Outbound)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 13:41:00",
+      "location": "",
+      "time1": "",
+      "time2": "13:41:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:42:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 13:47:46",
+      "location": "Boston Back Bay Track 1",
+      "time1": "13:47:46",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:48:31",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 1 - 13:51:27",
+      "location": "Ruggles Track 1",
+      "time1": "13:51:27",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "13:52:12",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 14:02:12",
+      "location": "Route 128 Track 1",
+      "time1": "14:02:12",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:02:57",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sharon Track 1 - 14:10:04",
+      "location": "Sharon Track 1",
+      "time1": "14:10:04",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:10:49",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mansfield Track 1 - 14:19:05",
+      "location": "Mansfield Track 1",
+      "time1": "14:19:05",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:19:50",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Attleboro Track 3 - 14:27:30",
+      "location": "Attleboro Track 3",
+      "time1": "14:27:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:28:30",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Attleboro Track 1 - 14:35:30",
+      "location": "South Attleboro Track 1",
+      "time1": "14:35:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "14:36:30",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Providence Track 3 - 14:46:00",
+      "location": "Providence Track 3",
+      "time1": "14:46:00",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 18
+    }
+  ]
+}

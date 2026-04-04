@@ -1,0 +1,330 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "6602 Dover - NY Penn Station",
+    "start_time": "04:13",
+    "duration": "01:29",
+    "tonnage": 635.6,
+    "car_count": 10,
+    "train_length": 252.7
+  },
+  "location": {
+    "lat": 40.883068985429176,
+    "lng": -74.5598855687971,
+    "current_service_name": "NJT-6602"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 04:13:00",
+      "location": "",
+      "time1": "",
+      "time2": "4:13:00",
+      "sort_order": 0
+    },
+    {
+      "action": "WAIT",
+      "details": "Wait for a moment",
+      "location": "",
+      "time1": "04:14:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Dover Track 2 - 04:15:30",
+      "location": "Dover Track 2",
+      "time1": "04:15:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:16:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Denville Track 2 - 04:22:00",
+      "location": "Denville Track 2",
+      "time1": "04:22:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:22:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mount Tabor Track 2 - 04:24:30",
+      "location": "Mount Tabor Track 2",
+      "time1": "04:24:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:25:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morris Plains Track 2 - 04:30:00",
+      "location": "Morris Plains Track 2",
+      "time1": "04:30:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:30:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Morristown Track 2 - 04:34:00",
+      "location": "Morristown Track 2",
+      "time1": "04:34:00",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:34:30",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Convent Track 2 - 04:37:30",
+      "location": "Convent Track 2",
+      "time1": "04:37:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:38:00",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Madison Track 2 - 04:41:30",
+      "location": "Madison Track 2",
+      "time1": "04:41:30",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:42:00",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Chatham Track 2 - 04:45:00",
+      "location": "Chatham Track 2",
+      "time1": "04:45:00",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:45:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Track 2 - 04:52:00",
+      "location": "Summit Track 2",
+      "time1": "04:52:00",
+      "time2": "",
+      "sort_order": 18
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:52:30",
+      "time2": "",
+      "sort_order": 19
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 1 - 04:56:30",
+      "location": "Short Hills Track 1",
+      "time1": "04:56:30",
+      "time2": "",
+      "sort_order": 20
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:57:00",
+      "time2": "",
+      "sort_order": 21
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Millburn Track 1 - 04:59:00",
+      "location": "Millburn Track 1",
+      "time1": "04:59:00",
+      "time2": "",
+      "sort_order": 22
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "04:59:30",
+      "time2": "",
+      "sort_order": 23
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Maplewood Track 1 - 05:02:30",
+      "location": "Maplewood Track 1",
+      "time1": "05:02:30",
+      "time2": "",
+      "sort_order": 24
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:03:00",
+      "time2": "",
+      "sort_order": 25
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Orange Track 1 - 05:06:30",
+      "location": "South Orange Track 1",
+      "time1": "05:06:30",
+      "time2": "",
+      "sort_order": 26
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:07:00",
+      "time2": "",
+      "sort_order": 27
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Orange Track 1 - 05:10:30",
+      "location": "Orange Track 1",
+      "time1": "05:10:30",
+      "time2": "",
+      "sort_order": 28
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:11:00",
+      "time2": "",
+      "sort_order": 29
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Brick Church Track 1 - 05:14:30",
+      "location": "Brick Church Track 1",
+      "time1": "05:14:30",
+      "time2": "",
+      "sort_order": 30
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:15:00",
+      "time2": "",
+      "sort_order": 31
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 1 - 05:20:00",
+      "location": "Newark Broad Street Track 1",
+      "time1": "05:20:00",
+      "time2": "",
+      "sort_order": 32
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:20:30",
+      "time2": "",
+      "sort_order": 33
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "As indicated",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 34
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Secaucus Junction Track A - 05:29:30",
+      "location": "Secaucus Junction Track A",
+      "time1": "05:29:30",
+      "time2": "",
+      "sort_order": 35
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "05:30:00",
+      "time2": "",
+      "sort_order": 36
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "New York Penn Track 8 - 05:43:00",
+      "location": "New York Penn Track 8",
+      "time1": "05:43:00",
+      "time2": "",
+      "sort_order": 37
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 38
+    }
+  ]
+}

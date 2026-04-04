@@ -1,0 +1,121 @@
+{
+  "level_info": {
+    "service_name": "Train 551 GCT to North White Plains",
+    "start_time": "16:43",
+    "duration": "00:47",
+    "tonnage": 345.1,
+    "car_count": 6,
+    "train_length": 156
+  },
+  "location": {
+    "lat": 40.754375469398646,
+    "lng": -73.97601759490841,
+    "current_service_name": "551"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 16:43:00",
+      "location": "",
+      "time1": "",
+      "time2": "16:43:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:45:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 3 - 16:54:30",
+      "location": "Harlem 125th Street Track 3",
+      "time1": "16:54:30",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "16:55:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Scarsdale Track 1 - 17:14:00",
+      "location": "Scarsdale Track 1",
+      "time1": "17:14:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:14:30",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hartsdale Track 1 - 17:17:00",
+      "location": "Hartsdale Track 1",
+      "time1": "17:17:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:17:30",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 1 - 17:22:00",
+      "location": "White Plains Track 1",
+      "time1": "17:22:00",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:22:30",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Track 1 - 17:27:30",
+      "location": "North White Plains Track 1",
+      "time1": "17:27:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:28:00",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "North White Plains Yard Track 22",
+      "location": "North White Plains Yard Track 22",
+      "time1": "",
+      "time2": "",
+      "sort_order": 12
+    }
+  ]
+}

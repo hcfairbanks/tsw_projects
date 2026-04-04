@@ -1,0 +1,298 @@
+Service 024 | DUPLICATE | Amtrak Northeast Regional #94 (Boston - Depot) 22:20 00:26 | Train 1 | ACS-64 V AMTK50
+Service 031 | DUPLICATE | MBTA Providence #818 (Providence - Boston) 11:13 01:12 | Train 1 | CTC-3 MBTA
+Service 036 | DUPLICATE | MBTA Needham #614 (Mid-Day Storage) 13:49 00:05 | Train 1 | F40PH-3C MBTA
+Service 043 | DUPLICATE | MBTA Franklin #718 (Boston - Depot) 16:07 00:08 | Train 1 | F40PH-3C MBTA
+Service 062 | DUPLICATE | MBTA Providence #833 (Boston - Providence) 20:28 01:14 | Train 1 | F40PH-3C MBTA
+Service 071 | DUPLICATE | MBTA Providence #836 (Overnight Storage) 23:03 00:08 | Train 1 | F40PH-3C MBTA
+Service 041 | DUPLICATE | MBTA Providence #820 (Boston - Depot) 14:35 00:11 | Train 2 | F40PH-3C MBTA
+Service 042 | DUPLICATE | MBTA Franklin #713 (Boston - Readville) 14:38 00:20 | Train 2 | F40PH-3C MBTA
+Service 043 | DUPLICATE | MBTA Franklin #716 (Boston - Depot) 14:54 00:05 | Train 2 | F40PH-3C MBTA
+Service 044 | DUPLICATE | MBTA Providence #817 (Boston - Providence) 15:23 01:02 | Train 2 | F40PH-3C MBTA
+Service 044 | DUPLICATE | MBTA Providence #817 (Boston - Providence) 15:23 01:02 | Train 2 | F40PH-3C MBTA
+Service 045 | DUPLICATE | MBTA Stoughton #913 (Boston - Stoughton) 15:33 00:43 | Train 2 | F40PH-3C MBTA
+Service 046 | DUPLICATE | MBTA Providence #819 (Boston - Providence) 15:53 01:00 | Train 2 | F40PH-3C MBTA
+Service 047 | DUPLICATE | MBTA Franklin #718 (Boston - Depot) 16:07 00:08 | Train 2 | F40PH-3C MBTA
+Service 048 | DUPLICATE | MBTA Norwood Central #743 (Boston - Readville) 16:13 00:22 | Train 2 | F40PH-3C MBTA
+Service 049 | DUPLICATE | MBTA Stoughton #915 (Boston - Stoughton) 16:18 00:39 | Train 2 | F40PH-3C MBTA
+Service 050 | DUPLICATE | MBTA Providence #821 (Boston - Providence) 16:28 01:05 | Train 2 | F40PH-3C MBTA
+Service 051 | DUPLICATE | MBTA Providence #823 (Boston - Providence) 16:51 01:05 | Train 2 | F40PH-3C MBTA
+Service 052 | DUPLICATE | MBTA Franklin #745 (Boston - Readville) 17:00 00:22 | Train 2 | F40PH-3C MBTA
+Service 053 | DUPLICATE | MBTA Stoughton #917 (Boston - Stoughton) 17:10 00:46 | Train 2 | F40PH-3C MBTA
+Service 054 | DUPLICATE | MBTA Providence #825 (Boston - Providence) 17:38 01:00 | Train 2 | F40PH-3C MBTA
+Service 055 | DUPLICATE | MBTA Stoughton #919 (Boston - Stoughton) 17:49 00:50 | Train 2 | F40PH-3C MBTA
+Service 056 | DUPLICATE | MBTA Providence #827 (Boston - Providence) 18:08 01:00 | Train 2 | F40PH-3C MBTA
+Service 057 | DUPLICATE | MBTA Franklin #723 (Boston - Readville) 18:18 00:20 | Train 2 | F40PH-3C MBTA
+Service 058 | DUPLICATE | MBTA Stoughton #921 (Boston - Stoughton) 18:26 00:45 | Train 2 | F40PH-3C MBTA
+Service 059 | DUPLICATE | MBTA Providence #829 (Boston - Providence) 18:48 01:11 | Train 2 | F40PH-3C MBTA
+Service 060 | DUPLICATE | MBTA Stoughton #923 (Boston - Stoughton) 19:18 00:42 | Train 2 | F40PH-3C MBTA
+Service 061 | DUPLICATE | MBTA Providence #831 (Boston - Providence) 19:28 01:07 | Train 2 | F40PH-3C MBTA
+Service 062 | DUPLICATE | MBTA Providence #830 (Overnight Storage) 19:36 00:09 | Train 2 | F40PH-3C MBTA
+Service 063 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:05 | Train 2 | F40PH-3C MBTA
+Service 064 | DUPLICATE | MBTA Franklin #725 (Boston - Readville) 19:43 00:20 | Train 2 | F40PH-3C MBTA
+Service 065 | DUPLICATE | MBTA Fairmount #780 (Overnight Storage) 20:05 00:09 | Train 2 | F40PH-3C MBTA
+Service 066 | DUPLICATE | MBTA Providence #833 (Boston - Providence) 20:28 01:14 | Train 2 | F40PH-3C MBTA
+Service 067 | DUPLICATE | MBTA Needham #626 (Overnight Storage) 20:45 00:09 | Train 2 | F40PH-3C MBTA
+Service 068 | DUPLICATE | MBTA Franklin #727 (Boston - Readville) 20:58 00:21 | Train 2 | F40PH-3C MBTA
+Service 069 | DUPLICATE | MBTA Stoughton #924 (Overnight Storage) 21:28 00:09 | Train 2 | F40PH-3C MBTA
+Service 070 | DUPLICATE | MBTA Stoughton #925 (Boston - Stoughton) 21:38 00:39 | Train 2 | F40PH-3C MBTA
+Service 071 | DUPLICATE | MBTA Providence #835 (Boston - Providence) 21:59 01:12 | Train 2 | F40PH-3C MBTA
+Service 072 | DUPLICATE | MBTA Needham #628 (Boston - Depot) 22:36 00:09 | Train 2 | F40PH-3C MBTA
+Service 073 | DUPLICATE | MBTA Stoughton #927 (Boston - Stoughton) 22:38 00:39 | Train 2 | F40PH-3C MBTA
+Service 074 | DUPLICATE | MBTA Franklin #729 (Boston - Readville) 22:45 00:23 | Train 2 | F40PH-3C MBTA
+Service 075 | DUPLICATE | MBTA Providence #836 (Overnight Storage) 23:03 00:08 | Train 2 | F40PH-3C MBTA
+Service 076 | DUPLICATE | MBTA Providence #838 (Overnight Storage) 23:44 00:08 | Train 2 | F40PH-3C MBTA
+Service 076 | DUPLICATE | MBTA Providence #838 (Overnight Storage) 23:44 00:08 | Train 2 | F40PH-3C MBTA
+Service 077 | DUPLICATE | MBTA Franklin #730 (Overnight Storage) 23:48 00:08 | Train 2 | F40PH-3C MBTA
+Service 001 | DUPLICATE | MBTA Providence #801 (Boston - Providence) 05:28 01:01 | Train 1 | HSP46 MBTA
+Service 002 | DUPLICATE | MBTA Providence #803 (Boston - Providence) 06:29 01:07 | Train 1 | HSP46 MBTA
+Service 003 | DUPLICATE | MBTA Franklin #741 (Boston - Readville) 06:38 00:17 | Train 1 | HSP46 MBTA
+Service 004 | DUPLICATE | MBTA Stoughton #903 (Boston - Stoughton) 06:55 00:36 | Train 1 | HSP46 MBTA
+Service 005 | DUPLICATE | MBTA Providence #805 (Boston - Providence) 07:23 01:05 | Train 1 | HSP46 MBTA
+Service 006 | DUPLICATE | MBTA Stoughton #905 (Boston - Stoughton) 07:33 00:36 | Train 1 | HSP46 MBTA
+Service 007 | DUPLICATE | MBTA Kingston #034 (Mid-Day Storage) 07:34 00:09 | Train 1 | HSP46 MBTA
+Service 008 | DUPLICATE | MBTA Providence #806 (Mid-Day Storage) 07:52 00:09 | Train 1 | HSP46 MBTA
+Service 009 | DUPLICATE | MBTA Worcester #506 (Boston - Depot) 07:54 00:09 | Train 1 | HSP46 MBTA
+Service 010 | DUPLICATE | MBTA Greenbush #074 (Mid-Day Storage) 08:14 00:09 | Train 1 | HSP46 MBTA
+Service 011 | DUPLICATE | MBTA Attleboro #842 (Mid-Day Storage) 08:15 00:13 | Train 1 | HSP46 MBTA
+Service 012 | DUPLICATE | MBTA Stoughton #907 (Boston - Stoughton) 08:21 00:36 | Train 1 | HSP46 MBTA
+Service 013 | DUPLICATE | MBTA Franklin #706 (Mid-Day Storage) 08:25 00:09 | Train 1 | HSP46 MBTA
+Service 014 | DUPLICATE | MBTA Providence #810 (Mid-Day Storage) 08:39 00:13 | Train 1 | HSP46 MBTA
+Service 015 | DUPLICATE | MBTA Providence #808 (Mid-Day Storage) 08:47 00:11 | Train 1 | HSP46 MBTA
+Service 016 | DUPLICATE | MBTA Franklin #740 (Mid-Day Storage) 08:47 00:13 | Train 1 | HSP46 MBTA
+Service 017 | DUPLICATE | MBTA Needham #604 (Mid-Day Storage) 08:59 00:13 | Train 1 | HSP46 MBTA
+Service 018 | DUPLICATE | MBTA Worcester #588 (Mid-Day Storage) 09:05 00:08 | Train 1 | HSP46 MBTA
+Service 019 | DUPLICATE | MBTA Worcester #510 (S&I) 09:16 00:06 | Train 1 | HSP46 MBTA
+Service 020 | DUPLICATE | MBTA Fairmount #756 (Mid-Day Storage) 09:23 00:08 | Train 1 | HSP46 MBTA
+Service 021 | DUPLICATE | MBTA Providence #807 (Boston - Providence) 09:33 01:06 | Train 1 | HSP46 MBTA
+Service 022 | DUPLICATE | MBTA Franklin #705 (Boston - Readville) 09:38 00:17 | Train 1 | HSP46 MBTA
+Service 023 | DUPLICATE | MBTA Stoughton #909 (Boston - Stoughton) 09:43 00:41 | Train 1 | HSP46 MBTA
+Service 024 | DUPLICATE | MBTA Needham #608 (Boston - Depot) 09:47 00:09 | Train 1 | HSP46 MBTA
+Service 025 | DUPLICATE | MBTA Kingston #040 (Mid-Day Storage) 09:52 00:09 | Train 1 | HSP46 MBTA
+Service 026 | DUPLICATE | MBTA Worcester #590 (Mid-Day Storage) 10:00 00:08 | Train 1 | HSP46 MBTA
+Service 027 | DUPLICATE | MBTA Providence #809 (Boston - Providence) 10:23 01:10 | Train 1 | HSP46 MBTA
+Service 028 | DUPLICATE | MBTA Franklin #710 (Mid-Day Storage) 10:50 00:05 | Train 1 | HSP46 MBTA
+Service 029 | DUPLICATE | MBTA Worcester #512 (Boston - Depot) 11:13 00:10 | Train 1 | HSP46 MBTA
+Service 030 | DUPLICATE | MBTA Providence #811 (Boston - Providence) 11:23 01:03 | Train 1 | HSP46 MBTA
+Service 031 | DUPLICATE | MBTA Worcester #514 (Maintenance) 12:13 00:09 | Train 1 | HSP46 MBTA
+Service 032 | DUPLICATE | MBTA Franklin #709 (Boston - Readville) 12:18 00:20 | Train 1 | HSP46 MBTA
+Service 033 | DUPLICATE | MBTA Stoughton #911 (Boston - Stoughton) 13:18 00:44 | Train 1 | HSP46 MBTA
+Service 034 | DUPLICATE | MBTA Franklin #711 (Boston - Readville) 13:33 00:20 | Train 1 | HSP46 MBTA
+Service 035 | DUPLICATE | MBTA Franklin #714 (Boston - Depot) 13:36 00:07 | Train 1 | HSP46 MBTA
+Service 036 | DUPLICATE | MBTA Providence #813 (Boston - Providence) 13:41 01:04 | Train 1 | HSP46 MBTA
+Service 037 | DUPLICATE | MBTA Fairmount #764 (Boston - Depot) 13:45 00:10 | Train 1 | HSP46 MBTA
+Service 038 | DUPLICATE | MBTA Providence #815 (Depot - Boston) 13:45 00:07 | Train 1 | HSP46 MBTA
+Service 039 | DUPLICATE | MBTA Needham #614 (Mid-Day Storage) 13:49 00:05 | Train 1 | HSP46 MBTA
+Service 040 | DUPLICATE | MBTA Providence #815 (Boston - Providence) 14:28 01:06 | Train 1 | HSP46 MBTA
+Service 041 | DUPLICATE | MBTA Providence #820 (Boston - Depot) 14:35 00:11 | Train 1 | HSP46 MBTA
+Service 042 | DUPLICATE | MBTA Franklin #713 (Boston - Readville) 14:38 00:20 | Train 1 | HSP46 MBTA
+Service 043 | DUPLICATE | MBTA Franklin #716 (Boston - Depot) 14:54 00:05 | Train 1 | HSP46 MBTA
+Service 044 | DUPLICATE | MBTA Providence #817 (Boston - Providence) 15:23 01:02 | Train 1 | HSP46 MBTA
+Service 045 | DUPLICATE | MBTA Stoughton #913 (Boston - Stoughton) 15:33 00:43 | Train 1 | HSP46 MBTA
+Service 046 | DUPLICATE | MBTA Providence #819 (Boston - Providence) 15:53 01:00 | Train 1 | HSP46 MBTA
+Service 047 | DUPLICATE | MBTA Franklin #718 (Boston - Depot) 16:07 00:08 | Train 1 | HSP46 MBTA
+Service 048 | DUPLICATE | MBTA Norwood Central #743 (Boston - Readville) 16:13 00:22 | Train 1 | HSP46 MBTA
+Service 049 | DUPLICATE | MBTA Stoughton #915 (Boston - Stoughton) 16:18 00:39 | Train 1 | HSP46 MBTA
+Service 050 | DUPLICATE | MBTA Providence #821 (Boston - Providence) 16:28 01:05 | Train 1 | HSP46 MBTA
+Service 051 | DUPLICATE | MBTA Providence #823 (Boston - Providence) 16:51 01:05 | Train 1 | HSP46 MBTA
+Service 052 | DUPLICATE | MBTA Franklin #745 (Boston - Readville) 17:00 00:22 | Train 1 | HSP46 MBTA
+Service 053 | DUPLICATE | MBTA Stoughton #917 (Boston - Stoughton) 17:10 00:46 | Train 1 | HSP46 MBTA
+Service 054 | DUPLICATE | MBTA Providence #825 (Boston - Providence) 17:38 01:00 | Train 1 | HSP46 MBTA
+Service 055 | DUPLICATE | MBTA Stoughton #919 (Boston - Stoughton) 17:49 00:50 | Train 1 | HSP46 MBTA
+Service 056 | DUPLICATE | MBTA Providence #827 (Boston - Providence) 18:08 01:00 | Train 1 | HSP46 MBTA
+Service 057 | DUPLICATE | MBTA Franklin #723 (Boston - Readville) 18:18 00:20 | Train 1 | HSP46 MBTA
+Service 058 | DUPLICATE | MBTA Stoughton #921 (Boston - Stoughton) 18:26 00:45 | Train 1 | HSP46 MBTA
+Service 059 | DUPLICATE | MBTA Providence #829 (Boston - Providence) 18:48 01:11 | Train 1 | HSP46 MBTA
+Service 060 | DUPLICATE | MBTA Stoughton #923 (Boston - Stoughton) 19:18 00:42 | Train 1 | HSP46 MBTA
+Service 061 | DUPLICATE | MBTA Providence #831 (Boston - Providence) 19:28 01:07 | Train 1 | HSP46 MBTA
+Service 062 | DUPLICATE | MBTA Providence #830 (Overnight Storage) 19:36 00:09 | Train 1 | HSP46 MBTA
+Service 063 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:05 | Train 1 | HSP46 MBTA
+Service 064 | DUPLICATE | MBTA Franklin #725 (Boston - Readville) 19:43 00:20 | Train 1 | HSP46 MBTA
+Service 065 | DUPLICATE | MBTA Fairmount #780 (Overnight Storage) 20:05 00:09 | Train 1 | HSP46 MBTA
+Service 066 | DUPLICATE | MBTA Providence #833 (Boston - Providence) 20:28 01:14 | Train 1 | HSP46 MBTA
+Service 067 | DUPLICATE | MBTA Needham #626 (Overnight Storage) 20:45 00:09 | Train 1 | HSP46 MBTA
+Service 068 | DUPLICATE | MBTA Franklin #727 (Boston - Readville) 20:58 00:21 | Train 1 | HSP46 MBTA
+Service 069 | DUPLICATE | MBTA Stoughton #924 (Overnight Storage) 21:28 00:09 | Train 1 | HSP46 MBTA
+Service 070 | DUPLICATE | MBTA Stoughton #925 (Boston - Stoughton) 21:38 00:39 | Train 1 | HSP46 MBTA
+Service 071 | DUPLICATE | MBTA Providence #835 (Boston - Providence) 21:59 01:12 | Train 1 | HSP46 MBTA
+Service 073 | DUPLICATE | MBTA Stoughton #927 (Boston - Stoughton) 22:38 00:39 | Train 1 | HSP46 MBTA
+Service 074 | DUPLICATE | MBTA Franklin #729 (Boston - Readville) 22:45 00:23 | Train 1 | HSP46 MBTA
+Service 075 | DUPLICATE | MBTA Providence #836 (Overnight Storage) 23:03 00:08 | Train 1 | HSP46 MBTA
+Service 076 | DUPLICATE | MBTA Providence #838 (Overnight Storage) 23:44 00:08 | Train 1 | HSP46 MBTA
+Service 077 | DUPLICATE | MBTA Franklin #730 (Overnight Storage) 23:48 00:08 | Train 1 | HSP46 MBTA
+Service 001 | DUPLICATE | Amtrak Northeast Regional #95 (Boston - Providence) 06:09 00:42 | Train 1 | ACS-64 V AMTK50
+Service 001 | DUPLICATE | MBTA Franklin #701 (Depot - Boston) 03:00 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 002 | DUPLICATE | MBTA Worcester #501 (Depot - Boston) 04:00 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 003 | DUPLICATE | MBTA Providence #801 (Depot - Boston) 04:50 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 004 | DUPLICATE | MBTA Worcester #583 (Depot - Boston) 04:55 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 005 | DUPLICATE | MBTA Providence #800 (Providence - Boston) 04:58 01:18 | Train 1 | Rotem CTC-5 MBTA
+Service 006 | DUPLICATE | MBTA Worcester #503 (Depot - Boston) 05:20 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 007 | DUPLICATE | MBTA Providence #802 (Providence - Boston) 05:23 01:13 | Train 1 | Rotem CTC-5 MBTA
+Service 008 | DUPLICATE | MBTA Worcester #505 (Depot - Boston) 05:35 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 009 | DUPLICATE | MBTA Providence #804 (Providence - Boston) 05:58 01:03 | Train 1 | Rotem CTC-5 MBTA
+Service 010 | DUPLICATE | MBTA Franklin #741 (Depot - Boston) 05:58 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 012 | DUPLICATE | MBTA Stoughton #900 (Stoughton Layover - Boston) 06:17 00:37 | Train 1 | Rotem CTC-5 MBTA
+Service 013 | DUPLICATE | MBTA Providence #806 (Providence - Boston) 06:21 01:11 | Train 1 | Rotem CTC-5 MBTA
+Service 014 | DUPLICATE | MBTA Stoughton #902 (Stoughton Layover - Boston) 06:48 00:42 | Train 1 | Rotem CTC-5 MBTA
+Service 015 | DUPLICATE | MBTA Franklin #702 (Readville - Boston) 06:50 00:18 | Train 1 | Rotem CTC-5 MBTA
+Service 016 | DUPLICATE | MBTA Providence #808 (Providence - Boston) 07:11 00:59 | Train 1 | Rotem CTC-5 MBTA
+Service 017 | DUPLICATE | MBTA Attleboro #842 (Attleboro - Boston) 07:17 00:50 | Train 1 | Rotem CTC-5 MBTA
+Service 018 | DUPLICATE | MBTA Franklin #704 (Readville - Boston) 07:24 00:18 | Train 1 | Rotem CTC-5 MBTA
+Service 019 | DUPLICATE | MBTA Providence #810 (Providence - Boston) 07:28 01:06 | Train 1 | Rotem CTC-5 MBTA
+Service 021 | DUPLICATE | MBTA Providence #812 (Providence - Boston) 07:48 01:04 | Train 1 | Rotem CTC-5 MBTA
+Service 022 | DUPLICATE | MBTA Franklin #740 (Readville - Boston) 08:16 00:22 | Train 1 | Rotem CTC-5 MBTA
+Service 023 | DUPLICATE | MBTA Providence #814 (Providence - Boston) 08:23 01:17 | Train 1 | Rotem CTC-5 MBTA
+Service 024 | DUPLICATE | MBTA Stoughton #906 (Stoughton - Boston) 08:28 00:36 | Train 1 | Rotem CTC-5 MBTA
+Service 025 | DUPLICATE | MBTA Franklin #708 (Readville - Boston) 08:34 00:24 | Train 1 | Rotem CTC-5 MBTA
+Service 026 | DUPLICATE | MBTA Franklin #742 (Readville - Boston) 08:49 00:20 | Train 1 | Rotem CTC-5 MBTA
+Service 027 | DUPLICATE | MBTA Stoughton #908 (Stoughton - Boston) 09:13 00:37 | Train 1 | Rotem CTC-5 MBTA
+Service 028 | DUPLICATE | MBTA Providence #816 (Providence - Boston) 09:49 01:08 | Train 1 | Rotem CTC-5 MBTA
+Service 029 | DUPLICATE | MBTA Worcester #511 (Depot - Boston) 09:59 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 030 | DUPLICATE | MBTA Franklin #710 (Readville - Boston) 10:06 00:18 | Train 1 | Rotem CTC-5 MBTA
+Service 031 | DUPLICATE | MBTA Stoughton #910 (Stoughton - Boston) 10:38 00:37 | Train 1 | Rotem CTC-5 MBTA
+Service 032 | DUPLICATE | MBTA Providence #811 (Depot - Boston) 10:50 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 033 | DUPLICATE | MBTA Providence #818 (Providence - Boston) 11:13 01:12 | Train 1 | Rotem CTC-5 MBTA
+Service 034 | DUPLICATE | MBTA Worcester #513 (Depot - Boston) 11:25 00:05 | Train 1 | Rotem CTC-5 MBTA
+Service 035 | DUPLICATE | MBTA Franklin #712 (Readville - Boston) 11:38 00:18 | Train 1 | Rotem CTC-5 MBTA
+Service 036 | DUPLICATE | MBTA Stoughton #911 (Depot - Boston) 12:50 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 037 | DUPLICATE | MBTA Franklin #714 (Readville - Boston) 13:03 00:16 | Train 1 | Rotem CTC-5 MBTA
+Service 038 | DUPLICATE | MBTA Providence #813 (Depot - Boston) 13:05 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 039 | DUPLICATE | MBTA Providence #820 (Providence - Boston) 13:09 01:09 | Train 1 | Rotem CTC-5 MBTA
+Service 040 | DUPLICATE | MBTA Fairmount #767 (Depot - Boston) 13:20 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 041 | DUPLICATE | MBTA Providence #822 (Providence - Boston) 13:54 01:06 | Train 1 | Rotem CTC-5 MBTA
+Service 042 | DUPLICATE | MBTA Franklin #713 (Depot - Boston) 14:05 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 043 | DUPLICATE | MBTA Stoughton #912 (Stoughton - Boston) 14:13 00:33 | Train 1 | Rotem CTC-5 MBTA
+Service 044 | DUPLICATE | MBTA Franklin #716 (Readville - Boston) 14:25 00:17 | Train 1 | Rotem CTC-5 MBTA
+Service 045 | DUPLICATE | MBTA Franklin #715 (Depot - Boston) 14:50 00:05 | Train 1 | Rotem CTC-5 MBTA
+Service 046 | DUPLICATE | MBTA Providence #824 (Providence - Boston) 15:07 01:13 | Train 1 | Rotem CTC-5 MBTA
+Service 047 | DUPLICATE | MBTA Framingham #591 (Depot - Boston) 15:30 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 048 | DUPLICATE | MBTA Worcester #519 (Depot - Boston) 15:40 00:09 | Train 1 | Rotem CTC-5 MBTA
+Service 049 | DUPLICATE | MBTA Franklin #717 (Depot to Boston) 15:45 00:06 | Train 1 | Rotem CTC-5 MBTA
+Service 050 | DUPLICATE | MBTA Norwood Central #743 (Depot - Boston) 15:50 00:10 | Train 1 | Rotem CTC-5 MBTA
+Service 052 | DUPLICATE | MBTA Providence #821 (Depot - Boston) 16:05 00:10 | Train 1 | Rotem CTC-5 MBTA
+Service 053 | DUPLICATE | MBTA Needham #617 (Depot - Boston) 16:23 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 054 | DUPLICATE | MBTA Worcester #521 (Depot - Boston) 16:24 00:11 | Train 1 | Rotem CTC-5 MBTA
+Service 055 | DUPLICATE | MBTA Stoughton #914 (Stoughton - Boston) 16:28 00:36 | Train 1 | Rotem CTC-5 MBTA
+Service 056 | DUPLICATE | MBTA Franklin #745 (Depot - Boston) 16:30 00:07 | Train 1 | Rotem CTC-5 MBTA
+Service 057 | DUPLICATE | MBTA Stoughton #917 (Depot - Boston) 16:46 00:11 | Train 1 | Rotem CTC-5 MBTA
+Service 058 | DUPLICATE | MBTA Needham #619 (Depot to Boston) 16:55 00:05 | Train 1 | Rotem CTC-5 MBTA
+Service 059 | DUPLICATE | MBTA Providence #825 (Depot - Boston) 17:11 00:08 | Train 1 | Rotem CTC-5 MBTA
+Service 060 | DUPLICATE | MBTA Providence #828 (Providence - Boston) 17:18 01:03 | Train 1 | Rotem CTC-5 MBTA
+Service 061 | DUPLICATE | MBTA Stoughton #916 (Stoughton - Boston) 17:18 00:39 | Train 1 | Rotem CTC-5 MBTA
+Service 062 | DUPLICATE | MBTA Providence #827 (Depot - Boston) 17:40 00:15 | Train 1 | Rotem CTC-5 MBTA
+Service 063 | DUPLICATE | MBTA Worcester #525 (Depot - Boston) 17:46 00:10 | Train 1 | Rotem CTC-5 MBTA
+Service 064 | DUPLICATE | MBTA Franklin #722 (Readville - Boston) 17:51 00:23 | Train 1 | Rotem CTC-5 MBTA
+Service 065 | DUPLICATE | MBTA Providence #830 (Providence - Boston) 18:00 01:07 | Train 1 | Rotem CTC-5 MBTA
+Service 066 | DUPLICATE | MBTA Stoughton #918 (Stoughton - Boston) 18:14 00:41 | Train 1 | Rotem CTC-5 MBTA
+Service 067 | DUPLICATE | MBTA Franklin #746 (Readville - Boston) 18:59 00:21 | Train 1 | Rotem CTC-5 MBTA
+Service 068 | DUPLICATE | MBTA Stoughton #920 (Stoughton Layover - Boston) 19:17 00:42 | Train 1 | Rotem CTC-5 MBTA
+Service 069 | DUPLICATE | MBTA Providence #832 (Providence - Boston) 19:24 01:12 | Train 1 | Rotem CTC-5 MBTA
+Service 070 | DUPLICATE | MBTA Stoughton #922 (Stoughton Layover - Boston) 19:37 00:31 | Train 1 | Rotem CTC-5 MBTA
+Service 071 | DUPLICATE | MBTA Providence #834 (Providence - Boston) 20:14 01:11 | Train 1 | Rotem CTC-5 MBTA
+Service 072 | DUPLICATE | MBTA Franklin #726 (Readville - Boston) 20:25 00:18 | Train 1 | Rotem CTC-5 MBTA
+Service 073 | DUPLICATE | MBTA Stoughton #924 (Stoughton - Boston) 20:33 00:33 | Train 1 | Rotem CTC-5 MBTA
+Service 074 | DUPLICATE | MBTA Stoughton #925 (Depot - Boston) 21:10 00:05 | Train 1 | Rotem CTC-5 MBTA
+Service 075 | DUPLICATE | MBTA Providence #836 (Providence - Boston) 21:28 01:13 | Train 1 | Rotem CTC-5 MBTA
+Service 076 | DUPLICATE | MBTA Franklin #728 (Readville - Boston) 22:20 00:22 | Train 1 | Rotem CTC-5 MBTA
+Service 077 | DUPLICATE | MBTA Providence #838 (Providence - Boston) 22:28 01:11 | Train 1 | Rotem CTC-5 MBTA
+Service 078 | DUPLICATE | MBTA Stoughton #926 (Stoughton - Boston) 22:33 00:38 | Train 1 | Rotem CTC-5 MBTA
+Service 079 | DUPLICATE | MBTA Franklin #730 (Readville - Boston) 23:25 00:20 | Train 1 | Rotem CTC-5 MBTA
+Service 001 | DUPLICATE | Amtrak Northeast Regional #95 (Boston - Providence) 06:09 00:42 | Train 2 | ACS-64 V AMTK50
+Service 002 | DUPLICATE | Amtrak Northeast Regional #66 (Providence - Boston) 06:57 00:42 | Train 2 | ACS-64 V AMTK50
+Service 003 | DUPLICATE | Amtrak Northeast Regional #171 (Boston - Providence) 07:59 00:39 | Train 2 | ACS-64 V AMTK50
+Service 004 | DUPLICATE | Amtrak Northeast Regional #66 (Boston - Depot) 08:14 00:17 | Train 2 | ACS-64 V AMTK50
+Service 005 | DUPLICATE | Amtrak Northeast Regional #93 (Boston - Providence) 09:29 00:39 | Train 2 | ACS-64 V AMTK50
+Service 006 | DUPLICATE | Amtrak Northeast Regional #190 (Providence - Boston) 10:30 00:48 | Train 2 | ACS-64 V AMTK50
+Service 007 | DUPLICATE | Amtrak Northeast Regional #173 (Boston - Providence) 11:09 00:36 | Train 2 | ACS-64 V AMTK50
+Service 008 | DUPLICATE | Amtrak Northeast Regional #190 (Boston - Depot) 11:56 00:21 | Train 2 | ACS-64 V AMTK50
+Service 010 | DUPLICATE | Amtrak Northeast Regional #170 (Boston - Depot) 13:14 00:22 | Train 2 | ACS-64 V AMTK50
+Service 012 | DUPLICATE | Amtrak Northeast Regional #175 (Boston - Providence) 15:14 00:39 | Train 2 | ACS-64 V AMTK50
+Service 013 | DUPLICATE | Amtrak Northeast Regional #172 (Boston - Depot) 15:34 00:24 | Train 2 | ACS-64 V AMTK50
+Service 014 | DUPLICATE | Amtrak Northeast Regional #86 (Providence - Boston) 15:56 00:42 | Train 2 | ACS-64 V AMTK50
+Service 015 | DUPLICATE | Amtrak Northeast Regional #86 (Boston - Depot) 16:50 00:28 | Train 2 | ACS-64 V AMTK50
+Service 016 | DUPLICATE | Amtrak Northeast Regional #174 (Providence - Boston) 17:35 00:49 | Train 2 | ACS-64 V AMTK50
+Service 017 | DUPLICATE | Amtrak Northeast Regional #177 (Boston - Providence) 17:48 00:57 | Train 2 | ACS-64 V AMTK50
+Service 018 | DUPLICATE | Amtrak Northeast Regional #179 (Boston - Providence) 18:44 00:39 | Train 2 | ACS-64 V AMTK50
+Service 020 | DUPLICATE | Amtrak Northeast Regional #176 (Providence - Boston) 19:30 00:45 | Train 2 | ACS-64 V AMTK50
+Service 021 | DUPLICATE | Amtrak Northeast Regional #176 (Boston - Southampton Street Yard) 20:24 00:21 | Train 2 | ACS-64 V AMTK50
+Service 022 | DUPLICATE | Amtrak Lake Shore Limited (Boston - Depot) 20:40 00:25 | Train 2 | ACS-64 V AMTK50
+Service 023 | DUPLICATE | Amtrak Northeast Regional #94 (Providence - Boston) 21:23 00:39 | Train 2 | ACS-64 V AMTK50
+Service 024 | DUPLICATE | Amtrak Northeast Regional #94 (Boston - Depot) 22:20 00:26 | Train 2 | ACS-64 V AMTK50
+Service 001 | DUPLICATE | Amtrak Acela Express #2151 (Boston - Providence) 04:57 00:41 | Train 1 | Acela Express Amtrak
+Service 002 | DUPLICATE | Amtrak Acela Express #2153 (Boston - Providence) 05:57 00:39 | Train 1 | Acela Express Amtrak
+Service 003 | DUPLICATE | Amtrak Acela Express #2155 (Boston - Providence) 07:12 00:39 | Train 1 | Acela Express Amtrak
+Service 006 | DUPLICATE | Amtrak Acela Express #2163 (Boston - Providence) 10:58 00:38 | Train 1 | Acela Express Amtrak
+Service 007 | DUPLICATE | Amtrak Acela Express #2150 (Providence - Boston) 11:04 00:39 | Train 1 | Acela Express Amtrak
+Service 008 | DUPLICATE | Amtrak Acela Express #2165 (Boston - Providence) 12:02 00:41 | Train 1 | Acela Express Amtrak
+Service 009 | DUPLICATE | Amtrak Acela Express #2167 (Boston - Providence) 12:57 00:40 | Train 1 | Acela Express Amtrak
+Service 010 | DUPLICATE | Amtrak Acela Express #2154 (Providence - Boston) 13:02 00:40 | Train 1 | Acela Express Amtrak
+Service 011 | DUPLICATE | Amtrak Acela Express #2171 (Boston - Providence) 15:02 00:40 | Train 1 | Acela Express Amtrak
+Service 013 | DUPLICATE | Amtrak Acela Express #2173 (Boston - Providence) 16:07 00:40 | Train 1 | Acela Express Amtrak
+Service 015 | DUPLICATE | Amtrak Acela Express #2175 (Boston - Providence) 17:17 00:40 | Train 1 | Acela Express Amtrak
+Service 018 | DUPLICATE | Amtrak Acela Express #2168 (Providence - Boston) 20:05 00:41 | Train 1 | Acela Express Amtrak
+Service 019 | DUPLICATE | Amtrak Acela Express #2170 (Providence - Boston) 21:00 00:41 | Train 1 | Acela Express Amtrak
+Service 020 | DUPLICATE | Amtrak Acela Express #2172 (Providence - Boston) 22:10 00:41 | Train 1 | Acela Express Amtrak
+Service 001 | DUPLICATE | MBTA Franklin #701 (Depot - Boston) 03:00 00:08 | Train 1 | CTC-3 MBTA
+Service 002 | DUPLICATE | MBTA Worcester #501 (Depot - Boston) 04:00 00:09 | Train 1 | CTC-3 MBTA
+Service 003 | DUPLICATE | MBTA Providence #801 (Depot - Boston) 04:50 00:08 | Train 1 | CTC-3 MBTA
+Service 004 | DUPLICATE | MBTA Worcester #583 (Depot - Boston) 04:55 00:08 | Train 1 | CTC-3 MBTA
+Service 005 | DUPLICATE | MBTA Providence #800 (Providence - Boston) 04:58 01:18 | Train 1 | CTC-3 MBTA
+Service 006 | DUPLICATE | MBTA Worcester #503 (Depot - Boston) 05:20 00:09 | Train 1 | CTC-3 MBTA
+Service 007 | DUPLICATE | MBTA Providence #802 (Providence - Boston) 05:23 01:13 | Train 1 | CTC-3 MBTA
+Service 008 | DUPLICATE | MBTA Worcester #505 (Depot - Boston) 05:35 00:09 | Train 1 | CTC-3 MBTA
+Service 009 | DUPLICATE | MBTA Providence #804 (Providence - Boston) 05:58 01:03 | Train 1 | CTC-3 MBTA
+Service 015 | DUPLICATE | MBTA Franklin #702 (Readville - Boston) 06:50 00:18 | Train 1 | CTC-3 MBTA
+Service 016 | DUPLICATE | MBTA Attleboro #842 (Attleboro - Boston) 07:11 00:55 | Train 1 | CTC-3 MBTA
+Service 019 | DUPLICATE | MBTA Providence #810 (Providence - Boston) 07:28 01:06 | Train 1 | CTC-3 MBTA
+Service 021 | DUPLICATE | MBTA Providence #812 (Providence - Boston) 07:48 01:04 | Train 1 | CTC-3 MBTA
+Service 026 | DUPLICATE | MBTA Franklin #742 (Readville - Boston) 08:49 00:20 | Train 1 | CTC-3 MBTA
+Service 027 | DUPLICATE | MBTA Stoughton #908 (Stoughton - Boston) 09:13 00:37 | Train 1 | CTC-3 MBTA
+Service 029 | DUPLICATE | MBTA Worcester #511 (Depot - Boston) 09:59 00:09 | Train 1 | CTC-3 MBTA
+Service 030 | DUPLICATE | MBTA Franklin #710 (Readville - Boston) 10:06 00:18 | Train 1 | CTC-3 MBTA
+Service 031 | DUPLICATE | MBTA Stoughton #910 (Stoughton - Boston) 10:38 00:37 | Train 1 | CTC-3 MBTA
+Service 032 | DUPLICATE | MBTA Providence #811 (Depot - Boston) 10:50 00:09 | Train 1 | CTC-3 MBTA
+Service 033 | DUPLICATE | MBTA Providence #818 (Providence - Boston) 11:13 01:12 | Train 1 | CTC-3 MBTA
+Service 034 | DUPLICATE | MBTA Worcester #513 (Depot - Boston) 11:25 00:05 | Train 1 | CTC-3 MBTA
+Service 035 | DUPLICATE | MBTA Franklin #712 (Readville - Boston) 11:38 00:18 | Train 1 | CTC-3 MBTA
+Service 036 | DUPLICATE | MBTA Stoughton #911 (Depot - Boston) 12:50 00:09 | Train 1 | CTC-3 MBTA
+Service 038 | DUPLICATE | MBTA Providence #813 (Depot - Boston) 13:05 00:08 | Train 1 | CTC-3 MBTA
+Service 039 | DUPLICATE | MBTA Providence #820 (Providence - Boston) 13:09 01:09 | Train 1 | CTC-3 MBTA
+Service 040 | DUPLICATE | MBTA Fairmount #767 (Depot - Boston) 13:20 00:09 | Train 1 | CTC-3 MBTA
+Service 042 | DUPLICATE | MBTA Franklin #713 (Depot - Boston) 14:05 00:08 | Train 1 | CTC-3 MBTA
+Service 043 | DUPLICATE | MBTA Stoughton #912 (Stoughton - Boston) 14:13 00:33 | Train 1 | CTC-3 MBTA
+Service 045 | DUPLICATE | MBTA Franklin #715 (Depot - Boston) 14:50 00:05 | Train 1 | CTC-3 MBTA
+Service 047 | DUPLICATE | MBTA Framingham #591 (Depot - Boston) 15:30 00:09 | Train 1 | CTC-3 MBTA
+Service 048 | DUPLICATE | MBTA Worcester #519 (Depot - Boston) 15:40 00:09 | Train 1 | CTC-3 MBTA
+Service 049 | DUPLICATE | MBTA Franklin #717 (Depot to Boston) 15:45 00:06 | Train 1 | CTC-3 MBTA
+Service 050 | DUPLICATE | MBTA Norwood Central #743 (Depot - Boston) 15:50 00:10 | Train 1 | CTC-3 MBTA
+Service 053 | DUPLICATE | MBTA Needham #617 (Depot - Boston) 16:23 00:08 | Train 1 | CTC-3 MBTA
+Service 056 | DUPLICATE | MBTA Stoughton #914 (Stoughton - Boston) 16:28 00:36 | Train 1 | CTC-3 MBTA
+Service 057 | DUPLICATE | MBTA Stoughton #917 (Depot - Boston) 16:46 00:11 | Train 1 | CTC-3 MBTA
+Service 058 | DUPLICATE | MBTA Needham #619 (Depot to Boston) 16:55 00:05 | Train 1 | CTC-3 MBTA
+Service 060 | DUPLICATE | MBTA Providence #828 (Providence - Boston) 17:18 01:03 | Train 1 | CTC-3 MBTA
+Service 064 | DUPLICATE | MBTA Franklin #722 (Readville - Boston) 17:51 00:23 | Train 1 | CTC-3 MBTA
+Service 065 | DUPLICATE | MBTA Providence #830 (Providence - Boston) 18:00 01:07 | Train 1 | CTC-3 MBTA
+Service 070 | DUPLICATE | MBTA Stoughton #922 (Stoughton Layover - Boston) 19:37 00:31 | Train 1 | CTC-3 MBTA
+Service 071 | DUPLICATE | MBTA Franklin #726 (Readville - Boston) 20:25 00:18 | Train 1 | CTC-3 MBTA
+Service 072 | DUPLICATE | MBTA Stoughton #924 (Stoughton - Boston) 20:33 00:33 | Train 1 | CTC-3 MBTA
+Service 073 | DUPLICATE | MBTA Stoughton #925 (Depot - Boston) 21:10 00:05 | Train 1 | CTC-3 MBTA
+Service 076 | DUPLICATE | MBTA Providence #838 (Providence - Boston) 22:28 01:11 | Train 1 | CTC-3 MBTA
+Service 001 | DUPLICATE | MBTA Providence #801 (Boston - Providence) 05:28 01:01 | Train 1 | F40PH-3C MBTA
+Service 002 | DUPLICATE | MBTA Providence #803 (Boston - Providence) 06:29 01:07 | Train 1 | F40PH-3C MBTA
+Service 004 | DUPLICATE | MBTA Stoughton #903 (Boston - Stoughton) 06:55 00:36 | Train 1 | F40PH-3C MBTA
+Service 005 | DUPLICATE | MBTA Providence #805 (Boston - Providence) 07:23 01:05 | Train 1 | F40PH-3C MBTA
+Service 006 | DUPLICATE | MBTA Stoughton #905 (Boston - Stoughton) 07:33 00:36 | Train 1 | F40PH-3C MBTA
+Service 007 | DUPLICATE | MBTA Kingston #034 (Mid-Day Storage) 07:34 00:09 | Train 1 | F40PH-3C MBTA
+Service 008 | DUPLICATE | MBTA Providence #806 (Mid-Day Storage) 07:52 00:09 | Train 1 | F40PH-3C MBTA
+Service 009 | DUPLICATE | MBTA Worcester #506 (Boston - Depot) 07:54 00:09 | Train 1 | F40PH-3C MBTA
+Service 010 | DUPLICATE | MBTA Greenbush #074 (Mid-Day Storage) 08:14 00:09 | Train 1 | F40PH-3C MBTA
+Service 011 | DUPLICATE | MBTA Attleboro #842 (Mid-Day Storage) 08:15 00:13 | Train 1 | F40PH-3C MBTA
+Service 012 | DUPLICATE | MBTA Stoughton #907 (Boston - Stoughton) 08:21 00:36 | Train 1 | F40PH-3C MBTA
+Service 013 | DUPLICATE | MBTA Franklin #706 (Mid-Day Storage) 08:25 00:09 | Train 1 | F40PH-3C MBTA
+Service 020 | DUPLICATE | MBTA Fairmount #756 (Mid-Day Storage) 09:23 00:08 | Train 1 | F40PH-3C MBTA
+Service 021 | DUPLICATE | MBTA Providence #807 (Boston - Providence) 09:33 01:06 | Train 1 | F40PH-3C MBTA
+Service 022 | DUPLICATE | MBTA Franklin #705 (Boston - Readville) 09:38 00:17 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable
+Service 034 | DUPLICATE | MBTA Franklin #711 (Boston - Readville) 13:33 00:19 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable
+Service 034 | DUPLICATE | MBTA Franklin #711 (Boston - Readville) 13:33 00:19 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable
+Service 063 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:06 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable
+Service 063 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:06 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable
+Service 063 | DUPLICATE | MBTA Franklin #746 (Mid-Day Storage) 19:39 00:06 | Train 1 | F40PH-3C MBTA | Boston - Providence Timetable

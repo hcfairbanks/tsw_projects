@@ -1,0 +1,89 @@
+{
+  "level_info": {
+    "service_name": "Train 618 Southeast to GCT",
+    "start_time": "07:33",
+    "duration": "00:48",
+    "tonnage": 538.6,
+    "car_count": 10,
+    "train_length": 259.1
+  },
+  "location": {
+    "lat": 41.048855593527975,
+    "lng": -73.77330951103687,
+    "current_service_name": "618"
+  },
+  "schedule": [
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:35:00",
+      "time2": "",
+      "sort_order": 0
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "White Plains Track 2 - 07:39:00",
+      "location": "White Plains Track 2",
+      "time1": "07:39:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:40:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mount Vernon West Track 4 - 07:54:00",
+      "location": "Mount Vernon West Track 4",
+      "time1": "07:54:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:54:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Harlem 125th Street Track 4 - 08:08:00",
+      "location": "Harlem 125th Street Track 4",
+      "time1": "08:08:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "08:09:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Grand Central Track 23 - 08:22:00",
+      "location": "Grand Central Track 23",
+      "time1": "08:22:00",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 8
+    }
+  ]
+}

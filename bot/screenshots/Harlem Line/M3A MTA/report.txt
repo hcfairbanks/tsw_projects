@@ -1,0 +1,13 @@
+TSW Timetable Bot — New Method Run Report
+========================================
+
+Route:       Harlem Line
+Train:       M3A MTA
+Started:     2026-04-03 23:07:58
+Duration:    1:20:32
+Trains:      1
+Services:    41
+
+Train      Services   Duration
+---------- ---------- ----------
+Train 1    41         1:20:32

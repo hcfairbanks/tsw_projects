@@ -1,0 +1,73 @@
+{
+  "level_info": {
+    "service_name": "TGV 5376 Le Havre",
+    "start_time": "15:33",
+    "duration": "00:33",
+    "tonnage": 817.1,
+    "car_count": 20,
+    "train_length": 399.3
+  },
+  "location": {
+    "lat": 43.3049338569417,
+    "lng": 5.384442824424083,
+    "current_service_name": "TGV_5376_p"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 15:33:00",
+      "location": "",
+      "time1": "",
+      "time2": "15:33:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:35:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "Power Changeover Location",
+      "location": "Power Changeover Location",
+      "time1": "",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Aix-en-Provence TGV 4 - 15:46:00",
+      "location": "Aix-en-Provence TGV 4",
+      "time1": "15:46:00",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "15:47:00",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Avignon TGV 4 - 16:06:00",
+      "location": "Avignon TGV 4",
+      "time1": "16:06:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 6
+    }
+  ]
+}

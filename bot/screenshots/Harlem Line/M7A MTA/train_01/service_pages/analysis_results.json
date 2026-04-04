@@ -1,0 +1,1953 @@
+{
+  "provider": "claude",
+  "pages": 36,
+  "total_boxes": 300,
+  "duplicates_removed": 76,
+  "unique_count": 216,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "Train 696 Southeast to GCT",
+      "start_time": "00:04:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 437,
+      "name": "Train 695 GCT to Mount Kisco",
+      "start_time": "00:09:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 796 Croton-Harmon to GCT",
+      "start_time": "00:45:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 799 GCT to Croton-Harmon",
+      "start_time": "00:59:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 599 GCT to North White Plains",
+      "start_time": "01:19:00",
+      "duration": "01:04:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 701 GCT to Croton-Harmon",
+      "start_time": "01:49:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 699 GCT to Southeast",
+      "start_time": "01:55:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2500 North White Plains Yard to GCT",
+      "start_time": "04:25:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 502 North White Plains to GCT",
+      "start_time": "05:07:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 602 Southeast to GCT",
+      "start_time": "05:07:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 604 Southeast to GCT",
+      "start_time": "05:26:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 304 North White Plains to GCT",
+      "start_time": "05:28:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 703 GCT to Croton-Harmon",
+      "start_time": "05:37:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 501 GCT to North White Plains",
+      "start_time": "05:37:00",
+      "duration": "01:07:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 504 North White Plains to GCT",
+      "start_time": "05:43:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 306 North White Plains to GCT",
+      "start_time": "05:56:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 606 Southeast to GCT",
+      "start_time": "05:56:00",
+      "duration": "00:40:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 601 GCT to Southeast",
+      "start_time": "06:01:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 2309 GCT to Crestwood",
+      "start_time": "06:07:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 503 GCT to North White Plains",
+      "start_time": "06:07:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 506 North White Plains to GCT",
+      "start_time": "06:12:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 705 GCT to Croton-Harmon",
+      "start_time": "06:14:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 603 GCT to Southeast",
+      "start_time": "06:22:00",
+      "duration": "00:40:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 608 Southeast to GCT",
+      "start_time": "06:22:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 505 GCT to North White Plains",
+      "start_time": "06:27:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2313 GCT to Crestwood",
+      "start_time": "06:30:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 312 North White Plains to GCT",
+      "start_time": "06:36:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 605 GCT to Southeast",
+      "start_time": "06:41:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 307 GCT to North White Plains",
+      "start_time": "06:44:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 610 Southeast to GCT",
+      "start_time": "06:45:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 310 Crestwood to GCT",
+      "start_time": "06:48:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2323 GCT to Mount Vernon West Yard",
+      "start_time": "06:53:00",
+      "duration": "00:29:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 614 Southeast to GCT",
+      "start_time": "07:01:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 316 North White Plains to GCT",
+      "start_time": "07:08:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 507 GCT to North White Plains",
+      "start_time": "07:11:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 607 GCT to Southeast",
+      "start_time": "07:14:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 518 Crestwood to GCT",
+      "start_time": "07:16:00",
+      "duration": "01:01:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 309 GCT to North White Plains",
+      "start_time": "07:17:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 314 Crestwood to GCT",
+      "start_time": "07:17:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 709 GCT to Croton-Harmon",
+      "start_time": "07:22:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 520 Crestwood to GCT",
+      "start_time": "07:25:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 516 North White Plains to GCT",
+      "start_time": "07:27:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "GCT Yard Move (Part 1)",
+      "start_time": "07:29:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 416 Greystone to GCT",
+      "start_time": "07:31:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "GCT Yard Move (Part 2)",
+      "start_time": "07:36:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 2329 GCT to Crestwood",
+      "start_time": "07:49:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 724 Croton-Harmon to GCT",
+      "start_time": "07:51:00",
+      "duration": "00:22:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 609 GCT to Southeast",
+      "start_time": "07:52:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 324 Mount Vernon West Yard to GCT",
+      "start_time": "07:54:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 511 GCT to North White Plains",
+      "start_time": "07:56:00",
+      "duration": "01:01:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 624 Southeast to GCT",
+      "start_time": "07:58:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 328 North White Plains to GCT",
+      "start_time": "08:04:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 53,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 626 Southeast to GCT",
+      "start_time": "08:08:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 54,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 713 GCT to Croton-Harmon",
+      "start_time": "08:14:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 55,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 611 GCT to Southeast",
+      "start_time": "08:19:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 56,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 513 GCT to North White Plains",
+      "start_time": "08:22:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 57,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 628 Southeast to GCT",
+      "start_time": "08:23:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 58,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 2333 GCT to Crestwood",
+      "start_time": "08:32:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 59,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 528 North White Plains to GCT",
+      "start_time": "08:33:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 60,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 436 Greystone to GCT",
+      "start_time": "08:37:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 61,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 330 Crestwood to GCT",
+      "start_time": "08:39:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 62,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 632 Southeast to GCT",
+      "start_time": "08:41:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 63,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 613 GCT to Mount Kisco",
+      "start_time": "08:43:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 64,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 634 Southeast to GCT",
+      "start_time": "08:45:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 65,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "GCT Yard Move",
+      "start_time": "08:49:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 66,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 515 GCT to North White Plains",
+      "start_time": "08:54:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 67,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 636 Southeast to GCT",
+      "start_time": "09:09:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 68,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2335 GCT to Crestwood",
+      "start_time": "09:11:00",
+      "duration": "00:28:00"
+    },
+    {
+      "global_index": 69,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 2525 GCT to North White Plains Yard",
+      "start_time": "09:17:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 70,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 717 GCT to Croton-Harmon",
+      "start_time": "09:19:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 71,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 615 GCT to Mount Kisco",
+      "start_time": "09:21:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 72,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 334 Crestwood to GCT",
+      "start_time": "09:24:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 73,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 536 North White Plains to GCT",
+      "start_time": "09:26:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 74,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 638 Southeast to GCT",
+      "start_time": "09:34:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 75,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 617 GCT to Southeast",
+      "start_time": "09:50:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 76,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 336 Crestwood to GCT",
+      "start_time": "09:50:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 77,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 319 GCT to Crestwood",
+      "start_time": "09:53:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 78,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 640 Southeast to GCT",
+      "start_time": "09:56:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 79,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 540 North White Plains to GCT",
+      "start_time": "09:57:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 80,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 442 Croton-Harmon to GCT",
+      "start_time": "10:03:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 81,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 721 GCT to Croton-Harmon",
+      "start_time": "10:19:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 82,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 521 GCT to North White Plains",
+      "start_time": "10:21:00",
+      "duration": "01:15:00"
+    },
+    {
+      "global_index": 83,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 444 Greystone to GCT",
+      "start_time": "10:31:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 84,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 642 Southeast to GCT",
+      "start_time": "10:35:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 85,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 621 GCT to Southeast",
+      "start_time": "10:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 86,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 323 GCT to Crestwood",
+      "start_time": "10:53:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 87,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 2529 GCT to North White Plains Yard",
+      "start_time": "10:53:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 88,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 644 Southeast to GCT",
+      "start_time": "10:54:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 89,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 342 Crestwood to GCT",
+      "start_time": "10:59:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 90,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 525 GCT to North White Plains",
+      "start_time": "11:21:00",
+      "duration": "01:15:00"
+    },
+    {
+      "global_index": 91,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 646 Southeast to GCT",
+      "start_time": "11:33:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 92,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 625 GCT to Southeast",
+      "start_time": "11:50:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 93,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 327 GCT to Crestwood",
+      "start_time": "11:53:00",
+      "duration": "00:40:00"
+    },
+    {
+      "global_index": 94,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 648 Southeast to GCT",
+      "start_time": "11:54:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 95,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 346 Crestwood to GCT",
+      "start_time": "11:57:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 96,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 627 GCT to Southeast",
+      "start_time": "12:10:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 97,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 729 GCT to Croton-Harmon",
+      "start_time": "12:19:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 98,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "Train 529 GCT to North White Plains",
+      "start_time": "12:21:00",
+      "duration": "01:18:00"
+    },
+    {
+      "global_index": 99,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 350 Crestwood to GCT",
+      "start_time": "12:44:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 100,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 754 Croton-Harmon to GCT",
+      "start_time": "12:45:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 101,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 331 GCT to Crestwood",
+      "start_time": "12:53:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 102,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 552 North White Plains to GCT",
+      "start_time": "12:54:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 103,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 652 Southeast to GCT",
+      "start_time": "12:54:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 104,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 631 GCT to Southeast",
+      "start_time": "13:05:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 105,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 533 GCT to North White Plains",
+      "start_time": "13:21:00",
+      "duration": "01:15:00"
+    },
+    {
+      "global_index": 106,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 354 Crestwood to GCT",
+      "start_time": "13:44:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 107,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 758 Croton-Harmon to GCT",
+      "start_time": "13:47:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 108,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 633 GCT to Southeast",
+      "start_time": "13:48:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 109,
+      "page": 17,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 335 GCT to Crestwood",
+      "start_time": "13:53:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 110,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 556 North White Plains to GCT",
+      "start_time": "13:54:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 111,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 656 Southeast to GCT",
+      "start_time": "13:54:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 112,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 635 GCT to Southeast",
+      "start_time": "14:10:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 113,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 737 GCT to Croton-Harmon",
+      "start_time": "14:19:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 114,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 2564 North White Plains Yard to GCT",
+      "start_time": "14:22:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 115,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 358 Crestwood to GCT",
+      "start_time": "14:44:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 116,
+      "page": 18,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "Train 907 GCT to Mount Kisco",
+      "start_time": "14:49:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 117,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 637 GCT to Mount Kisco",
+      "start_time": "14:46:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 118,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 2566 North White Plains Yard to GCT",
+      "start_time": "14:47:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 119,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 639 GCT to Mount Kisco",
+      "start_time": "14:52:00",
+      "duration": "00:42:00"
+    },
+    {
+      "global_index": 120,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 660 Southeast to GCT",
+      "start_time": "14:54:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 121,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 541 GCT to North White Plains",
+      "start_time": "14:55:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 122,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 560 North White Plains to GCT",
+      "start_time": "14:56:00",
+      "duration": "01:05:00"
+    },
+    {
+      "global_index": 123,
+      "page": 19,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "Train 611 GCT to Southeast",
+      "start_time": "15:15:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 124,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 662 Southeast to GCT",
+      "start_time": "15:17:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 125,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 741 GCT to Croton-Harmon",
+      "start_time": "15:20:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 126,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 343 GCT to North White Plains",
+      "start_time": "15:21:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 127,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 562 North White Plains to GCT",
+      "start_time": "15:22:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 128,
+      "page": 20,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2568 North White Plains Yard to GCT",
+      "start_time": "15:24:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 129,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 743 GCT to Croton-Harmon",
+      "start_time": "15:42:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 130,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 766 Croton-Harmon to GCT",
+      "start_time": "15:47:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 131,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 443 GCT to Greystone",
+      "start_time": "15:51:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 132,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 643 GCT to Southeast",
+      "start_time": "15:51:00",
+      "duration": "00:38:00"
+    },
+    {
+      "global_index": 133,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 564 North White Plains to GCT",
+      "start_time": "15:56:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 134,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 345 GCT to North White Plains",
+      "start_time": "15:56:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 135,
+      "page": 21,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "",
+      "start_time": "",
+      "duration": ""
+    },
+    {
+      "global_index": 136,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 745 GCT to Croton-Harmon",
+      "start_time": "16:07:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 137,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 566 North White Plains to GCT",
+      "start_time": "16:11:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 138,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 547 GCT to North White Plains",
+      "start_time": "16:23:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 139,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 600 Southeast to GCT",
+      "start_time": "16:24:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 140,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 349 GCT to North White Plains",
+      "start_time": "16:29:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 141,
+      "page": 22,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 749 GCT to Croton-Harmon",
+      "start_time": "16:35:00",
+      "duration": "00:16:00"
+    },
+    {
+      "global_index": 142,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 2640 Mount Kisco to GCT",
+      "start_time": "16:36:00",
+      "duration": "01:00:00"
+    },
+    {
+      "global_index": 143,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 649 GCT to Mount Kisco",
+      "start_time": "16:40:00",
+      "duration": "00:38:00"
+    },
+    {
+      "global_index": 144,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 568 North White Plains to GCT",
+      "start_time": "16:42:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 145,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 551 GCT to North White Plains",
+      "start_time": "16:43:00",
+      "duration": "00:47:00"
+    },
+    {
+      "global_index": 146,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 351 GCT to Crestwood",
+      "start_time": "16:47:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 147,
+      "page": 23,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 668 Southeast to GCT",
+      "start_time": "16:49:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 148,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 353 GCT to North White Plains",
+      "start_time": "16:53:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 149,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 651 GCT to Mount Kisco",
+      "start_time": "16:56:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 150,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 2642 Southeast to GCT",
+      "start_time": "17:05:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 151,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 570 North White Plains to GCT",
+      "start_time": "17:10:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 152,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 670 Southeast to GCT",
+      "start_time": "17:18:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 153,
+      "page": 24,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 370 North White Plains to GCT",
+      "start_time": "17:23:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 154,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 2352 Crestwood to GCT",
+      "start_time": "17:36:00",
+      "duration": "00:35:00"
+    },
+    {
+      "global_index": 155,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 357 GCT to Crestwood",
+      "start_time": "17:37:00",
+      "duration": "00:35:00"
+    },
+    {
+      "global_index": 156,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 359 GCT to North White Plains",
+      "start_time": "17:39:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 157,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "GCT Yard Move (Part 1)",
+      "start_time": "17:44:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 158,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 672 Southeast to GCT",
+      "start_time": "17:47:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 159,
+      "page": 25,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 774 Croton-Harmon to GCT",
+      "start_time": "17:49:00",
+      "duration": "00:22:00"
+    },
+    {
+      "global_index": 160,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 2550 North White Plains Yard to GCT",
+      "start_time": "17:51:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 161,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "GCT Yard Move (Part 2)",
+      "start_time": "17:51:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 162,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 361 GCT to Crestwood",
+      "start_time": "17:57:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 163,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 572 North White Plains to GCT",
+      "start_time": "17:59:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 164,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 665 GCT to Southeast",
+      "start_time": "18:12:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 165,
+      "page": 26,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 776 Croton-Harmon to GCT",
+      "start_time": "18:19:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 166,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 365 GCT to Crestwood",
+      "start_time": "18:22:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 167,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 674 Southeast to GCT",
+      "start_time": "18:22:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 168,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 771 GCT to Croton-Harmon",
+      "start_time": "18:27:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 169,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 2358 Crestwood to GCT",
+      "start_time": "18:28:00",
+      "duration": "00:38:00"
+    },
+    {
+      "global_index": 170,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 667 GCT to Mount Kisco",
+      "start_time": "18:28:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 171,
+      "page": 27,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 574 North White Plains to GCT",
+      "start_time": "18:29:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 172,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 669 GCT to Mount Kisco",
+      "start_time": "18:31:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 173,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 567 GCT to North White Plains",
+      "start_time": "18:37:00",
+      "duration": "00:55:00"
+    },
+    {
+      "global_index": 174,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 2362 Crestwood to GCT",
+      "start_time": "18:43:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 175,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 367 GCT to Mount Vernon West",
+      "start_time": "18:48:00",
+      "duration": "00:39:00"
+    },
+    {
+      "global_index": 176,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 676 Southeast to GCT",
+      "start_time": "18:49:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 177,
+      "page": 28,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 778 Croton-Harmon to GCT",
+      "start_time": "18:52:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 178,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 775 GCT to Croton-Harmon",
+      "start_time": "18:54:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 179,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 671 GCT to Mount Kisco",
+      "start_time": "18:55:00",
+      "duration": "00:34:00"
+    },
+    {
+      "global_index": 180,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 673 GCT to Mount Kisco",
+      "start_time": "18:58:00",
+      "duration": "00:43:00"
+    },
+    {
+      "global_index": 181,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 576 North White Plains to GCT",
+      "start_time": "18:59:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 182,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 373 GCT to North White Plains",
+      "start_time": "19:04:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 183,
+      "page": 29,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2366 Crestwood to GCT",
+      "start_time": "19:08:00",
+      "duration": "00:32:00"
+    },
+    {
+      "global_index": 184,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 678 Southeast to GCT",
+      "start_time": "19:21:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 185,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 677 GCT to Mount Kisco",
+      "start_time": "19:23:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 186,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 577 GCT to North White Plains",
+      "start_time": "19:27:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 187,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 579 GCT to North White Plains",
+      "start_time": "19:30:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 188,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 2368 Mount Vernon West to GCT",
+      "start_time": "19:34:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 189,
+      "page": 30,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 2666 Southeast to GCT",
+      "start_time": "19:41:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 190,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 679 GCT to Southeast",
+      "start_time": "19:53:00",
+      "duration": "00:39:00"
+    },
+    {
+      "global_index": 191,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 680 Southeast to GCT",
+      "start_time": "19:56:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 192,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 581 GCT to North White Plains",
+      "start_time": "19:57:00",
+      "duration": "00:56:00"
+    },
+    {
+      "global_index": 193,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 781 GCT to Croton-Harmon",
+      "start_time": "20:00:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 194,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 580 North White Plains to GCT",
+      "start_time": "20:00:00",
+      "duration": "01:02:00"
+    },
+    {
+      "global_index": 195,
+      "page": 31,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 682 Mount Kisco to GCT",
+      "start_time": "20:29:00",
+      "duration": "00:57:00"
+    },
+    {
+      "global_index": 196,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 783 GCT to Croton-Harmon",
+      "start_time": "20:32:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 197,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 485 GCT to Greystone",
+      "start_time": "20:36:00",
+      "duration": "00:16:00"
+    },
+    {
+      "global_index": 198,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 683 GCT to Southeast",
+      "start_time": "20:51:00",
+      "duration": "00:45:00"
+    },
+    {
+      "global_index": 199,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 684 Southeast to GCT",
+      "start_time": "20:53:00",
+      "duration": "00:51:00"
+    },
+    {
+      "global_index": 200,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 2694 Southeast to GCT",
+      "start_time": "21:07:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 201,
+      "page": 32,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 785 GCT to Croton-Harmon",
+      "start_time": "21:12:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 202,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 685 GCT to Mount Kisco",
+      "start_time": "21:15:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 203,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 787 GCT to Croton-Harmon",
+      "start_time": "21:19:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 204,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 387 GCT to Crestwood",
+      "start_time": "21:24:00",
+      "duration": "00:46:00"
+    },
+    {
+      "global_index": 205,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 790 Croton-Harmon to GCT",
+      "start_time": "21:46:00",
+      "duration": "00:20:00"
+    },
+    {
+      "global_index": 206,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 687 GCT to Southeast",
+      "start_time": "21:51:00",
+      "duration": "00:44:00"
+    },
+    {
+      "global_index": 207,
+      "page": 33,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 789 GCT to Croton-Harmon",
+      "start_time": "21:53:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 208,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "Train 688 Southeast to GCT",
+      "start_time": "21:57:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 209,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "Train 587 GCT to North White Plains",
+      "start_time": "21:59:00",
+      "duration": "01:03:00"
+    },
+    {
+      "global_index": 210,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "Train 791 GCT to Croton-Harmon",
+      "start_time": "22:19:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 211,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 388 Crestwood to GCT",
+      "start_time": "22:20:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 212,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 591 GCT to North White Plains",
+      "start_time": "22:31:00",
+      "duration": "01:06:00"
+    },
+    {
+      "global_index": 213,
+      "page": 34,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 792 Croton-Harmon to GCT",
+      "start_time": "22:47:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 214,
+      "page": 35,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "Train 592 North White Plains to GCT",
+      "start_time": "22:50:00",
+      "duration": "01:08:00"
+    },
+    {
+      "global_index": 215,
+      "page": 35,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "Train 692 Southeast to GCT",
+      "start_time": "23:00:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 216,
+      "page": 35,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "Train 691 GCT to Mount Kisco",
+      "start_time": "23:03:00",
+      "duration": "00:41:00"
+    }
+  ]
+}

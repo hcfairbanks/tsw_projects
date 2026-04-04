@@ -1,0 +1,82 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "435 Hoboken - Gladstone",
+    "start_time": "18:02",
+    "duration": "00:35",
+    "tonnage": 251.8,
+    "car_count": 4,
+    "train_length": 104.3
+  },
+  "location": {
+    "lat": 40.734610968301965,
+    "lng": -74.0293272507246,
+    "current_service_name": "NJT-435"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 18:02:00",
+      "location": "",
+      "time1": "",
+      "time2": "18:02:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:04:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Newark Broad Street Track 2 - 18:20:00",
+      "location": "Newark Broad Street Track 2",
+      "time1": "18:20:00",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:20:30",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Short Hills Track 2 - 18:33:30",
+      "location": "Short Hills Track 2",
+      "time1": "18:33:30",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "18:34:00",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Summit Track 1 - 18:38:00",
+      "location": "Summit Track 1",
+      "time1": "18:38:00",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 7
+    }
+  ]
+}

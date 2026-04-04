@@ -1,0 +1,16 @@
+{
+  "level_info": {
+    "service_name": "MBTA Providence #804 (Providence - Boston)",
+    "start_time": "05:58",
+    "duration": "01:03",
+    "tonnage": 463.8,
+    "car_count": 6,
+    "train_length": 148.3,
+    "section": "Boston - Providence Timetable"
+  },
+  "location": {
+    "lat": 41.82965500422685,
+    "lng": -71.41290159698724,
+    "current_service_name": "MBTA Providence #804 (Inbound)"
+  }
+}

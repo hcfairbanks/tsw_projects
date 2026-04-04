@@ -1,0 +1,171 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Providence #806 (Providence - Boston)",
+    "start_time": "06:21",
+    "duration": "01:11",
+    "tonnage": 507.7,
+    "car_count": 6,
+    "train_length": 495.4,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": null,
+    "lng": null,
+    "current_service_name": "MBTA Providence #806 (AI From Portal)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 06:21:00",
+      "location": "",
+      "time1": "",
+      "time2": "6:21:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:22:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "South Attleboro Track 2 - 06:31:19",
+      "location": "South Attleboro Track 2",
+      "time1": "06:31:19",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:32:19",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Attleboro Track 4 - 06:40:57",
+      "location": "Attleboro Track 4",
+      "time1": "06:40:57",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:41:57",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Mansfield Track 2 - 06:49:49",
+      "location": "Mansfield Track 2",
+      "time1": "06:49:49",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:50:49",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Sharon Track 2 - 06:58:11",
+      "location": "Sharon Track 2",
+      "time1": "06:58:11",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "06:59:11",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 2 - 07:06:41",
+      "location": "Route 128 Track 2",
+      "time1": "07:06:41",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:07:41",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 3 - 07:18:40",
+      "location": "Ruggles Track 3",
+      "time1": "07:18:40",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:19:25",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 3 - 07:22:31",
+      "location": "Boston Back Bay Track 3",
+      "time1": "07:22:31",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "07:23:16",
+      "time2": "",
+      "sort_order": 15
+    },
+    {
+      "action": "GO VIA LOCATION",
+      "details": "East Limits Cove Interlocking",
+      "location": "East Limits Cove Interlocking",
+      "time1": "",
+      "time2": "",
+      "sort_order": 16
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston South Station Track 09 - 07:32:30",
+      "location": "Boston South Station Track 09",
+      "time1": "07:32:30",
+      "time2": "",
+      "sort_order": 17
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 18
+    }
+  ]
+}

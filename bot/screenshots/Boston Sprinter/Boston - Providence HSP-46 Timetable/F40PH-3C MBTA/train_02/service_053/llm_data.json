@@ -1,0 +1,147 @@
+{
+  "conductor_compatible": true,
+  "level_info": {
+    "service_name": "MBTA Stoughton #917 (Boston - Stoughton)",
+    "start_time": "17:10",
+    "duration": "00:46",
+    "tonnage": 508,
+    "car_count": 6,
+    "train_length": 488,
+    "section": "Boston - Providence HSP-46 Timetable"
+  },
+  "location": {
+    "lat": 42.350040895260854,
+    "lng": -71.0560557480364,
+    "current_service_name": "MBTA Stoughton #917 (SHSY to Boston)"
+  },
+  "schedule": [
+    {
+      "action": "WAIT FOR SERVICE",
+      "details": "Service is scheduled to start at 17:10:00",
+      "location": "",
+      "time1": "",
+      "time2": "17:10:00",
+      "sort_order": 0
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:11:00",
+      "time2": "",
+      "sort_order": 1
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Boston Back Bay Track 1 - 17:16:51",
+      "location": "Boston Back Bay Track 1",
+      "time1": "17:16:51",
+      "time2": "",
+      "sort_order": 2
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:17:21",
+      "time2": "",
+      "sort_order": 3
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Ruggles Track 1 - 17:20:29",
+      "location": "Ruggles Track 1",
+      "time1": "17:20:29",
+      "time2": "",
+      "sort_order": 4
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:20:59",
+      "time2": "",
+      "sort_order": 5
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Hyde Park Track 3 - 17:29:30",
+      "location": "Hyde Park Track 3",
+      "time1": "17:29:30",
+      "time2": "",
+      "sort_order": 6
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:30:15",
+      "time2": "",
+      "sort_order": 7
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Route 128 Track 1 - 17:37:30",
+      "location": "Route 128 Track 1",
+      "time1": "17:37:30",
+      "time2": "",
+      "sort_order": 8
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:38:15",
+      "time2": "",
+      "sort_order": 9
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Junction - 17:44:30",
+      "location": "Canton Junction",
+      "time1": "17:44:30",
+      "time2": "",
+      "sort_order": 10
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:45:15",
+      "time2": "",
+      "sort_order": 11
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Canton Center - 17:47:30",
+      "location": "Canton Center",
+      "time1": "17:47:30",
+      "time2": "",
+      "sort_order": 12
+    },
+    {
+      "action": "LOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "17:48:15",
+      "time2": "",
+      "sort_order": 13
+    },
+    {
+      "action": "STOP AT LOCATION",
+      "details": "Stoughton - 17:57:00",
+      "location": "Stoughton",
+      "time1": "17:57:00",
+      "time2": "",
+      "sort_order": 14
+    },
+    {
+      "action": "UNLOAD PASSENGERS",
+      "details": "",
+      "location": "",
+      "time1": "",
+      "time2": "",
+      "sort_order": 15
+    }
+  ]
+}

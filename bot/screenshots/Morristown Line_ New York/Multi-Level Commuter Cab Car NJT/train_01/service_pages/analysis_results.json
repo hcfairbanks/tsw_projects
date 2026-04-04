@@ -1,0 +1,918 @@
+{
+  "provider": "claude",
+  "pages": 17,
+  "total_boxes": 141,
+  "duplicates_removed": 38,
+  "unique_count": 101,
+  "unique_services": [
+    {
+      "global_index": 1,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "3209 Sunnyside Yard - NY Penn Station",
+      "start_time": "03:57:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 2,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 437,
+      "name": "6602 Dover Yard Move",
+      "start_time": "03:59:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 3,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "3215 Sunnyside Yard - NY Penn Station",
+      "start_time": "04:57:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 4,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6604 Dover - NY Penn Station",
+      "start_time": "04:58:00",
+      "duration": "01:30:00"
+    },
+    {
+      "global_index": 5,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6200 Montclair State University - NY Penn Station",
+      "start_time": "05:10:00",
+      "duration": "00:21:00"
+    },
+    {
+      "global_index": 6,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6606 Dover Yard Move",
+      "start_time": "05:16:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 7,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6610 Dover Yard Move",
+      "start_time": "05:37:00",
+      "duration": "00:06:00"
+    },
+    {
+      "global_index": 8,
+      "page": 0,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6202 Montclair State University - NY Penn Station",
+      "start_time": "05:38:00",
+      "duration": "00:24:00"
+    },
+    {
+      "global_index": 9,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "XB18 Hoboken Yard Move",
+      "start_time": "05:49:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 10,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6612 Dover - NY Penn Station",
+      "start_time": "06:07:00",
+      "duration": "01:24:00"
+    },
+    {
+      "global_index": 11,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6305 NY Penn Station - Summit",
+      "start_time": "06:07:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 12,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6204 Montclair State University - NY Penn Station",
+      "start_time": "06:22:00",
+      "duration": "00:23:00"
+    },
+    {
+      "global_index": 13,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6614 Dover - NY Penn Station",
+      "start_time": "06:38:00",
+      "duration": "01:26:00"
+    },
+    {
+      "global_index": 14,
+      "page": 1,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6307 NY Penn Station - Summit",
+      "start_time": "06:41:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 15,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6616 Dover - NY Penn Station",
+      "start_time": "06:59:00",
+      "duration": "01:28:00"
+    },
+    {
+      "global_index": 16,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6206 Montclair State University - NY Penn Station",
+      "start_time": "07:14:00",
+      "duration": "00:27:00"
+    },
+    {
+      "global_index": 17,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6620 Dover Yard Move",
+      "start_time": "07:15:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 18,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "X37 Hoboken - Summit",
+      "start_time": "07:29:00",
+      "duration": "00:52:00"
+    },
+    {
+      "global_index": 19,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "X633 NY Penn Station - Summit",
+      "start_time": "07:29:00",
+      "duration": "00:35:00"
+    },
+    {
+      "global_index": 20,
+      "page": 2,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6215 NY Penn Station - Montclair State University",
+      "start_time": "07:41:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 21,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6611 NY Penn Station - Dover",
+      "start_time": "07:50:00",
+      "duration": "01:26:00"
+    },
+    {
+      "global_index": 22,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6624 Dover - NY Penn Station",
+      "start_time": "08:06:00",
+      "duration": "01:24:00"
+    },
+    {
+      "global_index": 23,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "3124 NY Penn Station - Sunnyside Yard",
+      "start_time": "08:19:00",
+      "duration": "00:22:00"
+    },
+    {
+      "global_index": 24,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6219 NY Penn Station - Montclair State University",
+      "start_time": "08:20:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 25,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6315 NY Penn Station - Summit",
+      "start_time": "08:24:00",
+      "duration": "00:50:00"
+    },
+    {
+      "global_index": 26,
+      "page": 3,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6616 NY Penn Station - Sunnyside Yard",
+      "start_time": "08:34:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 27,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6214 Montclair State University - NY Penn Station",
+      "start_time": "08:34:00",
+      "duration": "00:24:00"
+    },
+    {
+      "global_index": 28,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "3924 NY Penn Station - Sunnyside Yard",
+      "start_time": "08:42:00",
+      "duration": "00:27:00"
+    },
+    {
+      "global_index": 29,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6617 NY Penn Station - Dover",
+      "start_time": "08:42:00",
+      "duration": "01:24:00"
+    },
+    {
+      "global_index": 30,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "3926 NY Penn Station - Sunnyside Yard",
+      "start_time": "08:59:00",
+      "duration": "00:28:00"
+    },
+    {
+      "global_index": 31,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6628 Dover - NY Penn Station",
+      "start_time": "09:04:00",
+      "duration": "01:20:00"
+    },
+    {
+      "global_index": 32,
+      "page": 4,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6227 NY Penn Station - Montclair State University",
+      "start_time": "09:09:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 33,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6216 Montclair State University - NY Penn Station",
+      "start_time": "09:23:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 34,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "3830 NY Penn Station - Sunnyside Yard",
+      "start_time": "09:56:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 35,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6632 Dover - NY Penn Station",
+      "start_time": "10:04:00",
+      "duration": "01:21:00"
+    },
+    {
+      "global_index": 36,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6332 Summit - NY Penn Station",
+      "start_time": "10:25:00",
+      "duration": "00:53:00"
+    },
+    {
+      "global_index": 37,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6233 NY Penn Station - Montclair State University",
+      "start_time": "10:29:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 38,
+      "page": 5,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6226 Montclair State University - NY Penn Station",
+      "start_time": "11:21:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 39,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6226/3243 NY Penn Station - NY Penn Station",
+      "start_time": "11:55:00",
+      "duration": "00:37:00"
+    },
+    {
+      "global_index": 40,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6640 Dover - NY Penn Station",
+      "start_time": "11:56:00",
+      "duration": "01:30:00"
+    },
+    {
+      "global_index": 41,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6230 Montclair State University - NY Penn Station",
+      "start_time": "12:17:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 42,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6234 Montclair State University - NY Penn Station",
+      "start_time": "13:16:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 43,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "3244 NY Penn Station - Sunnyside Yard",
+      "start_time": "13:50:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 44,
+      "page": 6,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6648 Dover - NY Penn Station",
+      "start_time": "13:56:00",
+      "duration": "01:28:00"
+    },
+    {
+      "global_index": 45,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6238 Montclair State University - NY Penn Station",
+      "start_time": "14:17:00",
+      "duration": "00:31:00"
+    },
+    {
+      "global_index": 46,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6650 Dover - NY Penn Station",
+      "start_time": "14:37:00",
+      "duration": "01:33:00"
+    },
+    {
+      "global_index": 47,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "3248 NY Penn Station - Sunnyside Yard",
+      "start_time": "14:48:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 48,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "3753 Sunnyside Yard - NY Penn Station",
+      "start_time": "14:48:00",
+      "duration": "00:14:00"
+    },
+    {
+      "global_index": 49,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6639 Sunnyside Yard - NY Penn Station",
+      "start_time": "14:50:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 50,
+      "page": 7,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6251 NY Penn Station - Montclair State University",
+      "start_time": "14:51:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 51,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6654 Dover - NY Penn Station",
+      "start_time": "15:14:00",
+      "duration": "01:33:00"
+    },
+    {
+      "global_index": 52,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6242 Montclair State University - NY Penn Station",
+      "start_time": "15:15:00",
+      "duration": "00:30:00"
+    },
+    {
+      "global_index": 53,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6639 NY Penn Station - Dover",
+      "start_time": "15:25:00",
+      "duration": "01:25:00"
+    },
+    {
+      "global_index": 54,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "3255 Sunnyside Yard - NY Penn Station",
+      "start_time": "15:27:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 55,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "3721 Sunnyside Yard - NY Penn Station",
+      "start_time": "15:37:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 56,
+      "page": 8,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6656 Dover - NY Penn Station",
+      "start_time": "15:41:00",
+      "duration": "01:23:00"
+    },
+    {
+      "global_index": 57,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6658 Dover - NY Penn Station",
+      "start_time": "15:59:00",
+      "duration": "01:25:00"
+    },
+    {
+      "global_index": 58,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6647 NY Penn Station - Summit",
+      "start_time": "16:07:00",
+      "duration": "00:49:00"
+    },
+    {
+      "global_index": 59,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "246 Montclair State University - Hoboken",
+      "start_time": "16:34:00",
+      "duration": "00:17:00"
+    },
+    {
+      "global_index": 60,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "3951 Sunnyside Yard - NY Penn Station",
+      "start_time": "16:39:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 61,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "X640 Summit - NY Penn Station",
+      "start_time": "16:43:00",
+      "duration": "00:38:00"
+    },
+    {
+      "global_index": 62,
+      "page": 9,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6248 Montclair State University - NY Penn Station",
+      "start_time": "16:44:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 63,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6662 Dover - NY Penn Station",
+      "start_time": "16:45:00",
+      "duration": "01:23:00"
+    },
+    {
+      "global_index": 64,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6643 NY Penn Station - Dover",
+      "start_time": "16:45:00",
+      "duration": "01:22:00"
+    },
+    {
+      "global_index": 65,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6263 NY Penn Station - Montclair State University",
+      "start_time": "16:52:00",
+      "duration": "00:16:00"
+    },
+    {
+      "global_index": 66,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6651 Sunnyside Yard - NY Penn Station",
+      "start_time": "17:08:00",
+      "duration": "00:16:00"
+    },
+    {
+      "global_index": 67,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6647 NY Penn Station - Dover",
+      "start_time": "17:14:00",
+      "duration": "01:24:00"
+    },
+    {
+      "global_index": 68,
+      "page": 10,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6651 NY Penn Station - Dover",
+      "start_time": "17:43:00",
+      "duration": "01:26:00"
+    },
+    {
+      "global_index": 69,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "X632 Summit - NY Penn Station",
+      "start_time": "17:45:00",
+      "duration": "00:41:00"
+    },
+    {
+      "global_index": 70,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6666 Dover - NY Penn Station",
+      "start_time": "17:48:00",
+      "duration": "01:25:00"
+    },
+    {
+      "global_index": 71,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "3961 Sunnyside Yard - NY Penn Station",
+      "start_time": "18:01:00",
+      "duration": "00:15:00"
+    },
+    {
+      "global_index": 72,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6355 NY Penn Station - Summit",
+      "start_time": "18:18:00",
+      "duration": "00:54:00"
+    },
+    {
+      "global_index": 73,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6258 Montclair State University - NY Penn Station",
+      "start_time": "18:33:00",
+      "duration": "00:28:00"
+    },
+    {
+      "global_index": 74,
+      "page": 11,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "3866/6663 NY Penn Station - NY Penn Station",
+      "start_time": "18:41:00",
+      "duration": "00:36:00"
+    },
+    {
+      "global_index": 75,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 506,
+      "name": "6659 NY Penn Station - Dover",
+      "start_time": "18:47:00",
+      "duration": "01:26:00"
+    },
+    {
+      "global_index": 76,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6363 NY Penn Station - Summit",
+      "start_time": "19:18:00",
+      "duration": "00:48:00"
+    },
+    {
+      "global_index": 77,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6663 NY Penn Station - Dover",
+      "start_time": "19:25:00",
+      "duration": "01:18:00"
+    },
+    {
+      "global_index": 78,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6653 Dover Yard Move",
+      "start_time": "19:25:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 79,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6291 NY Penn Station - Montclair State University",
+      "start_time": "19:37:00",
+      "duration": "00:18:00"
+    },
+    {
+      "global_index": 80,
+      "page": 12,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "3512 NY Penn Station - Sunnyside Yard",
+      "start_time": "19:42:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 81,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 368,
+      "name": "6033 Dover Yard Move",
+      "start_time": "19:25:00",
+      "duration": "00:02:00"
+    },
+    {
+      "global_index": 82,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6264 Montclair State University - NY Penn Station",
+      "start_time": "19:49:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 83,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "X636 Summit - NY Penn Station",
+      "start_time": "19:58:00",
+      "duration": "00:40:00"
+    },
+    {
+      "global_index": 84,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6674 Dover - NY Penn Station",
+      "start_time": "20:27:00",
+      "duration": "01:26:00"
+    },
+    {
+      "global_index": 85,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "3872 NY Penn Station - Sunnyside Yard",
+      "start_time": "20:31:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 86,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6270 Montclair State University - NY Penn Station",
+      "start_time": "20:33:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 87,
+      "page": 13,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "6293 NY Penn Station - Montclair State University",
+      "start_time": "20:34:00",
+      "duration": "00:19:00"
+    },
+    {
+      "global_index": 88,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "6671 NY Penn Station - Dover",
+      "start_time": "20:51:00",
+      "duration": "01:34:00"
+    },
+    {
+      "global_index": 89,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6270 NY Penn Station - Sunnyside Yard",
+      "start_time": "21:17:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 90,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "3891 Sunnyside Yard - NY Penn Station",
+      "start_time": "21:30:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 91,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6274 Montclair State University - NY Penn Station",
+      "start_time": "21:38:00",
+      "duration": "00:26:00"
+    },
+    {
+      "global_index": 92,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "",
+      "start_time": "21:39:00",
+      "duration": "00:03:00"
+    },
+    {
+      "global_index": 93,
+      "page": 14,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "6675 NY Penn Station - Dover",
+      "start_time": "21:51:00",
+      "duration": "01:33:00"
+    },
+    {
+      "global_index": 94,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 575,
+      "name": "3293 Sunnyside Yard - NY Penn Station",
+      "start_time": "22:00:00",
+      "duration": "00:12:00"
+    },
+    {
+      "global_index": 95,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 644,
+      "name": "6674 NY Penn Station - Sunnyside Yard",
+      "start_time": "22:11:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 96,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 713,
+      "name": "6278 Montclair State University - NY Penn Station",
+      "start_time": "22:50:00",
+      "duration": "00:25:00"
+    },
+    {
+      "global_index": 97,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6683 NY Penn Station - Dover",
+      "start_time": "23:53:00",
+      "duration": "01:37:00"
+    },
+    {
+      "global_index": 98,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "XT37 Hoboken Yard Move",
+      "start_time": "00:04:00",
+      "duration": "00:05:00"
+    },
+    {
+      "global_index": 99,
+      "page": 15,
+      "click_x": 2373,
+      "click_y": 920,
+      "name": "6601 Sunnyside Yard - NY Penn Station",
+      "start_time": "00:24:00",
+      "duration": "00:13:00"
+    },
+    {
+      "global_index": 100,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 782,
+      "name": "6201 NY Penn Station - Montclair State University",
+      "start_time": "00:34:00",
+      "duration": "00:18:00"
+    },
+    {
+      "global_index": 101,
+      "page": 16,
+      "click_x": 2373,
+      "click_y": 851,
+      "name": "6679 Dover Yard Move",
+      "start_time": "00:36:00",
+      "duration": "00:02:00"
+    }
+  ]
+}
