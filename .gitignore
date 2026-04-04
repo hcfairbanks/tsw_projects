@@ -1,4 +1,29 @@
 hud/
 junk/
-hud-go/tsw_hud.db
-hud-go/dist/tsw_hud.db
+.claude
+
+# Dependencies
+**/node_modules/
+
+# Build artifacts
+**/dist/
+
+# Databases & SQLite temp files
+*.db-shm
+*.db-wal
+
+# Compiled binaries
+*.exe~
+*.dll
+
+# Python
+__pycache__/
+*.pyc
+
+# Backup files
+*.bak
+*~
+
+# Project-specific
+tsw_api_reader/notes/
+bot/claude_reports/
