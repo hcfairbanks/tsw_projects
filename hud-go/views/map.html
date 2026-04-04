@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Route Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 80px;
+            right: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 320px;
+            max-width: 350px;
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .info-panel.collapsed {
+            min-width: 0;
+            max-width: none;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            border: 2px solid rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        .info-panel.collapsed .panel-content {
+            display: none;
+        }
+
+        .info-panel.collapsed .panel-toggle-icon {
+            display: block;
+            font-size: 20px;
+            color: #333;
+            line-height: 1;
+        }
+
+        .panel-toggle-icon {
+            display: none;
+        }
+
+        .panel-collapse-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .panel-collapse-btn:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .info-panel h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected {
+            background-color: #00cc66;
+            box-shadow: 0 0 6px #00cc66;
+        }
+
+        .status-disconnected {
+            background-color: #ff0000;
+            box-shadow: 0 0 6px #ff0000;
+        }
+
+        .status-lost {
+            background-color: #ffaa00;
+            box-shadow: 0 0 6px #ffaa00;
+        }
+
+        .info-group {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .info-group h3 {
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .timetable-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .game-time {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timetable-time {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timetable-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .distance-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .legend {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend h3 {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .legend-line {
+            width: 20px;
+            height: 4px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .follow-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .follow-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #loadFromGameBtn {
+            background: #28a745;
+            margin-bottom: 10px;
+        }
+
+        #loadFromGameBtn:hover {
+            background: #218838;
+        }
+
+        #loadFromGameBtn:disabled {
+            background: #6c9c7a;
+            cursor: not-allowed;
+        }
+
+        .follow-btn.following {
+            background: #dc2626;
+        }
+
+        .follow-btn.following:hover {
+            background: #b91c1c;
+        }
+
+        .route-selector {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .route-selector h3 {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h3 {
+            margin-bottom: 0;
+        }
+
+        .collapse-icon {
+            font-size: 12px;
+            color: #666;
+            transition: transform 0.2s ease;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .route-selector select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .route-selector button {
+            width: 100%;
+            margin-top: 8px;
+            padding: 8px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .route-selector button:hover {
+            background: #0052cc;
+        }
+
+        .route-selector button:active {
+            background: #003d99;
+        }
+
+        .route-selector button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .route-selector .status-message {
+            margin-top: 5px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .route-selector .status-message.success {
+            color: #00cc66;
+        }
+
+        .route-selector .status-message.error {
+            color: #ff0000;
+        }
+
+        .browse-btn {
+            background: #28a745 !important;
+            margin-top: 5px;
+        }
+
+        .browse-btn:hover {
+            background: #218838 !important;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .typeahead-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .typeahead-item:last-child {
+            border-bottom: none;
+        }
+
+        .typeahead-item:hover,
+        .typeahead-item.highlighted {
+            background: #f0f0f0;
+        }
+
+        .typeahead-item .route-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .typeahead-item .country-name {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .nav-link {
+            display: inline-block;
+            color: #0066ff;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="info-panel" id="infoPanel" onclick="expandPanel(event)">
+        <span class="panel-toggle-icon">&#9776;</span>
+        <div class="panel-content" style="padding-top: 35px;">
+        <button class="panel-collapse-btn" onclick="collapsePanel(event)" title="Collapse panel">&times;</button>
+        <a href="/" class="nav-link" id="backToHome" data-i18n="map.backToHome">Back to Home</a>
+        <button class="follow-btn" id="loadFromGameBtn" onclick="loadFromGame()" title="Detect timetable from running game" style="margin-bottom: 10px;">Load From Game</button>
+        <div id="loadFromGameStatus" style="font-size: 11px; color: #666; margin-bottom: 10px; display: none;"></div>
+        <h2><span class="status-indicator" id="statusIndicator"></span><span data-i18n="map.tracking">Tracking</span></h2>
+
+        <div class="info-item" style="margin-bottom: 15px; display: none;" id="connectionStatusItem">
+            <span id="connectionStatus">Lost Connection</span>
+        </div>
+
+        <div class="route-selector">
+            <div class="section-header" onclick="toggleTimetableSection()">
+                <h3 data-i18n="map.loadTimetable">Load Timetable</h3>
+                <span class="collapse-icon" id="timetableCollapseIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="timetableContent">
+                <label style="font-size: 11px; color: #666;" data-i18n="map.route">Route:</label>
+                <div class="typeahead-container" style="position: relative;">
+                    <input type="text" id="routeInput" placeholder="Type to search routes..." autocomplete="off"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;">
+                    <div id="routeDropdown" class="typeahead-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ddd; border-top: none; border-radius: 0 0 4px 4px; z-index: 1001;">
+                    </div>
+                    <input type="hidden" id="routeSelect" value="">
+                </div>
+                <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.train">Train:</label>
+                <select id="trainSelect" onchange="handleTrainChange()" disabled>
+                    <option value="">-- Select a route first --</option>
+                </select>
+                <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.timetable">Timetable:</label>
+                <select id="timetableSelect" onchange="handleTimetableChange()" disabled>
+                    <option value="">-- Select a timetable --</option>
+                </select>
+                <button id="loadRouteBtn" onclick="loadSelectedTimetable()" disabled style="margin-top: 10px;" data-i18n="map.loadTimetable">Load Timetable</button>
+                <button id="clearRouteBtn" onclick="clearLoadedRoute()" style="width: 100%; margin-top: 8px; padding: 8px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; display: none;" data-i18n="map.clearLoadedRoute">Clear Loaded Route</button>
+                <a href="/huds" target="_blank" id="openHudLink" style="display: none; margin-top: 8px; text-align: center; padding: 8px; background: #8b5cf6; color: white; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: 600;" data-i18n="map.openHud">Open HUD</a>
+                <div id="routeInfoGroup" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                    <h3 id="routeName" style="font-size: 13px; color: #333; margin: 0;">Loading...</h3>
+                    <div class="info-item" style="display: none;">
+                        <span class="info-label">Trip Duration:</span>
+                        <span class="info-value" id="routeDuration">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timetable-display" id="timetableDisplay" style="display: none;">
+            <div class="game-time" id="gameTime">--:--:--</div>
+            <div class="timetable-time" id="timetableTime">--:--</div>
+            <div class="timetable-label" id="timetableLabel">Next Stop</div>
+            <div class="distance-display" id="distanceDisplay" style="display: none;">
+                <span id="distanceValue">0</span> <span id="distanceUnit">m</span>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <h3 data-i18n="map.trainStatus">Train Status</h3>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.speed">Speed:</span>
+                <span class="info-value"><span id="speed">0</span> km/h</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.direction">Direction:</span>
+                <span class="info-value" id="direction">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.position">Position:</span>
+                <span class="info-value" style="font-size: 11px;">
+                    <div>Lat: <span id="currentLat">-</span></div>
+                    <div>Lng: <span id="currentLng">-</span></div>
+                </span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3 data-i18n="map.mapLegend">Map Legend</h3>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #0066ff;"></div>
+                <span data-i18n="map.routePath">Route Path</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00cc66;"></div>
+                <span data-i18n="map.timetableStations">Timetable Stations</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffa500;"></div>
+                <span data-i18n="map.liveTrainPosition">Live Train Position</span>
+            </div>
+            <button class="follow-btn" id="followBtn" onclick="toggleFollowTrain()" title="Click to follow train position" data-i18n="map.followTrain">Follow Train</button>
+        </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([52.0, -1.5], 6);
+
+        // Add tile layers
+        const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        });
+        const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 19
+        });
+        osm.addTo(map);
+        L.control.layers({
+            'Geographic': osm,
+            'Satellite': satellite
+        }).addTo(map);
+
+        // Map layers
+        let routePolyline = null;
+        let markerLayers = [];
+        let trainMarker = null;
+        let routeData = null;
+        let firstPosition = true;
+        let isFollowingTrain = false;
+
+        // Direction mapping
+        const directionMap = {
+            '-1': 'Reverse',
+            '0': 'Neutral',
+            '1': 'Forward'
+        };
+
+        function toggleTimetableSection() {
+            const content = document.getElementById('timetableContent');
+            const icon = document.getElementById('timetableCollapseIcon');
+
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+
+            // Save preference to localStorage
+            localStorage.setItem('timetableSectionCollapsed', content.classList.contains('collapsed'));
+        }
+
+        // Restore collapsed state on page load
+        function restoreTimetableSectionState() {
+            const isCollapsed = localStorage.getItem('timetableSectionCollapsed') === 'true';
+            if (isCollapsed) {
+                document.getElementById('timetableContent').classList.add('collapsed');
+                document.getElementById('timetableCollapseIcon').classList.add('collapsed');
+            }
+        }
+
+        function collapsePanel(event) {
+            event.stopPropagation();
+            document.getElementById('infoPanel').classList.add('collapsed');
+            localStorage.setItem('infoPanelCollapsed', 'true');
+        }
+
+        function expandPanel(event) {
+            const panel = document.getElementById('infoPanel');
+            if (panel.classList.contains('collapsed')) {
+                event.stopPropagation();
+                panel.classList.remove('collapsed');
+                localStorage.setItem('infoPanelCollapsed', 'false');
+            }
+        }
+
+        function restorePanelState() {
+            const params = new URLSearchParams(window.location.search);
+            const fromStart = params.get('from') === 'start';
+
+            if (fromStart) {
+                document.getElementById('backToHome').style.display = 'none';
+            }
+
+            const savedState = localStorage.getItem('infoPanelCollapsed');
+            const isCollapsed = savedState !== null ? savedState === 'true' : fromStart;
+
+            if (isCollapsed) {
+                document.getElementById('infoPanel').classList.add('collapsed');
+            }
+        }
+
+        let activeGameStream = null;
+
+        function cancelLoadFromGame() {
+            const btn = document.getElementById('loadFromGameBtn');
+            const statusEl = document.getElementById('loadFromGameStatus');
+            if (activeGameStream) {
+                activeGameStream.close();
+                activeGameStream = null;
+            }
+            btn.textContent = 'Load From Game';
+            btn.classList.remove('following');
+            statusEl.style.display = 'none';
+            statusEl.textContent = '';
+        }
+
+        function loadFromGame() {
+            const btn = document.getElementById('loadFromGameBtn');
+            const statusEl = document.getElementById('loadFromGameStatus');
+
+            // If already running, cancel
+            if (activeGameStream) {
+                cancelLoadFromGame();
+                return;
+            }
+
+            btn.textContent = 'Cancel';
+            btn.classList.add('following');
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#666';
+            statusEl.textContent = 'Connecting to TSW...';
+
+            const gameStream = new EventSource('/stream');
+            activeGameStream = gameStream;
+            let attempts = 0;
+            const maxAttempts = 300;
+
+            function resetBtn(errorMsg) {
+                activeGameStream = null;
+                btn.classList.remove('following');
+                if (errorMsg) {
+                    statusEl.style.color = '#ff0000';
+                    statusEl.textContent = errorMsg;
+                }
+                btn.textContent = 'Load From Game';
+            }
+
+            gameStream.onmessage = function(event) {
+                if (activeGameStream !== gameStream) return;
+                attempts++;
+                let data;
+                try {
+                    data = JSON.parse(event.data);
+                } catch (e) {
+                    return;
+                }
+
+                if (data.waiting) {
+                    statusEl.textContent = 'Waiting for TSW connection... (' + attempts + ')';
+                    if (attempts > maxAttempts) {
+                        gameStream.close();
+                        resetBtn('Could not connect to TSW. Make sure the game is running.');
+                    }
+                    return;
+                }
+
+                const serviceName = data.currentServiceName;
+                const position = data.playerPosition;
+
+                if (!serviceName) {
+                    statusEl.textContent = 'Connected - waiting for service... (' + attempts + ')';
+                    if (attempts > maxAttempts) {
+                        gameStream.close();
+                        resetBtn('No service detected. Start a service in TSW.');
+                    }
+                    return;
+                }
+
+                statusEl.textContent = 'Service: ' + serviceName + ' - detecting timetable...';
+                gameStream.close();
+
+                let detectUrl = '/api/timetables/detect?current_service_name=' + encodeURIComponent(serviceName);
+                if (position && position.latitude && position.longitude) {
+                    detectUrl += '&lat=' + position.latitude + '&lng=' + position.longitude;
+                }
+
+                fetch(detectUrl)
+                    .then(function(res) { return res.json(); })
+                    .then(function(result) {
+                        if (result.found) {
+                            statusEl.style.color = '#00cc66';
+                            statusEl.textContent = 'Found: ' + (result.route_name || result.service_name) + ' - loading...';
+                            btn.textContent = 'Loading...';
+
+                            fetch('/api/map/route-data/' + result.timetable_id)
+                                .then(function(res) { return res.json(); })
+                                .then(function(mapData) {
+                                    if (mapData.error) throw new Error(mapData.error);
+
+                                    return fetch('/api/upload-route', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            filename: 'db_timetable_' + result.timetable_id + '.json',
+                                            routeData: mapData
+                                        })
+                                    }).then(function() { return mapData; });
+                                })
+                                .then(function(mapData) {
+                                    localStorage.setItem('customRoute', JSON.stringify(mapData));
+                                    localStorage.setItem('customRouteFilename', mapData.routeName);
+
+                                    clearRouteDisplay();
+                                    routeData = mapData;
+                                    initializeRoute(mapData);
+
+                                    document.getElementById('clearRouteBtn').style.display = 'block';
+                                    document.getElementById('openHudLink').style.display = 'block';
+
+                                    if (mapData.timetableId) {
+                                        selectTimetableInDropdowns(mapData.timetableId);
+                                    }
+
+                                    statusEl.style.color = '#00cc66';
+                                    statusEl.textContent = 'Loaded!';
+                                    activeGameStream = null;
+                                    btn.classList.remove('following');
+                                    btn.textContent = 'Load From Game';
+                                })
+                                .catch(function(err) {
+                                    resetBtn('Error loading route: ' + err.message);
+                                });
+                        } else {
+                            resetBtn('No timetable found for "' + serviceName + '"');
+                        }
+                    })
+                    .catch(function(err) {
+                        resetBtn('Error: ' + err.message);
+                    });
+            };
+
+            gameStream.onerror = function() {
+                gameStream.close();
+                resetBtn('Connection error. Is the server running?');
+            };
+        }
+
+        function toggleFollowTrain() {
+            const followBtn = document.getElementById('followBtn');
+
+            isFollowingTrain = !isFollowingTrain;
+
+            if (isFollowingTrain) {
+                followBtn.textContent = 'Stop Following';
+                followBtn.classList.add('following');
+                followBtn.title = 'Click to stop following train position';
+
+                if (trainMarker) {
+                    const pos = trainMarker.getLatLng();
+                    map.setView([pos.lat, pos.lng], map.getZoom());
+                }
+
+                console.log('Started following train');
+            } else {
+                followBtn.textContent = 'Follow Train';
+                followBtn.classList.remove('following');
+                followBtn.title = 'Click to follow train position';
+
+                console.log('Stopped following train');
+            }
+        }
+
+        function parseRouteName(fullName) {
+            const match = fullName.match(/^(.+?)\s+(\d{4})\s+(\d{4})$/);
+            if (!match) {
+                return { name: fullName, duration: null };
+            }
+
+            const routeName = match[1].trim();
+            const durationHHMM = match[3];
+
+            const hours = parseInt(durationHHMM.substring(0, 2), 10);
+            const minutes = parseInt(durationHHMM.substring(2, 4), 10);
+
+            let durationStr = '';
+            if (hours > 0 && minutes > 0) {
+                durationStr = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            } else if (hours > 0) {
+                durationStr = `${hours} hour${hours !== 1 ? 's' : ''}`;
+            } else {
+                durationStr = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            }
+
+            return { name: routeName, duration: durationStr };
+        }
+
+        // Create custom train icon
+        const trainIcon = L.divIcon({
+            className: 'train-icon',
+            html: '<div style="background: #ffa500; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255,165,0,0.8), 0 2px 6px rgba(0,0,0,0.3);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        // Clear loaded route from localStorage and server
+        async function clearLoadedRoute() {
+            try {
+                // Clear from server
+                await fetch('/api/clear-route', { method: 'POST' });
+
+                // Clear from localStorage
+                localStorage.removeItem('customRoute');
+                localStorage.removeItem('customRouteFilename');
+
+                // Clear file input (if dev tools exist)
+                const fileInput = document.getElementById('jsonFileInput');
+                if (fileInput) fileInput.value = '';
+
+                // Hide the clear button and HUD link
+                document.getElementById('clearRouteBtn').style.display = 'none';
+                document.getElementById('openHudLink').style.display = 'none';
+
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            } catch (err) {
+                console.error('Failed to clear route:', err);
+            }
+        }
+
+        // Handle file selection from native file picker (Dev Tools)
+        function handleFileSelect() {
+            const fileInput = document.getElementById('jsonFileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const statusMessage = document.getElementById('devStatusMessage');
+            statusMessage.textContent = 'Loading file...';
+            statusMessage.className = 'status-message';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const routeData = JSON.parse(e.target.result);
+
+                    if (!routeData.coordinates || !routeData.routeName) {
+                        throw new Error('Invalid route file format');
+                    }
+
+                    // Send route data to backend
+                    fetch('/api/upload-route', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename: file.name,
+                            routeData: routeData
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            localStorage.setItem('customRoute', e.target.result);
+                            localStorage.setItem('customRouteFilename', file.name);
+
+                            statusMessage.textContent = `Loaded ${file.name}`;
+                            statusMessage.className = 'status-message success';
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        } else {
+                            throw new Error(result.error || 'Failed to load route on server');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Failed to send route to server:', err);
+                        statusMessage.textContent = `Server error: ${err.message}`;
+                        statusMessage.className = 'status-message error';
+                    });
+                } catch (err) {
+                    console.error('Failed to load route:', err);
+                    statusMessage.textContent = `Invalid route file: ${err.message}`;
+                    statusMessage.className = 'status-message error';
+                }
+            };
+
+            reader.onerror = function() {
+                statusMessage.textContent = 'Failed to read file';
+                statusMessage.className = 'status-message error';
+            };
+
+            reader.readAsText(file);
+        }
+
+        // =============================================
+        // Cascading Selectors: Route → Train → Timetable
+        // =============================================
+
+        let allRoutes = [];
+        let highlightedIndex = -1;
+
+        // Load routes for typeahead (only routes with timetables that have coordinates)
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes/with-coordinates');
+                allRoutes = await response.json();
+                console.log('Routes with coordinates loaded:', allRoutes.length);
+            } catch (err) {
+                console.error('Failed to load routes:', err);
+            }
+        }
+
+        // Setup typeahead for route input
+        function setupRouteTypeahead() {
+            const input = document.getElementById('routeInput');
+            const dropdown = document.getElementById('routeDropdown');
+            const hiddenSelect = document.getElementById('routeSelect');
+
+            // Show dropdown on focus
+            input.addEventListener('focus', function() {
+                showRouteDropdown(this.value);
+            });
+
+            // Filter on input
+            input.addEventListener('input', function() {
+                highlightedIndex = -1;
+                showRouteDropdown(this.value);
+            });
+
+            // Keyboard navigation
+            input.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+                    updateHighlight(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                    updateHighlight(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                        items[highlightedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Hide dropdown on click outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.typeahead-container')) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function updateHighlight(items) {
+            items.forEach((item, idx) => {
+                item.classList.toggle('highlighted', idx === highlightedIndex);
+            });
+            if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                items[highlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showRouteDropdown(filter) {
+            const dropdown = document.getElementById('routeDropdown');
+            const filterLower = filter.toLowerCase();
+
+            const filtered = allRoutes.filter(route =>
+                route.name.toLowerCase().includes(filterLower) ||
+                (route.country_name && route.country_name.toLowerCase().includes(filterLower))
+            );
+
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: #999;">No routes found</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(route => `
+                    <div class="typeahead-item" data-id="${route.id}" data-name="${route.name}">
+                        <div class="route-name">${route.name}</div>
+                        ${route.country_name ? `<div class="country-name">${route.country_name}</div>` : ''}
+                    </div>
+                `).join('');
+
+                // Add click handlers
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const name = this.dataset.name;
+                        document.getElementById('routeInput').value = name;
+                        document.getElementById('routeSelect').value = id;
+                        dropdown.style.display = 'none';
+                        handleRouteChange();
+                    });
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        // Handle route selection - load trains for this route (only those with coordinates)
+        async function handleRouteChange() {
+            const routeId = document.getElementById('routeSelect').value;
+            const trainSelect = document.getElementById('trainSelect');
+            const timetableSelect = document.getElementById('timetableSelect');
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            // Reset dependent dropdowns
+            trainSelect.innerHTML = '<option value="">-- Select a train --</option>';
+            trainSelect.disabled = true;
+            timetableSelect.innerHTML = '<option value="">-- Select a timetable --</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!routeId) return;
+
+            try {
+                const response = await fetch(`/api/routes/${routeId}/trains-with-coordinates`);
+                const trains = await response.json();
+
+                if (trains.length > 0) {
+                    trainSelect.disabled = false;
+                    trains.forEach(train => {
+                        const option = document.createElement('option');
+                        option.value = train.id;
+                        option.textContent = train.name;
+                        trainSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Trains with coordinates loaded:', trains.length);
+            } catch (err) {
+                console.error('Failed to load trains:', err);
+            }
+        }
+
+        // Handle train selection - load timetables for this route+train
+        async function handleTrainChange() {
+            const routeId = document.getElementById('routeSelect').value;
+            const trainId = document.getElementById('trainSelect').value;
+            const timetableSelect = document.getElementById('timetableSelect');
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            // Reset timetable dropdown
+            timetableSelect.innerHTML = '<option value="">-- Select a timetable --</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!trainId) return;
+
+            try {
+                const response = await fetch(`/api/timetables?route_id=${routeId}&train_id=${trainId}`);
+                const timetables = await response.json();
+
+                // Only show timetables with recorded data
+                const withData = timetables.filter(t => t.coordinate_count > 0);
+
+                if (withData.length > 0) {
+                    timetableSelect.disabled = false;
+                    withData.forEach(tt => {
+                        const option = document.createElement('option');
+                        option.value = tt.id;
+                        const label = tt.service ? `${tt.service}: ${tt.service_name}` : tt.service_name;
+                        option.textContent = `${label} (${tt.coordinate_count} pts)`;
+                        timetableSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Timetables with data:', withData.length);
+            } catch (err) {
+                console.error('Failed to load timetables:', err);
+            }
+        }
+
+        // Handle timetable selection - enable load button
+        function handleTimetableChange() {
+            const timetableId = document.getElementById('timetableSelect').value;
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            loadBtn.disabled = !timetableId;
+            console.log('Selected timetable:', timetableId);
+        }
+
+        // Load selected timetable data from database and display directly (no reload)
+        async function loadSelectedTimetable() {
+            const timetableId = document.getElementById('timetableSelect').value;
+
+            if (!timetableId) {
+                return;
+            }
+
+            try {
+                // Fetch route data directly from database
+                const response = await fetch(`/api/map/route-data/${timetableId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Log to console
+                console.log('=== ROUTE DATA FROM DATABASE ===');
+                console.log('Service Name:', data.routeName);
+                console.log('Timetable ID:', data.timetableId);
+                console.log('Total Coordinates:', data.totalPoints);
+                console.log('Timetable Entries:', data.timetable?.length || 0);
+                console.log('Timetable JSON:', JSON.stringify(data.timetable, null, 2));
+                console.log('=====================================');
+
+                // Send to server to set as active route (for telemetry tracking)
+                const uploadRes = await fetch('/api/upload-route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: `db_timetable_${timetableId}.json`,
+                        routeData: data
+                    })
+                });
+
+                const result = await uploadRes.json();
+                if (!result.success) {
+                    console.warn('Failed to set route on server:', result.error);
+                }
+
+                // Store in localStorage for persistence across page loads
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                localStorage.setItem('customRouteFilename', data.routeName);
+
+                // Clear existing route display
+                clearRouteDisplay();
+
+                // Display the route directly without reloading
+                routeData = data;
+                initializeRoute(data);
+
+                // Show the clear route button and HUD link
+                document.getElementById('clearRouteBtn').style.display = 'block';
+                document.getElementById('openHudLink').style.display = 'block';
+
+            } catch (err) {
+                console.error('Failed to load timetable:', err);
+            }
+        }
+
+        // Clear existing route display from the map
+        function clearRouteDisplay() {
+            // Remove existing polyline
+            if (routePolyline) {
+                map.removeLayer(routePolyline);
+                routePolyline = null;
+            }
+
+            // Remove existing station markers
+            markerLayers.forEach(marker => map.removeLayer(marker));
+            markerLayers = [];
+
+            // Reset route data
+            routeData = null;
+        }
+
+        // Load config and hide dev tools if needed
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                if (!config.developmentMode) {
+                    const devTools = document.querySelector('.dev-tools');
+                    if (devTools) {
+                        devTools.style.display = 'none';
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load config:', err);
+            }
+        }
+
+        // Select timetable in dropdowns by timetable ID
+        async function selectTimetableInDropdowns(timetableId) {
+            if (!timetableId) return;
+
+            try {
+                // Get timetable details to find route_id and train_id
+                const response = await fetch(`/api/timetables/${timetableId}`);
+                const timetable = await response.json();
+
+                if (!timetable || timetable.error) {
+                    console.log('Could not find timetable:', timetableId);
+                    return;
+                }
+
+                // Wait for routes to load
+                while (allRoutes.length === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // Find and select the route
+                const route = allRoutes.find(r => r.id === timetable.route_id);
+                if (route) {
+                    document.getElementById('routeInput').value = route.name;
+                    document.getElementById('routeSelect').value = route.id;
+
+                    // Load trains for this route
+                    await handleRouteChange();
+
+                    // Get the first train from timetable (trains array or legacy train_id)
+                    const trainId = timetable.trains && timetable.trains.length > 0
+                        ? timetable.trains[0].id
+                        : timetable.train_id;
+
+                    if (trainId) {
+                        // Select the train
+                        const trainSelect = document.getElementById('trainSelect');
+                        trainSelect.value = trainId;
+
+                        // Load timetables for this route+train
+                        await handleTrainChange();
+
+                        // Select the timetable
+                        const timetableSelect = document.getElementById('timetableSelect');
+                        timetableSelect.value = timetableId;
+                        handleTimetableChange();
+
+                        console.log('Dropdowns populated for timetable:', timetableId);
+                    }
+                }
+            } catch (err) {
+                console.error('Error selecting timetable in dropdowns:', err);
+            }
+        }
+
+        // Load routes on page load
+        loadRoutes();
+        setupRouteTypeahead();
+        loadConfig();
+        restoreTimetableSectionState();
+        restorePanelState();
+
+        // Check server first for loaded route, then fall back to localStorage
+        async function loadInitialRoute() {
+            try {
+                // Check server first
+                const response = await fetch('/route-data');
+                const serverData = await response.json();
+
+                if (serverData && serverData.routeName && !serverData.error) {
+                    console.log('Loading route from server:', serverData.routeName);
+                    routeData = serverData;
+                    initializeRoute(serverData);
+
+                    // Sync localStorage with server data
+                    localStorage.setItem('customRoute', JSON.stringify(serverData));
+                    localStorage.setItem('customRouteFilename', serverData.routeName);
+
+                    // Show clear button and HUD link
+                    document.getElementById('clearRouteBtn').style.display = 'block';
+                    document.getElementById('openHudLink').style.display = 'block';
+                    document.getElementById('routeInfoGroup').style.display = 'block';
+
+                    // Select the timetable in dropdowns
+                    if (serverData.timetableId) {
+                        await selectTimetableInDropdowns(serverData.timetableId);
+                    }
+                    return;
+                }
+            } catch (err) {
+                console.log('No route loaded on server, checking localStorage');
+            }
+
+            // Fall back to localStorage
+            const customRoute = localStorage.getItem('customRoute');
+            const customRouteFilename = localStorage.getItem('customRouteFilename');
+
+            if (customRoute) {
+                try {
+                    const data = JSON.parse(customRoute);
+                    console.log('Loading custom route from localStorage:', customRouteFilename);
+                    routeData = data;
+                    initializeRoute(data);
+
+                    // Show clear button and HUD link since a route is loaded
+                    document.getElementById('clearRouteBtn').style.display = 'block';
+                    document.getElementById('openHudLink').style.display = 'block';
+
+                    // Select the timetable in dropdowns
+                    if (data.timetableId) {
+                        await selectTimetableInDropdowns(data.timetableId);
+                    }
+                } catch (err) {
+                    console.error('Failed to load custom route:', err);
+                    localStorage.removeItem('customRoute');
+                    localStorage.removeItem('customRouteFilename');
+                }
+            }
+        }
+
+        loadInitialRoute();
+
+        function initializeRoute(data) {
+            if (data.error) {
+                document.getElementById('routeInfoGroup').style.display = 'none';
+                return;
+            }
+
+            // Show the route info section
+            document.getElementById('routeInfoGroup').style.display = 'block';
+
+            const parsed = parseRouteName(data.routeName || 'Unknown');
+            document.getElementById('routeName').textContent = parsed.name;
+            if (parsed.duration) {
+                document.getElementById('routeDuration').textContent = parsed.duration;
+                document.getElementById('routeDuration').parentElement.style.display = 'flex';
+            }
+
+            // Draw route polyline
+            const coordinates = data.coordinates.map(coord => [coord.latitude, coord.longitude]);
+            routePolyline = L.polyline(coordinates, {
+                color: '#0066ff',
+                weight: 4,
+                opacity: 0.6
+            }).addTo(map);
+
+            map.fitBounds(routePolyline.getBounds(), { padding: [50, 50] });
+
+            // Add timetable stations to map
+            if (data.timetable && data.timetable.length > 0) {
+                addTimetableStations(data.timetable);
+            }
+
+            console.log('Route loaded successfully');
+        }
+
+        // Add timetable entries as station markers on the map
+        function addTimetableStations(timetable) {
+            console.log('Adding station markers for', timetable.length, 'entries');
+            timetable.forEach((entry, index) => {
+                // Only show stations that have coordinates
+                if (!entry.latitude || !entry.longitude) {
+                    console.log(`  [${index}] ${entry.location}: SKIPPED - no coords`);
+                    return;
+                }
+                console.log(`  [${index}] ${entry.location}: Adding marker at ${entry.latitude}, ${entry.longitude}`);
+
+                const stationName = entry.location || `Station ${index + 1}`;
+                const stopNumber = entry.index + 1;
+
+                const mapMarker = L.circleMarker([entry.latitude, entry.longitude], {
+                    radius: 8,
+                    fillColor: '#00cc66',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).bindPopup(`
+                    <strong>#${stopNumber} ${stationName}</strong><br>
+                    <small>Arr: ${entry.arrival || '-'} | Dep: ${entry.departure || '-'}</small><br>
+                    <small>Platform: ${entry.platform || '-'}</small>
+                `).addTo(map);
+
+                markerLayers.push(mapMarker);
+            });
+        }
+
+        // Connect to live position stream
+        const eventSource = new EventSource('/stream');
+
+        eventSource.onopen = () => {
+            console.log('Connected to live stream');
+            document.getElementById('statusIndicator').className = 'status-indicator status-connected';
+            document.getElementById('connectionStatusItem').style.display = 'none';
+        };
+
+        eventSource.onerror = () => {
+            console.log('Connection lost');
+            document.getElementById('statusIndicator').className = 'status-indicator status-lost';
+            document.getElementById('connectionStatus').textContent = 'Lost Connection';
+            document.getElementById('connectionStatusItem').style.display = 'flex';
+        };
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            // Update speed and direction
+            if (data.speed !== undefined) {
+                document.getElementById('speed').textContent = data.speed;
+            }
+            if (data.direction !== undefined) {
+                document.getElementById('direction').textContent = directionMap[data.direction] || 'Unknown';
+            }
+
+            // Update game time
+            if (data.localTime) {
+                try {
+                    const date = new Date(data.localTime);
+                    const hours = String(date.getUTCHours()).padStart(2, '0');
+                    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+                    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+                    document.getElementById('gameTime').textContent = `${hours}:${minutes}:${seconds}`;
+                } catch (e) {
+                    document.getElementById('gameTime').textContent = '--:--:--';
+                }
+            }
+
+            // Update timetable display
+            if (data.timetableTime && data.timetableLabel) {
+                document.getElementById('timetableDisplay').style.display = 'block';
+                document.getElementById('timetableTime').textContent = data.timetableTime;
+                document.getElementById('timetableLabel').textContent = data.timetableLabel;
+
+                if (data.distanceToStation !== null && data.distanceToStation !== undefined) {
+                    document.getElementById('distanceDisplay').style.display = 'block';
+                    const isImperial = data.distanceUnits === 'imperial';
+
+                    if (isImperial) {
+                        // Imperial: distance is in feet
+                        const feet = data.distanceToStation;
+                        if (feet > 5280) {
+                            // Convert to miles (5280 feet = 1 mile)
+                            document.getElementById('distanceValue').textContent = (feet / 5280).toFixed(1);
+                            document.getElementById('distanceUnit').textContent = 'mi';
+                        } else {
+                            document.getElementById('distanceValue').textContent = Math.round(feet).toLocaleString();
+                            document.getElementById('distanceUnit').textContent = 'ft';
+                        }
+                    } else {
+                        // Metric: distance is in meters
+                        if (data.distanceToStation > 3000) {
+                            document.getElementById('distanceValue').textContent = (data.distanceToStation / 1000).toFixed(1);
+                            document.getElementById('distanceUnit').textContent = 'km';
+                        } else {
+                            document.getElementById('distanceValue').textContent = Math.round(data.distanceToStation).toLocaleString();
+                            document.getElementById('distanceUnit').textContent = 'm';
+                        }
+                    }
+                } else {
+                    document.getElementById('distanceDisplay').style.display = 'none';
+                }
+            } else {
+                document.getElementById('timetableDisplay').style.display = 'none';
+            }
+
+            // Update train position
+            if (data.playerPosition && data.playerPosition.latitude && data.playerPosition.longitude) {
+                const lat = data.playerPosition.latitude;
+                const lng = data.playerPosition.longitude;
+
+                document.getElementById('currentLat').textContent = lat.toFixed(6);
+                document.getElementById('currentLng').textContent = lng.toFixed(6);
+
+                if (trainMarker) {
+                    trainMarker.setLatLng([lat, lng]);
+                } else {
+                    trainMarker = L.marker([lat, lng], { icon: trainIcon })
+                        .bindPopup('<strong>Your Train</strong>')
+                        .addTo(map);
+                }
+
+                if (firstPosition || isFollowingTrain) {
+                    map.setView([lat, lng], firstPosition ? 15 : map.getZoom());
+                    firstPosition = false;
+                }
+            }
+        };
+
+        console.log('Live Route Tracker initialized');
+    </script>
+    <script src="/js/i18n.js"></script>
+</body>
+</html>

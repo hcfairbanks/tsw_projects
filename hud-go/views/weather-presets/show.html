@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Preset - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 30px; }
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+        /* Nav styles now in theme.css */
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-danger { background: var(--btn-danger-bg); color: #fff; }
+        .btn-danger:hover { background: var(--btn-danger-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover { background: var(--accent-hover); }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: var(--text-secondary); }
+        .detail-value { color: var(--accent-color); font-weight: bold; }
+        .actions { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 id="presetName">Weather Preset</h1>
+
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <h2 data-i18n="weatherPresets.presetDetails">Preset Details</h2>
+        <div id="presetDetails">
+            <p style="text-align: center; color: #666;" data-i18n="weatherPresets.loadingPreset">Loading preset...</p>
+        </div>
+        <div class="actions">
+            <button class="btn-primary" onclick="applyPreset()" data-i18n="weatherPresets.applyToGame">Apply to Game</button>
+            <button class="btn-danger" onclick="deletePreset()" data-i18n="weatherPresets.deletePreset">Delete Preset</button>
+        </div>
+    </div>
+
+    <script>
+        const presetId = window.location.pathname.split('/').pop();
+        let currentPreset = null;
+
+        async function loadPreset() {
+            try {
+                const response = await fetch(`/api/weather-presets/${presetId}`);
+                if (!response.ok) {
+                    document.getElementById('presetDetails').innerHTML = `<p style="text-align: center; color: #e94560;">${i18n.t('weatherPresets.presetNotFound')}</p>`;
+                    return;
+                }
+
+                currentPreset = await response.json();
+                document.getElementById('presetName').textContent = currentPreset.name;
+                document.title = `${currentPreset.name} - TSW HUD Project`;
+
+                const html = `
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.temperature')}</span>
+                        <span class="detail-value">${currentPreset.temperature}C</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.cloudiness')}</span>
+                        <span class="detail-value">${(currentPreset.cloudiness * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.precipitation')}</span>
+                        <span class="detail-value">${(currentPreset.precipitation * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.wetness')}</span>
+                        <span class="detail-value">${(currentPreset.wetness * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.groundSnow')}</span>
+                        <span class="detail-value">${(currentPreset.ground_snow * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.piledSnow')}</span>
+                        <span class="detail-value">${(currentPreset.piled_snow * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">${i18n.t('weatherPresets.fogDensity')}</span>
+                        <span class="detail-value">${(currentPreset.fog_density * 100).toFixed(0)}%</span>
+                    </div>
+                `;
+                document.getElementById('presetDetails').innerHTML = html;
+            } catch (err) {
+                document.getElementById('presetDetails').innerHTML = `<p style="text-align: center; color: #e94560;">${i18n.t('weatherPresets.errorLoadingPreset')}</p>`;
+            }
+        }
+
+        async function applyPreset() {
+            if (!currentPreset) return;
+
+            const values = [
+                { key: 'Temperature', value: currentPreset.temperature },
+                { key: 'Cloudiness', value: currentPreset.cloudiness },
+                { key: 'Precipitation', value: currentPreset.precipitation },
+                { key: 'Wetness', value: currentPreset.wetness },
+                { key: 'GroundSnow', value: currentPreset.ground_snow },
+                { key: 'PiledSnow', value: currentPreset.piled_snow },
+                { key: 'FogDensity', value: currentPreset.fog_density }
+            ];
+
+            let successCount = 0;
+            for (const { key, value } of values) {
+                try {
+                    const response = await fetch(`/api/weather/set?key=${key}&value=${encodeURIComponent(value)}`, {
+                        method: 'PATCH'
+                    });
+                    if (response.ok) successCount++;
+                } catch (err) {
+                    console.error(`Failed to set ${key}:`, err);
+                }
+            }
+
+            if (successCount === values.length) {
+                alert(i18n.t('weatherPresets.presetApplied'));
+            } else {
+                alert(i18n.t('weatherPresets.partiallyApplied').replace('{0}', successCount).replace('{1}', values.length));
+            }
+        }
+
+        async function deletePreset() {
+            if (!confirm(i18n.t('weatherPresets.confirmDelete'))) return;
+
+            try {
+                const response = await fetch(`/api/weather-presets/${presetId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    window.location.href = '/weather-presets';
+                } else {
+                    alert(i18n.t('weatherPresets.errorDeleting'));
+                }
+            } catch (err) {
+                alert(i18n.t('weatherPresets.errorDeleting'));
+            }
+        }
+
+        // Theme and color scheme initialization
+        (function() {
+            var theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+
+            var colorScheme = localStorage.getItem('colorScheme');
+            if (colorScheme && colorScheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', colorScheme);
+            }
+        })();
+
+        loadPreset();
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+</body>
+</html>

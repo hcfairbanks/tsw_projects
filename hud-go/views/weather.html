@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSW Weather Control</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Side-by-side layout for weather sections on desktop */
+        .weather-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff4444;
+        }
+
+        .status-indicator.connected {
+            background: #00cc66;
+            box-shadow: 0 0 10px #00cc66;
+        }
+
+        /* Nav styles now in theme.css */
+
+        /* Current Weather Status Section */
+        .section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-value {
+            min-width: 80px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--accent-color);
+        }
+
+        /* Controls Section */
+        .control-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .control-row:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            min-width: 120px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-label .icon {
+            font-size: 1.2em;
+        }
+
+        .control-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-color);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--btn-primary-bg);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--btn-primary-bg);
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .button-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-apply {
+            flex: 1;
+            background: var(--btn-primary-bg);
+            color: white;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            background: var(--btn-primary-hover);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-apply:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: var(--btn-danger-bg);
+            color: #fff;
+        }
+
+        .btn-reset:hover {
+            background: var(--btn-danger-hover);
+        }
+
+        .btn-save {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-save:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Preset Section */
+        .preset-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .preset-select {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .preset-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .preset-select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .nav-btn {
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: normal;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-hover);
+            color: var(--bg-primary);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 14px 20px;
+            border-radius: 6px;
+            background: #00cc66;
+            color: white;
+            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification.error {
+            background: #ff4444;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="weather.title">Weather Control</h1>
+
+        <nav id="main-nav"></nav>
+
+        <!-- Preset Selection -->
+        <div class="section">
+            <div class="section-title"><span data-i18n="weather.presets">Presets</span> <a href="/weather-presets" class="nav-btn" data-i18n="weather.managePresets">Manage Presets</a></div>
+            <div class="preset-row">
+                <select class="preset-select" id="presetSelect">
+                    <option value="" data-i18n="weather.selectPreset">-- Select a preset --</option>
+                </select>
+                <button class="btn btn-apply" onclick="applyPreset()" data-i18n="weather.applyPreset">Apply Preset</button>
+            </div>
+        </div>
+
+        <!-- Weather Grid: Current Weather + Set Weather side by side -->
+        <div class="weather-grid">
+            <!-- Current Weather Status -->
+            <div class="section">
+                <div class="section-title" data-i18n="weather.currentWeather">Current Weather</div>
+                <div class="status-bar" style="justify-content: flex-start; margin-bottom: 15px;">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText" data-i18n="weather.connecting">Connecting...</span>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">🌡️</span> <span data-i18n="weather.temperature">Temperature</span></div>
+                    <div class="status-value" id="status-Temperature">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">☁️</span> <span data-i18n="weather.cloudiness">Cloudiness</span></div>
+                    <div class="status-value" id="status-Cloudiness">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">🌧️</span> <span data-i18n="weather.precipitation">Precipitation</span></div>
+                    <div class="status-value" id="status-Precipitation">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">💧</span> <span data-i18n="weather.wetness">Wetness</span></div>
+                    <div class="status-value" id="status-Wetness">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">❄️</span> <span data-i18n="weather.groundSnow">Ground Snow</span></div>
+                    <div class="status-value" id="status-GroundSnow">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">⛄</span> <span data-i18n="weather.piledSnow">Piled Snow</span></div>
+                    <div class="status-value" id="status-PiledSnow">--</div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-label"><span class="icon">🌫️</span> <span data-i18n="weather.fogDensity">Fog Density</span></div>
+                    <div class="status-value" id="status-FogDensity">--</div>
+                </div>
+            </div>
+
+            <!-- Weather Controls -->
+            <div class="section">
+            <div class="section-title" data-i18n="weather.setWeather">Set Weather</div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">🌡️</span> <span data-i18n="weather.temperature">Temperature</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-Temperature" min="-40" max="50" value="-40" step="0.5" oninput="updateTempSlider()">
+                    <span class="slider-value" id="val-Temperature">-40°C</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">☁️</span> <span data-i18n="weather.cloudiness">Cloudiness</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-Cloudiness" min="0" max="100" value="0" oninput="updateSlider('Cloudiness')">
+                    <span class="slider-value" id="val-Cloudiness">0%</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">🌧️</span> <span data-i18n="weather.precipitation">Precipitation</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-Precipitation" min="0" max="100" value="0" oninput="updateSlider('Precipitation')">
+                    <span class="slider-value" id="val-Precipitation">0%</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">💧</span> <span data-i18n="weather.wetness">Wetness</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-Wetness" min="0" max="100" value="0" oninput="updateSlider('Wetness')">
+                    <span class="slider-value" id="val-Wetness">0%</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">❄️</span> <span data-i18n="weather.groundSnow">Ground Snow</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-GroundSnow" min="0" max="100" value="0" oninput="updateSlider('GroundSnow')">
+                    <span class="slider-value" id="val-GroundSnow">0%</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">⛄</span> <span data-i18n="weather.piledSnow">Piled Snow</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-PiledSnow" min="0" max="100" value="0" oninput="updateSlider('PiledSnow')">
+                    <span class="slider-value" id="val-PiledSnow">0%</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label"><span class="icon">🌫️</span> <span data-i18n="weather.fogDensity">Fog Density</span></div>
+                <div class="control-input">
+                    <input type="range" id="ctrl-FogDensity" min="0" max="100" value="0" oninput="updateSlider('FogDensity')">
+                    <span class="slider-value" id="val-FogDensity">0%</span>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="btn btn-reset" onclick="resetWeather()" data-i18n="weather.reset">Reset</button>
+                <button class="btn btn-save" onclick="saveAsPreset()" data-i18n="weather.saveAsPreset">Save as Preset</button>
+                <button class="btn btn-apply" onclick="applyAllWeather()" data-i18n="weather.applyWeather">Apply Changes</button>
+            </div>
+            </div>
+        </div><!-- end weather-grid -->
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        let isConnected = false;
+        let eventSource = null;
+        let presets = [];
+        let temperatureUnits = 'celsius'; // Default, will be loaded from config
+
+        // Load config to get temperature units setting
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                temperatureUnits = config.temperatureUnits || 'celsius';
+                // Update the slider display with correct units
+                updateTempSlider();
+            } catch (err) {
+                console.error('Failed to load config:', err);
+            }
+        }
+
+        // Convert Celsius to Fahrenheit
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9/5) + 32;
+        }
+
+        // Format temperature for display based on units setting
+        function formatTemperature(celsius) {
+            if (temperatureUnits === 'fahrenheit') {
+                return celsiusToFahrenheit(celsius).toFixed(1) + '°F';
+            }
+            return celsius.toFixed(1) + '°C';
+        }
+
+        // Load presets on page load
+        async function loadPresets() {
+            try {
+                const response = await fetch('/api/weather-presets');
+                presets = await response.json();
+                const select = document.getElementById('presetSelect');
+                const selectText = typeof i18n !== 'undefined' ? i18n.t('weather.selectPreset') : '-- Select a preset --';
+                select.innerHTML = '<option value="">' + selectText + '</option>';
+                for (const preset of presets) {
+                    const option = document.createElement('option');
+                    option.value = preset.id;
+                    option.textContent = preset.name;
+                    select.appendChild(option);
+                }
+            } catch (err) {
+                console.error('Failed to load presets:', err);
+            }
+        }
+
+        // Apply selected preset
+        async function applyPreset() {
+            const select = document.getElementById('presetSelect');
+            const presetId = select.value;
+            if (!presetId) {
+                showNotification('Please select a preset', true);
+                return;
+            }
+
+            const preset = presets.find(p => p.id == presetId);
+            if (!preset) return;
+
+            const values = [
+                { key: 'Temperature', value: preset.temperature },
+                { key: 'Cloudiness', value: preset.cloudiness },
+                { key: 'Precipitation', value: preset.precipitation },
+                { key: 'Wetness', value: preset.wetness },
+                { key: 'GroundSnow', value: preset.ground_snow },
+                { key: 'PiledSnow', value: preset.piled_snow },
+                { key: 'FogDensity', value: preset.fog_density }
+            ];
+
+            let successCount = 0;
+            for (const { key, value } of values) {
+                try {
+                    const response = await fetch(`/api/weather/set?key=${key}&value=${encodeURIComponent(value)}`, {
+                        method: 'PATCH'
+                    });
+                    if (response.ok) successCount++;
+                } catch (err) {
+                    console.error(`Failed to set ${key}:`, err);
+                }
+            }
+
+            if (successCount === values.length) {
+                showNotification(`Applied preset: ${preset.name}`);
+            } else {
+                showNotification(`Partially applied (${successCount}/${values.length})`, true);
+            }
+        }
+
+        // Save current settings as a new preset
+        async function saveAsPreset() {
+            var promptMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('weather.enterPresetName') : 'Enter a name for this preset:';
+            const name = prompt(promptMsg);
+            if (!name || !name.trim()) return;
+
+            const preset = {
+                name: name.trim(),
+                temperature: parseFloat(document.getElementById('ctrl-Temperature').value),
+                cloudiness: parseFloat(document.getElementById('ctrl-Cloudiness').value) / 100,
+                precipitation: parseFloat(document.getElementById('ctrl-Precipitation').value) / 100,
+                wetness: parseFloat(document.getElementById('ctrl-Wetness').value) / 100,
+                ground_snow: parseFloat(document.getElementById('ctrl-GroundSnow').value) / 100,
+                piled_snow: parseFloat(document.getElementById('ctrl-PiledSnow').value) / 100,
+                fog_density: parseFloat(document.getElementById('ctrl-FogDensity').value) / 100
+            };
+
+            try {
+                const response = await fetch('/api/weather-presets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(preset)
+                });
+
+                if (response.ok) {
+                    var savedMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('weather.presetSaved') : 'Preset saved';
+                    showNotification(savedMsg + ': ' + name);
+                    loadPresets(); // Refresh the dropdown
+                } else {
+                    const data = await response.json();
+                    var failedMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('weather.failedToSavePreset') : 'Failed to save preset';
+                    showNotification(data.error || failedMsg, true);
+                }
+            } catch (err) {
+                var errorMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('weather.errorSavingPreset') : 'Error saving preset';
+                showNotification(errorMsg + ': ' + err.message, true);
+            }
+        }
+
+        function showNotification(message, isError = false) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = 'notification show' + (isError ? ' error' : '');
+            setTimeout(() => {
+                notif.className = 'notification';
+            }, 3000);
+        }
+
+        function updateConnectionStatus(connected) {
+            isConnected = connected;
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+
+            if (connected) {
+                indicator.className = 'status-indicator connected';
+                text.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.connected') : 'Connected to TSW';
+            } else {
+                indicator.className = 'status-indicator';
+                text.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.disconnected') : 'Disconnected';
+            }
+        }
+
+        function formatStatusValue(key, value) {
+            if (value === null || value === undefined) return '--';
+            if (key === 'Temperature') return formatTemperature(value);
+            return (value * 100).toFixed(0) + '%';
+        }
+
+        // Update the status display from stream data
+        function updateStatusDisplay(weather) {
+            if (!weather) return;
+
+            const keys = ['Temperature', 'Cloudiness', 'Precipitation', 'Wetness', 'GroundSnow', 'PiledSnow', 'FogDensity'];
+
+            for (const key of keys) {
+                const el = document.getElementById(`status-${key}`);
+                if (el) {
+                    el.textContent = formatStatusValue(key, weather[key]);
+                }
+            }
+        }
+
+        function updateSlider(key) {
+            const slider = document.getElementById(`ctrl-${key}`);
+            const display = document.getElementById(`val-${key}`);
+            display.textContent = slider.value + '%';
+        }
+
+        function updateTempSlider() {
+            const slider = document.getElementById('ctrl-Temperature');
+            const display = document.getElementById('val-Temperature');
+            const celsiusValue = parseFloat(slider.value);
+            display.textContent = formatTemperature(celsiusValue);
+        }
+
+        async function applyAllWeather() {
+            const controls = ['Temperature', 'Cloudiness', 'Precipitation', 'Wetness', 'GroundSnow', 'PiledSnow', 'FogDensity'];
+            let successCount = 0;
+            let errorMsg = null;
+
+            for (const key of controls) {
+                const input = document.getElementById(`ctrl-${key}`);
+                let value;
+
+                if (key === 'Temperature') {
+                    value = parseFloat(input.value);
+                } else {
+                    value = parseFloat(input.value) / 100;
+                }
+
+                try {
+                    const response = await fetch(`/api/weather/set?key=${key}&value=${encodeURIComponent(value)}`, {
+                        method: 'PATCH'
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        successCount++;
+                    } else {
+                        errorMsg = result.error;
+                    }
+                } catch (err) {
+                    errorMsg = err.message;
+                }
+            }
+
+            if (successCount === controls.length) {
+                showNotification('Weather updated successfully');
+            } else if (successCount > 0) {
+                showNotification(`Partially updated (${successCount}/${controls.length})`, true);
+            } else {
+                showNotification(errorMsg || 'Failed to update weather', true);
+            }
+        }
+
+        async function resetWeather() {
+            try {
+                const response = await fetch(`/api/weather/set?key=Reset&value=1`, {
+                    method: 'PATCH'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Weather reset to default');
+                } else {
+                    showNotification(result.error || 'Failed to reset weather', true);
+                }
+            } catch (err) {
+                showNotification('Error: ' + err.message, true);
+            }
+        }
+
+        // Connect to SSE stream for live weather data
+        function connectToStream() {
+            eventSource = new EventSource('/stream');
+
+            eventSource.onopen = () => {
+                console.log('Connected to live stream');
+                updateConnectionStatus(true);
+            };
+
+            eventSource.onerror = () => {
+                console.log('Stream connection lost');
+                updateConnectionStatus(false);
+            };
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+
+                    // Update weather status display from stream
+                    if (data.weather) {
+                        updateStatusDisplay(data.weather);
+                    }
+                } catch (err) {
+                    console.error('Error parsing stream data:', err);
+                }
+            };
+        }
+
+        // Theme and color scheme initialization
+        (function() {
+            var theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+
+            var colorScheme = localStorage.getItem('colorScheme');
+            if (colorScheme && colorScheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', colorScheme);
+            }
+        })();
+
+        // Theme and other initialization done above
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script>
+        // Initialize i18n, then start connection and load config/presets
+        i18n.init().then(function() {
+            connectToStream();
+            loadConfig();
+            loadPresets();
+        });
+    </script>
+</body>
+</html>

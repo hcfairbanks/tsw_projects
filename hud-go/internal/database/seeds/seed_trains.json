@@ -1,0 +1,158 @@
+[
+  {
+    "id": 4,
+    "name": "1972 Mark 2 Stock",
+    "class_id": 4,
+    "in_game_name": null
+  },
+  {
+    "id": 5,
+    "name": "Class 377/2 SN",
+    "class_id": 5,
+    "in_game_name": "Class 377/2 SN"
+  },
+  {
+    "id": 38,
+    "name": "ACS-64 V AMTK50",
+    "class_id": 38,
+    "in_game_name": "ACS-64 V AMTK50"
+  },
+  {
+    "id": 39,
+    "name": "Acela Express Amtrak",
+    "class_id": 39,
+    "in_game_name": "Acela Express Amtrak"
+  },
+  {
+    "id": 40,
+    "name": "CTC-3 MBTA",
+    "class_id": 40,
+    "in_game_name": "CTC-3 MBTA"
+  },
+  {
+    "id": 41,
+    "name": "F40PH-3C MBTA",
+    "class_id": 41,
+    "in_game_name": "F40PH-3C MBTA"
+  },
+  {
+    "id": 62,
+    "name": "LMS Jubilee",
+    "class_id": 62,
+    "in_game_name": null
+  },
+  {
+    "id": 75,
+    "name": "TGV Duplex",
+    "class_id": 75,
+    "in_game_name": null
+  },
+  {
+    "id": 81,
+    "name": "1972 MkII Tube Stock LU",
+    "class_id": 81,
+    "in_game_name": "1972 MkII Tube Stock LU"
+  },
+  {
+    "id": 91,
+    "name": "GP38-2 CN",
+    "class_id": 91,
+    "in_game_name": null
+  },
+  {
+    "id": 92,
+    "name": "GP9RM CN",
+    "class_id": 92,
+    "in_game_name": null
+  },
+  {
+    "id": 113,
+    "name": "LMS Stanier 8F",
+    "class_id": 113,
+    "in_game_name": null
+  },
+  {
+    "id": 123,
+    "name": "Allegra 8/12 RhB",
+    "class_id": 123,
+    "in_game_name": null
+  },
+  {
+    "id": 124,
+    "name": "Class 66 DB",
+    "class_id": 124,
+    "in_game_name": "Class 66 DB"
+  },
+  {
+    "id": 131,
+    "name": "EMD F125 Metrolink",
+    "class_id": 131,
+    "in_game_name": "EMD F125 Metrolink"
+  },
+  {
+    "id": 132,
+    "name": "Rotem Bi-Level Cab Car Metrolink",
+    "class_id": 132,
+    "in_game_name": "Rotem Bi-Level Cab Car Metrolink"
+  },
+  {
+    "id": 146,
+    "name": "Class 350/1",
+    "class_id": 146,
+    "in_game_name": "Class 350/1"
+  },
+  {
+    "id": 150,
+    "name": "Class 150/2 GWR",
+    "class_id": 150,
+    "in_game_name": null
+  },
+  {
+    "id": 157,
+    "name": "Class 802",
+    "class_id": 157,
+    "in_game_name": null
+  },
+  {
+    "id": 162,
+    "name": "Class 390",
+    "class_id": 162,
+    "in_game_name": "Class 390"
+  },
+  {
+    "id": 163,
+    "name": "Class 802/1 GWR",
+    "class_id": 157,
+    "in_game_name": null
+  },
+  {
+    "id": 164,
+    "name": "HSP46 MBTA",
+    "class_id": 163,
+    "in_game_name": "HSP46 MBTA"
+  },
+  {
+    "id": 165,
+    "name": "Rotem CTC-5 MBTA",
+    "class_id": 164,
+    "in_game_name": "Rotem CTC-5 MBTA"
+  },
+  {
+    "id": 166,
+    "name": "ALP-46 NJT",
+    "class_id": null,
+    "in_game_name": null
+  },
+  {
+    "id": 167,
+    "name": "Arrow III NJT",
+    "class_id": null,
+    "in_game_name": null
+  },
+  {
+    "id": 168,
+    "name": "Multi-Level Commuter Cab Car NJT",
+    "class_id": null,
+    "in_game_name": null
+  }
+]

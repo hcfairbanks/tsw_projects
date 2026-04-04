@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable View - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 30px; }
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .detail-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-weight: bold; color: var(--accent-color); width: 150px; flex-shrink: 0; }
+        .detail-value { color: var(--text-primary); flex: 1; }
+        .detail-value a { color: var(--accent-color); text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover { background: var(--accent-hover); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        th { background: var(--bg-tertiary); color: var(--accent-color); }
+        tr:hover { background: var(--bg-primary); }
+        .empty-message { text-align: center; color: var(--text-muted); padding: 20px; }
+        .back-link { margin-bottom: 20px; }
+        .back-link a { color: var(--accent-color); text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .coord-cell { font-family: monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+        #routeMap { height: 750px; border-radius: 6px; }
+        .map-card { display: none; }
+        .map-card.has-coordinates { display: block; }
+        .stop-marker { background: #00cc66; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+        .tag { display: inline-block; background: var(--bg-tertiary); padding: 4px 10px; border-radius: 4px; margin-right: 6px; margin-bottom: 4px; font-size: 13px; }
+        .action-bar { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 id="pageTitle" data-i18n="timetables.details">Timetable Details</h1>
+
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="timetableTitle">Loading...</h2>
+            <button class="btn-secondary dev-only" style="display:none;" onclick="goToEdit()" data-i18n="common.edit">Edit</button>
+        </div>
+        <div id="timetableDetails">
+            <p class="empty-message" data-i18n="common.loading">Loading timetable details...</p>
+        </div>
+    </div>
+
+    <div class="card map-card" id="mapCard">
+        <h2 style="cursor: pointer; user-select: none;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span data-i18n="timetables.routeMap">Route Map</span><span id="coordSourceBadge"></span></h2>
+        <div id="routeMapContainer">
+            <div id="routeMap"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2><span data-i18n="timetables.entries">Entries</span> <span id="entryCount" style="color: var(--text-muted); font-size: 14px;"></span></h2>
+        <div id="entriesList">
+            <p class="empty-message" data-i18n="common.loading">Loading entries...</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="common.export">Export</h2>
+        <div class="action-bar">
+            <button class="btn-primary" onclick="exportCSV()" data-i18n="timetables.exportCSV">Export CSV</button>
+            <button class="btn-secondary" onclick="exportJSON()" data-i18n="timetables.exportJSONMap">Export JSON (Map)</button>
+            <div style="flex: 1;"></div>
+            <button class="btn-secondary dev-only" style="display:none;" onclick="goToEdit()" data-i18n="common.edit">Edit</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/timetable-actions.js"></script>
+    <script>
+        const timetableId = window.location.pathname.split('/').filter(Boolean)[1];
+        let timetable = null;
+        let entries = [];
+        let allRoutes = [];
+        let allCountries = [];
+
+        function goToEdit() {
+            window.location.href = '/timetables/' + timetableId;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function _t(key, fallback) {
+            return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
+        }
+
+        async function loadData() {
+            try {
+                const [timetableRes, routesRes, countriesRes] = await Promise.all([
+                    fetch('/api/timetables/' + timetableId),
+                    fetch('/api/routes'),
+                    fetch('/api/countries')
+                ]);
+
+                if (!timetableRes.ok) {
+                    document.getElementById('timetableTitle').textContent = _t('timetables.timetableNotFound', 'Timetable Not Found');
+                    document.getElementById('timetableDetails').innerHTML = '<p class="empty-message">' + _t('timetables.timetableNotFoundMsg', 'The requested timetable could not be found.') + '</p>';
+                    return;
+                }
+
+                timetable = await timetableRes.json();
+                allRoutes = await routesRes.json();
+                allCountries = await countriesRes.json();
+                entries = timetable.entries || [];
+
+                renderTimetable();
+                renderEntries();
+                initRouteMap();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('timetableDetails').innerHTML = '<p class="empty-message">' + _t('timetables.errorLoadingTimetable', 'Error loading timetable') + '</p>';
+            }
+        }
+
+        function renderTimetable() {
+            var untitledText = _t('timetables.untitled', 'Untitled');
+            document.getElementById('timetableTitle').textContent = timetable.service_name || untitledText;
+            document.title = (timetable.service_name || untitledText) + ' - TSW HUD Project';
+
+            // Coord source badge
+            var coordBadge = document.getElementById('coordSourceBadge');
+            if (timetable.coordinates_coord_source) {
+                var src = timetable.coordinates_coord_source;
+                var srcDisplay = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.' + src) : (src.charAt(0).toUpperCase() + src.slice(1));
+                coordBadge.textContent = ': ' + srcDisplay;
+            } else {
+                coordBadge.textContent = '';
+            }
+
+            const route = allRoutes.find(function(r) { return r.id == timetable.route_id; });
+            const country = route ? allCountries.find(function(c) { return c.id == route.country_id; }) : null;
+
+            const trains = timetable.trains || [];
+            const sections = timetable.sections || [];
+
+            let html = '';
+            if (timetable.service) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceLabel', 'Service:') + '</span><span class="detail-value">' + escapeHtml(timetable.service) + '</span></div>';
+            }
+            if (timetable.current_service_name) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.currentServiceLabel', 'Current Service:') + '</span><span class="detail-value">' + escapeHtml(timetable.current_service_name) + '</span></div>';
+            }
+
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceTypeLabel', 'Service Type:') + '</span><span class="detail-value">' + escapeHtml(timetable.service_type || 'passenger') + '</span></div>';
+
+            if (timetable.bound) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.boundLabel', 'Bound:') + '</span><span class="detail-value">' + escapeHtml(timetable.bound) + '</span></div>';
+            }
+
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.routeLabel', 'Route:') + '</span><span class="detail-value">' + (route ? '<a href="/routes/' + route.id + '">' + escapeHtml(route.name) + '</a>' : '-') + '</span></div>';
+
+            if (country) {
+                var flag = country.code ? '<span class="fi fi-' + country.code.toLowerCase() + '" style="margin-right: 6px;"></span>' : '';
+                html += '<div class="detail-row"><span class="detail-label">' + _t('routes.country', 'Country:') + '</span><span class="detail-value">' + flag + escapeHtml(country.name) + '</span></div>';
+            }
+
+            if (sections.length > 0) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.sectionLabel', 'Sections:') + '</span><span class="detail-value">' + sections.map(function(s) { return '<span class="tag">' + escapeHtml(s.name) + '</span>'; }).join('') + '</span></div>';
+            }
+
+            if (trains.length > 0) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.trainsLabel', 'Trains:') + '</span><span class="detail-value">' + trains.map(function(t) { return '<span class="tag">' + escapeHtml(t.name) + '</span>'; }).join('') + '</span></div>';
+            }
+
+            if (timetable.start_time) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.startTimeLabel', 'Start Time:') + '</span><span class="detail-value">' + escapeHtml(timetable.start_time) + '</span></div>';
+            }
+            if (timetable.duration) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.durationLabel', 'Duration:') + '</span><span class="detail-value">' + escapeHtml(timetable.duration) + '</span></div>';
+            }
+
+            // Specs row
+            var specs = [];
+            if (timetable.tonnage) specs.push(_t('timetables.tonnageLabel', 'Tonnage:') + ' ' + timetable.tonnage + 't');
+            if (timetable.car_count) specs.push(_t('timetables.carCountLabel', 'Cars:') + ' ' + timetable.car_count);
+            if (timetable.train_length) specs.push(_t('timetables.trainLengthLabel', 'Length:') + ' ' + timetable.train_length + 'm');
+            if (specs.length > 0) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.specs', 'Specs:') + '</span><span class="detail-value">' + specs.join(' &nbsp;|&nbsp; ') + '</span></div>';
+            }
+
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.conductorLabel', 'Conductor:') + '</span><span class="detail-value">' + (timetable.conductor_compatible ? _t('common.yes', 'Yes') : _t('common.no', 'No')) + '</span></div>';
+
+            if (timetable.contributor) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.contributorLabel', 'Contributor:') + '</span><span class="detail-value">' + escapeHtml(timetable.contributor) + '</span></div>';
+            }
+
+            document.getElementById('timetableDetails').innerHTML = html;
+        }
+
+        function renderEntries() {
+            if (!entries || entries.length === 0) {
+                document.getElementById('entriesList').innerHTML = '<p class="empty-message">' + _t('timetables.noEntries', 'No entries') + '</p>';
+                return;
+            }
+
+            document.getElementById('entryCount').textContent = '(' + entries.length + ')';
+
+            var actionHeader = _t('timetables.action', 'Action');
+            var locationHeader = _t('timetables.location', 'Location');
+            var platformHeader = _t('timetables.platform', 'Platform');
+            var time1Header = _t('timetables.time1', 'Time 1');
+            var time2Header = _t('timetables.time2', 'Time 2');
+            var detailsHeader = _t('timetables.details', 'Details');
+            var latHeader = _t('timetables.lat', 'Lat');
+            var lngHeader = _t('timetables.lng', 'Lng');
+
+            let html = '<table><thead><tr><th>#</th><th>' + actionHeader + '</th><th>' + locationHeader + '</th><th>' + platformHeader + '</th><th>' + time1Header + '</th><th>' + time2Header + '</th><th>' + detailsHeader + '</th><th>' + latHeader + '</th><th>' + lngHeader + '</th></tr></thead><tbody>';
+
+            entries.forEach(function(entry, index) {
+                html += '<tr>';
+                html += '<td>' + index + '</td>';
+                html += '<td>' + escapeHtml(entry.action || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.location || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.platform || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.time1 || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.time2 || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.details || '') + '</td>';
+                html += '<td class="coord-cell">' + escapeHtml(entry.latitude || '') + '</td>';
+                html += '<td class="coord-cell">' + escapeHtml(entry.longitude || '') + '</td>';
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('entriesList').innerHTML = html;
+        }
+
+        // --- Map (same approach as edit page) ---
+        let routeMap = null;
+        let routePolyline = null;
+        let stopMarkers = [];
+        let pathCoordinates = [];
+        let mapVisible = true;
+
+        function toggleRouteMap() {
+            mapVisible = !mapVisible;
+            document.getElementById('routeMapContainer').style.display = mapVisible ? 'block' : 'none';
+            document.getElementById('mapToggleIcon').innerHTML = mapVisible ? '&#9660;' : '&#9654;';
+            if (mapVisible && routeMap) routeMap.invalidateSize();
+        }
+
+        async function initRouteMap() {
+            var mapCard = document.getElementById('mapCard');
+
+            // Fetch path coordinates from export endpoint
+            try {
+                var exportRes = await fetch('/api/timetables/' + timetableId + '/export');
+                if (exportRes.ok) {
+                    var exportData = await exportRes.json();
+                    pathCoordinates = exportData.coordinates || [];
+                }
+            } catch (err) {
+                console.error('Failed to load coordinates:', err);
+                pathCoordinates = [];
+            }
+
+            // Check if we have path coordinates or entry coordinates
+            var entriesWithCoords = entries.filter(function(entry) {
+                var lat = parseFloat(entry.latitude);
+                var lng = parseFloat(entry.longitude);
+                return !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
+            });
+
+            if (pathCoordinates.length === 0 && entriesWithCoords.length === 0) {
+                mapCard.classList.remove('has-coordinates');
+                return;
+            }
+
+            mapCard.classList.add('has-coordinates');
+
+            if (!routeMap) {
+                routeMap = L.map('routeMap').setView([51.5, -0.1], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(routeMap);
+            }
+
+            // Clear existing
+            stopMarkers.forEach(function(m) { m.remove(); });
+            stopMarkers = [];
+            if (routePolyline) { routePolyline.remove(); routePolyline = null; }
+
+            // Draw path polyline
+            if (pathCoordinates.length >= 2) {
+                var pathLatLngs = pathCoordinates.map(function(c) { return [c.latitude, c.longitude]; });
+                routePolyline = L.polyline(pathLatLngs, { color: '#0066ff', weight: 4, opacity: 0.7 }).addTo(routeMap);
+            }
+
+            // Add stop markers from entries only
+            entriesWithCoords.forEach(function(entry, index) {
+                var lat = parseFloat(entry.latitude);
+                var lng = parseFloat(entry.longitude);
+
+                var markerClass = 'stop-marker';
+                if (index === 0) markerClass += ' first';
+                else if (index === entriesWithCoords.length - 1) markerClass += ' last';
+
+                var icon = L.divIcon({
+                    className: 'stop-marker-wrapper',
+                    html: '<div class="' + markerClass + '"></div>',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+
+                var popupContent = '<strong>' + (index + 1) + '. ' + escapeHtml(entry.location || 'Unknown') + '</strong>';
+                if (entry.platform) popupContent += '<br>' + _t('timetables.popupPlatform', 'Platform') + ': ' + entry.platform;
+                if (entry.time1) popupContent += '<br>' + _t('timetables.popupTime', 'Time') + ': ' + entry.time1;
+                if (entry.action) popupContent += '<br>' + _t('timetables.popupAction', 'Action') + ': ' + entry.action;
+
+                var marker = L.marker([lat, lng], { icon: icon })
+                    .bindPopup(popupContent)
+                    .addTo(routeMap);
+                stopMarkers.push(marker);
+            });
+
+            // Fit bounds
+            var boundsCoords;
+            if (pathCoordinates.length > 0) {
+                boundsCoords = pathCoordinates.map(function(c) { return [c.latitude, c.longitude]; });
+            } else {
+                boundsCoords = entriesWithCoords.map(function(e) { return [parseFloat(e.latitude), parseFloat(e.longitude)]; });
+            }
+            if (boundsCoords.length > 0) {
+                routeMap.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
+            }
+        }
+
+        // --- Export ---
+        function exportCSV() {
+            if (!entries || entries.length === 0) return;
+            var csv = 'Action,Location,Platform,Time1,Time2,Details,Latitude,Longitude\n';
+            entries.forEach(function(e) {
+                csv += [e.action, e.location, e.platform, e.time1, e.time2, e.details, e.latitude, e.longitude]
+                    .map(function(v) { return '"' + String(v || '').replace(/"/g, '""') + '"'; }).join(',') + '\n';
+            });
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = (timetable.service_name || 'timetable') + '.csv';
+            a.click();
+        }
+
+        function exportJSON() {
+            window.open('/api/timetables/' + timetableId + '/export/download', '_blank');
+        }
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script>
+        document.addEventListener('languageChanged', function() { loadData(); });
+        i18n.init().then(function() {
+            fetch('/api/config').then(function(r) { return r.json(); }).then(function(config) {
+                if (config.developmentMode) {
+                    document.querySelectorAll('.dev-only').forEach(function(el) {
+                        el.style.display = '';
+                    });
+                }
+            }).catch(function() {});
+            loadData();
+        });
+    </script>
+</body>
+</html>

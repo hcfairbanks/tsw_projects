@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trains - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 30px; }
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+        /* Nav styles now in theme.css */
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+        input[type="text"]:focus { outline: none; border-color: var(--accent-color); }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-danger { background: var(--btn-danger-bg); color: #fff; }
+        .btn-danger:hover { background: var(--btn-danger-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover { background: var(--accent-hover); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-tertiary); color: var(--accent-color); }
+        tr:hover { background: var(--bg-primary); }
+        .actions { white-space: nowrap; }
+        .actions button { padding: 5px 10px; font-size: 12px; }
+        .empty-message { text-align: center; color: var(--text-muted); padding: 20px; }
+        #editForm { display: none; }
+        #editForm.active { display: block; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-box input { flex: 1; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .typeahead-container { position: relative; flex: 1; }
+        .typeahead-container input { width: 100%; }
+        .typeahead-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; z-index: 1001; }
+        .typeahead-item { padding: 10px 12px; cursor: pointer; font-size: 13px; border-bottom: 1px solid var(--border-color); }
+        .typeahead-item:last-child { border-bottom: none; }
+        .typeahead-item:hover, .typeahead-item.highlighted { background: var(--bg-tertiary); }
+        .typeahead-item .item-name { font-weight: 600; color: var(--text-primary); }
+        .typeahead-item .item-sub { font-size: 11px; color: var(--text-muted); }
+        select.form-select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+        select.form-select:focus { outline: none; border-color: var(--accent-color); }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .pagination button { min-width: 40px; }
+        .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-info { color: var(--text-muted); font-size: 14px; }
+        .per-page { display: flex; align-items: center; gap: 8px; }
+        .per-page select { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="trains.title">Trains</h1>
+
+    <nav id="main-nav"></nav>
+    <div class="card">
+        <h2 data-i18n="trains.addNew">Add New Train</h2>
+        <form id="addForm">
+            <div class="form-group">
+                <label for="name" data-i18n="trains.trainName">Train Name:</label>
+                <input type="text" id="name" name="name" required placeholder="e.g., Class 395 Javelin" data-i18n-placeholder="trains.namePlaceholder">
+            </div>
+            <button type="submit" class="btn-primary" data-i18n="common.add">Add Train</button>
+        </form>
+    </div>
+    <div class="card" id="editForm">
+        <h2 data-i18n="trains.editTrain">Edit Train</h2>
+        <form id="editFormInner">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label for="editName" data-i18n="trains.trainName">Train Name *:</label>
+                <input type="text" id="editName" name="name" required>
+            </div>
+            <button type="submit" class="btn-primary" data-i18n="common.save">Save Changes</button>
+            <button type="button" class="btn-secondary" onclick="cancelEdit()" data-i18n="common.cancel">Cancel</button>
+        </form>
+    </div>
+    <div class="card">
+        <h2 data-i18n="trains.allTrains">Trains</h2>
+        <div class="search-box">
+            <div class="typeahead-container">
+                <input type="text" id="searchInput" placeholder="Type to search trains..." autocomplete="off" data-i18n-placeholder="trains.searchPlaceholder">
+                <div id="trainSearchDropdown" class="typeahead-dropdown"></div>
+            </div>
+            <button class="btn-secondary" onclick="clearSearch()" data-i18n="common.clear">Clear</button>
+        </div>
+        <div id="trainsList"><p class="empty-message" data-i18n="common.loading">Loading trains...</p></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+    <script>
+        function t(key, fb) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fb; }
+
+        const API_URL = '/api/trains';
+        let allTrains = [];
+        let currentSearch = '';
+        let currentPage = 1;
+        let currentLimit = 10;
+        let highlightedIndex = -1;
+
+        async function loadTrains() {
+            try {
+                const response = await fetch(API_URL);
+                allTrains = await response.json();
+                setupTypeahead();
+                renderTrains(1);
+            } catch (error) {
+                console.error('Error loading trains:', error);
+                document.getElementById('trainsList').innerHTML = '<p class="empty-message">' + t('trains.errorLoading', 'Error loading trains') + '</p>';
+            }
+        }
+
+        // =============================================
+        // Typeahead Setup
+        // =============================================
+        var trainTypeaheadInitialized = false;
+        function setupTypeahead() {
+            if (trainTypeaheadInitialized) return; // Prevent duplicate event listeners
+            trainTypeaheadInitialized = true;
+
+            var input = document.getElementById('searchInput');
+            var dropdown = document.getElementById('trainSearchDropdown');
+
+            // Show dropdown on focus or click
+            function showDropdown() {
+                showTrainDropdown(input.value);
+            }
+
+            input.addEventListener('focus', showDropdown);
+            input.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent document click from hiding dropdown
+                showDropdown();
+            });
+            input.addEventListener('input', function() {
+                highlightedIndex = -1;
+                currentSearch = this.value.trim();
+                showTrainDropdown(this.value);
+                renderTrains(1);
+            });
+            input.addEventListener('keydown', function(e) { handleTypeaheadKeydown(e, dropdown); });
+
+            // Prevent clicks inside dropdown from closing it
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Hide dropdown on click outside
+            document.addEventListener('click', function() {
+                dropdown.style.display = 'none';
+            });
+        }
+
+        function handleTypeaheadKeydown(e, dropdown) {
+            var items = dropdown.querySelectorAll('.typeahead-item[data-id]');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+                updateHighlight(items, highlightedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                updateHighlight(items, highlightedIndex);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                    items[highlightedIndex].click();
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        function updateHighlight(items, index) {
+            items.forEach(function(item, idx) {
+                item.classList.toggle('highlighted', idx === index);
+            });
+            if (index >= 0 && items[index]) {
+                items[index].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showTrainDropdown(filter) {
+            var dropdown = document.getElementById('trainSearchDropdown');
+            var filterLower = String(filter || '').toLowerCase();
+
+            var filtered = allTrains.filter(function(train) {
+                var name = String(train.name || '');
+                return name.toLowerCase().includes(filterLower);
+            }).slice(0, 20);
+
+            var noTrainsText = t('trains.noTrains', 'No trains found');
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + noTrainsText + '</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(function(train) {
+                    return '<div class="typeahead-item" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' +
+                        '<div class="item-name">' + escapeHtml(train.name) + '</div></div>';
+                }).join('');
+
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        document.getElementById('searchInput').value = this.dataset.name;
+                        dropdown.style.display = 'none';
+                        currentSearch = this.dataset.name;
+                        renderTrains(1);
+                    });
+                });
+            }
+            dropdown.style.display = 'block';
+        }
+
+        function renderTrains(page) {
+            page = page || currentPage;
+            currentPage = page;
+
+            const container = document.getElementById('trainsList');
+            let trains = allTrains;
+
+            // Filter by search term
+            if (currentSearch) {
+                const searchLower = String(currentSearch).toLowerCase();
+                trains = trains.filter(function(t) {
+                    var name = String(t.name || '');
+                    return name.toLowerCase().includes(searchLower);
+                });
+            }
+
+            var total = trains.length;
+            var totalPages = Math.ceil(total / currentLimit);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            var start = (currentPage - 1) * currentLimit;
+            var paginatedTrains = trains.slice(start, start + currentLimit);
+
+            if (trains.length === 0) {
+                container.innerHTML = '<p class="empty-message" data-i18n="trains.noTrains">No trains found.</p>';
+                if (typeof i18n !== 'undefined') i18n.translatePage();
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            var nameHeader = t('common.name', 'Name');
+            var actionsHeader = t('common.actions', 'Actions');
+            var showBtn = t('common.show', 'Show');
+            var editBtn = t('common.edit', 'Edit');
+            var deleteBtn = t('common.delete', 'Delete');
+
+            let html = '<table><thead><tr><th data-i18n="common.name">' + nameHeader + '</th><th class="actions" data-i18n="common.actions">' + actionsHeader + '</th></tr></thead><tbody>';
+            paginatedTrains.forEach(function(t) {
+                html += '<tr><td><a href="/trains/' + t.id + '">' + escapeHtml(t.name) + '</a></td>';
+                html += '<td class="actions"><button class="btn-primary" onclick="showTrain(' + t.id + ')" data-i18n="common.show">' + showBtn + '</button>';
+                html += "<button class=\"btn-secondary\" onclick=\"editTrain(" + t.id + ",'" + escapeJs(t.name) + "')\" data-i18n=\"common.edit\">" + editBtn + "</button>";
+                html += '<button class="btn-danger" onclick="deleteTrain(' + t.id + ')" data-i18n="common.delete">' + deleteBtn + '</button></td></tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            if (typeof i18n !== 'undefined') i18n.translatePage();
+
+            renderPagination(total, totalPages);
+        }
+
+        function renderPagination(total, totalPages) {
+            var container = document.getElementById('pagination');
+            var showingText = t('common.showing', 'Showing');
+            var trainsText = t('trains.trains', 'trains');
+            var ofText = t('common.of', 'of');
+            if (totalPages <= 1) {
+                container.innerHTML = '<span class="pagination-info">' + showingText + ' ' + total + ' ' + trainsText + '</span>';
+                return;
+            }
+
+            var html = '<button class="btn-secondary" onclick="goToPage(1)" ' + (currentPage === 1 ? 'disabled' : '') + '>&laquo;</button>';
+            html += '<button class="btn-secondary" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '>&lsaquo;</button>';
+            html += '<span class="pagination-info">' + currentPage + ' ' + ofText + ' ' + totalPages + '</span>';
+            html += '<button class="btn-secondary" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>&rsaquo;</button>';
+            html += '<button class="btn-secondary" onclick="goToPage(' + totalPages + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>&raquo;</button>';
+            html += '<div class="per-page"><label>&nbsp;</label><select onchange="changeLimit(this.value)">';
+            [5, 10, 25, 50].forEach(function(n) {
+                html += '<option value="' + n + '" ' + (currentLimit === n ? 'selected' : '') + '>' + n + '</option>';
+            });
+            html += '</select></div>';
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            renderTrains(page);
+        }
+
+        function changeLimit(limit) {
+            currentLimit = parseInt(limit);
+            currentPage = 1;
+            renderTrains(1);
+        }
+
+        function showTrain(id) { window.location.href = '/trains/' + id; }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('trainSearchDropdown').style.display = 'none';
+            currentSearch = '';
+            currentPage = 1;
+            renderTrains(1);
+        }
+
+        function escapeHtml(text) { var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        function escapeJs(text) { return String(text).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+
+        document.getElementById('addForm').addEventListener('submit', async function(e) {
+            // Let HTML5 validation handle required fields
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                return;
+            }
+
+            e.preventDefault();
+            var name = document.getElementById('name').value.trim();
+            var data = { name: name };
+            try {
+                const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                const result = await response.json();
+                if (!response.ok) {
+                    alert(result.error || t('trains.errorAdding', 'Error adding train'));
+                    return;
+                }
+                document.getElementById('name').value = '';
+                allTrains = [];
+                loadTrains();
+            } catch (error) { console.error('Error adding train:', error); alert(t('trains.errorAdding', 'Error adding train')); }
+        });
+
+        function editTrain(id, name) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editForm').classList.add('active');
+            document.getElementById('editName').focus();
+        }
+
+        function cancelEdit() {
+            document.getElementById('editForm').classList.remove('active');
+        }
+
+        document.getElementById('editFormInner').addEventListener('submit', async function(e) {
+            // Let HTML5 validation handle required fields
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                return;
+            }
+
+            e.preventDefault();
+            var id = document.getElementById('editId').value;
+            var name = document.getElementById('editName').value.trim();
+            try {
+                const response = await fetch(API_URL + '/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name }) });
+                const result = await response.json();
+                if (!response.ok) {
+                    alert(result.error || t('trains.errorUpdating', 'Error updating train'));
+                    return;
+                }
+                cancelEdit();
+                loadTrains();
+            } catch (error) { console.error('Error updating train:', error); alert(t('trains.errorUpdating', 'Error updating train')); }
+        });
+
+        async function deleteTrain(id) {
+            var confirmMsg = t('trains.confirmDelete', 'Are you sure you want to delete this train?');
+            if (!confirm(confirmMsg)) return;
+            try {
+                await fetch(API_URL + '/' + id, { method: 'DELETE' });
+                loadTrains();
+            } catch (error) { console.error('Error deleting train:', error); alert(t('trains.errorDeleting', 'Error deleting train')); }
+        }
+
+        // Theme and color scheme initialization
+        (function() {
+            var theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+
+            var colorScheme = localStorage.getItem('colorScheme');
+            if (colorScheme && colorScheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', colorScheme);
+            }
+        })();
+
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script>
+        // Re-render dynamic content when language changes
+        document.addEventListener('languageChanged', function() {
+            renderTrains(currentPage);
+        });
+
+        // Load data after i18n is initialized
+        i18n.init().then(function() {
+            loadTrains();
+        });
+    </script>
+</body>
+</html>

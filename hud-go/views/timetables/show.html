@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Details - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 30px; }
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+        /* Nav styles now in theme.css */
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .detail-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-weight: bold; color: var(--accent-color); width: 120px; flex-shrink: 0; }
+        .detail-value { color: var(--text-primary); flex: 1; }
+        .detail-value a { color: var(--accent-color); text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover { background: var(--accent-hover); }
+        .btn-danger { background: var(--btn-danger-bg); color: #fff; }
+        .btn-danger:hover { background: var(--btn-danger-hover); }
+        .btn-save { background: var(--btn-success-bg); color: #fff; }
+        .btn-save:hover { background: var(--btn-success-hover); }
+        .btn-cancel { background: #95a5a6; color: #fff; }
+        .btn-cancel:hover { background: #7f8c8d; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        th { background: var(--bg-tertiary); color: var(--accent-color); }
+        tr:hover { background: var(--bg-primary); }
+        .actions { white-space: nowrap; }
+        .actions button { padding: 5px 10px; font-size: 12px; }
+        .empty-message { text-align: center; color: var(--text-muted); padding: 20px; }
+        .back-link { margin-bottom: 20px; }
+        .back-link a { color: var(--accent-color); text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+        .editable-cell { cursor: pointer; position: relative; }
+        .editable-cell:hover { background: var(--bg-tertiary); }
+        .editable-cell input, .editable-cell select { width: 100%; padding: 5px; border: 1px solid var(--accent-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+        .action-select, .location-select { padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 12px; min-width: 140px; }
+        .action-select:focus, .location-select:focus { outline: none; border-color: var(--accent-color); }
+        .service-name-input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 16px; }
+        .service-name-input:focus { outline: none; border-color: var(--accent-color); }
+        .action-bar { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .unsaved-indicator { color: var(--color-warning); font-size: 12px; margin-left: 10px; }
+        .btn-warning { background: var(--btn-warning-bg); color: #1a1a2e; }
+        .btn-warning:hover { background: var(--btn-warning-hover); }
+        .entries-header { display: flex; align-items: center; gap: 15px; }
+        .entries-header h2 { margin-bottom: 0; border-bottom: none; padding-bottom: 0; flex: 1; }
+        select { background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); }
+        select:focus { border-color: var(--accent-color); outline: none; }
+        label { color: var(--text-secondary); }
+        /* Typeahead styles */
+        .typeahead-wrapper { position: relative; flex: 1; }
+        .typeahead-input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 16px; }
+        .typeahead-input:focus { outline: none; border-color: var(--accent-color); }
+        .typeahead-input:disabled { background: var(--bg-tertiary); color: var(--text-muted); cursor: not-allowed; }
+        .typeahead-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-primary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
+        .typeahead-dropdown.show { display: block; }
+        .typeahead-item { padding: 10px; cursor: pointer; color: var(--text-primary); }
+        .typeahead-item:hover, .typeahead-item.active { background: var(--bg-tertiary); color: var(--accent-color); }
+        .typeahead-empty { padding: 10px; color: var(--text-muted); font-style: italic; }
+        .typeahead-row { display: flex; align-items: center; gap: 10px; }
+        .view-link { font-size: 12px; white-space: nowrap; }
+        .clear-btn { padding: 5px 10px; font-size: 12px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; }
+        .clear-btn:hover { background: var(--btn-danger-bg); color: #fff; }
+        /* Map styles */
+        #routeMap { height: 750px; border-radius: 6px; }
+        .map-card { display: block; }
+        .stop-marker { background: #00cc66; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+        .coord-cell { font-family: monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="timetables.details">Timetable Details</h1>
+
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <h2 id="timetableTitle">Loading...</h2>
+        <div id="timetableDetails">
+            <p class="empty-message" data-i18n="common.loading">Loading timetable details...</p>
+        </div>
+    </div>
+
+    <div class="card map-card" id="mapCard">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="cursor: pointer; user-select: none; margin: 0;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span data-i18n="timetables.routeMap">Route Map</span><span id="coordSourceBadge"></span></h2>
+            <button class="btn-danger" id="deletePathBtn" style="display: none; font-size: 12px; padding: 4px 10px;" onclick="deletePathData()">Delete Path Data</button>
+        </div>
+        <div id="routeMapContainer">
+            <div id="routeMap"></div>
+        </div>
+    </div>
+
+    <div class="card" id="qrCard" style="display: none; text-align: center; padding: 30px;">
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <div style="color: #fff; font-size: 1.2rem; font-weight: bold; margin-bottom: 12px;" data-i18n="huds.mobile">Mobile</div>
+                <div id="qr-timetable-mobile" style="display: inline-block; background: white; padding: 16px; border-radius: 10px;"></div>
+            </div>
+            <div>
+                <div style="color: #fff; font-size: 1.2rem; font-weight: bold; margin-bottom: 12px;" data-i18n="huds.tablet">Tablet</div>
+                <div id="qr-timetable-tablet" style="display: inline-block; background: white; padding: 16px; border-radius: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="entries-header">
+            <h2><span data-i18n="timetables.entries">Entries</span> <span id="unsavedIndicator" class="unsaved-indicator" style="display:none;" data-i18n="timetables.unsavedChanges">* Unsaved changes</span></h2>
+            <button class="btn-warning" id="recordRouteBtn" onclick="goToRecordMap()" data-i18n="timetables.recordRoute">Record Route</button>
+        </div>
+        <div id="entriesList">
+            <p class="empty-message" data-i18n="common.loading">Loading entries...</p>
+        </div>
+        <div class="action-bar">
+            <button class="btn-primary" onclick="addEntry()" data-i18n="timetables.addEntry">Add Entry</button>
+            <button class="btn-save" id="saveBtn" onclick="saveChanges()" disabled data-i18n="timetables.saveAllChanges">Save All Changes</button>
+            <button class="btn-danger" onclick="deleteTimetable()" data-i18n="timetables.deleteTimetable">Delete Timetable</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="common.export">Export</h2>
+        <div class="action-bar">
+            <button class="btn-primary" onclick="exportCSV()" data-i18n="timetables.exportCSV">Export CSV</button>
+            <button class="btn-secondary" onclick="exportThirdRails()" data-i18n="timetables.exportThirdRails">Export ThirdRails</button>
+            <button class="btn-secondary" onclick="exportJSON()" data-i18n="timetables.exportJSONMap">Export JSON (Map)</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/timetable-actions.js"></script>
+    <script>
+        const timetableId = window.location.pathname.split('/').pop();
+        let timetable = null;
+        let entries = [];
+        let allRoutes = [];
+        let allTrains = [];
+        let allCountries = [];
+        let hasUnsavedChanges = false;
+        let deletedEntryIds = [];
+
+        const ACTIONS = TIMETABLE_ACTIONS;
+
+        async function loadData() {
+            try {
+                const [timetableRes, routesRes, trainsRes, countriesRes] = await Promise.all([
+                    fetch('/api/timetables/' + timetableId),
+                    fetch('/api/routes'),
+                    fetch('/api/trains'),
+                    fetch('/api/countries')
+                ]);
+
+                if (!timetableRes.ok) {
+                    document.getElementById('timetableTitle').textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.timetableNotFound') : 'Timetable Not Found';
+                    document.getElementById('timetableDetails').innerHTML = '<p class="empty-message">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.timetableNotFoundMsg') : 'The requested timetable could not be found.') + '</p>';
+                    return;
+                }
+
+                timetable = await timetableRes.json();
+                allRoutes = await routesRes.json();
+                allTrains = await trainsRes.json();
+                allCountries = await countriesRes.json();
+                entries = timetable.entries || [];
+
+                // Load locations for this route before rendering entries
+                if (timetable.route_id) {
+                    try {
+                        var locRes = await fetch('/api/routes/' + timetable.route_id + '/locations');
+                        routeLocations = await locRes.json();
+                    } catch (err) {
+                        routeLocations = [];
+                    }
+                }
+
+                renderTimetable();
+                renderEntries();
+                initRouteMap();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('timetableDetails').innerHTML = '<p class="empty-message">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorLoadingTimetable') : 'Error loading timetable') + '</p>';
+            }
+        }
+
+        // Track selected route for typeahead
+        let selectedRouteId = null;
+        let timetableTrains = []; // Trains assigned to this timetable
+        let timetableSections = []; // Sections assigned to this timetable
+        let routeTrains = []; // Trains available for selected route
+        let routeSections = []; // Sections available for selected route
+        let routeLocations = []; // Locations for the selected route
+        let routeActiveIndex = -1;
+        let trainActiveIndex = -1;
+        let sectionActiveIndex = -1;
+
+        function renderTimetable() {
+            var untitledText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.untitled') : 'Untitled';
+            document.getElementById('timetableTitle').textContent = timetable.service_name || untitledText;
+            document.title = (timetable.service_name || untitledText) + ' - TSW HUD Project';
+
+            // Show coord source next to Route Map label
+            var coordBadge = document.getElementById('coordSourceBadge');
+            if (timetable.coordinates_coord_source) {
+                var src = timetable.coordinates_coord_source;
+                coordBadge.textContent = ': ' + src.charAt(0).toUpperCase() + src.slice(1);
+            } else {
+                coordBadge.textContent = '';
+            }
+
+            const route = allRoutes.find(function(r) { return r.id == timetable.route_id; });
+
+            // Initialize selected IDs from timetable
+            selectedRouteId = timetable.route_id || null;
+            timetableTrains = timetable.trains || [];
+            timetableSections = timetable.sections || [];
+
+            var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
+
+            let html = '';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceLabel', 'Service:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="serviceInput" value="' + escapeHtml(timetable.service || '') + '" onchange="markUnsaved()" placeholder="e.g., 741-06"></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceNameLabel', 'Service Name:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="serviceNameInput" value="' + escapeHtml(timetable.service_name || '') + '" onchange="markUnsaved()"></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceTypeLabel', 'Service Type:') + '</span><span class="detail-value"><select id="serviceTypeSelect" onchange="markUnsaved()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"><option value="passenger"' + (timetable.service_type === 'passenger' || !timetable.service_type ? ' selected' : '') + '>' + _t('timetables.passenger', 'Passenger') + '</option><option value="freight"' + (timetable.service_type === 'freight' ? ' selected' : '') + '>' + _t('timetables.freight', 'Freight') + '</option></select></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.boundLabel', 'Bound:') + '</span><span class="detail-value"><select id="boundSelect" onchange="markUnsaved()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"><option value=""' + (!timetable.bound ? ' selected' : '') + '>-</option><option value="northbound"' + (timetable.bound === 'northbound' ? ' selected' : '') + '>' + _t('timetables.northbound', 'Northbound') + '</option><option value="southbound"' + (timetable.bound === 'southbound' ? ' selected' : '') + '>' + _t('timetables.southbound', 'Southbound') + '</option><option value="eastbound"' + (timetable.bound === 'eastbound' ? ' selected' : '') + '>' + _t('timetables.eastbound', 'Eastbound') + '</option><option value="westbound"' + (timetable.bound === 'westbound' ? ' selected' : '') + '>' + _t('timetables.westbound', 'Westbound') + '</option></select></span></div>';
+
+            // Current service name (from TSW API)
+            html += '<div class="detail-row"><span class="detail-label">Current Service Name:</span><span class="detail-value"><input type="text" class="service-name-input" id="currentServiceNameInput" value="' + escapeHtml(timetable.current_service_name || '') + '" onchange="markUnsaved()" placeholder="e.g., 5L03" style="width: 400px;"></span></div>';
+
+            // Train specs (tonnage, car count, train length)
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.tonnageLabel', 'Tonnage:') + '</span><span class="detail-value"><input type="number" step="0.1" class="service-name-input" id="tonnageInput" value="' + (timetable.tonnage || '') + '" onchange="markUnsaved()" placeholder="e.g., 164.2" style="width: 150px;"> t</span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.carCountLabel', 'Car Count:') + '</span><span class="detail-value"><input type="number" step="1" class="service-name-input" id="carCountInput" value="' + (timetable.car_count || '') + '" onchange="markUnsaved()" placeholder="e.g., 7" style="width: 150px;"></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.trainLengthLabel', 'Train Length:') + '</span><span class="detail-value"><input type="number" step="0.1" class="service-name-input" id="trainLengthInput" value="' + (timetable.train_length || '') + '" onchange="markUnsaved()" placeholder="e.g., 113.9" style="width: 150px;"> m</span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.startTimeLabel', 'Start Time:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="startTimeInput" value="' + escapeHtml(timetable.start_time || '') + '" onchange="markUnsaved()" placeholder="e.g., 07:59" style="width: 150px;"></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.durationLabel', 'Duration:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="durationInput" value="' + escapeHtml(timetable.duration || '') + '" onchange="markUnsaved()" placeholder="e.g., 00:39" style="width: 150px;"></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.conductorLabel', 'Conductor:') + '</span><span class="detail-value"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="conductorCompatibleInput"' + (timetable.conductor_compatible ? ' checked' : '') + ' onchange="markUnsaved()"> ' + _t('timetables.conductorCompatible', 'Conductor Compatible') + '</label></span></div>';
+
+            // Route typeahead
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.routeLabel', 'Route:') + '</span><span class="detail-value typeahead-row">';
+            html += '<div class="typeahead-wrapper">';
+            html += '<input type="text" class="typeahead-input" id="routeSearch" placeholder="' + _t('timetables.typeToSearchRoutes', 'Type to search routes...') + '" autocomplete="off" value="' + (route ? escapeHtml(route.name) : '') + '">';
+            html += '<div class="typeahead-dropdown" id="routeDropdown"></div>';
+            html += '</div>';
+            if (route) html += '<a href="/routes/' + route.id + '" class="view-link" id="routeViewLink">' + _t('common.view', 'View') + '</a>';
+            else html += '<span id="routeViewLink"></span>';
+            html += '<button type="button" class="clear-btn" onclick="clearRoute()">' + _t('common.clear', 'Clear') + '</button>';
+            html += '</span></div>';
+
+            // Sections (multi-section, same pattern as trains)
+            html += '<div class="detail-row" style="align-items: flex-start;"><span class="detail-label">' + _t('timetables.sectionLabel', 'Sections:') + '</span><span class="detail-value">';
+            html += '<div id="sectionsSection">';
+            html += renderSectionsSection();
+            html += '</div>';
+            html += '</span></div>';
+
+            // Trains section (multi-train)
+            html += '<div class="detail-row" style="align-items: flex-start;"><span class="detail-label">' + _t('timetables.trainsLabel', 'Trains:') + '</span><span class="detail-value">';
+            html += '<div id="trainsSection">';
+            html += renderTrainsSection();
+            html += '</div>';
+            html += '</span></div>';
+
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.createdLabel', 'Created:') + '</span><span class="detail-value">' + (timetable.created_at || '-') + '</span></div>';
+
+            // Display contributor information
+            if (timetable.contributor) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.contributorLabel', 'Contributor:') + '</span><span class="detail-value">' + escapeHtml(timetable.contributor) + '</span></div>';
+            }
+            if (timetable.coordinates_contributor) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.coordinatesLabel', 'Coordinates:') + '</span><span class="detail-value">' + escapeHtml(timetable.coordinates_contributor) + '</span></div>';
+            }
+
+            document.getElementById('timetableDetails').innerHTML = html;
+
+            // Setup typeahead event handlers
+            setupRouteTypeahead();
+            setupAddTrainTypeahead();
+
+            // Load trains and sections for selected route
+            if (selectedRouteId) {
+                loadRouteTrains(selectedRouteId);
+                loadRouteSections(selectedRouteId);
+            }
+        }
+
+        function renderTrainsSection() {
+            let html = '';
+
+            var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
+            if (timetableTrains.length === 0) {
+                html += '<p style="color: var(--text-muted); margin: 0 0 10px 0;">' + _t('timetables.noTrainsAssigned', 'No trains assigned.') + '</p>';
+            } else {
+                html += '<div style="margin-bottom: 10px;">';
+                timetableTrains.forEach(function(train) {
+                    html += '<div style="display: flex; align-items: center; gap: 10px; padding: 5px 0;">';
+                    html += '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
+                    html += '<button class="btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="removeTrain(' + train.id + ')">' + _t('common.remove', 'Remove') + '</button>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // Add train section
+            html += '<div class="typeahead-row" style="margin-top: 10px;">';
+            html += '<div class="typeahead-wrapper">';
+            html += '<input type="text" class="typeahead-input" id="addTrainSearch" placeholder="' + (selectedRouteId ? _t('timetables.typeToSearchTrains', 'Type to search trains to add...') : _t('timetables.selectRouteFirst', 'Select a route first')) + '" autocomplete="off"' + (selectedRouteId ? '' : ' disabled') + ' style="font-size: 14px; padding: 8px;">';
+            html += '<div class="typeahead-dropdown" id="addTrainDropdown"></div>';
+            html += '</div>';
+            html += '</div>';
+
+            return html;
+        }
+
+        function refreshTrainsSection() {
+            document.getElementById('trainsSection').innerHTML = renderTrainsSection();
+            setupAddTrainTypeahead();
+        }
+
+        function renderSectionsSection() {
+            let html = '';
+            var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
+
+            if (timetableSections.length === 0) {
+                html += '<p style="color: var(--text-muted); margin: 0 0 10px 0;">' + _t('timetables.noSectionsAssigned', 'No sections assigned.') + '</p>';
+            } else {
+                html += '<div style="margin-bottom: 10px;">';
+                timetableSections.forEach(function(section) {
+                    html += '<div style="display: flex; align-items: center; gap: 10px; padding: 5px 0;">';
+                    html += '<span>' + escapeHtml(section.name) + '</span>';
+                    html += '<button class="btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="removeSectionFromTimetable(' + section.id + ')">' + _t('common.remove', 'Remove') + '</button>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // Add section dropdown
+            html += '<div style="margin-top: 10px;">';
+            html += '<select id="addSectionSelect" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; min-width: 250px;"' + (selectedRouteId ? '' : ' disabled') + '>';
+            html += '<option value="">' + _t('timetables.addSection', '+ Add section...') + '</option>';
+
+            // Only show sections not already assigned
+            var availableSections = routeSections.filter(function(s) {
+                return !timetableSections.some(function(ts) { return ts.id === s.id; });
+            });
+            availableSections.forEach(function(s) {
+                html += '<option value="' + s.id + '">' + escapeHtml(s.name) + '</option>';
+            });
+            html += '</select>';
+            html += '</div>';
+
+            return html;
+        }
+
+        function refreshSectionsSection() {
+            document.getElementById('sectionsSection').innerHTML = renderSectionsSection();
+            // Attach change handler to the new select
+            var sel = document.getElementById('addSectionSelect');
+            if (sel) {
+                sel.addEventListener('change', function() {
+                    if (sel.value) {
+                        var sectionId = parseInt(sel.value);
+                        var sectionName = sel.options[sel.selectedIndex].text;
+                        addSectionToTimetable(sectionId, sectionName);
+                    }
+                });
+            }
+        }
+
+        async function addSectionToTimetable(sectionId, sectionName) {
+            try {
+                await fetch('/api/timetables/' + timetableId + '/sections', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ section_id: sectionId })
+                });
+                timetableSections.push({ id: sectionId, name: sectionName });
+                refreshSectionsSection();
+            } catch (error) {
+                console.error('Error adding section:', error);
+                alert('Error adding section to timetable');
+            }
+        }
+
+        async function removeSectionFromTimetable(sectionId) {
+            if (!confirm('Remove this section from the timetable?')) return;
+            try {
+                await fetch('/api/timetables/' + timetableId + '/sections/' + sectionId, {
+                    method: 'DELETE'
+                });
+                timetableSections = timetableSections.filter(function(s) { return s.id !== sectionId; });
+                refreshSectionsSection();
+            } catch (error) {
+                console.error('Error removing section:', error);
+                alert('Error removing section from timetable');
+            }
+        }
+
+        // Load trains for a specific route
+        async function loadRouteTrains(routeId) {
+            try {
+                const response = await fetch('/api/routes/' + routeId + '/trains');
+                routeTrains = await response.json();
+            } catch (error) {
+                console.error('Error loading route trains:', error);
+                routeTrains = [];
+            }
+        }
+
+        // Get available trains for the route (not already added to timetable)
+        function getAvailableTrainsForRoute() {
+            return routeTrains.filter(function(t) {
+                return !timetableTrains.some(function(tt) { return tt.id === t.id; });
+            });
+        }
+
+        // Route typeahead functions
+        function filterRoutes(query) {
+            if (!query) return allRoutes.slice(0, 10);
+            const lowerQuery = query.toLowerCase();
+            return allRoutes.filter(function(r) {
+                return r.name.toLowerCase().includes(lowerQuery);
+            }).slice(0, 10);
+        }
+
+        function renderRouteDropdown(routes) {
+            const dropdown = document.getElementById('routeDropdown');
+            if (routes.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noRoutesFound') : 'No routes found') + '</div>';
+            } else {
+                dropdown.innerHTML = routes.map(function(route, index) {
+                    return '<div class="typeahead-item' + (index === routeActiveIndex ? ' active' : '') + '" data-id="' + route.id + '" data-name="' + escapeHtml(route.name) + '">' + escapeHtml(route.name) + '</div>';
+                }).join('');
+
+                dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        selectRoute(parseInt(item.dataset.id), item.dataset.name);
+                    });
+                });
+            }
+            dropdown.classList.add('show');
+        }
+
+        async function loadRouteSections(routeId) {
+            if (!routeId) {
+                routeSections = [];
+                refreshSectionsSection();
+                return;
+            }
+            try {
+                var res = await fetch('/api/routes/' + routeId + '/sections');
+                routeSections = await res.json();
+                refreshSectionsSection();
+            } catch (err) {
+                console.error('Error loading sections:', err);
+                routeSections = [];
+                refreshSectionsSection();
+            }
+        }
+
+        async function selectRoute(id, name) {
+            const searchInput = document.getElementById('routeSearch');
+            const dropdown = document.getElementById('routeDropdown');
+            const viewLink = document.getElementById('routeViewLink');
+
+            searchInput.value = name;
+            selectedRouteId = id;
+            dropdown.classList.remove('show');
+            routeActiveIndex = -1;
+
+            // Update view link
+            viewLink.outerHTML = '<a href="/routes/' + id + '" class="view-link" id="routeViewLink">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.view') : 'View') + '</a>';
+
+            // Load trains for the new route
+            await loadRouteTrains(id);
+
+            // Load sections for the new route
+            await loadRouteSections(id);
+
+            // Refresh the trains section to enable adding trains
+            refreshTrainsSection();
+
+            // Load locations for the new route
+            try {
+                var locRes = await fetch('/api/routes/' + id + '/locations');
+                routeLocations = await locRes.json();
+            } catch (err) {
+                routeLocations = [];
+            }
+
+            markUnsaved();
+        }
+
+        function clearRoute() {
+            const searchInput = document.getElementById('routeSearch');
+            const viewLink = document.getElementById('routeViewLink');
+
+            searchInput.value = '';
+            selectedRouteId = null;
+            viewLink.outerHTML = '<span id="routeViewLink"></span>';
+
+            // Clear route trains
+            routeTrains = [];
+
+            // Clear sections
+            loadRouteSections(null);
+
+            // Refresh trains section to disable adding trains
+            refreshTrainsSection();
+
+            markUnsaved();
+        }
+
+        function setupRouteTypeahead() {
+            const searchInput = document.getElementById('routeSearch');
+            const dropdown = document.getElementById('routeDropdown');
+
+            searchInput.addEventListener('input', function() {
+                selectedRouteId = null;
+                document.getElementById('routeViewLink').outerHTML = '<span id="routeViewLink"></span>';
+                routeActiveIndex = -1;
+                const filtered = filterRoutes(searchInput.value.trim());
+                renderRouteDropdown(filtered);
+
+                // Clear route trains when route is being edited
+                routeTrains = [];
+                refreshTrainsSection();
+
+                markUnsaved();
+            });
+
+            searchInput.addEventListener('focus', function() {
+                const filtered = filterRoutes(searchInput.value.trim());
+                renderRouteDropdown(filtered);
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    routeActiveIndex = Math.min(routeActiveIndex + 1, items.length - 1);
+                    updateActiveRouteItem(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    routeActiveIndex = Math.max(routeActiveIndex - 1, 0);
+                    updateActiveRouteItem(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (routeActiveIndex >= 0 && items[routeActiveIndex]) {
+                        selectRoute(parseInt(items[routeActiveIndex].dataset.id), items[routeActiveIndex].dataset.name);
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.classList.remove('show');
+                    routeActiveIndex = -1;
+                }
+            });
+        }
+
+        function updateActiveRouteItem(items) {
+            items.forEach(function(item, index) {
+                if (index === routeActiveIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Add train typeahead functions (for multi-train)
+        let availableTrains = [];
+
+        function filterAddTrains(query) {
+            // Get available trains (not already added)
+            availableTrains = getAvailableTrainsForRoute();
+            if (!query) return availableTrains.slice(0, 10);
+            const lowerQuery = query.toLowerCase();
+            return availableTrains.filter(function(t) {
+                return t.name.toLowerCase().includes(lowerQuery);
+            }).slice(0, 10);
+        }
+
+        function renderAddTrainDropdown(trains) {
+            const dropdown = document.getElementById('addTrainDropdown');
+            if (!dropdown) return;
+
+            if (trains.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noTrainsAvailable') : 'No trains available') + '</div>';
+            } else {
+                dropdown.innerHTML = trains.map(function(train, index) {
+                    return '<div class="typeahead-item' + (index === trainActiveIndex ? ' active' : '') + '" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' + escapeHtml(train.name) + '</div>';
+                }).join('');
+
+                dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        addTrainToTimetable(parseInt(item.dataset.id), item.dataset.name);
+                    });
+                });
+            }
+            dropdown.classList.add('show');
+        }
+
+        async function addTrainToTimetable(trainId, trainName) {
+            const dropdown = document.getElementById('addTrainDropdown');
+            const searchInput = document.getElementById('addTrainSearch');
+
+            dropdown.classList.remove('show');
+            searchInput.value = '';
+            trainActiveIndex = -1;
+
+            try {
+                await fetch('/api/timetables/' + timetableId + '/trains', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ train_id: trainId })
+                });
+
+                // Add the train to the timetable list
+                timetableTrains.push({ id: trainId, name: trainName });
+
+                refreshTrainsSection();
+            } catch (error) {
+                console.error('Error adding train:', error);
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorAddingTrain') : 'Error adding train to timetable');
+            }
+        }
+
+        async function removeTrain(trainId) {
+            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.removeTrainConfirm') : 'Remove this train from the timetable?')) return;
+
+            try {
+                await fetch('/api/timetables/' + timetableId + '/trains/' + trainId, {
+                    method: 'DELETE'
+                });
+
+                timetableTrains = timetableTrains.filter(function(t) { return t.id !== trainId; });
+                refreshTrainsSection();
+            } catch (error) {
+                console.error('Error removing train:', error);
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorRemovingTrain') : 'Error removing train from timetable');
+            }
+        }
+
+        function setupAddTrainTypeahead() {
+            const searchInput = document.getElementById('addTrainSearch');
+            const dropdown = document.getElementById('addTrainDropdown');
+
+            if (!searchInput || !dropdown) return;
+
+            searchInput.addEventListener('input', function() {
+                trainActiveIndex = -1;
+                const filtered = filterAddTrains(searchInput.value.trim());
+                renderAddTrainDropdown(filtered);
+            });
+
+            searchInput.addEventListener('focus', function() {
+                if (!searchInput.disabled) {
+                    const filtered = filterAddTrains(searchInput.value.trim());
+                    renderAddTrainDropdown(filtered);
+                }
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    trainActiveIndex = Math.min(trainActiveIndex + 1, items.length - 1);
+                    updateActiveAddTrainItem(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    trainActiveIndex = Math.max(trainActiveIndex - 1, 0);
+                    updateActiveAddTrainItem(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (trainActiveIndex >= 0 && items[trainActiveIndex]) {
+                        addTrainToTimetable(parseInt(items[trainActiveIndex].dataset.id), items[trainActiveIndex].dataset.name);
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.classList.remove('show');
+                    trainActiveIndex = -1;
+                }
+            });
+        }
+
+        function updateActiveAddTrainItem(items) {
+            items.forEach(function(item, index) {
+                if (index === trainActiveIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.typeahead-wrapper')) {
+                const routeDropdown = document.getElementById('routeDropdown');
+                const addTrainDropdown = document.getElementById('addTrainDropdown');
+                if (routeDropdown) routeDropdown.classList.remove('show');
+                if (addTrainDropdown) addTrainDropdown.classList.remove('show');
+                routeActiveIndex = -1;
+                trainActiveIndex = -1;
+            }
+        });
+
+        var draggedIndex = null;
+
+        function renderEntries() {
+            const container = document.getElementById('entriesList');
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p class="empty-message">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noEntriesInTimetable') : 'No entries in this timetable.') + '</p>';
+                updateRecordRouteButton();
+                return;
+            }
+
+            var actionHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.action') : 'Action';
+            var locationHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.location') : 'Location';
+            var platformHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.platform') : 'Platform / Track';
+            var time1Header = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.time1') : 'Time 1';
+            var time2Header = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.time2') : 'Time 2';
+            var detailsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.detailsColumn') : 'Details';
+            var actionsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.actions') : 'Actions';
+            var latHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.lat') : 'Lat';
+            var lngHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.lng') : 'Lng';
+            var coordSourceHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.coordSource') : 'Coord Source';
+            let html = '<table><thead><tr><th>#</th><th>' + actionHeader + '</th><th>' + locationHeader + '</th><th>' + platformHeader + '</th><th>' + time1Header + '</th><th>' + time2Header + '</th><th>' + detailsHeader + '</th><th>' + latHeader + '</th><th>' + lngHeader + '</th><th>' + coordSourceHeader + '</th><th class="actions">' + actionsHeader + '</th></tr></thead><tbody id="entriesTableBody">';
+            var selectText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.select') : '-- Select --';
+            var deleteText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.delete') : 'Delete';
+
+            entries.forEach(function(entry, index) {
+                var actionOptions = ACTIONS.map(function(a) {
+                    return '<option value="' + a + '"' + (entry.action === a ? ' selected' : '') + '>' + a + '</option>';
+                }).join('');
+
+                html += '<tr data-index="' + index + '" data-id="' + (entry.id || '') + '">';
+                html += '<td class="drag-handle">\u2630 ' + (index + 1) + '</td>';
+                html += '<td><select class="action-select" onchange="updateEntryField(' + index + ', \'action\', this.value)"><option value="">' + selectText + '</option>' + actionOptions + '</select></td>';
+                var locationOptions = routeLocations.map(function(loc) {
+                    return '<option value="' + escapeHtml(loc.name) + '"' + (entry.location === loc.name ? ' selected' : '') + '>' + escapeHtml(loc.name) + '</option>';
+                }).join('');
+                var currentLocInList = !entry.location || routeLocations.some(function(l) { return l.name === entry.location; });
+                var extraLocOption = (!currentLocInList && entry.location) ? '<option value="' + escapeHtml(entry.location) + '" selected>' + escapeHtml(entry.location) + '</option>' : '';
+                html += '<td><select class="location-select" onchange="updateEntryField(' + index + ', \'location\', this.value)"><option value="">' + selectText + '</option>' + extraLocOption + locationOptions + '</select></td>';
+                html += '<td class="editable-cell" data-field="platform">' + escapeHtml(entry.platform || '') + '</td>';
+                html += '<td class="editable-cell" data-field="time1">' + escapeHtml(entry.time1 || '') + '</td>';
+                html += '<td class="editable-cell" data-field="time2">' + escapeHtml(entry.time2 || '') + '</td>';
+                html += '<td class="editable-cell" data-field="details">' + escapeHtml(entry.details || '') + '</td>';
+                html += '<td class="editable-cell coord-cell" data-field="latitude">' + escapeHtml(entry.latitude || '') + '</td>';
+                html += '<td class="editable-cell coord-cell" data-field="longitude">' + escapeHtml(entry.longitude || '') + '</td>';
+                var cs = entry.coord_source || '';
+                html += '<td>' + (cs ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.' + cs) : (cs.charAt(0).toUpperCase() + cs.slice(1))) : '') + '</td>';
+                html += '<td class="actions">';
+                html += '<button class="btn-danger" onclick="deleteEntry(' + index + ')">' + deleteText + '</button>';
+                html += '</td></tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+            // Add click handlers for editable cells
+            document.querySelectorAll('#entriesList .editable-cell').forEach(function(cell) {
+                cell.addEventListener('click', makeCellEditable);
+            });
+
+            // Add drag event listeners
+            var tbody = document.getElementById('entriesTableBody');
+            setupDragListeners(tbody, entries, function() {
+                entries.forEach(function(entry, i) { entry.sort_order = i; });
+                renderEntries();
+                markUnsaved();
+            });
+
+            updateRecordRouteButton();
+        }
+
+        function setupDragListeners(tbody, entriesArray, rerenderFn) {
+            var rows = tbody.querySelectorAll('tr[data-index]');
+            rows.forEach(function(row) {
+                var handle = row.querySelector('.drag-handle');
+                if (handle) {
+                    handle.addEventListener('mousedown', function() {
+                        row.setAttribute('draggable', 'true');
+                    });
+                }
+
+                row.addEventListener('dragstart', function(e) {
+                    draggedIndex = parseInt(this.dataset.index);
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    var targetIndex = parseInt(this.dataset.index);
+                    rows.forEach(function(r) {
+                        r.classList.remove('drag-over-above', 'drag-over-below');
+                    });
+                    if (draggedIndex === null || targetIndex === draggedIndex) return;
+                    if (targetIndex < draggedIndex) {
+                        this.classList.add('drag-over-above');
+                    } else {
+                        this.classList.add('drag-over-below');
+                    }
+                });
+
+                row.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over-above', 'drag-over-below');
+                });
+
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    var targetIndex = parseInt(this.dataset.index);
+                    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+                    var item = entriesArray.splice(draggedIndex, 1)[0];
+                    entriesArray.splice(targetIndex, 0, item);
+                    draggedIndex = null;
+                    rerenderFn();
+                });
+
+                row.addEventListener('dragend', function() {
+                    draggedIndex = null;
+                    rows.forEach(function(r) {
+                        r.setAttribute('draggable', 'false');
+                        r.classList.remove('dragging', 'drag-over-above', 'drag-over-below');
+                    });
+                });
+            });
+        }
+
+        function updateRecordRouteButton() {
+            // Always show the Record Route button
+        }
+
+        function updateEntryField(index, field, value) {
+            entries[index][field] = value;
+            if (field === 'action') {
+                entries[index].action_id = TIMETABLE_ACTIONS_MAP[value] || null;
+            }
+            if (field === 'location') {
+                entries[index].location_id = null;
+            }
+            markUnsaved();
+        }
+
+        function makeCellEditable(e) {
+            var cell = e.target;
+            if (cell.querySelector('input')) return;
+
+            var currentValue = cell.textContent;
+            var field = cell.dataset.field;
+            var row = cell.parentElement;
+            var index = parseInt(row.dataset.index);
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentValue;
+
+            input.addEventListener('blur', function() {
+                var newValue = input.value;
+                entries[index][field] = newValue;
+                cell.textContent = newValue;
+                markUnsaved();
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    input.blur();
+                } else if (e.key === 'Escape') {
+                    cell.textContent = currentValue;
+                }
+            });
+
+            cell.textContent = '';
+            cell.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function addEntry() {
+            entries.push({
+                action: 'STOP AT LOCATION',
+                action_id: TIMETABLE_ACTIONS_MAP['STOP AT LOCATION'] || null,
+                details: '',
+                location: '',
+                platform: '',
+                time1: '',
+                time2: '',
+                latitude: '',
+                longitude: '',
+                sort_order: entries.length,
+                isNew: true
+            });
+            renderEntries();
+            markUnsaved();
+        }
+
+        function deleteEntry(index) {
+            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.deleteEntryConfirm') : 'Delete this entry?')) return;
+            var removed = entries.splice(index, 1)[0];
+            if (removed.id && !removed.isNew) {
+                deletedEntryIds.push(removed.id);
+            }
+            // Update sort_order
+            entries.forEach(function(entry, i) { entry.sort_order = i; });
+            renderEntries();
+            markUnsaved();
+        }
+
+
+        function markUnsaved() {
+            hasUnsavedChanges = true;
+            document.getElementById('unsavedIndicator').style.display = 'inline';
+            document.getElementById('saveBtn').disabled = false;
+        }
+
+        function markSaved() {
+            hasUnsavedChanges = false;
+            document.getElementById('unsavedIndicator').style.display = 'none';
+            document.getElementById('saveBtn').disabled = true;
+        }
+
+        async function saveChanges() {
+            try {
+                // Update timetable service name, service type, and route (trains are managed via junction table)
+                const serviceName = document.getElementById('serviceNameInput').value.trim();
+                const serviceType = document.getElementById('serviceTypeSelect').value;
+
+                const serviceCode = document.getElementById('serviceInput').value.trim() || null;
+                const boundVal = document.getElementById('boundSelect').value || null;
+
+                const tonnageVal = document.getElementById('tonnageInput').value.trim();
+                const carCountVal = document.getElementById('carCountInput').value.trim();
+                const trainLengthVal = document.getElementById('trainLengthInput').value.trim();
+                const startTimeVal = document.getElementById('startTimeInput').value.trim();
+                const durationVal = document.getElementById('durationInput').value.trim();
+
+                const conductorCompatibleVal = document.getElementById('conductorCompatibleInput').checked;
+                const currentServiceNameVal = document.getElementById('currentServiceNameInput').value.trim() || null;
+
+                const updateData = {
+                    service_name: serviceName,
+                    service: serviceCode,
+                    service_type: serviceType,
+                    bound: boundVal,
+                    route_id: selectedRouteId,
+                    section_ids: timetableSections.map(function(s) { return s.id; }),
+                    tonnage: tonnageVal ? parseFloat(tonnageVal) : null,
+                    car_count: carCountVal ? parseInt(carCountVal, 10) : null,
+                    train_length: trainLengthVal ? parseFloat(trainLengthVal) : null,
+                    start_time: startTimeVal || null,
+                    duration: durationVal || null,
+                    conductor_compatible: conductorCompatibleVal,
+                    current_service_name: currentServiceNameVal
+                };
+
+                const updateRes = await fetch('/api/timetables/' + timetableId, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (!updateRes.ok) {
+                    const error = await updateRes.json();
+                    throw new Error(error.error || 'Failed to update timetable');
+                }
+
+                const updatedTimetable = await updateRes.json();
+                timetable = { ...timetable, ...updatedTimetable };
+                timetable.trains = timetableTrains;
+
+                // Update/create/delete entries
+                for (var i = 0; i < entries.length; i++) {
+                    var entry = entries[i];
+                    if (entry.isNew) {
+                        // Create new entry
+                        var createRes = await fetch('/api/timetables/' + timetableId + '/entries', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(entry)
+                        });
+                        if (!createRes.ok) {
+                            var createError = await createRes.json();
+                            throw new Error(createError.error || 'Failed to create entry ' + (i + 1));
+                        }
+                        var created = await createRes.json();
+                        entries[i].id = created.id;
+                        delete entries[i].isNew;
+                    } else if (entry.id) {
+                        // Update existing entry
+                        var updateEntryRes = await fetch('/api/entries/' + entry.id, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(entry)
+                        });
+                        if (!updateEntryRes.ok) {
+                            var entryError = await updateEntryRes.json();
+                            throw new Error(entryError.error || 'Failed to update entry ' + (i + 1));
+                        }
+                    }
+                }
+
+                // Delete removed entries
+                for (var d = 0; d < deletedEntryIds.length; d++) {
+                    await fetch('/api/entries/' + deletedEntryIds[d], { method: 'DELETE' });
+                }
+                deletedEntryIds = [];
+
+                // Update title and re-render to show updated View links
+                document.getElementById('timetableTitle').textContent = serviceName || ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.untitled') : 'Untitled');
+                renderTimetable();
+
+                markSaved();
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.changesSaved') : 'Changes saved successfully!');
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                alert(((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorSavingChanges') : 'Error saving changes: ') + error.message);
+            }
+        }
+
+        async function deleteTimetable() {
+            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.confirmDeleteTimetableEntries') : 'Are you sure you want to delete this timetable and all its entries?')) return;
+            try {
+                await fetch('/api/timetables/' + timetableId, { method: 'DELETE' });
+                window.location.href = '/timetables';
+            } catch (error) {
+                console.error('Error deleting timetable:', error);
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorDeletingTimetable') : 'Error deleting timetable');
+            }
+        }
+
+        async function deletePathData() {
+            if (!confirm('Are you sure you want to delete the path data for this timetable?')) return;
+            try {
+                const res = await fetch('/api/timetables/' + timetableId + '/path-data', { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error deleting path data:', error);
+                alert('Error deleting path data');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function escapeCSV(text) {
+            if (!text) return '';
+            // If contains comma, quote, or newline, wrap in quotes and escape quotes
+            if (text.indexOf(',') >= 0 || text.indexOf('"') >= 0 || text.indexOf('\n') >= 0) {
+                return '"' + text.replace(/"/g, '""') + '"';
+            }
+            return text;
+        }
+
+        function sanitizeFilename(name) {
+            // Collapse multiple spaces into single space and trim
+            return name.replace(/\s+/g, ' ').trim();
+        }
+
+        function downloadCSV(content, filename) {
+            var blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        function exportCSV() {
+            if (entries.length === 0) {
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noEntriesToExport') : 'No entries to export');
+                return;
+            }
+
+            var lines = ['Action,Location,Platform,Time1,Time2,Details,Latitude,Longitude'];
+
+            entries.forEach(function(entry) {
+                var action = entry.action || '';
+                var location = entry.location || '';
+                var platform = entry.platform || '';
+                var time1 = entry.time1 || '';
+                var time2 = entry.time2 || '';
+                var details = entry.details || '';
+                var latitude = (entry.latitude !== null && entry.latitude !== undefined) ? String(entry.latitude) : '';
+                var longitude = (entry.longitude !== null && entry.longitude !== undefined) ? String(entry.longitude) : '';
+
+                lines.push([
+                    escapeCSV(action),
+                    escapeCSV(location),
+                    escapeCSV(platform),
+                    escapeCSV(time1),
+                    escapeCSV(time2),
+                    escapeCSV(details),
+                    escapeCSV(latitude),
+                    escapeCSV(longitude)
+                ].join(','));
+            });
+
+            var filename = sanitizeFilename(timetable.service_name || 'timetable') + '.csv';
+            downloadCSV(lines.join('\n'), filename);
+        }
+
+        function exportThirdRails() {
+            if (entries.length === 0) {
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noEntriesToExport') : 'No entries to export');
+                return;
+            }
+
+            var lines = ['Destination,Arrival,Departure,Platform'];
+            var combinedRows = [];
+
+            // Combine STOP/WAIT entries with following LOAD PASSENGERS
+            for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                var action = entry.action || '';
+
+                if (action === 'WAIT FOR SERVICE' || action === 'STOP AT LOCATION') {
+                    var row = {
+                        location: entry.location || '',
+                        arrival: entry.time2 || entry.time1 || '',
+                        departure: '',
+                        platform: entry.platform || ''
+                    };
+
+                    // For WAIT FOR SERVICE, arrival is time2 (or time1)
+                    if (action === 'WAIT FOR SERVICE') {
+                        row.arrival = entry.time2 || entry.time1 || '';
+                    } else {
+                        row.arrival = entry.time1 || '';
+                    }
+
+                    // Look for following LOAD PASSENGERS to get departure time
+                    if (i + 1 < entries.length) {
+                        var nextEntry = entries[i + 1];
+                        if (nextEntry.action === 'LOAD PASSENGERS') {
+                            row.departure = nextEntry.time1 || '';
+                            i++; // Skip the LOAD PASSENGERS entry
+                        }
+                    }
+
+                    combinedRows.push(row);
+                } else if (action === 'UNLOAD PASSENGERS') {
+                    // Find previous STOP entry to get location
+                    var prevEntry = i > 0 ? entries[i - 1] : null;
+                    if (prevEntry && prevEntry.action === 'STOP AT LOCATION') {
+                        // Already handled with the STOP
+                    } else {
+                        // Standalone UNLOAD - use its own data
+                        combinedRows.push({
+                            location: entry.location || '',
+                            arrival: entry.time1 || '',
+                            departure: '',
+                            platform: entry.platform || ''
+                        });
+                    }
+                }
+            }
+
+            combinedRows.forEach(function(row) {
+                lines.push([
+                    escapeCSV(row.location),
+                    escapeCSV(row.arrival),
+                    escapeCSV(row.departure),
+                    escapeCSV(row.platform)
+                ].join(','));
+            });
+
+            var filename = sanitizeFilename(timetable.service_name || 'timetable') + '_thirdrails.csv';
+            downloadCSV(lines.join('\n'), filename);
+        }
+
+        function exportJSON() {
+            // Trigger download via the export/download endpoint
+            window.location.href = '/api/timetables/' + timetableId + '/export/download';
+        }
+
+        function goToRecordMap() {
+            window.open('/record?timetable_id=' + timetableId, '_blank');
+        }
+
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // Theme and color scheme initialization
+        (function() {
+            var theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+
+            var colorScheme = localStorage.getItem('colorScheme');
+            if (colorScheme && colorScheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', colorScheme);
+            }
+        })();
+
+        // Toggle Route Map collapse
+        function toggleRouteMap() {
+            const container = document.getElementById('routeMapContainer');
+            const icon = document.getElementById('mapToggleIcon');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                icon.innerHTML = '&#9660;'; // ▼
+                // Invalidate map size after showing so tiles render correctly
+                if (routeMap) {
+                    setTimeout(() => routeMap.invalidateSize(), 0);
+                }
+            } else {
+                container.style.display = 'none';
+                icon.innerHTML = '&#9654;'; // ▶
+            }
+        }
+
+        // Map variables and initialization
+        let routeMap = null;
+        let routePolyline = null;
+        let stopMarkers = [];
+        let pathCoordinates = [];
+
+        async function initRouteMap() {
+            const mapCard = document.getElementById('mapCard');
+
+            // Fetch the full export data which includes path coordinates
+            try {
+                const exportRes = await fetch('/api/timetables/' + timetableId + '/export');
+                if (exportRes.ok) {
+                    const exportData = await exportRes.json();
+                    pathCoordinates = exportData.coordinates || [];
+                }
+            } catch (err) {
+                console.error('Failed to load coordinates:', err);
+                pathCoordinates = [];
+            }
+
+            // Check if we have path coordinates or entry coordinates
+            const entriesWithCoords = entries.filter(function(entry) {
+                const lat = parseFloat(entry.latitude);
+                const lng = parseFloat(entry.longitude);
+                return !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
+            });
+
+            if (pathCoordinates.length === 0 && entriesWithCoords.length === 0) {
+                mapCard.classList.remove('has-coordinates');
+                document.getElementById('routeMapContainer').style.display = 'none';
+                return;
+            }
+
+            mapCard.classList.add('has-coordinates');
+            document.getElementById('routeMapContainer').style.display = '';
+            document.getElementById('deletePathBtn').style.display = '';
+
+            // Initialize map if not already done
+            if (!routeMap) {
+                routeMap = L.map('routeMap').setView([51.5, -0.1], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(routeMap);
+            }
+
+            // Clear existing markers and polyline
+            stopMarkers.forEach(function(marker) { marker.remove(); });
+            stopMarkers = [];
+            if (routePolyline) {
+                routePolyline.remove();
+                routePolyline = null;
+            }
+
+            // Draw full path polyline if we have path coordinates
+            if (pathCoordinates.length >= 2) {
+                const pathLatLngs = pathCoordinates.map(function(c) {
+                    return [c.latitude, c.longitude];
+                });
+                routePolyline = L.polyline(pathLatLngs, {
+                    color: '#0066ff',
+                    weight: 4,
+                    opacity: 0.7
+                }).addTo(routeMap);
+            }
+
+            // Add stop markers for entries with coordinates
+            entriesWithCoords.forEach(function(entry, index) {
+                const lat = parseFloat(entry.latitude);
+                const lng = parseFloat(entry.longitude);
+
+                // Determine marker style
+                let markerClass = 'stop-marker';
+                if (index === 0) markerClass += ' first';
+                else if (index === entriesWithCoords.length - 1) markerClass += ' last';
+
+                const icon = L.divIcon({
+                    className: 'stop-marker-wrapper',
+                    html: '<div class="' + markerClass + '"></div>',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+
+                // Build popup content
+                let popupContent = '<strong>' + (index + 1) + '. ' + (entry.location || 'Unknown') + '</strong>';
+                if (entry.platform) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupPlatform') : 'Platform') + ': ' + entry.platform;
+                if (entry.time1) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupTime') : 'Time') + ': ' + entry.time1;
+                if (entry.action) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupAction') : 'Action') + ': ' + entry.action;
+
+                const marker = L.marker([lat, lng], { icon: icon })
+                    .bindPopup(popupContent)
+                    .addTo(routeMap);
+
+                stopMarkers.push(marker);
+            });
+
+            // Fit map bounds - prefer path coordinates if available, otherwise use entry coords
+            let boundsCoords;
+            if (pathCoordinates.length > 0) {
+                boundsCoords = pathCoordinates.map(function(c) { return [c.latitude, c.longitude]; });
+            } else {
+                boundsCoords = entriesWithCoords.map(function(e) { return [parseFloat(e.latitude), parseFloat(e.longitude)]; });
+            }
+
+            if (boundsCoords.length > 0) {
+                const bounds = L.latLngBounds(boundsCoords);
+                routeMap.fitBounds(bounds, { padding: [30, 30] });
+            }
+        }
+
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        i18n.init().then(function() {
+            loadData();
+            generateTimetableQR();
+        });
+
+        async function generateTimetableQR() {
+            try {
+                const response = await fetch('/api/config/server-urls');
+                const urls = await response.json();
+                const base = urls.network;
+
+                ['mobile', 'tablet'].forEach(function(hud) {
+                    const url = base + '/' + hud + '?timetable=' + timetableId;
+                    const container = document.getElementById('qr-timetable-' + hud);
+                    const qr = qrcode(0, 'M');
+                    qr.addData(url);
+                    qr.make();
+                    container.innerHTML = qr.createSvgTag(6, 2);
+                });
+
+                document.getElementById('qrCard').style.display = '';
+            } catch (err) {
+                console.error('Failed to generate QR code:', err);
+            }
+        }
+    </script>
+</body>
+</html>

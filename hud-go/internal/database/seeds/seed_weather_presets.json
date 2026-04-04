@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Sunny Day",
+    "temperature": 25,
+    "cloudiness": 0.1,
+    "precipitation": 0,
+    "wetness": 0,
+    "ground_snow": 0,
+    "piled_snow": 0,
+    "fog_density": 0
+  },
+  {
+    "name": "Snowy Day",
+    "temperature": -5,
+    "cloudiness": 0.8,
+    "precipitation": 0.7,
+    "wetness": 0.3,
+    "ground_snow": 0.8,
+    "piled_snow": 0.6,
+    "fog_density": 0.2
+  },
+  {
+    "name": "Rainy Day",
+    "temperature": 12,
+    "cloudiness": 0.9,
+    "precipitation": 0.8,
+    "wetness": 0.7,
+    "ground_snow": 0,
+    "piled_snow": 0,
+    "fog_density": 0.3
+  }
+]

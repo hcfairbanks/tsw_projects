@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Timetable</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-primary); color: var(--text-primary); padding: 20px; transition: background-color 0.3s, color 0.3s; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        h1 { color: var(--accent-color); margin-bottom: 30px; text-align: center; }
+        .form-section { background: var(--bg-secondary); padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .form-section h2 { font-size: 16px; color: var(--accent-color); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color); }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 200px; }
+        .form-group.full-width { flex: 100%; }
+        .form-group label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; background: var(--bg-primary); color: var(--text-primary); }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-color); }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .btn-primary { background: var(--btn-primary-bg); color: white; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-success { background: var(--color-success); color: white; }
+        .btn-success:hover { opacity: 0.9; }
+        .btn-danger { background: var(--btn-danger-bg); color: white; }
+        .btn-danger:hover { background: var(--btn-danger-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover { background: var(--accent-hover); }
+        .entries-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .entries-header h2 { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .entries-table { width: 100%; border-collapse: collapse; }
+        .entries-table th, .entries-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        .entries-table th { background: var(--bg-tertiary); font-weight: 600; color: var(--accent-color); }
+        .entries-table input, .entries-table select { width: 100%; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 12px; background: var(--bg-primary); color: var(--text-primary); }
+        .entries-table .action-select, .entries-table .location-select { min-width: 140px; }
+        .entries-table .location-input { min-width: 150px; }
+        .entries-table .platform-input { width: 60px; }
+        .entries-table .time-input { width: 90px; }
+        .entries-table .btn-small { padding: 4px 8px; font-size: 12px; }
+        .entries-table .actions-cell { white-space: nowrap; }
+        .no-entries { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
+        .submit-section { display: flex; gap: 10px; justify-content: flex-end; }
+        .status-message { padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .status-message.success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; display: block; }
+        .status-message.error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; display: block; }
+        .quick-add { background: var(--bg-tertiary); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
+        .quick-add h3 { font-size: 14px; color: var(--text-primary); margin-bottom: 10px; }
+        .quick-add-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .quick-add-buttons .btn { padding: 6px 12px; font-size: 12px; }
+
+        /* Typeahead styles */
+        .typeahead-wrapper { position: relative; flex: 1; }
+        .typeahead-input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+        .typeahead-input:focus { outline: none; border-color: var(--accent-color); }
+        .typeahead-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-primary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
+        .typeahead-dropdown.show { display: block; }
+        .typeahead-item { padding: 10px; cursor: pointer; color: var(--text-primary); }
+        .typeahead-item:hover, .typeahead-item.active { background: var(--bg-tertiary); color: var(--accent-color); }
+        .typeahead-empty { padding: 10px; color: var(--text-muted); font-style: italic; }
+        .typeahead-row { display: flex; align-items: center; gap: 10px; }
+        .clear-btn { padding: 5px 10px; font-size: 12px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; }
+        .clear-btn:hover { background: var(--btn-danger-bg); color: #fff; }
+
+        /* Selected trains list */
+        .selected-trains { margin-top: 10px; }
+        .selected-train { display: inline-flex; align-items: center; gap: 5px; background: var(--bg-tertiary); padding: 5px 10px; border-radius: 4px; margin-right: 8px; margin-bottom: 8px; font-size: 13px; }
+        .selected-train .remove-train { background: none; border: none; color: var(--btn-danger-bg); cursor: pointer; font-size: 14px; padding: 0 2px; }
+        .selected-train .remove-train:hover { color: var(--btn-danger-hover); }
+    </style>
+</head>
+<body data-theme="dark">
+    <script src="/js/i18n.js"></script>
+    <div class="container">
+        <h1 data-i18n="timetables.createNew">Create Timetable</h1>
+        <nav id="main-nav"></nav>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="form-section">
+            <h2 data-i18n="timetables.details">Timetable Details</h2>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="service" data-i18n="timetables.service">Service</label>
+                    <input type="text" id="service" placeholder="e.g., 741-06">
+                </div>
+                <div class="form-group" style="flex: 3;">
+                    <label for="serviceName" data-i18n="timetables.serviceName">Service Name *</label>
+                    <input type="text" id="serviceName" placeholder="e.g., 2T17: London Euston - Tring 08:22 00:35" required>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 150px;">
+                    <label for="serviceType" data-i18n="timetables.serviceType">Service Type</label>
+                    <select id="serviceType">
+                        <option value="passenger" data-i18n="timetables.passenger">Passenger</option>
+                        <option value="freight" data-i18n="timetables.freight">Freight</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="tonnage" data-i18n="timetables.tonnage">Tonnage</label>
+                    <input type="number" step="0.1" id="tonnage" placeholder="e.g., 164.2">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="carCount" data-i18n="timetables.carCount">Car Count</label>
+                    <input type="number" step="1" id="carCount" placeholder="e.g., 7">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="trainLength" data-i18n="timetables.trainLength">Train Length (m)</label>
+                    <input type="number" step="0.1" id="trainLength" placeholder="e.g., 113.9">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="startTime" data-i18n="timetables.startTime">Start Time</label>
+                    <input type="text" id="startTime" placeholder="e.g., 07:59">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="duration" data-i18n="timetables.duration">Duration</label>
+                    <input type="text" id="duration" placeholder="e.g., 00:39">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 150px;">
+                    <label for="bound" data-i18n="timetables.bound">Bound</label>
+                    <select id="bound">
+                        <option value="">-</option>
+                        <option value="northbound" data-i18n="timetables.northbound">Northbound</option>
+                        <option value="southbound" data-i18n="timetables.southbound">Southbound</option>
+                        <option value="eastbound" data-i18n="timetables.eastbound">Eastbound</option>
+                        <option value="westbound" data-i18n="timetables.westbound">Westbound</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="conductorCompatible" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="conductorCompatible" style="width: auto; margin: 0;">
+                        <span data-i18n="timetables.conductorCompatible">Conductor Compatible</span>
+                    </label>
+                </div>
+                <div class="form-group" style="flex: 2;">
+                    <label for="currentServiceName">Current Service Name</label>
+                    <input type="text" id="currentServiceName" placeholder="e.g., 5L03">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-i18n="timetables.route">Route *</label>
+                    <div class="typeahead-row">
+                        <div class="typeahead-wrapper">
+                            <input type="text" class="typeahead-input" id="routeSearch" data-i18n-placeholder="trains.searchRoutesPlaceholder" placeholder="Type to search routes..." autocomplete="off">
+                            <div class="typeahead-dropdown" id="routeDropdown"></div>
+                        </div>
+                        <button type="button" class="clear-btn" onclick="clearRoute()" data-i18n="common.clear">Clear</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="timetables.trains">Trains * (at least one)</label>
+                    <div class="typeahead-row">
+                        <div class="typeahead-wrapper">
+                            <input type="text" class="typeahead-input" id="trainSearch" placeholder="Type to search and add trains..." autocomplete="off">
+                            <div class="typeahead-dropdown" id="trainDropdown"></div>
+                        </div>
+                    </div>
+                    <div class="selected-trains" id="selectedTrains"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="entries-header">
+                <h2 data-i18n="timetables.entries">Timetable Entries</h2>
+                <button class="btn btn-primary" onclick="addEntry()" data-i18n="timetables.addEntry">+ Add Entry</button>
+            </div>
+
+            <div class="quick-add">
+                <h3 data-i18n="timetables.quickAdd">Quick Add Common Entries</h3>
+                <div class="quick-add-buttons">
+                    <button class="btn btn-secondary" onclick="addQuickEntry('WAIT FOR SERVICE')" data-i18n="timetables.waitForService">Wait for Service</button>
+                    <button class="btn btn-secondary" onclick="addQuickEntry('STOP AT LOCATION')" data-i18n="timetables.stopAtLocation">Stop at Location</button>
+                    <button class="btn btn-secondary" onclick="addQuickEntry('LOAD PASSENGERS')" data-i18n="timetables.loadPassengers">Load Passengers</button>
+                    <button class="btn btn-secondary" onclick="addQuickEntry('UNLOAD PASSENGERS')" data-i18n="timetables.unloadPassengers">Unload Passengers</button>
+                    <button class="btn btn-secondary" onclick="addQuickEntry('GO VIA LOCATION')" data-i18n="timetables.goViaLocation">Go Via Location</button>
+                </div>
+            </div>
+
+            <table class="entries-table" id="entriesTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th data-i18n="timetables.action">Action</th>
+                        <th data-i18n="timetables.location">Location</th>
+                        <th data-i18n="timetables.platform">Platform</th>
+                        <th data-i18n="timetables.time1">Time 1</th>
+                        <th data-i18n="timetables.time2">Time 2</th>
+                        <th data-i18n="common.actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="entriesBody">
+                </tbody>
+            </table>
+
+            <div id="noEntries" class="no-entries" data-i18n="timetables.noEntriesYet">
+                No entries yet. Click "Add Entry" or use Quick Add to start building your timetable.
+            </div>
+        </div>
+
+        <div class="form-section submit-section">
+            <button class="btn btn-secondary" onclick="clearAll()" data-i18n="common.clear">Clear All</button>
+            <button class="btn btn-success" onclick="createTimetable()" data-i18n="timetables.createNew">Create Timetable</button>
+        </div>
+    </div>
+
+    <script src="/js/timetable-actions.js"></script>
+    <script>
+        let entries = [];
+        let entryIdCounter = 0;
+        let allRoutes = [];
+        let allTrains = [];
+        let routeTrains = []; // Trains available for the selected route
+        let selectedRouteId = null;
+        let selectedTrains = []; // Array of {id, name}
+        let routeLocations = []; // Locations for the selected route
+        let routeActiveIndex = -1;
+        let trainActiveIndex = -1;
+
+        const ACTIONS = TIMETABLE_ACTIONS;
+
+        // Load routes and trains
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes');
+                allRoutes = await response.json();
+            } catch (err) {
+                console.error('Failed to load routes:', err);
+            }
+        }
+
+        async function loadTrains() {
+            try {
+                const response = await fetch('/api/trains');
+                allTrains = await response.json();
+            } catch (err) {
+                console.error('Failed to load trains:', err);
+            }
+        }
+
+        // Route typeahead
+        function filterRoutes(query) {
+            if (!query) return allRoutes.slice(0, 10);
+            const lowerQuery = query.toLowerCase();
+            return allRoutes.filter(function(r) {
+                return r.name.toLowerCase().includes(lowerQuery);
+            }).slice(0, 10);
+        }
+
+        function renderRouteDropdown(routes) {
+            const dropdown = document.getElementById('routeDropdown');
+            if (routes.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">No routes found</div>';
+            } else {
+                dropdown.innerHTML = routes.map(function(route, index) {
+                    return '<div class="typeahead-item' + (index === routeActiveIndex ? ' active' : '') + '" data-id="' + route.id + '" data-name="' + escapeHtml(route.name) + '">' + escapeHtml(route.name) + '</div>';
+                }).join('');
+
+                dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        selectRoute(parseInt(item.dataset.id), item.dataset.name);
+                    });
+                });
+            }
+            dropdown.classList.add('show');
+        }
+
+        async function selectRoute(id, name) {
+            document.getElementById('routeSearch').value = name;
+            selectedRouteId = id;
+            document.getElementById('routeDropdown').classList.remove('show');
+            routeActiveIndex = -1;
+
+            // Clear selected trains when route changes (they may not be valid for new route)
+            selectedTrains = [];
+            renderSelectedTrains();
+
+            // Fetch trains available for this route
+            try {
+                const response = await fetch('/api/routes/' + id + '/trains');
+                routeTrains = await response.json();
+            } catch (err) {
+                console.error('Failed to load trains for route:', err);
+                routeTrains = [];
+            }
+
+            // Enable train input and update placeholder
+            const trainInput = document.getElementById('trainSearch');
+            trainInput.disabled = false;
+            trainInput.placeholder = routeTrains.length > 0
+                ? 'Type to search and add trains...'
+                : 'No trains available for this route';
+
+            // Fetch locations available for this route
+            try {
+                const locResponse = await fetch('/api/routes/' + id + '/locations');
+                routeLocations = await locResponse.json();
+            } catch (err) {
+                console.error('Failed to load locations for route:', err);
+                routeLocations = [];
+            }
+        }
+
+        function clearRoute() {
+            document.getElementById('routeSearch').value = '';
+            selectedRouteId = null;
+            routeTrains = [];
+
+            // Clear selected trains since no route is selected
+            selectedTrains = [];
+            renderSelectedTrains();
+
+            // Disable train input until a route is selected
+            const trainInput = document.getElementById('trainSearch');
+            trainInput.disabled = true;
+            trainInput.placeholder = 'Select a route first...';
+            trainInput.value = '';
+        }
+
+        function setupRouteTypeahead() {
+            const searchInput = document.getElementById('routeSearch');
+            const dropdown = document.getElementById('routeDropdown');
+
+            searchInput.addEventListener('input', function() {
+                selectedRouteId = null;
+                routeActiveIndex = -1;
+                const filtered = filterRoutes(searchInput.value.trim());
+                renderRouteDropdown(filtered);
+            });
+
+            searchInput.addEventListener('focus', function() {
+                const filtered = filterRoutes(searchInput.value.trim());
+                renderRouteDropdown(filtered);
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    routeActiveIndex = Math.min(routeActiveIndex + 1, items.length - 1);
+                    updateActiveItem(items, routeActiveIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    routeActiveIndex = Math.max(routeActiveIndex - 1, 0);
+                    updateActiveItem(items, routeActiveIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (routeActiveIndex >= 0 && items[routeActiveIndex]) {
+                        selectRoute(parseInt(items[routeActiveIndex].dataset.id), items[routeActiveIndex].dataset.name);
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.classList.remove('show');
+                    routeActiveIndex = -1;
+                }
+            });
+        }
+
+        // Train typeahead (multi-select) - filtered by selected route
+        function filterTrains(query) {
+            // Only show trains available for the selected route
+            if (!selectedRouteId || routeTrains.length === 0) {
+                return [];
+            }
+
+            // Filter out already selected trains
+            const selectedIds = selectedTrains.map(function(t) { return t.id; });
+            let available = routeTrains.filter(function(t) {
+                return !selectedIds.includes(t.id);
+            });
+
+            if (!query) return available.slice(0, 10);
+            const lowerQuery = query.toLowerCase();
+            return available.filter(function(t) {
+                return t.name.toLowerCase().includes(lowerQuery);
+            }).slice(0, 10);
+        }
+
+        function renderTrainDropdown(trains) {
+            const dropdown = document.getElementById('trainDropdown');
+            if (!selectedRouteId) {
+                dropdown.innerHTML = '<div class="typeahead-empty">Please select a route first</div>';
+            } else if (trains.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">No trains available for this route</div>';
+            } else {
+                dropdown.innerHTML = trains.map(function(train, index) {
+                    return '<div class="typeahead-item' + (index === trainActiveIndex ? ' active' : '') + '" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' + escapeHtml(train.name) + '</div>';
+                }).join('');
+
+                dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        addTrain(parseInt(item.dataset.id), item.dataset.name);
+                    });
+                });
+            }
+            dropdown.classList.add('show');
+        }
+
+        function addTrain(id, name) {
+            // Check if already added
+            if (selectedTrains.some(function(t) { return t.id === id; })) return;
+
+            selectedTrains.push({ id: id, name: name });
+            document.getElementById('trainSearch').value = '';
+            document.getElementById('trainDropdown').classList.remove('show');
+            trainActiveIndex = -1;
+            renderSelectedTrains();
+        }
+
+        function removeTrain(id) {
+            selectedTrains = selectedTrains.filter(function(t) { return t.id !== id; });
+            renderSelectedTrains();
+        }
+
+        function renderSelectedTrains() {
+            const container = document.getElementById('selectedTrains');
+            if (selectedTrains.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = selectedTrains.map(function(train) {
+                return '<span class="selected-train">' + escapeHtml(train.name) + '<button type="button" class="remove-train" onclick="removeTrain(' + train.id + ')">&times;</button></span>';
+            }).join('');
+        }
+
+        function setupTrainTypeahead() {
+            const searchInput = document.getElementById('trainSearch');
+            const dropdown = document.getElementById('trainDropdown');
+
+            searchInput.addEventListener('input', function() {
+                trainActiveIndex = -1;
+                const filtered = filterTrains(searchInput.value.trim());
+                renderTrainDropdown(filtered);
+            });
+
+            searchInput.addEventListener('focus', function() {
+                const filtered = filterTrains(searchInput.value.trim());
+                renderTrainDropdown(filtered);
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    trainActiveIndex = Math.min(trainActiveIndex + 1, items.length - 1);
+                    updateActiveItem(items, trainActiveIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    trainActiveIndex = Math.max(trainActiveIndex - 1, 0);
+                    updateActiveItem(items, trainActiveIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (trainActiveIndex >= 0 && items[trainActiveIndex]) {
+                        addTrain(parseInt(items[trainActiveIndex].dataset.id), items[trainActiveIndex].dataset.name);
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.classList.remove('show');
+                    trainActiveIndex = -1;
+                }
+            });
+        }
+
+        function updateActiveItem(items, activeIndex) {
+            items.forEach(function(item, index) {
+                if (index === activeIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            var wrapper = e.target.closest('.typeahead-wrapper');
+            if (!wrapper) {
+                document.getElementById('routeDropdown').classList.remove('show');
+                document.getElementById('trainDropdown').classList.remove('show');
+                routeActiveIndex = -1;
+                trainActiveIndex = -1;
+            }
+        });
+
+        function addEntry(action = '') {
+            const entry = {
+                id: ++entryIdCounter,
+                action: action,
+                action_id: TIMETABLE_ACTIONS_MAP[action] || null,
+                location: '',
+                platform: '',
+                time1: '',
+                time2: ''
+            };
+            entries.push(entry);
+            renderEntries();
+        }
+
+        function addQuickEntry(action) {
+            addEntry(action);
+        }
+
+        function removeEntry(id) {
+            entries = entries.filter(e => e.id !== id);
+            renderEntries();
+        }
+
+
+        function updateEntry(id, field, value) {
+            const entry = entries.find(e => e.id === id);
+            if (entry) {
+                entry[field] = value;
+                if (field === 'action') {
+                    entry.action_id = TIMETABLE_ACTIONS_MAP[value] || null;
+                }
+            }
+        }
+
+        var draggedIndex = null;
+
+        function renderEntries() {
+            const tbody = document.getElementById('entriesBody');
+            const noEntries = document.getElementById('noEntries');
+
+            if (entries.length === 0) {
+                tbody.innerHTML = '';
+                noEntries.style.display = 'block';
+                return;
+            }
+
+            noEntries.style.display = 'none';
+
+            tbody.innerHTML = entries.map((entry, index) => `
+                <tr data-index="${index}">
+                    <td class="drag-handle">\u2630 ${index + 1}</td>
+                    <td>
+                        <select class="action-select" onchange="updateEntry(${entry.id}, 'action', this.value)">
+                            <option value="">-- Select --</option>
+                            ${ACTIONS.map(a => `<option value="${a}" ${entry.action === a ? 'selected' : ''}>${a}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="location-select" onchange="updateEntry(${entry.id}, 'location', this.value)">
+                            <option value="">-- Select --</option>
+                            ${(() => {
+                                const currentLocInList = !entry.location || routeLocations.some(l => l.name === entry.location);
+                                const extraOpt = (!currentLocInList && entry.location) ? `<option value="${escapeHtml(entry.location)}" selected>${escapeHtml(entry.location)}</option>` : '';
+                                return extraOpt + routeLocations.map(loc => `<option value="${escapeHtml(loc.name)}" ${entry.location === loc.name ? 'selected' : ''}>${escapeHtml(loc.name)}</option>`).join('');
+                            })()}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="platform-input" value="${escapeHtml(entry.platform)}"
+                            onchange="updateEntry(${entry.id}, 'platform', this.value)"
+                            placeholder="Plat">
+                    </td>
+                    <td>
+                        <input type="text" class="time-input" value="${escapeHtml(entry.time1)}"
+                            onchange="updateEntry(${entry.id}, 'time1', formatTimeInput(this.value)); this.value = formatTimeInput(this.value);"
+                            pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$"
+                            title="Time format: HH:MM:SS (e.g., 08:30:00)"
+                            placeholder="00:00:00">
+                    </td>
+                    <td>
+                        <input type="text" class="time-input" value="${escapeHtml(entry.time2)}"
+                            onchange="updateEntry(${entry.id}, 'time2', formatTimeInput(this.value)); this.value = formatTimeInput(this.value);"
+                            pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$"
+                            title="Time format: HH:MM:SS (e.g., 08:30:00)"
+                            placeholder="00:00:00">
+                    </td>
+                    <td class="actions-cell">
+                        <button class="btn btn-danger btn-small" onclick="removeEntry(${entry.id})">&times;</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Add drag event listeners
+            setupDragListeners(tbody, entries, renderEntries);
+
+        }
+
+        function setupDragListeners(tbody, entriesArray, rerenderFn) {
+            var rows = tbody.querySelectorAll('tr[data-index]');
+            rows.forEach(function(row) {
+                var handle = row.querySelector('.drag-handle');
+                if (handle) {
+                    handle.addEventListener('mousedown', function() {
+                        row.setAttribute('draggable', 'true');
+                    });
+                }
+
+                row.addEventListener('dragstart', function(e) {
+                    draggedIndex = parseInt(this.dataset.index);
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    var targetIndex = parseInt(this.dataset.index);
+                    rows.forEach(function(r) {
+                        r.classList.remove('drag-over-above', 'drag-over-below');
+                    });
+                    if (draggedIndex === null || targetIndex === draggedIndex) return;
+                    if (targetIndex < draggedIndex) {
+                        this.classList.add('drag-over-above');
+                    } else {
+                        this.classList.add('drag-over-below');
+                    }
+                });
+
+                row.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over-above', 'drag-over-below');
+                });
+
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    var targetIndex = parseInt(this.dataset.index);
+                    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+                    var item = entriesArray.splice(draggedIndex, 1)[0];
+                    entriesArray.splice(targetIndex, 0, item);
+                    draggedIndex = null;
+                    rerenderFn();
+                });
+
+                row.addEventListener('dragend', function() {
+                    draggedIndex = null;
+                    rows.forEach(function(r) {
+                        r.setAttribute('draggable', 'false');
+                        r.classList.remove('dragging', 'drag-over-above', 'drag-over-below');
+                    });
+                });
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Validate time format HH:MM:SS (00:00:00 - 23:59:59)
+        function isValidTimeFormat(time) {
+            if (!time) return true; // Empty is allowed (optional field)
+            const pattern = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+            return pattern.test(time);
+        }
+
+        // Format time input to HH:MM:SS
+        function formatTimeInput(value) {
+            if (!value) return '';
+            // If already in correct format, return as-is
+            if (/^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/.test(value)) {
+                // Pad hours if needed
+                const parts = value.split(':');
+                return parts[0].padStart(2, '0') + ':' + parts[1] + ':' + parts[2];
+            }
+            return value;
+        }
+
+        function showStatus(message, isError = false) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = 'status-message ' + (isError ? 'error' : 'success');
+            window.scrollTo(0, 0);
+        }
+
+        function clearAll() {
+            if (!confirm('Clear all entries and start over?')) return;
+            entries = [];
+            entryIdCounter = 0;
+            selectedTrains = [];
+            selectedRouteId = null;
+            routeTrains = [];
+            document.getElementById('serviceName').value = '';
+            document.getElementById('serviceType').value = 'passenger';
+            document.getElementById('routeSearch').value = '';
+            document.getElementById('trainSearch').value = '';
+
+            // Disable train input until a route is selected
+            const trainInput = document.getElementById('trainSearch');
+            trainInput.disabled = true;
+            trainInput.placeholder = 'Select a route first...';
+
+            renderSelectedTrains();
+            renderEntries();
+        }
+
+        async function createTimetable() {
+            const serviceName = document.getElementById('serviceName').value.trim();
+
+            if (!serviceName) {
+                showStatus('Please enter a service name.', true);
+                return;
+            }
+
+            if (entries.length === 0) {
+                showStatus('Please add at least one entry.', true);
+                return;
+            }
+
+            // Validate entries have actions
+            const invalidEntries = entries.filter(e => !e.action);
+            if (invalidEntries.length > 0) {
+                showStatus('All entries must have an action selected.', true);
+                return;
+            }
+
+            // Validate time format (HH:MM:SS)
+            const invalidTimeEntries = entries.filter(e =>
+                (e.time1 && !isValidTimeFormat(e.time1)) ||
+                (e.time2 && !isValidTimeFormat(e.time2))
+            );
+            if (invalidTimeEntries.length > 0) {
+                showStatus('Times must be in format HH:MM:SS (e.g., 08:30:00)', true);
+                return;
+            }
+
+            // Build the request body
+            const serviceType = document.getElementById('serviceType').value;
+            const serviceCode = document.getElementById('service').value.trim() || null;
+            const body = {
+                service_name: serviceName,
+                service: serviceCode,
+                service_type: serviceType,
+                entries: entries.map(e => ({
+                    action: e.action,
+                    action_id: TIMETABLE_ACTIONS_MAP[e.action] || null,
+                    location: e.location,
+                    platform: e.platform,
+                    time1: e.time1,
+                    time2: e.time2,
+                    details: '',
+                    latitude: '',
+                    longitude: ''
+                }))
+            };
+
+            const tonnageVal = document.getElementById('tonnage').value.trim();
+            const carCountVal = document.getElementById('carCount').value.trim();
+            const trainLengthVal = document.getElementById('trainLength').value.trim();
+            const startTimeVal = document.getElementById('startTime').value.trim();
+            const durationVal = document.getElementById('duration').value.trim();
+            if (tonnageVal) body.tonnage = parseFloat(tonnageVal);
+            if (carCountVal) body.car_count = parseInt(carCountVal, 10);
+            if (trainLengthVal) body.train_length = parseFloat(trainLengthVal);
+            if (startTimeVal) body.start_time = startTimeVal;
+            if (durationVal) body.duration = durationVal;
+            const boundVal = document.getElementById('bound').value || null;
+            if (boundVal) body.bound = boundVal;
+            const currentServiceNameVal = document.getElementById('currentServiceName').value.trim() || null;
+            if (currentServiceNameVal) body.current_service_name = currentServiceNameVal;
+            body.conductor_compatible = document.getElementById('conductorCompatible').checked;
+
+            if (selectedRouteId) body.route_id = selectedRouteId;
+            if (selectedTrains.length > 0) {
+                body.train_ids = selectedTrains.map(function(t) { return t.id; });
+            }
+
+            try {
+                const response = await fetch('/api/timetables', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    showStatus('Error: ' + result.error, true);
+                    return;
+                }
+
+                showStatus('Timetable created successfully! Redirecting...');
+
+                // Redirect to the new timetable
+                setTimeout(() => {
+                    window.location.href = `/timetables/${result.id}`;
+                }, 1500);
+
+            } catch (err) {
+                console.error('Failed to create timetable:', err);
+                showStatus('Failed to create timetable: ' + err.message, true);
+            }
+        }
+
+        // Theme and color scheme initialization
+        (function() {
+            var theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+
+            var colorScheme = localStorage.getItem('colorScheme');
+            if (colorScheme && colorScheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', colorScheme);
+            }
+        })();
+
+        // Initialize
+        async function init() {
+            await Promise.all([loadRoutes(), loadTrains()]);
+            setupRouteTypeahead();
+            setupTrainTypeahead();
+            renderEntries();
+
+            // Disable train input until a route is selected
+            const trainInput = document.getElementById('trainSearch');
+            trainInput.disabled = true;
+            trainInput.placeholder = 'Select a route first...';
+
+            // Check for URL params to pre-fill route and train
+            const urlParams = new URLSearchParams(window.location.search);
+            const prefilledRouteId = urlParams.get('route_id');
+            const prefilledTrainId = urlParams.get('train_id');
+
+            if (prefilledRouteId) {
+                // Find the route and select it
+                const route = allRoutes.find(function(r) { return r.id == prefilledRouteId; });
+                if (route) {
+                    await selectRoute(route.id, route.name);
+
+                    // Now check for train if provided
+                    if (prefilledTrainId) {
+                        // Find the train in route trains
+                        const train = routeTrains.find(function(t) { return t.id == prefilledTrainId; });
+                        if (train) {
+                            addTrain(train.id, train.name);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Initialize after i18n is ready
+        if (typeof i18n !== 'undefined' && i18n.init) {
+            i18n.init().then(function() {
+                init();
+            });
+        } else {
+            init();
+        }
+    </script>
+    <script src="/js/navbar.js"></script>
+</body>
+</html>

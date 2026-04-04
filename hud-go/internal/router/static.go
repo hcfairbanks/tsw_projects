@@ -1,0 +1,108 @@
+package router
+
+import (
+	"io/fs"
+	"net/http"
+	"os"
+	"path/filepath"
+
+	"github.com/go-chi/chi/v5"
+
+	"hud-go/internal/config"
+	"hud-go/views"
+)
+
+// servePage reads the named file from the embedded FS and writes it as text/html.
+func servePage(file string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		data, err := fs.ReadFile(views.Files, file)
+		if err != nil {
+			http.Error(w, "page not found", http.StatusNotFound)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Write(data)
+	}
+}
+
+// registerStaticRoutes registers all page routes and static asset routes.
+func registerStaticRoutes(r *chi.Mux) {
+	// Favicon - return empty 204 to avoid 404 noise
+	r.Get("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	// Named page routes
+	r.Get("/", servePage("huds/start.html"))
+	r.Get("/instructions", servePage("index.html"))
+	r.Get("/extract", servePage("extract.html"))
+	r.Get("/huds", servePage("huds/index.html"))
+	r.Get("/experiment", servePage("huds/experiment.html"))
+	r.Get("/tablet", servePage("huds/tablet.html"))
+	r.Get("/mobile", servePage("huds/mobile.html"))
+	r.Get("/start", servePage("huds/start.html"))
+	r.Get("/find-timetable", servePage("huds/start-mobile.html"))
+	r.Get("/start-mobile", servePage("huds/start-mobile.html"))
+	r.Get("/desktop", servePage("huds/desktop.html"))
+	r.Get("/data", servePage("data.html"))
+	r.Get("/map", servePage("map.html"))
+	r.Get("/weather", servePage("weather.html"))
+	r.Get("/record", servePage("record-map.html"))
+	r.Get("/settings", servePage("settings.html"))
+	r.Get("/api-subscriptions", servePage("api-subscriptions.html"))
+	r.Get("/recording-settings", servePage("recording-settings.html"))
+	r.Get("/analysis", servePage("analysis/index.html"))
+	r.Get("/locations", servePage("locations/index.html"))
+
+	// Dynamic page routes - routes
+	r.Get("/routes", servePage("routes/index.html"))
+	r.Get("/routes/{id}", servePage("routes/show.html"))
+	r.Get("/routes/{id}/edit", servePage("routes/show.html"))
+
+	// Dynamic page routes - trains
+	r.Get("/trains", servePage("trains/index.html"))
+	r.Get("/trains/{id}", servePage("trains/show.html"))
+	r.Get("/trains/{id}/edit", servePage("trains/show.html"))
+
+	// Dynamic page routes - timetables
+	r.Get("/timetables", servePage("timetables/index.html"))
+	r.Get("/timetables/create", servePage("timetables/create.html"))
+	r.Get("/timetables/{id}", servePage("timetables/show.html"))
+	r.Get("/timetables/{id}/view", servePage("timetables/view.html"))
+
+	// Dynamic page routes - countries
+	r.Get("/countries", servePage("countries/index.html"))
+	r.Get("/countries/{id}", servePage("countries/show.html"))
+
+	// Dynamic page routes - weather presets
+	r.Get("/weather-presets", servePage("weather-presets/index.html"))
+	r.Get("/weather-presets/{id}", servePage("weather-presets/show.html"))
+
+	// Static assets from embedded FS
+	cssFS, _ := fs.Sub(views.Files, "css")
+	r.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.FS(cssFS))))
+
+	jsFS, _ := fs.Sub(views.Files, "js")
+	r.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.FS(jsFS))))
+
+	localesFS, _ := fs.Sub(views.Files, "locales")
+	r.Handle("/locales/*", http.StripPrefix("/locales/", http.FileServer(http.FS(localesFS))))
+
+	// Images: try user-uploaded images from appDir first, fall back to embedded
+	r.Handle("/images/*", http.StripPrefix("/images/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Check appDir/images/ for user-uploaded images first
+		appDirPath := filepath.Join(config.AppDir(), "images", r.URL.Path)
+		if _, err := os.Stat(appDirPath); err == nil {
+			http.ServeFile(w, r, appDirPath)
+			return
+		}
+
+		// Fall back to embedded FS
+		imagesFS, err := fs.Sub(views.Files, "images")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		http.FileServer(http.FS(imagesFS)).ServeHTTP(w, r)
+	})))
+}

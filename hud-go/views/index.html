@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSW HUD PROJECT</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        /* Nav styles now in theme.css */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+        .btn-danger {
+            background: var(--color-error);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #d63850;
+        }
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .btn-secondary:hover {
+            background: var(--accent-hover);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background: var(--bg-tertiary);
+            color: var(--accent-color);
+        }
+        tr:hover {
+            background: var(--bg-primary);
+        }
+        .actions {
+            white-space: nowrap;
+        }
+        .actions button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+        }
+        #editForm {
+            display: none;
+        }
+        #editForm.active {
+            display: block;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="app.title">TSW HUD PROJECT</h1>
+
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <h2 data-i18n="home.welcome">Welcome</h2>
+        <p data-i18n="home.welcomeMessage">Use the navigation above to manage routes and extract timetables from Train Sim World.</p>
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="card">
+        <h2 data-i18n="home.gettingStarted">Getting Started Guide</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px;" data-i18n="home.gettingStartedDesc">Learn how to use the TSW HUD PROJECT to track your train journeys.</p>
+
+        <!-- Instruction 1: Extract Timetable from Images -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('ocr')">
+                <span class="instruction-number">1</span>
+                <h3 data-i18n="home.instruction1Title">Extract Timetable from Images (OCR)</h3>
+                <span class="instruction-toggle" id="ocr-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="ocr-content">
+                <p class="instruction-intro" data-i18n="instructions.ocrIntro">Use OCR to automatically extract timetable data from Train Sim World screenshots. You need to capture <strong>8 or more images</strong> in a specific order.</p>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 1: Capture Screenshots in TSW</h4>
+                    <p data-i18n="instructions.ocrCaptureDesc">In Train Sim World, capture these screenshots <strong>in order</strong>. Name them so they sort alphabetically (e.g., 1.png, 2.png, ... or use any names that sort correctly).</p>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage1Title">Image 1: Route Name</h4>
+                        <p data-i18n="instructions.ocrImage1Desc">The route name from the service selection screen.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image">
+                                <img src="/images/instructions/ocr_1_route.png" alt="Route Name" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage1Caption">Example: Route name "Boston Sprinter"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage2Title">Image 2: Service Name</h4>
+                        <p data-i18n="instructions.ocrImage2Desc">The service header showing the full service name, start time, and duration.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image">
+                                <img src="/images/instructions/ocr_2_service.png" alt="Service Name" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage2Caption">Example: "MBTA Providence #815 (Boston - Providence)"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage3Title">Image 3: Start Time</h4>
+                        <p data-i18n="instructions.ocrImage3Desc">The start time value (HH:MM format).</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image small-value">
+                                <img src="/images/instructions/ocr_3_start_time.png" alt="Start Time" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage3Caption">Example: Start time "14:28"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage4Title">Image 4: Duration</h4>
+                        <p data-i18n="instructions.ocrImage4Desc">The service duration (HH:MM format).</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image small-value">
+                                <img src="/images/instructions/ocr_4_duration.png" alt="Duration" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage4Caption">Example: Duration "01:06"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage5Title">Image 5: Tonnage</h4>
+                        <p data-i18n="instructions.ocrImage5Desc">The train tonnage value from the level info bar.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image small-value">
+                                <img src="/images/instructions/ocr_5_tonnage.png" alt="Tonnage" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage5Caption">Example: Tonnage "461.9"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage6Title">Image 6: Car Count</h4>
+                        <p data-i18n="instructions.ocrImage6Desc">The number of cars in the consist.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image small-value">
+                                <img src="/images/instructions/ocr_6_car_count.png" alt="Car Count" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage6Caption">Example: Car count "6"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage7Title">Image 7: Train Length</h4>
+                        <p data-i18n="instructions.ocrImage7Desc">The train length in meters from the level info bar.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image small-value">
+                                <img src="/images/instructions/ocr_7_train_length.png" alt="Train Length" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage7Caption">Example: Train length "148.7"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instruction-step" style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; color: var(--text-secondary);" data-i18n="instructions.ocrImage8Title">Images 8+: Timetable Pages</h4>
+                        <p data-i18n="instructions.ocrImage8Desc">Screenshot each page of the timetable showing the stops, actions, and times. Capture as many pages as needed to cover the full timetable.</p>
+                        <div class="instruction-images">
+                            <div class="instruction-image">
+                                <img src="/images/instructions/ocr_8_timetable_1.png" alt="Timetable Page 1" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage8Caption1">Example: Timetable page 1 - WAIT FOR SERVICE, stops, and times</p>
+                            </div>
+                            <div class="instruction-image">
+                                <img src="/images/instructions/ocr_9_timetable_2.png" alt="Timetable Page 2" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                                <p class="image-caption" data-i18n="instructions.ocrImage8Caption2">Example: Timetable page 2 - continuation of stops</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 2: Upload Images</h4>
+                    <ol>
+                        <li data-i18n="instructions.ocrUploadStep1">Go to the <a href="/timetables">Timetables</a> page or a <a href="/trains">Train</a> detail page</li>
+                        <li data-i18n="instructions.ocrUploadStep2">In the "Extract from Images" section, click or drag your screenshots into the upload area</li>
+                        <li data-i18n="instructions.ocrUploadStep3">Make sure files are named so they sort in the correct order (1.png, 2.png, ... or alphabetically)</li>
+                        <li data-i18n="instructions.ocrUploadStep4">The system will automatically process the images using OCR</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 3: Review and Edit Extracted Data</h4>
+                    <ol>
+                        <li data-i18n="instructions.ocrReviewStep1">The route will be auto-matched and locations will populate as dropdowns</li>
+                        <li data-i18n="instructions.ocrReviewStep2">Start time, duration, tonnage, car count, and train length will appear in the Level Info bar</li>
+                        <li data-i18n="instructions.ocrReviewStep3">Review the extracted timetable entries in the table</li>
+                        <li data-i18n="instructions.ocrReviewStep4">Click on any cell to edit if the OCR made mistakes</li>
+                        <li data-i18n="instructions.ocrReviewStep5">Check that times are in HH:MM:SS format (e.g., 14:28:00)</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 4: Complete the Timetable</h4>
+                    <ol>
+                        <li data-i18n="instructions.ocrCompleteStep1">Enter or verify the Service Name</li>
+                        <li data-i18n="instructions.ocrCompleteStep2">Confirm the Route was correctly matched (or select one manually)</li>
+                        <li data-i18n="instructions.ocrCompleteStep3">Select at least one Train for this service</li>
+                        <li data-i18n="instructions.ocrCompleteStep4">Click "Create Timetable" to save</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-warning">
+                    <strong data-i18n="instructions.important">Important:</strong> <span data-i18n="instructions.ocrImportantNote">The first location and first platform are not included in the in-game timetable screenshots and will need to be added manually.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 2: Create Timetable Manually -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('manual')">
+                <span class="instruction-number">2</span>
+                <h3 data-i18n="home.instruction2Title">Create Timetable Manually</h3>
+                <span class="instruction-toggle" id="manual-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="manual-content">
+                <p class="instruction-intro" data-i18n="home.instruction2Intro">Build a timetable from scratch by entering each stop manually.</p>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 1: <span data-i18n="instructions.startNewTimetable">Start a New Timetable</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.startNewTimetableStep1">Go to the Timetables page</li>
+                        <li data-i18n="instructions.startNewTimetableStep2">Click the "+ Create New Timetable" button</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 2: <span data-i18n="instructions.enterBasicInfo">Enter Basic Information</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.enterBasicInfoStep1">Enter the Service Name (e.g., "1C84 London Paddington to Penzance")</li>
+                        <li data-i18n="instructions.enterBasicInfoStep2">Select the Route from the dropdown</li>
+                        <li data-i18n="instructions.enterBasicInfoStep3">Select one or more Trains that can run this service</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 3: <span data-i18n="instructions.addEntries">Add Timetable Entries</span></h4>
+                    <p data-i18n="instructions.addEntriesDesc">Click "+ Add Entry" to add stops. For each entry:</p>
+                    <ul>
+                        <li data-i18n="instructions.addEntriesAction">Action: Select the type (WAIT FOR SERVICE, STOP AT LOCATION, LOAD PASSENGERS, etc.)</li>
+                        <li data-i18n="instructions.addEntriesLocation">Location: Enter the station name</li>
+                        <li data-i18n="instructions.addEntriesPlatform">Platform: Enter the platform number if applicable</li>
+                        <li data-i18n="instructions.addEntriesTime1">Time 1: Arrival time (HH:MM:SS format)</li>
+                        <li data-i18n="instructions.addEntriesTime2">Time 2: Departure time (HH:MM:SS format)</li>
+                    </ul>
+                    <p data-i18n="instructions.addEntriesQuickAdd">Use the "Quick Add Common Entries" buttons to quickly add preset actions.</p>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 4: <span data-i18n="instructions.saveTimetable">Save the Timetable</span></h4>
+                    <p data-i18n="instructions.saveTimetableDesc">Click "Create Timetable" when all entries are added.</p>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.tipEditLater">You can always edit the timetable later by clicking on it in the timetables list.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 3: Import from JSON -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('import')">
+                <span class="instruction-number">3</span>
+                <h3 data-i18n="home.instruction3Title">Import Timetable from JSON</h3>
+                <span class="instruction-toggle" id="import-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="import-content">
+                <p class="instruction-intro" data-i18n="home.instruction3Intro">Import previously exported timetables or share timetables with others.</p>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.importingTimetable">Importing a Timetable</h4>
+                    <ol>
+                        <li data-i18n="instructions.importingStep1">Go to the Timetables page</li>
+                        <li data-i18n="instructions.importingStep2">In the "Import Timetable" section, click or drag a JSON file into the upload area</li>
+                        <li data-i18n="instructions.importingStep3">The system will validate and import the timetable automatically</li>
+                        <li data-i18n="instructions.importingStep4">You'll be redirected to the timetable view on success</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.exportingTimetable">Exporting a Timetable</h4>
+                    <ol>
+                        <li data-i18n="instructions.exportingStep1">Open any timetable from the list</li>
+                        <li data-i18n="instructions.exportingStep2">Click the "Export JSON" button</li>
+                        <li data-i18n="instructions.exportingStep3">Save the JSON file to share or backup</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.tipJsonExport">JSON exports include all timetable data including coordinates, making them perfect for backups or sharing complete routes.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 4: Record Coordinates -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('record')">
+                <span class="instruction-number">4</span>
+                <h3 data-i18n="home.instruction4Title">Record Timetable Coordinates</h3>
+                <span class="instruction-toggle" id="record-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="record-content">
+                <p class="instruction-intro" data-i18n="home.instruction4Intro">Record GPS coordinates for your timetable by running the route in Train Sim World while connected to the HUD Project.</p>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 1: <span data-i18n="instructions.openRecordMap">Open the Record Map</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.openRecordMapStep1">Go to the Record Map page</li>
+                        <li data-i18n="instructions.openRecordMapStep2">Select your Route from the dropdown</li>
+                        <li data-i18n="instructions.openRecordMapStep4">Select the Train</li>
+                        <li data-i18n="instructions.openRecordMapStep5">Select the Timetable you want to record</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 2: <span data-i18n="instructions.startRecording">Start Recording</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.startRecordingStep1">Start Train Sim World and load your service</li>
+                        <li data-i18n="instructions.startRecordingStep2">Click the "Start" button on the Record Map page</li>
+                        <li data-i18n="instructions.startRecordingStep3">Begin driving your route - coordinates will be recorded automatically</li>
+                        <li data-i18n="instructions.startRecordingStep4">The map will show your path in real-time</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 3: <span data-i18n="instructions.saveStationPositions">Save Station Positions</span></h4>
+                    <p data-i18n="instructions.saveStationPositionsDesc">As you arrive at each station:</p>
+                    <ol>
+                        <li data-i18n="instructions.saveStationPositionsStep1">Select the station from the "Select Station" dropdown</li>
+                        <li data-i18n="instructions.saveStationPositionsStep2">Click "Save Position" to record the coordinates</li>
+                        <li data-i18n="instructions.saveStationPositionsStep3">The station will be marked with a green marker on the map</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 4: <span data-i18n="instructions.completeRecording">Complete Recording</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.completeRecordingStep1">When finished, click "Save" to process and save all data</li>
+                        <li data-i18n="instructions.completeRecordingStep2">The recording will be processed and saved to the database</li>
+                        <li data-i18n="instructions.completeRecordingStep3">Click "Reset" to clear and start fresh if needed</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.recordingModes">Recording Modes:</strong><br>
+                    - <strong data-i18n="instructions.automatic">Automatic:</strong> <span data-i18n="instructions.automaticDesc">Recording auto-stops after 2 minutes of no movement</span><br>
+                    - <strong data-i18n="instructions.manual">Manual:</strong> <span data-i18n="instructions.manualDesc">Recording continues until you click Save</span>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.tipPause">Use the "Pause" button if you need to take a break during recording. Resume when ready to continue.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 5: Automatically Record Coordinates -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('auto-record')">
+                <span class="instruction-number">5</span>
+                <h3 data-i18n="home.instruction5Title">Automatically Record Timetable Coordinates</h3>
+                <span class="instruction-toggle" id="auto-record-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="auto-record-content">
+                <p class="instruction-intro" data-i18n="home.instruction5Intro">Automatically record coordinates for your timetable entries while the AI drives the route for you. This explanation sounds more complicated than it is - a video tutorial will be added soon.</p>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 1: <span data-i18n="instructions.inGameSetup">In Game Setup</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.inGameSetupStep1">Start Train Sim World</li>
+                        <li data-i18n="instructions.inGameSetupStep2">Select your route</li>
+                        <li data-i18n="instructions.inGameSetupStep3">Select your train</li>
+                        <li data-i18n="instructions.inGameSetupStep4">Take a screenshot of the service name</li>
+                        <li data-i18n="instructions.inGameSetupStep5">Start the timetable</li>
+                        <li data-i18n="instructions.inGameSetupStep6">Do not touch any train controls</li>
+                        <li data-i18n="instructions.inGameSetupStep7">Navigate to the schedule screen</li>
+                        <li data-i18n="instructions.inGameSetupStep8">Take screenshots of the schedule (multiple if needed)</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 2: <span data-i18n="instructions.inTheApp">In the App</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.inTheAppStep1">Start the server</li>
+                        <li data-i18n="instructions.inTheAppStep2">Select or create your route</li>
+                        <li data-i18n="instructions.inTheAppStep3">Select or create your train</li>
+                        <li data-i18n="instructions.inTheAppStep4">Upload your screenshots to the Timetables page</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-warning">
+                    <strong data-i18n="instructions.important">Important:</strong> <span data-i18n="instructions.importantScreenshotOrder">The order of screenshots matters! They need to be in chronological order. If your screenshots have timestamps and you followed the flow above, you will be fine.</span>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 3: <span data-i18n="instructions.completeTimetableData">Complete Timetable Data</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.completeTimetableDataStep1">Go to Route Map to get the first location name and platform number</li>
+                        <li data-i18n="instructions.completeTimetableDataStep2">Add the location name and platform number to the timetable</li>
+                        <li data-i18n="instructions.completeTimetableDataStep3">Review and confirm the data - the "Service Name" often has OCR errors, but timetable data is usually accurate</li>
+                        <li data-i18n="instructions.completeTimetableDataStep4">Click "Create Timetable"</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 4: <span data-i18n="instructions.startAutoRecording">Start Auto Recording</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.startAutoRecordingStep1">Go to the Recording page</li>
+                        <li data-i18n="instructions.startAutoRecordingStep2">Select your route, train, and timetable</li>
+                        <li data-i18n="instructions.startAutoRecordingStep3">Click "Record"</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 5: <span data-i18n="instructions.enableAIDriver">Enable AI Driver (In Game)</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.enableAIDriverStep1">Use God Mode to access the console commands</li>
+                        <li data-i18n="instructions.enableAIDriverStep2">Enable the "Relinquish Service" command from the God Mode menu</li>
+                        <li data-i18n="instructions.enableAIDriverStep3">Sit in the copilot's seat</li>
+                        <li data-i18n="instructions.enableAIDriverStep4">Come back when automatic recording is complete</li>
+                    </ol>
+                    <div class="instruction-images">
+                        <div class="instruction-image">
+                            <img src="/images/instructions/Screenshot 2026-01-24 130437.png" alt="God Mode - Relinquish Service" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption">God Mode menu showing the "Relinquish Service" option</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.stopDetection">How Stop Detection Works:</strong><br>
+                    - <span data-i18n="instructions.stopDetectionDesc1">Each stop (including the first) must be recorded stopped for a minimum of 30 seconds to be identified as a stop</span><br>
+                    - <span data-i18n="instructions.stopDetectionDesc2">If the train doesn't move for around 5 minutes (usually at the last stop), the server will automatically stop recording, identify all stops based on timing, and save everything to the database</span>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.benefit">Benefit:</strong> <span data-i18n="instructions.benefitDesc">This method lets you enjoy all the data that comes from a full route recording without having to sit through the entire journey!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 6: Tracking Map -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('tracking')">
+                <span class="instruction-number">6</span>
+                <h3 data-i18n="home.instruction6Title">Using the Tracking Map</h3>
+                <span class="instruction-toggle" id="tracking-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="tracking-content">
+                <p class="instruction-intro" data-i18n="home.instruction6Intro">View your live train position on the map while playing Train Sim World.</p>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 1: <span data-i18n="instructions.loadTimetable">Load a Timetable</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.loadTimetableStep1">Go to the Tracking Map page</li>
+                        <li data-i18n="instructions.loadTimetableStep2">In the "Load Timetable" section, select your Route</li>
+                        <li data-i18n="instructions.loadTimetableStep3">Select the Train</li>
+                        <li data-i18n="instructions.loadTimetableStep4">Select a Timetable (only timetables with recorded coordinates will appear)</li>
+                        <li data-i18n="instructions.loadTimetableStep5">Click "Load Timetable"</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 2: <span data-i18n="instructions.viewLiveTracking">View Live Tracking</span></h4>
+                    <p data-i18n="instructions.viewLiveTrackingDesc">Once connected to Train Sim World:</p>
+                    <ul>
+                        <li data-i18n="instructions.viewLiveTrackingOrange">Your train position appears as an orange marker</li>
+                        <li data-i18n="instructions.viewLiveTrackingBlue">The route path is shown as a blue line</li>
+                        <li data-i18n="instructions.viewLiveTrackingGreen">Station stops are marked with green circles</li>
+                        <li data-i18n="instructions.viewLiveTrackingInfo">The info panel shows your current speed and direction</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 3: <span data-i18n="instructions.timetableInfo">Timetable Information</span></h4>
+                    <p data-i18n="instructions.timetableInfoDesc">The timetable display shows:</p>
+                    <ul>
+                        <li data-i18n="instructions.timetableInfoGameTime">Game Time: Current in-game time</li>
+                        <li data-i18n="instructions.timetableInfoNextStop">Next Stop Time: Scheduled time for the next station</li>
+                        <li data-i18n="instructions.timetableInfoDistance">Distance: Distance remaining to the next stop</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4><span data-i18n="instructions.step">Step</span> 4: <span data-i18n="instructions.followMode">Follow Mode</span></h4>
+                    <ol>
+                        <li data-i18n="instructions.followModeStep1">Click "Follow Train" to keep the map centered on your position</li>
+                        <li data-i18n="instructions.followModeStep2">Click "Stop Following" to browse the map freely</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.tipOpenHUD">Click "Open HUD" to open a dedicated heads-up display window that you can position alongside your game.</span>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.mapLegend">Map Legend:</strong><br>
+                    - <span style="color: #0066ff;" data-i18n="instructions.blueLine">Blue line</span> = <span data-i18n="instructions.routePath">Route path</span><br>
+                    - <span style="color: #00cc66;" data-i18n="instructions.greenCircles">Green circles</span> = <span data-i18n="instructions.timetableStations">Timetable stations</span><br>
+                    - <span style="color: #ffa500;" data-i18n="instructions.orangeMarker">Orange marker</span> = <span data-i18n="instructions.liveTrainPosition">Your live train position</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 7: Automated Data Collection (new_method.py) -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('new-method')">
+                <span class="instruction-number">7</span>
+                <h3 data-i18n="home.instruction7Title">Automated Data Collection (new_method.py)</h3>
+                <span class="instruction-toggle" id="new-method-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="new-method-content">
+                <p class="instruction-intro" data-i18n="instructions.newMethodIntro">Automatically capture all service data for a route using AI-powered screen reading. This bot uses the Claude API to navigate Train Sim World menus and extract timetable data without manual screenshots.</p>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.newMethodPrerequisites">Prerequisites</h4>
+                    <ol>
+                        <li data-i18n="instructions.newMethodPrereq1">Anthropic API key set as environment variable (ANTHROPIC_API_KEY)</li>
+                        <li data-i18n="instructions.newMethodPrereq2">TSW HUD server running (use <code>run.bat --no-subscriptions</code>)</li>
+                        <li data-i18n="instructions.newMethodPrereq3">Train Sim World installed and configured</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.newMethodHowItWorks">How It Works</h4>
+                    <p data-i18n="instructions.newMethodHowItWorksDesc">The bot operates in 4 phases:</p>
+                    <ol>
+                        <li><strong data-i18n="instructions.newMethodPhase1">Setup Phase:</strong> <span data-i18n="instructions.newMethodPhase1Desc">Launches TSW, navigates to the route selection screen, and selects the configured route</span></li>
+                        <li><strong data-i18n="instructions.newMethodPhase2">Page Capture Phase:</strong> <span data-i18n="instructions.newMethodPhase2Desc">Scrolls through all service pages and captures screenshots of each one</span></li>
+                        <li><strong data-i18n="instructions.newMethodPhase3">Service Discovery Phase:</strong> <span data-i18n="instructions.newMethodPhase3Desc">Uses Claude API to analyze captured pages and identify all service names and positions</span></li>
+                        <li><strong data-i18n="instructions.newMethodPhase4">Service Processing Phase:</strong> <span data-i18n="instructions.newMethodPhase4Desc">Clicks each service, captures the timetable data, and uploads it to the HUD database</span></li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.newMethodCommands">Commands</h4>
+                    <p data-i18n="instructions.newMethodCommandsDesc">Run from the <code>bot/</code> directory:</p>
+                    <ul>
+                        <li><code>python new_method.py</code> — <span data-i18n="instructions.newMethodCmd1">Full run: launches game, captures all services</span></li>
+                        <li><code>python new_method.py --no-launch</code> — <span data-i18n="instructions.newMethodCmd2">Skip game launch (game already running and on service screen)</span></li>
+                        <li><code>python new_method.py "Train Name" 1 110</code> — <span data-i18n="instructions.newMethodCmd3">Resume from a specific train, train number, and service number</span></li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.newMethodConfiguration">Configuration</h4>
+                    <p data-i18n="instructions.newMethodConfigurationDesc">Before running, update <code>ROUTE_NAME</code> in <code>bot/config.py</code> to match your target route. Progress is saved automatically to <code>progress_new_method.json</code>, so the bot can resume if interrupted.</p>
+                </div>
+
+                <div class="instruction-warning">
+                    <strong data-i18n="instructions.important">Important:</strong> <span data-i18n="instructions.newMethodWarning">Do not move the mouse or interact with the computer while the bot is running. It controls the mouse and keyboard to navigate game menus.</span>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.newMethodTip">Use <code>--no-launch</code> when the game is already open to save time. The bot will start from the service selection screen.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 8: Screen Calibration (calibrate.py) -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('calibrate')">
+                <span class="instruction-number">8</span>
+                <h3 data-i18n="home.instruction8Title">Screen Calibration (calibrate.py)</h3>
+                <span class="instruction-toggle" id="calibrate-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="calibrate-content">
+                <p class="instruction-intro" data-i18n="instructions.calibrateIntro">Calibrate the bot's screen coordinates for your display resolution. This interactive 21-step tool captures reference images and measures pixel positions for all UI elements the bot needs to click.</p>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.calibrateWhenNeeded">When Is Calibration Needed?</h4>
+                    <ul>
+                        <li data-i18n="instructions.calibrateWhen1">First time setting up the bot on a new computer</li>
+                        <li data-i18n="instructions.calibrateWhen2">After changing your display resolution or scaling</li>
+                        <li data-i18n="instructions.calibrateWhen3">After a Train Sim World update that changes the UI layout</li>
+                        <li data-i18n="instructions.calibrateWhen4">If the bot is clicking in wrong positions</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.calibrateCommands">Commands</h4>
+                    <p data-i18n="instructions.calibrateCommandsDesc">Run from the <code>bot/</code> directory:</p>
+                    <ul>
+                        <li><code>python calibrate.py</code> — <span data-i18n="instructions.calibrateCmd1">Run all 21 calibration steps</span></li>
+                        <li><code>python calibrate.py --step 5</code> — <span data-i18n="instructions.calibrateCmd2">Run only step 5</span></li>
+                        <li><code>python calibrate.py --from 10</code> — <span data-i18n="instructions.calibrateCmd3">Start from step 10 onward</span></li>
+                        <li><code>python calibrate.py --list</code> — <span data-i18n="instructions.calibrateCmd4">List all calibration steps</span></li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.calibrateSteps">Calibration Steps</h4>
+                    <p data-i18n="instructions.calibrateStepsDesc">The tool guides you through capturing each game screen. Here are some of the key reference images it captures:</p>
+
+                    <div class="instruction-images">
+                        <div class="instruction-image">
+                            <img src="/images/instructions/to_the_trains.png" alt="To the Trains" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgTrains">Main menu "To the Trains" button</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/choose_a_route.png" alt="Choose a Route" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgRoute">Route selection screen</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/timetable.png" alt="Timetable" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgTimetable">Timetable selection</p>
+                        </div>
+                    </div>
+
+                    <div class="instruction-images">
+                        <div class="instruction-image">
+                            <img src="/images/instructions/driver_1.png" alt="Driver" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgDriver">Driver selection hover state</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/get_started_1.png" alt="Get Started" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgGetStarted">Get Started button hover state</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/schedule.png" alt="Schedule" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgSchedule">In-game schedule screen</p>
+                        </div>
+                    </div>
+
+                    <div class="instruction-images">
+                        <div class="instruction-image">
+                            <img src="/images/instructions/route_search.png" alt="Route Search" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgRouteSearch">Route search bar position</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/level_splash.png" alt="Level Splash" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgLevelSplash">Level loading splash screen</p>
+                        </div>
+                        <div class="instruction-image">
+                            <img src="/images/instructions/positions.png" alt="Service Positions" onclick="openLightbox(this.src, this.alt)" class="clickable-image">
+                            <p class="image-caption" data-i18n="instructions.calibrateImgPositions">Service list click positions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.calibrateOutputs">Output Files</h4>
+                    <ul>
+                        <li><code>calibration.json</code> — <span data-i18n="instructions.calibrateOutput1">All measured coordinates and dimensions</span></li>
+                        <li><code>1_config.py</code> — <span data-i18n="instructions.calibrateOutput2">Generated Python config with calibrated values</span></li>
+                        <li><code>references/*.png</code> — <span data-i18n="instructions.calibrateOutput3">Updated reference images for screen matching</span></li>
+                    </ul>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.calibrateTip">If only specific elements are misaligned, use <code>--step N</code> to recalibrate just that step instead of running the full calibration.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction 9: Service Scroll Calibration (calibrate_service_scroll.py) -->
+        <div class="instruction-card">
+            <div class="instruction-header" onclick="toggleInstruction('service-scroll')">
+                <span class="instruction-number">9</span>
+                <h3 data-i18n="home.instruction9Title">Service Click Calibration (calibrate_service_scroll.py)</h3>
+                <span class="instruction-toggle" id="service-scroll-toggle">+</span>
+            </div>
+            <div class="instruction-content" id="service-scroll-content">
+                <p class="instruction-intro" data-i18n="instructions.serviceScrollIntro">Test and fine-tune the click positions for each service in the service list. This tool verifies that the bot can correctly click on every service entry, and helps you adjust Y-position drift per page.</p>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.serviceScrollPrerequisites">Prerequisites</h4>
+                    <ol>
+                        <li data-i18n="instructions.serviceScrollPrereq1">A <code>services.csv</code> file generated from a previous calibration or bot run</li>
+                        <li data-i18n="instructions.serviceScrollPrereq2">Train Sim World running and on the service selection screen</li>
+                        <li data-i18n="instructions.serviceScrollPrereq3">Screen calibration completed (calibrate.py)</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.serviceScrollCommands">Commands</h4>
+                    <p data-i18n="instructions.serviceScrollCommandsDesc">Run from the <code>bot/</code> directory:</p>
+                    <ul>
+                        <li><code>python calibrate_service_scroll.py</code> — <span data-i18n="instructions.serviceScrollCmd1">Test all services from the beginning</span></li>
+                        <li><code>python calibrate_service_scroll.py --from 130</code> — <span data-i18n="instructions.serviceScrollCmd2">Start testing from service number 130</span></li>
+                        <li><code>python calibrate_service_scroll.py --step 130</code> — <span data-i18n="instructions.serviceScrollCmd3">Test only service number 130</span></li>
+                        <li><code>python calibrate_service_scroll.py --restart</code> — <span data-i18n="instructions.serviceScrollCmd4">Reset and start from the beginning</span></li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.serviceScrollHowItWorks">How It Works</h4>
+                    <ol>
+                        <li data-i18n="instructions.serviceScrollHow1">The tool scrolls to each service's page in the game</li>
+                        <li data-i18n="instructions.serviceScrollHow2">It clicks the service at the calculated Y-position</li>
+                        <li data-i18n="instructions.serviceScrollHow3">It captures a screenshot and uses AI to verify the correct service was selected</li>
+                        <li data-i18n="instructions.serviceScrollHow4">If wrong, use the global hotkeys to nudge the Y-position up or down</li>
+                        <li data-i18n="instructions.serviceScrollHow5">At the end, it outputs suggested <code>PAGE_Y_DRIFT</code> values for <code>config.py</code></li>
+                    </ol>
+                </div>
+
+                <div class="instruction-step">
+                    <h4 data-i18n="instructions.serviceScrollDrift">Page Y Drift Correction</h4>
+                    <p data-i18n="instructions.serviceScrollDriftDesc">Different pages in the service list may have slight vertical offsets. The tool detects these and suggests per-page drift corrections that you add to <code>PAGE_Y_DRIFT</code> in <code>bot/config.py</code>. You can also run <code>python evaluate_drift.py</code> to automatically compare captured data against expected values.</p>
+                </div>
+
+                <div class="instruction-tip">
+                    <strong data-i18n="instructions.tip">Tip:</strong> <span data-i18n="instructions.serviceScrollTip">During testing, use the global hotkeys to adjust click positions in real-time. The adjustments are saved and reported at the end as drift suggestions.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .instruction-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .instruction-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .instruction-header:hover {
+            background: var(--bg-primary);
+        }
+        .instruction-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .instruction-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--text-primary);
+            flex-grow: 1;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .instruction-toggle {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: center;
+        }
+        .instruction-content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .instruction-content.active {
+            display: block;
+        }
+        .instruction-intro {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .instruction-step {
+            margin-bottom: 20px;
+        }
+        .instruction-step h4 {
+            color: var(--accent-color);
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+        .instruction-step p, .instruction-step li {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .instruction-step ol, .instruction-step ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        .instruction-step li {
+            margin-bottom: 5px;
+        }
+        .instruction-images {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .instruction-image {
+            flex: 1;
+            min-width: 280px;
+            max-width: 500px;
+        }
+        .instruction-image img {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        .instruction-image.small-value {
+            min-width: unset;
+            max-width: 120px;
+            flex: none;
+        }
+        .instruction-image.small-value img {
+            width: auto;
+            max-height: 40px;
+        }
+        .image-caption {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: center;
+        }
+        .instruction-tip {
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent-color);
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .instruction-tip strong {
+            color: var(--accent-color);
+        }
+        .instruction-warning {
+            background: var(--color-error-bg);
+            border-left: 3px solid var(--color-error);
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .instruction-warning strong {
+            color: var(--color-error);
+        }
+        .clickable-image {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .clickable-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 85%;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        .lightbox-caption {
+            color: white;
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover {
+            color: var(--color-error);
+        }
+    </style>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="">
+        <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+
+    <script>
+        // Apply theme on page load
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+        }
+
+        // Apply color scheme for accessibility
+        function applyColorScheme(scheme) {
+            if (scheme && scheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', scheme);
+            } else {
+                document.body.removeAttribute('data-color-scheme');
+            }
+        }
+
+        // Load theme from localStorage first for instant apply
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        }
+
+        // Load color scheme from localStorage
+        const savedColorScheme = localStorage.getItem('colorScheme');
+        if (savedColorScheme) {
+            applyColorScheme(savedColorScheme);
+        }
+
+        // Then fetch from server to ensure sync
+        fetch('/api/config')
+            .then(res => res.json())
+            .then(config => {
+                const theme = config.theme || 'dark';
+                applyTheme(theme);
+                localStorage.setItem('theme', theme);
+
+                const colorScheme = config.colorScheme || 'default';
+                applyColorScheme(colorScheme);
+                localStorage.setItem('colorScheme', colorScheme);
+            })
+            .catch(err => console.error('Failed to load config:', err));
+
+        // Toggle instruction sections
+        function toggleInstruction(id) {
+            const content = document.getElementById(id + '-content');
+            const toggle = document.getElementById(id + '-toggle');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                toggle.textContent = '+';
+            } else {
+                content.classList.add('active');
+                toggle.textContent = '-';
+            }
+        }
+
+        // Lightbox functions
+        function openLightbox(src, alt) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+
+            img.src = src;
+            img.alt = alt;
+            caption.textContent = alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+</body>
+</html>

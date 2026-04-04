@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Subscriptions - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            opacity: 0;
+        }
+        body.i18n-ready {
+            opacity: 1;
+            transition: opacity 0.15s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        h1 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .status-row:last-child {
+            border-bottom: none;
+        }
+        .status-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .status-value {
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .status-active {
+            background-color: var(--color-success);
+            box-shadow: 0 0 6px var(--color-success);
+        }
+        .status-inactive {
+            background-color: var(--color-error);
+            box-shadow: 0 0 6px var(--color-error);
+        }
+        .status-pending {
+            background-color: var(--color-warning);
+            box-shadow: 0 0 6px var(--color-warning);
+        }
+        .actions-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary {
+            background: var(--btn-primary-bg);
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--btn-primary-hover);
+        }
+        .btn-danger {
+            background: var(--btn-danger-bg);
+            color: white;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: var(--btn-danger-hover);
+        }
+        .btn-success {
+            background: var(--btn-success-bg);
+            color: white;
+        }
+        .btn-success:hover:not(:disabled) {
+            background: var(--btn-success-hover);
+        }
+        .btn-warning {
+            background: var(--btn-warning-bg);
+            color: #333;
+        }
+        .btn-warning:hover:not(:disabled) {
+            background: var(--btn-warning-hover);
+        }
+        .status-message {
+            text-align: center;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status-message.success {
+            display: block;
+            background: var(--color-success-bg);
+            color: var(--color-success);
+        }
+        .status-message.error {
+            display: block;
+            background: var(--color-error-bg);
+            color: var(--color-error);
+        }
+        .status-message.info {
+            display: block;
+            background: var(--color-info-bg);
+            color: var(--color-info);
+        }
+        .status-message.warning {
+            display: block;
+            background: var(--color-warning-bg);
+            color: var(--color-warning);
+        }
+        .subscription-list {
+            margin-top: 15px;
+        }
+        .subscription-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+        }
+        .subscription-path {
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+        .subscription-status {
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .data-preview {
+            background: var(--bg-primary);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .warning-box {
+            background: var(--color-warning-bg);
+            border: 1px solid var(--color-warning);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: var(--color-warning);
+        }
+        body[data-theme="light"] .warning-box {
+            color: #111111;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="apiSubscriptions.title">API Subscription Management</h1>
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <h2 data-i18n="apiSubscriptions.connectionStatus">Connection Status</h2>
+
+        <div class="status-row">
+            <span class="status-label" data-i18n="apiSubscriptions.apiKeyStatus">API Key Status</span>
+            <span class="status-value" id="apiKeyStatus">
+                <span class="status-indicator status-pending"></span>
+                <span data-i18n="apiSubscriptions.checking">Checking...</span>
+            </span>
+        </div>
+
+        <div class="status-row">
+            <span class="status-label" data-i18n="apiSubscriptions.subscriptionsCreated">Subscriptions Created</span>
+            <span class="status-value" id="subscriptionStatus">
+                <span class="status-indicator status-pending"></span>
+                <span data-i18n="apiSubscriptions.checking">Checking...</span>
+            </span>
+        </div>
+
+        <div class="status-row">
+            <span class="status-label" data-i18n="apiSubscriptions.apiKeySource">API Key Source</span>
+            <span class="status-value" id="apiKeySource">-</span>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="apiSubscriptions.subscriptionActions">Subscription Actions</h2>
+
+        <div class="warning-box">
+            <strong data-i18n="apiSubscriptions.note">Note:</strong> <span data-i18n="apiSubscriptions.resetNote">Resetting subscriptions will disconnect and reconnect to the TSW CommAPI. This is useful if the game was restarted or if data is not updating properly.</span>
+        </div>
+
+        <div class="actions-container">
+            <button class="btn btn-warning" id="btnReset" onclick="resetSubscriptions()" data-i18n="apiSubscriptions.resetSubscriptions">
+                Reset Subscriptions
+            </button>
+            <button class="btn btn-danger" id="btnDelete" onclick="deleteSubscriptions()" data-i18n="apiSubscriptions.deleteSubscriptions">
+                Delete Subscriptions
+            </button>
+            <button class="btn btn-success" id="btnCreate" onclick="createSubscriptions()" data-i18n="apiSubscriptions.createSubscriptions">
+                Create Subscriptions
+            </button>
+            <button class="btn btn-primary" id="btnRefresh" onclick="refreshStatus()" data-i18n="apiSubscriptions.refreshStatus">
+                Refresh Status
+            </button>
+        </div>
+
+        <div id="actionMessage" class="status-message"></div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="apiSubscriptions.liveDataPreview">Live Data Preview</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;" data-i18n="apiSubscriptions.liveDataPreviewDesc">
+            Preview of current subscription data from TSW:
+        </p>
+        <button class="btn btn-primary" onclick="fetchLiveData()" style="margin-bottom: 10px;" data-i18n="apiSubscriptions.fetchLiveData">
+            Fetch Live Data
+        </button>
+        <div class="data-preview" id="dataPreview" data-i18n="apiSubscriptions.clickFetchLiveData">
+            Click "Fetch Live Data" to see current subscription data...
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="apiSubscriptions.subscriptionEndpoints">Subscription Endpoints</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;" data-i18n="apiSubscriptions.subscriptionEndpointsDesc">
+            The following endpoints are subscribed when active:
+        </p>
+        <div class="subscription-list" id="subscriptionList" data-i18n="common.loading">
+            Loading...
+        </div>
+    </div>
+
+    <script>
+        // Apply theme on page load
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+        }
+
+        // Apply color scheme for accessibility
+        function applyColorScheme(scheme) {
+            if (scheme && scheme !== 'default') {
+                document.body.setAttribute('data-color-scheme', scheme);
+            } else {
+                document.body.removeAttribute('data-color-scheme');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        }
+
+        const savedColorScheme = localStorage.getItem('colorScheme');
+        if (savedColorScheme) {
+            applyColorScheme(savedColorScheme);
+        }
+
+        fetch('/api/config')
+            .then(res => res.json())
+            .then(config => {
+                const theme = config.theme || 'dark';
+                applyTheme(theme);
+                localStorage.setItem('theme', theme);
+
+                const colorScheme = config.colorScheme || 'default';
+                applyColorScheme(colorScheme);
+                localStorage.setItem('colorScheme', colorScheme);
+            })
+            .catch(err => console.error('Failed to load config:', err));
+
+        // Subscription endpoints list
+        const subscriptionEndpoints = [
+            '/subscription/TimeOfDay.Data?Subscription=1',
+            '/subscription/DriverAid.Data?Subscription=1',
+            '/subscription/DriverAid.PlayerInfo?Subscription=1',
+            '/subscription/DriverAid.TrackData?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetSpeed?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetDirection?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetPowerHandle?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetIsSlipping?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_1?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_2?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetAcceleration?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetSpeedControlTarget?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetMaxPermittedSpeed?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetTractiveEffort?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetElectricBrakeHandle?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetLocomotiveBrakeHandle?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetTrainBrakeHandle?Subscription=1',
+            '/subscription/CurrentDrivableActor.Function.HUD_GetIsTractionLocked?Subscription=1',
+            '/subscription/CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue?Subscription=1',
+            '/subscription/CurrentFormation/1/Door_PassengerDoor_BL.Function.GetCurrentOutputValue?Subscription=1',
+            '/subscription/WeatherManager.Data?Subscription=1'
+        ];
+
+        // Display subscription list
+        function displaySubscriptionList() {
+            const list = document.getElementById('subscriptionList');
+            list.innerHTML = subscriptionEndpoints.map(endpoint => `
+                <div class="subscription-item">
+                    <span class="subscription-path">${endpoint}</span>
+                </div>
+            `).join('');
+        }
+
+        // Refresh status
+        async function refreshStatus() {
+            const apiKeyStatus = document.getElementById('apiKeyStatus');
+            const subscriptionStatus = document.getElementById('subscriptionStatus');
+            const apiKeySource = document.getElementById('apiKeySource');
+
+            const checkingText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.checking') : 'Checking...';
+            const availableText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.available') : 'Available';
+            const notAvailableText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.notAvailable') : 'Not Available';
+            const activeText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.active') : 'Active';
+            const notCreatedText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.notCreated') : 'Not Created';
+            const errorText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.error') : 'Error';
+
+            apiKeyStatus.innerHTML = '<span class="spinner"></span> ' + checkingText;
+            subscriptionStatus.innerHTML = '<span class="spinner"></span> ' + checkingText;
+
+            try {
+                const response = await fetch('/api/subscription/status');
+                const data = await response.json();
+
+                // Update API key status
+                if (data.hasApiKey) {
+                    apiKeyStatus.innerHTML = '<span class="status-indicator status-active"></span> ' + availableText;
+                    apiKeySource.textContent = data.apiKeySource || ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.unknown') : 'Unknown');
+                } else {
+                    apiKeyStatus.innerHTML = '<span class="status-indicator status-inactive"></span> ' + notAvailableText;
+                    apiKeySource.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.none') : 'None';
+                }
+
+                // Update subscription status
+                if (data.subscriptionsCreated) {
+                    subscriptionStatus.innerHTML = '<span class="status-indicator status-active"></span> ' + activeText;
+                } else {
+                    subscriptionStatus.innerHTML = '<span class="status-indicator status-inactive"></span> ' + notCreatedText;
+                }
+
+            } catch (err) {
+                console.error('Failed to fetch status:', err);
+                apiKeyStatus.innerHTML = '<span class="status-indicator status-inactive"></span> ' + errorText;
+                subscriptionStatus.innerHTML = '<span class="status-indicator status-inactive"></span> ' + errorText;
+                const failedToFetchText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.failedToFetchStatus') : 'Failed to fetch status: ';
+                showMessage('statusMessage', failedToFetchText + err.message, 'error');
+            }
+        }
+
+        // Reset subscriptions (delete and recreate)
+        async function resetSubscriptions() {
+            const btn = document.getElementById('btnReset');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> ' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.resetting') : 'Resetting...');
+
+            showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.resettingSubscriptions') : 'Resetting subscriptions...', 'info');
+
+            try {
+                const response = await fetch('/api/subscription/reset', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.resetSuccess') : 'Subscriptions reset successfully!', 'success');
+                } else {
+                    const failedText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.failed') : 'Failed: ';
+                    const unknownErrorText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.unknownError') : 'Unknown error';
+                    showMessage('actionMessage', failedText + (data.error || unknownErrorText), 'error');
+                }
+            } catch (err) {
+                const errorPrefix = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.errorPrefix') : 'Error: ';
+                showMessage('actionMessage', errorPrefix + err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.resetSubscriptions') : 'Reset Subscriptions';
+                refreshStatus();
+            }
+        }
+
+        // Delete subscriptions only
+        async function deleteSubscriptions() {
+            const btn = document.getElementById('btnDelete');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> ' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.deleting') : 'Deleting...');
+
+            showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.deletingSubscriptions') : 'Deleting subscriptions...', 'info');
+
+            try {
+                const response = await fetch('/api/subscription/delete', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.deleteSuccess') : 'Subscriptions deleted successfully!', 'success');
+                } else {
+                    const failedText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.failed') : 'Failed: ';
+                    const unknownErrorText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.unknownError') : 'Unknown error';
+                    showMessage('actionMessage', failedText + (data.error || unknownErrorText), 'error');
+                }
+            } catch (err) {
+                const errorPrefix = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.errorPrefix') : 'Error: ';
+                showMessage('actionMessage', errorPrefix + err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.deleteSubscriptions') : 'Delete Subscriptions';
+                refreshStatus();
+            }
+        }
+
+        // Create subscriptions only
+        async function createSubscriptions() {
+            const btn = document.getElementById('btnCreate');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> ' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.creating') : 'Creating...');
+
+            showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.creatingSubscriptions') : 'Creating subscriptions (this may take a moment)...', 'info');
+
+            try {
+                const response = await fetch('/api/subscription/create', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('actionMessage', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.createSuccess') : 'Subscriptions created successfully!', 'success');
+                } else {
+                    const failedText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.failed') : 'Failed: ';
+                    const unknownErrorText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.unknownError') : 'Unknown error';
+                    showMessage('actionMessage', failedText + (data.error || unknownErrorText), 'error');
+                }
+            } catch (err) {
+                const errorPrefix = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.errorPrefix') : 'Error: ';
+                showMessage('actionMessage', errorPrefix + err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.createSubscriptions') : 'Create Subscriptions';
+                refreshStatus();
+            }
+        }
+
+        // Fetch live data
+        async function fetchLiveData() {
+            const preview = document.getElementById('dataPreview');
+            preview.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.fetchingData') : 'Fetching data...';
+
+            try {
+                const response = await fetch('/api/subscription/data');
+                const data = await response.json();
+                preview.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                const errorFetchingText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('apiSubscriptions.errorFetchingData') : 'Error fetching data: ';
+                preview.textContent = errorFetchingText + err.message;
+            }
+        }
+
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = 'status-message ' + type;
+
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    el.className = 'status-message';
+                }, 5000);
+            }
+        }
+
+        // Initialize
+        displaySubscriptionList();
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script>
+        i18n.init().then(function() {
+            document.body.classList.add('i18n-ready');
+            refreshStatus();
+        });
+    </script>
+</body>
+</html>

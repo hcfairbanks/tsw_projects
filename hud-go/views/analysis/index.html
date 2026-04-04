@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover { background: var(--btn-primary-hover); }
+        .btn-primary:disabled { background: #555; cursor: not-allowed; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Typeahead */
+        .selector-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .selector-row label { color: var(--text-secondary); font-weight: bold; }
+        .typeahead-container { position: relative; flex: 1; min-width: 300px; }
+        .typeahead-container input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
+        .typeahead-container input:focus { outline: none; border-color: var(--accent-color); }
+        .typeahead-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; z-index: 1001; }
+        .typeahead-item { padding: 10px 12px; cursor: pointer; font-size: 13px; border-bottom: 1px solid var(--border-color); }
+        .typeahead-item:last-child { border-bottom: none; }
+        .typeahead-item:hover, .typeahead-item.highlighted { background: var(--bg-tertiary); }
+        .typeahead-item .item-name { font-weight: 600; color: var(--text-primary); }
+        .typeahead-item .item-sub { font-size: 11px; color: var(--text-muted); }
+
+        /* Direction group cards */
+        .direction-card { background: var(--bg-primary); border-radius: 6px; padding: 15px; margin-top: 15px; border: 1px solid var(--border-color); }
+        .direction-label { font-size: 18px; font-weight: bold; color: var(--accent-color); margin-bottom: 12px; }
+        .recommended-badge { display: inline-block; background: var(--btn-primary-bg); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+
+        /* Stats grid */
+        .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0; }
+        .stat { background: var(--bg-secondary); padding: 8px 14px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .stat-value { font-size: 16px; font-weight: bold; color: var(--text-primary); }
+
+        /* Recommended timetable */
+        .rec-name { font-size: 16px; margin-bottom: 5px; }
+        .rec-name a { font-weight: bold; }
+        .rec-trains { color: var(--text-muted); font-size: 13px; margin-bottom: 8px; }
+
+        /* Alternatives */
+        .alt-section { margin-top: 12px; }
+        .alt-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 5px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; }
+        .alt-toggle:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .alt-list { display: none; margin-top: 8px; }
+        .alt-list.open { display: block; }
+        .alt-item { padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .alt-item:last-child { border-bottom: none; }
+        .alt-stops { color: var(--text-muted); font-size: 12px; }
+
+        .empty-message { text-align: center; color: var(--text-muted); padding: 30px; }
+        .loading { text-align: center; color: var(--text-muted); padding: 20px; }
+
+        /* Missing coordinates section */
+        .missing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .missing-table th, .missing-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        .missing-table th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; }
+        .missing-table td a { font-weight: 600; }
+        .missing-loc { display: inline-block; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 3px; padding: 2px 8px; margin: 2px; font-size: 12px; }
+    </style>
+</head>
+<body data-theme="dark">
+    <h1 data-i18n="analysis.title">Route Analysis</h1>
+    <p class="subtitle" data-i18n="analysis.subtitle">Analyze timetables to find the best coverage in each direction</p>
+
+    <nav id="main-nav"></nav>
+
+    <div class="card">
+        <h2 data-i18n="analysis.selectRoute">Select Route</h2>
+        <div class="selector-row">
+            <label>Country:</label>
+            <div style="position: relative; min-width: 200px;">
+                <div id="countryDisplay" onclick="toggleCountryFilter()" style="padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">All</div>
+                <div id="countryDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: var(--bg-secondary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; z-index: 1001;"></div>
+                <input type="hidden" id="countryFilter" value="">
+            </div>
+            <label data-i18n="analysis.route">Route:</label>
+            <div class="typeahead-container">
+                <input type="text" id="routeInput" placeholder="Type to search routes..." data-i18n-placeholder="analysis.searchPlaceholder" autocomplete="off">
+                <div id="routeDropdown" class="typeahead-dropdown"></div>
+            </div>
+            <button class="btn-primary" id="analyzeBtn" disabled data-i18n="analysis.analyze">Analyze</button>
+        </div>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+    (function() {
+        var routeInput = document.getElementById('routeInput');
+        var routeDropdown = document.getElementById('routeDropdown');
+        var analyzeBtn = document.getElementById('analyzeBtn');
+        var resultsDiv = document.getElementById('results');
+
+        var allRoutes = [];        // routes that have timetables
+        var selectedRouteId = null;
+        var highlightedIndex = -1;
+        var countryFilter = document.getElementById('countryFilter');
+        var countryDisplay = document.getElementById('countryDisplay');
+        var countryDropdown = document.getElementById('countryDropdown');
+
+        window.toggleCountryFilter = function() {
+            countryDropdown.style.display = countryDropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        window.selectCountry = function(id, name, code) {
+            countryFilter.value = id || '';
+            var flag = code ? '<span class="fi fi-' + code.toLowerCase() + '" style="margin-right: 4px;"></span>' : '';
+            countryDisplay.innerHTML = flag + (name || 'All');
+            countryDropdown.style.display = 'none';
+            selectedRouteId = null;
+            analyzeBtn.disabled = true;
+            routeInput.value = '';
+        }
+
+        // Translation helper with fallback
+        function t(key, fallback) {
+            return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
+        }
+
+        // Load routes, timetables, and countries
+        Promise.all([
+            fetch('/api/routes').then(function(r) { return r.json(); }),
+            fetch('/api/timetables').then(function(r) { return r.json(); }),
+            fetch('/api/countries').then(function(r) { return r.json(); })
+        ]).then(function(results) {
+            var routes = results[0];
+            var timetables = results[1];
+            var countries = results[2];
+
+            // Find route IDs that have at least one timetable
+            var routeIdsWithTimetables = new Set();
+            timetables.forEach(function(tt) {
+                if (tt.route_id) routeIdsWithTimetables.add(tt.route_id);
+            });
+
+            allRoutes = routes
+                .filter(function(r) { return routeIdsWithTimetables.has(r.id); })
+                .sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+            // Populate country filter with only countries that have routes with timetables
+            var countryIds = new Set(allRoutes.map(function(r) { return r.country_id; }).filter(Boolean));
+            window._countryMap = {};
+            countries.forEach(function(c) { window._countryMap[c.id] = c; });
+
+            var ddHtml = '<div class="typeahead-item" onclick="selectCountry(\'\', \'All\', \'\')">All</div>';
+            countries
+                .filter(function(c) { return countryIds.has(c.id); })
+                .sort(function(a, b) { return a.name.localeCompare(b.name); })
+                .forEach(function(c) {
+                    var flag = c.code ? '<span class="fi fi-' + c.code.toLowerCase() + '" style="margin-right: 6px;"></span>' : '';
+                    ddHtml += '<div class="typeahead-item" onclick="selectCountry(\'' + c.id + '\', \'' + c.name.replace(/'/g, "\\'") + '\', \'' + (c.code || '') + '\')">' + flag + c.name + '</div>';
+                });
+            countryDropdown.innerHTML = ddHtml;
+        });
+
+        // Close country dropdown on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#countryDisplay') && !e.target.closest('#countryDropdown')) {
+                countryDropdown.style.display = 'none';
+            }
+        });
+
+        // Typeahead: show dropdown on focus
+        routeInput.addEventListener('focus', function() {
+            showDropdown(this.value);
+        });
+
+        // Typeahead: filter on input
+        routeInput.addEventListener('input', function() {
+            highlightedIndex = -1;
+            selectedRouteId = null;
+            analyzeBtn.disabled = true;
+            showDropdown(this.value);
+        });
+
+        // Typeahead: keyboard navigation
+        routeInput.addEventListener('keydown', function(e) {
+            var items = routeDropdown.querySelectorAll('.typeahead-item[data-id]');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+                updateHighlight(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                updateHighlight(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                    items[highlightedIndex].click();
+                } else if (selectedRouteId) {
+                    analyzeBtn.click();
+                }
+            } else if (e.key === 'Escape') {
+                routeDropdown.style.display = 'none';
+            }
+        });
+
+        // Hide dropdown on click outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.typeahead-container')) {
+                routeDropdown.style.display = 'none';
+            }
+        });
+
+        function showDropdown(filter) {
+            var filterLower = (filter || '').toLowerCase();
+
+            if (allRoutes.length === 0) {
+                routeDropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + t('analysis.loadingRoutes', 'Loading routes...') + '</div>';
+                routeDropdown.style.display = 'block';
+                return;
+            }
+
+            var selectedCountry = countryFilter.value;
+            var filtered = allRoutes.filter(function(route) {
+                if (selectedCountry && route.country_id != selectedCountry) return false;
+                return route.name.toLowerCase().includes(filterLower);
+            }).slice(0, 20);
+
+            if (filtered.length === 0) {
+                routeDropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + t('analysis.noRoutes', 'No routes found') + '</div>';
+            } else {
+                routeDropdown.innerHTML = filtered.map(function(route) {
+                    var c = window._countryMap && window._countryMap[route.country_id];
+                    var flag = (c && c.code) ? '<span class="fi fi-' + c.code.toLowerCase() + '" style="margin-right: 6px;"></span>' : '';
+                    return '<div class="typeahead-item" data-id="' + route.id + '" data-name="' + escapeHtml(route.name) + '">' +
+                        '<div class="item-name">' + flag + escapeHtml(route.name) + '</div>' +
+                        '</div>';
+                }).join('');
+
+                routeDropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        routeInput.value = this.dataset.name;
+                        selectedRouteId = parseInt(this.dataset.id);
+                        analyzeBtn.disabled = false;
+                        routeDropdown.style.display = 'none';
+                        resultsDiv.innerHTML = '';
+                    });
+                });
+            }
+            routeDropdown.style.display = 'block';
+        }
+
+        function updateHighlight(items) {
+            items.forEach(function(item, idx) {
+                item.classList.toggle('highlighted', idx === highlightedIndex);
+            });
+            if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                items[highlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        // Analyze button
+        analyzeBtn.addEventListener('click', function() {
+            if (!selectedRouteId) return;
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = t('analysis.analyzing', 'Analyzing...');
+            resultsDiv.innerHTML = '<div class="loading">' + t('analysis.analyzingTimetables', 'Analyzing timetables...') + '</div>';
+
+            fetch('/api/analysis?route_id=' + selectedRouteId)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    renderResults(data.groups || [], data.missingCoords || []);
+                })
+                .catch(function(err) {
+                    resultsDiv.innerHTML = '<div class="card"><p class="empty-message">' + t('common.error', 'Error') + ': ' + err.message + '</p></div>';
+                })
+                .finally(function() {
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.textContent = t('analysis.analyze', 'Analyze');
+                });
+        });
+
+        function renderResults(groups, missingCoords) {
+            if (groups.length === 0 && missingCoords.length === 0) {
+                resultsDiv.innerHTML = '<div class="card"><p class="empty-message">' + t('analysis.noTimetables', 'No timetables with stops found for this route.') + '</p></div>';
+                return;
+            }
+
+            var html = '';
+
+            if (groups.length > 0) {
+            html += '<div class="card"><h2>' + t('analysis.directionGroups', 'Direction Groups') + ' (' + groups.length + ')</h2>';
+
+            groups.forEach(function(group, idx) {
+                var rec = group.recommended;
+                html += '<div class="direction-card">';
+                html += '<div class="direction-label">' + escapeHtml(group.directionLabel) + '<span class="recommended-badge">' + group.timetableCount + ' ' + (group.timetableCount !== 1 ? t('analysis.timetables', 'timetables') : t('analysis.timetable', 'timetable')) + '</span></div>';
+
+                // Recommended timetable
+                html += '<div class="rec-name"><a href="/timetables/' + rec.id + '">' + escapeHtml(rec.service_name) + '</a> <span class="recommended-badge">' + t('analysis.recommended', 'Recommended') + '</span></div>';
+                if (rec.trainNames && rec.trainNames.length > 0) {
+                    html += '<div class="rec-trains">' + t('analysis.trains', 'Trains') + ': ' + rec.trainNames.map(escapeHtml).join(', ') + '</div>';
+                }
+
+                // Stats
+                html += '<div class="stats">';
+                html += '<div class="stat"><div class="stat-label">' + t('analysis.stops', 'Stops') + '</div><div class="stat-value">' + rec.stopCount + '</div></div>';
+                html += '<div class="stat"><div class="stat-label">' + t('analysis.firstStation', 'First Station') + '</div><div class="stat-value">' + escapeHtml(rec.firstStation || '-') + '</div></div>';
+                html += '<div class="stat"><div class="stat-label">' + t('analysis.lastStation', 'Last Station') + '</div><div class="stat-value">' + escapeHtml(rec.lastStation || '-') + '</div></div>';
+                if (rec.tonnage) html += '<div class="stat"><div class="stat-label">' + t('analysis.tonnage', 'Tonnage') + '</div><div class="stat-value">' + rec.tonnage + ' t</div></div>';
+                if (rec.car_count) html += '<div class="stat"><div class="stat-label">' + t('analysis.cars', 'Cars') + '</div><div class="stat-value">' + rec.car_count + '</div></div>';
+                if (rec.train_length) html += '<div class="stat"><div class="stat-label">' + t('analysis.length', 'Length') + '</div><div class="stat-value">' + rec.train_length + ' m</div></div>';
+                html += '</div>';
+
+                // Alternatives
+                if (group.alternatives.length > 0) {
+                    var altId = 'alt-' + idx;
+                    html += '<div class="alt-section">';
+                    html += '<button class="alt-toggle" onclick="toggleAlt(\'' + altId + '\', this)">' + group.alternatives.length + ' ' + t('analysis.otherTimetables', 'other timetable(s) in this direction') + '</button>';
+                    html += '<div class="alt-list" id="' + altId + '">';
+                    group.alternatives.forEach(function(alt) {
+                        html += '<div class="alt-item"><span><a href="/timetables/' + alt.id + '">' + escapeHtml(alt.service_name) + '</a></span><span class="alt-stops">' + alt.stopCount + ' ' + t('analysis.stops', 'stops') + '</span></div>';
+                    });
+                    html += '</div></div>';
+                }
+
+                html += '</div>';
+            });
+
+            html += '</div>';
+            } // end groups
+
+            // Missing coordinates section
+            if (missingCoords.length > 0) {
+                html += '<div class="card"><h2>' + t('analysis.missingCoordinates', 'Missing Coordinates') + ' (' + missingCoords.length + ' ' + t('analysis.timetables', 'timetables') + ')</h2>';
+                html += '<table class="missing-table"><thead><tr><th>' + t('common.id', 'ID') + '</th><th>' + t('analysis.timetable', 'Timetable') + '</th><th>' + t('analysis.locationsWithoutCoords', 'Locations without Lat/Lng') + '</th></tr></thead><tbody>';
+                missingCoords.forEach(function(item) {
+                    var uniqueLocs = item.locations.filter(function(loc, i, arr) { return arr.indexOf(loc) === i; });
+                    html += '<tr>';
+                    html += '<td>' + item.timetable_id + '</td>';
+                    html += '<td><a href="/timetables/' + item.timetable_id + '">' + escapeHtml(item.service_name) + '</a></td>';
+                    html += '<td>' + uniqueLocs.map(function(loc) { return '<span class="missing-loc">' + escapeHtml(loc) + '</span>'; }).join(' ') + '</td>';
+                    html += '</tr>';
+                });
+                html += '</tbody></table></div>';
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Global toggle function for alternatives
+        window.toggleAlt = function(id, btn) {
+            var list = document.getElementById(id);
+            if (list) {
+                var wasOpen = list.classList.contains('open');
+                list.classList.toggle('open');
+                if (!wasOpen) {
+                    btn.textContent = t('analysis.hideAlternatives', 'Hide alternatives');
+                } else {
+                    // Re-render will restore the original text; just keep current
+                    btn.textContent = btn.dataset.originalText || btn.textContent;
+                }
+            }
+        };
+    })();
+    </script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/i18n.js"></script>
+</body>
+</html>
