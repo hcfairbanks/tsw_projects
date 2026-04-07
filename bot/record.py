@@ -609,17 +609,22 @@ SCHEDULE_JSON_PROMPT = (
     "- location: the station or location name WITHOUT platform/track info "
     "(e.g. 'Milton Keynes Central', 'Glendale'). "
     "Extract this from the details column. Leave empty if no location.\n"
-    "- structure: either 'Platform' or 'Track' depending on what the schedule shows. "
-    "Leave empty if no platform or track is mentioned.\n"
+    "- structure: either 'Platform' or 'Track' depending on what the details text shows. "
+    "For example if details says 'Edge Hill Platform 4', structure is 'Platform'. "
+    "If details says 'Glendale Track 1', structure is 'Track'. "
+    "ALWAYS extract this when the details contain a platform or track reference. Leave empty only if there is no platform or track mentioned at all.\n"
     "- structure_number: the platform or track number/identifier only "
-    "(e.g. '6', '1', '2A', 'N-1'). Leave empty if no platform or track is mentioned.\n"
+    "(e.g. '6', '1', '2A', 'N-1'). For 'Edge Hill Platform 4' this would be '4'. "
+    "ALWAYS extract this when the details contain a platform or track reference. Leave empty only if there is no platform or track mentioned at all.\n"
     "- time1: time value WITHOUT the '+' prefix. Use empty string if '-' or blank\n"
     "- time2: time value WITHOUT the '+' prefix. Use empty string if '-' or blank\n\n"
     "IMPORTANT:\n"
     "- Remove '+' from all time values (e.g. '+06:28:00' → '6:28:00')\n"
     "- Use empty string (not '-') for missing times\n"
     "- Deduplicate: if the same row appears in multiple images, include it only ONCE\n"
-    "- Maintain chronological order\n\n"
+    "- Maintain chronological order\n"
+    "- ALWAYS parse platform/track from the details text. If details says 'Edge Hill Platform 4', "
+    "then location='Edge Hill', structure='Platform', structure_number='4'. Do NOT leave structure and structure_number empty when a platform or track is present in the details.\n\n"
     "Respond ONLY with a JSON array, one object per row:\n"
     '[{"action": "...", "details": "...", "location": "...", "structure": "...", "structure_number": "...", "time1": "...", "time2": "..."}, ...]\n'
     "No other text."
@@ -741,8 +746,18 @@ def extract_schedule_llm_json(service_dir):
         action = (row.get("action") or "").strip().upper()
         details = (row.get("details") or "").strip()
         location = (row.get("location") or "").strip()
+        structure = (row.get("structure") or "").strip()
+        structure_number = (row.get("structure_number") or "").strip()
         time1 = _clean_time(row.get("time1"))
         time2 = _clean_time(row.get("time2"))
+
+        # Fallback: parse structure/structure_number from details if LLM missed them
+        if not structure and not structure_number and details:
+            import re
+            m = re.search(r'(Platform|Track)\s+(\S+)', details, re.IGNORECASE)
+            if m:
+                structure = m.group(1).capitalize()
+                structure_number = m.group(2)
 
         # Dedup key: action + time1 + time2 + location
         dedup_key = f"{action}|{time1}|{time2}|{location}"
@@ -755,6 +770,8 @@ def extract_schedule_llm_json(service_dir):
             "action": action,
             "details": details,
             "location": location,
+            "structure": structure,
+            "structure_number": structure_number,
             "time1": time1,
             "time2": time2,
             "sort_order": len(entries),

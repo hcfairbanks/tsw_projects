@@ -1,5 +1,5 @@
 {
-  "developmentMode": false,
+  "developmentMode": true,
   "apiKey": "",
   "theme": "dark",
   "language": "en",
@@ -15,6 +15,6 @@
   "minPointsForStop": 0,
   "autoStopTimeoutSeconds": 0,
   "saveFrequency": 0,
-  "enableSubscriptions": true,
+  "enableSubscriptions": false,
   "colorScheme": ""
 }

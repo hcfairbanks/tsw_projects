@@ -32,3 +32,4 @@ __pycache__/
 tsw_api_reader/notes/
 bot/claude_reports/
 bot/screenshots/
+bot/run_report.txt
