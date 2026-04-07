@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "22:19:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "22:21:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Upper Holloway Platform 2 - 22:24:00",
-      "location": "Upper Holloway Platform 2",
+      "location": "Upper Holloway",
       "time1": "22:24:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "WAIT",
@@ -43,7 +47,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

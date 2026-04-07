@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "16:56:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "16:58:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 1 - 17:31:00",
-      "location": "White Plains Track 1",
+      "location": "White Plains",
       "time1": "17:31:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,7 +47,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

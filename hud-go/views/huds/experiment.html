@@ -256,6 +256,7 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 function formatDistance(distanceMeters, distanceUnits) {
+    distanceMeters = distanceMeters / 100; // raw value is in cm
     var isImperial = distanceUnits === 'imperial';
     if (isImperial) {
         var feet = distanceMeters * 3.28084;

@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "15:51:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "15:53:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 2 - 16:02:30",
-      "location": "Harlem 125th Street Track 2",
+      "location": "Harlem 125th Street",
       "time1": "16:02:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "16:03:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Yankees East 153rd Street Track 1 - 16:07:00",
-      "location": "Yankees East 153rd Street Track 1",
+      "location": "Yankees East 153rd Street",
       "time1": "16:07:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,7 +66,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     }
   ]
 }

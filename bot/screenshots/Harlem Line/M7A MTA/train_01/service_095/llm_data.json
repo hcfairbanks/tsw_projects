@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "11:57:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "11:59:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Tuckahoe Track 4 - 12:01:00",
-      "location": "Tuckahoe Track 4",
+      "location": "Tuckahoe",
       "time1": "12:01:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "12:01:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Bronxville Track 4 - 12:03:00",
-      "location": "Bronxville Track 4",
+      "location": "Bronxville",
       "time1": "12:03:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "12:03:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fleetwood Track 4 - 12:06:00",
-      "location": "Fleetwood Track 4",
+      "location": "Fleetwood",
       "time1": "12:06:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "12:06:30",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Mount Vernon West Track 4 - 12:08:30",
-      "location": "Mount Vernon West Track 4",
+      "location": "Mount Vernon West",
       "time1": "12:08:30",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "12:09:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Wakefield Track 4 - 12:10:30",
-      "location": "Wakefield Track 4",
+      "location": "Wakefield",
       "time1": "12:10:30",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "12:11:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Woodlawn Track 4 - 12:13:00",
-      "location": "Woodlawn Track 4",
+      "location": "Woodlawn",
       "time1": "12:13:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,15 +142,18 @@
       "location": "",
       "time1": "12:13:30",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Williams Bridge Track 4 - 12:16:00",
-      "location": "Williams Bridge Track 4",
+      "location": "Williams Bridge",
       "time1": "12:16:00",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -139,15 +161,18 @@
       "location": "",
       "time1": "12:16:30",
       "time2": "",
-      "sort_order": 15
+      "sort_order": 15,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Botanical Garden Track 4 - 12:18:30",
-      "location": "Botanical Garden Track 4",
+      "location": "Botanical Garden",
       "time1": "12:18:30",
       "time2": "",
-      "sort_order": 16
+      "sort_order": 16,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -155,15 +180,18 @@
       "location": "",
       "time1": "12:19:00",
       "time2": "",
-      "sort_order": 17
+      "sort_order": 17,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fordham Track 4 - 12:20:30",
-      "location": "Fordham Track 4",
+      "location": "Fordham",
       "time1": "12:20:30",
       "time2": "",
-      "sort_order": 18
+      "sort_order": 18,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -171,15 +199,18 @@
       "location": "",
       "time1": "12:21:00",
       "time2": "",
-      "sort_order": 19
+      "sort_order": 19,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 1 - 12:28:30",
-      "location": "Harlem 125th Street Track 1",
+      "location": "Harlem 125th Street",
       "time1": "12:28:30",
       "time2": "",
-      "sort_order": 20
+      "sort_order": 20,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -187,15 +218,18 @@
       "location": "",
       "time1": "12:29:00",
       "time2": "",
-      "sort_order": 21
+      "sort_order": 21,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 17 - 12:40:00",
-      "location": "Grand Central Track 17",
+      "location": "Grand Central",
       "time1": "12:40:00",
       "time2": "",
-      "sort_order": 22
+      "sort_order": 22,
+      "structure": "Track",
+      "structure_number": "17"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -203,7 +237,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 23
+      "sort_order": 23,
+      "structure": ""
     }
   ]
 }

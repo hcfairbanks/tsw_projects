@@ -727,7 +727,7 @@
     "conductorLabel": "Conduttore:",
     "sectionLabel": "Sezione:",
     "noneOption": "- Nessuno -",
-    "platformTrack": "Binario / Banchina",
+    "platformTrack": "Binario / Traccia",
     "lat": "Lat",
     "lng": "Lng",
     "noEntriesInTimetable": "Nessuna voce in questo orario.",

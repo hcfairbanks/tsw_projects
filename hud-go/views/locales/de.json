@@ -727,7 +727,7 @@
     "conductorLabel": "Zugführer:",
     "sectionLabel": "Abschnitt:",
     "noneOption": "- Keine -",
-    "platformTrack": "Gleis / Bahnsteig",
+    "platformTrack": "Bahnsteig / Gleis",
     "lat": "Lat",
     "lng": "Lng",
     "noEntriesInTimetable": "Keine Einträge in diesem Fahrplan.",

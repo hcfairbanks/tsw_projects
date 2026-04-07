@@ -20,7 +20,8 @@
       "location": "",
       "time1": "",
       "time2": "7:24:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "07:26:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Short Hills Track 1 - 07:32:30",
-      "location": "Short Hills Track 1",
+      "location": "Short Hills",
       "time1": "07:32:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,15 +48,18 @@
       "location": "",
       "time1": "07:33:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 2 - 07:47:00",
-      "location": "Newark Broad Street Track 2",
+      "location": "Newark Broad Street",
       "time1": "07:47:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -60,15 +67,18 @@
       "location": "",
       "time1": "07:47:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Secaucus Junction Track A - 07:59:30",
-      "location": "Secaucus Junction Track A",
+      "location": "Secaucus Junction",
       "time1": "07:59:30",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "A"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -76,7 +86,8 @@
       "location": "",
       "time1": "08:00:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -84,15 +95,18 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 3 - 08:13:00",
-      "location": "New York Penn Track 3",
+      "location": "New York Penn",
       "time1": "08:13:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": "Track",
+      "structure_number": "3"
     }
   ]
 }

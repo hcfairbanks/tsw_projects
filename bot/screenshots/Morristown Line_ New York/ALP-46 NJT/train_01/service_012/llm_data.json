@@ -20,15 +20,18 @@
       "location": "",
       "time1": "06:52:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Orange Track 1 - 06:55:30",
-      "location": "Orange Track 1",
+      "location": "Orange",
       "time1": "06:55:30",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -36,15 +39,18 @@
       "location": "",
       "time1": "06:56:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Brick Church Track 1 - 06:59:30",
-      "location": "Brick Church Track 1",
+      "location": "Brick Church",
       "time1": "06:59:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -52,15 +58,18 @@
       "location": "",
       "time1": "07:00:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 1 - 07:05:30",
-      "location": "Newark Broad Street Track 1",
+      "location": "Newark Broad Street",
       "time1": "07:05:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -68,15 +77,18 @@
       "location": "",
       "time1": "07:06:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 9 - 07:28:00",
-      "location": "New York Penn Track 9",
+      "location": "New York Penn",
       "time1": "07:28:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": "Track",
+      "structure_number": "9"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -84,7 +96,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": ""
     }
   ]
 }

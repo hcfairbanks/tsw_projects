@@ -20,7 +20,8 @@
       "location": "",
       "time1": "",
       "time2": "17:55:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "17:56:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 3 - 18:11:30",
-      "location": "Newark Broad Street Track 3",
+      "location": "Newark Broad Street",
       "time1": "18:11:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,7 +48,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

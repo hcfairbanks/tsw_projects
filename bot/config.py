@@ -89,32 +89,36 @@ SPREADSHEETS_DIR = os.path.join(BASE_DIR, "spreadsheets")
 # route/class/train/services that need re-doing.
 
 RUN_MANIFEST = [
-
-    {"route": "Harlem Line"},
-    {"route": "West Somerset Railway"},
-    {"route": "Oakville Subdivision"},
-    # {"route": "Spirit of Steam: Liverpool - Crewe"},
-    # {"route": "Horseshoe Curve"},
-    # {"route": "Sand Patch Grade"},
-    # {"route": "Sherman Hill: Cheyenne - Laramie"},
-    # {"route": "Berninalinie"}
+    {"route": "Spirit of Steam: Liverpool - Crewe"},
+    {"route": "Horseshoe Curve"},
+    {"route": "Sand Patch Grade"},
+    {"route": "Sherman Hill: Cheyenne - Laramie"},
+    {"route": "Berninalinie"},
+    {"route": "Boston Worcester"},
+    {"route": "Riviera Line"},
+    {"route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"},
+    {"route": "Bahnstrecke Leipzig - Dresden"},
+    {"route": "Nahverkehr Dresden"},
+    {"route": "Boston Sprinter"},
+    {"route": "Great Western Express"},
+    {"route": "WCML South - London Euston to Milton Keynes"},
+    {"route": "London Underground Bakerloo Line"}
 ]
 
+
+
 # TODO
-# "Boston Worcester"
-# "Boston Sprinter"
-# "Riviera Line"
+# Need to determine which ones of all layers completed
 
 # Finished
 # {"route": "London Overground: Gospel Oak - Barking"},
 # {"route": "Antelope Valley Line"},
 # {"route": "Morristown Line: New York"},
 # {"route": "LGV Mediterranee"},
-
-# Add routes, trains, sections
-# "Great Western Express"
-# "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"
-# "WCML South - London Euston to Milton Keynes"
+# {"route": "Harlem Line"},
+# {"route": "West Somerset Railway"},
+# {"route": "Oakville Subdivision"},
+# {"route": "Isle of Wight"},
 
 
 # RUN_MANIFEST = [

@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "8:19:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "08:21:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 3 - 08:30:30",
-      "location": "Harlem 125th Street Track 3",
+      "location": "Harlem 125th Street",
       "time1": "08:30:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "08:31:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fordham Track 3 - 08:37:30",
-      "location": "Fordham Track 3",
+      "location": "Fordham",
       "time1": "08:37:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "08:38:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Williams Bridge Track 3 - 08:41:00",
-      "location": "Williams Bridge Track 3",
+      "location": "Williams Bridge",
       "time1": "08:41:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "08:41:30",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Mount Vernon West Track 3 - 08:48:00",
-      "location": "Mount Vernon West Track 3",
+      "location": "Mount Vernon West",
       "time1": "08:48:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "08:48:30",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 1 - 09:00:30",
-      "location": "White Plains Track 1",
+      "location": "White Plains",
       "time1": "09:00:30",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "09:01:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "North White Plains Track 1 - 09:05:30",
-      "location": "North White Plains Track 1",
+      "location": "North White Plains",
       "time1": "09:05:30",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,7 +142,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     }
   ]
 }

@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "4:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "00:05:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Hill Yard Track 10 - 00:10:00",
-      "location": "Hill Yard Track 10",
+      "location": "Hill Yard",
       "time1": "00:10:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "10"
     }
   ]
 }

@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "9:29:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,7 +28,8 @@
       "location": "",
       "time1": "09:30:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "GO VIA LOCATION",
@@ -35,15 +37,18 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 13",
-      "location": "New York Penn Track 13",
+      "location": "New York Penn",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "13"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -51,7 +56,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     }
   ]
 }

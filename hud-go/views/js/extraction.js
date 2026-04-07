@@ -329,7 +329,7 @@ window.ExtractionModule = (function() {
                 action_id: (window.TIMETABLE_ACTIONS_MAP && window.TIMETABLE_ACTIONS_MAP['STOP AT LOCATION']) || null,
                 details: '',
                 location: '',
-                platform: '',
+                structure_number: '',
                 time1: '',
                 time2: '',
                 latitude: '',
@@ -790,7 +790,7 @@ window.ExtractionModule = (function() {
                 '<td><select class="action-select" onchange="ExtractionModule.updateExtractedField(' + index + ', \'action\', this.value)"><option value="">' + selectText + '</option>' + actionOptions + '</select></td>' +
                 '<td class="editable-cell" data-field="details">' + escapeHtml(entry.details || '') + '</td>' +
                 '<td>' + buildLocationSelect(entry, index) + '</td>' +
-                '<td class="editable-cell" data-field="platform">' + escapeHtml(entry.platform || '') + '</td>' +
+                '<td class="editable-cell" data-field="structure_number">' + escapeHtml(entry.structure_number || '') + '</td>' +
                 '<td class="editable-cell" data-field="time1">' + escapeHtml(entry.time1 || '') + '</td>' +
                 '<td class="editable-cell" data-field="time2">' + escapeHtml(entry.time2 || '') + '</td>' +
                 '<td class="editable-cell" data-field="latitude">' + escapeHtml(entry.latitude || '') + '</td>' +
@@ -951,7 +951,7 @@ window.ExtractionModule = (function() {
                         action_id: (window.TIMETABLE_ACTIONS_MAP && window.TIMETABLE_ACTIONS_MAP[entry.action]) || null,
                         details: entry.details || '',
                         location: entry.location || '',
-                        platform: entry.platform || '',
+                        structure_number: entry.structure_number || '',
                         time1: formatTimeInput(entry.time1 || ''),
                         time2: formatTimeInput(entry.time2 || ''),
                         latitude: entry.latitude || '',

@@ -27,7 +27,7 @@ func (h *EntryHandler) GetByTimetableID(w http.ResponseWriter, r *http.Request) 
 
 	rows, err := h.db.Query(`
 		SELECT te.id, te.timetable_id, te.action_id, te.details, te.location_id,
-			te.platform, te.time1, te.time2, te.latitude, te.longitude,
+			te.structure_number, te.structure, te.time1, te.time2, te.latitude, te.longitude,
 			te.api_name, te.sort_order, te.coord_source,
 			ta.name, l.name
 		FROM timetable_entries te
@@ -48,7 +48,8 @@ func (h *EntryHandler) GetByTimetableID(w http.ResponseWriter, r *http.Request) 
 			actionID    *int
 			details     *string
 			locationID  *int
-			platform    *string
+			structureNumber *string
+			structure       *string
 			time1       *string
 			time2       *string
 			latitude    *string
@@ -61,7 +62,7 @@ func (h *EntryHandler) GetByTimetableID(w http.ResponseWriter, r *http.Request) 
 		)
 		if err := rows.Scan(
 			&id, &ttID, &actionID, &details, &locationID,
-			&platform, &time1, &time2, &latitude, &longitude,
+			&structureNumber, &structure, &time1, &time2, &latitude, &longitude,
 			&apiName, &sortOrder, &coordSource,
 			&action, &location,
 		); err != nil {
@@ -74,7 +75,8 @@ func (h *EntryHandler) GetByTimetableID(w http.ResponseWriter, r *http.Request) 
 			"action_id":    actionID,
 			"details":      details,
 			"location_id":  locationID,
-			"platform":     platform,
+			"structure_number": structureNumber,
+			"structure":    structure,
 			"time1":        time1,
 			"time2":        time2,
 			"latitude":     latitude,
@@ -104,7 +106,8 @@ func (h *EntryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Details     string  `json:"details"`
 		LocationID  *int    `json:"location_id"`
 		Location    string  `json:"location"`
-		Platform    string  `json:"platform"`
+		StructureNumber string `json:"structure_number"`
+		Structure       string `json:"structure"`
 		Time1       string  `json:"time1"`
 		Time2       string  `json:"time2"`
 		Latitude    string  `json:"latitude"`
@@ -171,9 +174,9 @@ func (h *EntryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		sortOrder = &count
 	}
 
-	res, err := h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, platform, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		timetableID, actionID, body.Details, locID, body.Platform,
+	res, err := h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, structure_number, structure, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		timetableID, actionID, body.Details, locID, body.StructureNumber, nilIfEmpty(body.Structure),
 		body.Time1, body.Time2, body.Latitude, body.Longitude,
 		body.ApiName, sortOrder, body.CoordSource)
 	if err != nil {
@@ -191,7 +194,8 @@ func (h *EntryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		"details":      body.Details,
 		"location":     body.Location,
 		"location_id":  locID,
-		"platform":     body.Platform,
+		"structure_number": body.StructureNumber,
+		"structure":       body.Structure,
 		"time1":        body.Time1,
 		"time2":        body.Time2,
 		"latitude":     body.Latitude,
@@ -316,8 +320,9 @@ func (h *EntryHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stringFields := map[string]string{
-		"details":   "details",
-		"platform":  "platform",
+		"details":          "details",
+		"structure_number": "structure_number",
+		"structure":        "structure",
 		"time1":     "time1",
 		"time2":     "time2",
 		"latitude":  "latitude",

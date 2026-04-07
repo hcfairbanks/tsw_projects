@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "9:11:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "09:12:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Palmdale Track 1 - 09:20:00",
-      "location": "Palmdale Track 1",
+      "location": "Palmdale",
       "time1": "09:20:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "09:21:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Vincent Grade Acton Track 1 - 09:31:00",
-      "location": "Vincent Grade Acton Track 1",
+      "location": "Vincent Grade Acton",
       "time1": "09:31:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "09:32:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Vista Canyon Track 1 - 10:07:00",
-      "location": "Vista Canyon Track 1",
+      "location": "Vista Canyon",
       "time1": "10:07:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "10:08:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Via Princessa Track 1 - 10:11:00",
-      "location": "Via Princessa Track 1",
+      "location": "Via Princessa",
       "time1": "10:11:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "10:12:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Santa Clarita Track 1 - 10:17:00",
-      "location": "Santa Clarita Track 1",
+      "location": "Santa Clarita",
       "time1": "10:17:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "10:18:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newhall Track 1 - 10:24:00",
-      "location": "Newhall Track 1",
+      "location": "Newhall",
       "time1": "10:24:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,15 +142,18 @@
       "location": "",
       "time1": "10:25:00",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Sylmar/San Fernando Track 1 - 10:40:00",
-      "location": "Sylmar/San Fernando Track 1",
+      "location": "Sylmar/San Fernando",
       "time1": "10:40:00",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -139,15 +161,18 @@
       "location": "",
       "time1": "10:41:00",
       "time2": "",
-      "sort_order": 15
+      "sort_order": 15,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Sun Valley Track 1 - 10:48:00",
-      "location": "Sun Valley Track 1",
+      "location": "Sun Valley",
       "time1": "10:48:00",
       "time2": "",
-      "sort_order": 16
+      "sort_order": 16,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -155,15 +180,18 @@
       "location": "",
       "time1": "10:49:00",
       "time2": "",
-      "sort_order": 17
+      "sort_order": 17,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Burbank Airport-North Track 1 - 10:52:00",
-      "location": "Burbank Airport-North Track 1",
+      "location": "Burbank Airport-North",
       "time1": "10:52:00",
       "time2": "",
-      "sort_order": 18
+      "sort_order": 18,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -171,15 +199,18 @@
       "location": "",
       "time1": "10:53:00",
       "time2": "",
-      "sort_order": 19
+      "sort_order": 19,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Burbank-Downtown Track 1 - 10:57:00",
-      "location": "Burbank-Downtown Track 1",
+      "location": "Burbank-Downtown",
       "time1": "10:57:00",
       "time2": "",
-      "sort_order": 20
+      "sort_order": 20,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -187,15 +218,18 @@
       "location": "",
       "time1": "10:58:00",
       "time2": "",
-      "sort_order": 21
+      "sort_order": 21,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Glendale Track 2 - 11:04:00",
-      "location": "Glendale Track 2",
+      "location": "Glendale",
       "time1": "11:04:00",
       "time2": "",
-      "sort_order": 22
+      "sort_order": 22,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -203,15 +237,18 @@
       "location": "",
       "time1": "11:05:00",
       "time2": "",
-      "sort_order": 23
+      "sort_order": 23,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "LA Union Station Track 04 - 11:16:00",
-      "location": "LA Union Station Track 04",
+      "location": "LA Union Station",
       "time1": "11:16:00",
       "time2": "",
-      "sort_order": 24
+      "sort_order": 24,
+      "structure": "Track",
+      "structure_number": "04"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -219,7 +256,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 25
+      "sort_order": 25,
+      "structure": ""
     }
   ]
 }

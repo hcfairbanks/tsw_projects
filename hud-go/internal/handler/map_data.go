@@ -486,7 +486,7 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 // buildTimetableArrayFromEntries builds a timetable array from DB entries.
 func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]any {
 	rows, err := db.Query(`
-		SELECT te.id, te.sort_order, te.platform, te.time1, te.time2,
+		SELECT te.id, te.sort_order, te.structure_number, te.time1, te.time2,
 		       te.latitude, te.longitude, te.api_name,
 		       COALESCE(l.name, '') AS location,
 		       COALESCE(ta.name, '') AS action
@@ -504,7 +504,7 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	type entryRow struct {
 		ID        int
 		SortOrder *int
-		Platform  *string
+		StructureNumber *string
 		Time1     *string
 		Time2     *string
 		Latitude  *string
@@ -517,7 +517,7 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	var entries []entryRow
 	for rows.Next() {
 		var e entryRow
-		if err := rows.Scan(&e.ID, &e.SortOrder, &e.Platform, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude, &e.ApiName, &e.Location, &e.Action); err != nil {
+		if err := rows.Scan(&e.ID, &e.SortOrder, &e.StructureNumber, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude, &e.ApiName, &e.Location, &e.Action); err != nil {
 			continue
 		}
 		entries = append(entries, e)
@@ -552,9 +552,9 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 			}
 		}
 
-		platform := ""
-		if entry.Platform != nil {
-			platform = *entry.Platform
+		structureNumber := ""
+		if entry.StructureNumber != nil {
+			structureNumber = *entry.StructureNumber
 		}
 		apiName := ""
 		if entry.ApiName != nil {
@@ -567,7 +567,7 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 			"location":  entry.Location,
 			"arrival":   arrival,
 			"departure": departure,
-			"platform":  platform,
+			"structure_number": structureNumber,
 			"apiName":   apiName,
 		}
 

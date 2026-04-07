@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "7:25:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Crestwood Track 4 - 07:55:00",
-      "location": "Crestwood Track 4",
+      "location": "Crestwood",
       "time1": "07:55:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -35,7 +38,8 @@
       "location": "",
       "time1": "07:57:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Tuckahoe Track 4 - 07:59:00",
-      "location": "Tuckahoe Track 4",
+      "location": "Tuckahoe",
       "time1": "07:59:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "07:59:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Bronxville Track 4 - 08:01:30",
-      "location": "Bronxville Track 4",
+      "location": "Bronxville",
       "time1": "08:01:30",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "08:02:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fleetwood Track 4 - 08:04:30",
-      "location": "Fleetwood Track 4",
+      "location": "Fleetwood",
       "time1": "08:04:30",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "08:05:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 25 - 08:34:00",
-      "location": "Grand Central Track 25",
+      "location": "Grand Central",
       "time1": "08:34:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "25"
     }
   ]
 }

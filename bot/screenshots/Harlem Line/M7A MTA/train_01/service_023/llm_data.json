@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "6:22:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "06:24:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 3 - 06:33:30",
-      "location": "Harlem 125th Street Track 3",
+      "location": "Harlem 125th Street",
       "time1": "06:33:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "06:34:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fordham Track 3 - 06:40:30",
-      "location": "Fordham Track 3",
+      "location": "Fordham",
       "time1": "06:40:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "06:41:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 1 - 06:59:30",
-      "location": "White Plains Track 1",
+      "location": "White Plains",
       "time1": "06:59:30",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "07:00:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "North White Plains Track 1 - 07:03:00",
-      "location": "North White Plains Track 1",
+      "location": "North White Plains",
       "time1": "07:03:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,7 +104,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     }
   ]
 }

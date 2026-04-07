@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 )
 
 var migrations = []string{
@@ -126,7 +127,8 @@ var migrations = []string{
 		action_id INTEGER REFERENCES timetable_actions(id),
 		details TEXT,
 		location_id INTEGER REFERENCES locations(id),
-		platform TEXT,
+		structure_number TEXT,
+		structure TEXT,
 		time1 TEXT,
 		time2 TEXT,
 		latitude TEXT,
@@ -136,6 +138,9 @@ var migrations = []string{
 		coord_source TEXT,
 		FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE
 	)`,
+	// Add structure column for existing databases
+	`ALTER TABLE timetable_entries ADD COLUMN structure TEXT`,
+	`ALTER TABLE timetable_entries RENAME COLUMN platform TO structure_number`,
 	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_timetable_id ON timetable_entries(timetable_id)`,
 
 	// station_name_mappings
@@ -231,6 +236,10 @@ var migrations = []string{
 func RunMigrations(db *sql.DB) error {
 	for i, stmt := range migrations {
 		if _, err := db.Exec(stmt); err != nil {
+			// ALTER TABLE may fail if column already exists — that's OK
+			if strings.HasPrefix(strings.TrimSpace(stmt), "ALTER TABLE") {
+				continue
+			}
 			return fmt.Errorf("migration %d failed: %w", i, err)
 		}
 	}

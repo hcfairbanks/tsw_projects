@@ -191,7 +191,7 @@
                         <th>#</th>
                         <th data-i18n="timetables.action">Action</th>
                         <th data-i18n="timetables.location">Location</th>
-                        <th data-i18n="timetables.platform">Platform</th>
+                        <th data-i18n="timetables.platformTrack">Platform / Track</th>
                         <th data-i18n="timetables.time1">Time 1</th>
                         <th data-i18n="timetables.time2">Time 2</th>
                         <th data-i18n="common.actions">Actions</th>
@@ -495,7 +495,7 @@
                 action: action,
                 action_id: TIMETABLE_ACTIONS_MAP[action] || null,
                 location: '',
-                platform: '',
+                structure_number: '',
                 time1: '',
                 time2: ''
             };
@@ -557,8 +557,8 @@
                         </select>
                     </td>
                     <td>
-                        <input type="text" class="platform-input" value="${escapeHtml(entry.platform)}"
-                            onchange="updateEntry(${entry.id}, 'platform', this.value)"
+                        <input type="text" class="platform-input" value="${escapeHtml(entry.structure_number)}"
+                            onchange="updateEntry(${entry.id}, 'structure_number', this.value)"
                             placeholder="Plat">
                     </td>
                     <td>
@@ -737,7 +737,7 @@
                     action: e.action,
                     action_id: TIMETABLE_ACTIONS_MAP[e.action] || null,
                     location: e.location,
-                    platform: e.platform,
+                    structure_number: e.structure_number,
                     time1: e.time1,
                     time2: e.time2,
                     details: '',

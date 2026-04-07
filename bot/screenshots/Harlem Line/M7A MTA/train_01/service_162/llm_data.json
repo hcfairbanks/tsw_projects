@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "18:12:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "18:14:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 2 - 18:23:30",
-      "location": "Harlem 125th Street Track 2",
+      "location": "Harlem 125th Street",
       "time1": "18:23:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "18:24:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 1 - 18:46:00",
-      "location": "White Plains Track 1",
+      "location": "White Plains",
       "time1": "18:46:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "18:47:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "North White Plains Track 1 - 18:50:00",
-      "location": "North White Plains Track 1",
+      "location": "North White Plains",
       "time1": "18:50:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,7 +85,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     }
   ]
 }

@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "10:53:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "North White Plains Yard Track 23",
-      "location": "North White Plains Yard Track 23",
+      "location": "North White Plains Yard",
       "time1": "",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "23"
     }
   ]
 }

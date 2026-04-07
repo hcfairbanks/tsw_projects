@@ -20,7 +20,8 @@
       "location": "",
       "time1": "",
       "time2": "16:44:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "16:45:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Secaucus Junction Track A - 16:56:30",
-      "location": "Secaucus Junction Track A",
+      "location": "Secaucus Junction",
       "time1": "16:56:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "A"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,15 +48,18 @@
       "location": "",
       "time1": "16:57:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 9 - 17:10:00",
-      "location": "New York Penn Track 9",
+      "location": "New York Penn",
       "time1": "17:10:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "9"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -60,7 +67,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     }
   ]
 }

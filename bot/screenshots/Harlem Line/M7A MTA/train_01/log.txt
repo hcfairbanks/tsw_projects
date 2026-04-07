@@ -346,3 +346,89 @@ Service #173 |  Train 567 GCT to North White Plains | images: C:\Users\hcfai\Des
 Service #173 | OK | Train 367 GCT to Mount Vernon West 18:48 00:39 | timetable_id=34719
 Service #174 |  Train 2362 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_174
 Service #174 | OK | Train 676 Southeast to GCT 18:49 00:46 | timetable_id=34720
+Service #174 |  Train 2362 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_174
+Service #174 | DUPLICATE | Train 676 Southeast to GCT 18:49 00:46
+Service #175 |  Train 367 GCT to Mount Vernon West | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_175
+Service #175 | OK | Train 778 Croton-Harmon to GCT 18:52 00:21 | timetable_id=34721
+Service #176 |  Train 676 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_176
+Service #176 | OK | Train 775 GCT to Croton-Harmon 18:54 00:15 | timetable_id=34722
+Service #177 |  Train 778 Croton-Harmon to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_177
+Service #177 | OK | Train 671 GCT to Mount Kisco 18:55 00:34 | timetable_id=34723
+Service #178 |  Train 775 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_178
+Service #178 | OK | Train 673 GCT to Mount Kisco 18:58 00:43 | timetable_id=34724
+Service #179 |  Train 671 GCT to Mount Kisco | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_179
+Service #179 | OK | Train 576 North White Plains to GCT 18:59 01:03 | timetable_id=34725
+Service #180 |  Train 673 GCT to Mount Kisco | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_180
+Service #180 | OK | Train 373 GCT to North White Plains 19:04 00:54 | timetable_id=34726
+Service #181 |  Train 576 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_181
+Service #181 | OK | Train 2366 Crestwood to GCT 19:08 00:32 | timetable_id=34727
+Service #182 |  Train 373 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_182
+Service #182 | OK | Train 678 Southeast to GCT 19:21 00:44 | timetable_id=34728
+Service #183 |  Train 2366 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_183
+Service #183 | OK | Train 677 GCT to Mount Kisco 19:23 00:37 | timetable_id=34729
+Service #184 |  Train 678 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_184
+Service #184 | OK | Train 577 GCT to North White Plains 19:27 00:49 | timetable_id=34730
+Service #185 |  Train 677 GCT to Mount Kisco | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_185
+Service #185 | OK | Train 579 GCT to North White Plains 19:30 01:06 | timetable_id=34731
+Service #186 |  Train 577 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_186
+Service #186 | OK | Train 2368 Mount Vernon West to GCT 19:34 00:36 | timetable_id=34732
+Service #187 |  Train 579 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_187
+Service #187 | OK | Train 2666 Southeast to GCT 19:41 00:50 | timetable_id=34733
+Service #188 |  Train 2368 Mount Vernon West to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_188
+Service #188 | OK | Train 679 GCT to Southeast 19:53 00:39 | timetable_id=34734
+Service #189 |  Train 2666 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_189
+Service #189 | OK | Train 680 Southeast to GCT 19:56 00:50 | timetable_id=34735
+Service #190 |  Train 679 GCT to Southeast | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_190
+Service #190 | OK | Train 581 GCT to North White Plains 19:57 00:56 | timetable_id=34736
+Service #191 |  Train 680 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_191
+Service #191 | OK | Train 781 GCT to Croton-Harmon 20:00 00:14 | timetable_id=34737
+Service #192 |  Train 581 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_192
+Service #192 | OK | Train 580 North White Plains to GCT 20:00 01:02 | timetable_id=34738
+Service #193 |  Train 781 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_193
+Service #193 | OK | Train 682 Mount Kisco to GCT 20:29 00:57 | timetable_id=34739
+Service #194 |  Train 580 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_194
+Service #194 | OK | Train 783 GCT to Croton-Harmon 20:32 00:15 | timetable_id=34740
+Service #195 |  Train 682 Mount Kisco to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_195
+Service #195 | OK | Train 485 GCT to Greystone 20:36 00:16 | timetable_id=34741
+Service #196 |  Train 783 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_196
+Service #196 | OK | Train 683 GCT to Southeast 20:51 00:45 | timetable_id=34742
+Service #197 |  Train 485 GCT to Greystone | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_197
+Service #197 | OK | Train 684 Southeast to GCT 20:53 00:51 | timetable_id=34743
+Service #198 |  Train 683 GCT to Southeast | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_198
+Service #198 | OK | Train 2694 Southeast to GCT 21:07 00:44 | timetable_id=34744
+Service #199 |  Train 684 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_199
+Service #199 | OK | Train 785 GCT to Croton-Harmon 21:12 00:15 | timetable_id=34745
+Service #200 |  Train 2694 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_200
+Service #200 | OK | Train 685 GCT to Mount Kisco 21:15 00:41 | timetable_id=34746
+Service #201 |  Train 785 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_201
+Service #201 | OK | Train 787 GCT to Croton-Harmon 21:19 00:14 | timetable_id=34747
+Service #202 |  Train 685 GCT to Mount Kisco | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_202
+Service #202 | OK | Train 387 GCT to Crestwood 21:24 00:46 | timetable_id=34748
+Service #203 |  Train 787 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_203
+Service #203 | OK | Train 790 Croton-Harmon to GCT 21:46 00:20 | timetable_id=34749
+Service #204 |  Train 387 GCT to Crestwood | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_204
+Service #204 | OK | Train 687 GCT to Southeast 21:51 00:44 | timetable_id=34750
+Service #205 |  Train 790 Croton-Harmon to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_205
+Service #205 | OK | Train 789 GCT to Croton-Harmon 21:53 00:15 | timetable_id=34751
+Service #206 |  Train 687 GCT to Southeast | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_206
+Service #206 | OK | Train 688 Southeast to GCT 21:57 00:52 | timetable_id=34752
+Service #207 |  Train 789 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_207
+Service #207 | OK | Train 587 GCT to North White Plains 21:59 01:03 | timetable_id=34753
+Service #208 |  Train 688 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_208
+Service #208 | OK | Train 791 GCT to Croton-Harmon 22:19 00:14 | timetable_id=34754
+Service #209 |  Train 587 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_209
+Service #209 | OK | Train 388 Crestwood to GCT 22:20 00:48 | timetable_id=34755
+Service #210 |  Train 791 GCT to Croton-Harmon | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_210
+Service #210 | OK | Train 591 GCT to North White Plains 22:31 01:06 | timetable_id=34756
+Service #211 |  Train 388 Crestwood to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_211
+Service #211 | DUPLICATE | Train 591 GCT to North White Plains 22:31 01:06
+Service #212 |  Train 591 GCT to North White Plains | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_212
+Service #212 | OK | Train 792 Croton-Harmon to GCT 22:47 00:21 | timetable_id=34757
+Service #213 |  Train 792 Croton-Harmon to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_213
+Service #213 | OK | Train 592 North White Plains to GCT 22:50 01:08 | timetable_id=34758
+Service #214 |  Train 592 North White Plains to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_214
+Service #214 | OK | Train 692 Southeast to GCT 23:00 00:48 | timetable_id=34759
+Service #215 |  Train 692 Southeast to GCT | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_215
+Service #215 | OK | Train 691 GCT to Mount Kisco 23:03 00:41 | timetable_id=34760
+Service #216 |  Train 691 GCT to Mount Kisco | images: C:\Users\hcfai\Desktop\applications\bot\screenshots\Harlem Line\M7A MTA\train_01\service_216
+Service #216 | DUPLICATE | Train 692 Southeast to GCT 23:00 00:48

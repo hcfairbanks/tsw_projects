@@ -20,7 +20,8 @@
       "location": "",
       "time1": "",
       "time2": "17:48:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "17:50:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Denville Track 2 - 17:56:30",
-      "location": "Denville Track 2",
+      "location": "Denville",
       "time1": "17:56:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,15 +48,18 @@
       "location": "",
       "time1": "17:57:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Morris Plains Track 2 - 18:03:30",
-      "location": "Morris Plains Track 2",
+      "location": "Morris Plains",
       "time1": "18:03:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -60,15 +67,18 @@
       "location": "",
       "time1": "18:04:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Morristown Track 2 - 18:07:30",
-      "location": "Morristown Track 2",
+      "location": "Morristown",
       "time1": "18:07:30",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -76,15 +86,18 @@
       "location": "",
       "time1": "18:08:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Convent Track 2 - 18:11:30",
-      "location": "Convent Track 2",
+      "location": "Convent",
       "time1": "18:11:30",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -92,15 +105,18 @@
       "location": "",
       "time1": "18:12:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Madison Track 2 - 18:15:30",
-      "location": "Madison Track 2",
+      "location": "Madison",
       "time1": "18:15:30",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -108,15 +124,18 @@
       "location": "",
       "time1": "18:16:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Chatham Track 2 - 18:19:30",
-      "location": "Chatham Track 2",
+      "location": "Chatham",
       "time1": "18:19:30",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -124,15 +143,18 @@
       "location": "",
       "time1": "18:20:00",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Summit Track 2 - 18:26:00",
-      "location": "Summit Track 2",
+      "location": "Summit",
       "time1": "18:26:00",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -140,15 +162,18 @@
       "location": "",
       "time1": "18:26:30",
       "time2": "",
-      "sort_order": 15
+      "sort_order": 15,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Short Hills Track 1 - 18:30:30",
-      "location": "Short Hills Track 1",
+      "location": "Short Hills",
       "time1": "18:30:30",
       "time2": "",
-      "sort_order": 16
+      "sort_order": 16,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -156,15 +181,18 @@
       "location": "",
       "time1": "18:31:00",
       "time2": "",
-      "sort_order": 17
+      "sort_order": 17,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Millburn Track 1 - 18:33:30",
-      "location": "Millburn Track 1",
+      "location": "Millburn",
       "time1": "18:33:30",
       "time2": "",
-      "sort_order": 18
+      "sort_order": 18,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -172,15 +200,18 @@
       "location": "",
       "time1": "18:34:00",
       "time2": "",
-      "sort_order": 19
+      "sort_order": 19,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Maplewood Track 1 - 18:36:30",
-      "location": "Maplewood Track 1",
+      "location": "Maplewood",
       "time1": "18:36:30",
       "time2": "",
-      "sort_order": 20
+      "sort_order": 20,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -188,15 +219,18 @@
       "location": "",
       "time1": "18:37:00",
       "time2": "",
-      "sort_order": 21
+      "sort_order": 21,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "South Orange Track 1 - 18:40:30",
-      "location": "South Orange Track 1",
+      "location": "South Orange",
       "time1": "18:40:30",
       "time2": "",
-      "sort_order": 22
+      "sort_order": 22,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -204,15 +238,18 @@
       "location": "",
       "time1": "18:41:00",
       "time2": "",
-      "sort_order": 23
+      "sort_order": 23,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Brick Church Track 1 - 18:45:30",
-      "location": "Brick Church Track 1",
+      "location": "Brick Church",
       "time1": "18:45:30",
       "time2": "",
-      "sort_order": 24
+      "sort_order": 24,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -220,15 +257,18 @@
       "location": "",
       "time1": "18:46:00",
       "time2": "",
-      "sort_order": 25
+      "sort_order": 25,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 1 - 18:51:00",
-      "location": "Newark Broad Street Track 1",
+      "location": "Newark Broad Street",
       "time1": "18:51:00",
       "time2": "",
-      "sort_order": 26
+      "sort_order": 26,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -236,7 +276,8 @@
       "location": "",
       "time1": "18:52:00",
       "time2": "",
-      "sort_order": 27
+      "sort_order": 27,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -244,7 +285,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 28
+      "sort_order": 28,
+      "structure": ""
     },
     {
       "action": "GO VIA LOCATION",
@@ -252,7 +294,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 29
+      "sort_order": 29,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
@@ -260,15 +303,18 @@
       "location": "",
       "time1": "19:09:00",
       "time2": "",
-      "sort_order": 30
+      "sort_order": 30,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 5 - 19:14:00",
-      "location": "New York Penn Track 5",
+      "location": "New York Penn",
       "time1": "19:14:00",
       "time2": "",
-      "sort_order": 31
+      "sort_order": 31,
+      "structure": "Track",
+      "structure_number": "5"
     }
   ]
 }

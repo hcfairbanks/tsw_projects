@@ -19,15 +19,18 @@
       "location": "",
       "time1": "10:35:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 4 - 10:40:00",
-      "location": "Harlem 125th Street Track 4",
+      "location": "Harlem 125th Street",
       "time1": "10:40:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -35,15 +38,18 @@
       "location": "",
       "time1": "10:41:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 13 - 10:52:00",
-      "location": "Grand Central Track 13",
+      "location": "Grand Central",
       "time1": "10:52:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "13"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -51,7 +57,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     }
   ]
 }

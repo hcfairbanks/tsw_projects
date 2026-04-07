@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "6:53:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "North White Plains Track 1 - 06:58:00",
-      "location": "North White Plains Track 1",
+      "location": "North White Plains",
       "time1": "06:58:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -35,15 +38,18 @@
       "location": "",
       "time1": "06:59:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 2 - 07:01:30",
-      "location": "White Plains Track 2",
+      "location": "White Plains",
       "time1": "07:01:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -51,15 +57,18 @@
       "location": "",
       "time1": "07:02:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Hartsdale Track 2 - 07:06:30",
-      "location": "Hartsdale Track 2",
+      "location": "Hartsdale",
       "time1": "07:06:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -67,15 +76,18 @@
       "location": "",
       "time1": "07:07:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Scarsdale Track 2 - 07:10:30",
-      "location": "Scarsdale Track 2",
+      "location": "Scarsdale",
       "time1": "07:10:30",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -83,15 +95,18 @@
       "location": "",
       "time1": "07:11:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Crestwood Track 2 - 07:14:30",
-      "location": "Crestwood Track 2",
+      "location": "Crestwood",
       "time1": "07:14:30",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -99,15 +114,18 @@
       "location": "",
       "time1": "07:15:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 1 - 07:30:30",
-      "location": "Harlem 125th Street Track 1",
+      "location": "Harlem 125th Street",
       "time1": "07:30:30",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -115,15 +133,18 @@
       "location": "",
       "time1": "07:31:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 27 - 07:44:00",
-      "location": "Grand Central Track 27",
+      "location": "Grand Central",
       "time1": "07:44:00",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": "Track",
+      "structure_number": "27"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -131,7 +152,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": ""
     }
   ]
 }

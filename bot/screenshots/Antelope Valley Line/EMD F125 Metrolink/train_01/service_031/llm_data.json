@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "17:57:37",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "17:59:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Glendale Track 1 - 18:12:00",
-      "location": "Glendale Track 1",
+      "location": "Glendale",
       "time1": "18:12:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "18:13:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Burbank-Downtown Track 2 - 18:19:00",
-      "location": "Burbank-Downtown Track 2",
+      "location": "Burbank-Downtown",
       "time1": "18:19:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,7 +66,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     }
   ]
 }

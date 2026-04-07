@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "3:41:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "03:42:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Palmdale Track 1 - 03:50:00",
-      "location": "Palmdale Track 1",
+      "location": "Palmdale",
       "time1": "03:50:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "03:51:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Vincent Grade Acton Track 1 - 04:01:00",
-      "location": "Vincent Grade Acton Track 1",
+      "location": "Vincent Grade Acton",
       "time1": "04:01:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "04:02:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Vista Canyon Track 1 - 04:37:00",
-      "location": "Vista Canyon Track 1",
+      "location": "Vista Canyon",
       "time1": "04:37:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "04:38:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Via Princessa Track 1 - 04:41:00",
-      "location": "Via Princessa Track 1",
+      "location": "Via Princessa",
       "time1": "04:41:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "04:42:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Santa Clarita Track 1 - 04:47:00",
-      "location": "Santa Clarita Track 1",
+      "location": "Santa Clarita",
       "time1": "04:47:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "04:48:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newhall Track 1 - 04:54:00",
-      "location": "Newhall Track 1",
+      "location": "Newhall",
       "time1": "04:54:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,7 +142,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     }
   ]
 }

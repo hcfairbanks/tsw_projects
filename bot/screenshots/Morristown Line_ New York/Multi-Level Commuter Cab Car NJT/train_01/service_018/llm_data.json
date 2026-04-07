@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "7:29:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "07:30:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Summit Yard Track 04 - 08:19:00",
-      "location": "Summit Yard Track 04",
+      "location": "Summit Yard",
       "time1": "08:19:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "04"
     },
     {
       "action": "STOP AT LOCATION",
@@ -43,7 +47,9 @@
       "location": "Summit Wall Track",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "",
+      "structure_number": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -51,7 +57,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     }
   ]
 }

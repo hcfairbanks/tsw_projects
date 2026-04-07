@@ -3,13 +3,13 @@
     "service_name": "Train 676 Southeast to GCT",
     "start_time": "18:49",
     "duration": "00:46",
-    "tonnage": 504.9,
+    "tonnage": 506.4,
     "car_count": 8,
-    "train_length": 208.0
+    "train_length": 208
   },
   "location": {
-    "lat": 41.049326860297576,
-    "lng": -73.77318671936143,
+    "lat": 41.04932686029769,
+    "lng": -73.77318671937233,
     "current_service_name": "676"
   },
   "schedule": [
@@ -19,15 +19,18 @@
       "location": "",
       "time1": "18:51:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 2 - 18:54:30",
-      "location": "White Plains Track 2",
+      "location": "White Plains",
       "time1": "18:54:30",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -35,15 +38,18 @@
       "location": "",
       "time1": "18:55:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fordham Track 4 - 19:15:30",
-      "location": "Fordham Track 4",
+      "location": "Fordham",
       "time1": "19:15:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -51,15 +57,18 @@
       "location": "",
       "time1": "19:16:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 4 - 19:24:30",
-      "location": "Harlem 125th Street Track 4",
+      "location": "Harlem 125th Street",
       "time1": "19:24:30",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -67,15 +76,18 @@
       "location": "",
       "time1": "19:25:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 35 - 19:36:00",
-      "location": "Grand Central Track 35",
+      "location": "Grand Central",
       "time1": "19:36:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": "Track",
+      "structure_number": "35"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -83,7 +95,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": ""
     }
   ]
 }

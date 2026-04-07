@@ -218,24 +218,25 @@
 
             var actionHeader = _t('timetables.action', 'Action');
             var locationHeader = _t('timetables.location', 'Location');
-            var platformHeader = _t('timetables.platform', 'Platform');
+            var platformHeader = _t('timetables.platformTrack', 'Platform / Track');
             var time1Header = _t('timetables.time1', 'Time 1');
             var time2Header = _t('timetables.time2', 'Time 2');
             var detailsHeader = _t('timetables.details', 'Details');
             var latHeader = _t('timetables.lat', 'Lat');
             var lngHeader = _t('timetables.lng', 'Lng');
 
-            let html = '<table><thead><tr><th>#</th><th>' + actionHeader + '</th><th>' + locationHeader + '</th><th>' + platformHeader + '</th><th>' + time1Header + '</th><th>' + time2Header + '</th><th>' + detailsHeader + '</th><th>' + latHeader + '</th><th>' + lngHeader + '</th></tr></thead><tbody>';
+            var hideDetails = !window.__devMode;
+            let html = '<table><thead><tr><th>#</th><th>' + actionHeader + '</th><th>' + locationHeader + '</th><th>' + platformHeader + '</th><th>' + time1Header + '</th><th>' + time2Header + '</th>' + (hideDetails ? '' : '<th>' + detailsHeader + '</th>') + '<th>' + latHeader + '</th><th>' + lngHeader + '</th></tr></thead><tbody>';
 
             entries.forEach(function(entry, index) {
                 html += '<tr>';
                 html += '<td>' + index + '</td>';
                 html += '<td>' + escapeHtml(entry.action || '') + '</td>';
                 html += '<td>' + escapeHtml(entry.location || '') + '</td>';
-                html += '<td>' + escapeHtml(entry.platform || '') + '</td>';
+                html += '<td>' + escapeHtml(entry.structure_number || '') + '</td>';
                 html += '<td>' + escapeHtml(entry.time1 || '') + '</td>';
                 html += '<td>' + escapeHtml(entry.time2 || '') + '</td>';
-                html += '<td>' + escapeHtml(entry.details || '') + '</td>';
+                if (!hideDetails) html += '<td>' + escapeHtml(entry.details || '') + '</td>';
                 html += '<td class="coord-cell">' + escapeHtml(entry.latitude || '') + '</td>';
                 html += '<td class="coord-cell">' + escapeHtml(entry.longitude || '') + '</td>';
                 html += '</tr>';
@@ -323,7 +324,7 @@
                 });
 
                 var popupContent = '<strong>' + (index + 1) + '. ' + escapeHtml(entry.location || 'Unknown') + '</strong>';
-                if (entry.platform) popupContent += '<br>' + _t('timetables.popupPlatform', 'Platform') + ': ' + entry.platform;
+                if (entry.structure_number) popupContent += '<br>' + (entry.structure || _t('timetables.popupPlatform', 'Platform')) + ': ' + entry.structure_number;
                 if (entry.time1) popupContent += '<br>' + _t('timetables.popupTime', 'Time') + ': ' + entry.time1;
                 if (entry.action) popupContent += '<br>' + _t('timetables.popupAction', 'Action') + ': ' + entry.action;
 
@@ -350,7 +351,7 @@
             if (!entries || entries.length === 0) return;
             var csv = 'Action,Location,Platform,Time1,Time2,Details,Latitude,Longitude\n';
             entries.forEach(function(e) {
-                csv += [e.action, e.location, e.platform, e.time1, e.time2, e.details, e.latitude, e.longitude]
+                csv += [e.action, e.location, e.structure_number, e.time1, e.time2, e.details, e.latitude, e.longitude]
                     .map(function(v) { return '"' + String(v || '').replace(/"/g, '""') + '"'; }).join(',') + '\n';
             });
             var blob = new Blob([csv], { type: 'text/csv' });
@@ -371,12 +372,14 @@
         i18n.init().then(function() {
             fetch('/api/config').then(function(r) { return r.json(); }).then(function(config) {
                 if (config.developmentMode) {
+                    window.__devMode = true;
                     document.querySelectorAll('.dev-only').forEach(function(el) {
                         el.style.display = '';
                     });
                 }
-            }).catch(function() {});
-            loadData();
+            }).catch(function() {}).then(function() {
+                loadData();
+            });
         });
     </script>
 </body>

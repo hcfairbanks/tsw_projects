@@ -136,7 +136,8 @@ type entryRow struct {
 	ActionID    *int    `json:"action_id"`
 	Details     *string `json:"details"`
 	LocationID  *int    `json:"location_id"`
-	Platform    *string `json:"platform"`
+	StructureNumber *string `json:"structure_number"`
+	Structure       *string `json:"structure"`
 	Time1       *string `json:"time1"`
 	Time2       *string `json:"time2"`
 	Latitude    *string `json:"latitude"`
@@ -151,7 +152,7 @@ type entryRow struct {
 func (h *TimetableHandler) getEntriesForTimetable(timetableID int) ([]entryRow, error) {
 	rows, err := h.db.Query(`
 		SELECT te.id, te.timetable_id, te.action_id, te.details, te.location_id,
-			te.platform, te.time1, te.time2, te.latitude, te.longitude,
+			te.structure_number, te.structure, te.time1, te.time2, te.latitude, te.longitude,
 			te.api_name, te.sort_order, te.coord_source,
 			ta.name, l.name
 		FROM timetable_entries te
@@ -167,7 +168,7 @@ func (h *TimetableHandler) getEntriesForTimetable(timetableID int) ([]entryRow, 
 		var e entryRow
 		if err := rows.Scan(
 			&e.ID, &e.TimetableID, &e.ActionID, &e.Details, &e.LocationID,
-			&e.Platform, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude,
+			&e.StructureNumber, &e.Structure, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude,
 			&e.ApiName, &e.SortOrder, &e.CoordSource,
 			&e.Action, &e.Location,
 		); err != nil {
@@ -688,7 +689,8 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 			Details     string  `json:"details"`
 			Location    string  `json:"location"`
 			LocationID  *int    `json:"location_id"`
-			Platform    string  `json:"platform"`
+			StructureNumber string `json:"structure_number"`
+			Structure       string `json:"structure"`
 			Time1       string  `json:"time1"`
 			Time2       string  `json:"time2"`
 			Latitude    string  `json:"latitude"`
@@ -851,18 +853,19 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 				locID = &lid
 			}
 		}
-		h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, platform, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			timetableID, actionID, entry.Details, locID, entry.Platform,
+		h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, structure_number, structure, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			timetableID, actionID, entry.Details, locID, entry.StructureNumber, entry.Structure,
 			entry.Time1, entry.Time2, entry.Latitude, entry.Longitude,
 			entry.ApiName, i, entry.CoordSource)
 		savedEntries = append(savedEntries, map[string]any{
-			"timetable_id": timetableID,
-			"action":       entry.Action,
-			"action_id":    actionID,
-			"details":      entry.Details,
-			"location":     locName,
-			"platform":     entry.Platform,
+			"timetable_id":    timetableID,
+			"action":          entry.Action,
+			"action_id":       actionID,
+			"details":         entry.Details,
+			"location":        locName,
+			"structure_number": entry.StructureNumber,
+			"structure":       entry.Structure,
 			"time1":        entry.Time1,
 			"time2":        entry.Time2,
 			"latitude":     entry.Latitude,
@@ -1161,7 +1164,11 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 			details, _ := entry["details"].(string)
 			location, _ := entry["location"].(string)
 			location = strings.TrimSpace(location)
-			platform, _ := entry["platform"].(string)
+			structureNumber, _ := entry["structure_number"].(string)
+			if structureNumber == "" {
+				structureNumber, _ = entry["platform"].(string)
+			}
+			structure, _ := entry["structure"].(string)
 			time1, _ := entry["time1"].(string)
 			time2, _ := entry["time2"].(string)
 			lat, _ := entry["latitude"].(string)
@@ -1199,9 +1206,9 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 				locID = nil
 			}
 
-			h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, platform, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				timetableID, actionID, details, locID, platform,
+			h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, structure_number, structure, time1, time2, latitude, longitude, api_name, sort_order, coord_source)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				timetableID, actionID, details, locID, structureNumber, nilIfEmpty(structure),
 				time1, time2, lat, lng, apiName, i, nilIfEmpty(coordSrc))
 			entriesImported++
 		}
@@ -1549,13 +1556,14 @@ func (h *TimetableHandler) ExportDownload(w http.ResponseWriter, r *http.Request
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filename))
 
 		writer := csv.NewWriter(w)
-		writer.Write([]string{"action", "location", "platform", "time1", "time2", "details", "latitude", "longitude", "api_name", "coord_source"})
+		writer.Write([]string{"action", "location", "structure", "structure_number", "time1", "time2", "details", "latitude", "longitude", "api_name", "coord_source"})
 		if csvData, ok := exportData["csvData"].([]map[string]any); ok {
 			for _, row := range csvData {
 				writer.Write([]string{
 					fmt.Sprintf("%v", row["action"]),
 					fmt.Sprintf("%v", row["location"]),
-					fmt.Sprintf("%v", row["platform"]),
+					fmt.Sprintf("%v", row["structure"]),
+					fmt.Sprintf("%v", row["structure_number"]),
 					fmt.Sprintf("%v", row["time1"]),
 					fmt.Sprintf("%v", row["time2"]),
 					fmt.Sprintf("%v", row["details"]),
@@ -1845,17 +1853,18 @@ func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
 	csvData := make([]map[string]any, len(entries))
 	for i, e := range entries {
 		csvData[i] = map[string]any{
-			"index":        i,
-			"action":       ptrStr(e.Action),
-			"location":     ptrStr(e.Location),
-			"platform":     ptrStr(e.Platform),
-			"time1":        ptrStr(e.Time1),
-			"time2":        ptrStr(e.Time2),
-			"details":      ptrStr(e.Details),
-			"latitude":     ptrStr(e.Latitude),
-			"longitude":    ptrStr(e.Longitude),
-			"api_name":     ptrStr(e.ApiName),
-			"coord_source": e.CoordSource,
+			"index":            i,
+			"action":           ptrStr(e.Action),
+			"location":         ptrStr(e.Location),
+			"structure":        ptrStr(e.Structure),
+			"structure_number": ptrStr(e.StructureNumber),
+			"time1":            ptrStr(e.Time1),
+			"time2":            ptrStr(e.Time2),
+			"details":          ptrStr(e.Details),
+			"latitude":         ptrStr(e.Latitude),
+			"longitude":        ptrStr(e.Longitude),
+			"api_name":         ptrStr(e.ApiName),
+			"coord_source":     e.CoordSource,
 		}
 	}
 
@@ -1863,12 +1872,13 @@ func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
 	timetableEntries := make([]map[string]any, len(entries))
 	for i, e := range entries {
 		entry := map[string]any{
-			"index":    i,
-			"location": ptrStr(e.Location),
-			"arrival":  ptrStr(e.Time1),
-			"departure": ptrStr(e.Time2),
-			"platform": ptrStr(e.Platform),
-			"apiName":  ptrStr(e.ApiName),
+			"index":            i,
+			"location":         ptrStr(e.Location),
+			"arrival":          ptrStr(e.Time1),
+			"departure":        ptrStr(e.Time2),
+			"structure":        ptrStr(e.Structure),
+			"structure_number": ptrStr(e.StructureNumber),
+			"apiName":          ptrStr(e.ApiName),
 		}
 		if e.Latitude != nil && *e.Latitude != "" {
 			entry["latitude"] = *e.Latitude

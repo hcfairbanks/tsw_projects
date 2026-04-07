@@ -118,7 +118,7 @@ func fcGetTimetables(db *sql.DB, routeID int) ([]timetableRow, error) {
 func fcLoadEntries(db *sql.DB, timetableID int) ([]entryRow, error) {
 	rows, err := db.Query(`
 		SELECT te.id, te.timetable_id, te.action_id, te.details, te.location_id,
-		       te.platform, te.time1, te.time2, te.latitude, te.longitude,
+		       te.structure_number, te.time1, te.time2, te.latitude, te.longitude,
 		       te.api_name, te.sort_order, te.coord_source,
 		       ta.name as action, l.name as location
 		FROM timetable_entries te
@@ -134,7 +134,7 @@ func fcLoadEntries(db *sql.DB, timetableID int) ([]entryRow, error) {
 	for rows.Next() {
 		var e entryRow
 		if err := rows.Scan(&e.ID, &e.TimetableID, &e.ActionID, &e.Details, &e.LocationID,
-			&e.Platform, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude,
+			&e.StructureNumber, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude,
 			&e.ApiName, &e.SortOrder, &e.CoordSource,
 			&e.Action, &e.Location); err != nil {
 			return nil, err
@@ -307,7 +307,7 @@ func fcBuildLookup(db *sql.DB, allTimetables []timetableRow, dirTemplates map[st
 			if locName == "" || locName == "start" {
 				continue
 			}
-			platform := strings.TrimSpace(ptrStr(entry.Platform))
+			platform := strings.TrimSpace(ptrStr(entry.StructureNumber))
 			priority := coordPriorityVal(ptrStr(entry.CoordSource))
 			cd := coordData{
 				Latitude:  *entry.Latitude,
@@ -527,7 +527,7 @@ func fcFillEntryCoords(db *sql.DB, tt timetableRow, direction string, lookup *co
 		if locName == "" {
 			continue
 		}
-		platform := strings.TrimSpace(ptrStr(entry.Platform))
+		platform := strings.TrimSpace(ptrStr(entry.StructureNumber))
 
 		if locName == "track" && platform == "" {
 			fmt.Fprintf(report, "  SKIP: timetable %d entry %d - \"track\" without platform number\n", tt.ID, entry.ID)
@@ -565,10 +565,10 @@ func fcFillEntryCoords(db *sql.DB, tt timetableRow, direction string, lookup *co
 			}
 			updated++
 			fmt.Fprintf(report, "  FILLED: timetable %d entry %d \"%s\" platform \"%s\" -> %s\n",
-				tt.ID, entry.ID, ptrStr(entry.Location), ptrStr(entry.Platform), matchType)
+				tt.ID, entry.ID, ptrStr(entry.Location), ptrStr(entry.StructureNumber), matchType)
 		} else {
 			fmt.Fprintf(report, "  MISSING: timetable %d entry %d \"%s\" platform \"%s\" - no match found for direction \"%s\"\n",
-				tt.ID, entry.ID, ptrStr(entry.Location), ptrStr(entry.Platform), direction)
+				tt.ID, entry.ID, ptrStr(entry.Location), ptrStr(entry.StructureNumber), direction)
 		}
 	}
 	return updated, nil
@@ -604,7 +604,7 @@ func fcInferPlatforms(db *sql.DB, allTT []timetableRow, lookup *coordLookup, rep
 			return inferred, err
 		}
 		for _, entry := range entries {
-			if strings.TrimSpace(ptrStr(entry.Platform)) != "" {
+			if strings.TrimSpace(ptrStr(entry.StructureNumber)) != "" {
 				continue
 			}
 			if !fcHasCoords(entry) {
@@ -630,7 +630,7 @@ func fcInferPlatforms(db *sql.DB, allTT []timetableRow, lookup *coordLookup, rep
 				}
 			}
 			if bestPlat != "" && bestDist <= threshold {
-				db.Exec("UPDATE timetable_entries SET platform = ? WHERE id = ?", bestPlat, entry.ID)
+				db.Exec("UPDATE timetable_entries SET structure_number = ? WHERE id = ?", bestPlat, entry.ID)
 				inferred++
 				fmt.Fprintf(report, "  PLATFORM: timetable %d entry %d \"%s\" -> platform %s (%.2fm)\n",
 					tt.ID, entry.ID, ptrStr(entry.Location), bestPlat, bestDist)
@@ -695,14 +695,14 @@ func fcIdenticalStops(a, b []entryRow) bool {
 		if loc == "" {
 			continue
 		}
-		la = append(la, fmt.Sprintf("%s|%s", strings.ToLower(loc), ptrStr(e.Platform)))
+		la = append(la, fmt.Sprintf("%s|%s", strings.ToLower(loc), ptrStr(e.StructureNumber)))
 	}
 	for _, e := range b {
 		loc := strings.TrimSpace(ptrStr(e.Location))
 		if loc == "" {
 			continue
 		}
-		lb = append(lb, fmt.Sprintf("%s|%s", strings.ToLower(loc), ptrStr(e.Platform)))
+		lb = append(lb, fmt.Sprintf("%s|%s", strings.ToLower(loc), ptrStr(e.StructureNumber)))
 	}
 	if len(la) != len(lb) {
 		return false
@@ -742,8 +742,8 @@ func fcBuildCoordPath(db *sql.DB, tt timetableRow, direction string, sources []p
 		sA, sB := stops[i], stops[i+1]
 		locA := strings.ToLower(ptrStr(sA.Location))
 		locB := strings.ToLower(ptrStr(sB.Location))
-		platA := strings.TrimSpace(ptrStr(sA.Platform))
-		platB := strings.TrimSpace(ptrStr(sB.Platform))
+		platA := strings.TrimSpace(ptrStr(sA.StructureNumber))
+		platB := strings.TrimSpace(ptrStr(sB.StructureNumber))
 		latA, lngA := fcParseLat(sA), fcParseLng(sA)
 		latB, lngB := fcParseLat(sB), fcParseLng(sB)
 
@@ -757,10 +757,10 @@ func fcBuildCoordPath(db *sql.DB, tt timetableRow, direction string, sources []p
 			}
 			fA, fB := false, false
 			for _, s := range src.Stops {
-				if strings.ToLower(ptrStr(s.Location)) == locA && strings.TrimSpace(ptrStr(s.Platform)) == platA {
+				if strings.ToLower(ptrStr(s.Location)) == locA && strings.TrimSpace(ptrStr(s.StructureNumber)) == platA {
 					fA = true
 				}
-				if strings.ToLower(ptrStr(s.Location)) == locB && strings.TrimSpace(ptrStr(s.Platform)) == platB {
+				if strings.ToLower(ptrStr(s.Location)) == locB && strings.TrimSpace(ptrStr(s.StructureNumber)) == platB {
 					fB = true
 				}
 			}
@@ -880,7 +880,7 @@ func fcMissingReport(db *sql.DB, routeID int, routeName string, allTT []timetabl
 		}
 		for _, e := range entries {
 			if !fcHasCoords(e) {
-				key := fmt.Sprintf("%s|%s", strings.ToLower(ptrStr(e.Location)), ptrStr(e.Platform))
+				key := fmt.Sprintf("%s|%s", strings.ToLower(ptrStr(e.Location)), ptrStr(e.StructureNumber))
 				missingByDir[dir][key] = true
 			}
 		}
@@ -1384,7 +1384,7 @@ func buildRouteMap(db *sql.DB, routeID int) error {
 		}
 
 		eRows, err := db.Query(`
-			SELECT te.location_id, l.name, te.platform, te.latitude, te.longitude
+			SELECT te.location_id, l.name, te.structure_number, te.latitude, te.longitude
 			FROM timetable_entries te
 			LEFT JOIN locations l ON l.id = te.location_id
 			WHERE te.timetable_id = ?

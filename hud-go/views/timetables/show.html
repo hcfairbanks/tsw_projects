@@ -726,7 +726,7 @@
 
             var actionHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.action') : 'Action';
             var locationHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.location') : 'Location';
-            var platformHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.platform') : 'Platform / Track';
+            var platformHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.platformTrack') : 'Platform / Track';
             var time1Header = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.time1') : 'Time 1';
             var time2Header = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.time2') : 'Time 2';
             var detailsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.detailsColumn') : 'Details';
@@ -752,7 +752,7 @@
                 var currentLocInList = !entry.location || routeLocations.some(function(l) { return l.name === entry.location; });
                 var extraLocOption = (!currentLocInList && entry.location) ? '<option value="' + escapeHtml(entry.location) + '" selected>' + escapeHtml(entry.location) + '</option>' : '';
                 html += '<td><select class="location-select" onchange="updateEntryField(' + index + ', \'location\', this.value)"><option value="">' + selectText + '</option>' + extraLocOption + locationOptions + '</select></td>';
-                html += '<td class="editable-cell" data-field="platform">' + escapeHtml(entry.platform || '') + '</td>';
+                html += '<td class="editable-cell" data-field="structure_number">' + escapeHtml(entry.structure_number || '') + '</td>';
                 html += '<td class="editable-cell" data-field="time1">' + escapeHtml(entry.time1 || '') + '</td>';
                 html += '<td class="editable-cell" data-field="time2">' + escapeHtml(entry.time2 || '') + '</td>';
                 html += '<td class="editable-cell" data-field="details">' + escapeHtml(entry.details || '') + '</td>';
@@ -894,7 +894,7 @@
                 action_id: TIMETABLE_ACTIONS_MAP['STOP AT LOCATION'] || null,
                 details: '',
                 location: '',
-                platform: '',
+                structure_number: '',
                 time1: '',
                 time2: '',
                 latitude: '',
@@ -1095,7 +1095,7 @@
             entries.forEach(function(entry) {
                 var action = entry.action || '';
                 var location = entry.location || '';
-                var platform = entry.platform || '';
+                var platform = entry.structure_number || '';
                 var time1 = entry.time1 || '';
                 var time2 = entry.time2 || '';
                 var details = entry.details || '';
@@ -1137,7 +1137,7 @@
                         location: entry.location || '',
                         arrival: entry.time2 || entry.time1 || '',
                         departure: '',
-                        platform: entry.platform || ''
+                        structure_number: entry.structure_number || ''
                     };
 
                     // For WAIT FOR SERVICE, arrival is time2 (or time1)
@@ -1168,7 +1168,7 @@
                             location: entry.location || '',
                             arrival: entry.time1 || '',
                             departure: '',
-                            platform: entry.platform || ''
+                            structure_number: entry.structure_number || ''
                         });
                     }
                 }
@@ -1179,7 +1179,7 @@
                     escapeCSV(row.location),
                     escapeCSV(row.arrival),
                     escapeCSV(row.departure),
-                    escapeCSV(row.platform)
+                    escapeCSV(row.structure_number)
                 ].join(','));
             });
 
@@ -1317,7 +1317,7 @@
 
                 // Build popup content
                 let popupContent = '<strong>' + (index + 1) + '. ' + (entry.location || 'Unknown') + '</strong>';
-                if (entry.platform) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupPlatform') : 'Platform') + ': ' + entry.platform;
+                if (entry.structure_number) popupContent += '<br>' + (entry.structure || ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupPlatform') : 'Platform')) + ': ' + entry.structure_number;
                 if (entry.time1) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupTime') : 'Time') + ': ' + entry.time1;
                 if (entry.action) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupAction') : 'Action') + ': ' + entry.action;
 

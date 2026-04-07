@@ -16,10 +16,12 @@
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 19",
-      "location": "Grand Central Track 19",
+      "location": "Grand Central",
       "time1": "",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": "Track",
+      "structure_number": "19"
     }
   ]
 }

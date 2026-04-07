@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "15:34:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "15:35:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Sylmar/San Fernando Track 1 - 15:48:00",
-      "location": "Sylmar/San Fernando Track 1",
+      "location": "Sylmar/San Fernando",
       "time1": "15:48:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "15:49:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Sun Valley Track 1 - 15:56:00",
-      "location": "Sun Valley Track 1",
+      "location": "Sun Valley",
       "time1": "15:56:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "15:57:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Burbank Airport-North Track 1 - 16:00:00",
-      "location": "Burbank Airport-North Track 1",
+      "location": "Burbank Airport-North",
       "time1": "16:00:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "16:01:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Burbank-Downtown Track 1 - 16:05:00",
-      "location": "Burbank-Downtown Track 1",
+      "location": "Burbank-Downtown",
       "time1": "16:05:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "16:06:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Glendale Track 2 - 16:12:00",
-      "location": "Glendale Track 2",
+      "location": "Glendale",
       "time1": "16:12:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "16:13:00",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "LA Union Station Track 04 - 16:24:00",
-      "location": "LA Union Station Track 04",
+      "location": "LA Union Station",
       "time1": "16:24:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "04"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -123,7 +142,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     }
   ]
 }

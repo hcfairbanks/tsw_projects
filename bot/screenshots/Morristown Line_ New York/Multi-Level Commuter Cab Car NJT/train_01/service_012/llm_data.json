@@ -20,7 +20,8 @@
       "location": "",
       "time1": "06:25:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "GO VIA LOCATION",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 7 - 06:46:00",
-      "location": "New York Penn Track 7",
+      "location": "New York Penn",
       "time1": "06:46:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "7"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,7 +48,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

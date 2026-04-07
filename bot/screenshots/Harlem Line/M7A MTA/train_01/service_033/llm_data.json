@@ -19,15 +19,18 @@
       "location": "",
       "time1": "07:03:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "White Plains Track 2 - 07:06:00",
-      "location": "White Plains Track 2",
+      "location": "White Plains",
       "time1": "07:06:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -35,15 +38,18 @@
       "location": "",
       "time1": "07:07:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 1 - 07:35:00",
-      "location": "Harlem 125th Street Track 1",
+      "location": "Harlem 125th Street",
       "time1": "07:35:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -51,15 +57,18 @@
       "location": "",
       "time1": "07:36:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 25 - 07:49:00",
-      "location": "Grand Central Track 25",
+      "location": "Grand Central",
       "time1": "07:49:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "25"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -67,7 +76,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     }
   ]
 }

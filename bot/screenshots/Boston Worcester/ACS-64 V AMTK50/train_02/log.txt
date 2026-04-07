@@ -1,6 +1,0 @@
-Service #1 | AM178EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_02\service_001
-Service #1 | DUPLICATE | AM178EQ Boston South Station to Southampton Yard 00:39 00:23
-Service #2 | AM66EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_02\service_002
-Service #2 | DUPLICATE | AM66EQ Boston South Station to Southampton Yard 08:14 00:27
-Service #3 | AM190EQ Boston South Station to Southampton Yard | images: C:\Users\hcfai\Desktop\tsw_hud_project_wtf_3\bot\screenshots\Boston Worcester\ACS-64 V AMTK50\train_02\service_003
-Service #3 | DUPLICATE | AM190EQ Boston South Station to Southampton Yard 11:37 00:11

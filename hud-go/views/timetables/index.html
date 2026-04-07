@@ -228,7 +228,7 @@
                         <th data-i18n="timetables.action">Action</th>
                         <th data-i18n="common.description">Details</th>
                         <th data-i18n="timetables.location">Location</th>
-                        <th data-i18n="timetables.platform">Platform</th>
+                        <th data-i18n="timetables.platformTrack">Platform / Track</th>
                         <th data-i18n="timetables.time1">Time 1</th>
                         <th data-i18n="timetables.time2">Time 2</th>
                         <th data-i18n="record.latitude">Latitude</th>
@@ -1497,7 +1497,7 @@
                     '<td><select class="action-select" onchange="updateExtractedField(' + index + ', \'action\', this.value)"><option value="">-- Select --</option>' + actionOptions + '</select></td>' +
                     '<td class="editable-cell" data-field="details">' + escapeHtml(entry.details || '') + '</td>' +
                     '<td>' + buildLocationSelect(entry, index) + '</td>' +
-                    '<td class="editable-cell" data-field="platform">' + escapeHtml(entry.platform || '') + '</td>' +
+                    '<td class="editable-cell" data-field="structure_number">' + escapeHtml(entry.structure_number || '') + '</td>' +
                     '<td class="editable-cell" data-field="time1">' + escapeHtml(entry.time1 || '') + '</td>' +
                     '<td class="editable-cell" data-field="time2">' + escapeHtml(entry.time2 || '') + '</td>' +
                     '<td class="editable-cell" data-field="latitude">' + escapeHtml(entry.latitude || '') + '</td>' +
@@ -1629,7 +1629,7 @@
                 action_id: TIMETABLE_ACTIONS_MAP['STOP AT LOCATION'] || null,
                 details: '',
                 location: '',
-                platform: '',
+                structure_number: '',
                 time1: '',
                 time2: '',
                 latitude: '',
@@ -1730,7 +1730,7 @@
                             action_id: TIMETABLE_ACTIONS_MAP[entry.action] || null,
                             details: entry.details || '',
                             location: entry.location || '',
-                            platform: entry.platform || '',
+                            structure_number: entry.structure_number || '',
                             time1: formatTimeInput(entry.time1 || ''),
                             time2: formatTimeInput(entry.time2 || ''),
                             latitude: entry.latitude || '',

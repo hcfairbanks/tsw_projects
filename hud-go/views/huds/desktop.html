@@ -913,6 +913,7 @@ function drawNextSpeedLimitBox(options, nextSpeedLimit) {
 }
 
 function formatDistanceShort(distanceMeters, distanceUnits) {
+    distanceMeters = distanceMeters / 100; // raw value is in cm
     if (distanceUnits === 'imperial') {
         var feet = distanceMeters * 3.28084;
         if (feet > 5280) {

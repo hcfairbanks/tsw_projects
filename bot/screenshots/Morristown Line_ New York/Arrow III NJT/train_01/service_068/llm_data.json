@@ -20,7 +20,8 @@
       "location": "",
       "time1": "",
       "time2": "17:36:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -28,15 +29,18 @@
       "location": "",
       "time1": "17:38:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 2 - 17:54:00",
-      "location": "Newark Broad Street Track 2",
+      "location": "Newark Broad Street",
       "time1": "17:54:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -44,15 +48,18 @@
       "location": "",
       "time1": "17:54:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Short Hills Track 2 - 18:07:30",
-      "location": "Short Hills Track 2",
+      "location": "Short Hills",
       "time1": "18:07:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -60,15 +67,18 @@
       "location": "",
       "time1": "18:08:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Summit Track 1 - 18:13:00",
-      "location": "Summit Track 1",
+      "location": "Summit",
       "time1": "18:13:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -76,7 +86,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     }
   ]
 }

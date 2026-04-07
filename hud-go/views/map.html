@@ -1366,7 +1366,7 @@
                 }).bindPopup(`
                     <strong>#${stopNumber} ${stationName}</strong><br>
                     <small>Arr: ${entry.arrival || '-'} | Dep: ${entry.departure || '-'}</small><br>
-                    <small>Platform: ${entry.platform || '-'}</small>
+                    <small>Platform: ${entry.structure_number || '-'}</small>
                 `).addTo(map);
 
                 markerLayers.push(mapMarker);

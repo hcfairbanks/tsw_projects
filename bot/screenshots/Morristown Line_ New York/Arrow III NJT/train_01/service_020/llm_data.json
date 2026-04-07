@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "7:54:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "07:55:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Pullman Yard Track 4 - 08:00:00",
-      "location": "Pullman Yard Track 4",
+      "location": "Pullman Yard",
       "time1": "08:00:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "4"
     }
   ]
 }

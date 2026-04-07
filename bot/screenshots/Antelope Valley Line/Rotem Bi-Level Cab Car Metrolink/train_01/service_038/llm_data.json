@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "18:30:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "LA Union Station Track 09",
-      "location": "LA Union Station Track 09",
+      "location": "LA Union Station",
       "time1": "",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "09"
     }
   ]
 }

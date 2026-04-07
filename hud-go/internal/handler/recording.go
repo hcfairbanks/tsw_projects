@@ -46,7 +46,7 @@ type processedEntry struct {
 	Location      string `json:"location"`
 	Arrival       string `json:"arrival"`
 	Departure     string `json:"departure"`
-	Platform      string `json:"platform"`
+	StructureNumber string `json:"structure_number"`
 	ApiName       string `json:"apiName"`
 	IsPassThrough bool   `json:"isPassThrough,omitempty"`
 	Action        string `json:"action"`
@@ -240,7 +240,7 @@ func (h *RecordingHandler) checkAutoStop() {
 // preprocessTimetableEntries queries timetable_entries and builds processed entries.
 func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []processedEntry {
 	rows, err := h.db.Query(`
-		SELECT te.id, COALESCE(l.name, '') as location, te.platform,
+		SELECT te.id, COALESCE(l.name, '') as location, te.structure_number,
 			te.time1, te.time2, COALESCE(ta.name, '') as action, te.api_name
 		FROM timetable_entries te
 		LEFT JOIN timetable_actions ta ON ta.id = te.action_id
@@ -254,19 +254,19 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 	defer rows.Close()
 
 	type rawEntry struct {
-		ID       int
-		Location string
-		Platform string
-		Time1    *string
-		Time2    *string
-		Action   string
-		ApiName  *string
+		ID              int
+		Location        string
+		StructureNumber string
+		Time1           *string
+		Time2           *string
+		Action          string
+		ApiName         *string
 	}
 
 	var rawEntries []rawEntry
 	for rows.Next() {
 		var e rawEntry
-		rows.Scan(&e.ID, &e.Location, &e.Platform, &e.Time1, &e.Time2, &e.Action, &e.ApiName)
+		rows.Scan(&e.ID, &e.Location, &e.StructureNumber, &e.Time1, &e.Time2, &e.Action, &e.ApiName)
 		rawEntries = append(rawEntries, e)
 	}
 
@@ -283,7 +283,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 		switch action {
 		case "WAIT FOR SERVICE":
 			location := e.Location
-			platform := e.Platform
+			platform := e.StructureNumber
 			arrival := ptrStr(e.Time2)
 			departure := arrival
 
@@ -302,7 +302,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 				Location:  location,
 				Arrival:   arrival,
 				Departure: departure,
-				Platform:  platform,
+				StructureNumber:  platform,
 				ApiName:   apiName,
 				Action:    e.Action,
 			})
@@ -310,7 +310,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 
 		case "STOP AT LOCATION":
 			location := e.Location
-			platform := e.Platform
+			platform := e.StructureNumber
 			arrival := ptrStr(e.Time1)
 			departure := ""
 
@@ -329,7 +329,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 				Location:  location,
 				Arrival:   arrival,
 				Departure: departure,
-				Platform:  platform,
+				StructureNumber:  platform,
 				ApiName:   apiName,
 				Action:    e.Action,
 			})
@@ -338,7 +338,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 		case "UNLOAD PASSENGERS":
 			location := e.Location
 			if location != "" && location != "-" {
-				platform := e.Platform
+				platform := e.StructureNumber
 				arrival := ptrStr(e.Time1)
 				apiName := buildApiName(location, platform, stationMapping)
 				processed = append(processed, processedEntry{
@@ -346,7 +346,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 					Location:  location,
 					Arrival:   arrival,
 					Departure: "",
-					Platform:  platform,
+					StructureNumber:  platform,
 					ApiName:   apiName,
 					Action:    e.Action,
 				})
@@ -356,7 +356,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 		case "GO VIA LOCATION":
 			location := e.Location
 			if location != "" && location != "-" {
-				platform := e.Platform
+				platform := e.StructureNumber
 				mappedLoc := stationMapping[location]
 				if mappedLoc == "" {
 					mappedLoc = location
@@ -366,7 +366,7 @@ func (h *RecordingHandler) preprocessTimetableEntries(timetableID int) []process
 					Location:      location,
 					Arrival:       "",
 					Departure:     "",
-					Platform:      platform,
+					StructureNumber:      platform,
 					ApiName:       mappedLoc,
 					IsPassThrough: true,
 					Action:        e.Action,
@@ -434,7 +434,7 @@ func (h *RecordingHandler) saveRecordingFile() {
 			"location": entry.Location,
 			"arrival":  entry.Arrival,
 			"departure": entry.Departure,
-			"platform": entry.Platform,
+			"structure_number": entry.StructureNumber,
 			"apiName":  entry.ApiName,
 		}
 		if entry.IsPassThrough {
@@ -747,7 +747,7 @@ func (h *RecordingHandler) Stop(w http.ResponseWriter, r *http.Request) {
 				"location":  entry.Location,
 				"arrival":   entry.Arrival,
 				"departure": entry.Departure,
-				"platform":  entry.Platform,
+				"structure_number": entry.StructureNumber,
 				"apiName":   entry.ApiName,
 			}
 			if entry.IsPassThrough {
@@ -1051,7 +1051,7 @@ func (h *RecordingHandler) GetRouteData(w http.ResponseWriter, r *http.Request) 
 			"location":  entry.Location,
 			"arrival":   entry.Arrival,
 			"departure": entry.Departure,
-			"platform":  entry.Platform,
+			"structure_number": entry.StructureNumber,
 			"apiName":   entry.ApiName,
 		}
 		if entry.IsPassThrough {
@@ -1629,7 +1629,7 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 				"location":  entry.Location,
 				"arrival":   entry.Arrival,
 				"departure": entry.Departure,
-				"platform":  entry.Platform,
+				"structure_number": entry.StructureNumber,
 				"apiName":   entry.ApiName,
 			}
 			if entry.IsPassThrough {
@@ -1644,7 +1644,7 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 	} else if h.timetableID > 0 {
 		// Fallback: query DB directly if cachedEntries not available
 		rows, err := h.db.Query(`
-			SELECT te.id, COALESCE(l.name, '') as location, te.platform,
+			SELECT te.id, COALESCE(l.name, '') as location, te.structure_number,
 				te.time1, te.time2, COALESCE(ta.name, '') as action, te.api_name
 			FROM timetable_entries te
 			LEFT JOIN timetable_actions ta ON ta.id = te.action_id
@@ -1656,14 +1656,14 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 			idx := 0
 			for rows.Next() {
 				var id int
-				var location, platform, action string
+				var location, structureNumber, action string
 				var time1, time2, apiName *string
-				rows.Scan(&id, &location, &platform, &time1, &time2, &action, &apiName)
+				rows.Scan(&id, &location, &structureNumber, &time1, &time2, &action, &apiName)
 
 				entry := map[string]any{
-					"index":    idx,
-					"location": location,
-					"platform": platform,
+					"index":            idx,
+					"location":         location,
+					"structure_number": structureNumber,
 					"arrival":  time1,
 					"departure": time2,
 					"action":   action,

@@ -54,7 +54,7 @@ type ocrEntry struct {
 	ActionID  *int   `json:"action_id"`
 	Details   string `json:"details"`
 	Location  string `json:"location"`
-	Platform  string `json:"platform"`
+	StructureNumber string `json:"structure_number"`
 	Time1     string `json:"time1"`
 	Time2     string `json:"time2"`
 	Latitude  string `json:"latitude"`
@@ -341,7 +341,7 @@ func (h *OCRHandler) Extract(w http.ResponseWriter, r *http.Request) {
 			ActionID:  actionID,
 			Details:   cleanOcrValue(row.details),
 			Location:  cleanOcrValue(row.location),
-			Platform:  cleanOcrValue(row.platform),
+			StructureNumber: cleanOcrValue(row.platform),
 			Time1:     cleanOcrValue(row.time1),
 			Time2:     cleanOcrValue(row.time2),
 			Latitude:  "",

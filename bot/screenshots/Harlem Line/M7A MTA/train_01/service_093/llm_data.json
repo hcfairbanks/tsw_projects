@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "11:53:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "11:55:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 3 - 12:04:30",
-      "location": "Harlem 125th Street Track 3",
+      "location": "Harlem 125th Street",
       "time1": "12:04:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "12:05:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fordham Track 3 - 12:12:30",
-      "location": "Fordham Track 3",
+      "location": "Fordham",
       "time1": "12:12:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "12:13:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Mount Vernon West Track 3 - 12:21:30",
-      "location": "Mount Vernon West Track 3",
+      "location": "Mount Vernon West",
       "time1": "12:21:30",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "12:22:00",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Fleetwood Track 1 - 12:24:30",
-      "location": "Fleetwood Track 1",
+      "location": "Fleetwood",
       "time1": "12:24:30",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "12:25:00",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Bronxville Track 1 - 12:27:00",
-      "location": "Bronxville Track 1",
+      "location": "Bronxville",
       "time1": "12:27:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "12:27:30",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Tuckahoe Track 1 - 12:29:30",
-      "location": "Tuckahoe Track 1",
+      "location": "Tuckahoe",
       "time1": "12:29:30",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,15 +142,18 @@
       "location": "",
       "time1": "12:30:00",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Crestwood Track 4 - 12:34:00",
-      "location": "Crestwood Track 4",
+      "location": "Crestwood",
       "time1": "12:34:00",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -139,7 +161,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 15
+      "sort_order": 15,
+      "structure": ""
     }
   ]
 }

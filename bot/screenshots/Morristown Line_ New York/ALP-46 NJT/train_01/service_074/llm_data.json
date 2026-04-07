@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "17:48:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,7 +28,8 @@
       "location": "",
       "time1": "17:50:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "GO VIA LOCATION",
@@ -35,23 +37,28 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "East River Tunnels Track 2 West - 17:59:00",
-      "location": "East River Tunnels Track 2 West",
+      "location": "East River Tunnels",
       "time1": "17:59:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "2 West"
     },
     {
       "action": "STOP AT LOCATION",
       "details": "New York Penn Track 12",
-      "location": "New York Penn Track 12",
+      "location": "New York Penn",
       "time1": "",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "12"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,7 +66,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     }
   ]
 }

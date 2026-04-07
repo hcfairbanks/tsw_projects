@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "5:33:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "05:35:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Woodgrange Park Platform 2 - 05:38:00",
-      "location": "Woodgrange Park Platform 2",
+      "location": "Woodgrange Park",
       "time1": "05:38:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "WAIT",
@@ -43,7 +47,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "18:43:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 32 - 19:18:00",
-      "location": "Grand Central Track 32",
+      "location": "Grand Central",
       "time1": "19:18:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "32"
     }
   ]
 }

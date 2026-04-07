@@ -31,3 +31,4 @@ __pycache__/
 # Project-specific
 tsw_api_reader/notes/
 bot/claude_reports/
+bot/screenshots/

@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "18:58:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "18:59:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Vincent Grade Acton Track 2 - 19:35:00",
-      "location": "Vincent Grade Acton Track 2",
+      "location": "Vincent Grade Acton",
       "time1": "19:35:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "19:36:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Palmdale Track 1 - 19:46:00",
-      "location": "Palmdale Track 1",
+      "location": "Palmdale",
       "time1": "19:46:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "19:47:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Lancaster Track 1 - 19:55:00",
-      "location": "Lancaster Track 1",
+      "location": "Lancaster",
       "time1": "19:55:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,7 +85,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     }
   ]
 }

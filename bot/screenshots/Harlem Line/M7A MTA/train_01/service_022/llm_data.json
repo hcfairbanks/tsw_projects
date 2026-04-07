@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "6:14:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Grand Central Track 41 - 06:20:00",
-      "location": "Grand Central Track 41",
+      "location": "Grand Central",
       "time1": "06:20:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "41"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -35,15 +38,18 @@
       "location": "",
       "time1": "06:21:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harlem 125th Street Track 2 - 06:30:00",
-      "location": "Harlem 125th Street Track 2",
+      "location": "Harlem 125th Street",
       "time1": "06:30:00",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -51,15 +57,18 @@
       "location": "",
       "time1": "06:30:30",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Yankees East 153rd Street Track 1 - 06:34:00",
-      "location": "Yankees East 153rd Street Track 1",
+      "location": "Yankees East 153rd Street",
       "time1": "06:34:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -67,7 +76,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     }
   ]
 }

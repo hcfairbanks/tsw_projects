@@ -1,1 +1,4 @@
 Service 045 | DUPLICATE | Train 663 GCT to Brewster 18:09 00:34 | Train 1 | M3A MTA
+Service 174 | DUPLICATE | Train 676 Southeast to GCT 18:49 00:46 | Train 1 | M7A MTA
+Service 211 | DUPLICATE | Train 591 GCT to North White Plains 22:31 01:06 | Train 1 | M7A MTA
+Service 216 | DUPLICATE | Train 692 Southeast to GCT 23:00 00:48 | Train 1 | M7A MTA

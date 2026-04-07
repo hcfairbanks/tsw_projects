@@ -20,15 +20,18 @@
       "location": "",
       "time1": "20:51:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Newark Broad Street Track 2 - 21:07:00",
-      "location": "Newark Broad Street Track 2",
+      "location": "Newark Broad Street",
       "time1": "21:07:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -36,15 +39,18 @@
       "location": "",
       "time1": "21:07:30",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Meadows Track 3 - 21:13:30",
-      "location": "Meadows Track 3",
+      "location": "Meadows",
       "time1": "21:13:30",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "Track",
+      "structure_number": "3"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -52,15 +58,18 @@
       "location": "",
       "time1": "21:14:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Hoboken Terminal Track 13 - 21:24:00",
-      "location": "Hoboken Terminal Track 13",
+      "location": "Hoboken Terminal",
       "time1": "21:24:00",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": "Track",
+      "structure_number": "13"
     },
     {
       "action": "UNLOAD PASSENGERS",
@@ -68,7 +77,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": ""
     }
   ]
 }

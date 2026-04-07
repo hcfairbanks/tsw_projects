@@ -65,7 +65,7 @@ from service_loop_scroll_method import (
     navigate_to_service_list,
     navigate_to_train_list,
 )
-from new_method import (
+from record import (
     count_trains_llm,
     extract_level_info_from_screen,
     extract_schedule_llm_json,

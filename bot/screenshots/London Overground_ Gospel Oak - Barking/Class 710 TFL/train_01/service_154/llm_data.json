@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "5:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "00:07:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Upper Holloway Platform 2 - 00:10:00",
-      "location": "Upper Holloway Platform 2",
+      "location": "Upper Holloway",
       "time1": "00:10:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "STOP AT LOCATION",
@@ -43,7 +47,9 @@
       "location": "Upper Holloway Reception Siding",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": "",
+      "structure_number": ""
     },
     {
       "action": "COUPLE TO FORMATION",
@@ -51,7 +57,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -59,7 +66,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     }
   ]
 }

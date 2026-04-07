@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "18:47:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "18:48:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Hoboken Terminal Track 13 - 19:53:00",
-      "location": "Hoboken Terminal Track 13",
+      "location": "Hoboken Terminal",
       "time1": "19:53:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "13"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,7 +47,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

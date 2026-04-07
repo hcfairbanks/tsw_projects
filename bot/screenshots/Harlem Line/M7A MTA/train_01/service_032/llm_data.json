@@ -19,15 +19,18 @@
       "location": "",
       "time1": "",
       "time2": "6:53:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Mount Vernon West Yard Track 06",
-      "location": "Mount Vernon West Yard Track 06",
+      "location": "Mount Vernon West Yard",
       "time1": "",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "Track",
+      "structure_number": "06"
     }
   ]
 }

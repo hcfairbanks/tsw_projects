@@ -19,7 +19,8 @@
       "location": "",
       "time1": "8:14:00",
       "time2": "",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
@@ -27,15 +28,19 @@
       "location": "Crestwood",
       "time1": "",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": "",
+      "structure_number": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Crestwood Track 4",
-      "location": "Crestwood Track 4",
+      "location": "Crestwood",
       "time1": "",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Track",
+      "structure_number": "4"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,7 +48,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

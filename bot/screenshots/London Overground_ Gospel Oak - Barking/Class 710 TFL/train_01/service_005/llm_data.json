@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "5:40:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "WAIT",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "05:42:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Barking Riverside Platform 1 - 06:05:00",
-      "location": "Barking Riverside Platform 1",
+      "location": "Barking Riverside",
       "time1": "06:05:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Platform",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,7 +47,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     }
   ]
 }

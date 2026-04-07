@@ -19,7 +19,8 @@
       "location": "",
       "time1": "",
       "time2": "8:37:00",
-      "sort_order": 0
+      "sort_order": 0,
+      "structure": ""
     },
     {
       "action": "LOAD PASSENGERS",
@@ -27,15 +28,18 @@
       "location": "",
       "time1": "08:39:00",
       "time2": "",
-      "sort_order": 1
+      "sort_order": 1,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Upper Holloway Platform 2 - 08:42:00",
-      "location": "Upper Holloway Platform 2",
+      "location": "Upper Holloway",
       "time1": "08:42:00",
       "time2": "",
-      "sort_order": 2
+      "sort_order": 2,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -43,15 +47,18 @@
       "location": "",
       "time1": "08:42:20",
       "time2": "",
-      "sort_order": 3
+      "sort_order": 3,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Crouch Hill Platform 2 - 08:45:00",
-      "location": "Crouch Hill Platform 2",
+      "location": "Crouch Hill",
       "time1": "08:45:00",
       "time2": "",
-      "sort_order": 4
+      "sort_order": 4,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -59,15 +66,18 @@
       "location": "",
       "time1": "08:45:20",
       "time2": "",
-      "sort_order": 5
+      "sort_order": 5,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Harringay Green Lanes Platform 2 - 08:48:00",
-      "location": "Harringay Green Lanes Platform 2",
+      "location": "Harringay Green Lanes",
       "time1": "08:48:00",
       "time2": "",
-      "sort_order": 6
+      "sort_order": 6,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -75,15 +85,18 @@
       "location": "",
       "time1": "08:48:20",
       "time2": "",
-      "sort_order": 7
+      "sort_order": 7,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "South Tottenham Platform 2 - 08:52:00",
-      "location": "South Tottenham Platform 2",
+      "location": "South Tottenham",
       "time1": "08:52:00",
       "time2": "",
-      "sort_order": 8
+      "sort_order": 8,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -91,15 +104,18 @@
       "location": "",
       "time1": "08:52:20",
       "time2": "",
-      "sort_order": 9
+      "sort_order": 9,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Blackhorse Road Platform 2 - 08:55:00",
-      "location": "Blackhorse Road Platform 2",
+      "location": "Blackhorse Road",
       "time1": "08:55:00",
       "time2": "",
-      "sort_order": 10
+      "sort_order": 10,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -107,15 +123,18 @@
       "location": "",
       "time1": "08:55:20",
       "time2": "",
-      "sort_order": 11
+      "sort_order": 11,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Walthamstow Queens Road Platform 2 - 08:57:00",
-      "location": "Walthamstow Queens Road Platform 2",
+      "location": "Walthamstow Queens Road",
       "time1": "08:57:00",
       "time2": "",
-      "sort_order": 12
+      "sort_order": 12,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -123,15 +142,18 @@
       "location": "",
       "time1": "08:57:20",
       "time2": "",
-      "sort_order": 13
+      "sort_order": 13,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Leyton Midland Road Platform 2 - 09:00:00",
-      "location": "Leyton Midland Road Platform 2",
+      "location": "Leyton Midland Road",
       "time1": "09:00:00",
       "time2": "",
-      "sort_order": 14
+      "sort_order": 14,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -139,15 +161,18 @@
       "location": "",
       "time1": "09:00:20",
       "time2": "",
-      "sort_order": 15
+      "sort_order": 15,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Leytonstone High Road Platform 2 - 09:02:00",
-      "location": "Leytonstone High Road Platform 2",
+      "location": "Leytonstone High Road",
       "time1": "09:02:00",
       "time2": "",
-      "sort_order": 16
+      "sort_order": 16,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -155,15 +180,18 @@
       "location": "",
       "time1": "09:02:20",
       "time2": "",
-      "sort_order": 17
+      "sort_order": 17,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Wanstead Park Platform 2 - 09:05:00",
-      "location": "Wanstead Park Platform 2",
+      "location": "Wanstead Park",
       "time1": "09:05:00",
       "time2": "",
-      "sort_order": 18
+      "sort_order": 18,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -171,15 +199,18 @@
       "location": "",
       "time1": "09:05:20",
       "time2": "",
-      "sort_order": 19
+      "sort_order": 19,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Woodgrange Park Platform 2 - 09:08:00",
-      "location": "Woodgrange Park Platform 2",
+      "location": "Woodgrange Park",
       "time1": "09:08:00",
       "time2": "",
-      "sort_order": 20
+      "sort_order": 20,
+      "structure": "Platform",
+      "structure_number": "2"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -187,15 +218,18 @@
       "location": "",
       "time1": "09:08:20",
       "time2": "",
-      "sort_order": 21
+      "sort_order": 21,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Barking Platform 7 - 09:12:00",
-      "location": "Barking Platform 7",
+      "location": "Barking",
       "time1": "09:12:00",
       "time2": "",
-      "sort_order": 22
+      "sort_order": 22,
+      "structure": "Platform",
+      "structure_number": "7"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -203,15 +237,18 @@
       "location": "",
       "time1": "09:12:30",
       "time2": "",
-      "sort_order": 23
+      "sort_order": 23,
+      "structure": ""
     },
     {
       "action": "STOP AT LOCATION",
       "details": "Barking Riverside Platform 1 - 09:19:00",
-      "location": "Barking Riverside Platform 1",
+      "location": "Barking Riverside",
       "time1": "09:19:00",
       "time2": "",
-      "sort_order": 24
+      "sort_order": 24,
+      "structure": "Platform",
+      "structure_number": "1"
     },
     {
       "action": "LOAD PASSENGERS",
@@ -219,7 +256,8 @@
       "location": "",
       "time1": "",
       "time2": "",
-      "sort_order": 25
+      "sort_order": 25,
+      "structure": ""
     }
   ]
 }
