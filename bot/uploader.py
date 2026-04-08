@@ -590,6 +590,55 @@ def upload_service(service_dir, train_name="", train_number=0, service_number=0,
             "timetable_id": None, "duplicate": False, "error": f"Create failed ({status}): {err}"}
 
 
+def upload_train_consist(timetable_id, train_id, train_number,
+                         weight=None, car_count=None, train_length=None,
+                         latitude=None, longitude=None):
+    """Upload a train consist record to the server.
+
+    Args:
+        timetable_id: ID of the timetable
+        train_id: ID of the train
+        train_number: Train number from folder structure (e.g. 1 from train_01)
+        weight: Tonnage (float)
+        car_count: Number of cars (int)
+        train_length: Length in meters (float)
+        latitude: Latitude where data was captured (float)
+        longitude: Longitude where data was captured (float)
+    """
+    if not timetable_id or not train_id:
+        print("       [uploader] Skipping train consist — missing timetable_id or train_id")
+        return False
+
+    body = {
+        "timetable_id": timetable_id,
+        "train_id": train_id,
+        "train_number": train_number,
+    }
+    if weight is not None:
+        body["weight"] = weight
+    if car_count is not None:
+        body["car_count"] = car_count
+    if train_length is not None:
+        body["train_length"] = train_length
+    if latitude is not None:
+        body["latitude"] = latitude
+    if longitude is not None:
+        body["longitude"] = longitude
+
+    try:
+        status, result = _api_post_json("/api/train-consists", body)
+        if status == 201:
+            print(f"       [uploader] Train consist saved (timetable={timetable_id}, train={train_id}, #={train_number})")
+            return True
+        else:
+            err = result.get("error", "Unknown error")
+            print(f"       [uploader] Train consist failed ({status}): {err}")
+            return False
+    except Exception as e:
+        print(f"       [uploader] Train consist error: {e}")
+        return False
+
+
 def _save_raw_ocr(service_dir, raw_texts):
     """Save raw OCR output to a text file in the service folder."""
     path = os.path.join(service_dir, "ocr_raw.txt")

@@ -31,7 +31,16 @@
 
         @media (max-width: 900px) {
             .weather-grid {
-                grid-template-columns: 1fr;
+                display: block;
+            }
+            .weather-grid > .section {
+                margin-bottom: 20px;
+            }
+            .button-row {
+                flex-direction: column;
+            }
+            .button-row .btn {
+                width: 100%;
             }
         }
 
@@ -161,7 +170,8 @@
         /* Buttons */
         .button-row {
             display: flex;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
@@ -260,6 +270,146 @@
             color: var(--bg-primary);
         }
 
+        /* Live Weather Section */
+        .live-weather-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .live-weather-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .live-weather-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--btn-primary-bg);
+        }
+
+        .live-weather-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .live-weather-info .coords {
+            font-family: monospace;
+            background: var(--bg-primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .live-weather-status {
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .live-weather-status.active {
+            background: rgba(0, 204, 102, 0.15);
+            color: #00cc66;
+        }
+
+        .live-weather-status.inactive {
+            background: rgba(255, 68, 68, 0.15);
+            color: #ff4444;
+        }
+
+        .interval-select {
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        /* Historical Weather Section */
+        .historical-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px 12px;
+            flex-wrap: wrap;
+        }
+
+        .historical-controls .btn-historical {
+            margin-left: auto;
+        }
+
+        .date-inputs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .date-inputs select, .date-inputs input {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .date-inputs label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .btn-historical {
+            padding: 8px 18px;
+            background: var(--btn-primary-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-historical:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-historical:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .historical-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .historical-info .matched-time {
+            font-family: monospace;
+            background: var(--bg-primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--accent-color);
+        }
+
         .notification {
             position: fixed;
             bottom: 20px;
@@ -298,6 +448,54 @@
                     <option value="" data-i18n="weather.selectPreset">-- Select a preset --</option>
                 </select>
                 <button class="btn btn-apply" onclick="applyPreset()" data-i18n="weather.applyPreset">Apply Preset</button>
+            </div>
+        </div>
+
+        <!-- Live Weather -->
+        <div class="section">
+            <div class="section-title" data-i18n="weather.liveWeather">Live Weather</div>
+            <div class="live-weather-toggle">
+                <label>
+                    <input type="checkbox" id="liveWeatherToggle" onchange="toggleLiveWeather()">
+                    <span data-i18n="weather.syncWeather">Sync weather from real world</span>
+                </label>
+                <span class="live-weather-status inactive" id="liveWeatherStatus" data-i18n="weather.liveOff">Off</span>
+                <span style="margin-left: auto; display: flex; align-items: center; gap: 6px;">
+                    <span data-i18n="weather.updateEvery">Update every</span>
+                    <select class="interval-select" id="liveWeatherInterval" onchange="updateLiveInterval()">
+                        <option value="60">1 min</option>
+                        <option value="300" selected>5 min</option>
+                        <option value="600">10 min</option>
+                        <option value="900">15 min</option>
+                        <option value="1800">30 min</option>
+                    </select>
+                </span>
+            </div>
+            <div class="live-weather-info" id="liveWeatherInfo" style="display: none;">
+                <span><span data-i18n="weather.position">Position:</span> <span class="coords" id="liveCoords">--</span></span>
+                <span><span data-i18n="weather.lastUpdate">Last update:</span> <span id="liveLastUpdate">--</span></span>
+            </div>
+        </div>
+
+        <!-- Historical Weather -->
+        <div class="section">
+            <div class="section-title" data-i18n="weather.historicalWeather">Historical Weather</div>
+            <div class="historical-controls">
+                <div class="date-inputs">
+                    <label data-i18n="weather.year">Year</label>
+                    <select id="histYear"></select>
+                    <label data-i18n="weather.month">Month</label>
+                    <select id="histMonth"></select>
+                    <label data-i18n="weather.day">Day</label>
+                    <select id="histDay"></select>
+                </div>
+                <span style="font-size: 12px; color: var(--text-secondary);"><span data-i18n="weather.inGameTime">In Game Time:</span> <span id="histGameTimeLive">--</span></span>
+                <button class="btn-historical" id="histApplyBtn" onclick="applyHistoricalWeather()" data-i18n="weather.apply">Apply</button>
+            </div>
+            <div class="historical-info" id="histInfo" style="display: none;">
+                <span><span data-i18n="weather.position">Position:</span> <span class="coords" id="histCoords">--</span></span>
+                <span><span data-i18n="weather.dateTimeMatched">Date/Time matched:</span> <span class="matched-time" id="histMatchedTime">--</span></span>
+                <span><span data-i18n="weather.gameTime">Game time:</span> <span id="histGameHour">--</span></span>
             </div>
         </div>
 
@@ -683,6 +881,17 @@
                     if (data.weather) {
                         updateStatusDisplay(data.weather);
                     }
+
+                    // Update in-game time display
+                    if (data.localTime) {
+                        const el = document.getElementById('histGameTimeLive');
+                        if (el) {
+                            // localTime is ISO8601, extract HH:MM
+                            const t = data.localTime;
+                            const idx = t.indexOf('T');
+                            el.textContent = idx >= 0 ? t.substring(idx + 1, idx + 6) : t;
+                        }
+                    }
                 } catch (err) {
                     console.error('Error parsing stream data:', err);
                 }
@@ -701,6 +910,234 @@
         })();
 
         // Theme and other initialization done above
+
+        // --- Historical Weather ---
+        function initHistoricalDatePickers() {
+            const yearSelect = document.getElementById('histYear');
+            const monthSelect = document.getElementById('histMonth');
+            const daySelect = document.getElementById('histDay');
+
+            // Years: 1940 to current year (Open-Meteo archive goes back to 1940)
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear; y >= 1940; y--) {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                yearSelect.appendChild(opt);
+            }
+
+            // Months
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            for (let m = 1; m <= 12; m++) {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = monthNames[m - 1];
+                monthSelect.appendChild(opt);
+            }
+
+            // Set to today by default
+            const today = new Date();
+            yearSelect.value = today.getFullYear();
+            monthSelect.value = today.getMonth() + 1;
+
+            // Update days when year/month change
+            yearSelect.addEventListener('change', updateDayOptions);
+            monthSelect.addEventListener('change', updateDayOptions);
+            updateDayOptions();
+
+            // Pre-select today's day
+            daySelect.value = today.getDate();
+        }
+
+        function updateDayOptions() {
+            const yearSelect = document.getElementById('histYear');
+            const monthSelect = document.getElementById('histMonth');
+            const daySelect = document.getElementById('histDay');
+
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            const prevDay = parseInt(daySelect.value) || 1;
+            daySelect.innerHTML = '';
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                daySelect.appendChild(opt);
+            }
+
+            // Restore previous selection if valid
+            daySelect.value = Math.min(prevDay, daysInMonth);
+        }
+
+        function getHistoricalDate() {
+            const y = document.getElementById('histYear').value;
+            const m = document.getElementById('histMonth').value.toString().padStart(2, '0');
+            const d = document.getElementById('histDay').value.toString().padStart(2, '0');
+            return y + '-' + m + '-' + d;
+        }
+
+        async function applyHistoricalWeather() {
+            const btn = document.getElementById('histApplyBtn');
+            btn.disabled = true;
+            btn.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.loading') : 'Loading...';
+
+            try {
+                const date = getHistoricalDate();
+                const response = await fetch('/api/weather/historical/apply?date=' + date, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    showNotification(result.error, true);
+                    return;
+                }
+
+                // Show info
+                document.getElementById('histInfo').style.display = 'flex';
+                document.getElementById('histCoords').textContent =
+                    result.latitude.toFixed(4) + ', ' + result.longitude.toFixed(4);
+                document.getElementById('histMatchedTime').textContent =
+                    result.matched_time || '--';
+                document.getElementById('histGameHour').textContent =
+                    result.game_time || '--';
+
+                // Update sliders
+                const w = result.weather;
+                document.getElementById('ctrl-Temperature').value = w.temperature;
+                updateTempSlider();
+                document.getElementById('ctrl-Cloudiness').value = (w.cloudiness * 100).toFixed(0);
+                updateSlider('Cloudiness');
+                document.getElementById('ctrl-Precipitation').value = (w.precipitation * 100).toFixed(0);
+                updateSlider('Precipitation');
+                document.getElementById('ctrl-Wetness').value = (w.wetness * 100).toFixed(0);
+                updateSlider('Wetness');
+                document.getElementById('ctrl-GroundSnow').value = (w.ground_snow * 100).toFixed(0);
+                updateSlider('GroundSnow');
+                document.getElementById('ctrl-PiledSnow').value = (w.piled_snow * 100).toFixed(0);
+                updateSlider('PiledSnow');
+                document.getElementById('ctrl-FogDensity').value = (w.fog_density * 100).toFixed(0);
+                updateSlider('FogDensity');
+
+                var histMsg = typeof i18n !== 'undefined' ? i18n.t('weather.historicalApplied') : 'Historical weather applied for';
+                var atWord = typeof i18n !== 'undefined' ? i18n.t('weather.at') : 'at';
+                if (result.applied === result.total) {
+                    showNotification(histMsg + ' ' + date + ' ' + atWord + ' ' + (result.game_time || '--'));
+                } else {
+                    showNotification(histMsg + ' (' + result.applied + '/' + result.total + ')', true);
+                }
+            } catch (err) {
+                showNotification('Historical weather error: ' + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.apply') : 'Apply';
+            }
+        }
+
+        // --- Live Weather ---
+        let liveWeatherTimer = null;
+        let liveWeatherActive = false;
+
+        function toggleLiveWeather() {
+            const checked = document.getElementById('liveWeatherToggle').checked;
+            if (checked) {
+                startLiveWeather();
+            } else {
+                stopLiveWeather();
+            }
+        }
+
+        function startLiveWeather() {
+            liveWeatherActive = true;
+            updateLiveWeatherStatus(true);
+            document.getElementById('liveWeatherInfo').style.display = 'flex';
+            applyLiveWeather(); // Apply immediately
+            scheduleLiveWeather();
+        }
+
+        function stopLiveWeather() {
+            liveWeatherActive = false;
+            updateLiveWeatherStatus(false);
+            if (liveWeatherTimer) {
+                clearInterval(liveWeatherTimer);
+                liveWeatherTimer = null;
+            }
+        }
+
+        function scheduleLiveWeather() {
+            if (liveWeatherTimer) clearInterval(liveWeatherTimer);
+            const seconds = parseInt(document.getElementById('liveWeatherInterval').value);
+            liveWeatherTimer = setInterval(() => {
+                if (liveWeatherActive) applyLiveWeather();
+            }, seconds * 1000);
+        }
+
+        function updateLiveInterval() {
+            if (liveWeatherActive) {
+                scheduleLiveWeather();
+            }
+        }
+
+        function updateLiveWeatherStatus(active) {
+            const el = document.getElementById('liveWeatherStatus');
+            if (active) {
+                el.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.liveActive') : 'Active';
+                el.className = 'live-weather-status active';
+            } else {
+                el.textContent = typeof i18n !== 'undefined' ? i18n.t('weather.liveOff') : 'Off';
+                el.className = 'live-weather-status inactive';
+            }
+        }
+
+        async function applyLiveWeather() {
+            try {
+                const response = await fetch('/api/weather/live/apply', { method: 'POST' });
+                const result = await response.json();
+
+                if (result.error) {
+                    showNotification(result.error, true);
+                    return;
+                }
+
+                // Update coords display
+                document.getElementById('liveCoords').textContent =
+                    result.latitude.toFixed(4) + ', ' + result.longitude.toFixed(4);
+
+                // Update last update time
+                document.getElementById('liveLastUpdate').textContent =
+                    new Date().toLocaleTimeString();
+
+                // Update the sliders to reflect live values
+                const w = result.weather;
+                document.getElementById('ctrl-Temperature').value = w.temperature;
+                updateTempSlider();
+                document.getElementById('ctrl-Cloudiness').value = (w.cloudiness * 100).toFixed(0);
+                updateSlider('Cloudiness');
+                document.getElementById('ctrl-Precipitation').value = (w.precipitation * 100).toFixed(0);
+                updateSlider('Precipitation');
+                document.getElementById('ctrl-Wetness').value = (w.wetness * 100).toFixed(0);
+                updateSlider('Wetness');
+                document.getElementById('ctrl-GroundSnow').value = (w.ground_snow * 100).toFixed(0);
+                updateSlider('GroundSnow');
+                document.getElementById('ctrl-PiledSnow').value = (w.piled_snow * 100).toFixed(0);
+                updateSlider('PiledSnow');
+                document.getElementById('ctrl-FogDensity').value = (w.fog_density * 100).toFixed(0);
+                updateSlider('FogDensity');
+
+                var liveMsg = typeof i18n !== 'undefined' ? i18n.t('weather.liveWeatherApplied') : 'Live weather applied';
+                if (result.applied === result.total) {
+                    showNotification(liveMsg + ' (' + result.applied + '/' + result.total + ')');
+                } else {
+                    showNotification(liveMsg + ' (' + result.applied + '/' + result.total + ')', true);
+                }
+            } catch (err) {
+                showNotification('Live weather error: ' + err.message, true);
+            }
+        }
     </script>
     <script src="/js/navbar.js"></script>
     <script src="/js/i18n.js"></script>
@@ -710,6 +1147,7 @@
             connectToStream();
             loadConfig();
             loadPresets();
+            initHistoricalDatePickers();
         });
     </script>
 </body>

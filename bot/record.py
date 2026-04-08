@@ -207,6 +207,7 @@ from uploader import (
     get_trains,
     get_section_trains,
     upload_service,
+    upload_train_consist,
     reset_route_cache,
 )
 from claude_cost_tracker import cost_tracker
@@ -1999,6 +2000,23 @@ def process_single_service(service_dir, service, train_name, train_index,
         print(f"       Upload error: {e}")
         _log(train_dir, f"Service #{service_index} | ERROR | {e}")
         result = {"success": False, "error": str(e)}
+
+    # Upload train consist data (weight/car_count/train_length per train)
+    tt_id = result.get("timetable_id") if result else None
+    if tt_id:
+        import uploader as _uploader_mod
+        train_id = _uploader_mod._train_ids[0] if _uploader_mod._train_ids else None
+        li = level_info or {}
+        upload_train_consist(
+            timetable_id=tt_id,
+            train_id=train_id,
+            train_number=train_index + 1,
+            weight=li.get("tonnage"),
+            car_count=li.get("car_count"),
+            train_length=li.get("train_length"),
+            latitude=first_lat,
+            longitude=first_lng,
+        )
 
     # Exit back to main menu
     exit_to_main_menu()

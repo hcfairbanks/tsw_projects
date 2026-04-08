@@ -1,8 +1,8 @@
 {
   "route": "Spirit of Steam: Liverpool - Crewe",
   "choice": null,
-  "train": "LMS Jubilee",
+  "train": "LMS Stanier 8F",
   "train_num": 1,
-  "service": 64,
-  "trains_per_class": 7
+  "service": 20,
+  "trains_per_class": 2
 }

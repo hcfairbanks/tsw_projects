@@ -170,6 +170,20 @@ type RouteMarker struct {
 	PlatformLength *float64 `db:"platform_length" json:"platform_length"`
 }
 
+// TrainConsist stores per-train details for a timetable.
+type TrainConsist struct {
+	ID          int      `db:"id"           json:"id"`
+	TimetableID int      `db:"timetable_id" json:"timetable_id"`
+	TrainID     int      `db:"train_id"     json:"train_id"`
+	Weight      *float64 `db:"weight"       json:"weight"`
+	CarCount    *int     `db:"car_count"    json:"car_count"`
+	TrainLength *float64 `db:"train_length" json:"train_length"`
+	TrainNumber *int     `db:"train_number" json:"train_number"`
+	Latitude    *float64 `db:"latitude"     json:"latitude"`
+	Longitude   *float64 `db:"longitude"    json:"longitude"`
+	CreatedAt   *string  `db:"created_at"   json:"created_at"`
+}
+
 // RouteLocation represents a specific location point on a route.
 type RouteLocation struct {
 	ID         int      `db:"id"          json:"id"`

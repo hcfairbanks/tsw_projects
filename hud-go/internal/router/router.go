@@ -111,6 +111,10 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 
 	// Weather
 	r.Patch("/api/weather/set", h.Weather.Set)
+	r.Get("/api/weather/live", h.LiveWeather.Fetch)
+	r.Post("/api/weather/live/apply", h.LiveWeather.Apply)
+	r.Get("/api/weather/historical", h.HistWeather.Fetch)
+	r.Post("/api/weather/historical/apply", h.HistWeather.Apply)
 
 	// Weather Presets
 	r.Get("/api/weather-presets", h.WeatherPreset.GetAll)
@@ -185,6 +189,12 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Post("/api/route-processing/process-latest", h.RouteProcessing.ProcessLatest)
 	r.Get("/api/route-processing/list", h.RouteProcessing.List)
 	r.Get("/api/route-processing/file", h.RouteProcessing.GetFile)
+
+	// Train Consists
+	r.Get("/api/train-consists", h.TrainConsist.GetAll)
+	r.Post("/api/train-consists", h.TrainConsist.Create)
+	r.Post("/api/train-consists/bulk", h.TrainConsist.BulkCreate)
+	r.Get("/api/timetables/{timetableId}/consists", h.TrainConsist.GetByTimetableID)
 
 	// Misc
 	r.Post("/api/reload-db", h.ReloadDB)

@@ -89,20 +89,20 @@ SPREADSHEETS_DIR = os.path.join(BASE_DIR, "spreadsheets")
 # route/class/train/services that need re-doing.
 
 RUN_MANIFEST = [
-    {"route": "Spirit of Steam: Liverpool - Crewe"},
-    {"route": "Horseshoe Curve"},
-    {"route": "Sand Patch Grade"},
-    {"route": "Sherman Hill: Cheyenne - Laramie"},
-    {"route": "Berninalinie"},
-    {"route": "Boston Worcester"},
-    {"route": "Riviera Line"},
-    {"route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"},
-    {"route": "Bahnstrecke Leipzig - Dresden"},
-    {"route": "Nahverkehr Dresden"},
-    {"route": "Boston Sprinter"},
-    {"route": "Great Western Express"},
-    {"route": "WCML South - London Euston to Milton Keynes"},
-    {"route": "London Underground Bakerloo Line"}
+    {"route": "Spirit of Steam: Liverpool - Crewe"}
+    # {"route": "Horseshoe Curve"},
+    # {"route": "Sand Patch Grade"},
+    # {"route": "Sherman Hill: Cheyenne - Laramie"},
+    # {"route": "Berninalinie"},
+    # {"route": "Boston Worcester"},
+    # {"route": "Riviera Line"},
+    # {"route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"},
+    # {"route": "Bahnstrecke Leipzig - Dresden"},
+    # {"route": "Nahverkehr Dresden"},
+    # {"route": "Boston Sprinter"},
+    # {"route": "Great Western Express"},
+    # {"route": "WCML South - London Euston to Milton Keynes"},
+    # {"route": "London Underground Bakerloo Line"}
 ]
 
 
@@ -313,7 +313,7 @@ TRAIN_BOX_TOP = 400
 TRAIN_BOX_WIDTH = 476
 TRAIN_BOX_HEIGHT = 270
 TRAIN_SCROLL_PER_BOX = -310   # scroll clicks to move one train box down
-TRAIN_VISIBLE_COUNT = 4       # trains visible without scrolling
+TRAIN_VISIBLE_COUNT = 5       # trains visible without scrolling
 TRAIN_FIRST_Y_OFFSET = 60     # Y offset from TRAIN_BOX_TOP to center of first train
 TRAIN_BOX_STRIDE = 85         # distance between train box centers
 

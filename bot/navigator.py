@@ -312,23 +312,30 @@ def click_train(index):
     pyautogui.scroll(-config.TRAIN_SCROLL_PER_BOX * 30)
     time.sleep(1.5)
 
-    # 2. Scroll down one box at a time, verifying each scroll moved
-    scrolls_done = 0
-    for _ in range(index):
-        before = np.array(pyautogui.screenshot(region=region))
-        pyautogui.moveTo(scroll_x, scroll_y)
-        time.sleep(0.3)
-        pyautogui.scroll(config.TRAIN_SCROLL_PER_BOX)
-        time.sleep(1.0)
-        after = np.array(pyautogui.screenshot(region=region))
+    # 2. If train is already visible without scrolling, click directly
+    if index < config.TRAIN_VISIBLE_COUNT:
+        offset = index
+        scrolls_done = 0
+    else:
+        # Scroll down one box at a time, verifying each scroll moved
+        scrolls_needed = index - (config.TRAIN_VISIBLE_COUNT - 1)
+        scrolls_done = 0
+        for _ in range(scrolls_needed):
+            before = np.array(pyautogui.screenshot(region=region))
+            pyautogui.moveTo(scroll_x, scroll_y)
+            time.sleep(0.3)
+            pyautogui.scroll(config.TRAIN_SCROLL_PER_BOX)
+            time.sleep(1.0)
+            after = np.array(pyautogui.screenshot(region=region))
 
-        if np.mean(np.abs(before.astype(float) - after.astype(float))) < 5.0:
-            print(f"       Scroll stopped after {scrolls_done} (list end reached)")
-            break
-        scrolls_done += 1
+            if np.mean(np.abs(before.astype(float) - after.astype(float))) < 5.0:
+                print(f"       Scroll stopped after {scrolls_done} (list end reached)")
+                break
+            scrolls_done += 1
 
-    # 3. The target train is at offset (index - scrolls_done) from the top
-    offset = index - scrolls_done
+        # Target is at the end of the visible window, adjusted for actual scrolls
+        offset = (config.TRAIN_VISIBLE_COUNT - 1) - (scrolls_needed - scrolls_done)
+
     click_y = config.TRAIN_BOX_TOP + config.TRAIN_FIRST_Y_OFFSET + offset * config.TRAIN_BOX_STRIDE
 
     print(f"       Scrolled {scrolls_done}/{index}, offset in view: {offset}, "

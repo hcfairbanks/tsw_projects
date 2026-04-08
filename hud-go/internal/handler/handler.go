@@ -3,9 +3,11 @@ package handler
 import (
 	"database/sql"
 	"net/http"
+	"time"
 
 	"hud-go/internal/tsw"
 )
+
 
 // Handlers holds all sub-handlers for the application.
 type Handlers struct {
@@ -18,6 +20,8 @@ type Handlers struct {
 	StationMapping  *StationMappingHandler
 	WeatherPreset   *WeatherPresetHandler
 	Weather         *WeatherHandler
+	LiveWeather     *LiveWeatherHandler
+	HistWeather     *HistoricalWeatherHandler
 	Config          *ConfigHandler
 	OCR             *OCRHandler
 	Stream          *StreamHandler
@@ -29,6 +33,7 @@ type Handlers struct {
 	Analysis        *AnalysisHandler
 	RouteProcessing *RouteProcessingHandler
 	Action          *ActionHandler
+	TrainConsist    *TrainConsistHandler
 	ReloadDB        func(http.ResponseWriter, *http.Request)
 }
 
@@ -96,6 +101,8 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		StationMapping:  &StationMappingHandler{db: db},
 		WeatherPreset:   &WeatherPresetHandler{db: db},
 		Weather:         &WeatherHandler{client: tswClient},
+		LiveWeather:     &LiveWeatherHandler{client: tswClient, httpClient: &http.Client{Timeout: 10 * time.Second}},
+		HistWeather:     &HistoricalWeatherHandler{client: tswClient, httpClient: &http.Client{Timeout: 10 * time.Second}},
 		Config:          &ConfigHandler{db: db},
 		OCR:             &OCRHandler{db: db},
 		Stream:          &StreamHandler{db: db, GetData: getData},
@@ -107,6 +114,7 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		Analysis:        &AnalysisHandler{db: db},
 		RouteProcessing: &RouteProcessingHandler{db: db},
 		Action:          &ActionHandler{db: db},
+		TrainConsist:    &TrainConsistHandler{db: db},
 		ReloadDB: func(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error":"not implemented"}`, http.StatusNotImplemented)
 		},

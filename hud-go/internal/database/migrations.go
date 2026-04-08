@@ -215,6 +215,24 @@ var migrations = []string{
 	)`,
 	`CREATE INDEX IF NOT EXISTS idx_route_markers_route_id ON route_markers(route_id)`,
 
+	// train_consists
+	`CREATE TABLE IF NOT EXISTS train_consists (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		timetable_id INTEGER NOT NULL,
+		train_id INTEGER NOT NULL,
+		weight REAL,
+		car_count INTEGER,
+		train_length REAL,
+		train_number INTEGER,
+		latitude REAL,
+		longitude REAL,
+		created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE,
+		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
+		UNIQUE(timetable_id, train_id, weight, car_count, train_length)
+	)`,
+	`CREATE INDEX IF NOT EXISTS idx_train_consists_timetable_id ON train_consists(timetable_id)`,
+
 	// route_locations
 	`CREATE TABLE IF NOT EXISTS route_locations (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,

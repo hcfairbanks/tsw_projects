@@ -15,6 +15,6 @@
   "minPointsForStop": 0,
   "autoStopTimeoutSeconds": 0,
   "saveFrequency": 0,
-  "enableSubscriptions": false,
+  "enableSubscriptions": true,
   "colorScheme": ""
 }
