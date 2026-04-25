@@ -56,7 +56,18 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 				if lat != 0 || lng != 0 {
 					speed, _ := data["speed"].(int)
 					gameTime, _ := data["localTime"].(string)
-					rec.ProcessCoordinate(lat, lng, float64(speed), gameTime)
+					var tileX, tileY *int
+					if tile, ok := data["currentTile"].(map[string]any); ok {
+						if x, ok := tile["x"].(int); ok {
+							xi := x
+							tileX = &xi
+						}
+						if y, ok := tile["y"].(int); ok {
+							yi := y
+							tileY = &yi
+						}
+					}
+					rec.ProcessCoordinate(lat, lng, float64(speed), gameTime, tileX, tileY)
 				}
 			}
 			// Feed station markers

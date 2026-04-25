@@ -1,8 +1,8 @@
 {
-  "route": "Spirit of Steam: Liverpool - Crewe",
+  "route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville",
   "choice": null,
-  "train": "LMS Stanier 8F",
+  "train": "M9 LIRR",
   "train_num": 1,
-  "service": 20,
-  "trains_per_class": 2
+  "service": 163,
+  "trains_per_class": 1
 }

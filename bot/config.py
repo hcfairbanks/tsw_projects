@@ -16,6 +16,9 @@ SERVER_URL = "http://localhost:3000"
 STEAM_APP_ID = "3656800"
 GAME_PROCESS_NAME = "BootstrapPackagedGame.exe"
 
+# Window positioning
+REPOSITION_GAME_WINDOW = False   # move/resize game window to top-left on launch
+
 # Timeouts (seconds)
 GAME_LAUNCH_TIMEOUT = 120   # TSW takes a while to start
 SCREEN_TIMEOUT = 60         # waiting for a menu screen to appear
@@ -50,7 +53,7 @@ REF_EXIT_GAME_YES_2 = os.path.join(REFERENCES_DIR, "exit_game_yes_2.png")
 REF_SERVICE_FILTER = os.path.join(REFERENCES_DIR, "service_search.png")
 REF_SERVICE_NAME_SEARCH = os.path.join(REFERENCES_DIR, "service_name_search.png")
 REF_EXTRA_SECTION_FILTER = os.path.join(REFERENCES_DIR, "section_search.png")
-REF_TRAINING_POPUP = os.path.join(REFERENCES_DIR, "training_popup.png")
+REF_TRAINING_POPUP = os.path.join(REFERENCES_DIR, "training.png")
 REF_TRAINING_DONT_ASK_AGAIN = os.path.join(REFERENCES_DIR, "training_dont_ask_again.png")
 
 # Spreadsheet directory
@@ -89,19 +92,13 @@ SPREADSHEETS_DIR = os.path.join(BASE_DIR, "spreadsheets")
 # route/class/train/services that need re-doing.
 
 RUN_MANIFEST = [
-    {"route": "Spirit of Steam: Liverpool - Crewe"}
-    # {"route": "Horseshoe Curve"},
-    # {"route": "Sand Patch Grade"},
-    # {"route": "Sherman Hill: Cheyenne - Laramie"},
-    # {"route": "Berninalinie"},
+    {"route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"},
+    {"route": "Bahnstrecke Leipzig - Dresden"},
+    {"route": "Nahverkehr Dresden"},
+    {"route": "Great Western Express"},
+    {"route": "WCML South - London Euston to Milton Keynes"}
+    # Up Stairs
     # {"route": "Boston Worcester"},
-    # {"route": "Riviera Line"},
-    # {"route": "LIRR Commuter: New York - Long Beach, Hempstead & Hicksville"},
-    # {"route": "Bahnstrecke Leipzig - Dresden"},
-    # {"route": "Nahverkehr Dresden"},
-    # {"route": "Boston Sprinter"},
-    # {"route": "Great Western Express"},
-    # {"route": "WCML South - London Euston to Milton Keynes"},
     # {"route": "London Underground Bakerloo Line"}
 ]
 
@@ -110,7 +107,7 @@ RUN_MANIFEST = [
 # TODO
 # Need to determine which ones of all layers completed
 
-# Finished
+# Finished  ( Does not have consists )
 # {"route": "London Overground: Gospel Oak - Barking"},
 # {"route": "Antelope Valley Line"},
 # {"route": "Morristown Line: New York"},
@@ -119,7 +116,15 @@ RUN_MANIFEST = [
 # {"route": "West Somerset Railway"},
 # {"route": "Oakville Subdivision"},
 # {"route": "Isle of Wight"},
+# {"route": "Spirit of Steam: Liverpool - Crewe"}
 
+# Finished  ( Does have consists )
+# {"route": "Boston Sprinter"},
+# {"route": "Horseshoe Curve"},
+# {"route": "Sand Patch Grade"},
+# {"route": "Sherman Hill: Cheyenne - Laramie"},
+# {"route": "Berninalinie"},
+# {"route": "Riviera Line"},
 
 # RUN_MANIFEST = [
 #     {
@@ -476,10 +481,12 @@ if os.path.isfile(CALIBRATION_FILE):
     # Determine game window offset for resolving relative coords
     if _is_relative:
         _detected = _detect_game_window()
+        _live_game_region = None
         if _detected:
             _gx, _gy = _detected[0], _detected[1]
+            _live_game_region = _detected
             GAME_REGION = _detected
-            print(f"[config] Live game window at ({_gx}, {_gy})")
+            print(f"[config] Live game window at ({_gx}, {_gy}, {GAME_REGION[2]}, {GAME_REGION[3]})")
         else:
             _stored = _cal.get("GAME_REGION", [0, 0, 1920, 1080])
             _gx, _gy = _stored[0], _stored[1]
@@ -501,9 +508,13 @@ if os.path.isfile(CALIBRATION_FILE):
     for _key in _CALIBRATION_TUPLE_KEYS:
         if _key in _cal:
             _g[_key] = tuple(_cal[_key])
-    # In relative mode GAME_REGION was already set from detection/stored above
+    # In relative mode, restore the detected/stored GAME_REGION
+    # (the tuple keys loop above may have overwritten it with the raw calibration value)
     if _is_relative:
-        _g["GAME_REGION"] = GAME_REGION
+        if _live_game_region is not None:
+            _g["GAME_REGION"] = _live_game_region
+        else:
+            _g["GAME_REGION"] = GAME_REGION
 
     # Recompute derived values
     BOXES_TO_SCROLL = BOXES_PER_PAGE - OVERLAP_BOXES
@@ -528,13 +539,36 @@ if os.path.isfile(CALIBRATION_FILE):
         with open(CLICK_REGISTRY_FILE, "r") as _rf:
             _reg_data = json.load(_rf)
         _reg_entries = _reg_data.get("entries", _reg_data)
+
+        # Determine scale factors if source resolution differs from current
+        _source_region = _reg_data.get("source_game_region")
+        if _source_region:
+            _src_w, _src_h = _source_region[2], _source_region[3]
+            _cur_w, _cur_h = GAME_REGION[2], GAME_REGION[3]
+            _scale_x = _cur_w / _src_w
+            _scale_y = _cur_h / _src_h
+            _needs_scale = abs(_scale_x - 1.0) > 0.01 or abs(_scale_y - 1.0) > 0.01
+            if _needs_scale:
+                print(f"[config] Scaling CLICK_REGISTRY: {_src_w}x{_src_h} -> {_cur_w}x{_cur_h} "
+                      f"(x{_scale_x:.3f}, y{_scale_y:.3f})")
+        else:
+            _needs_scale = False
+
         CLICK_REGISTRY = {}
         for k, v in _reg_entries.items():
             entry = dict(v)
-            # Apply game window offset to click_x/click_y (they're stored relative)
+            cx = v["click_x"]
+            cy = v["click_y"]
+            # Scale from source resolution to current resolution
+            if _needs_scale:
+                cx = int(round(cx * _scale_x))
+                cy = int(round(cy * _scale_y))
+            # Apply game window offset (coords are relative to game window)
             if _is_relative:
-                entry["click_x"] = v["click_x"] + _gx
-                entry["click_y"] = v["click_y"] + _gy
+                cx += _gx
+                cy += _gy
+            entry["click_x"] = cx
+            entry["click_y"] = cy
             CLICK_REGISTRY[int(k)] = entry
         print(f"[config] Loaded CLICK_REGISTRY from click_registry.json ({len(CLICK_REGISTRY)} entries)")
 

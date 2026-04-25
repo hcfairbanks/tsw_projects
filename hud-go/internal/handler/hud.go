@@ -347,13 +347,15 @@ func (h *HUDHandler) SetTimetableIndex(w http.ResponseWriter, r *http.Request) {
 
 // UpdateTimetableCoordinates updates coordinates on a specific timetable entry.
 // POST /api/update-timetable-coordinates
-// Body: {"entryId": "...", "latitude": N, "longitude": N}
+// Body: {"entryId": "...", "latitude": N, "longitude": N, "x": N, "y": N}
 func (h *HUDHandler) UpdateTimetableCoordinates(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		EntryID   any     `json:"entryId"`
 		Index     *int    `json:"index"`
 		Latitude  float64 `json:"latitude"`
 		Longitude float64 `json:"longitude"`
+		X         *int    `json:"x"`
+		Y         *int    `json:"y"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -381,14 +383,24 @@ func (h *HUDHandler) UpdateTimetableCoordinates(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	applyCoords := func(m map[string]any) {
+		m["latitude"] = body.Latitude
+		m["longitude"] = body.Longitude
+		if body.X != nil {
+			m["x"] = *body.X
+		}
+		if body.Y != nil {
+			m["y"] = *body.Y
+		}
+	}
+
 	// Find the entry by entryId or index
 	found := false
 	if body.EntryID != nil {
 		for i, e := range entries {
 			if m, ok := e.(map[string]any); ok {
 				if m["id"] == body.EntryID {
-					m["latitude"] = body.Latitude
-					m["longitude"] = body.Longitude
+					applyCoords(m)
 					entries[i] = m
 					found = true
 					break
@@ -399,8 +411,7 @@ func (h *HUDHandler) UpdateTimetableCoordinates(w http.ResponseWriter, r *http.R
 		idx := *body.Index
 		if idx >= 0 && idx < len(entries) {
 			if m, ok := entries[idx].(map[string]any); ok {
-				m["latitude"] = body.Latitude
-				m["longitude"] = body.Longitude
+				applyCoords(m)
 				entries[idx] = m
 				found = true
 			}
@@ -424,14 +435,21 @@ func (h *HUDHandler) UpdateTimetableCoordinates(w http.ResponseWriter, r *http.R
 			entryID = v
 		}
 		if entryID > 0 {
+			var tileXArg, tileYArg any
+			if body.X != nil {
+				tileXArg = *body.X
+			}
+			if body.Y != nil {
+				tileYArg = *body.Y
+			}
 			_, err := h.db.Exec(
-				"UPDATE timetable_entries SET latitude = ?, longitude = ?, coord_source = 'manual' WHERE id = ?",
-				body.Latitude, body.Longitude, entryID,
+				"UPDATE timetable_entries SET latitude = ?, longitude = ?, tile_x = ?, tile_y = ?, coord_source = 'manual' WHERE id = ?",
+				body.Latitude, body.Longitude, tileXArg, tileYArg, entryID,
 			)
 			if err != nil {
 				log.Printf("[SAVE LOC] DB error updating entry %d: %v", entryID, err)
 			} else {
-				log.Printf("[SAVE LOC] Updated entry %d coordinates: lat=%f, lng=%f", entryID, body.Latitude, body.Longitude)
+				log.Printf("[SAVE LOC] Updated entry %d coordinates: lat=%f, lng=%f x=%v y=%v", entryID, body.Latitude, body.Longitude, tileXArg, tileYArg)
 			}
 		}
 	}

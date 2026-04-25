@@ -1378,14 +1378,20 @@
             }
 
             try {
+                const ds = latEl.dataset;
+                const payload = {
+                    index: index,
+                    latitude: parseFloat(lat),
+                    longitude: parseFloat(lng)
+                };
+                if (ds.tileX !== undefined && ds.tileY !== undefined) {
+                    payload.x = parseInt(ds.tileX, 10);
+                    payload.y = parseInt(ds.tileY, 10);
+                }
                 const response = await fetch('/api/recording/save-timetable-coords', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        index: index,
-                        latitude: parseFloat(lat),
-                        longitude: parseFloat(lng)
-                    })
+                    body: JSON.stringify(payload)
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -1476,6 +1482,16 @@
                     document.getElementById('currentLat').dataset.fullValue = lat;
                     document.getElementById('currentLng').dataset.fullValue = lng;
 
+                    // Capture current tile x/y (from DriverAid.PlayerInfo.currentTile) for saving
+                    const latDs = document.getElementById('currentLat').dataset;
+                    if (data.currentTile && typeof data.currentTile.x === 'number' && typeof data.currentTile.y === 'number') {
+                        latDs.tileX = data.currentTile.x;
+                        latDs.tileY = data.currentTile.y;
+                    } else {
+                        delete latDs.tileX;
+                        delete latDs.tileY;
+                    }
+
                     // Update train marker
                     if (trainMarker) {
                         trainMarker.setLatLng([lat, lng]);
@@ -1515,6 +1531,8 @@
                     document.getElementById('currentLng').textContent = '-';
                     document.getElementById('currentLat').dataset.fullValue = '';
                     document.getElementById('currentLng').dataset.fullValue = '';
+                    delete document.getElementById('currentLat').dataset.tileX;
+                    delete document.getElementById('currentLat').dataset.tileY;
 
                     // Remove train marker if it exists
                     if (trainMarker) {

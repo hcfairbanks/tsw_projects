@@ -47,7 +47,8 @@
 #     21. Exit                — Capture 'Exit Game' icon (image countdown)
 #                               a. Not hovered
 #                               b. Hovered
-#     22. Exit Confirm        — Capture dialog box and 'Yes' button (image countdown)
+#     22. Exit Dialog Box     — Capture the exit confirmation dialog box background
+#     23. Exit Confirm        — Capture 'Yes' button on the exit dialog (image countdown)
 #                               a. Not hovered
 #                               b. Hovered
 #
@@ -237,7 +238,7 @@ def banner(step_num, total, title, description):
         print(f"\n  {description}")
 
 
-TOTAL_STEPS = 22
+TOTAL_STEPS = 23
 
 
 # ── calibration steps (in game flow order) ───────────────────────────────────
@@ -782,9 +783,20 @@ def step_17_exit(cal):
     capture_reference("exit_game_2.png", reuse_region=(tl, br))
 
 
-def step_18_exit_confirm(cal):
-    """Capture the exit confirmation dialog and Yes button."""
-    banner(22, TOTAL_STEPS, "EXIT CONFIRM (IMAGE COUNTDOWN)",
+def step_18a_exit_dialogbox(cal):
+    """Capture the exit confirmation dialog box background."""
+    banner(22, TOTAL_STEPS, "EXIT DIALOG BOX",
+           "Click the 'Exit Game' icon so the confirmation dialog appears.\n"
+           "  Capture the dialog box background (not the Yes/No buttons).")
+
+    input("  Press Enter when the exit dialog is visible... ")
+
+    capture_reference("exit_game_dialogbox.png")
+
+
+def step_18b_exit_confirm(cal):
+    """Capture the Yes button on the exit dialog."""
+    banner(23, TOTAL_STEPS, "EXIT CONFIRM (IMAGE COUNTDOWN)",
            "Two images are required here.\n"
            "  1. A non-hover state\n"
            "  2. A hover state (you will see a yellow border)")
@@ -817,7 +829,8 @@ STEPS = [
     ("Schedule",             step_16_schedule),
     ("Main Menu Home",       step_16b_main_menu_home),
     ("Exit",                 step_17_exit),
-    ("Exit Confirm",         step_18_exit_confirm),
+    ("Exit Dialog Box",      step_18a_exit_dialogbox),
+    ("Exit Confirm",         step_18b_exit_confirm),
 ]
 
 

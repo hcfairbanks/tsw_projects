@@ -199,6 +199,7 @@ from navigator import (
     click_train,
     exit_game,
     kill_game,
+    position_game_window,
 )
 from schedule_capture import capture_schedule
 from uploader import (
@@ -2072,12 +2073,7 @@ def process_all_services(train_dir, train_index, train_name,
         captured = load_captured_services(class_dir) if class_dir else set()
         if captured:
             original_count = len(service_list)
-            if start_service is not None and start_service > 1:
-                service_list = [s for s in service_list
-                                if s["global_index"] >= start_service
-                                or _service_key(s) not in captured]
-            else:
-                service_list = [s for s in service_list if _service_key(s) not in captured]
+            service_list = [s for s in service_list if _service_key(s) not in captured]
             skipped = original_count - len(service_list)
             if skipped:
                 print(f"       Skipping {skipped} services already captured by previous trains")
@@ -2475,6 +2471,8 @@ def run_single_route():
             try:
                 if need_launch:
                     launch_game()
+                    if config.REPOSITION_GAME_WINDOW:
+                        position_game_window()
                     pass_warning_screen()
                     pass_splash_screen()
                     click_to_the_trains()

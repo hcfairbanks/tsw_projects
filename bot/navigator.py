@@ -1,3 +1,5 @@
+import ctypes
+from ctypes import wintypes
 import os
 import subprocess
 import time
@@ -7,6 +9,55 @@ import pyautogui
 
 import config
 from utils import wait_and_click, wait_for_image
+
+
+def _find_game_hwnd():
+    """Find the TSW game window handle."""
+    user32 = ctypes.windll.user32
+    WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+    hwnd_found = []
+
+    def callback(hwnd, lparam):
+        if user32.IsWindowVisible(hwnd):
+            length = user32.GetWindowTextLengthW(hwnd)
+            if length > 0:
+                buf = ctypes.create_unicode_buffer(length + 1)
+                user32.GetWindowTextW(hwnd, buf, length + 1)
+                if 'train sim world' in buf.value.lower():
+                    hwnd_found.append(hwnd)
+        return True
+
+    user32.EnumWindows(WNDENUMPROC(callback), 0)
+    return hwnd_found[0] if hwnd_found else None
+
+
+def position_game_window(timeout=120):
+    """Move the game window to top-left corner at calibrated size and bring to foreground.
+
+    Polls until the game window is found (up to timeout seconds).
+    Returns True if successful, False if timed out.
+    """
+    user32 = ctypes.windll.user32
+    target_w = config.GAME_REGION[2]
+    target_h = config.GAME_REGION[3]
+
+    start = time.time()
+    while time.time() - start < timeout:
+        hwnd = _find_game_hwnd()
+        if hwnd is not None:
+            # Move and resize to top-left at calibrated size
+            SWP_NOZORDER = 0x0004
+            user32.SetWindowPos(hwnd, None, 0, 0, target_w, target_h, SWP_NOZORDER)
+            # Bring to foreground
+            user32.SetForegroundWindow(hwnd)
+            # Update GAME_REGION so all subsequent screenshot calls use correct coords
+            config.GAME_REGION = (0, 0, target_w, target_h)
+            print(f"[navigator] Game window repositioned to (0, 0, {target_w}, {target_h}) and brought to foreground")
+            return True
+        time.sleep(2)
+
+    print("[navigator] Game window not found — timed out waiting")
+    return False
 
 
 def launch_game():
@@ -433,6 +484,8 @@ def relaunch_and_navigate(train_name, extra_section_choice=None):
     """
     print("\n       Relaunching game...")
     launch_game()
+    if config.REPOSITION_GAME_WINDOW:
+        position_game_window()
     pass_warning_screen()
     pass_splash_screen()
     click_to_the_trains()

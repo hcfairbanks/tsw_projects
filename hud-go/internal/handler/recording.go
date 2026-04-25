@@ -22,6 +22,8 @@ import (
 type Coordinate struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+	TileX     *int    `json:"x,omitempty"`
+	TileY     *int    `json:"y,omitempty"`
 }
 
 // Marker represents a station/marker discovered during recording.
@@ -84,6 +86,8 @@ type RecordingHandler struct {
 
 	// Marker/position tracking
 	currentPosition      *Coordinate     // Latest player position (for marker processing)
+	currentTileX         *int            // Latest player tile X (from DriverAid.PlayerInfo.currentTile)
+	currentTileY         *int            // Latest player tile Y
 	processedMarkerNames map[string]bool // Track which markers have been seen
 
 	// Save frequency
@@ -443,6 +447,12 @@ func (h *RecordingHandler) saveRecordingFile() {
 		if saved, ok := h.savedCoords[i]; ok {
 			te["latitude"] = saved.Latitude
 			te["longitude"] = saved.Longitude
+			if saved.TileX != nil {
+				te["x"] = *saved.TileX
+			}
+			if saved.TileY != nil {
+				te["y"] = *saved.TileY
+			}
 		}
 		timetable = append(timetable, te)
 	}
@@ -630,7 +640,16 @@ func (h *RecordingHandler) Start(w http.ResponseWriter, r *http.Request) {
 					if cm, ok := c.(map[string]any); ok {
 						lat, _ := cm["latitude"].(float64)
 						lng, _ := cm["longitude"].(float64)
-						h.coordinates = append(h.coordinates, Coordinate{Latitude: lat, Longitude: lng})
+						coord := Coordinate{Latitude: lat, Longitude: lng}
+						if x, ok := cm["x"].(float64); ok {
+							xi := int(x)
+							coord.TileX = &xi
+						}
+						if y, ok := cm["y"].(float64); ok {
+							yi := int(y)
+							coord.TileY = &yi
+						}
+						h.coordinates = append(h.coordinates, coord)
 					}
 				}
 				log.Printf("Resuming recording: %d existing coordinates loaded", len(h.coordinates))
@@ -662,7 +681,16 @@ func (h *RecordingHandler) Start(w http.ResponseWriter, r *http.Request) {
 						lat, hasLat := em["latitude"].(float64)
 						lng, hasLng := em["longitude"].(float64)
 						if hasLat && hasLng {
-							h.savedCoords[idx] = Coordinate{Latitude: lat, Longitude: lng}
+							coord := Coordinate{Latitude: lat, Longitude: lng}
+							if x, ok := em["x"].(float64); ok {
+								xi := int(x)
+								coord.TileX = &xi
+							}
+							if y, ok := em["y"].(float64); ok {
+								yi := int(y)
+								coord.TileY = &yi
+							}
+							h.savedCoords[idx] = coord
 						}
 					}
 				}
@@ -756,6 +784,12 @@ func (h *RecordingHandler) Stop(w http.ResponseWriter, r *http.Request) {
 			if saved, ok := h.savedCoords[i]; ok {
 				te["latitude"] = saved.Latitude
 				te["longitude"] = saved.Longitude
+				if saved.TileX != nil {
+					te["x"] = *saved.TileX
+				}
+				if saved.TileY != nil {
+					te["y"] = *saved.TileY
+				}
 			}
 			timetable = append(timetable, te)
 		}
@@ -925,9 +959,16 @@ func (h *RecordingHandler) saveToDatabase(timetableID int, coords []Coordinate, 
 				// Match by location name against DB entries
 				for _, dbe := range dbEntries {
 					if dbe.Location == entry.Location || (idx == 0 && dbe.Action == "WAIT FOR SERVICE") {
+						var tileXArg, tileYArg any
+						if coord.TileX != nil {
+							tileXArg = *coord.TileX
+						}
+						if coord.TileY != nil {
+							tileYArg = *coord.TileY
+						}
 						_, err := h.db.Exec(
-							"UPDATE timetable_entries SET latitude = ?, longitude = ?, coord_source = 'automatic' WHERE id = ?",
-							fmt.Sprintf("%f", coord.Latitude), fmt.Sprintf("%f", coord.Longitude), dbe.ID,
+							"UPDATE timetable_entries SET latitude = ?, longitude = ?, tile_x = ?, tile_y = ?, coord_source = 'automatic' WHERE id = ?",
+							fmt.Sprintf("%f", coord.Latitude), fmt.Sprintf("%f", coord.Longitude), tileXArg, tileYArg, dbe.ID,
 						)
 						if err == nil {
 							entriesUpdated++
@@ -1061,6 +1102,12 @@ func (h *RecordingHandler) GetRouteData(w http.ResponseWriter, r *http.Request) 
 		if saved, ok := h.savedCoords[i]; ok {
 			te["latitude"] = saved.Latitude
 			te["longitude"] = saved.Longitude
+			if saved.TileX != nil {
+				te["x"] = *saved.TileX
+			}
+			if saved.TileY != nil {
+				te["y"] = *saved.TileY
+			}
 		} else if h.timetableID > 0 {
 			// Check database for existing coordinates
 			te["latitude"] = nil
@@ -1102,6 +1149,8 @@ func (h *RecordingHandler) SaveTimetableCoords(w http.ResponseWriter, r *http.Re
 		Index     int     `json:"index"`
 		Latitude  float64 `json:"latitude"`
 		Longitude float64 `json:"longitude"`
+		X         *int    `json:"x"`
+		Y         *int    `json:"y"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		util.Error(w, http.StatusBadRequest, "Invalid JSON: "+err.Error())
@@ -1133,6 +1182,8 @@ func (h *RecordingHandler) SaveTimetableCoords(w http.ResponseWriter, r *http.Re
 	h.savedCoords[body.Index] = Coordinate{
 		Latitude:  body.Latitude,
 		Longitude: body.Longitude,
+		TileX:     body.X,
+		TileY:     body.Y,
 	}
 
 	log.Printf("Saved timetable entry %d coordinates to recording: %f, %f", body.Index, body.Latitude, body.Longitude)
@@ -1437,7 +1488,16 @@ func (h *RecordingHandler) LoadFile(w http.ResponseWriter, r *http.Request) {
 			if cm, ok := c.(map[string]any); ok {
 				lat, _ := cm["latitude"].(float64)
 				lng, _ := cm["longitude"].(float64)
-				h.coordinates = append(h.coordinates, Coordinate{Latitude: lat, Longitude: lng})
+				coord := Coordinate{Latitude: lat, Longitude: lng}
+				if x, ok := cm["x"].(float64); ok {
+					xi := int(x)
+					coord.TileX = &xi
+				}
+				if y, ok := cm["y"].(float64); ok {
+					yi := int(y)
+					coord.TileY = &yi
+				}
+				h.coordinates = append(h.coordinates, coord)
 			}
 		}
 	}
@@ -1476,7 +1536,16 @@ func (h *RecordingHandler) LoadFile(w http.ResponseWriter, r *http.Request) {
 				lat, hasLat := em["latitude"].(float64)
 				lng, hasLng := em["longitude"].(float64)
 				if hasLat && hasLng {
-					h.savedCoords[idx] = Coordinate{Latitude: lat, Longitude: lng}
+					coord := Coordinate{Latitude: lat, Longitude: lng}
+					if x, ok := em["x"].(float64); ok {
+						xi := int(x)
+						coord.TileX = &xi
+					}
+					if y, ok := em["y"].(float64); ok {
+						yi := int(y)
+						coord.TileY = &yi
+					}
+					h.savedCoords[idx] = coord
 				}
 			}
 		}
@@ -1638,6 +1707,12 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 			if saved, ok := h.savedCoords[i]; ok {
 				te["latitude"] = saved.Latitude
 				te["longitude"] = saved.Longitude
+				if saved.TileX != nil {
+					te["x"] = *saved.TileX
+				}
+				if saved.TileY != nil {
+					te["y"] = *saved.TileY
+				}
 			}
 			timetable = append(timetable, te)
 		}
@@ -1673,6 +1748,12 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 				if saved, ok := h.savedCoords[idx]; ok {
 					entry["latitude"] = saved.Latitude
 					entry["longitude"] = saved.Longitude
+					if saved.TileX != nil {
+						entry["x"] = *saved.TileX
+					}
+					if saved.TileY != nil {
+						entry["y"] = *saved.TileY
+					}
 				}
 
 				timetable = append(timetable, entry)
@@ -1713,7 +1794,7 @@ func (h *RecordingHandler) GetStreamState() map[string]any {
 
 // ProcessCoordinate adds a GPS coordinate to the active recording.
 // Called by the telemetry stream, not an HTTP handler.
-func (h *RecordingHandler) ProcessCoordinate(lat, lng, speed float64, gameTimeISO string) {
+func (h *RecordingHandler) ProcessCoordinate(lat, lng, speed float64, gameTimeISO string, tileX, tileY *int) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	if !h.isRecording || h.isPaused {
@@ -1733,8 +1814,21 @@ func (h *RecordingHandler) ProcessCoordinate(lat, lng, speed float64, gameTimeIS
 		return
 	}
 
-	// Update current position for marker processing
-	h.currentPosition = &Coordinate{Latitude: lat, Longitude: lng}
+	// Copy tile pointers so their memory is stable for downstream consumers.
+	var tx, ty *int
+	if tileX != nil {
+		v := *tileX
+		tx = &v
+	}
+	if tileY != nil {
+		v := *tileY
+		ty = &v
+	}
+
+	// Update current position/tile for marker processing
+	h.currentPosition = &Coordinate{Latitude: lat, Longitude: lng, TileX: tx, TileY: ty}
+	h.currentTileX = tx
+	h.currentTileY = ty
 
 	// Only add if coordinate is different from last one
 	isDuplicate := false
@@ -1749,7 +1843,7 @@ func (h *RecordingHandler) ProcessCoordinate(lat, lng, speed float64, gameTimeIS
 		// Update last unique coordinate time for auto-stop tracking
 		h.lastUniqueCoordTime = time.Now()
 
-		h.coordinates = append(h.coordinates, Coordinate{Latitude: lat, Longitude: lng})
+		h.coordinates = append(h.coordinates, Coordinate{Latitude: lat, Longitude: lng, TileX: tx, TileY: ty})
 
 		// Save to file periodically based on save frequency setting
 		if h.saveFrequency > 0 && len(h.coordinates)%h.saveFrequency == 0 {
@@ -1774,6 +1868,8 @@ func (h *RecordingHandler) ProcessCoordinate(lat, lng, speed float64, gameTimeIS
 					h.savedCoords[nextIdx] = Coordinate{
 						Latitude:  lat,
 						Longitude: lng,
+						TileX:     tx,
+						TileY:     ty,
 					}
 
 					// Persist to file

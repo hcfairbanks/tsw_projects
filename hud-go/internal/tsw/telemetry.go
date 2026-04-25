@@ -16,6 +16,7 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 
 	data := map[string]any{
 		"playerPosition":           nil,
+		"currentTile":              nil,
 		"localTime":                nil,
 		"speed":                    0,
 		"direction":                0,
@@ -83,6 +84,13 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 				// Filter stale Chatham position
 				if lat != 51.380108707397724 || lng != 0.5219243867730494 {
 					data["playerPosition"] = map[string]any{"latitude": lat, "longitude": lng}
+				}
+			}
+			if tile, ok := values["currentTile"].(map[string]any); ok {
+				x, hasX := tile["x"].(float64)
+				y, hasY := tile["y"].(float64)
+				if hasX && hasY {
+					data["currentTile"] = map[string]any{"x": int(x), "y": int(y)}
 				}
 			}
 			if cm, ok := values["cameraMode"].(string); ok {

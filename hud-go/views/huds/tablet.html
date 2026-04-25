@@ -1758,6 +1758,7 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
         var stationScrollOffset = 0;
         var stationSelectorBounds = null;
         var currentPlayerPosition = null;
+        var currentTile = null;
 
         // Load config to check development mode
         async function loadConfig() {
@@ -2009,14 +2010,19 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             }
 
             try {
+                var payload = {
+                    entryId: entryId,
+                    latitude: currentPlayerPosition.latitude,
+                    longitude: currentPlayerPosition.longitude
+                };
+                if (currentTile && typeof currentTile.x === 'number' && typeof currentTile.y === 'number') {
+                    payload.x = currentTile.x;
+                    payload.y = currentTile.y;
+                }
                 var response = await fetch('/api/update-timetable-coordinates', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        entryId: entryId,
-                        latitude: currentPlayerPosition.latitude,
-                        longitude: currentPlayerPosition.longitude
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 var result = await response.json();
@@ -2024,7 +2030,11 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                     // Update local cache
                     cachedTimetableItems[selectedStationIndex].latitude = currentPlayerPosition.latitude;
                     cachedTimetableItems[selectedStationIndex].longitude = currentPlayerPosition.longitude;
-                    console.log('Location saved for station:', selectedStation.location, 'Lat:', currentPlayerPosition.latitude, 'Lng:', currentPlayerPosition.longitude);
+                    if (payload.x !== undefined) {
+                        cachedTimetableItems[selectedStationIndex].x = payload.x;
+                        cachedTimetableItems[selectedStationIndex].y = payload.y;
+                    }
+                    console.log('Location saved for station:', selectedStation.location, 'Lat:', currentPlayerPosition.latitude, 'Lng:', currentPlayerPosition.longitude, 'Tile:', payload.x, payload.y);
                     showToast('Saved: ' + selectedStation.location);
                 } else {
                     console.error('Failed to save location:', result.error);
@@ -2156,6 +2166,7 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             if (data.playerPosition) {
                 currentPlayerPosition = data.playerPosition;
             }
+            currentTile = data.currentTile || null;
             document.getElementById('display').innerText = JSON.stringify(data, null, 2);
             if (data.signalAspectClass != null) {
                 lastSignalAspectClass = data.signalAspectClass;

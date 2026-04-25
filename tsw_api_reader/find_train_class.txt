@@ -1,0 +1,79 @@
+# Determining Train Class from TSW API
+
+Source of truth: observed endpoint captures in [endpoints/CurrentFormation_endpoints.json](endpoints/CurrentFormation_endpoints.json) and [endpoints/CurrentDrivableActor_endpoints.json](endpoints/CurrentDrivableActor_endpoints.json).
+
+Base URL in captures: `http://localhost:31270`
+
+## Index convention
+
+`CurrentFormation/0` is the lead (driven) vehicle — `Simulation_IsLeadVehicle_InputValue` is true at index 0 (line 228 of CurrentFormation_endpoints.json). Higher indices (`/1`, `/2`, …) are trailing cars. Always query index `0` for the unit you are driving.
+
+## Option 1 (preferred) — `IS_GetVehicleInfo`
+
+```
+GET /get/CurrentFormation/0.Function.IS_GetVehicleInfo
+```
+
+Returns a structured object. The `class_14_...` key holds the class string directly, and `number_16_...` holds the fleet/unit number.
+
+Example (lines 1231-1246):
+```json
+{
+  "Result": "Success",
+  "Values": {
+    "Output": {
+      "type_2_993B00F34A75ECAE1E03789F0A26F2CD": "NewEnumerator0",
+      "maxTractiveEffortN_5_51382DF64252D2E36D1AADAA50733891": 0,
+      "maxDynamicBrakingEffortN_9_25684CCD4FC8E712D16C33B881F47F52": 0,
+      "maxPermissibleSpeedMS_11_C87720DD4A008EF058465FB17C9C5125": 0,
+      "class_14_DEF4FFB040D67D23C82CD2B95A57F83E": "390/0",
+      "number_16_10F0662F49E6ECC11EEE82B717634A69": "69101",
+      "hasTapChanger_18_0BECB64F401B59E622BD49B9C3416BAC": false
+    }
+  }
+}
+```
+
+Parsing note: the suffixes (`_14_DEF4...`) are Unreal FGuid hashes for the struct members. They may change between game/DLC builds, so match by prefix (`class_`, `number_`, `type_`, `hasTapChanger_`) rather than the full key.
+
+## Option 2 — `ObjectClass` on the drivable actor
+
+```
+GET /get/CurrentDrivableActor.ObjectClass
+GET /get/CurrentFormation/0.ObjectClass
+```
+
+Returns the raw Unreal blueprint class name. Example (CurrentDrivableActor_endpoints.json lines 1788-1792):
+```json
+{ "ObjectClass": "RVM_EMK_AWC_Class390_11_DMFK_C" }
+```
+
+Decoding the name:
+- `RVM` — rail vehicle model prefix
+- `EMK` — route (Euston–Milton Keynes)
+- `AWC` — operator (Avanti West Coast)
+- `Class390` — the class
+- `11` — vehicle position within the unit
+- `DMFK` — vehicle role (Driving Motor First Kitchen)
+- `_C` — Unreal "class" suffix
+
+Extract the class with regex `Class(\d+)`. Useful when you want more than the class number (operator, route, car role).
+
+`CurrentDrivableActor.ObjectName` (line 1783) returns the same info with a trailing instance id, e.g. `RVM_EMK_AWC_Class390_11_DMFK_C_2147471340`.
+
+## Option 3 (probes only) — `HasClassNumber` / `HasClassDisplayName` / `HasFamilyName`
+
+```
+GET /get/CurrentFormation/0.Function.HasClassNumber         → bool
+GET /get/CurrentFormation/0.Function.HasClassDisplayName    → bool
+GET /get/CurrentFormation/0.Function.HasFamilyName          → bool
+GET /get/CurrentFormation/0.Function.HasVehicleNumber       → bool
+GET /get/CurrentFormation/0.Function.HasUnitNumber          → bool
+```
+
+These only return a boolean indicating whether the corresponding getter would return a value. The matching `GetClassNumber` / `GetClassDisplayName` / `GetFamilyName` endpoints are **not** present in the capture, so you cannot read the class string through this path — use Option 1 or 2 instead.
+
+## Recommended approach
+
+1. Primary: call `IS_GetVehicleInfo` on `CurrentFormation/0`. Match output keys by prefix. Gives you class (`390/0`) and unit number (`69101`) in one request.
+2. Fallback / enrichment: call `CurrentDrivableActor.ObjectClass` and regex for `Class(\d+)` plus the operator/route tokens if you want additional context.

@@ -1,8 +1,10 @@
+#### Copy over
+bot/calibration.json
+bot/refrences/*
+bot/click_registry.json
 
+#### Ensure this is where you want it
+bot/progress_new_method.json
 
-config.py
-calibration.json
-refrences\*
-Cick Registrey ???
-
-"C:\Users\hcfai\Desktop\tsw_hud_project_downstairs\bot\screenshots\London Underground Bakerloo Line\*"
+#### Optional
+hud-go/tsw_hud.db

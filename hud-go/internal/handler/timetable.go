@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"archive/zip"
+	"bytes"
 	"database/sql"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"strconv"
@@ -1796,15 +1799,381 @@ func (h *TimetableHandler) ExportAllForRoute(w http.ResponseWriter, r *http.Requ
 		exports = append(exports, exportData)
 	}
 
-	if exports == nil {
-		exports = []map[string]any{}
+	var buf bytes.Buffer
+	zw := zip.NewWriter(&buf)
+	for _, exportData := range exports {
+		sn := ""
+		if v, ok := exportData["serviceName"].(string); ok {
+			sn = sanitizeFilename(v)
+		}
+		if sn == "" {
+			sn = "timetable"
+		}
+		fh, err := zw.Create(sn + ".json")
+		if err != nil {
+			continue
+		}
+		json.NewEncoder(fh).Encode(exportData)
 	}
+	zw.Close()
 
-	util.JSON(w, 200, exports)
+	safeName := sanitizeFilename(routeName)
+	w.Header().Set("Content-Type", "application/zip")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.zip\"", safeName))
+	w.Write(buf.Bytes())
 }
 
 func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request) {
-	util.Error(w, http.StatusNotImplemented, "not implemented")
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		util.Error(w, 400, "failed to read request body: "+err.Error())
+		return
+	}
+
+	zr, err := zip.NewReader(bytes.NewReader(body), int64(len(body)))
+	if err != nil {
+		util.Error(w, 400, "invalid zip file: "+err.Error())
+		return
+	}
+
+	type importError struct {
+		File  string `json:"file"`
+		Error string `json:"error"`
+	}
+
+	var (
+		routeName      string
+		routeCreated   bool
+		routeID        *int
+		countryName    string
+		countryCreated bool
+		countryID      *int
+		trainsCreated  []string
+		ttImported     int
+		ttSkipped      int
+		errs           []importError
+	)
+
+	seenTrains := map[string]bool{}
+
+	for _, f := range zr.File {
+		if f.FileInfo().IsDir() || !strings.HasSuffix(strings.ToLower(f.Name), ".json") {
+			continue
+		}
+
+		rc, err := f.Open()
+		if err != nil {
+			errs = append(errs, importError{File: f.Name, Error: "cannot open: " + err.Error()})
+			continue
+		}
+		data, err := io.ReadAll(rc)
+		rc.Close()
+		if err != nil {
+			errs = append(errs, importError{File: f.Name, Error: "cannot read: " + err.Error()})
+			continue
+		}
+
+		var entry map[string]any
+		if err := json.Unmarshal(data, &entry); err != nil {
+			errs = append(errs, importError{File: f.Name, Error: "invalid JSON: " + err.Error()})
+			continue
+		}
+
+		serviceName := ""
+		if v, ok := entry["serviceName"].(string); ok && v != "" {
+			serviceName = v
+		}
+		if serviceName == "" {
+			errs = append(errs, importError{File: f.Name, Error: "missing serviceName"})
+			continue
+		}
+
+		// Skip duplicates
+		var existingID int
+		if h.db.QueryRow("SELECT id FROM timetables WHERE service_name = ?", serviceName).Scan(&existingID) == nil {
+			ttSkipped++
+			continue
+		}
+
+		// Resolve country (once, from first file)
+		if countryID == nil {
+			if cn, ok := entry["countryName"].(string); ok && cn != "" {
+				countryName = cn
+				var cid int
+				if h.db.QueryRow("SELECT id FROM countries WHERE name = ?", cn).Scan(&cid) == nil {
+					countryID = &cid
+				} else {
+					res, err := h.db.Exec("INSERT INTO countries (name) VALUES (?)", cn)
+					if err != nil {
+						errs = append(errs, importError{File: f.Name, Error: "create country: " + err.Error()})
+						continue
+					}
+					id64, _ := res.LastInsertId()
+					cid = int(id64)
+					countryID = &cid
+					countryCreated = true
+				}
+			}
+		}
+
+		// Resolve route (once, from first file)
+		if routeID == nil {
+			if rn, ok := entry["routeName"].(string); ok && rn != "" {
+				routeName = rn
+				var rid int
+				if h.db.QueryRow("SELECT id FROM routes WHERE name = ?", rn).Scan(&rid) == nil {
+					routeID = &rid
+				} else {
+					cid := 0
+					if countryID != nil {
+						cid = *countryID
+					}
+					res, err := h.db.Exec("INSERT INTO routes (name, country_id, tsw_version) VALUES (?, ?, 3)", rn, cid)
+					if err != nil {
+						errs = append(errs, importError{File: f.Name, Error: "create route: " + err.Error()})
+						continue
+					}
+					id64, _ := res.LastInsertId()
+					rid = int(id64)
+					routeID = &rid
+					routeCreated = true
+				}
+			}
+		}
+
+		// Resolve trains — auto-create missing ones
+		trainNamesRaw, _ := entry["trainNames"].([]any)
+		var trainIDs []int
+		for _, tn := range trainNamesRaw {
+			name, ok := tn.(string)
+			if !ok || strings.TrimSpace(name) == "" {
+				continue
+			}
+			name = strings.TrimSpace(name)
+			var tid int
+			if h.db.QueryRow("SELECT id FROM trains WHERE name = ?", name).Scan(&tid) == nil {
+				trainIDs = append(trainIDs, tid)
+			} else {
+				res, err := h.db.Exec("INSERT INTO trains (name) VALUES (?)", name)
+				if err == nil {
+					id64, _ := res.LastInsertId()
+					trainIDs = append(trainIDs, int(id64))
+					if !seenTrains[name] {
+						seenTrains[name] = true
+						trainsCreated = append(trainsCreated, name)
+					}
+				}
+			}
+		}
+
+		var trainID *int
+		if len(trainIDs) > 0 {
+			trainID = &trainIDs[0]
+		}
+
+		serviceType, _ := entry["serviceType"].(string)
+		if serviceType == "" {
+			serviceType = "passenger"
+		}
+		contributor, _ := entry["contributor"].(string)
+		service, _ := entry["service"].(string)
+		bound, _ := entry["bound"].(string)
+		conductorVal := 0
+		if v, ok := entry["conductorCompatible"].(bool); ok && v {
+			conductorVal = 1
+		}
+		currentServiceName, _ := entry["current_service_name"].(string)
+
+		// Resolve sections
+		var sectionIDs []int
+		if routeID != nil {
+			if sectionNames, ok := entry["sectionNames"].([]any); ok {
+				for _, sn := range sectionNames {
+					name, ok := sn.(string)
+					if !ok || name == "" {
+						continue
+					}
+					sid, err := h.findOrCreateSection(*routeID, name)
+					if err == nil {
+						sectionIDs = append(sectionIDs, sid)
+					}
+				}
+			} else if sectionName, ok := entry["sectionName"].(string); ok && sectionName != "" {
+				sid, err := h.findOrCreateSection(*routeID, sectionName)
+				if err == nil {
+					sectionIDs = append(sectionIDs, sid)
+				}
+			}
+		}
+		var sectionID *int
+		if len(sectionIDs) > 0 {
+			sectionID = &sectionIDs[0]
+		}
+
+		res, err := h.db.Exec(`INSERT INTO timetables (service_name, route_id, train_id, service_type, contributor, bound, service, section_id, conductor_compatible, current_service_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			serviceName, routeID, trainID, serviceType,
+			nilIfEmpty(contributor), nilIfEmpty(bound), nilIfEmpty(service),
+			sectionID, conductorVal, nilIfEmpty(currentServiceName))
+		if err != nil {
+			errs = append(errs, importError{File: f.Name, Error: "insert timetable: " + err.Error()})
+			continue
+		}
+		ttID64, _ := res.LastInsertId()
+		ttID := int(ttID64)
+
+		for _, tid := range trainIDs {
+			h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", ttID, tid)
+		}
+		for _, sid := range sectionIDs {
+			h.db.Exec("INSERT OR IGNORE INTO timetable_sections (timetable_id, section_id) VALUES (?, ?)", ttID, sid)
+		}
+
+		// Train specs
+		var specUpdates []string
+		var specArgs []any
+		if v, ok := entry["tonnage"].(float64); ok {
+			specUpdates = append(specUpdates, "tonnage = ?")
+			specArgs = append(specArgs, v)
+		}
+		if v, ok := entry["carCount"].(float64); ok {
+			specUpdates = append(specUpdates, "car_count = ?")
+			specArgs = append(specArgs, int(v))
+		}
+		if v, ok := entry["trainLength"].(float64); ok {
+			specUpdates = append(specUpdates, "train_length = ?")
+			specArgs = append(specArgs, v)
+		}
+		if v, ok := entry["startTime"].(string); ok && v != "" {
+			specUpdates = append(specUpdates, "start_time = ?")
+			specArgs = append(specArgs, v)
+		}
+		if v, ok := entry["duration"].(string); ok && v != "" {
+			specUpdates = append(specUpdates, "duration = ?")
+			specArgs = append(specArgs, v)
+		}
+		if len(specUpdates) > 0 {
+			specArgs = append(specArgs, ttID)
+			h.db.Exec("UPDATE timetables SET "+strings.Join(specUpdates, ", ")+" WHERE id = ?", specArgs...)
+		}
+
+		// Coordinates
+		if coords, ok := entry["coordinates"].([]any); ok && len(coords) > 0 {
+			coordSource := "automatic"
+			if cs, ok := entry["coordinates_source"].(string); ok && cs != "" {
+				coordSource = cs
+			}
+			coordJSON, _ := json.Marshal(coords)
+			h.db.Exec("INSERT INTO timetable_coordinates (timetable_id, coordinates, coord_source) VALUES (?, ?, ?)", ttID, string(coordJSON), coordSource)
+			if cc, ok := entry["coordinates_contributor"].(string); ok && cc != "" {
+				h.db.Exec("UPDATE timetables SET coordinates_contributor = ? WHERE id = ?", cc, ttID)
+			}
+		}
+
+		// Markers
+		if markers, ok := entry["markers"].([]any); ok {
+			for _, m := range markers {
+				mMap, ok := m.(map[string]any)
+				if !ok {
+					continue
+				}
+				stationName, _ := mMap["stationName"].(string)
+				markerType := "Station"
+				if v, ok := mMap["markerType"].(string); ok {
+					markerType = v
+				}
+				var lat, lng, platLen *float64
+				if v, ok := mMap["latitude"].(float64); ok {
+					lat = &v
+				}
+				if v, ok := mMap["longitude"].(float64); ok {
+					lng = &v
+				}
+				if v, ok := mMap["platformLength"].(float64); ok {
+					platLen = &v
+				}
+				h.db.Exec("INSERT INTO timetable_markers (timetable_id, station_name, marker_type, latitude, longitude, platform_length) VALUES (?, ?, ?, ?, ?, ?)",
+					ttID, stationName, markerType, lat, lng, platLen)
+			}
+		}
+
+		// Entries
+		if csvData, ok := entry["csvData"].([]any); ok {
+			for i, item := range csvData {
+				e, ok := item.(map[string]any)
+				if !ok {
+					continue
+				}
+				action, _ := e["action"].(string)
+				action = strings.ToUpper(strings.TrimSpace(action))
+				details, _ := e["details"].(string)
+				location, _ := e["location"].(string)
+				location = strings.TrimSpace(location)
+				structureNumber, _ := e["structure_number"].(string)
+				if structureNumber == "" {
+					structureNumber, _ = e["platform"].(string)
+				}
+				structure, _ := e["structure"].(string)
+				time1, _ := e["time1"].(string)
+				time2, _ := e["time2"].(string)
+				if time1 == "" {
+					time1, _ = e["arrival"].(string)
+				}
+				if time2 == "" {
+					time2, _ = e["departure"].(string)
+				}
+				lat, _ := e["latitude"].(string)
+				lng, _ := e["longitude"].(string)
+				apiName, _ := e["api_name"].(string)
+				coordSrc, _ := e["coord_source"].(string)
+
+				isUnload := action == "UNLOAD PASSENGERS"
+				if isUnload {
+					location = ""
+					details = ""
+				}
+
+				actionID := h.resolveActionID(action)
+				var locID *int
+				if location != "" && routeID != nil {
+					lid, err := h.findOrCreateLocation(*routeID, location)
+					if err == nil {
+						locID = &lid
+					}
+				}
+				if isUnload {
+					locID = nil
+				}
+
+				h.db.Exec(`INSERT INTO timetable_entries (timetable_id, action_id, details, location_id, structure_number, structure, time1, time2, latitude, longitude, api_name, sort_order, coord_source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+					ttID, actionID, details, locID, structureNumber, nilIfEmpty(structure),
+					time1, time2, lat, lng, apiName, i, nilIfEmpty(coordSrc))
+			}
+		}
+
+		ttImported++
+	}
+
+	if trainsCreated == nil {
+		trainsCreated = []string{}
+	}
+	if errs == nil {
+		errs = []importError{}
+	}
+
+	util.JSON(w, 200, map[string]any{
+		"route": map[string]any{
+			"name":    routeName,
+			"created": routeCreated,
+		},
+		"country": map[string]any{
+			"name":    countryName,
+			"created": countryCreated,
+		},
+		"trainsCreated":      trainsCreated,
+		"timetablesImported": ttImported,
+		"timetablesSkipped":  ttSkipped,
+		"errors":             errs,
+	})
 }
 
 // ---------- internal helpers ----------

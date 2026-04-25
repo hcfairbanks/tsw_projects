@@ -133,6 +133,8 @@ var migrations = []string{
 		time2 TEXT,
 		latitude TEXT,
 		longitude TEXT,
+		tile_x INTEGER,
+		tile_y INTEGER,
 		api_name TEXT,
 		sort_order INTEGER,
 		coord_source TEXT,
@@ -141,6 +143,8 @@ var migrations = []string{
 	// Add structure column for existing databases
 	`ALTER TABLE timetable_entries ADD COLUMN structure TEXT`,
 	`ALTER TABLE timetable_entries RENAME COLUMN platform TO structure_number`,
+	`ALTER TABLE timetable_entries ADD COLUMN tile_x INTEGER`,
+	`ALTER TABLE timetable_entries ADD COLUMN tile_y INTEGER`,
 	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_timetable_id ON timetable_entries(timetable_id)`,
 
 	// station_name_mappings
