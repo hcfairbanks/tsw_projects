@@ -334,7 +334,7 @@
 
         .map-overlay .close-btn {
             position: absolute;
-            top: 70px;
+            top: 15px;
             right: 15px;
             z-index: 3001;
             background: #000;
@@ -353,6 +353,12 @@
 
         .map-overlay .close-btn:hover {
             background: #333;
+        }
+
+        /* Push the Leaflet basemap switcher (and any other top-right controls)
+           down below the close button so they don't overlap. */
+        .map-overlay .leaflet-top.leaflet-right {
+            top: 70px;
         }
 
         .map-overlay .satellite-btn {
@@ -1727,11 +1733,15 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
 
     <!-- Map Overlay -->
     <div id="mapOverlay" class="map-overlay">
-        <button class="satellite-btn" id="satelliteToggle" onclick="toggleSatelliteView()">Satellite</button>
         <button class="close-btn" onclick="hideMapOverlay()">&times;</button>
         <div id="overlayMap"></div>
+        <!-- The in-map toggle bar is intentionally hidden on the tablet HUD
+             (limited screen space). Layer prefs are configured at /settings. -->
+        <div id="overlayServiceLayerBar" style="display: none;"></div>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
+    <script src="/js/service-map.js"></script>
     <script>
         function refreshPage() {
             location.reload();
@@ -2209,26 +2219,6 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
         var overlayMarkerLayers = [];
         var overlayEventSource = null;
         var overlayTrainIcon = null;
-        var overlayStreetLayer = null;
-        var overlaySatelliteLayer = null;
-        var overlayIsSatellite = false;
-
-        function toggleSatelliteView() {
-            if (!overlayMap) return;
-
-            var btn = document.getElementById('satelliteToggle');
-            if (overlayIsSatellite) {
-                overlayMap.removeLayer(overlaySatelliteLayer);
-                overlayMap.addLayer(overlayStreetLayer);
-                btn.textContent = 'Satellite';
-                overlayIsSatellite = false;
-            } else {
-                overlayMap.removeLayer(overlayStreetLayer);
-                overlayMap.addLayer(overlaySatelliteLayer);
-                btn.textContent = 'Map';
-                overlayIsSatellite = true;
-            }
-        }
 
         function showMapOverlay() {
             document.getElementById('mapOverlay').classList.add('active');
@@ -2237,18 +2227,9 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             if (!overlayMap) {
                 overlayMap = L.map('overlayMap').setView([51.5, -0.1], 13);
 
-                // Street layer (default)
-                overlayStreetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                });
-
-                // Satellite layer
-                overlaySatelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: '© Esri'
-                });
-
-                // Add street layer by default
-                overlayStreetLayer.addTo(overlayMap);
+                // Basemap switcher (Map / Satellite / Topo) shared with the
+                // route page — replaces the old single-button satellite toggle.
+                LeafletExtras.attachBasemapControls(overlayMap);
 
                 overlayTrainIcon = L.divIcon({
                     className: 'train-marker',
@@ -2324,9 +2305,52 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                     });
                 }
 
+                // Layer toggle bar: route-derived markers (platforms, signals,
+                // switches, track features).
+                attachOverlayServiceLayers(data, routeCoords).catch(function (e) {
+                    console.warn('overlay serviceLayer attach failed', e);
+                });
+
             } catch (err) {
                 console.error('Failed to load map route:', err);
             }
+        }
+
+        var overlayServiceMapHandle = null;
+        var overlayLastAttachedRouteId = null;
+        async function attachOverlayServiceLayers(data, pathLatLngs) {
+            if (!window.ServiceMap) return;
+            var bar = document.getElementById('overlayServiceLayerBar');
+            var resolvedRouteId = (data && data.routeId) ? Number(data.routeId) : null;
+            if (!resolvedRouteId) {
+                var routeName = (data && data.routeName) ? String(data.routeName) : '';
+                if (!routeName) { bar.style.display = 'none'; return; }
+                try {
+                    var routesRes = await fetch('/api/routes');
+                    if (routesRes.ok) {
+                        var routes = await routesRes.json();
+                        var lower = routeName.toLowerCase();
+                        var match = routes.find(function (r) { return (r.name || '').toLowerCase() === lower; });
+                        if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) === 0; });
+                        if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) !== -1; });
+                        if (match) resolvedRouteId = match.id;
+                    }
+                } catch (_) { /* fall through */ }
+            }
+            if (!resolvedRouteId) { bar.style.display = 'none'; return; }
+            if (overlayLastAttachedRouteId === resolvedRouteId && overlayServiceMapHandle) return;
+            if (overlayServiceMapHandle && overlayServiceMapHandle.destroy) overlayServiceMapHandle.destroy();
+            var entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
+            overlayServiceMapHandle = await ServiceMap.attach(overlayMap, {
+                routeId: resolvedRouteId,
+                barContainer: bar,
+                pathLatLngs: pathLatLngs,
+                scheduleEntries: entries,
+                // Shared with the desktop HUD; configured at /settings.
+                storageKey: 'huddev.hudMap.layers',
+                hideBar: true
+            });
+            overlayLastAttachedRouteId = resolvedRouteId;
         }
 
         function startMapPositionUpdates() {

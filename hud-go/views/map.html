@@ -27,7 +27,9 @@
 
         .info-panel {
             position: absolute;
-            top: 80px;
+            /* Pushed down so the Leaflet basemap switcher (top-right, ~110px
+               tall when expanded) sits cleanly above the panel. */
+            top: 130px;
             right: 10px;
             background: white;
             padding: 20px;
@@ -37,7 +39,7 @@
             min-width: 320px;
             max-width: 350px;
             transition: all 0.3s ease;
-            max-height: 90vh;
+            max-height: calc(100vh - 150px);
             overflow-y: auto;
         }
 
@@ -521,25 +523,74 @@
         </div>
     </div>
 
+    <!-- Service-map layer toggle bar. Lives at bottom-left.
+         Open  : horizontal bar across the bottom (right margin clears the info panel).
+         Closed: just the round button — a small square in the bottom-left corner. -->
+    <div id="serviceLayerWrapper" data-state="open" style="position: fixed; left: 12px; bottom: 12px; z-index: 1100; pointer-events: auto; display: flex; flex-direction: row; align-items: stretch; gap: 8px;">
+        <button id="serviceLayerToggleBtn" onclick="toggleServiceLayerPanel()" style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 12px; background: rgba(0,0,0,0.85); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+            <span id="serviceLayerToggleArrow">▾</span>
+            <span id="serviceLayerToggleLabel" data-i18n="map.layers">Layers</span>
+        </button>
+        <div id="serviceLayerBar" style="flex: 1 1 auto; min-width: 0;"></div>
+    </div>
+    <style>
+        /* White text against the bar's dark background. */
+        #serviceLayerWrapper, #serviceLayerWrapper * { color: #fff; }
+        /* When open, the wrapper extends to the right so the bar can lay
+           horizontally without colliding with the info panel (350px wide,
+           anchored top-right with 10px margin). */
+        #serviceLayerWrapper[data-state="open"]    { right: 380px; }
+        /* When closed, only the toggle button shows; the bar div shrinks to
+           zero so the wrapper collapses to a single 44px square. */
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerBar { display: none; }
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleLabel { display: none; }
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleBtn { padding: 0; min-width: 44px; width: 44px; }
+        /* Inside the bar, lay items out horizontally so the bar reads as a
+           strip across the bottom. */
+        #serviceLayerBar [data-svc-layer-bar="1"] {
+            height: 44px;
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 14px !important;
+            margin: 0 !important;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        #serviceLayerBar [data-svc-layer-bar="1"] > div {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 14px 18px !important;
+        }
+        #serviceLayerBar [data-svc-layer-bar="1"] strong { display: none; }
+    </style>
+    <script>
+        function toggleServiceLayerPanel() {
+            const wrap = document.getElementById('serviceLayerWrapper');
+            const arrow = document.getElementById('serviceLayerToggleArrow');
+            const next = wrap.getAttribute('data-state') === 'open' ? 'closed' : 'open';
+            wrap.setAttribute('data-state', next);
+            arrow.textContent = next === 'open' ? '▾' : '▴';
+            try { localStorage.setItem('huddev.trackingMap.layerPanel', next); } catch (_) {}
+        }
+        (function () {
+            try {
+                if (localStorage.getItem('huddev.trackingMap.layerPanel') === 'closed') {
+                    document.getElementById('serviceLayerWrapper').setAttribute('data-state', 'closed');
+                    document.getElementById('serviceLayerToggleArrow').textContent = '▴';
+                }
+            } catch (_) { /* ignore */ }
+        })();
+    </script>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
+    <script src="/js/service-map.js"></script>
     <script>
         // Initialize the map
         const map = L.map('map').setView([52.0, -1.5], 6);
 
-        // Add tile layers
-        const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            maxZoom: 19
-        });
-        const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri',
-            maxZoom: 19
-        });
-        osm.addTo(map);
-        L.control.layers({
-            'Geographic': osm,
-            'Satellite': satellite
-        }).addTo(map);
+        // Basemap switcher (Map / Satellite / Topo) shared with the route page.
+        LeafletExtras.attachBasemapControls(map);
 
         // Map layers
         let routePolyline = null;
@@ -1324,34 +1375,88 @@
                 document.getElementById('routeDuration').parentElement.style.display = 'flex';
             }
 
-            // Draw route polyline
+            // Build the route polyline and station markers but DON'T add them
+            // directly to the map — pass them to ServiceMap.attach so the
+            // "Path" / "Stops" toggle checkboxes can hide/show them.
             const coordinates = data.coordinates.map(coord => [coord.latitude, coord.longitude]);
             routePolyline = L.polyline(coordinates, {
                 color: '#0066ff',
                 weight: 4,
                 opacity: 0.6
-            }).addTo(map);
+            });
 
-            map.fitBounds(routePolyline.getBounds(), { padding: [50, 50] });
-
-            // Add timetable stations to map
+            // Build stop markers without adding them to the map yet.
+            const stopMarkerLayers = [];
             if (data.timetable && data.timetable.length > 0) {
-                addTimetableStations(data.timetable);
+                buildTimetableStations(data.timetable, stopMarkerLayers);
             }
 
             console.log('Route loaded successfully');
+
+            // Hand off to the layer-bar helper. It puts the polyline in the
+            // 'path' group and the stops in the 'stops' group, then adds
+            // route-derived markers (platforms / signals / switches / track
+            // features). Toggling now works for every layer.
+            attachServiceLayers(data, coordinates, routePolyline, stopMarkerLayers)
+                .then(function () {
+                    // Fit bounds after attach so the polyline is on the map.
+                    if (coordinates.length >= 2) {
+                        map.fitBounds(L.latLngBounds(coordinates), { padding: [50, 50] });
+                    }
+                })
+                .catch(function (e) { console.warn('serviceLayerBar attach failed', e); });
         }
 
-        // Add timetable entries as station markers on the map
-        function addTimetableStations(timetable) {
-            console.log('Adding station markers for', timetable.length, 'entries');
-            timetable.forEach((entry, index) => {
-                // Only show stations that have coordinates
-                if (!entry.latitude || !entry.longitude) {
-                    console.log(`  [${index}] ${entry.location}: SKIPPED - no coords`);
-                    return;
+        // Resolve the DB route id from the loaded data, then call ServiceMap.
+        // Loaders that go through /api/map/route-data/<id> include `routeId`
+        // directly — prefer that. Otherwise fall back to matching by name
+        // against /api/routes.
+        let serviceMapHandle = null;
+        let lastAttachedRouteId = null;
+        async function attachServiceLayers(data, pathLatLngs, pathLayer, stopLayers) {
+            if (!window.ServiceMap) return;
+            let resolvedRouteId = (data && data.routeId) ? Number(data.routeId) : null;
+
+            if (!resolvedRouteId) {
+                const routeName = (data && data.routeName) ? String(data.routeName) : '';
+                if (routeName) {
+                    try {
+                        const routesRes = await fetch('/api/routes');
+                        if (routesRes.ok) {
+                            const routes = await routesRes.json();
+                            const lower = routeName.toLowerCase();
+                            let match = routes.find(function (r) { return (r.name || '').toLowerCase() === lower; });
+                            if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) === 0; });
+                            if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) !== -1; });
+                            if (match) resolvedRouteId = match.id;
+                        }
+                    } catch (_) { /* fall through */ }
                 }
-                console.log(`  [${index}] ${entry.location}: Adding marker at ${entry.latitude}, ${entry.longitude}`);
+            }
+
+            // Even without a DB route match, still attach so the Path/Stops
+            // toggles work. Route-derived markers will simply be empty.
+            if (lastAttachedRouteId === resolvedRouteId && serviceMapHandle) return;
+            if (serviceMapHandle && serviceMapHandle.destroy) serviceMapHandle.destroy();
+            const entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
+            serviceMapHandle = await ServiceMap.attach(map, {
+                routeId: resolvedRouteId || 0,
+                barContainer: document.getElementById('serviceLayerBar'),
+                pathLatLngs: pathLatLngs,
+                scheduleEntries: entries,
+                pathLayer: pathLayer,
+                stopLayers: stopLayers,
+                storageKey: 'huddev.trackingMap.layers'
+            });
+            lastAttachedRouteId = resolvedRouteId;
+        }
+
+        // Build station markers for the timetable. Doesn't add them to the
+        // map directly — the markers go into ServiceMap's "stops" layer
+        // group via opts.stopLayers so the Stops toggle controls them.
+        function buildTimetableStations(timetable, outArray) {
+            timetable.forEach((entry, index) => {
+                if (!entry.latitude || !entry.longitude) return;
 
                 const stationName = entry.location || `Station ${index + 1}`;
                 const stopNumber = entry.index + 1;
@@ -1367,8 +1472,9 @@
                     <strong>#${stopNumber} ${stationName}</strong><br>
                     <small>Arr: ${entry.arrival || '-'} | Dep: ${entry.departure || '-'}</small><br>
                     <small>Platform: ${entry.structure_number || '-'}</small>
-                `).addTo(map);
+                `);
 
+                outArray.push(mapMarker);
                 markerLayers.push(mapMarker);
             });
         }

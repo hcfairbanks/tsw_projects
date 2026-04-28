@@ -1,0 +1,75 @@
+
+please summerize the chat so far so that I can move this conversation to another computer
+Project Summary: tsw6-timetable — TSW6 Timetable Extractor
+What the project does
+A Go CLI tool (tsw6-timetable) that extracts train service timetable data from Train Sim World 6 game files (.pak → .uasset → structured JSON/CSV).
+
+Project location
+C:\Users\hcfai\Desktop\project\project\
+
+TSW6 install
+I:\SteamLibrary\steamapps\common\Train Sim World 6
+
+Reference data
+C:\Users\hcfai\Desktop\applications_1\bot\screenshots\Isle of Wight\Isle of Wight Class 483\
+
+Current state
+All infrastructure is working:
+
+Route discovery (flat pak layout: DLC\TS2Prototype-WindowsNoEditor-<RouteName>.pak)
+Pak extraction via repak.exe (Oodle compression support — UnrealPak doesn't work)
+UAssetGUI converts .uasset → JSON
+Last debug temp dir: C:\Users\hcfai\AppData\Local\Temp\tsw6-timetable-911446000\
+Isle of Wight extracted assets at: .../IsleOfWight/TS2Prototype/Plugins/DLC/IsleOfWight_Route_Gameplay/Content/Timetable/IOW_Timetable.uasset.json
+Parser — just completed:
+
+IOW_Timetable Export[0] is a base64 RawExport (binary UE4 tagged properties)
+Successfully parses all 68 services from the Isle of Wight route
+Python prototype at C:\Users\hcfai\Desktop\parse_timetable.py is working and verified against reference screenshots
+Output saved to C:\Users\hcfai\Desktop\iow_timetable_output.json
+Key binary format findings
+UE4 FPropertyTag structure:
+
+8 bytes FName (name) → 8 bytes FName (type) → int32 size → int32 arr_idx → type-specific extras → 1 byte has_guid [+ 16 byte guid]
+BoolProperty: extra uint8 bool value BEFORE has_guid
+StructProperty: extra FName (struct type) + 16-byte guid BEFORE has_guid
+ArrayProperty: extra FName (inner type) BEFORE has_guid
+Critical bug fixed: ArrayProperty<StructProperty> with count==0 has NO inner tag header — must skip immediately.
+
+Service structure (RouteTimetableServiceDefinition):
+
+Name (NameProperty) → e.g. NB_0535
+FriendlyName (TextProperty) → e.g. "2U02 : Ryde St. Johns - Ryde Pier Head"
+FormationName, MapPointA, MapPointB, bIsPlayerDrivable, Description, StartTime (Timespan)
+Instructions (ArrayProperty of RouteTimetableServiceInstruction)
+Instruction structure:
+
+InstructionType (EnumProperty) → GoTo or LoadUnload
+Destination (StructProperty RouteLocation) → contains Name (NameProperty) = station name e.g. "Ryde Esplanade Platform 1"
+ArrivalTime, SimulatedArrivalTime, SimulatedCompletionTime (all Timespan = int64 ticks, 100ns each)
+LoadingCriteria (ArrayProperty of RouteTimetableInstructionLoadCargoEntry) → bLoad, bUnload, MinimumTime
+Schedule logic:
+
+GoTo → LoadUnload pair = stop with passengers
+arrival = LoadUnload.ArrivalTime (scheduled)
+load time = arrival + MinimumTime (30s typically)
+bLoad=True → LOAD PASSENGERS; bUnload=True → UNLOAD PASSENGERS
+Bare GoTo (no following LoadUnload) = positioning move, no scheduled time (e.g. depot siding)
+Times: Ticks ÷ 10,000,000 = seconds. Convert to HH:MM:SS.
+
+Lat/lng NOT in timetable data — Destination has NetworkRibbonLocation (track GUID + float offset). Real coordinates need a separate route/network asset.
+
+What was just written
+internal/pak/uasset/parse.go was completely rewritten to implement the binary parser in Go. It:
+
+Base64-decodes Export[0].Data
+Walks tagged properties to find Services array
+Parses each RouteTimetableServiceDefinition struct
+Parses each Instructions array item
+Pairs GoTo+LoadUnload instructions into schedule items
+Outputs rich Service struct + legacy Stops slice for CSV backward compatibility
+Remaining work
+Build and test the Go implementation (/c/Program\ Files/Go/bin/go build ./... from project dir)
+Run end-to-end extraction to verify 68 services output correctly
+Update output/csv.go if the new richer fields should appear in CSV
+Ribbon→lat/lng conversion (deferred — needs route network asset files from other pak files)

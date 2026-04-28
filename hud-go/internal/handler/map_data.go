@@ -415,7 +415,8 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 
 	// Get timetable info
 	var serviceName string
-	err = h.db.QueryRow("SELECT service_name FROM timetables WHERE id = ?", timetableID).Scan(&serviceName)
+	var routeID *int
+	err = h.db.QueryRow("SELECT service_name, route_id FROM timetables WHERE id = ?", timetableID).Scan(&serviceName, &routeID)
 	if err == sql.ErrNoRows {
 		util.Error(w, http.StatusNotFound, fmt.Sprintf("Timetable %d not found", timetableID))
 		return
@@ -475,6 +476,7 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 
 	util.JSON(w, http.StatusOK, map[string]any{
 		"routeName":   serviceName,
+		"routeId":     routeID,
 		"timetableId": timetableID,
 		"totalPoints": len(filteredCoords),
 		"coordinates": filteredCoords,
@@ -484,15 +486,35 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 }
 
 // buildTimetableArrayFromEntries builds a timetable array from DB entries.
+//
+// Coordinate resolution priority (best-precision first):
+//
+//  1. cab_stop_signs (the in-game green stop ring; ~3 m of the visible
+//     marker; only set on Platform rows).
+//  2. track_markers (the in-game "Go Via X" routing marker; ~6 m of the
+//     visible marker; the only source for non-Platform rows like
+//     "Smallbrook Junction Line 1").
+//  3. timetable_entries.latitude/longitude (legacy CSV-imported coords,
+//     18–100+ m off from the visible markers — used as a final fallback so
+//     depot/scenario services and any unmapped stop still display
+//     something).
+//
+// `coord_source` on each output row records which tier won: "cab_stop_sign",
+// "track_marker", or "timetable_entry". Field is omitted when no coords
+// exist at all.
 func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]any {
 	rows, err := db.Query(`
 		SELECT te.id, te.sort_order, te.structure_number, te.time1, te.time2,
 		       te.latitude, te.longitude, te.api_name,
+		       css.latitude AS cab_lat, css.longitude AS cab_lng,
+		       tm.latitude  AS tm_lat,  tm.longitude  AS tm_lng,
 		       COALESCE(l.name, '') AS location,
 		       COALESCE(ta.name, '') AS action
 		FROM timetable_entries te
 		LEFT JOIN locations l ON te.location_id = l.id
 		LEFT JOIN timetable_actions ta ON te.action_id = ta.id
+		LEFT JOIN cab_stop_signs css ON css.id = te.cab_stop_sign_id
+		LEFT JOIN track_markers   tm  ON tm.id  = te.track_marker_id
 		WHERE te.timetable_id = ?
 		ORDER BY te.sort_order
 	`, timetableID)
@@ -502,22 +524,32 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	defer rows.Close()
 
 	type entryRow struct {
-		ID        int
-		SortOrder *int
+		ID              int
+		SortOrder       *int
 		StructureNumber *string
-		Time1     *string
-		Time2     *string
-		Latitude  *string
-		Longitude *string
-		ApiName   *string
-		Location  string
-		Action    string
+		Time1           *string
+		Time2           *string
+		Latitude        *string  // timetable_entries.latitude (TEXT, legacy fallback)
+		Longitude       *string  // timetable_entries.longitude (TEXT, legacy fallback)
+		ApiName         *string
+		CabLat          *float64 // cab_stop_signs.latitude (REAL, top priority)
+		CabLng          *float64 // cab_stop_signs.longitude (REAL, top priority)
+		TmLat           *float64 // track_markers.latitude   (REAL, second priority)
+		TmLng           *float64 // track_markers.longitude  (REAL, second priority)
+		Location        string
+		Action          string
 	}
 
 	var entries []entryRow
 	for rows.Next() {
 		var e entryRow
-		if err := rows.Scan(&e.ID, &e.SortOrder, &e.StructureNumber, &e.Time1, &e.Time2, &e.Latitude, &e.Longitude, &e.ApiName, &e.Location, &e.Action); err != nil {
+		if err := rows.Scan(
+			&e.ID, &e.SortOrder, &e.StructureNumber, &e.Time1, &e.Time2,
+			&e.Latitude, &e.Longitude, &e.ApiName,
+			&e.CabLat, &e.CabLng,
+			&e.TmLat, &e.TmLng,
+			&e.Location, &e.Action,
+		); err != nil {
 			continue
 		}
 		entries = append(entries, e)
@@ -571,13 +603,26 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 			"apiName":   apiName,
 		}
 
-		// Only include coordinates if they exist
-		if entry.Latitude != nil && entry.Longitude != nil && *entry.Latitude != "" && *entry.Longitude != "" {
+		// Coordinate resolution — prefer the highest-precision source the
+		// importer was able to resolve. See function-level comment for the
+		// full priority order and accuracy expectations.
+		switch {
+		case entry.CabLat != nil && entry.CabLng != nil:
+			item["latitude"] = *entry.CabLat
+			item["longitude"] = *entry.CabLng
+			item["coord_source"] = "cab_stop_sign"
+		case entry.TmLat != nil && entry.TmLng != nil:
+			item["latitude"] = *entry.TmLat
+			item["longitude"] = *entry.TmLng
+			item["coord_source"] = "track_marker"
+		case entry.Latitude != nil && entry.Longitude != nil &&
+			*entry.Latitude != "" && *entry.Longitude != "":
 			lat, errLat := strconv.ParseFloat(*entry.Latitude, 64)
 			lng, errLng := strconv.ParseFloat(*entry.Longitude, 64)
 			if errLat == nil && errLng == nil {
 				item["latitude"] = lat
 				item["longitude"] = lng
+				item["coord_source"] = "timetable_entry"
 			}
 		}
 

@@ -77,11 +77,38 @@ func scanRowsToMaps(rows *sql.Rows) ([]map[string]any, error) {
 // ---------- 1. GetAll ----------
 
 func (h *RouteHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	search := strings.TrimSpace(q.Get("search"))
+	countryIDStr := q.Get("country_id")
+	limitStr := q.Get("limit")
+
+	var conditions []string
+	var args []any
+	if search != "" {
+		conditions = append(conditions, "(r.name LIKE ? OR c.name LIKE ?)")
+		pat := "%" + search + "%"
+		args = append(args, pat, pat)
+	}
+	if countryIDStr != "" {
+		if cid, err := strconv.Atoi(countryIDStr); err == nil {
+			conditions = append(conditions, "r.country_id = ?")
+			args = append(args, cid)
+		}
+	}
+	where := ""
+	if len(conditions) > 0 {
+		where = " WHERE " + strings.Join(conditions, " AND ")
+	}
+	limitClause := ""
+	if limit, _ := strconv.Atoi(limitStr); limit > 0 {
+		limitClause = fmt.Sprintf(" LIMIT %d", limit)
+	}
+
 	rows, err := h.db.Query(`
 		SELECT r.*, c.name AS country_name
 		FROM routes r
-		LEFT JOIN countries c ON r.country_id = c.id
-		ORDER BY r.id DESC`)
+		LEFT JOIN countries c ON r.country_id = c.id`+where+`
+		ORDER BY r.name`+limitClause, args...)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -336,29 +363,133 @@ func (h *RouteHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 // ---------- 8. Delete ----------
 
+// Delete cascades the route deletion through every dependent table.
+//
+// `timetables.route_id` uses `ON DELETE SET NULL` (so timetables otherwise
+// survive a route delete and orphan), but the user-facing intent of "delete
+// route" is "wipe everything tied to this route" — so we explicitly delete
+// the timetables here first. timetable_entries / timetable_trains /
+// timetable_sections / timetable_coordinates / timetable_markers /
+// train_consists all use `ON DELETE CASCADE` on timetable_id and clean up
+// automatically.
+//
+// route_coordinates / route_markers / route_locations / route_trains /
+// locations / station_name_mappings / sections / cab_stop_signs /
+// track_markers all use `ON DELETE CASCADE` on route_id and are removed
+// when the route row itself is deleted at the end.
+//
+// The frontend gates this with a confirmation dialog naming the timetable
+// count so a click-through delete is unambiguous.
 func (h *RouteHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
 
-	// Check for FK references from timetables
-	var ttCount int
-	if err := h.db.QueryRow("SELECT COUNT(*) FROM timetables WHERE route_id = ?", id).Scan(&ttCount); err != nil {
+	if _, err := h.db.Exec("DELETE FROM timetables WHERE route_id = ?", id); err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	if ttCount > 0 {
-		util.Error(w, http.StatusConflict, "Cannot delete route: timetables still reference it")
+
+	if _, err := h.db.Exec("DELETE FROM routes WHERE id = ?", id); err != nil {
+		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	_, err := h.db.Exec("DELETE FROM routes WHERE id = ?", id)
+	deleteOrphanTrains(h.db)
+
+	util.Success(w, map[string]any{"success": true})
+}
+
+// deleteOrphanTrains removes trains rows that no other table references.
+// Cleans up after route/timetable deletion so re-imports don't reuse stale
+// formation rows by name.
+func deleteOrphanTrains(db *sql.DB) {
+	db.Exec(`
+		DELETE FROM trains
+		WHERE id NOT IN (SELECT train_id FROM route_trains WHERE train_id IS NOT NULL)
+		  AND id NOT IN (SELECT train_id FROM timetable_trains WHERE train_id IS NOT NULL)
+		  AND id NOT IN (SELECT train_id FROM section_trains WHERE train_id IS NOT NULL)
+		  AND id NOT IN (SELECT train_id FROM timetables WHERE train_id IS NOT NULL)
+	`)
+	// Classes whose only members were just-deleted orphans are now empty —
+	// drop them too so the typeahead doesn't surface dead class entries.
+	db.Exec(`
+		DELETE FROM train_classes
+		WHERE id NOT IN (SELECT class_id FROM trains WHERE class_id IS NOT NULL)
+	`)
+}
+
+// GetTrainClasses returns the train CLASSES used on a route, deduped from
+// the per-formation route_trains rows. Each item carries the class summary
+// and the list of formation IDs (so the UI can drill from class → formation
+// without an extra round-trip per class).
+func (h *RouteHandler) GetTrainClasses(w http.ResponseWriter, r *http.Request) {
+	id, ok := parseID(w, r, "id")
+	if !ok {
+		return
+	}
+	rows, err := h.db.Query(`
+		SELECT
+			COALESCE(tc.id, -t.id) AS class_key,
+			COALESCE(tc.name, t.name) AS class_name,
+			COALESCE(tc.livery_id, t.livery_id) AS livery_id,
+			COALESCE(tc.typical_length_m, t.length_m) AS length_m,
+			COALESCE(tc.typical_car_count, t.car_count) AS car_count,
+			t.id AS train_id, t.name AS train_name
+		FROM trains t
+		INNER JOIN route_trains rt ON t.id = rt.train_id
+		LEFT JOIN train_classes tc ON tc.id = t.class_id
+		WHERE rt.route_id = ?
+		ORDER BY class_name, train_name`, id)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	util.Success(w, map[string]any{"success": true})
+	defer rows.Close()
+	type formation struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+	type classGroup struct {
+		ID         *int        `json:"id"` // null when no train_classes row exists yet (legacy data)
+		Name       string      `json:"name"`
+		LiveryID   *string     `json:"livery_id,omitempty"`
+		LengthM    *float64    `json:"length_m,omitempty"`
+		CarCount   *int        `json:"car_count,omitempty"`
+		Formations []formation `json:"formations"`
+	}
+	groups := map[int]*classGroup{}
+	order := []int{}
+	for rows.Next() {
+		var key int
+		var name string
+		var livery *string
+		var lengthM *float64
+		var carCount *int
+		var fid int
+		var fname string
+		if err := rows.Scan(&key, &name, &livery, &lengthM, &carCount, &fid, &fname); err != nil {
+			util.Error(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		g, ok := groups[key]
+		if !ok {
+			g = &classGroup{Name: name, LiveryID: livery, LengthM: lengthM, CarCount: carCount, Formations: []formation{}}
+			if key > 0 {
+				k := key
+				g.ID = &k
+			}
+			groups[key] = g
+			order = append(order, key)
+		}
+		g.Formations = append(g.Formations, formation{ID: fid, Name: fname})
+	}
+	out := make([]*classGroup, 0, len(order))
+	for _, k := range order {
+		out = append(out, groups[k])
+	}
+	util.JSON(w, http.StatusOK, out)
 }
 
 // ---------- 9. GetTrains ----------
@@ -898,6 +1029,12 @@ func (h *RouteHandler) DeleteAllTimetables(w http.ResponseWriter, r *http.Reques
 
 	// Delete the timetables themselves
 	h.db.Exec("DELETE FROM timetables WHERE route_id = ?", id)
+
+	// Sweep orphan trains: rows no longer reachable from any route_trains,
+	// timetable_trains, section_trains, or timetables.train_id. Generic
+	// formation names like "PlayerFormation" become available for the
+	// next route's import without colliding by name.
+	deleteOrphanTrains(h.db)
 
 	util.Success(w, map[string]any{"success": true, "deleted": len(ttIDs)})
 }

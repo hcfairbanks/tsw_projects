@@ -15,10 +15,15 @@ type Route struct {
 	TswVersion int    `db:"tsw_version" json:"tsw_version"`
 }
 
-// Train represents a train/rolling stock.
+// Train represents a train/rolling stock (a single physical formation).
 type Train struct {
-	ID   int    `db:"id"   json:"id"`
-	Name string `db:"name" json:"name"`
+	ID        int      `db:"id"          json:"id"`
+	Name      string   `db:"name"        json:"name"`
+	ClassID   *int     `db:"class_id"    json:"class_id,omitempty"`
+	ClassName *string  `db:"class_name"  json:"class_name,omitempty"`
+	LiveryID  *string  `db:"livery_id"   json:"livery_id,omitempty"`
+	LengthM   *float64 `db:"length_m"    json:"length_m,omitempty"`
+	CarCount  *int     `db:"car_count"   json:"car_count,omitempty"`
 }
 
 // RouteTrain represents a many-to-many link between routes and trains.

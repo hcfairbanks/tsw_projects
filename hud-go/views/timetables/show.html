@@ -75,6 +75,8 @@
         .clear-btn:hover { background: var(--btn-danger-bg); color: #fff; }
         /* Map styles */
         #routeMap { height: 750px; border-radius: 6px; }
+        #routeMapContainer:fullscreen, #routeMapContainer:-webkit-full-screen { background: #fff; padding: 12px; box-sizing: border-box; }
+        #routeMapContainer:fullscreen #routeMap, #routeMapContainer:-webkit-full-screen #routeMap { height: calc(100vh - 80px); border-radius: 6px; }
         .map-card { display: block; }
         .stop-marker { background: #00cc66; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
         .coord-cell { font-family: monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
@@ -99,6 +101,56 @@
         </div>
         <div id="routeMapContainer">
             <div id="routeMap"></div>
+            <div id="serviceLayerBar" style="display:none; margin-top: 10px; padding: 12px 14px; background: var(--bg-tertiary); border-radius: 6px; font-size: 14px;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px;">
+                    <strong style="font-size: 14px;" data-i18n="routes.layers.title">Layers:</strong>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="path" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.rails">Path</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="platform_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.platformTracks">Platform tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="siding_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.sidingTracks">Siding tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="line_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.lineTracks">Line tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="running_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#1f77b4;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.runningTracks">Running tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="stops" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#00cc66;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>
+                        <span data-i18n="routes.layers.stops">Stops</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="platforms" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>
+                        <span data-i18n="routes.layers.platforms">Platforms</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="signals" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>
+                        <span data-i18n="routes.layers.signals">Signals</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-svc-layer="switches" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>
+                        <span data-i18n="routes.layers.switches">Switches</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -140,9 +192,12 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
     <script src="/js/timetable-actions.js"></script>
     <script>
-        const timetableId = window.location.pathname.split('/').pop();
+        // Strip the /edit suffix (the page now lives at /timetables/<id>/edit
+        // under the standard view-vs-edit URL convention).
+        const timetableId = window.location.pathname.replace(/\/edit$/, '').split('/').pop();
         let timetable = null;
         let entries = [];
         let allRoutes = [];
@@ -228,18 +283,14 @@
             var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
 
             let html = '';
-            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceLabel', 'Service:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="serviceInput" value="' + escapeHtml(timetable.service || '') + '" onchange="markUnsaved()" placeholder="e.g., 741-06"></span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceNameLabel', 'Service Name:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="serviceNameInput" value="' + escapeHtml(timetable.service_name || '') + '" onchange="markUnsaved()"></span></div>';
+            // Current service name (TSW API backend ID) — sits right under Service Name.
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.currentServiceLabel', 'Current Service Name:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="currentServiceNameInput" value="' + escapeHtml(timetable.current_service_name || '') + '" onchange="markUnsaved()" placeholder="e.g., 5L03" style="width: 400px;"></span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.serviceTypeLabel', 'Service Type:') + '</span><span class="detail-value"><select id="serviceTypeSelect" onchange="markUnsaved()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"><option value="passenger"' + (timetable.service_type === 'passenger' || !timetable.service_type ? ' selected' : '') + '>' + _t('timetables.passenger', 'Passenger') + '</option><option value="freight"' + (timetable.service_type === 'freight' ? ' selected' : '') + '>' + _t('timetables.freight', 'Freight') + '</option></select></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.playableLabel', 'Playable:') + '</span><span class="detail-value"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="playableInput"' + (timetable.playable ? ' checked' : '') + ' onchange="markUnsaved()"> ' + _t('timetables.playableHint', 'Player can drive this service') + '</label></span></div>';
+            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.sourceLabel', 'Source:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="sourceInput" value="' + escapeHtml(timetable.source || '') + '" onchange="markUnsaved()" placeholder="e.g., Timetable" style="width: 250px;"></span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.boundLabel', 'Bound:') + '</span><span class="detail-value"><select id="boundSelect" onchange="markUnsaved()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;"><option value=""' + (!timetable.bound ? ' selected' : '') + '>-</option><option value="northbound"' + (timetable.bound === 'northbound' ? ' selected' : '') + '>' + _t('timetables.northbound', 'Northbound') + '</option><option value="southbound"' + (timetable.bound === 'southbound' ? ' selected' : '') + '>' + _t('timetables.southbound', 'Southbound') + '</option><option value="eastbound"' + (timetable.bound === 'eastbound' ? ' selected' : '') + '>' + _t('timetables.eastbound', 'Eastbound') + '</option><option value="westbound"' + (timetable.bound === 'westbound' ? ' selected' : '') + '>' + _t('timetables.westbound', 'Westbound') + '</option></select></span></div>';
 
-            // Current service name (from TSW API)
-            html += '<div class="detail-row"><span class="detail-label">Current Service Name:</span><span class="detail-value"><input type="text" class="service-name-input" id="currentServiceNameInput" value="' + escapeHtml(timetable.current_service_name || '') + '" onchange="markUnsaved()" placeholder="e.g., 5L03" style="width: 400px;"></span></div>';
-
-            // Train specs (tonnage, car count, train length)
-            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.tonnageLabel', 'Tonnage:') + '</span><span class="detail-value"><input type="number" step="0.1" class="service-name-input" id="tonnageInput" value="' + (timetable.tonnage || '') + '" onchange="markUnsaved()" placeholder="e.g., 164.2" style="width: 150px;"> t</span></div>';
-            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.carCountLabel', 'Car Count:') + '</span><span class="detail-value"><input type="number" step="1" class="service-name-input" id="carCountInput" value="' + (timetable.car_count || '') + '" onchange="markUnsaved()" placeholder="e.g., 7" style="width: 150px;"></span></div>';
-            html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.trainLengthLabel', 'Train Length:') + '</span><span class="detail-value"><input type="number" step="0.1" class="service-name-input" id="trainLengthInput" value="' + (timetable.train_length || '') + '" onchange="markUnsaved()" placeholder="e.g., 113.9" style="width: 150px;"> m</span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.startTimeLabel', 'Start Time:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="startTimeInput" value="' + escapeHtml(timetable.start_time || '') + '" onchange="markUnsaved()" placeholder="e.g., 07:59" style="width: 150px;"></span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.durationLabel', 'Duration:') + '</span><span class="detail-value"><input type="text" class="service-name-input" id="durationInput" value="' + escapeHtml(timetable.duration || '') + '" onchange="markUnsaved()" placeholder="e.g., 00:39" style="width: 150px;"></span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.conductorLabel', 'Conductor:') + '</span><span class="detail-value"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="conductorCompatibleInput"' + (timetable.conductor_compatible ? ' checked' : '') + ' onchange="markUnsaved()"> ' + _t('timetables.conductorCompatible', 'Conductor Compatible') + '</label></span></div>';
@@ -302,7 +353,11 @@
                 html += '<div style="margin-bottom: 10px;">';
                 timetableTrains.forEach(function(train) {
                     html += '<div style="display: flex; align-items: center; gap: 10px; padding: 5px 0;">';
-                    html += '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
+                    var primaryT = train.class_name || train.name;
+                    var suffixT = (train.class_name && train.name && train.class_name !== train.name)
+                        ? ' <span style="color: var(--text-muted); font-size: 12px;">— ' + escapeHtml(train.name) + '</span>'
+                        : '';
+                    html += '<a href="/trains/' + train.id + '">' + escapeHtml(primaryT) + '</a>' + suffixT;
                     html += '<button class="btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="removeTrain(' + train.id + ')">' + _t('common.remove', 'Remove') + '</button>';
                     html += '</div>';
                 });
@@ -937,32 +992,30 @@
                 const serviceName = document.getElementById('serviceNameInput').value.trim();
                 const serviceType = document.getElementById('serviceTypeSelect').value;
 
-                const serviceCode = document.getElementById('serviceInput').value.trim() || null;
                 const boundVal = document.getElementById('boundSelect').value || null;
 
-                const tonnageVal = document.getElementById('tonnageInput').value.trim();
-                const carCountVal = document.getElementById('carCountInput').value.trim();
-                const trainLengthVal = document.getElementById('trainLengthInput').value.trim();
                 const startTimeVal = document.getElementById('startTimeInput').value.trim();
                 const durationVal = document.getElementById('durationInput').value.trim();
 
                 const conductorCompatibleVal = document.getElementById('conductorCompatibleInput').checked;
                 const currentServiceNameVal = document.getElementById('currentServiceNameInput').value.trim() || null;
+                const playableEl = document.getElementById('playableInput');
+                const sourceEl = document.getElementById('sourceInput');
+                const playableVal = playableEl ? playableEl.checked : false;
+                const sourceVal = sourceEl ? (sourceEl.value.trim() || null) : null;
 
                 const updateData = {
                     service_name: serviceName,
-                    service: serviceCode,
                     service_type: serviceType,
                     bound: boundVal,
                     route_id: selectedRouteId,
                     section_ids: timetableSections.map(function(s) { return s.id; }),
-                    tonnage: tonnageVal ? parseFloat(tonnageVal) : null,
-                    car_count: carCountVal ? parseInt(carCountVal, 10) : null,
-                    train_length: trainLengthVal ? parseFloat(trainLengthVal) : null,
                     start_time: startTimeVal || null,
                     duration: durationVal || null,
                     conductor_compatible: conductorCompatibleVal,
-                    current_service_name: currentServiceNameVal
+                    current_service_name: currentServiceNameVal,
+                    playable: playableVal,
+                    source: sourceVal
                 };
 
                 const updateRes = await fetch('/api/timetables/' + timetableId, {
@@ -1237,6 +1290,71 @@
         let routePolyline = null;
         let stopMarkers = [];
         let pathCoordinates = [];
+        // Per-category sub-layers for the service map (path, stops, plus
+        // route-derived markers — platforms / signals / switches near the
+        // service's path). Toggle bar at #serviceLayerBar.
+        let serviceLayerGroups = {};
+        const SERVICE_LAYER_LS_KEY = 'huddev.serviceMap.layers';
+        const SERVICE_MARKER_PROX_M = 50; // generic "near the path" — switches, etc.
+        const SIGNAL_PROX_M = 3;          // signals: must be ON the path; tight enough to
+                                          // exclude signals on parallel tracks at same station.
+
+        function loadServiceLayerPrefs() {
+            try { return JSON.parse(localStorage.getItem(SERVICE_LAYER_LS_KEY) || 'null') || {}; } catch (_) { return {}; }
+        }
+        function saveServiceLayerPrefs(prefs) {
+            try { localStorage.setItem(SERVICE_LAYER_LS_KEY, JSON.stringify(prefs)); } catch (_) {}
+        }
+
+        // Fast equirectangular distance (metres) — exact enough at these scales.
+        function distMeters(lat1, lng1, lat2, lng2) {
+            const R = 6371000;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const m = (lat1 + lat2) * 0.5 * Math.PI / 180;
+            const x = dLng * Math.cos(m);
+            return Math.hypot(dLat, x) * R;
+        }
+        function minDistanceToPath(lat, lng, pathLatLngs) {
+            let best = Infinity;
+            for (let i = 0; i < pathLatLngs.length; i++) {
+                const d = distMeters(lat, lng, pathLatLngs[i][0], pathLatLngs[i][1]);
+                if (d < best) best = d;
+                if (best < 1) return best; // can't get meaningfully closer
+            }
+            return best;
+        }
+        // Tighter: distance from a point to the polyline's nearest SEGMENT
+        // (perpendicular projection, clamped to endpoints) rather than nearest
+        // vertex. Necessary when the threshold is small enough that sampling
+        // gaps between vertices would otherwise admit off-path points.
+        function minDistanceToPathSegments(lat, lng, pathLatLngs) {
+            if (pathLatLngs.length === 0) return Infinity;
+            if (pathLatLngs.length === 1) {
+                return distMeters(lat, lng, pathLatLngs[0][0], pathLatLngs[0][1]);
+            }
+            let best = Infinity;
+            for (let i = 0; i + 1 < pathLatLngs.length; i++) {
+                const a = pathLatLngs[i], b = pathLatLngs[i + 1];
+                // Project (lng, lat) onto segment in degree space; metric
+                // distance to the projected foot. At these scales the linear
+                // approx is sub-cm for path scales of <20 km.
+                const ax = a[1], ay = a[0], bx = b[1], by = b[0];
+                const dx = bx - ax, dy = by - ay;
+                const len2 = dx * dx + dy * dy;
+                let fx = ax, fy = ay;
+                if (len2 > 0) {
+                    let t = ((lng - ax) * dx + (lat - ay) * dy) / len2;
+                    if (t < 0) t = 0; else if (t > 1) t = 1;
+                    fx = ax + t * dx;
+                    fy = ay + t * dy;
+                }
+                const d = distMeters(lat, lng, fy, fx);
+                if (d < best) best = d;
+                if (best < 0.3) return best;
+            }
+            return best;
+        }
 
         async function initRouteMap() {
             const mapCard = document.getElementById('mapCard');
@@ -1270,75 +1388,252 @@
             document.getElementById('routeMapContainer').style.display = '';
             document.getElementById('deletePathBtn').style.display = '';
 
-            // Initialize map if not already done
+            // Initialize map if not already done. Basemap switcher (Map / Sat /
+            // Topo) + fullscreen toggle come from /js/leaflet-extras.js.
             if (!routeMap) {
-                routeMap = L.map('routeMap').setView([51.5, -0.1], 10);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(routeMap);
+                routeMap = L.map('routeMap', { preferCanvas: true }).setView([51.5, -0.1], 10);
+                if (window.LeafletExtras) {
+                    LeafletExtras.attachBasemapControls(routeMap);
+                    LeafletExtras.attachFullscreenControl(routeMap, '#routeMapContainer');
+                } else {
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                        subdomains: 'abcd',
+                        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                    }).addTo(routeMap);
+                }
             }
 
-            // Clear existing markers and polyline
-            stopMarkers.forEach(function(marker) { marker.remove(); });
+            // Tear down previous layer groups + polyline + stop markers.
+            stopMarkers.forEach(function(m) { m.remove(); });
             stopMarkers = [];
-            if (routePolyline) {
-                routePolyline.remove();
-                routePolyline = null;
+            if (routePolyline) { routePolyline.remove(); routePolyline = null; }
+            Object.keys(serviceLayerGroups).forEach(function(k) {
+                if (serviceLayerGroups[k]) routeMap.removeLayer(serviceLayerGroups[k]);
+            });
+            serviceLayerGroups = {
+                path:           L.layerGroup(),
+                platform_track: L.layerGroup(),
+                siding_track:   L.layerGroup(),
+                line_track:     L.layerGroup(),
+                running_track:  L.layerGroup(),
+                stops:          L.layerGroup(),
+                platforms:      L.layerGroup(),
+                signals:        L.layerGroup(),
+                switches:       L.layerGroup(),
+            };
+
+            // Path polyline → 'path' group.
+            const pathLatLngs = pathCoordinates.map(function(c) { return [c.latitude, c.longitude]; });
+            if (pathLatLngs.length >= 2) {
+                routePolyline = L.polyline(pathLatLngs, { color: '#0066ff', weight: 4, opacity: 0.7 });
+                serviceLayerGroups.path.addLayer(routePolyline);
             }
 
-            // Draw full path polyline if we have path coordinates
-            if (pathCoordinates.length >= 2) {
-                const pathLatLngs = pathCoordinates.map(function(c) {
-                    return [c.latitude, c.longitude];
-                });
-                routePolyline = L.polyline(pathLatLngs, {
-                    color: '#0066ff',
-                    weight: 4,
-                    opacity: 0.7
-                }).addTo(routeMap);
-            }
-
-            // Add stop markers for entries with coordinates
+            // Scheduled stops → 'stops' group.
             entriesWithCoords.forEach(function(entry, index) {
                 const lat = parseFloat(entry.latitude);
                 const lng = parseFloat(entry.longitude);
-
-                // Determine marker style
                 let markerClass = 'stop-marker';
                 if (index === 0) markerClass += ' first';
                 else if (index === entriesWithCoords.length - 1) markerClass += ' last';
-
                 const icon = L.divIcon({
                     className: 'stop-marker-wrapper',
                     html: '<div class="' + markerClass + '"></div>',
                     iconSize: [14, 14],
                     iconAnchor: [7, 7]
                 });
-
-                // Build popup content
                 let popupContent = '<strong>' + (index + 1) + '. ' + (entry.location || 'Unknown') + '</strong>';
                 if (entry.structure_number) popupContent += '<br>' + (entry.structure || ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupPlatform') : 'Platform')) + ': ' + entry.structure_number;
                 if (entry.time1) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupTime') : 'Time') + ': ' + entry.time1;
                 if (entry.action) popupContent += '<br>' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.popupAction') : 'Action') + ': ' + entry.action;
-
-                const marker = L.marker([lat, lng], { icon: icon })
-                    .bindPopup(popupContent)
-                    .addTo(routeMap);
-
+                const marker = L.marker([lat, lng], { icon: icon }).bindPopup(popupContent);
+                serviceLayerGroups.stops.addLayer(marker);
                 stopMarkers.push(marker);
             });
 
-            // Fit map bounds - prefer path coordinates if available, otherwise use entry coords
-            let boundsCoords;
-            if (pathCoordinates.length > 0) {
-                boundsCoords = pathCoordinates.map(function(c) { return [c.latitude, c.longitude]; });
-            } else {
-                boundsCoords = entriesWithCoords.map(function(e) { return [parseFloat(e.latitude), parseFloat(e.longitude)]; });
+            // Pull route-level Point features (platforms / signals / switches)
+            // and keep only those within proximity of the service's path. We
+            // wait for this fetch before showing the toggle bar so the layers
+            // settle in their persisted state in one shot.
+            if (timetable && timetable.route_id && pathLatLngs.length > 0) {
+                try {
+                    const r = await fetch('/api/routes/' + timetable.route_id + '/map-data');
+                    if (r.ok) {
+                        const md = await r.json();
+                        const feats = (md && Array.isArray(md.coordinates)) ? md.coordinates : [];
+                        // Style + classification helpers shared with the route page.
+                        const TRACK_FEATURE_STYLE = {
+                            platform_track: { color: '#ff7f00', weight: 5, opacity: 0.85 },
+                            siding_track:   { color: '#9467bd', weight: 4, opacity: 0.7  },
+                            line_track:     { color: '#17becf', weight: 4, opacity: 0.7  },
+                            running_track:  { color: '#1f77b4', weight: 4, opacity: 0.7  },
+                        };
+                        // Returns true if any vertex of the (Multi)LineString
+                        // geometry is within proximity of the path.
+                        function lineNearPath(geom) {
+                            const lines = (geom.type === 'MultiLineString') ? geom.coordinates : [geom.coordinates];
+                            for (let i = 0; i < lines.length; i++) {
+                                const line = lines[i];
+                                for (let j = 0; j < line.length; j++) {
+                                    const c = line[j];
+                                    if (minDistanceToPath(c[1], c[0], pathLatLngs) <= SERVICE_MARKER_PROX_M) return true;
+                                }
+                            }
+                            return false;
+                        }
+                        // Build a Set of (location, structure, structure_number)
+                        // tuples the service explicitly uses — pulled from the
+                        // schedule (entries). Used to tighten the platform-track
+                        // filter so two parallel platforms at the same station
+                        // don't both light up just because they're within 50 m.
+                        const usedStructures = new Set();
+                        (entries || []).forEach(function(e) {
+                            const loc = (e.location || '').trim();
+                            const st = (e.structure || '').trim();
+                            const num = (e.structure_number || '').trim();
+                            if (!loc || !num) return;
+                            usedStructures.add(loc + '|' + st + '|' + num);
+                        });
+                        function structureMatchesSchedule(p) {
+                            const loc = (p.location || '').trim();
+                            const st = (p.structure || '').trim();
+                            const num = (p.structure_number || '').trim();
+                            if (!loc || !num) return false;
+                            return usedStructures.has(loc + '|' + st + '|' + num);
+                        }
+                        feats.forEach(function(feat) {
+                            const geom = feat.geometry;
+                            if (!geom) return;
+                            const p = feat.properties || {};
+                            // Track-feature LineStrings: classify by feature_type.
+                            if ((geom.type === 'LineString' || geom.type === 'MultiLineString') && p.feature_type) {
+                                const group = serviceLayerGroups[p.feature_type];
+                                if (!group) return;
+                                // Platform tracks: STRICT schedule match. Two parallel
+                                // platforms at the same station are within proximity
+                                // of each other, so geometric proximity alone catches
+                                // the wrong one. The schedule lists the exact platform
+                                // the service uses — go with that.
+                                if (p.feature_type === 'platform_track') {
+                                    if (!structureMatchesSchedule(p)) return;
+                                } else {
+                                    // Sidings / lines / running tracks: prefer schedule
+                                    // match when available, else fall back to proximity
+                                    // (trains can cross unnamed running tracks the
+                                    // schedule doesn't enumerate).
+                                    const named = p.structure && p.structure_number;
+                                    if (named && structureMatchesSchedule(p)) {
+                                        // pass — explicitly used
+                                    } else if (named) {
+                                        return; // named but not used by this service
+                                    } else if (!lineNearPath(geom)) {
+                                        return;
+                                    }
+                                }
+                                const layer = L.geoJSON(feat, {
+                                    style: TRACK_FEATURE_STYLE[p.feature_type] || { color: '#0066ff', weight: 3, opacity: 0.8 }
+                                });
+                                const popupParts = [];
+                                if (p.location) popupParts.push('<b>' + escapeHtml(p.location) + '</b>');
+                                const sub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                                if (sub) popupParts.push(escapeHtml(sub));
+                                if (p.length_m != null) popupParts.push('Length: ' + p.length_m + ' m');
+                                if (popupParts.length) {
+                                    layer.eachLayer(function(l) { l.bindPopup(popupParts.join('<br>')); });
+                                }
+                                group.addLayer(layer);
+                                return;
+                            }
+                            // Point features: platforms / signals / switches.
+                            if (geom.type !== 'Point') return;
+                            const c = geom.coordinates;
+                            if (!Array.isArray(c) || c.length < 2) return;
+                            const flng = c[0], flat = c[1];
+                            // Determine kind first so we can apply per-kind filters.
+                            let group = 'platforms', fill = '#ff7f00', radius = 4;
+                            if (p.signal_id) { group = 'signals'; fill = '#ffd700'; radius = 3; }
+                            else if (p.jct_guid != null) { group = 'switches'; fill = '#cc8400'; }
+                            // Platforms: schedule-strict (same reason as platform_track).
+                            // Two adjacent platforms at one station are within 50 m of
+                            // each other, so geometric proximity catches the wrong
+                            // one. Only show platforms whose
+                            // (location, structure, structure_number) appears in the
+                            // service's schedule.
+                            if (group === 'platforms') {
+                                if (!structureMatchesSchedule(p)) return;
+                            } else if (group === 'signals') {
+                                // Signals must be ON the path — parallel-track signals
+                                // at the same station are within ~5 m so coarse
+                                // proximity catches the wrong one. Use point-to-
+                                // segment distance with a tight 3 m threshold.
+                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > SIGNAL_PROX_M) return;
+                            } else {
+                                // Switches: keep the wider proximity — junctions can
+                                // sit a bit off the path geometry.
+                                if (minDistanceToPath(flat, flng, pathLatLngs) > SERVICE_MARKER_PROX_M) return;
+                            }
+                            const m = L.circleMarker([flat, flng], {
+                                radius: radius, color: '#ffffff', weight: 1.5,
+                                fillColor: fill, fillOpacity: 1
+                            });
+                            let label = '';
+                            if (p.name) {
+                                const ssub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                                label = ssub ? p.name + ' — ' + ssub : p.name;
+                            } else if (p.display_label) {
+                                label = p.display_label;
+                            }
+                            if (label) m.bindTooltip(label, { permanent: false, direction: 'right', offset: [6, 0] });
+                            const lines = [];
+                            if (p.name) lines.push('<b>' + escapeHtml(p.name) + '</b>');
+                            const psub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                            if (psub) lines.push(escapeHtml(psub));
+                            if (p.signal_id) lines.push('Signal ID: <code>' + escapeHtml(p.signal_id) + '</code>');
+                            if (p.signal_type) lines.push('Type: ' + escapeHtml(p.signal_type));
+                            if (lines.length) m.bindPopup(lines.join('<br>'));
+                            serviceLayerGroups[group].addLayer(m);
+                        });
+                    }
+                } catch (e) {
+                    console.warn('service map: route features fetch failed', e);
+                }
             }
 
+            // Always start with every layer ON when this page loads —
+            // stale "off" prefs from earlier debugging would otherwise leave
+            // the map looking empty. Toggling during the session still works
+            // (and still persists), but each fresh visit resets to visible.
+            const bar = document.getElementById('serviceLayerBar');
+            ['path','platform_track','siding_track','line_track','running_track','stops','platforms','signals','switches'].forEach(function(k) {
+                const box = bar.querySelector('input[data-svc-layer="' + k + '"]');
+                if (box) box.checked = true;
+                serviceLayerGroups[k].addTo(routeMap);
+            });
+            // Hide the bar entirely if nothing exists in any group beyond an
+            // empty path (e.g. no path + no entries) — but if anything is
+            // displayable, show it.
+            const totalLayers = Object.values(serviceLayerGroups).reduce(function(n, g) { return n + g.getLayers().length; }, 0);
+            bar.style.display = totalLayers > 0 ? 'block' : 'none';
+
+            bar.querySelectorAll('input[type="checkbox"][data-svc-layer]').forEach(function(box) {
+                box.onchange = function() {
+                    const k = box.getAttribute('data-svc-layer');
+                    const grp = serviceLayerGroups[k];
+                    if (!grp) return;
+                    if (box.checked) grp.addTo(routeMap);
+                    else routeMap.removeLayer(grp);
+                    const p2 = loadServiceLayerPrefs();
+                    p2[k] = box.checked;
+                    saveServiceLayerPrefs(p2);
+                };
+            });
+
+            // Fit bounds — prefer path, else the stops, else any extra markers.
+            let boundsCoords = [];
+            if (pathLatLngs.length > 0) boundsCoords = pathLatLngs.slice();
+            else boundsCoords = entriesWithCoords.map(function(e) { return [parseFloat(e.latitude), parseFloat(e.longitude)]; });
             if (boundsCoords.length > 0) {
-                const bounds = L.latLngBounds(boundsCoords);
-                routeMap.fitBounds(bounds, { padding: [30, 30] });
+                routeMap.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
             }
         }
 
@@ -1364,7 +1659,19 @@
                     const qr = qrcode(0, 'M');
                     qr.addData(url);
                     qr.make();
-                    container.innerHTML = qr.createSvgTag(6, 2);
+                    // Wrap the QR in an anchor so clicking opens the HUD URL
+                    // in a new tab. The container keeps its background/padding
+                    // styling; the anchor takes the inline-block layout.
+                    container.innerHTML = '';
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.title = url;
+                    a.style.display = 'inline-block';
+                    a.style.cursor = 'pointer';
+                    a.innerHTML = qr.createSvgTag(6, 2);
+                    container.appendChild(a);
                 });
 
                 document.getElementById('qrCard').style.display = '';

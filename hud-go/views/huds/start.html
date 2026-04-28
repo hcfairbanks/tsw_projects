@@ -74,6 +74,19 @@
             background: white;
             padding: 12px;
         }
+        /* Hover effect mirrors the Desktop click-target tile so all five
+           start-card targets feel the same. The anchor is the click target
+           injected by the QR generator. */
+        .start-card .qr-code a {
+            display: block;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .start-card .qr-code a:hover {
+            transform: scale(1.05);
+        }
+        .start-card .qr-code a:hover svg {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
         .start-card .qr-label {
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -223,40 +236,30 @@
                 const response = await fetch('/api/config/server-urls');
                 const urls = await response.json();
 
+                // Helper: render the QR SVG wrapped in an anchor so the user
+                // can click it (in addition to scanning) — handy when you're
+                // already at the desk on the same machine.
+                function renderClickableQR(container, url) {
+                    var qr = qrcode(0, 'M');
+                    qr.addData(url);
+                    qr.make();
+                    container.innerHTML = '<a href="' + url + '" target="_blank" rel="noopener" style="display:block;line-height:0;">' + qr.createSvgTag(5, 0) + '</a>';
+                }
+
                 // Mobile QR
-                var mobileUrl = urls.network + '/find-timetable?hud=mobile';
-                var mobileContainer = document.getElementById('qr-mobile');
-                var qrMobile = qrcode(0, 'M');
-                qrMobile.addData(mobileUrl);
-                qrMobile.make();
-                mobileContainer.innerHTML = qrMobile.createSvgTag(5, 0);
+                renderClickableQR(document.getElementById('qr-mobile'), urls.network + '/find-timetable?hud=mobile');
 
                 // Tablet QR
-                var tabletUrl = urls.network + '/find-timetable?hud=tablet';
-                var tabletContainer = document.getElementById('qr-tablet');
-                var qrTablet = qrcode(0, 'M');
-                qrTablet.addData(tabletUrl);
-                qrTablet.make();
-                tabletContainer.innerHTML = qrTablet.createSvgTag(5, 0);
+                renderClickableQR(document.getElementById('qr-tablet'), urls.network + '/find-timetable?hud=tablet');
 
                 // Desktop link
                 document.getElementById('desktop-link').href = '/find-timetable?hud=desktop';
 
                 // Weather QR
-                var weatherUrl = urls.network + '/weather';
-                var weatherContainer = document.getElementById('qr-weather');
-                var qrWeather = qrcode(0, 'M');
-                qrWeather.addData(weatherUrl);
-                qrWeather.make();
-                weatherContainer.innerHTML = qrWeather.createSvgTag(5, 0);
+                renderClickableQR(document.getElementById('qr-weather'), urls.network + '/weather');
 
                 // Tracking Map QR
-                var mapUrl = urls.network + '/map?from=start';
-                var mapContainer = document.getElementById('qr-map');
-                var qrMap = qrcode(0, 'M');
-                qrMap.addData(mapUrl);
-                qrMap.make();
-                mapContainer.innerHTML = qrMap.createSvgTag(5, 0);
+                renderClickableQR(document.getElementById('qr-map'), urls.network + '/map?from=start');
             } catch (err) {
                 console.error('Failed to generate QR codes:', err);
             }

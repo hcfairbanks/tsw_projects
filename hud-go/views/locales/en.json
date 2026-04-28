@@ -393,6 +393,12 @@
     "valid": "Valid",
     "notFound": "Not Found",
     "source": "Source",
+    "sourceLabel": "Source:",
+    "sourceTimetable": "Timetable",
+    "sourceScenario": "Scenario",
+    "sourceTraining": "Training",
+    "playableLabel": "Playable:",
+    "playableHint": "Player can drive this service",
     "contributor": "Contributor",
     "contributorName": "Contributor Name",
     "contributorNameDesc": "Your name will be added to timetables you create or add coordinates to",
@@ -542,7 +548,19 @@
     "timetablesImported": "Timetables imported:",
     "skipped": "skipped:",
     "alreadyExist": "already exist",
-    "errors": "Errors:"
+    "errors": "Errors:",
+    "layers": {
+      "title": "Layers:",
+      "rails": "Rails",
+      "platformTracks": "Platform tracks",
+      "sidingTracks": "Siding tracks",
+      "lineTracks": "Line tracks",
+      "runningTracks": "Running tracks",
+      "platforms": "Platforms",
+      "signals": "Signals",
+      "switches": "Switches",
+      "stops": "Stops"
+    }
   },
   "trains": {
     "title": "Trains",
@@ -578,7 +596,24 @@
     "errorLoadingTimetables": "Error loading timetables",
     "showingTimetablesOnRoute": "Showing timetables for this train on",
     "train": "Train",
-    "noRoutes": "This train is not assigned to any routes."
+    "noRoutes": "This train is not assigned to any routes.",
+    "formations": "Formations",
+    "formationDetails": "Formation Details",
+    "formationsInClass": "Formations",
+    "formationsHint": "Each row below is a physical train belonging to this class.",
+    "classDetails": "Class Details",
+    "consist": "Consist",
+    "consistHint": "Per-car list captured during route import.",
+    "class": "Class",
+    "livery": "Livery",
+    "length": "Length",
+    "cars": "Cars",
+    "typicalLength": "Typical Length",
+    "typicalCarCount": "Typical Car Count",
+    "position": "#",
+    "friendlyName": "Friendly Name",
+    "category": "Category",
+    "lead": "Lead"
   },
   "timetables": {
     "title": "Timetables",
@@ -748,7 +783,8 @@
     "errorRemovingTrain": "Error removing train from timetable",
     "popupPlatform": "Platform",
     "popupTime": "Time",
-    "popupAction": "Action"
+    "popupAction": "Action",
+    "backend": "Backend"
   },
   "map": {
     "title": "Tracking Map",

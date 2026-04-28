@@ -107,6 +107,21 @@
     </div>
 
     <div class="card">
+        <h2 data-i18n="trains.formationDetails">Formation Details</h2>
+        <div id="formationDetails">
+            <p class="empty-message">Loading...</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="trains.consist">Consist</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;" data-i18n="trains.consistHint">Per-car list captured during route import.</p>
+        <div id="vehiclesList">
+            <p class="empty-message">Loading...</p>
+        </div>
+    </div>
+
+    <div class="card">
         <h2 data-i18n="nav.routes">Routes</h2>
         <div id="routesList">
             <p class="empty-message">Loading routes...</p>
@@ -169,16 +184,31 @@
         function renderTrain(train) {
             currentTrain = train;
             document.getElementById('trainName').textContent = train.name;
-            document.title = train.name + ' - TSW HUD Project';
+
+            // Lead with the class name (when present) — formation_name (e.g.
+            // "Class483_006") is the variant designation, not the user-facing
+            // identity. Page title shows class — formation.
+            var displayTitle = train.class_name
+                ? train.class_name + (train.class_name !== train.name ? ' — ' + train.name : '')
+                : train.name;
+            document.title = displayTitle + ' - TSW HUD Project';
+            if (!isEditMode) {
+                document.getElementById('pageTitle').textContent = displayTitle;
+            }
 
             var idLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.id') : 'ID';
             var nameLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.name') : 'Name';
+            var classLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.class') : 'Class';
+            var liveryLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.livery') : 'Livery';
+            var lengthLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.length') : 'Length';
+            var carsLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.cars') : 'Cars';
             var editBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.edit') : 'Edit';
             var saveBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.save') : 'Save';
             var cancelBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.cancel') : 'Cancel';
             var changeNameLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.changeName') : 'Change Name';
             var namePlaceholder = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.enterTrainName') : 'Enter train name...';
 
+            // Edit-mode card (rename) — keeps existing behavior.
             let html = '<div class="detail-row"><span class="detail-label">' + idLabel + ':</span><span class="detail-value">' + train.id + '</span></div>';
             html += '<div class="detail-row"><span class="detail-label">' + nameLabel + ':</span><span class="detail-value" id="nameDisplay">' + escapeHtml(train.name);
             if (isEditMode) html += ' <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px; margin-left: 10px;" onclick="showNameEdit()">' + editBtn + '</button>';
@@ -186,12 +216,22 @@
             if (isEditMode) {
                 html += '<div class="detail-row" id="nameEditRow" style="display: none;"><span class="detail-label">' + changeNameLabel + ':</span><span class="detail-value"><input type="text" id="nameInput" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; min-width: 200px;" placeholder="' + namePlaceholder + '"> <button class="btn-primary" style="padding: 4px 12px; font-size: 12px;" onclick="saveNameChange()">' + saveBtn + '</button> <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="cancelNameEdit()">' + cancelBtn + '</button></span></div>';
             }
-
-            if (!isEditMode) {
-                document.getElementById('pageTitle').textContent = train.name;
-            }
-
             document.getElementById('trainDetails').innerHTML = html;
+
+            // Formation details card (always shown).
+            var details = '';
+            details += detailRow(idLabel, train.id);
+            details += detailRow(nameLabel, train.name);
+            if (train.class_name) {
+                var classCell = train.class_id
+                    ? '<a href="/train-classes/' + train.class_id + '">' + escapeHtml(train.class_name) + '</a>'
+                    : escapeHtml(train.class_name);
+                details += '<div class="detail-row"><span class="detail-label">' + classLabel + ':</span><span class="detail-value">' + classCell + '</span></div>';
+            }
+            if (train.livery_id) details += detailRow(liveryLabel, train.livery_id);
+            if (train.length_m != null) details += detailRow(lengthLabel, Number(train.length_m).toFixed(1) + ' m');
+            if (train.car_count != null) details += detailRow(carsLabel, train.car_count);
+            document.getElementById('formationDetails').innerHTML = details;
 
             // Add keyboard handlers for name input
             const nameInput = document.getElementById('nameInput');
@@ -206,6 +246,56 @@
                 });
             }
 
+        }
+
+        function detailRow(label, value) {
+            if (value == null || value === '') return '';
+            return '<div class="detail-row"><span class="detail-label">' + label + ':</span><span class="detail-value">' + escapeHtml(String(value)) + '</span></div>';
+        }
+
+        async function loadVehicles() {
+            try {
+                var response = await fetch('/api/trains/' + trainId + '/vehicles');
+                if (!response.ok) {
+                    document.getElementById('vehiclesList').innerHTML = '<p class="empty-message">No consist data.</p>';
+                    return;
+                }
+                var vehicles = await response.json();
+                renderVehicles(vehicles);
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+                document.getElementById('vehiclesList').innerHTML = '<p class="empty-message">Error loading consist.</p>';
+            }
+        }
+
+        function renderVehicles(vehicles) {
+            var container = document.getElementById('vehiclesList');
+            if (!vehicles || vehicles.length === 0) {
+                container.innerHTML = '<p class="empty-message">No consist data recorded for this formation.</p>';
+                return;
+            }
+            var posHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.position') : '#';
+            var classHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.class') : 'Class';
+            var friendlyHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.friendlyName') : 'Friendly Name';
+            var liveryHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.livery') : 'Livery';
+            var categoryHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.category') : 'Category';
+            var lengthHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.length') : 'Length';
+            var leadHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.lead') : 'Lead';
+
+            var html = '<table><thead><tr><th>' + posHeader + '</th><th>' + classHeader + '</th><th>' + friendlyHeader + '</th><th>' + liveryHeader + '</th><th>' + categoryHeader + '</th><th>' + lengthHeader + '</th><th>' + leadHeader + '</th></tr></thead><tbody>';
+            vehicles.forEach(function(v) {
+                html += '<tr>';
+                html += '<td>' + v.position + '</td>';
+                html += '<td>' + escapeHtml(v.class_name || '-') + '</td>';
+                html += '<td>' + escapeHtml(v.friendly_name || '-') + '</td>';
+                html += '<td>' + escapeHtml(v.livery_id || '-') + '</td>';
+                html += '<td>' + escapeHtml(v.vehicle_category || '-') + '</td>';
+                html += '<td>' + (v.length_m != null ? Number(v.length_m).toFixed(1) + ' m' : '-') + '</td>';
+                html += '<td>' + (v.is_lead ? '✓' : '') + (v.is_flipped ? ' (flipped)' : '') + '</td>';
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
         }
 
         function showNameEdit() {
@@ -545,10 +635,12 @@
         if (typeof i18n !== 'undefined' && i18n.init) {
             i18n.init().then(function() {
                 loadTrain();
+                loadVehicles();
                 loadRoutes().then(loadTimetables);
             });
         } else {
             loadTrain();
+            loadVehicles();
             loadRoutes().then(loadTimetables);
         }
     </script>

@@ -64,6 +64,8 @@
         .inline-typeahead-wrapper .typeahead-dropdown { z-index: 200; }
         /* Map styles */
         #routeMap { height: 750px; border-radius: 6px; }
+        #routeMapContainer:fullscreen, #routeMapContainer:-webkit-full-screen { background: #fff; padding: 12px; box-sizing: border-box; }
+        #routeMapContainer:fullscreen #routeMap, #routeMapContainer:-webkit-full-screen #routeMap { height: calc(100vh - 80px); border-radius: 6px; }
         .map-card { display: none; }
         .map-card.has-data { display: block; }
         .stop-marker { background: #00cc66; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
@@ -175,6 +177,51 @@
         <h2 style="cursor: pointer; user-select: none;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span id="mapTitle">Route Map</span></h2>
         <div id="routeMapContainer">
             <div id="routeMap"></div>
+            <div id="routeLayerBar" style="display:none; margin-top: 10px; padding: 12px 14px; background: var(--bg-tertiary); border-radius: 6px; font-size: 14px;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px;">
+                    <strong style="font-size: 14px;" data-i18n="routes.layers.title">Layers:</strong>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="rails" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.rails">Rails</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="platform_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.platformTracks">Platform tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="siding_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.sidingTracks">Siding tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="line_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.lineTracks">Line tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="running_track" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:5px;background:#1f77b4;border-radius:2px"></span>
+                        <span data-i18n="routes.layers.runningTracks">Running tracks</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="platforms" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>
+                        <span data-i18n="routes.layers.platforms">Platforms</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="signals" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>
+                        <span data-i18n="routes.layers.signals">Signals</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" data-layer="switches" checked style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>
+                        <span data-i18n="routes.layers.switches">Switches</span>
+                    </label>
+                </div>
+            </div>
         </div>
         <div id="routeLocationsSection" class="edit-only" style="margin-top: 15px; display:none;"></div>
     </div>
@@ -195,53 +242,9 @@
 
     <div class="card">
         <h2 data-i18n="routes.timetablesOnRoute">Timetables on this Route</h2>
-        <div class="filter-box">
-            <label data-i18n="routes.filterService">Service:</label>
-            <div class="tt-typeahead-container">
-                <input type="text" id="ttServiceInput" placeholder="Type to search services..." data-i18n-placeholder="routes.searchServicesPlaceholder" autocomplete="off">
-                <div id="ttServiceDropdown" class="tt-typeahead-dropdown"></div>
-                <input type="hidden" id="ttServiceFilter" value="">
-                <input type="hidden" id="ttServiceFilterType" value="">
-            </div>
-            <label data-i18n="routes.filterTrain">Train:</label>
-            <div class="tt-typeahead-container">
-                <input type="text" id="ttTrainInput" placeholder="Type to search trains..." data-i18n-placeholder="routes.searchTrainsPlaceholder" autocomplete="off">
-                <div id="ttTrainDropdown" class="tt-typeahead-dropdown"></div>
-                <input type="hidden" id="ttTrainFilter" value="">
-            </div>
-            <label data-i18n="routes.filterSection">Section:</label>
-            <select id="ttSectionFilter" onchange="renderRouteTimetables(1)">
-                <option value="" data-i18n="common.all">All</option>
-                <option value="__none__" data-i18n="routes.noSection">No Section</option>
-            </select>
-            <label data-i18n="routes.filterCoordStatus">Coord Status:</label>
-            <select id="ttCompletedFilter" onchange="renderRouteTimetables(1)">
-                <option value="" data-i18n="common.all">All</option>
-                <option value="completed" data-i18n="timetables.completed">Completed</option>
-                <option value="not_completed" data-i18n="timetables.notCompleted">Not Completed</option>
-            </select>
-        </div>
-        <div class="filter-box">
-            <label data-i18n="routes.filterStartTime">Start Time:</label>
-            <input type="text" id="ttStartTimeMin" title="From" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="text" id="ttStartTimeMax" title="To" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <label data-i18n="routes.filterDuration">Duration:</label>
-            <input type="text" id="ttDurationMin" title="Min" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="text" id="ttDurationMax" title="Max" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <label data-i18n="routes.filterStops">Stops:</label>
-            <input type="number" id="ttStopsMin" title="Min" placeholder="Min" min="0" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="number" id="ttStopsMax" title="Max" placeholder="Max" min="0" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <div style="flex: 1;"></div>
-            <button class="btn-primary" onclick="renderRouteTimetables(1)" data-i18n="common.search">Search</button>
-            <button class="btn-secondary" onclick="clearTtFilters()" data-i18n="common.clear">Clear</button>
-        </div>
-        <div id="routeTimetablesList">
-            <p class="empty-message">Loading timetables...</p>
-        </div>
-        <div class="pagination" id="ttPagination"></div>
+        <!-- Filter card + paginated results — rendered by the shared
+             TimetableSearch module, with the route preselected and locked. -->
+        <div id="timetableSearchHost"></div>
     </div>
 
     <script>
@@ -327,14 +330,24 @@
             }
 
             // Country (editable with typeahead in edit mode)
-            var countryDisplay = route.country ? escapeHtml(route.country) : '<span style="color: var(--text-muted); font-style: italic;">Not set</span>';
+            // Resolve country name via country_id (the routes payload no longer
+            // carries the country string directly post-Phase-B). Fall back to
+            // route.country / route.country_name only if present, then to "Not set".
+            var resolvedCountry = null;
             var countryFlag = '';
             if (route.country_id) {
                 var countryObj = allCountries.find(function(c) { return c.id === route.country_id; });
-                if (countryObj && countryObj.code) {
-                    countryFlag = '<span class="fi fi-' + countryObj.code.toLowerCase() + '" style="margin-right: 6px;"></span>';
+                if (countryObj) {
+                    resolvedCountry = countryObj.name;
+                    if (countryObj.code) {
+                        countryFlag = '<span class="fi fi-' + countryObj.code.toLowerCase() + '" style="margin-right: 6px;"></span>';
+                    }
                 }
             }
+            if (!resolvedCountry) resolvedCountry = route.country || route.country_name;
+            var countryDisplay = resolvedCountry
+                ? escapeHtml(resolvedCountry)
+                : '<span style="color: var(--text-muted); font-style: italic;">Not set</span>';
             html += '<div class="detail-row" id="country-display">';
             html += '<span class="detail-label">' + countryLabel + ':</span>';
             html += '<span class="detail-value">' + countryFlag + countryDisplay;
@@ -542,9 +555,12 @@
             }
         }
 
+        // routeTrains is now an array of class groups:
+        //   { id, name, livery_id, length_m, car_count, formations: [{id, name}, ...] }
+        // Legacy trains without a class_id come back as a singleton group with id=null.
         async function loadRouteTrains() {
             try {
-                const response = await fetch('/api/routes/' + routeId + '/trains');
+                const response = await fetch('/api/routes/' + routeId + '/train-classes');
                 routeTrains = await response.json();
                 renderTrains(routeTrains);
             } catch (error) {
@@ -564,8 +580,12 @@
         }
 
         function updateAvailableTrains() {
-            // Filter out trains already on this route
-            const routeTrainIds = routeTrains.map(function(t) { return t.id; });
+            // routeTrains is now class groups; flatten to formation IDs to know
+            // which trains are already linked to this route.
+            const routeTrainIds = [];
+            routeTrains.forEach(function(g) {
+                (g.formations || []).forEach(function(f) { routeTrainIds.push(f.id); });
+            });
             availableTrains = allTrains.filter(function(t) { return routeTrainIds.indexOf(t.id) === -1; });
             // Clear the search input
             trainSearch.value = '';
@@ -669,31 +689,62 @@
             }
         });
 
-        function renderTrains(trains) {
+        function renderTrains(groups) {
             const container = document.getElementById('trainsList');
 
             var noTrainsMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('routes.noTrainsOnRoute') : 'No trains assigned to this route yet.';
-            var idHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.id') : 'ID';
             var trainHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.train') : 'Train';
+            var formationsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.formations') : 'Formations';
             var actionsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.actions') : 'Actions';
             var viewBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.view') : 'View';
             var removeBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.remove') : 'Remove';
 
-            if (trains.length === 0) {
+            if (!groups || groups.length === 0) {
                 container.innerHTML = '<p class="empty-message">' + noTrainsMsg + '</p>';
                 return;
             }
 
+            // Formations column + Remove button are dev-mode-only — end
+            // users only need to see the class name. Edit mode keeps the
+            // View button (drill-into class) regardless of dev mode.
             let html = '<table><thead><tr><th>' + trainHeader + '</th>';
+            if (devMode) html += '<th>' + formationsHeader + '</th>';
             if (isEditMode) html += '<th class="actions">' + actionsHeader + '</th>';
             html += '</tr></thead><tbody>';
-            trains.forEach(function(train) {
-                html += '<tr id="train-row-' + train.id + '">';
-                html += '<td><a href="/trains/' + train.id + '?from_route=' + routeId + '">' + escapeHtml(train.name) + '</a></td>';
+            groups.forEach(function(g) {
+                var formations = g.formations || [];
+                // When the class has a real id, link primary text to the class
+                // page; otherwise fall back to the single formation (legacy
+                // trains without a class_id).
+                var primaryHref;
+                if (g.id) {
+                    primaryHref = '/train-classes/' + g.id + '?from_route=' + routeId;
+                } else if (formations.length === 1) {
+                    primaryHref = '/trains/' + formations[0].id + '?from_route=' + routeId;
+                } else {
+                    primaryHref = '#';
+                }
+                var rowKey = g.id ? ('class-' + g.id) : ('legacy-' + (formations[0] ? formations[0].id : '0'));
+                html += '<tr id="train-row-' + rowKey + '">';
+                html += '<td><a href="' + primaryHref + '">' + escapeHtml(g.name) + '</a></td>';
+                if (devMode) {
+                    // Formation chips — each links to the physical train.
+                    var chips = formations.map(function(f) {
+                        return '<a href="/trains/' + f.id + '?from_route=' + routeId + '" style="display:inline-block;margin-right:8px;color:var(--accent-color);text-decoration:none;font-size:13px;">' + escapeHtml(f.name) + '</a>';
+                    }).join('');
+                    html += '<td>' + (chips || '<span style="color:var(--text-muted);">-</span>') + '</td>';
+                }
                 if (isEditMode) {
                     html += '<td class="actions">';
-                    html += '<button class="btn-primary" onclick="showTrain(' + train.id + ')">' + viewBtn + '</button>';
-                    html += '<button class="btn-danger" onclick="removeTrain(' + train.id + ')">' + removeBtn + '</button>';
+                    if (g.id) {
+                        html += '<button class="btn-primary" onclick="showClass(' + g.id + ')">' + viewBtn + '</button>';
+                    } else if (formations.length === 1) {
+                        html += '<button class="btn-primary" onclick="showTrain(' + formations[0].id + ')">' + viewBtn + '</button>';
+                    }
+                    if (devMode) {
+                        var ids = formations.map(function(f) { return f.id; }).join(',');
+                        html += '<button class="btn-danger" onclick="removeTrainGroup([' + ids + '])">' + removeBtn + '</button>';
+                    }
                     html += '</td>';
                 }
                 html += '</tr>';
@@ -704,6 +755,25 @@
 
         function showTrain(trainId) {
             window.location.href = '/trains/' + trainId + '?from_route=' + routeId;
+        }
+
+        function showClass(classId) {
+            window.location.href = '/train-classes/' + classId + '?from_route=' + routeId;
+        }
+
+        async function removeTrainGroup(ids) {
+            if (!ids || !ids.length) return;
+            if (!confirm('Remove this train from the route?')) return;
+            try {
+                for (var i = 0; i < ids.length; i++) {
+                    await fetch('/api/routes/' + routeId + '/trains/' + ids[i], { method: 'DELETE' });
+                }
+                await loadRouteTrains();
+                updateAvailableTrains();
+            } catch (error) {
+                console.error('Error removing trains:', error);
+                alert('Error removing train from route');
+            }
         }
 
         async function addExistingTrain() {
@@ -892,416 +962,9 @@
             initRouteMap();
         }
 
-        // =============================================
-        // Timetables on this Route
-        // =============================================
-        let routeTimetables = [];
-        let ttCurrentPage = 1;
-        let ttCurrentLimit = 10;
-        let ttHighlightedIndex = { service: -1, train: -1 };
-
-        async function loadRouteTimetables() {
-            try {
-                var response = await fetch('/api/timetables?route_id=' + routeId);
-                routeTimetables = await response.json();
-                setupTtTypeaheads();
-                renderRouteTimetables();
-            } catch (error) {
-                console.error('Error loading timetables:', error);
-                document.getElementById('routeTimetablesList').innerHTML = '<p class="empty-message">Error loading timetables</p>';
-            }
-        }
-
-        function setupTtTypeaheads() {
-            setupTtServiceTypeahead();
-            setupTtTrainTypeahead();
-
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.tt-typeahead-container')) {
-                    document.getElementById('ttServiceDropdown').style.display = 'none';
-                    document.getElementById('ttTrainDropdown').style.display = 'none';
-                }
-            });
-        }
-
-        function setupTtServiceTypeahead() {
-            var input = document.getElementById('ttServiceInput');
-            var dropdown = document.getElementById('ttServiceDropdown');
-            var hidden = document.getElementById('ttServiceFilter');
-            var hiddenType = document.getElementById('ttServiceFilterType');
-
-            input.addEventListener('focus', function() { showTtServiceDropdown(this.value); });
-            input.addEventListener('input', function() {
-                ttHighlightedIndex.service = -1;
-                hidden.value = '';
-                hiddenType.value = '';
-                showTtServiceDropdown(this.value);
-                renderRouteTimetables(1);
-            });
-            input.addEventListener('keydown', function(e) { handleTtTypeaheadKeydown(e, 'service', dropdown); });
-        }
-
-        function setupTtTrainTypeahead() {
-            var input = document.getElementById('ttTrainInput');
-            var dropdown = document.getElementById('ttTrainDropdown');
-            var hidden = document.getElementById('ttTrainFilter');
-
-            input.addEventListener('focus', function() { showTtTrainDropdown(this.value); });
-            input.addEventListener('input', function() {
-                ttHighlightedIndex.train = -1;
-                hidden.value = '';
-                showTtTrainDropdown(this.value);
-                renderRouteTimetables(1);
-            });
-            input.addEventListener('keydown', function(e) { handleTtTypeaheadKeydown(e, 'train', dropdown); });
-        }
-
-        function handleTtTypeaheadKeydown(e, type, dropdown) {
-            var items = dropdown.querySelectorAll('.tt-typeahead-item[data-id]');
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                ttHighlightedIndex[type] = Math.min(ttHighlightedIndex[type] + 1, items.length - 1);
-                updateTtHighlight(items, ttHighlightedIndex[type]);
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                ttHighlightedIndex[type] = Math.max(ttHighlightedIndex[type] - 1, 0);
-                updateTtHighlight(items, ttHighlightedIndex[type]);
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                if (ttHighlightedIndex[type] >= 0 && items[ttHighlightedIndex[type]]) {
-                    items[ttHighlightedIndex[type]].click();
-                }
-            } else if (e.key === 'Escape') {
-                dropdown.style.display = 'none';
-            }
-        }
-
-        function updateTtHighlight(items, index) {
-            items.forEach(function(item, idx) {
-                item.classList.toggle('highlighted', idx === index);
-            });
-            if (index >= 0 && items[index]) {
-                items[index].scrollIntoView({ block: 'nearest' });
-            }
-        }
-
-        function showTtServiceDropdown(filter) {
-            var dropdown = document.getElementById('ttServiceDropdown');
-            var filterLower = filter.toLowerCase();
-
-            var items = [];
-            var seen = {};
-            routeTimetables.forEach(function(t) {
-                if (t.service && !seen['code:' + t.service]) {
-                    seen['code:' + t.service] = true;
-                    if (t.service.toLowerCase().includes(filterLower)) {
-                        items.push({ type: 'code', value: t.service, label: t.service });
-                    }
-                }
-                if (t.service_name && !seen['name:' + t.service_name]) {
-                    seen['name:' + t.service_name] = true;
-                    if (t.service_name.toLowerCase().includes(filterLower)) {
-                        items.push({ type: 'name', value: t.service_name, label: t.service_name });
-                    }
-                }
-            });
-            items.sort(function(a, b) {
-                if (a.type !== b.type) return a.type === 'code' ? -1 : 1;
-                return a.label.localeCompare(b.label);
-            });
-
-            if (items.length === 0) {
-                dropdown.innerHTML = '<div class="tt-typeahead-item" style="color: var(--text-muted);">No services found</div>';
-            } else {
-                dropdown.innerHTML = items.map(function(item) {
-                    var sub = item.type === 'code' ? 'Service Code' : 'Service Name';
-                    return '<div class="tt-typeahead-item" data-id="' + escapeHtml(item.value) + '" data-name="' + escapeHtml(item.label) + '" data-type="' + item.type + '">' +
-                        '<div class="item-name">' + escapeHtml(item.label) + '</div>' +
-                        '<div class="item-sub">' + sub + '</div></div>';
-                }).join('');
-
-                dropdown.querySelectorAll('.tt-typeahead-item[data-id]').forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        document.getElementById('ttServiceInput').value = this.dataset.name;
-                        document.getElementById('ttServiceFilter').value = this.dataset.id;
-                        document.getElementById('ttServiceFilterType').value = this.dataset.type;
-                        dropdown.style.display = 'none';
-                        renderRouteTimetables(1);
-                    });
-                });
-            }
-            dropdown.style.display = 'block';
-        }
-
-        function showTtTrainDropdown(filter) {
-            var dropdown = document.getElementById('ttTrainDropdown');
-            var filterLower = filter.toLowerCase();
-
-            // Collect unique trains from route timetables
-            var trainItems = [];
-            var seen = {};
-            routeTimetables.forEach(function(t) {
-                if (t.trains && t.trains.length > 0) {
-                    t.trains.forEach(function(train) {
-                        if (!seen[train.id] && train.name.toLowerCase().includes(filterLower)) {
-                            seen[train.id] = true;
-                            trainItems.push(train);
-                        }
-                    });
-                } else if (t.train_id) {
-                    var train = allTrains.find(function(tr) { return tr.id == t.train_id; });
-                    if (train && !seen[train.id] && train.name.toLowerCase().includes(filterLower)) {
-                        seen[train.id] = true;
-                        trainItems.push(train);
-                    }
-                }
-            });
-
-            if (trainItems.length === 0) {
-                dropdown.innerHTML = '<div class="tt-typeahead-item" style="color: var(--text-muted);">No trains found</div>';
-            } else {
-                dropdown.innerHTML = trainItems.map(function(train) {
-                    return '<div class="tt-typeahead-item" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' +
-                        '<div class="item-name">' + escapeHtml(train.name) + '</div></div>';
-                }).join('');
-
-                dropdown.querySelectorAll('.tt-typeahead-item[data-id]').forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        document.getElementById('ttTrainInput').value = this.dataset.name;
-                        document.getElementById('ttTrainFilter').value = this.dataset.id;
-                        dropdown.style.display = 'none';
-                        renderRouteTimetables(1);
-                    });
-                });
-            }
-            dropdown.style.display = 'block';
-        }
-
-        function renderRouteTimetables(page) {
-            page = page || ttCurrentPage;
-            ttCurrentPage = page;
-
-            var container = document.getElementById('routeTimetablesList');
-            var serviceFilter = document.getElementById('ttServiceFilter').value;
-            var serviceInput = document.getElementById('ttServiceInput').value.toLowerCase().trim();
-            var trainId = document.getElementById('ttTrainFilter').value;
-            var trainInput = document.getElementById('ttTrainInput').value.toLowerCase().trim();
-
-            var timetables = routeTimetables.slice();
-
-            // Apply service filter
-            var serviceFilterType = document.getElementById('ttServiceFilterType').value;
-            if (serviceFilter) {
-                if (serviceFilterType === 'code') {
-                    timetables = timetables.filter(function(t) { return t.service === serviceFilter; });
-                } else {
-                    timetables = timetables.filter(function(t) { return t.service_name === serviceFilter; });
-                }
-            } else if (serviceInput) {
-                timetables = timetables.filter(function(t) {
-                    var matchName = t.service_name && t.service_name.toLowerCase().includes(serviceInput);
-                    var matchCode = t.service && t.service.toLowerCase().includes(serviceInput);
-                    return matchName || matchCode;
-                });
-            }
-
-            // Apply train filter
-            if (trainId) {
-                timetables = timetables.filter(function(t) {
-                    if (t.train_id == trainId) return true;
-                    if (t.trains && t.trains.length > 0) {
-                        return t.trains.some(function(tr) { return tr.id == trainId; });
-                    }
-                    return false;
-                });
-            } else if (trainInput) {
-                timetables = timetables.filter(function(t) {
-                    var train = allTrains.find(function(tr) { return tr.id == t.train_id; });
-                    if (train && train.name.toLowerCase().includes(trainInput)) return true;
-                    if (t.trains && t.trains.length > 0) {
-                        return t.trains.some(function(tr) { return tr.name.toLowerCase().includes(trainInput); });
-                    }
-                    return false;
-                });
-            }
-
-            // Apply section filter
-            var sectionFilter = document.getElementById('ttSectionFilter').value;
-            if (sectionFilter === '__none__') {
-                timetables = timetables.filter(function(t) { return !t.section_name; });
-            } else if (sectionFilter) {
-                timetables = timetables.filter(function(t) { return t.section_name === sectionFilter; });
-            }
-
-            // Apply completed filter
-            var completedFilter = document.getElementById('ttCompletedFilter').value;
-            if (completedFilter === 'completed') {
-                timetables = timetables.filter(function(t) { return t.coordinates_complete === true; });
-            } else if (completedFilter === 'not_completed') {
-                timetables = timetables.filter(function(t) { return t.coordinates_complete !== true; });
-            }
-
-            // Apply start time range filter
-            var startTimeMin = document.getElementById('ttStartTimeMin').value;
-            var startTimeMax = document.getElementById('ttStartTimeMax').value;
-            if (startTimeMin || startTimeMax) {
-                timetables = timetables.filter(function(t) {
-                    if (!t.start_time) return false;
-                    var val = t.start_time.replace(/[^0-9:]/g, '').substring(0, 5);
-                    if (startTimeMin && val < startTimeMin) return false;
-                    if (startTimeMax && val > startTimeMax) return false;
-                    return true;
-                });
-            }
-
-            // Apply duration range filter
-            var durationMin = document.getElementById('ttDurationMin').value;
-            var durationMax = document.getElementById('ttDurationMax').value;
-            if (durationMin || durationMax) {
-                timetables = timetables.filter(function(t) {
-                    if (!t.duration) return false;
-                    var val = t.duration.replace(/[^0-9:]/g, '').substring(0, 5);
-                    if (durationMin && val < durationMin) return false;
-                    if (durationMax && val > durationMax) return false;
-                    return true;
-                });
-            }
-
-            // Apply stops range filter
-            var stopsMin = document.getElementById('ttStopsMin').value;
-            var stopsMax = document.getElementById('ttStopsMax').value;
-            if (stopsMin || stopsMax) {
-                timetables = timetables.filter(function(t) {
-                    var count = t.entry_count || 0;
-                    if (stopsMin && count < parseInt(stopsMin)) return false;
-                    if (stopsMax && count > parseInt(stopsMax)) return false;
-                    return true;
-                });
-            }
-
-            var total = timetables.length;
-            var totalPages = Math.ceil(total / ttCurrentLimit);
-            if (ttCurrentPage > totalPages) ttCurrentPage = totalPages || 1;
-
-            var start = (ttCurrentPage - 1) * ttCurrentLimit;
-            var paginated = timetables.slice(start, start + ttCurrentLimit);
-
-            if (timetables.length === 0) {
-                container.innerHTML = '<p class="empty-message">No timetables found.</p>';
-                document.getElementById('ttPagination').innerHTML = '';
-                return;
-            }
-
-            var html = '<table><thead><tr><th data-i18n="timetables.service">Service</th><th data-i18n="timetables.serviceName">Service Name</th><th data-i18n="timetables.section">Section</th><th data-i18n="timetables.trains">Trains</th><th data-i18n="timetables.startTime">Start Time</th><th data-i18n="timetables.duration">Duration</th><th data-i18n="timetables.stops">Stops</th><th data-i18n="timetables.coordStatus">Coord Status</th>';
-            if (isEditMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
-            html += '</tr></thead><tbody>';
-            paginated.forEach(function(t) {
-                var trainDisplay = '-';
-                if (t.trains && t.trains.length > 0) {
-                    trainDisplay = t.trains.map(function(train) {
-                        return '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
-                    }).join(', ');
-                } else if (t.train_id) {
-                    var train = allTrains.find(function(tr) { return tr.id == t.train_id; });
-                    if (train) {
-                        trainDisplay = '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
-                    }
-                }
-
-                var completedStatus = t.coordinates_complete
-                    ? '<span class="status-badge completed">Completed</span>'
-                    : '<span class="status-badge incomplete">Not Completed</span>';
-
-                html += '<tr>';
-                html += '<td><a href="/timetables/' + t.id + (devMode ? '' : '/view') + '">' + escapeHtml(t.service || '-') + '</a></td>';
-                html += '<td><a href="/timetables/' + t.id + (devMode ? '' : '/view') + '">' + escapeHtml(t.service_name || 'Untitled') + '</a></td>';
-                html += '<td>' + escapeHtml(t.section_name || '-') + '</td>';
-                html += '<td>' + trainDisplay + '</td>';
-                html += '<td>' + escapeHtml(t.start_time || '-') + '</td>';
-                html += '<td>' + escapeHtml(t.duration || '-') + '</td>';
-                html += '<td>' + (t.entry_count || 0) + '</td>';
-                html += '<td>' + completedStatus + '</td>';
-                if (isEditMode) {
-                    html += '<td class="actions">';
-                    html += '<button class="btn-primary" onclick="window.location.href=\'/timetables/' + t.id + '\'">Show</button>';
-                    html += '<button class="btn-danger" onclick="deleteRouteTimetable(' + t.id + ')">Delete</button>';
-                    html += '</td>';
-                }
-                html += '</tr>';
-            });
-            html += '</tbody></table>';
-            container.innerHTML = html;
-
-            if (typeof i18n !== 'undefined' && i18n.translate) {
-                i18n.translate(container);
-            }
-
-            renderTtPagination(total, totalPages);
-        }
-
-        function renderTtPagination(total, totalPages) {
-            var container = document.getElementById('ttPagination');
-            if (totalPages <= 1) {
-                container.innerHTML = '<span class="pagination-info">Showing ' + total + ' timetables</span>';
-                return;
-            }
-
-            var html = '<button class="btn-secondary" onclick="ttGoToPage(1)" ' + (ttCurrentPage === 1 ? 'disabled' : '') + '>&laquo;</button>';
-            html += '<button class="btn-secondary" onclick="ttGoToPage(' + (ttCurrentPage - 1) + ')" ' + (ttCurrentPage === 1 ? 'disabled' : '') + '>&lsaquo;</button>';
-            html += '<span class="pagination-info">' + ttCurrentPage + ' of ' + totalPages + '</span>';
-            html += '<button class="btn-secondary" onclick="ttGoToPage(' + (ttCurrentPage + 1) + ')" ' + (ttCurrentPage === totalPages ? 'disabled' : '') + '>&rsaquo;</button>';
-            html += '<button class="btn-secondary" onclick="ttGoToPage(' + totalPages + ')" ' + (ttCurrentPage === totalPages ? 'disabled' : '') + '>&raquo;</button>';
-            html += '<div class="per-page"><label>&nbsp;</label><select onchange="ttChangeLimit(this.value)">';
-            [5, 10, 25, 50].forEach(function(n) {
-                html += '<option value="' + n + '" ' + (ttCurrentLimit === n ? 'selected' : '') + '>' + n + '</option>';
-            });
-            html += '</select></div>';
-            container.innerHTML = html;
-        }
-
-        function ttGoToPage(page) {
-            renderRouteTimetables(page);
-        }
-
-        function ttChangeLimit(limit) {
-            ttCurrentLimit = parseInt(limit);
-            ttCurrentPage = 1;
-            renderRouteTimetables(1);
-        }
-
-        async function deleteRouteTimetable(id) {
-            if (!confirm('Are you sure you want to delete this timetable?')) return;
-            try {
-                await fetch('/api/timetables/' + id, { method: 'DELETE' });
-                loadRouteTimetables();
-            } catch (error) {
-                console.error('Error deleting timetable:', error);
-                alert('Error deleting timetable');
-            }
-        }
-
-        function clearTtFilters() {
-            document.getElementById('ttServiceInput').value = '';
-            document.getElementById('ttServiceFilter').value = '';
-            document.getElementById('ttServiceFilterType').value = '';
-            document.getElementById('ttTrainInput').value = '';
-            document.getElementById('ttTrainFilter').value = '';
-            document.getElementById('ttCompletedFilter').value = '';
-            document.getElementById('ttStartTimeMin').value = '';
-            document.getElementById('ttStartTimeMax').value = '';
-            document.getElementById('ttDurationMin').value = '';
-            document.getElementById('ttDurationMax').value = '';
-            document.getElementById('ttStopsMin').value = '';
-            document.getElementById('ttStopsMax').value = '';
-            document.getElementById('ttServiceDropdown').style.display = 'none';
-            document.getElementById('ttTrainDropdown').style.display = 'none';
-            ttCurrentPage = 1;
-            renderRouteTimetables(1);
-        }
-
-        // Initialization deferred to after i18n.init()
     </script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
     <script>
         // =============================================
         // Route Map
@@ -1337,7 +1000,11 @@
                 var markers = mapData.markers || [];
                 var locations = mapData.locations || [];
 
-                // Check if we have any data to show
+                // Detect new tsw6-extractor format: coordinates is a GeoJSON
+                // features array (each entry has type: "Feature"). Old format is
+                // a flat or multi-segment lat/lng array.
+                var isGeoJSON = coords.length > 0 && coords[0] && coords[0].type === 'Feature';
+
                 var locationsWithCoords = locations.filter(function(l) {
                     return l.latitude && l.longitude && l.name && l.name.toLowerCase() !== 'start';
                 });
@@ -1348,89 +1015,225 @@
 
                 mapCard.classList.add('has-data');
 
-                // Initialize map
+                // Initialize map. Use CARTO basemap (OSM 403s on file:// — also
+                // throttles heavy in-app traffic; CARTO is friendlier).
                 if (!routeMap) {
-                    routeMap = L.map('routeMap').setView([51.5, -0.1], 10);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(routeMap);
+                    routeMap = L.map('routeMap', { preferCanvas: true }).setView([51.5, -0.1], 10);
+                    if (window.LeafletExtras) {
+                        LeafletExtras.attachBasemapControls(routeMap);
+                        LeafletExtras.attachFullscreenControl(routeMap, '#routeMapContainer');
+                    } else {
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                            subdomains: 'abcd',
+                            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                        }).addTo(routeMap);
+                    }
                 }
 
                 // Clear existing layers
                 stopMarkers.forEach(function(m) { m.remove(); });
                 stopMarkers = [];
                 if (routePolyline) { routePolyline.remove(); routePolyline = null; }
+                if (window._routeGeoJSONLayer) { window._routeGeoJSONLayer.remove(); window._routeGeoJSONLayer = null; }
 
-                // Draw GPS path - supports multi-segment format (array of arrays) or flat array
-                if (coords.length > 0) {
-                    var pathLatLngs;
-                    if (Array.isArray(coords[0]) || (coords[0] && Array.isArray(coords[0].latitude))) {
-                        // Multi-segment: [[{lat,lng},...], [{lat,lng},...]]
-                        pathLatLngs = coords.map(function(segment) {
-                            return segment.map(function(c) { return [c.latitude, c.longitude]; });
-                        });
-                    } else {
-                        // Flat array (legacy): [{lat,lng},...]
-                        pathLatLngs = [coords.map(function(c) { return [c.latitude, c.longitude]; })];
-                    }
-                    // Filter out empty segments
-                    pathLatLngs = pathLatLngs.filter(function(seg) { return seg.length >= 2; });
-                    if (pathLatLngs.length > 0) {
-                        routePolyline = L.polyline(pathLatLngs, {
-                            color: '#0066ff',
-                            weight: 4,
-                            opacity: 0.7
-                        }).addTo(routeMap);
-                    }
-                }
-
-                // Add location markers - each bound/platform combo gets its own marker
-                locationsWithCoords.forEach(function(loc, index) {
-                    var markerClass = 'stop-marker';
-                    if (index === 0) markerClass += ' first';
-                    else if (index === locationsWithCoords.length - 1) markerClass += ' last';
-
-                    var icon = L.divIcon({
-                        className: 'stop-marker-wrapper',
-                        html: '<div class="' + markerClass + '"></div>',
-                        iconSize: [14, 14],
-                        iconAnchor: [7, 7]
-                    });
-
-                    var popup = '<strong>' + escapeHtml(loc.name) + '</strong>';
-                    if (loc.bound) popup += '<br>Bound: ' + loc.bound;
-                    if (loc.platform) popup += '<br>Platform: ' + loc.platform;
-
-                    var marker = L.marker([loc.latitude, loc.longitude], { icon: icon })
-                        .bindPopup(popup)
-                        .addTo(routeMap);
-                    stopMarkers.push(marker);
-                });
-
-                // Fit bounds - flatten multi-segment coords
-                var boundsCoords;
-                if (coords.length > 0) {
-                    if (Array.isArray(coords[0])) {
-                        // Multi-segment
-                        boundsCoords = [];
-                        coords.forEach(function(seg) {
-                            seg.forEach(function(c) { boundsCoords.push([c.latitude, c.longitude]); });
-                        });
-                    } else {
-                        boundsCoords = coords.map(function(c) { return [c.latitude, c.longitude]; });
-                    }
+                if (isGeoJSON) {
+                    renderGeoJSONFeatures(coords);
                 } else {
-                    boundsCoords = locationsWithCoords.map(function(l) { return [l.latitude, l.longitude]; });
-                }
-                if (boundsCoords.length > 0) {
-                    routeMap.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
+                    renderLegacyCoords(coords, locationsWithCoords);
                 }
 
-                // Render locations tables
+                // Render locations tables (legacy + new — populated when present).
                 renderRouteLocations(locations);
 
             } catch (err) {
                 console.error('Error loading route map data:', err);
+            }
+        }
+
+        // ---------- new tsw6 GeoJSON renderer ----------
+        // Features come in three shapes from the extractor:
+        //   - one MultiLineString (the merged rail network)
+        //   - LineStrings tagged feature_type: platform_track | siding_track | line_track | running_track
+        //   - Points tagged with: name (platforms), signal_id (signals), jct_guid (switches)
+        var TRACK_FEATURE_STYLE = {
+            platform_track: { color: '#ff7f00', weight: 5, opacity: 0.85 },
+            siding_track:   { color: '#9467bd', weight: 4, opacity: 0.7  },
+            line_track:     { color: '#17becf', weight: 4, opacity: 0.7  },
+            running_track:  { color: '#1f77b4', weight: 4, opacity: 0.7  }
+        };
+        function styleRailFeature(feature) {
+            var p = feature.properties || {};
+            if (p.feature_type && TRACK_FEATURE_STYLE[p.feature_type]) {
+                return TRACK_FEATURE_STYLE[p.feature_type];
+            }
+            return { color: '#0066ff', weight: 2, opacity: 0.9 };
+        }
+        // Layer keys match the data-layer attributes in #routeLayerBar.
+        var ROUTE_LAYER_KEYS = ['rails','platform_track','siding_track','line_track','running_track','platforms','signals','switches'];
+        var routeLayerGroups = {};
+        var ROUTE_LAYER_LS_KEY = 'huddev.routeMap.layers';
+
+        function loadLayerPrefs() {
+            try {
+                var raw = localStorage.getItem(ROUTE_LAYER_LS_KEY);
+                if (!raw) return null;
+                return JSON.parse(raw);
+            } catch (_) { return null; }
+        }
+        function saveLayerPrefs(prefs) {
+            try { localStorage.setItem(ROUTE_LAYER_LS_KEY, JSON.stringify(prefs)); } catch (_) {}
+        }
+
+        function renderGeoJSONFeatures(features) {
+            // Tear down any existing layer groups.
+            ROUTE_LAYER_KEYS.forEach(function(k) {
+                if (routeLayerGroups[k]) { routeMap.removeLayer(routeLayerGroups[k]); }
+                routeLayerGroups[k] = L.layerGroup();
+            });
+
+            var allBounds = L.latLngBounds();
+            features.forEach(function(feat) {
+                var p = feat.properties || {};
+                var t = feat.geometry && feat.geometry.type;
+                var sub;
+                if (t === 'Point') {
+                    var c = feat.geometry.coordinates;
+                    var latlng = L.latLng(c[1], c[0]);
+                    var fill = '#ff7f00', radius = 4, key = 'platforms';
+                    if (p.signal_id) { fill = '#ffd700'; radius = 3; key = 'signals'; }
+                    else if (p.jct_guid != null) { fill = '#cc8400'; key = 'switches'; }
+                    var marker = L.circleMarker(latlng, {
+                        radius: radius,
+                        color: '#ffffff', weight: 1.5,
+                        fillColor: fill, fillOpacity: 1
+                    });
+                    var label = '';
+                    if (p.name) {
+                        var ssub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                        label = ssub ? p.name + ' — ' + ssub : p.name;
+                    } else if (p.display_label) {
+                        label = p.display_label;
+                    }
+                    if (label) {
+                        marker.bindTooltip(label, { permanent: false, direction: 'right', offset: [6, 0] });
+                    }
+                    var lines = [];
+                    if (p.name) lines.push('<b>' + escapeHtml(p.name) + '</b>');
+                    var psub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                    if (psub) lines.push(escapeHtml(psub));
+                    if (p.signal_id) lines.push('Signal ID: <code>' + escapeHtml(p.signal_id) + '</code>');
+                    if (p.signal_type) lines.push('Type: ' + escapeHtml(p.signal_type));
+                    if (lines.length) marker.bindPopup(lines.join('<br>'));
+                    routeLayerGroups[key].addLayer(marker);
+                    allBounds.extend(latlng);
+                } else if (p.feature_type && (t === 'LineString' || t === 'MultiLineString')) {
+                    var layer = L.geoJSON(feat, { style: styleRailFeature });
+                    var key2 = p.feature_type; // platform_track | siding_track | line_track | running_track
+                    if (!routeLayerGroups[key2]) routeLayerGroups[key2] = L.layerGroup();
+                    routeLayerGroups[key2].addLayer(layer);
+                    try { allBounds.extend(layer.getBounds()); } catch (_) {}
+                    layer.eachLayer(function(lyr) {
+                        var lp = feat.properties || {};
+                        var ls = [];
+                        if (lp.location) ls.push('<b>' + escapeHtml(lp.location) + '</b>');
+                        var lsub = [lp.structure, lp.structure_number].filter(Boolean).join(' ');
+                        if (lsub) ls.push(escapeHtml(lsub));
+                        if (lp.feature_type) ls.push('Track: ' + escapeHtml(lp.feature_type));
+                        if (lp.length_m != null) ls.push('Length: ' + lp.length_m + ' m');
+                        if (ls.length) lyr.bindPopup(ls.join('<br>'));
+                    });
+                } else {
+                    // Base rails (MultiLineString without feature_type) → 'rails' group.
+                    var rl = L.geoJSON(feat, { style: styleRailFeature });
+                    routeLayerGroups['rails'].addLayer(rl);
+                    try { allBounds.extend(rl.getBounds()); } catch (_) {}
+                }
+            });
+
+            // Fit bounds before applying visibility (avoids flicker).
+            try { if (allBounds.isValid()) routeMap.fitBounds(allBounds, { padding: [30, 30] }); } catch (_) {}
+
+            // Apply persisted visibility, fall back to all-on if no prefs.
+            var prefs = loadLayerPrefs() || {};
+            ROUTE_LAYER_KEYS.forEach(function(k) {
+                var visible = prefs[k] === undefined ? true : !!prefs[k];
+                var box = document.querySelector('#routeLayerBar input[data-layer="' + k + '"]');
+                if (box) box.checked = visible;
+                if (visible && routeLayerGroups[k]) routeLayerGroups[k].addTo(routeMap);
+            });
+
+            // Wire change handlers (idempotent — safe to re-run on reload).
+            var bar = document.getElementById('routeLayerBar');
+            bar.style.display = 'block';
+            bar.querySelectorAll('input[type="checkbox"][data-layer]').forEach(function(box) {
+                box.onchange = function() {
+                    var k = box.getAttribute('data-layer');
+                    var grp = routeLayerGroups[k];
+                    if (!grp) return;
+                    if (box.checked) grp.addTo(routeMap);
+                    else routeMap.removeLayer(grp);
+                    var prefs2 = loadLayerPrefs() || {};
+                    prefs2[k] = box.checked;
+                    saveLayerPrefs(prefs2);
+                };
+            });
+
+            window._routeGeoJSONLayer = { remove: function() {
+                ROUTE_LAYER_KEYS.forEach(function(k) {
+                    if (routeLayerGroups[k]) routeMap.removeLayer(routeLayerGroups[k]);
+                });
+                routeLayerGroups = {};
+                document.getElementById('routeLayerBar').style.display = 'none';
+            }};
+        }
+
+        // ---------- legacy renderer (kept for old recording-style coords) ----------
+        function renderLegacyCoords(coords, locationsWithCoords) {
+            if (coords.length > 0) {
+                var pathLatLngs;
+                if (Array.isArray(coords[0]) || (coords[0] && Array.isArray(coords[0].latitude))) {
+                    pathLatLngs = coords.map(function(segment) {
+                        return segment.map(function(c) { return [c.latitude, c.longitude]; });
+                    });
+                } else {
+                    pathLatLngs = [coords.map(function(c) { return [c.latitude, c.longitude]; })];
+                }
+                pathLatLngs = pathLatLngs.filter(function(seg) { return seg.length >= 2; });
+                if (pathLatLngs.length > 0) {
+                    routePolyline = L.polyline(pathLatLngs, { color: '#0066ff', weight: 4, opacity: 0.7 }).addTo(routeMap);
+                }
+            }
+            locationsWithCoords.forEach(function(loc, index) {
+                var markerClass = 'stop-marker';
+                if (index === 0) markerClass += ' first';
+                else if (index === locationsWithCoords.length - 1) markerClass += ' last';
+                var icon = L.divIcon({
+                    className: 'stop-marker-wrapper',
+                    html: '<div class="' + markerClass + '"></div>',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+                var popup = '<strong>' + escapeHtml(loc.name) + '</strong>';
+                if (loc.bound) popup += '<br>Bound: ' + loc.bound;
+                if (loc.platform) popup += '<br>Platform: ' + loc.platform;
+                var marker = L.marker([loc.latitude, loc.longitude], { icon: icon }).bindPopup(popup).addTo(routeMap);
+                stopMarkers.push(marker);
+            });
+            var boundsCoords;
+            if (coords.length > 0) {
+                if (Array.isArray(coords[0])) {
+                    boundsCoords = [];
+                    coords.forEach(function(seg) {
+                        seg.forEach(function(c) { boundsCoords.push([c.latitude, c.longitude]); });
+                    });
+                } else {
+                    boundsCoords = coords.map(function(c) { return [c.latitude, c.longitude]; });
+                }
+            } else {
+                boundsCoords = locationsWithCoords.map(function(l) { return [l.latitude, l.longitude]; });
+            }
+            if (boundsCoords.length > 0) {
+                routeMap.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
             }
         }
 
@@ -1736,13 +1539,22 @@
             loadCountries().then(function() {
                 loadRoute();
             });
-            loadAllTrains().then(loadRouteTrains);
+            // Wait for dev-mode flag before rendering trains so the
+            // Formations column + Remove button gate correctly.
+            checkDevMode().then(function() { loadAllTrains().then(loadRouteTrains); });
             if (isEditMode) loadSections();
             checkDevMode().then(function() {
-                loadRouteTimetables();
+                // The "Timetables on this Route" panel is now rendered by the
+                // shared TimetableSearch module — preselect & lock the route
+                // so the user only sees timetables for this route.
+                TimetableSearch.init(document.getElementById('timetableSearchHost'), {
+                    routeId: routeId,
+                    lockRoute: true
+                });
             });
             initRouteMap();
         });
     </script>
+    <script src="/js/timetable-search.js"></script>
 </body>
 </html>

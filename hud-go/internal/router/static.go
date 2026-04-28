@@ -64,10 +64,17 @@ func registerStaticRoutes(r *chi.Mux) {
 	r.Get("/trains/{id}", servePage("trains/show.html"))
 	r.Get("/trains/{id}/edit", servePage("trains/show.html"))
 
+	// Dynamic page routes - train classes
+	r.Get("/train-classes/{id}", servePage("trains/class.html"))
+
 	// Dynamic page routes - timetables
+	// URL convention (matches /trains, /routes): /<id> = read-only view,
+	// /<id>/edit = editable form. /<id>/view kept as a legacy alias for any
+	// bookmarks that still reference the old path.
 	r.Get("/timetables", servePage("timetables/index.html"))
 	r.Get("/timetables/create", servePage("timetables/create.html"))
-	r.Get("/timetables/{id}", servePage("timetables/show.html"))
+	r.Get("/timetables/{id}", servePage("timetables/view.html"))
+	r.Get("/timetables/{id}/edit", servePage("timetables/show.html"))
 	r.Get("/timetables/{id}/view", servePage("timetables/view.html"))
 
 	// Dynamic page routes - countries

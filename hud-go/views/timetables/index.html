@@ -13,6 +13,17 @@
         h1 { color: var(--accent-color); text-align: center; margin-bottom: 30px; }
         .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
         /* Nav styles now in theme.css */
+        /* Embedded mode (?embedded=1) — used when this page is iframed inside
+           /routes/<id>. Hide everything that's redundant inside the parent
+           page (top heading, nav, extract/create/import + extract results
+           cards). Keep the search/filter card and the table. */
+        body[data-embedded="1"] { padding: 0; background: transparent; max-width: none; }
+        body[data-embedded="1"] > h1,
+        body[data-embedded="1"] > nav,
+        body[data-embedded="1"] > #main-nav,
+        body[data-embedded="1"] > .card.dev-only,
+        body[data-embedded="1"] > #extractResultsSection { display: none !important; }
+        body[data-embedded="1"] .card { margin-bottom: 0; border: none; background: transparent; padding: 0; }
         .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
         h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; }
@@ -255,90 +266,27 @@
         </div>
     </div>
 
+    <!-- Filter card + paginated results table — rendered by the shared
+         TimetableSearch module (also used on /routes/<id>). The .card
+         wrapper matches the route page's "Timetables on this Route" panel
+         so both pages have the same surrounding chrome. -->
     <div class="card">
-        <div class="filter-box">
-            <label data-i18n="timetables.serviceName">Service:</label>
-            <div class="typeahead-container">
-                <input type="text" id="serviceInput" data-i18n-placeholder="common.search" placeholder="Type to search services..." autocomplete="off">
-                <div id="serviceDropdown" class="typeahead-dropdown"></div>
-                <input type="hidden" id="serviceFilter" value="">
-                <input type="hidden" id="serviceFilterType" value="">
-            </div>
-            <label data-i18n="routes.country">Country:</label>
-            <div class="filter-country-container" id="filterCountryContainer">
-                <div class="country-select-display" id="filterCountryDisplay" onclick="toggleCountryDropdown()">
-                    <span data-i18n="common.all">All</span>
-                </div>
-                <div class="country-dropdown" id="filterCountryDropdown"></div>
-                <input type="hidden" id="countryFilter" value="">
-            </div>
-            <label data-i18n="timetables.route">Route:</label>
-            <div class="typeahead-container">
-                <input type="text" id="routeInput" data-i18n-placeholder="common.search" placeholder="Type to search routes..." autocomplete="off">
-                <div id="routeDropdown" class="typeahead-dropdown"></div>
-                <input type="hidden" id="routeFilter" value="">
-            </div>
-            <label data-i18n="timetables.section">Section:</label>
-            <select id="sectionFilter">
-                <option value="" data-i18n="common.all">All</option>
-                <option value="__none__" data-i18n="timetables.noSection">No Section</option>
-            </select>
-            <label data-i18n="trains.title">Train:</label>
-            <div class="typeahead-container">
-                <input type="text" id="trainInput" data-i18n-placeholder="common.search" placeholder="Type to search trains..." autocomplete="off">
-                <div id="trainDropdown" class="typeahead-dropdown"></div>
-                <input type="hidden" id="trainFilter" value="">
-            </div>
-        </div>
-        <div class="filter-box">
-            <label data-i18n="timetables.startTime">Start Time:</label>
-            <input type="text" id="startTimeMin" title="From" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="text" id="startTimeMax" title="To" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <label data-i18n="timetables.duration">Duration:</label>
-            <input type="text" id="durationMin" title="Min" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="text" id="durationMax" title="Max" placeholder="HH:MM" maxlength="5" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <label data-i18n="timetables.stops">Stops:</label>
-            <input type="number" id="stopsMin" title="Min" placeholder="Min" min="0" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <span style="color: var(--text-muted);">-</span>
-            <input type="number" id="stopsMax" title="Max" placeholder="Max" min="0" style="min-width: 70px; max-width: 80px; flex: 0;">
-            <label data-i18n="timetables.conductor">Conductor:</label>
-            <select id="conductorFilter" style="min-width: 80px; width: auto;">
-                <option value="" data-i18n="common.all">All</option>
-                <option value="yes" data-i18n="common.yes">Yes</option>
-                <option value="no" data-i18n="common.no">No</option>
-            </select>
-            <label class="dev-only" style="display:none" data-i18n="timetables.coordSource">Coord Source:</label>
-            <select class="dev-only" style="display:none; min-width: 100px; width: auto;" id="coordSourceFilter">
-                <option value="" data-i18n="common.all">All</option>
-                <option value="automatic" data-i18n="timetables.automatic">Automatic</option>
-                <option value="imported" data-i18n="timetables.imported">Imported</option>
-                <option value="predictive" data-i18n="timetables.predictive">Predictive</option>
-                <option value="none" data-i18n="timetables.none">None</option>
-            </select>
-            <div style="flex: 1;"></div>
-            <button class="btn-secondary" onclick="clearFilters()" data-i18n="common.clear">Clear</button>
-            <button class="btn-primary" onclick="fetchAndRenderTimetables(1)" data-i18n="common.search">Search</button>
-        </div>
-        <div id="timetablesList" class="table-wrapper">
-            <p class="empty-message" data-i18n="timetables.loadingTimetables">Loading timetables...</p>
-        </div>
-        <div class="pagination" id="pagination"></div>
+        <div id="timetableSearchHost"></div>
     </div>
 
     <script src="/js/timetable-actions.js"></script>
+    <script src="/js/timetable-search.js"></script>
     <script>
-        let allTimetables = [];
+        // The filter card + paginated results are owned by TimetableSearch
+        // (see /js/timetable-search.js, also used by /routes/<id>).
+        //
+        // The variables below are kept ONLY because the OCR extraction code
+        // further down the page needs them — they're not used for the
+        // search results table anymore.
         let allRoutes = [];
         let allTrains = [];
         let allCountries = [];
-        let highlightedIndex = { service: -1, route: -1, train: -1 };
-        let currentPage = 1;
-        let currentLimit = 15;
         let devMode = false;
-        let sortColumn = 'service_name';
-        let sortDirection = 'asc';
 
         function countryCodeToFlag(code) {
             if (!code || code.length !== 2) return '';
@@ -353,572 +301,6 @@
             return String.fromCodePoint.apply(null, codePoints);
         }
 
-        function populateCountryFilter() {
-            var dropdown = document.getElementById('filterCountryDropdown');
-            var allText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.all') : 'All';
-            var html = '<div class="country-dropdown-item" onclick="selectCountryFilter(\'\', \'' + allText + '\', \'\')">' + allText + '</div>';
-            // Use routeSummary (lightweight) to determine which countries have timetables
-            var routeIdsWithTimetables = new Set(routeSummary.map(function(s) { return s.route_id; }));
-            var routeCountryIds = new Set(allRoutes.filter(function(r) {
-                return routeIdsWithTimetables.has(r.id);
-            }).map(function(r) { return r.country_id; }));
-            allCountries.filter(function(c) { return routeCountryIds.has(c.id); }).forEach(function(c) {
-                var flag = c.code ? countryCodeToFlag(c.code) : '';
-                html += '<div class="country-dropdown-item" onclick="selectCountryFilter(\'' + c.id + '\', \'' + escapeHtml(c.name).replace(/'/g, "\\'") + '\', \'' + (c.code || '') + '\')">' + flag + escapeHtml(c.name) + '</div>';
-            });
-            dropdown.innerHTML = html;
-        }
-
-        function toggleCountryDropdown() {
-            var display = document.getElementById('filterCountryDisplay');
-            var dropdown = document.getElementById('filterCountryDropdown');
-            var isOpen = dropdown.classList.contains('open');
-            dropdown.classList.toggle('open');
-            display.classList.toggle('open');
-            if (!isOpen) {
-                document.addEventListener('click', closeCountryDropdownOutside);
-            }
-        }
-
-        function closeCountryDropdownOutside(e) {
-            var container = document.getElementById('filterCountryContainer');
-            if (!container.contains(e.target)) {
-                document.getElementById('filterCountryDropdown').classList.remove('open');
-                document.getElementById('filterCountryDisplay').classList.remove('open');
-                document.removeEventListener('click', closeCountryDropdownOutside);
-            }
-        }
-
-        function selectCountryFilter(id, name, code) {
-            var display = document.getElementById('filterCountryDisplay');
-            var hidden = document.getElementById('countryFilter');
-            hidden.value = id;
-            var flag = code ? countryCodeToFlag(code) : '';
-            display.innerHTML = '<span>' + flag + escapeHtml(name) + '</span>';
-            document.getElementById('filterCountryDropdown').classList.remove('open');
-            display.classList.remove('open');
-            onCountryFilterChange();
-        }
-
-        function onCountryFilterChange() {
-            document.getElementById('routeInput').value = '';
-            document.getElementById('routeFilter').value = '';
-            updateSectionFilter('');
-        }
-
-        var routeSummary = [];
-        var _searchDebounceTimer = null;
-
-        async function loadData() {
-            try {
-                const [summaryRes, routesRes, trainsRes, countriesRes] = await Promise.all([
-                    fetch('/api/timetables/route-summary'),
-                    fetch('/api/routes'),
-                    fetch('/api/trains'),
-                    fetch('/api/countries')
-                ]);
-                routeSummary = await summaryRes.json();
-                allRoutes = await routesRes.json();
-                allTrains = await trainsRes.json();
-                allCountries = await countriesRes.json();
-
-                populateCountryFilter();
-                setupTypeaheads();
-                fetchAndRenderTimetables(1);
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('timetablesList').innerHTML = '<p class="empty-message">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorLoading') : 'Error loading timetables') + '</p>';
-            }
-        }
-
-        // =============================================
-        // Section Filter
-        // =============================================
-        function updateSectionFilter(routeId) {
-            var select = document.getElementById('sectionFilter');
-            // Reset to default options
-            select.innerHTML = '<option value="" data-i18n="common.all">All</option><option value="__none__" data-i18n="timetables.noSection">No Section</option>';
-            if (typeof i18n !== 'undefined' && i18n.translate) { i18n.translate(select); }
-
-            if (!routeId) return;
-
-            // Fetch sections for this route
-            fetch('/api/routes/' + routeId + '/sections')
-                .then(function(res) { return res.json(); })
-                .then(function(sections) {
-                    sections.forEach(function(s) {
-                        var opt = document.createElement('option');
-                        opt.value = s.name;
-                        opt.textContent = s.name;
-                        select.appendChild(opt);
-                    });
-                })
-                .catch(function(err) { console.error('Error loading sections:', err); });
-        }
-
-        // =============================================
-        // Typeahead Setup
-        // =============================================
-        function setupTypeaheads() {
-            setupServiceTypeahead();
-            setupRouteTypeahead();
-            setupTrainTypeahead();
-
-            // Hide dropdowns on click outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.typeahead-container')) {
-                    document.getElementById('serviceDropdown').style.display = 'none';
-                    document.getElementById('routeDropdown').style.display = 'none';
-                    document.getElementById('trainDropdown').style.display = 'none';
-                    // Also hide extract dropdowns if they exist
-                    var extractRouteDropdown = document.getElementById('extractRouteDropdown');
-                    var extractTrainDropdown = document.getElementById('extractTrainDropdown');
-                    if (extractRouteDropdown) extractRouteDropdown.style.display = 'none';
-                    if (extractTrainDropdown) extractTrainDropdown.style.display = 'none';
-                }
-            });
-        }
-
-        function setupServiceTypeahead() {
-            var input = document.getElementById('serviceInput');
-            var dropdown = document.getElementById('serviceDropdown');
-            var hidden = document.getElementById('serviceFilter');
-            var hiddenType = document.getElementById('serviceFilterType');
-
-            input.addEventListener('focus', function() { showServiceDropdown(this.value); });
-            input.addEventListener('input', function() {
-                highlightedIndex.service = -1;
-                hidden.value = '';
-                hiddenType.value = '';
-                showServiceDropdown(this.value);
-            });
-            input.addEventListener('keydown', function(e) { handleTypeaheadKeydown(e, 'service', dropdown); });
-        }
-
-        function setupRouteTypeahead() {
-            var input = document.getElementById('routeInput');
-            var dropdown = document.getElementById('routeDropdown');
-            var hidden = document.getElementById('routeFilter');
-
-            input.addEventListener('focus', function() { showRouteDropdown(this.value); });
-            input.addEventListener('input', function() {
-                highlightedIndex.route = -1;
-                hidden.value = '';
-                showRouteDropdown(this.value);
-                // Reset section filter when route is cleared
-                if (!this.value.trim()) {
-                    updateSectionFilter(null);
-                }
-            });
-            input.addEventListener('keydown', function(e) { handleTypeaheadKeydown(e, 'route', dropdown); });
-        }
-
-        function setupTrainTypeahead() {
-            var input = document.getElementById('trainInput');
-            var dropdown = document.getElementById('trainDropdown');
-            var hidden = document.getElementById('trainFilter');
-
-            input.addEventListener('focus', function() { showTrainDropdown(this.value); });
-            input.addEventListener('input', function() {
-                highlightedIndex.train = -1;
-                hidden.value = '';
-                showTrainDropdown(this.value);
-            });
-            input.addEventListener('keydown', function(e) { handleTypeaheadKeydown(e, 'train', dropdown); });
-        }
-
-        function handleTypeaheadKeydown(e, type, dropdown) {
-            var items = dropdown.querySelectorAll('.typeahead-item[data-id]');
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                highlightedIndex[type] = Math.min(highlightedIndex[type] + 1, items.length - 1);
-                updateHighlight(items, highlightedIndex[type]);
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                highlightedIndex[type] = Math.max(highlightedIndex[type] - 1, 0);
-                updateHighlight(items, highlightedIndex[type]);
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                if (highlightedIndex[type] >= 0 && items[highlightedIndex[type]]) {
-                    items[highlightedIndex[type]].click();
-                }
-            } else if (e.key === 'Escape') {
-                dropdown.style.display = 'none';
-            }
-        }
-
-        function updateHighlight(items, index) {
-            items.forEach(function(item, idx) {
-                item.classList.toggle('highlighted', idx === index);
-            });
-            if (index >= 0 && items[index]) {
-                items[index].scrollIntoView({ block: 'nearest' });
-            }
-        }
-
-        function showServiceDropdown(filter) {
-            var dropdown = document.getElementById('serviceDropdown');
-            var filterLower = filter.toLowerCase();
-
-            // Get unique service names and service codes
-            var items = [];
-            var seen = {};
-            allTimetables.forEach(function(t) {
-                // Match against service code
-                if (t.service && !seen['code:' + t.service]) {
-                    seen['code:' + t.service] = true;
-                    if (t.service.toLowerCase().includes(filterLower)) {
-                        items.push({ type: 'code', value: t.service, label: t.service });
-                    }
-                }
-                // Match against service name
-                if (t.service_name && !seen['name:' + t.service_name]) {
-                    seen['name:' + t.service_name] = true;
-                    if (t.service_name.toLowerCase().includes(filterLower)) {
-                        items.push({ type: 'name', value: t.service_name, label: t.service_name });
-                    }
-                }
-            });
-            // Sort: codes first, then names
-            items.sort(function(a, b) {
-                if (a.type !== b.type) return a.type === 'code' ? -1 : 1;
-                return a.label.localeCompare(b.label);
-            });
-
-            if (items.length === 0) {
-                dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noServicesFound') : 'No services found') + '</div>';
-            } else {
-                dropdown.innerHTML = items.map(function(item) {
-                    var sub = item.type === 'code' ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.serviceCode') : 'Service Code') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.serviceName') : 'Service Name');
-                    return '<div class="typeahead-item" data-id="' + escapeHtml(item.value) + '" data-name="' + escapeHtml(item.label) + '" data-type="' + item.type + '">' +
-                        '<div class="item-name">' + escapeHtml(item.label) + '</div>' +
-                        '<div class="item-sub">' + sub + '</div></div>';
-                }).join('');
-
-                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        document.getElementById('serviceInput').value = this.dataset.name;
-                        document.getElementById('serviceFilter').value = this.dataset.id;
-                        document.getElementById('serviceFilterType').value = this.dataset.type;
-                        dropdown.style.display = 'none';
-                    });
-                });
-            }
-            dropdown.style.display = 'block';
-        }
-
-        function showRouteDropdown(filter) {
-            var dropdown = document.getElementById('routeDropdown');
-            var filterLower = filter.toLowerCase();
-            var selectedCountry = document.getElementById('countryFilter').value;
-
-            var filtered = allRoutes.filter(function(route) {
-                if (selectedCountry && route.country_id != selectedCountry) return false;
-                return route.name.toLowerCase().includes(filterLower) ||
-                    (route.country_name && route.country_name.toLowerCase().includes(filterLower));
-            });
-
-            if (filtered.length === 0) {
-                dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noRoutesFound') : 'No routes found') + '</div>';
-            } else {
-                dropdown.innerHTML = filtered.map(function(route) {
-                    return '<div class="typeahead-item" data-id="' + route.id + '" data-name="' + escapeHtml(route.name) + '">' +
-                        '<div class="item-name">' + escapeHtml(route.name) + '</div>' +
-                        (route.country_name ? '<div class="item-sub">' + escapeHtml(route.country_name) + '</div>' : '') +
-                        '</div>';
-                }).join('');
-
-                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        document.getElementById('routeInput').value = this.dataset.name;
-                        document.getElementById('routeFilter').value = this.dataset.id;
-                        dropdown.style.display = 'none';
-                        updateSectionFilter(this.dataset.id);
-                    });
-                });
-            }
-            dropdown.style.display = 'block';
-        }
-
-        function showTrainDropdown(filter) {
-            var dropdown = document.getElementById('trainDropdown');
-            var filterLower = filter.toLowerCase();
-
-            var filtered = allTrains.filter(function(train) {
-                return train.name.toLowerCase().includes(filterLower);
-            });
-
-            if (filtered.length === 0) {
-                dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noTrainsFound') : 'No trains found') + '</div>';
-            } else {
-                dropdown.innerHTML = filtered.map(function(train) {
-                    return '<div class="typeahead-item" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' +
-                        '<div class="item-name">' + escapeHtml(train.name) + '</div></div>';
-                }).join('');
-
-                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        document.getElementById('trainInput').value = this.dataset.name;
-                        document.getElementById('trainFilter').value = this.dataset.id;
-                        dropdown.style.display = 'none';
-                    });
-                });
-            }
-            dropdown.style.display = 'block';
-        }
-
-        function toggleSort(col) {
-            if (sortColumn === col) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortColumn = col;
-                sortDirection = 'asc';
-            }
-            fetchAndRenderTimetables(1);
-        }
-
-        var colClassMap = {
-            service: 'col-service', service_name: 'col-service-name', route: 'col-route',
-            section: 'col-section', trains: 'col-trains', start_time: 'col-start-time',
-            duration: 'col-duration', stops: 'col-stops', coord_source: 'col-coord-source',
-            conductor: 'col-conductor'
-        };
-
-        function sortHeader(col, label, i18nKey) {
-            var arrow = sortColumn === col ? (sortDirection === 'asc' ? '&#9650;' : '&#9660;') : '&#9650;';
-            var cls = 'sortable' + (sortColumn === col ? ' active' : '') + ' ' + (colClassMap[col] || '');
-            return '<th class="' + cls + '" data-i18n="' + i18nKey + '" onclick="toggleSort(\'' + col + '\')">' + label + '<span class="sort-arrow">' + arrow + '</span></th>';
-        }
-
-        function sortTimetables(timetables) {
-            return timetables.slice().sort(function(a, b) {
-                var valA, valB;
-                switch (sortColumn) {
-                    case 'service': valA = (a.service || '').toLowerCase(); valB = (b.service || '').toLowerCase(); break;
-                    case 'service_name': valA = (a.service_name || '').toLowerCase(); valB = (b.service_name || '').toLowerCase(); break;
-                    case 'route':
-                        var rA = allRoutes.find(function(r) { return r.id == a.route_id; });
-                        var rB = allRoutes.find(function(r) { return r.id == b.route_id; });
-                        valA = (rA ? rA.name : '').toLowerCase(); valB = (rB ? rB.name : '').toLowerCase(); break;
-                    case 'section': valA = (a.section_name || '').toLowerCase(); valB = (b.section_name || '').toLowerCase(); break;
-                    case 'trains':
-                        valA = (a.trains && a.trains.length > 0 ? a.trains[0].name : '').toLowerCase();
-                        valB = (b.trains && b.trains.length > 0 ? b.trains[0].name : '').toLowerCase(); break;
-                    case 'start_time': valA = a.start_time || ''; valB = b.start_time || ''; break;
-                    case 'duration': valA = a.duration || ''; valB = b.duration || ''; break;
-                    case 'stops': valA = a.entry_count || 0; valB = b.entry_count || 0; break;
-                    case 'coord_source': valA = (a.coordinates_coord_source || '').toLowerCase(); valB = (b.coordinates_coord_source || '').toLowerCase(); break;
-                    case 'conductor': valA = a.conductor_compatible ? 1 : 0; valB = b.conductor_compatible ? 1 : 0; break;
-                    default: valA = ''; valB = '';
-                }
-                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
-                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
-
-        async function renderTimetables(page) {
-            return fetchAndRenderTimetables(page);
-        }
-
-        async function fetchAndRenderTimetables(page) {
-            page = page || currentPage;
-            currentPage = page;
-
-            var container = document.getElementById('timetablesList');
-            container.innerHTML = '<p class="empty-message">Loading...</p>';
-
-            // Build query params from filters
-            var params = new URLSearchParams({ page: page, limit: currentLimit });
-
-            var serviceFilter = document.getElementById('serviceFilter').value;
-            var serviceInput = document.getElementById('serviceInput').value.trim();
-            var routeId = document.getElementById('routeFilter').value;
-            var trainId = document.getElementById('trainFilter').value;
-            var countryId = document.getElementById('countryFilter').value;
-            var sectionFilter = document.getElementById('sectionFilter').value;
-            var coordSourceFilter = document.getElementById('coordSourceFilter').value;
-            var conductorFilter = document.getElementById('conductorFilter').value;
-            var startTimeMin = document.getElementById('startTimeMin').value;
-            var startTimeMax = document.getElementById('startTimeMax').value;
-            var durationMin = document.getElementById('durationMin').value;
-            var durationMax = document.getElementById('durationMax').value;
-            var stopsMin = document.getElementById('stopsMin').value;
-            var stopsMax = document.getElementById('stopsMax').value;
-
-            if (serviceFilter) params.set('search', serviceFilter);
-            else if (serviceInput) params.set('search', serviceInput);
-            if (routeId) params.set('route_id', routeId);
-            if (countryId) params.set('country_id', countryId);
-            if (trainId) params.set('train_id', trainId);
-            if (sectionFilter) params.set('section', sectionFilter);
-            if (coordSourceFilter) params.set('coord_source', coordSourceFilter);
-            if (conductorFilter) params.set('conductor', conductorFilter);
-            if (startTimeMin) params.set('start_time_min', startTimeMin);
-            if (startTimeMax) params.set('start_time_max', startTimeMax);
-            if (durationMin) params.set('duration_min', durationMin);
-            if (durationMax) params.set('duration_max', durationMax);
-            if (stopsMin) params.set('stops_min', stopsMin);
-            if (stopsMax) params.set('stops_max', stopsMax);
-
-            try {
-                var response = await fetch('/api/timetables/paginated?' + params);
-                var result = await response.json();
-                var timetables = result.data;
-                var total = result.pagination.total;
-                var totalPages = result.pagination.totalPages;
-
-            if (timetables.length === 0) {
-                container.innerHTML = '<p class="empty-message">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noTimetablesFound') : 'No timetables found.') + '</p>';
-                document.getElementById('pagination').innerHTML = '<span class="pagination-info">0 results</span>';
-                return;
-            }
-
-            let html = '<table><thead><tr>';
-            if (devMode) html += '<th data-i18n="timetables.service">Service</th>';
-            html += '<th data-i18n="timetables.serviceName">Service Name</th>';
-            html += '<th data-i18n="timetables.route">Route</th>';
-            html += '<th data-i18n="timetables.section">Section</th>';
-            html += '<th data-i18n="timetables.trains">Trains</th>';
-            html += '<th data-i18n="timetables.startTime">Start Time</th>';
-            html += '<th data-i18n="timetables.duration">Duration</th>';
-            html += '<th data-i18n="timetables.stops">Stops</th>';
-            if (devMode) html += '<th data-i18n="timetables.coordSource">Coord Source</th>';
-            html += '<th data-i18n="timetables.conductor">Conductor</th>';
-            if (devMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
-            html += '</tr></thead><tbody>';
-            timetables.forEach(function(t) {
-                const route = allRoutes.find(function(r) { return r.id == t.route_id; });
-
-                let trainDisplay = '-';
-                if (t.trains && t.trains.length > 0) {
-                    trainDisplay = t.trains.map(function(train) {
-                        return '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
-                    }).join(', ');
-                } else if (t.train_id) {
-                    const train = allTrains.find(function(tr) { return tr.id == t.train_id; });
-                    if (train) {
-                        trainDisplay = '<a href="/trains/' + train.id + '">' + escapeHtml(train.name) + '</a>';
-                    }
-                }
-
-                html += '<tr>';
-                if (devMode) html += '<td><a href="/timetables/' + t.id + '">' + escapeHtml(t.service || '-') + '</a></td>';
-                html += '<td><a href="/timetables/' + t.id + (devMode ? '' : '/view') + '">' + escapeHtml(t.service_name || 'Untitled') + '</a></td>';
-                html += '<td>' + (route ? '<a href="/routes/' + route.id + '">' + escapeHtml(route.name) + '</a>' : '-') + '</td>';
-                html += '<td>' + escapeHtml(t.section_name || '-') + '</td>';
-                html += '<td>' + trainDisplay + '</td>';
-                html += '<td>' + escapeHtml(t.start_time || '-') + '</td>';
-                html += '<td>' + escapeHtml(t.duration || '-') + '</td>';
-                html += '<td>' + (t.entry_count || 0) + '</td>';
-                if (devMode) {
-                    var csLabel = t.coordinates_coord_source
-                        ? (typeof i18n !== 'undefined' && i18n.t ? i18n.t('timetables.' + t.coordinates_coord_source) : (t.coordinates_coord_source.charAt(0).toUpperCase() + t.coordinates_coord_source.slice(1)))
-                        : (typeof i18n !== 'undefined' && i18n.t ? i18n.t('timetables.none') : 'None');
-                    html += '<td>' + escapeHtml(csLabel) + '</td>';
-                }
-                html += '<td>' + (t.conductor_compatible ? (typeof i18n !== 'undefined' && i18n.t ? i18n.t('common.yes') : 'Yes') : (typeof i18n !== 'undefined' && i18n.t ? i18n.t('common.no') : 'No')) + '</td>';
-                if (devMode) {
-                    html += '<td class="actions">';
-                    html += '<button class="btn-primary" onclick="showTimetable(' + t.id + ')" data-i18n="common.show">Show</button>';
-                    html += '<button class="btn-secondary" onclick="editTimetable(' + t.id + ')" data-i18n="common.edit">Edit</button>';
-                    html += '<button class="btn-danger" onclick="deleteTimetable(' + t.id + ')" data-i18n="common.delete">Delete</button>';
-                    html += '</td>';
-                }
-                html += '</tr>';
-            });
-            html += '</tbody></table>';
-            container.innerHTML = html;
-
-            if (typeof i18n !== 'undefined' && i18n.translate) {
-                i18n.translate(container);
-            }
-
-            renderPagination(total, totalPages);
-            } catch (error) {
-                console.error('Error fetching timetables:', error);
-                container.innerHTML = '<p class="empty-message">Error loading timetables</p>';
-            }
-        }
-
-        function renderPagination(total, totalPages) {
-            var container = document.getElementById('pagination');
-            var ofText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.of') : 'of';
-            var showingText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.showing') : 'Showing';
-            if (totalPages <= 1) {
-                var timetablesText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.timetablesCount') : 'timetables';
-                container.innerHTML = '<span class="pagination-info">' + showingText + ' ' + total + ' ' + timetablesText + '</span>';
-                return;
-            }
-
-            var html = '<button class="btn-secondary" onclick="goToPage(1)" ' + (currentPage === 1 ? 'disabled' : '') + '>&laquo;</button>';
-            html += '<button class="btn-secondary" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '>&lsaquo;</button>';
-            html += '<span class="pagination-info">' + currentPage + ' ' + ofText + ' ' + totalPages + ' (' + total + ' total)</span>';
-            html += '<button class="btn-secondary" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>&rsaquo;</button>';
-            html += '<button class="btn-secondary" onclick="goToPage(' + totalPages + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>&raquo;</button>';
-            html += '<div class="per-page"><label>&nbsp;</label><select onchange="changeLimit(this.value)">';
-            [15, 25, 50, 100].forEach(function(n) {
-                html += '<option value="' + n + '" ' + (currentLimit === n ? 'selected' : '') + '>' + n + '</option>';
-            });
-            html += '</select></div>';
-            container.innerHTML = html;
-        }
-
-        function goToPage(page) {
-            fetchAndRenderTimetables(page);
-        }
-
-        function changeLimit(limit) {
-            currentLimit = parseInt(limit);
-            currentPage = 1;
-            fetchAndRenderTimetables(1);
-        }
-
-        function showTimetable(id) {
-            window.location.href = '/timetables/' + id + '/view';
-        }
-
-        function editTimetable(id) {
-            window.location.href = '/timetables/' + id;
-        }
-
-        async function deleteTimetable(id) {
-            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.confirmDeleteTimetable') : 'Are you sure you want to delete this timetable?')) return;
-            try {
-                await fetch('/api/timetables/' + id, { method: 'DELETE' });
-                fetchAndRenderTimetables(currentPage);
-            } catch (error) {
-                console.error('Error deleting timetable:', error);
-                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorDeletingTimetable') : 'Error deleting timetable');
-            }
-        }
-
-        function clearFilters() {
-            document.getElementById('countryFilter').value = '';
-            var allText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.all') : 'All';
-            document.getElementById('filterCountryDisplay').innerHTML = '<span>' + allText + '</span>';
-            document.getElementById('serviceInput').value = '';
-            document.getElementById('serviceFilter').value = '';
-            document.getElementById('serviceFilterType').value = '';
-            document.getElementById('routeInput').value = '';
-            document.getElementById('routeFilter').value = '';
-            document.getElementById('trainInput').value = '';
-            document.getElementById('trainFilter').value = '';
-            updateSectionFilter(null);
-            document.getElementById('startTimeMin').value = '';
-            document.getElementById('startTimeMax').value = '';
-            document.getElementById('durationMin').value = '';
-            document.getElementById('durationMax').value = '';
-            document.getElementById('stopsMin').value = '';
-            document.getElementById('stopsMax').value = '';
-            document.getElementById('conductorFilter').value = '';
-            document.getElementById('coordSourceFilter').value = '';
-            document.getElementById('serviceDropdown').style.display = 'none';
-            document.getElementById('routeDropdown').style.display = 'none';
-            document.getElementById('trainDropdown').style.display = 'none';
-            currentPage = 1;
-            fetchAndRenderTimetables(1);
-        }
 
         function escapeHtml(text) {
             if (!text) return '';
@@ -972,9 +354,9 @@
                 statusDiv.className = 'upload-status success';
                 statusDiv.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.importedRedirecting') : 'Imported successfully! Redirecting...';
 
-                // Redirect to the show page after a brief delay
+                // Redirect to the editor after import so the user can tweak.
                 setTimeout(function() {
-                    window.location.href = '/timetables/' + result.id;
+                    window.location.href = '/timetables/' + result.id + '/edit';
                 }, 1000);
 
             } catch (error) {
@@ -1767,7 +1149,7 @@
                 imageUploadStatus.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.createdRedirecting') : 'Timetable created! Redirecting...';
 
                 setTimeout(function() {
-                    window.location.href = '/timetables/' + result.id;
+                    window.location.href = '/timetables/' + result.id + '/edit';
                 }, 1000);
 
             } catch (error) {
@@ -1797,10 +1179,8 @@
     <script src="/js/navbar.js"></script>
     <script src="/js/i18n.js"></script>
     <script>
-        // Re-render dynamic content (including pagination) when language changes
-        document.addEventListener('languageChanged', function() {
-            fetchAndRenderTimetables(currentPage);
-        });
+        // The TimetableSearch module owns its own languageChanged handler
+        // and re-renders the table on language switch.
 
         i18n.init().then(function() {
             fetch('/api/config').then(function(r) { return r.json(); }).then(function(config) {
@@ -1812,7 +1192,17 @@
                     document.body.style.maxWidth = '1900px';
                 }
             }).catch(function() {}).then(function() {
-                loadData();
+                // Bootstrap the shared search module.
+                TimetableSearch.init(document.getElementById('timetableSearchHost'), {
+                    readUrlParams: true
+                });
+                // Independently load reference data the OCR extraction code
+                // (further down the page) still needs.
+                Promise.all([
+                    fetch('/api/routes').then(function(r) { return r.json(); }).then(function(d) { allRoutes = d; }),
+                    fetch('/api/trains').then(function(r) { return r.json(); }).then(function(d) { allTrains = d; }),
+                    fetch('/api/countries').then(function(r) { return r.json(); }).then(function(d) { allCountries = d; })
+                ]).catch(function(err) { console.error('Reference data load failed:', err); });
             });
         });
     </script>

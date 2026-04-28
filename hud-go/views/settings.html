@@ -747,6 +747,13 @@
     </div>
 
     <div class="card">
+        <h2 data-i18n="settings.mapLayers">Map Layers</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;" data-i18n="settings.mapLayersDesc">Pick which categories show on the desktop / tablet HUD maps. The HUD has limited screen space, so the in-map toggle bar is hidden there — these checkboxes are the source of truth for those two pages.</p>
+
+        <div id="mapLayersList"></div>
+    </div>
+
+    <div class="card">
         <h2 data-i18n="settings.advanced">Advanced</h2>
 
         <div class="setting-row">
@@ -780,6 +787,61 @@
     <script>
         let defaultPaths = { tsw5: '', tsw6: '' };
         let serverUrls = { local: '', network: '' };
+
+        // ---------- Map Layers (HUD desktop + tablet) ----------
+        // Stored under huddev.hudMap.layers — same key the desktop and tablet
+        // HUDs read in service-map.js. Each entry is layerKey -> bool. Missing
+        // keys default to true (visible).
+        const HUD_LAYER_KEY = 'huddev.hudMap.layers';
+        const HUD_LAYER_DEFS = [
+            ['path',           'Path',           '<span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>'],
+            ['platform_track', 'Platform tracks','<span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>'],
+            ['siding_track',   'Siding tracks',  '<span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>'],
+            ['line_track',     'Line tracks',    '<span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>'],
+            ['running_track',  'Running tracks', '<span style="display:inline-block;width:28px;height:5px;background:#1f77b4;border-radius:2px"></span>'],
+            ['stops',          'Stops',          '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#00cc66;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
+            ['platforms',      'Platforms',      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
+            ['signals',        'Signals',        '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>'],
+            ['switches',       'Switches',       '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>'],
+        ];
+
+        function loadHudLayerPrefs() {
+            try { return JSON.parse(localStorage.getItem(HUD_LAYER_KEY) || 'null') || {}; }
+            catch (_) { return {}; }
+        }
+        function saveHudLayerPrefs(prefs) {
+            try { localStorage.setItem(HUD_LAYER_KEY, JSON.stringify(prefs)); } catch (_) {}
+        }
+        function renderMapLayersList() {
+            var container = document.getElementById('mapLayersList');
+            if (!container) return;
+            var prefs = loadHudLayerPrefs();
+            var html = '';
+            HUD_LAYER_DEFS.forEach(function (def) {
+                var key = def[0], label = def[1], swatch = def[2];
+                var visible = prefs[key] === undefined ? true : !!prefs[key];
+                html += '<div class="setting-row">'
+                     + '<div class="setting-info" style="display:flex;align-items:center;gap:10px;">'
+                     + swatch
+                     + '<div class="setting-label">' + label + '</div>'
+                     + '</div>'
+                     + '<label class="toggle-switch">'
+                     + '<input type="checkbox" data-hud-layer="' + key + '"' + (visible ? ' checked' : '') + '>'
+                     + '<span class="toggle-slider"></span>'
+                     + '</label>'
+                     + '</div>';
+            });
+            container.innerHTML = html;
+            container.querySelectorAll('input[data-hud-layer]').forEach(function (box) {
+                box.addEventListener('change', function () {
+                    var k = box.getAttribute('data-hud-layer');
+                    var p = loadHudLayerPrefs();
+                    p[k] = box.checked;
+                    saveHudLayerPrefs(p);
+                });
+            });
+        }
+        renderMapLayersList();
 
         // Load server URLs
         async function loadServerUrls() {

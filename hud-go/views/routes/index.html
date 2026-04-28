@@ -554,11 +554,42 @@
         });
 
         async function deleteRoute(id) {
-            if (!confirm(t('routes.confirmDelete', 'Are you sure you want to delete this route?'))) return;
+            // Probe how much data is tied to the route so the warning names
+            // the actual scope. Falls back to a generic message on error.
+            let ttCount = null;
             try {
-                await fetch(API_URL + '/' + id, { method: 'DELETE' });
+                const res = await fetch('/api/routes/' + id + '/timetables');
+                if (res.ok) {
+                    const list = await res.json();
+                    if (Array.isArray(list)) ttCount = list.length;
+                }
+            } catch (_) { /* ignore — show generic warning */ }
+
+            const baseMsg = 'This will permanently delete the route AND all of its data: ' +
+                            'timetables, schedule entries, coordinates, platform markers, ' +
+                            'cab-stop signs, and track markers. This cannot be undone.';
+            const scopeMsg = ttCount === null
+                ? baseMsg
+                : (ttCount === 0
+                    ? 'This will delete the route and its associated coordinates, markers, and cab-stop signs. This cannot be undone.'
+                    : 'This will delete the route, ' + ttCount + ' timetable' + (ttCount === 1 ? '' : 's') +
+                      ', and all associated coordinates, markers, and cab-stop signs. This cannot be undone.');
+
+            if (!confirm(scopeMsg + '\n\nProceed?')) return;
+
+            try {
+                const response = await fetch(API_URL + '/' + id, { method: 'DELETE' });
+                if (!response.ok) {
+                    let detail = '';
+                    try { const body = await response.json(); detail = body.error || body.message || ''; } catch (_) {}
+                    alert('Failed to delete route (' + response.status + ')' + (detail ? ': ' + detail : ''));
+                    return;
+                }
                 loadRoutes(currentPage, currentLimit, currentSearch, currentCountryId);
-            } catch (error) { console.error('Error deleting route:', error); alert(t('routes.errorDeleting', 'Error deleting route')); }
+            } catch (error) {
+                console.error('Error deleting route:', error);
+                alert(t('routes.errorDeleting', 'Error deleting route') + ': ' + (error.message || error));
+            }
         }
 
         async function importRouteZip() {

@@ -993,7 +993,8 @@ window.ExtractionModule = (function() {
             }
 
             setTimeout(function() {
-                window.location.href = '/timetables/' + result.id;
+                // After creation, land on the editor so the user can tweak.
+                window.location.href = '/timetables/' + result.id + '/edit';
             }, 1000);
 
         } catch (error) {

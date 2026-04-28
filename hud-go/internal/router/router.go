@@ -67,11 +67,17 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Put("/api/trains/{id}", h.Train.Update)
 	r.Delete("/api/trains/{id}", h.Train.Delete)
 	r.Get("/api/trains/{id}/routes", h.Train.GetRoutes)
+	r.Get("/api/trains/{id}/vehicles", h.Train.GetVehicles)
+
+	// Train classes (groups physical formations by their TSW class)
+	r.Get("/api/train-classes/{id}", h.Train.GetClassByID)
+	r.Get("/api/routes/{id}/train-classes", h.Route.GetTrainClasses)
 
 	// Timetables
 	r.Get("/api/timetables", h.Timetable.GetAll)
 	r.Get("/api/timetables/paginated", h.Timetable.GetPaginated)
 	r.Get("/api/timetables/route-summary", h.Timetable.GetRouteSummary)
+	r.Get("/api/timetables/sources", h.Timetable.GetSources)
 	r.Get("/api/timetables/check-service", h.Timetable.CheckService)
 	r.Get("/api/timetables/detect", h.Timetable.Detect)
 	r.Get("/api/timetables/services-by-train", h.Timetable.GetServicesByTrain)
