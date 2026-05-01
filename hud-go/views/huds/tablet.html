@@ -2274,7 +2274,12 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                 });
                 overlayMarkerLayers = [];
 
-                // Draw route polyline
+                // Draw route polyline + station markers WITHOUT adding to the
+                // map yet — ServiceMap.attach (called below) takes ownership
+                // and applies the user's "Path" / "Stops" visibility prefs
+                // from /settings (huddev.hudMap.layers). The fallback path
+                // inside attachOverlayServiceLayers adds them directly when
+                // the route can't be resolved (so the basic map still works).
                 var routeCoords = data.coordinates.map(function(coord) {
                     return [coord.latitude, coord.longitude];
                 });
@@ -2282,12 +2287,13 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                     color: '#0066ff',
                     weight: 4,
                     opacity: 0.6
-                }).addTo(overlayMap);
+                });
 
-                // Fit map to route bounds
+                // Fit bounds works on the polyline's getBounds() regardless
+                // of whether it's been added to the map.
                 overlayMap.fitBounds(overlayRoutePolyline.getBounds(), { padding: [50, 50] });
 
-                // Add station markers from timetable
+                // Build station markers (also unattached for the same reason).
                 if (data.timetable && data.timetable.length > 0) {
                     data.timetable.forEach(function(entry, index) {
                         if (!entry.latitude || !entry.longitude) return;
@@ -2299,15 +2305,15 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                             iconAnchor: [6, 6]
                         });
                         var marker = L.marker([entry.latitude, entry.longitude], { icon: stationIcon })
-                            .bindTooltip(entry.location || 'Station ' + (index + 1), { permanent: false, direction: 'top' })
-                            .addTo(overlayMap);
+                            .bindTooltip(entry.location || 'Station ' + (index + 1), { permanent: false, direction: 'top' });
                         overlayMarkerLayers.push(marker);
                     });
                 }
 
-                // Layer toggle bar: route-derived markers (platforms, signals,
-                // switches, track features).
-                attachOverlayServiceLayers(data, routeCoords).catch(function (e) {
+                // Hand path + stops + route-derived layers (platforms,
+                // signals, switches, track features) to ServiceMap so the
+                // /settings "Map Layers" toggles drive visibility.
+                attachOverlayServiceLayers(data, routeCoords, overlayRoutePolyline, overlayMarkerLayers).catch(function (e) {
                     console.warn('overlay serviceLayer attach failed', e);
                 });
 
@@ -2318,13 +2324,20 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
 
         var overlayServiceMapHandle = null;
         var overlayLastAttachedRouteId = null;
-        async function attachOverlayServiceLayers(data, pathLatLngs) {
-            if (!window.ServiceMap) return;
+        async function attachOverlayServiceLayers(data, pathLatLngs, pathLayer, stopLayers) {
+            // Fallback: when ServiceMap isn't available or no route resolves,
+            // add the path + stops directly so the user still sees a map.
+            // Layer prefs only apply when ServiceMap takes ownership.
+            function fallbackAddDirect() {
+                if (pathLayer) pathLayer.addTo(overlayMap);
+                (stopLayers || []).forEach(function (s) { s.addTo(overlayMap); });
+            }
+            if (!window.ServiceMap) { fallbackAddDirect(); return; }
             var bar = document.getElementById('overlayServiceLayerBar');
             var resolvedRouteId = (data && data.routeId) ? Number(data.routeId) : null;
             if (!resolvedRouteId) {
                 var routeName = (data && data.routeName) ? String(data.routeName) : '';
-                if (!routeName) { bar.style.display = 'none'; return; }
+                if (!routeName) { if (bar) bar.style.display = 'none'; fallbackAddDirect(); return; }
                 try {
                     var routesRes = await fetch('/api/routes');
                     if (routesRes.ok) {
@@ -2337,14 +2350,20 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                     }
                 } catch (_) { /* fall through */ }
             }
-            if (!resolvedRouteId) { bar.style.display = 'none'; return; }
-            if (overlayLastAttachedRouteId === resolvedRouteId && overlayServiceMapHandle) return;
+            if (!resolvedRouteId) { if (bar) bar.style.display = 'none'; fallbackAddDirect(); return; }
+            // Always tear down the previous handle and re-attach. Skipping
+            // re-attach when the route hasn't changed would leave stale
+            // pathLayer/stopLayers references on the map (each call to
+            // loadMapRoute() builds new ones) and would also miss any
+            // /settings layer-pref changes the user made between opens.
             if (overlayServiceMapHandle && overlayServiceMapHandle.destroy) overlayServiceMapHandle.destroy();
             var entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
             overlayServiceMapHandle = await ServiceMap.attach(overlayMap, {
                 routeId: resolvedRouteId,
                 barContainer: bar,
                 pathLatLngs: pathLatLngs,
+                pathLayer: pathLayer,
+                stopLayers: stopLayers,
                 scheduleEntries: entries,
                 // Shared with the desktop HUD; configured at /settings.
                 storageKey: 'huddev.hudMap.layers',

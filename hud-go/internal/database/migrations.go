@@ -330,6 +330,93 @@ var migrations = []string{
 	`ALTER TABLE train_classes ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP`,
 	`ALTER TABLE trains ADD COLUMN class_id INTEGER REFERENCES train_classes(id)`,
 
+	// cross_pak_reference_name is TSW's internal asset-mount path for a
+	// route (e.g. "EustonMiltonKeynes" for WCML South). Cargo / scenario
+	// DLCs reference parent routes via this name in their timetable
+	// NameMaps; the importer matches by it before falling back to display
+	// name. Populated lazily by ImportRouteZip.
+	`ALTER TABLE routes ADD COLUMN cross_pak_reference_name TEXT`,
+	`CREATE INDEX IF NOT EXISTS idx_routes_cross_pak_reference_name ON routes(cross_pak_reference_name)`,
+
+	// pak_catalog: one row per pak file under the user's TSW6 install,
+	// recording the metadata the /extractor list needs (display name,
+	// country, parent route, cross-pak references) so the page renders
+	// instantly instead of warming up by walking ~36 paks every load.
+	//
+	// Populated by `internal/catalog.ScanCatalog` on first /extractor
+	// visit and refreshed on demand via POST /api/extractor/rescan.
+	// Diffed by pak_mtime + pak_size — paks that haven't changed are
+	// skipped on re-scan.
+	//
+	//   pak_path                  absolute path on disk; primary key
+	//   codename                  filename-derived name ("WCMLSouth")
+	//   display_name              from RouteDefinition.DisplayName, or
+	//                             trimmed *_Gameplay.uplugin Description
+	//   country_code              from RouteDetails.Country ("UK","US"…)
+	//   has_route_definition      1 if pak ships its own RouteDefinition
+	//                             (i.e. it's a parent route, not addon)
+	//   cross_pak_references      JSON array of cross_pak_reference_names
+	//                             discovered in this pak's timetables /
+	//                             scenario definitions; multi-valued for
+	//                             cargo DLCs that span several routes
+	//   pak_mtime, pak_size       for invalidation
+	//   scanned_at                Unix epoch seconds of last scan
+	`CREATE TABLE IF NOT EXISTS pak_catalog (
+		pak_path TEXT PRIMARY KEY,
+		codename TEXT NOT NULL,
+		display_name TEXT,
+		country_code TEXT,
+		has_route_definition INTEGER NOT NULL DEFAULT 0,
+		cross_pak_references TEXT,
+		pak_mtime INTEGER NOT NULL,
+		pak_size INTEGER NOT NULL,
+		scanned_at INTEGER NOT NULL
+	)`,
+	// Each pak's own mount (e.g. "EustonMiltonKeynes" for WCML South).
+	// Set only on parent paks (has_route_definition=1); used by the tree
+	// builder to attach addon children whose cross_pak_references list
+	// includes this string. ALTER variant for DBs created before the
+	// column existed.
+	`ALTER TABLE pak_catalog ADD COLUMN cross_pak_reference_name TEXT`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_catalog_has_route_def ON pak_catalog(has_route_definition)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_catalog_codename ON pak_catalog(codename)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_catalog_cross_pak_reference_name ON pak_catalog(cross_pak_reference_name)`,
+
+	// pak_rvds: every RailVehicleDefinition asset across the user's
+	// installed paks, recorded once at catalog scan time so the
+	// extractor doesn't re-walk the install directory looking for
+	// RVDs on every route extraction (saved ~1–2 min per route on
+	// a typical install).
+	//
+	//   pak_path                FK to pak_catalog; cascade-deletes when
+	//                           the pak vanishes from disk
+	//   asset_path              canonical reference path used by
+	//                           CompiledRVMap entries inside timetables
+	//                           (e.g. "/LIRREX_M7/Data/RailVehicleDefinition/RVD_LIRREX_M7-A")
+	//   rail_vehicle_class…     fields mirror uasset.RVD; see ParseRVD
+	//                           for what each one means
+	//   regions                 JSON array (the asset stores a list)
+	`CREATE TABLE IF NOT EXISTS pak_rvds (
+		pak_path TEXT NOT NULL,
+		asset_path TEXT NOT NULL,
+		rail_vehicle_class TEXT,
+		friendly_name TEXT,
+		livery_id TEXT,
+		vehicle_category TEXT,
+		approximate_length_m REAL,
+		drivable INTEGER NOT NULL DEFAULT 0,
+		substitutable_unit INTEGER NOT NULL DEFAULT 0,
+		has_guard_controls INTEGER NOT NULL DEFAULT 0,
+		service_types INTEGER,
+		regions TEXT,
+		PRIMARY KEY (pak_path, asset_path),
+		FOREIGN KEY (pak_path) REFERENCES pak_catalog(pak_path) ON DELETE CASCADE
+	)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_rvds_class ON pak_rvds(rail_vehicle_class)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_rvds_livery ON pak_rvds(livery_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_rvds_vehicle_category ON pak_rvds(vehicle_category)`,
+	`CREATE INDEX IF NOT EXISTS idx_pak_rvds_friendly_name ON pak_rvds(friendly_name)`,
+
 	// Backfill: one class row per distinct (class_name, livery_id) on
 	// trains that have a class_name set. The IGNORE clause keeps the
 	// migration idempotent across restarts.
@@ -421,6 +508,15 @@ var migrations = []string{
 	`ALTER TABLE timetable_entries ADD COLUMN track_marker_id INTEGER REFERENCES track_markers(id)`,
 	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_track_marker
 		ON timetable_entries(track_marker_id)`,
+
+	// extractor_completed_routes: user-marked "I'm done with this route"
+	// flags backing the Completed Routes list on /extractor. Survives
+	// hud-go restarts and zip deletions — independent of whether the route
+	// actually has a zip in the output dir.
+	`CREATE TABLE IF NOT EXISTS extractor_completed_routes (
+		codename TEXT PRIMARY KEY,
+		completed_at TEXT DEFAULT CURRENT_TIMESTAMP
+	)`,
 }
 
 // One-shot data backfills run exactly once per database. Tracked via

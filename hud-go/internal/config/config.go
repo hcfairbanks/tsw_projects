@@ -26,6 +26,14 @@ type Config struct {
 	SaveFrequency          int     `json:"saveFrequency"`
 	EnableSubscriptions    bool    `json:"enableSubscriptions"`
 	ColorScheme            string  `json:"colorScheme"`
+	// Extractor settings — paths used by the in-app pak extractor (the
+	// /extractor page). The extractor itself is in-process Go code, but it
+	// shells out to two third-party tools (UAssetGUI.exe, repak.exe) which
+	// are auto-detected next to the hud-go binary or on PATH.
+	ExtractorTswPath    string `json:"extractorTswPath"`    // TSW6 install dir (required)
+	ExtractorOutputDir  string `json:"extractorOutputDir"`  // where per-route zips land (required)
+	ExtractorTempDir    string `json:"extractorTempDir"`    // temp dir for tile unpacks; empty = system temp
+	ExtractorAutoImport bool   `json:"extractorAutoImport"` // after each route extracts, wipe existing DB row + import the new zip
 }
 
 var (

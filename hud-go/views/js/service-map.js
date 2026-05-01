@@ -191,19 +191,25 @@
         // station for a given service.
         var usedStructuresFull = new Set();
         var usedStructuresLoose = new Set();
+        // Defensive: coerce property values to string before .trim(). Some
+        // GeoJSON property keys (e.g. cab_stop_sign features' `location`)
+        // collide with this function's expected string fields but carry a
+        // numeric scalar — without coercion, .trim() throws.
+        function strProp(v) { return String(v == null ? '' : v).trim(); }
+
         entries.forEach(function (e) {
-            var loc = (e.location || '').trim();
-            var num = (e.structure_number || '').trim();
+            var loc = strProp(e.location);
+            var num = strProp(e.structure_number);
             if (!loc || !num) return;
-            var st = (e.structure || '').trim();
+            var st = strProp(e.structure);
             usedStructuresFull.add(loc + '|' + st + '|' + num);
             usedStructuresLoose.add(loc + '|' + num);
         });
         function structureMatchesSchedule(p) {
-            var loc = (p.location || '').trim();
-            var num = (p.structure_number || '').trim();
+            var loc = strProp(p.location);
+            var num = strProp(p.structure_number);
             if (!loc || !num) return false;
-            var st = (p.structure || '').trim();
+            var st = strProp(p.structure);
             return usedStructuresFull.has(loc + '|' + st + '|' + num)
                 || usedStructuresLoose.has(loc + '|' + num);
         }
@@ -277,7 +283,15 @@
                 return;
             }
             // Point features: platforms / signals / switches.
+            //
+            // Skip pak-derived feature kinds that have their own DB tables and
+            // are consumed elsewhere (cab_stop_signs feed the HUD's distance
+            // calc; track_markers drive Go-Via lookups). They share the
+            // FeatureCollection with the platform/signal/switch points but
+            // would crash this layer pipeline because their `location`
+            // property is a numeric scalar, not a station-name string.
             if (geom.type !== 'Point') return;
+            if (p.feature_kind === 'cab_stop_sign' || p.feature_kind === 'track_marker') return;
             var c = geom.coordinates;
             if (!Array.isArray(c) || c.length < 2) return;
             var flng = c[0], flat = c[1];

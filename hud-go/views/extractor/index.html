@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extractor - TSW HUD Project</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <script src="/js/theme-loader.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1600px; margin: 0 auto; padding: 20px; background-color: var(--bg-primary); color: var(--text-primary); }
+        h1 { color: var(--accent-color); text-align: center; margin-bottom: 25px; }
+        .card { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        h2 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-size: 1.1em; }
+        button { padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; font-weight: 500; }
+        button:disabled { opacity: 0.45; cursor: not-allowed; }
+        .btn-primary { background: var(--btn-primary-bg); color: #fff; }
+        .btn-primary:hover:not(:disabled) { background: var(--btn-primary-hover); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+        .btn-secondary:hover:not(:disabled) { background: var(--accent-hover); }
+        .btn-danger { background: var(--btn-danger-bg); color: #fff; }
+        .btn-danger:hover:not(:disabled) { background: var(--btn-danger-hover); }
+        .btn-tiny { padding: 4px 8px; font-size: 12px; }
+
+        .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .progress-summary { margin-left: auto; font-size: 14px; color: var(--text-muted); }
+        .progress-summary strong { color: var(--accent-color); }
+
+        .settings-row { display: grid; grid-template-columns: 160px 1fr auto; gap: 12px; align-items: center; margin-bottom: 8px; }
+        .settings-row label { font-weight: bold; }
+        .settings-row input { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 13px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--bg-tertiary); color: var(--accent-color); padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-color); position: sticky; top: 0; }
+        td { padding: 8px 12px; border-bottom: 1px solid var(--border-color); }
+        tr.row-running td { background: rgba(64, 156, 255, 0.10); }
+        tr.row-done td { color: var(--text-muted); }
+        tr.row-failed td { background: rgba(220, 80, 80, 0.10); }
+        /* Addon children of a parent route — same row height, but de-
+           emphasised so the parent reads as the actionable item. */
+        tr.row-child td { background: rgba(0, 0, 0, 0.02); padding-top: 4px; padding-bottom: 4px; font-size: 12.5px; }
+
+        .status-pill { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .pill-not-yet { background: var(--bg-tertiary); color: var(--text-muted); }
+        .pill-done { background: rgba(40, 180, 80, 0.18); color: rgb(70, 200, 110); }
+        .pill-running { background: rgba(64, 156, 255, 0.20); color: rgb(100, 180, 255); }
+        .pill-failed { background: rgba(220, 80, 80, 0.18); color: rgb(255, 120, 120); }
+        .pill-skipped { background: rgba(180, 160, 60, 0.15); color: rgb(220, 200, 120); }
+
+        .log-card { padding: 14px 18px; }
+        #logPanel { font-family: 'Consolas', 'Menlo', monospace; font-size: 12px; line-height: 1.45; height: 280px; overflow-y: auto; background: #0a0a0a; color: #c8c8c8; padding: 10px 14px; border-radius: 4px; border: 1px solid var(--border-color); white-space: pre-wrap; word-break: break-word; }
+        .log-line .log-route { color: rgb(120, 180, 240); }
+        .log-line .log-warn { color: rgb(220, 180, 80); }
+        .log-line .log-err  { color: rgb(255, 110, 110); }
+        .log-line .log-ok   { color: rgb(110, 220, 130); }
+
+        /* Unified summary look across the three collapsibles on this page
+           (Settings / Routes / Completed Routes). Browser-default disclosure
+           arrow stays; only color + sizing are normalised. Closed = muted,
+           open = accent — same shift Settings already used. */
+        /* Custom arrow + flex layout for all <details> summaries on this page.
+           Native ::marker behaves inconsistently when summary uses flex
+           layout (sometimes wraps to a new line, sometimes vanishes), so we
+           hide it and draw our own ▶ via ::before that rotates 90° when
+           [open]. The summary becomes a normal flex row so the title and
+           toolbar sit on one line, with the toolbar pinned right. */
+        details summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            padding: 6px 12px;
+            color: var(--text-muted);
+            font-size: 1.1em;
+            font-weight: 600;
+            list-style: none;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before {
+            content: '▶';
+            display: inline-block;
+            font-size: 0.75em;
+            transition: transform 0.15s ease;
+            color: inherit;
+        }
+        details[open] summary::before { transform: rotate(90deg); }
+        details[open] summary { color: var(--accent-color); }
+
+        /* Toolbar inside the Routes summary (Run / Stop). Sits immediately
+           right of the "Routes" title rather than far-right of the row.
+           Hidden when the panel is collapsed — the toolbar only makes sense
+           when the user is looking at the list. */
+        .summary-toolbar { display: inline-flex; align-items: center; gap: 8px; font-weight: 400; font-size: 13px; color: var(--text-muted); }
+        .summary-toolbar button,
+        summary > #btnRescan { font-size: 12px; padding: 6px 12px; margin: 0; }
+        details:not([open]) .summary-toolbar,
+        details:not([open]) > summary > #btnRescan { display: none; }
+    </style>
+</head>
+<body>
+    <nav id="main-nav"></nav>
+
+    <h1 data-i18n="extractor.title">TSW6 Extractor</h1>
+
+    <!-- Settings (collapsed by default) -->
+    <div class="card">
+        <details>
+            <summary data-i18n="extractor.settings">Settings</summary>
+            <div style="margin-top: 12px;">
+                <div class="settings-row">
+                    <label for="cfgTswPath" data-i18n="extractor.tswInstallDir">TSW install dir:</label>
+                    <input id="cfgTswPath" type="text" placeholder="e.g. D:/SteamLibrary/steamapps/common/Train Sim World 6" data-i18n-placeholder="extractor.tswInstallDirPlaceholder">
+                    <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorTswPath', 'cfgTswPath')" data-i18n="common.save">Save</button>
+                </div>
+                <div class="settings-row">
+                    <label for="cfgOutputDir" data-i18n="extractor.outputDir">Output dir:</label>
+                    <input id="cfgOutputDir" type="text" placeholder="e.g. C:/Users/&lt;you&gt;/Desktop/new_data" data-i18n-placeholder="extractor.outputDirPlaceholder">
+                    <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorOutputDir', 'cfgOutputDir')" data-i18n="common.save">Save</button>
+                </div>
+                <div class="settings-row">
+                    <label for="cfgTempDir" data-i18n="extractor.tempDir">Temp dir:</label>
+                    <input id="cfgTempDir" type="text" placeholder="(empty = system temp)" data-i18n-placeholder="extractor.tempDirPlaceholder">
+                    <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorTempDir', 'cfgTempDir')" data-i18n="common.save">Save</button>
+                </div>
+                <!-- Auto Update / Import: after each per-route extract, the
+                     server wipes the existing DB row for that route (cascades
+                     timetables / coords / markers / cab-stop signs) and runs
+                     the same import logic /api/routes/import-zip uses. -->
+                <div class="settings-row">
+                    <label for="cfgAutoImport" data-i18n="extractor.autoImport">Auto Update / Import:</label>
+                    <label style="justify-self:start;">
+                        <input id="cfgAutoImport" type="checkbox" onchange="saveCfgBoolField('extractorAutoImport', 'cfgAutoImport')">
+                        <span data-i18n="extractor.autoImportDesc">Wipe + re-import each route into the DB after extraction</span>
+                    </label>
+                    <span></span>
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Routes (incomplete) -->
+    <div class="card">
+        <details id="routesPanel" open>
+            <summary>
+                <span data-i18n="extractor.routes">Routes</span>
+                <!-- Scan/Rescan sits right next to the label so it's the
+                     first action a user sees on a cold-start page (when
+                     the toolbar's Run/Stop don't apply yet). stopPropagation
+                     here too so clicking it doesn't toggle <details>. -->
+                <button id="btnRescan" class="btn-secondary" onclick="event.stopPropagation();" title="Scan the TSW install dir for routes + addons. Reads route names, country, and cross-pak relationships from the pak data." style="margin-left: 8px;"><span id="btnRescanLabel">⟳ Scan</span></button>
+                <span id="routesCount" style="font-size:13px; color:var(--text-muted); font-weight: normal;"></span>
+                <!-- Toolbar (Run / Stop). click stopPropagation prevents toggling
+                     <details> when buttons are clicked. CSS hides this whole span
+                     when the panel is collapsed. -->
+                <span class="summary-toolbar" onclick="event.stopPropagation();" style="cursor:default;">
+                    <button id="btnStart" class="btn-primary"><span data-i18n="extractor.extractedBtn">Extract</span></button>
+                    <button id="btnStop" class="btn-danger" disabled><span data-i18n="extractor.stop">■ Stop</span></button>
+                </span>
+                <span id="selectionSummary" style="margin-left:auto; font-size:13px; color:var(--text-muted); font-weight: normal;"></span>
+                <!-- skip-existing default is "true" (skip) — the toggle was removed
+                     from the UI. Read by the JS as a constant when starting a job. -->
+                <input type="checkbox" id="skipExisting" checked style="display:none;">
+                <!-- progressSummary: kept hidden so existing JS that updates its
+                     text doesn't crash; user-facing progress shows in the live log. -->
+                <span id="progressSummary" style="display:none;"></span>
+            </summary>
+            <div style="max-height: 540px; overflow-y: auto; margin-top: 10px;">
+                <table id="routesTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 38px; text-align:center;">
+                                <input type="checkbox" id="selectAll" title="Select all" data-i18n-title="extractor.selectAll">
+                            </th>
+                            <th style="width: 70%;" data-i18n="extractor.colRoute">Route</th>
+                            <th style="width: 12%;" data-i18n="extractor.colSize">Size</th>
+                            <th style="width: 18%;" data-i18n="extractor.colActions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routesBody">
+                        <tr><td colspan="4" style="text-align:center; color: var(--text-muted); padding: 30px;" data-i18n="common.loading">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+    </div>
+
+    <!-- Completed Routes (collapsed by default) -->
+    <div class="card">
+        <details id="completedPanel">
+            <summary>
+                <span data-i18n="extractor.completedRoutes">Completed Routes</span>
+                <span id="completedCount" style="font-size:13px; color:var(--text-muted); font-weight: normal;"></span>
+            </summary>
+            <div style="max-height: 540px; overflow-y: auto; margin-top: 10px;">
+                <table id="completedTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 26%;" data-i18n="extractor.colActions">Actions</th>
+                            <th style="width: 62%;" data-i18n="extractor.colRoute">Route</th>
+                            <th style="width: 12%;" data-i18n="extractor.colSize">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completedBody">
+                        <tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding: 30px;" data-i18n="extractor.completedEmpty">No routes marked as complete yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+    </div>
+
+    <!-- Live log -->
+    <div class="card log-card">
+        <details id="logPanelDetails" open>
+            <summary>
+                <span data-i18n="extractor.liveLog">Live log</span>
+                <!-- Clear button is part of the summary header but click is
+                     stopped from propagating so it doesn't toggle the panel. -->
+                <button class="btn-secondary btn-tiny summary-toolbar"
+                        style="margin-left:auto;"
+                        onclick="event.stopPropagation(); clearLog();"
+                        data-i18n="extractor.clear">Clear</button>
+            </summary>
+            <div id="logPanel" style="margin-top: 10px;"></div>
+        </details>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script>
+        // Translation helper — returns the localised string for `key`, or
+        // the literal `fb` (fallback English) if i18n isn't loaded yet.
+        function t(key, fb) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fb; }
+
+        // Per-route state map: codename -> {displayName, country, zipExists, zipBytes,
+        // status?, lastError?, completed}
+        const routes = new Map();
+        // Set of currently-selected route codenames. Survives re-renders.
+        const selected = new Set();
+
+        const elProgress       = document.getElementById('progressSummary');
+        const elBody           = document.getElementById('routesBody');
+        const elCompletedBody  = document.getElementById('completedBody');
+        const elBtnStart       = document.getElementById('btnStart');
+        const elBtnStop        = document.getElementById('btnStop');
+        const elBtnRescan      = document.getElementById('btnRescan');
+        const elSkip           = document.getElementById('skipExisting');
+        const elLog            = document.getElementById('logPanel');
+        const elSelectAll      = document.getElementById('selectAll');
+        const elSelectSummary  = document.getElementById('selectionSummary');
+        const elRoutesCount    = document.getElementById('routesCount');
+        const elCompletedCount = document.getElementById('completedCount');
+
+        // ---------- initial load ----------
+        async function loadConfig() {
+            try {
+                const r = await fetch('/api/config');
+                if (!r.ok) return;
+                const cfg = await r.json();
+                document.getElementById('cfgTswPath').value      = cfg.extractorTswPath    || '';
+                document.getElementById('cfgOutputDir').value    = cfg.extractorOutputDir  || '';
+                document.getElementById('cfgTempDir').value      = cfg.extractorTempDir    || '';
+                document.getElementById('cfgAutoImport').checked = !!cfg.extractorAutoImport;
+            } catch (e) { console.error('config load:', e); }
+        }
+
+        async function saveCfgField(key, inputId) {
+            const value = document.getElementById(inputId).value.trim();
+            await putConfigKey(key, value);
+        }
+
+        // Boolean variant for checkbox-driven settings (extractorAutoImport).
+        // Fires on every change so the user doesn't need a Save button.
+        async function saveCfgBoolField(key, inputId) {
+            const value = !!document.getElementById(inputId).checked;
+            await putConfigKey(key, value);
+        }
+
+        async function putConfigKey(key, value) {
+            try {
+                // PUT /api/config takes the full object; merge with current first.
+                const cur = await (await fetch('/api/config')).json();
+                cur[key] = value;
+                const r = await fetch('/api/config', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cur),
+                });
+                if (!r.ok) throw new Error('save failed: ' + r.status);
+                appendLog('cfg ' + key + ' saved', 'ok');
+            } catch (e) { alert('Save failed: ' + e.message); }
+        }
+
+        async function loadRoutes() {
+            try {
+                const r = await fetch('/api/extractor/routes');
+                if (!r.ok) {
+                    const txt = await r.text();
+                    elBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">' +
+                        'Cannot list routes: ' + escapeHTML(txt) + '<br><br>Check the Settings panel above.</td></tr>';
+                    return;
+                }
+                const data = await r.json();
+                routes.clear();
+                // The API now returns a tree: top-level rows are parent
+                // routes (the user's installed RouteDefinitions); each
+                // carries `children` — addon paks (cargo / wagon / train
+                // DLCs) whose timetables ship services for that parent.
+                // The current UI is one row per route; we keep that shape
+                // for the parent rows and stash `children` on the row so
+                // renderRouteList can indent them underneath.
+                for (const it of (data.items || [])) {
+                    routes.set(it.name, {
+                        displayName: it.display_name || it.name,
+                        country:     it.country || '',
+                        zipExists:   it.zip_exists,
+                        zipBytes:    it.zip_bytes,
+                        status:      it.zip_exists ? 'done' : 'not_yet',
+                        completed:   !!it.completed,
+                        children:    it.children || [],
+                    });
+                }
+                renderRoutes();
+            } catch (e) {
+                console.error('routes load:', e);
+                elBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">Error: ' + escapeHTML(e.message) + '</td></tr>';
+            }
+        }
+
+        function renderRoutes() {
+            const incomplete = [];
+            const completed  = [];
+            for (const [name, r] of routes) {
+                if (r.completed) completed.push([name, r]); else incomplete.push([name, r]);
+            }
+            renderRouteList(elBody, incomplete, false);
+            renderRouteList(elCompletedBody, completed, true);
+            elRoutesCount.textContent    = incomplete.length ? '(' + incomplete.length + ')' : '';
+            elCompletedCount.textContent = completed.length  ? '(' + completed.length  + ')' : '';
+            updateSelectionSummary();
+            updateRescanLabel();
+        }
+
+        // updateRescanLabel toggles the toolbar button between "Scan"
+        // (cold-start: catalog empty, click to populate) and "Rescan"
+        // (catalog already populated, click to refresh after a DLC
+        // install). Skipped while a scan is in flight — the button text
+        // is "⟳ Scanning…" then.
+        function updateRescanLabel() {
+            const lbl = document.getElementById('btnRescanLabel');
+            if (!lbl) return;
+            if (elBtnRescan.disabled) return;
+            lbl.textContent = routes.size === 0
+                ? t('extractor.scan',   '⟳ Scan')
+                : t('extractor.rescan', '⟳ Rescan');
+        }
+
+        // renderRouteList builds the body of one of the two tables. The two
+        // tables now have different column layouts:
+        //   Routes (incomplete): [checkbox] Route | Size | Actions      (4 cols)
+        //   Completed Routes:    Actions | Route | Size                  (3 cols)
+        function renderRouteList(tbody, entries, forCompleted) {
+            if (entries.length === 0) {
+                const colspan = forCompleted ? 3 : 4;
+                const msg = forCompleted
+                    ? t('extractor.completedEmpty', 'No routes marked as complete yet.')
+                    : (routes.size === 0
+                        ? t('extractor.noRoutes', 'No routes found.')
+                        : t('extractor.allCompleted', 'All routes are marked complete.'));
+                tbody.innerHTML = '<tr><td colspan="' + colspan + '" style="text-align:center; color:var(--text-muted); padding:30px;">' + escapeHTML(msg) + '</td></tr>';
+                return;
+            }
+            const rows = [];
+            for (const [name, r] of entries) {
+                const size = r.zipExists && r.zipBytes ? formatBytes(r.zipBytes) : '';
+                // Row tinting still reflects status (running/failed/done) so
+                // the user gets visual feedback even without the column.
+                const rowClass = r.status === 'running' ? 'row-running'
+                              : r.status === 'failed'  ? 'row-failed'
+                              : (r.status === 'done' || r.status === 'skipped') ? 'row-done' : '';
+                const label = '<span title="' + escapeAttr(name) + '">' +
+                    escapeHTML(r.displayName || name) +
+                    (r.country ? ' <span style="color:var(--text-muted); font-size:11px;">· ' + escapeHTML(r.country) + '</span>' : '') +
+                    '</span>';
+                const actions = forCompleted ? actionsForCompleted(name, r) : actionsForIncomplete(name, r);
+                if (forCompleted) {
+                    // Completed list: Actions | Route | Size
+                    rows.push(
+                        '<tr class="' + rowClass + '">' +
+                            '<td>' + actions + '</td>' +
+                            '<td>' + label + '</td>' +
+                            '<td>' + size + '</td>' +
+                        '</tr>'
+                    );
+                } else {
+                    // Routes list: [checkbox] Route | Size | Actions
+                    const checked = selected.has(name) ? 'checked' : '';
+                    rows.push(
+                        '<tr class="' + rowClass + '">' +
+                            '<td style="text-align:center;"><input type="checkbox" class="row-check" data-name="' + escapeAttr(name) + '" ' + checked + '></td>' +
+                            '<td>' + label + '</td>' +
+                            '<td>' + size + '</td>' +
+                            '<td>' + actions + '</td>' +
+                        '</tr>'
+                    );
+                }
+                // Addon children (cargo / wagon / train DLCs that ship
+                // services for this parent). Indented, no checkbox, no
+                // actions — they're rolled into the parent's extraction
+                // bundle, not separate operations.
+                const kids = r.children || [];
+                for (const kid of kids) {
+                    const kidLabel = '<span style="display:inline-block; padding-left: 24px; color: var(--text-muted);">' +
+                        '↳ ' +
+                        '<span title="' + escapeAttr(kid.name) + '">' +
+                        escapeHTML(kid.display_name || kid.name) +
+                        '</span></span>';
+                    if (forCompleted) {
+                        rows.push(
+                            '<tr class="row-child">' +
+                                '<td></td>' +
+                                '<td>' + kidLabel + '</td>' +
+                                '<td></td>' +
+                            '</tr>'
+                        );
+                    } else {
+                        rows.push(
+                            '<tr class="row-child">' +
+                                '<td></td>' +
+                                '<td>' + kidLabel + '</td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                            '</tr>'
+                        );
+                    }
+                }
+            }
+            tbody.innerHTML = rows.join('');
+            if (!forCompleted) {
+                for (const cb of tbody.querySelectorAll('.row-check')) {
+                    cb.addEventListener('change', onRowCheckChanged);
+                }
+            }
+        }
+
+        function actionsForIncomplete(name, r) {
+            const titleDelete = t('extractor.deleteZipTitle',    'Delete zip');
+            const titleMark   = t('extractor.markCompleteTitle', 'Mark this route as complete');
+            const safe = escapeAttr(name);
+            // No more "extract this route only" button — bulk Run handles
+            // single-route runs via the row checkbox.
+            return (
+                (r.zipExists ? '<button class="btn-danger btn-tiny" onclick="deleteZip(\'' + safe + '\')" title="' + escapeAttr(titleDelete) + '">×</button> ' : '') +
+                '<button class="btn-secondary btn-tiny" onclick="markCompleted(\'' + safe + '\')" title="' + escapeAttr(titleMark) + '">✓</button>'
+            );
+        }
+
+        function actionsForCompleted(name, r) {
+            const titleDelete = t('extractor.deleteZipTitle',  'Delete zip');
+            const titleUnmark = t('extractor.unmarkCompleteTitle', 'Move back to Routes');
+            const safe = escapeAttr(name);
+            return (
+                (r.zipExists ? '<button class="btn-danger btn-tiny" onclick="deleteZip(\'' + safe + '\')" title="' + escapeAttr(titleDelete) + '">×</button> ' : '') +
+                '<button class="btn-secondary btn-tiny" onclick="unmarkCompleted(\'' + safe + '\')" title="' + escapeAttr(titleUnmark) + '">↶ ' + escapeHTML(t('extractor.unmark', 'Unmark')) + '</button>'
+            );
+        }
+
+        async function markCompleted(name) {
+            try {
+                const r = await fetch('/api/extractor/completed/' + encodeURIComponent(name), { method: 'POST' });
+                if (!r.ok) throw new Error(await r.text());
+                const e = routes.get(name); if (e) { e.completed = true; }
+                selected.delete(name);
+                renderRoutes();
+                appendLog('✓ ' + name + ': ' + t('extractor.markedComplete', 'marked complete'), 'ok');
+            } catch (e) { appendLog(t('extractor.markFailed', 'mark complete failed') + ': ' + e.message, 'err'); }
+        }
+
+        async function unmarkCompleted(name) {
+            try {
+                const r = await fetch('/api/extractor/completed/' + encodeURIComponent(name), { method: 'DELETE' });
+                if (!r.ok) throw new Error(await r.text());
+                const e = routes.get(name); if (e) { e.completed = false; }
+                renderRoutes();
+                appendLog('↶ ' + name + ': ' + t('extractor.movedToRoutes', 'moved back to Routes'), 'ok');
+            } catch (e) { appendLog(t('extractor.unmarkFailed', 'unmark failed') + ': ' + e.message, 'err'); }
+        }
+
+        function onRowCheckChanged(e) {
+            const name = e.target.getAttribute('data-name');
+            if (e.target.checked) selected.add(name);
+            else                  selected.delete(name);
+            updateSelectionSummary();
+        }
+
+        function updateSelectionSummary() {
+            const n = selected.size;
+            const total = routes.size;
+            // Header select-all reflects all/some/none state of the visible rows.
+            if (n === 0) {
+                elSelectAll.checked       = false;
+                elSelectAll.indeterminate = false;
+            } else if (n === total) {
+                elSelectAll.checked       = true;
+                elSelectAll.indeterminate = false;
+            } else {
+                elSelectAll.checked       = false;
+                elSelectAll.indeterminate = true;
+            }
+            // Run button label reflects what'll happen on click.
+            // Run button label reflects what'll happen on click. Renamed
+            // from "Run all" to "Extracted" per UI feedback.
+            elBtnStart.textContent = n > 0
+                ? t('extractor.extractedSelected', 'Extract ({count})').replace('{count}', n)
+                : t('extractor.extractedBtn', 'Extract');
+            elSelectSummary.textContent = n > 0
+                ? t('extractor.selectionSummary', '{n} of {total} selected').replace('{n}', n).replace('{total}', total)
+                : '';
+        }
+
+        // Toggle every visible row to match the header checkbox.
+        elSelectAll.addEventListener('change', () => {
+            if (elSelectAll.checked) {
+                for (const name of routes.keys()) selected.add(name);
+            } else {
+                selected.clear();
+            }
+            renderRoutes();
+        });
+
+        function pillFor(status) {
+            const pill = (cls, key, fb) => '<span class="status-pill ' + cls + '">' + escapeHTML(t('extractor.' + key, fb)) + '</span>';
+            switch (status) {
+                case 'done':    return pill('pill-done',    'pillDone',    'done');
+                case 'running': return pill('pill-running', 'pillRunning', 'running');
+                case 'failed':  return pill('pill-failed',  'pillFailed',  'failed');
+                case 'skipped': return pill('pill-skipped', 'pillSkipped', 'skipped');
+                default:        return pill('pill-not-yet', 'pillNotYet',  'not yet');
+            }
+        }
+
+        function formatBytes(n) {
+            if (n < 1024) return n + ' B';
+            if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+            return (n / 1024 / 1024).toFixed(1) + ' MB';
+        }
+
+        function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        function escapeAttr(s) { return String(s).replace(/'/g, '&#39;').replace(/"/g, '&quot;'); }
+
+        // ---------- controls ----------
+        async function startAll() {
+            elBtnStart.disabled = true;
+            elBtnStop.disabled  = false;
+            // If any rows are checked, run only those — otherwise run every
+            // route the binary reports. Empty `routes` array on the server
+            // side means "all", matching the Run-all behaviour.
+            const body = { skip_existing: elSkip.checked };
+            if (selected.size > 0) {
+                body.routes = Array.from(selected);
+            }
+            try {
+                const r = await fetch('/api/extractor/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                if (!r.ok) {
+                    const txt = await r.text();
+                    appendLog('start failed: ' + txt, 'err');
+                    elBtnStart.disabled = false;
+                    elBtnStop.disabled  = true;
+                }
+            } catch (e) { appendLog('start error: ' + e.message, 'err'); }
+        }
+
+        async function stopRun() {
+            elBtnStop.disabled = true;
+            // Surface the user's intent in the log immediately (the actual
+            // SSE "stopped" event arrives shortly after the goroutine wraps).
+            appendLog(t('extractor.stopRequested', '⏸ stop requested by user'), 'warn');
+            try { await fetch('/api/extractor/stop', { method: 'POST' }); }
+            catch (e) { appendLog(t('extractor.stopError', 'stop error') + ': ' + e.message, 'err'); }
+        }
+
+        async function deleteZip(name) {
+            if (!confirm(t('extractor.confirmDeleteZip', 'Delete zip for {name}?').replace('{name}', name))) return;
+            try {
+                const r = await fetch('/api/extractor/zip/' + encodeURIComponent(name), { method: 'DELETE' });
+                if (!r.ok) {
+                    const txt = await r.text();
+                    appendLog('delete failed: ' + txt, 'err');
+                    return;
+                }
+                const e = routes.get(name);
+                if (e) { e.zipExists = false; e.zipBytes = 0; e.status = 'not_yet'; }
+                renderRoutes();
+                appendLog(name + ': zip deleted', 'ok');
+            } catch (e) { appendLog('delete error: ' + e.message, 'err'); }
+        }
+
+        elBtnStart.addEventListener('click', startAll);
+        elBtnStop.addEventListener('click', stopRun);
+        // stopPropagation + preventDefault keep the click from reaching
+        // <summary> and toggling the <details> panel closed. The other
+        // toolbar buttons rely on the wrapping span's onclick for this,
+        // but Rescan's async work means we re-emit the click target
+        // mid-handler (innerHTML rewrite); doing it explicitly on the
+        // button is more robust.
+        elBtnRescan.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            rescanCatalog();
+        });
+
+        // rescanCatalog re-walks the TSW install dir, refreshing the
+        // pak_catalog table. Defaults to ?force=1 because the user-
+        // facing meaning of "Rescan" is "actually rescan everything" —
+        // including paks that errored on the previous run (the diff
+        // path skips them when mtime+size match).
+        async function rescanCatalog() {
+            console.log('[extractor] rescan start');
+            appendLog("Scan Started — This can take over an hour depending on how many DLC's you own.", 'warn');
+            // Empty the visible list so the user gets immediate feedback
+            // that the rescan really did kick off (the server purges
+            // pak_catalog at the same moment, so this matches the truth).
+            // The list refills via loadRoutes() once the scan finishes.
+            routes.clear();
+            renderRoutes();
+            elBtnRescan.disabled = true;
+            elBtnRescan.innerHTML = '<span id="btnRescanLabel">⟳ Scanning…</span>';
+            try {
+                const r = await fetch('/api/extractor/rescan?force=1', { method: 'POST' });
+                console.log('[extractor] rescan response', r.status);
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+                appendLog('Scan: ' + data.added + ' added, ' + data.updated + ' updated, ' +
+                    data.skipped + ' skipped, ' + data.removed + ' removed', 'ok');
+                await loadRoutes();
+            } catch (e) {
+                console.error('[extractor] rescan failed', e);
+                appendLog('Scan failed: ' + e.message, 'err');
+            } finally {
+                elBtnRescan.disabled = false;
+                // updateRescanLabel runs inside renderRoutes (called by
+                // loadRoutes) — but on errors loadRoutes may not have
+                // finished, so call it directly here too as a safety
+                // net so the button never gets stuck on "Scanning…".
+                updateRescanLabel();
+            }
+        }
+
+        // ---------- live log ----------
+        function appendLog(msg, kind) {
+            const div = document.createElement('div');
+            div.className = 'log-line';
+            const cls = kind === 'err' ? 'log-err' : kind === 'warn' ? 'log-warn' : kind === 'ok' ? 'log-ok' : '';
+            div.innerHTML = (cls ? '<span class="' + cls + '">' : '') + escapeHTML(msg) + (cls ? '</span>' : '');
+            elLog.appendChild(div);
+            // Cap log to last 1000 lines so a long run doesn't OOM the page.
+            while (elLog.childElementCount > 1000) elLog.removeChild(elLog.firstChild);
+            elLog.scrollTop = elLog.scrollHeight;
+        }
+
+        function clearLog() { elLog.innerHTML = ''; }
+
+        function categoriseLog(line) {
+            const s = line || '';
+            if (/^Wrote \d+ service file/.test(s)) return 'ok';
+            if (/WARNING:/.test(s)) return 'warn';
+            if (/Error:|FAILED|failed/.test(s)) return 'err';
+            return null;
+        }
+
+        // The extractor does a one-time RVD pre-scan that walks every installed
+        // pak — produces ~80 log lines (one [rvd-scan] + one "Unpacked N files"
+        // per pak) before the actual route work even starts. From the user's
+        // perspective that's pure noise; collapse it into a single "Scanning
+        // for trains..." line, then a "Done — found N trains" line at the end.
+        // The binary still does the full scan; we just hide the chatter.
+        let rvdScanPhase = false;
+        let rvdScanLineId = 0;
+
+        // Returns true when the log line should be SUPPRESSED (or replaced
+        // with a collapsed status line). Mutates rvdScanPhase as a side effect.
+        function handleRvdScanCollapse(line) {
+            const s = line || '';
+            if (/Scanning all paks for RVD assets/i.test(s)) {
+                rvdScanPhase = true;
+                appendCollapsedLog(t('extractor.scanningTrains', 'Scanning for trains…'), 'rvdScan');
+                return true;
+            }
+            if (rvdScanPhase) {
+                if (/discovered \d+ unique RVDs/i.test(s)) {
+                    rvdScanPhase = false;
+                    const m = s.match(/discovered (\d+) unique RVDs/i);
+                    const n = m ? m[1] : '?';
+                    appendLog(t('extractor.scanningTrainsDone', 'Found {n} trains across all paks').replace('{n}', n), 'ok');
+                    return true;
+                }
+                // While in the scan phase, swallow the per-pak chatter:
+                // the [rvd-scan] header lines and the "Unpacked … rvd-…" body.
+                if (/\[rvd-scan\]/.test(s) || /Unpacked \d+ files .*rvd-/i.test(s)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // appendCollapsedLog writes a status line with a stable id so we can
+        // overwrite it in place (one ticking line, not a flood).
+        function appendCollapsedLog(msg, kindKey) {
+            const id = 'collapsed-' + kindKey;
+            let div = document.getElementById(id);
+            if (!div) {
+                div = document.createElement('div');
+                div.className = 'log-line';
+                div.id = id;
+                elLog.appendChild(div);
+            }
+            div.innerHTML = '<span class="log-warn">' + escapeHTML(msg) + '</span>';
+            elLog.scrollTop = elLog.scrollHeight;
+        }
+
+        // ---------- SSE ----------
+        function connectSSE() {
+            const es = new EventSource('/api/extractor/stream');
+            es.onmessage = (event) => {
+                let ev;
+                try { ev = JSON.parse(event.data); } catch (_) { return; }
+
+                // Update progress summary.
+                if (ev.status === 'running') {
+                    elBtnStart.disabled = true;
+                    elBtnStop.disabled  = false;
+                    elProgress.innerHTML =
+                        '<strong>' + (ev.done_count || 0) + '/' + (ev.total_routes || '?') + '</strong> done · ' +
+                        (ev.skipped_count || 0) + ' skipped · ' +
+                        (ev.failed_count || 0) + ' failed' +
+                        (ev.route ? ' — ' + escapeHTML(ev.route) : '');
+                } else if (ev.status === 'stopping') {
+                    elBtnStop.disabled = true;
+                    elProgress.innerHTML = '<strong>stopping…</strong>';
+                } else if (ev.status === 'idle') {
+                    elBtnStart.disabled = false;
+                    elBtnStop.disabled  = true;
+                    if (ev.type === 'finished') {
+                        elProgress.innerHTML = '<strong>finished</strong> · ' +
+                            (ev.done_count || 0) + ' done, ' +
+                            (ev.skipped_count || 0) + ' skipped, ' +
+                            (ev.failed_count || 0) + ' failed';
+                    } else if (ev.type === 'stopped') {
+                        elProgress.innerHTML = '<strong>stopped</strong>';
+                    } else if (!ev.type || ev.type === 'snapshot') {
+                        elProgress.innerHTML = 'idle';
+                    }
+                }
+
+                // Update per-row state.
+                if (ev.route) {
+                    const r = routes.get(ev.route) || { zipExists: false };
+                    switch (ev.type) {
+                        case 'route_started':
+                            r.status = 'running';
+                            appendLog('▶ ' + ev.route);
+                            break;
+                        case 'route_done':
+                            r.status = 'done';
+                            r.zipExists = true;
+                            if (ev.size_bytes) r.zipBytes = ev.size_bytes;
+                            appendLog('✓ ' + ev.route + (ev.size_bytes ? '  (' + formatBytes(ev.size_bytes) + ')' : ''), 'ok');
+                            break;
+                        case 'route_failed':
+                            r.status = 'failed';
+                            r.lastError = ev.message;
+                            appendLog('✗ ' + ev.route + ': ' + (ev.message || 'failed'), 'err');
+                            break;
+                        case 'route_skipped':
+                            r.status = 'skipped';
+                            r.zipExists = true;
+                            appendLog('· ' + ev.route + ' (skipped)');
+                            break;
+                        case 'log':
+                            // Collapse the noisy RVD pre-scan into a single
+                            // status line; show everything else verbatim.
+                            if (handleRvdScanCollapse(ev.message)) break;
+                            appendLog('[' + ev.route + '] ' + (ev.message || ''), categoriseLog(ev.message));
+                            break;
+                    }
+                    routes.set(ev.route, r);
+                    renderRoutes();
+                } else if (ev.type === 'started') {
+                    appendLog(t('extractor.extractionStarted', '— extraction started ({total} route(s)) —').replace('{total}', ev.total_routes || 0));
+                } else if (ev.type === 'finished') {
+                    appendLog(t('extractor.extractionFinished', '— finished —'), 'ok');
+                    // Re-load route list to pick up any newly-written zip sizes/mtimes.
+                    setTimeout(loadRoutes, 100);
+                } else if (ev.type === 'stopped') {
+                    appendLog(t('extractor.extractionStopped', '— stopped —'), 'warn');
+                    setTimeout(loadRoutes, 100);
+                } else if (ev.type === 'catalog_log') {
+                    // Per-pak progress from the rescan endpoint. Just dump
+                    // verbatim; route map isn't touched (events have no
+                    // ev.route, so the per-row branch above is skipped).
+                    appendLog(ev.message || '');
+                }
+            };
+            es.onerror = () => { /* EventSource auto-reconnects; nothing to do. */ };
+        }
+
+        (async () => {
+            await loadConfig();
+            await loadRoutes();
+            connectSSE();
+        })();
+    </script>
+</body>
+</html>

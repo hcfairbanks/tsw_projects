@@ -17,7 +17,8 @@
         { href: '/countries', label: 'Countries', i18n: 'nav.countries', devOnly: true },
         { href: '/instructions', label: 'Instructions', i18n: 'nav.instructions', devOnly: true },
         { href: '/locations', label: 'Locations', i18n: 'nav.locations', devOnly: true },
-        { href: '/trains', label: 'Trains', i18n: 'nav.trains', devOnly: true }
+        { href: '/trains', label: 'Trains', i18n: 'nav.trains', devOnly: true },
+        { href: '/extractor', label: 'Extractor', i18n: 'nav.extractor', devOnly: true }
     ];
 
     // Language data for rendering flags (must match i18n.js SUPPORTED_LANGUAGES)

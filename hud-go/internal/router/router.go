@@ -136,6 +136,17 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Get("/api/config/current-key", h.Config.GetCurrentKey)
 	r.Get("/api/config/server-urls", h.Config.GetServerURLs)
 
+	// Extractor (in-app per-route pak extractor — see /extractor page)
+	r.Get("/api/extractor/routes", h.Extractor.ListRoutes)
+	r.Get("/api/extractor/status", h.Extractor.Status)
+	r.Get("/api/extractor/stream", h.Extractor.Stream)
+	r.Post("/api/extractor/start", h.Extractor.Start)
+	r.Post("/api/extractor/stop", h.Extractor.Stop)
+	r.Post("/api/extractor/rescan", h.Extractor.Rescan)
+	r.Delete("/api/extractor/zip/{route}", h.Extractor.DeleteZip)
+	r.Post("/api/extractor/completed/{route}", h.Extractor.MarkCompleted)
+	r.Delete("/api/extractor/completed/{route}", h.Extractor.UnmarkCompleted)
+
 	// OCR
 	r.Get("/api/ocr-status", h.OCR.GetStatus)
 	r.Post("/api/extract", h.OCR.Extract)

@@ -34,6 +34,7 @@ type Handlers struct {
 	RouteProcessing *RouteProcessingHandler
 	Action          *ActionHandler
 	TrainConsist    *TrainConsistHandler
+	Extractor       *ExtractorHandler
 	ReloadDB        func(http.ResponseWriter, *http.Request)
 }
 
@@ -102,11 +103,14 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		return data
 	}
 
+	// Build the TimetableHandler first so Extractor can hold the same
+	// instance (shares the importer's logic without a 400-line duplication).
+	tt := &TimetableHandler{db: db}
 	return &Handlers{
 		Country:         &CountryHandler{db: db},
 		Route:           &RouteHandler{db: db},
 		Train:           &TrainHandler{db: db},
-		Timetable:       &TimetableHandler{db: db},
+		Timetable:       tt,
 		Entry:           &EntryHandler{db: db},
 		Location:        &LocationHandler{db: db},
 		StationMapping:  &StationMappingHandler{db: db},
@@ -126,6 +130,11 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		RouteProcessing: &RouteProcessingHandler{db: db},
 		Action:          &ActionHandler{db: db},
 		TrainConsist:    &TrainConsistHandler{db: db},
+		Extractor: &ExtractorHandler{
+			db:    db,
+			tt:    tt,
+			state: extractorState{status: extStatusIdle},
+		},
 		ReloadDB: func(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error":"not implemented"}`, http.StatusNotImplemented)
 		},

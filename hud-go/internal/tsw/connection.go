@@ -6,16 +6,63 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"hud-go/internal/config"
 )
 
+// lastLoggedKey lets resolveAPIKey suppress duplicate "Loaded API key…"
+// log lines. The connection loop and the various subscription handlers
+// all call resolveAPIKey; without this, every poll prints the line even
+// when the file hasn't changed. We only emit on transitions
+// (empty → key, keyA → keyB, key → empty).
+var (
+	lastLoggedKeyMu sync.Mutex
+	lastLoggedKey   string
+)
+
+// connLoopRunning guards against starting more than one connection loop.
+// EnsureConnectionLoop / Reset Subscriptions can both fire after boot, and
+// without this guard each call would spawn a fresh goroutine that races
+// the others over subscriptions + the 100 ms data poll.
+var (
+	connLoopMu      sync.Mutex
+	connLoopRunning bool
+)
+
+// EnsureConnectionLoop starts the connection loop iff it isn't already
+// running. Used by main.go on boot (when EnableSubscriptions is true) and
+// by the subscription handlers (Reset, Create) so the user can flip the
+// setting on at runtime and pick up the polling without restarting hud-go.
+//
+// stopCh may be nil — in that case the loop runs until the process exits,
+// which is fine for the runtime-toggle case (the goroutine is already
+// running when EnableSubscriptions=true on boot, and there's no per-loop
+// stop semantics in this codebase).
+func EnsureConnectionLoop(client *Client, cfg *config.Config, stopCh <-chan struct{}) {
+	connLoopMu.Lock()
+	if connLoopRunning {
+		connLoopMu.Unlock()
+		return
+	}
+	connLoopRunning = true
+	connLoopMu.Unlock()
+	StartConnectionLoop(client, cfg, stopCh)
+}
+
 // StartConnectionLoop runs a background goroutine that attempts to connect to the
 // TSW CommAPI. On success it initializes subscriptions and begins polling data.
 // It retries every 30 seconds on failure. Send on stopCh to shut down.
+//
+// Prefer EnsureConnectionLoop in new code — it's idempotent.
 func StartConnectionLoop(client *Client, cfg *config.Config, stopCh <-chan struct{}) {
 	go func() {
+		defer func() {
+			connLoopMu.Lock()
+			connLoopRunning = false
+			connLoopMu.Unlock()
+		}()
 		// Brief delay before first attempt to let TSW API settle
 		select {
 		case <-time.After(3 * time.Second):
@@ -141,10 +188,29 @@ func resolveAPIKey(cfg *config.Config) string {
 	}
 
 	key := strings.TrimSpace(string(data))
-	if key != "" {
-		log.Printf("[TSW] Loaded API key from %s", keyPath)
-	}
+	logKeyTransition(key, keyPath)
 	return key
+}
+
+// logKeyTransition prints a one-line log only when the resolved key
+// changes — first load, rotation by TSW6 on game start, or a switch back
+// to no-key. Idempotent reads (the common case under the polling loop)
+// stay silent.
+func logKeyTransition(newKey, source string) {
+	lastLoggedKeyMu.Lock()
+	defer lastLoggedKeyMu.Unlock()
+	if newKey == lastLoggedKey {
+		return
+	}
+	switch {
+	case newKey != "" && lastLoggedKey == "":
+		log.Printf("[TSW] Loaded API key from %s", source)
+	case newKey != "" && lastLoggedKey != "":
+		log.Printf("[TSW] API key changed (re-read from %s)", source)
+	case newKey == "" && lastLoggedKey != "":
+		log.Printf("[TSW] API key cleared (file at %s now empty/unreadable)", source)
+	}
+	lastLoggedKey = newKey
 }
 
 // commAPIKeyPath returns the path to the CommAPIKey.txt based on TSW version and config overrides.
@@ -181,6 +247,23 @@ func commAPIKeyPath(cfg *config.Config) string {
 // ResolveAPIKeyAvailable checks whether an API key can be resolved from config or file.
 func ResolveAPIKeyAvailable(cfg *config.Config) bool {
 	return resolveAPIKey(cfg) != ""
+}
+
+// ReloadAPIKey re-reads CommAPIKey.txt (or config.ApiKey) and pushes the
+// current value onto the client. Used by handlers that issue API calls
+// right away (Reset Subscriptions, Create Subscriptions) so they don't
+// race the connection loop's polling — TSW6 regenerates the file on game
+// start, and the file's contents can change between hud-go startup and
+// the user clicking the button.
+//
+// Returns the resolved key (or "") so callers can short-circuit when no
+// key is available rather than blasting the API with a stale one.
+func ReloadAPIKey(client *Client, cfg *config.Config) string {
+	key := resolveAPIKey(cfg)
+	if client != nil {
+		client.SetAPIKey(key)
+	}
+	return key
 }
 
 // APIKeySource returns a human-readable description of where the API key comes from.

@@ -53,6 +53,7 @@ func registerStaticRoutes(r *chi.Mux) {
 	r.Get("/recording-settings", servePage("recording-settings.html"))
 	r.Get("/analysis", servePage("analysis/index.html"))
 	r.Get("/locations", servePage("locations/index.html"))
+	r.Get("/extractor", servePage("extractor/index.html"))
 
 	// Dynamic page routes - routes
 	r.Get("/routes", servePage("routes/index.html"))

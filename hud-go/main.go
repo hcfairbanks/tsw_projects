@@ -49,7 +49,11 @@ func main() {
 	tswClient := tsw.NewClient()
 	stopTSW := make(chan struct{})
 	if cfg.EnableSubscriptions {
-		tsw.StartConnectionLoop(tswClient, cfg, stopTSW)
+		// Idempotent variant — the connection loop is the only thing that
+		// polls subscription data, so the subscription handlers also call
+		// EnsureConnectionLoop after Reset / Create to start it on demand
+		// when EnableSubscriptions was off at boot.
+		tsw.EnsureConnectionLoop(tswClient, cfg, stopTSW)
 	}
 
 	// Build router
