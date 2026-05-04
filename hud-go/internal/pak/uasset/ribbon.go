@@ -3,6 +3,7 @@ package uasset
 import (
 	"encoding/json"
 	"os"
+	"strings"
 )
 
 // Ribbon describes one NetworkRibbon record from a tile's .umap.json.
@@ -39,6 +40,14 @@ type Ribbon struct {
 	TangentY   float64 `json:"arc_tangent_y,omitempty"`
 	Radius     float64 `json:"arc_radius,omitempty"`
 	Length     float64 `json:"arc_length,omitempty"`
+	// IsClothoid is true when the ribbon's linked Curve is a
+	// NetworkCurveClothoidSpiral — a railway transition curve with
+	// linearly-varying curvature. These have no `Radius` field on
+	// the curve asset (radius changes along the curve), so the
+	// constant-radius arc walker treats them as straight chords.
+	// Renderers should use a graph-derived endpoint + Hermite
+	// interpolation for clothoid ribbons instead.
+	IsClothoid bool `json:"is_clothoid,omitempty"`
 }
 
 // LinkedPlatform is one named (RouteLocation) entry attached to a station
@@ -286,6 +295,16 @@ func parseTile(jsonPath, tileName string, withPlatforms bool) (tileScanResult, e
 		if curveRef > 0 {
 			ci := curveRef - 1
 			if ci >= 0 && ci < len(doc.Exports) {
+				// Detect clothoid spirals by the linked curve export's
+				// ObjectName. Clothoids carry no `Radius` (the curvature
+				// varies linearly along the curve), so the standard
+				// constant-radius walker would treat them as straight
+				// chords — visibly wrong on every railway transition
+				// curve. Marked here so the writer can substitute a
+				// graph-derived Hermite interpolation.
+				if strings.Contains(strings.ToLower(doc.Exports[ci].ObjectName), "clothoid") {
+					r.IsClothoid = true
+				}
 				for _, rawProp := range doc.Exports[ci].Data {
 					var p prop
 					if err := json.Unmarshal(rawProp, &p); err != nil {

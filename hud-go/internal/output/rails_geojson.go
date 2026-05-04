@@ -25,15 +25,16 @@ type RailsGeoJSONOptions struct {
 func DefaultRailsOptions() RailsGeoJSONOptions {
 	return RailsGeoJSONOptions{
 		SampleStepMeters: 1,
-		MinSamples:       2,
-		MaxSamples:       800,
+		MinSamples:       4,
+		MaxSamples:       5000,
 	}
 }
 
 // maxDeflectionRadians caps the angular change per polyline segment so
-// tight-radius curves don't render as flat polygons. ~3° per segment looks
-// smooth at every normal zoom level.
-const maxDeflectionRadians = 0.05236
+// tight-radius curves don't render as flat polygons. ~0.5° per segment
+// is well below human-visible polygonisation at any reasonable zoom —
+// kept aggressive because we no longer optimise for output size.
+const maxDeflectionRadians = 0.00873
 
 // sampleRibbonLatLng walks a ribbon's arc geometry and returns a slice of
 // [lng, lat] pairs ready for GeoJSON. Returns nil for ribbons with no usable

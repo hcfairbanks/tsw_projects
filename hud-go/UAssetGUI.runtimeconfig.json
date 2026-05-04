@@ -8,7 +8,7 @@
     "rollForward": "major",
     "configProperties": {
       "System.GC.Server": true,
-      "System.GC.HeapHardLimit": 2147483648,
+      "System.GC.HeapHardLimit": 17179869184,
       "System.GC.AllowVeryLargeObjects": true
     }
   }

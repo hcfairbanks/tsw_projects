@@ -349,6 +349,13 @@ func (e *Extractor) scanRouteDefinition(root, routeName string) *uasset.RouteDef
 			}
 			continue
 		}
+		// Apply the per-codename country override here so the value
+		// the caller stamps onto every Timetable matches what we log.
+		// Without this the log line prints the raw asset value (empty
+		// for Training Centre) and looks like the override didn't take.
+		if override := output.CountryOverrideForCodename(routeName); override != "" {
+			rd.CountryCode = override
+		}
 		e.logf("[%s] Loaded RouteDefinition: %q (country=%q)\n", routeName, rd.DisplayName, rd.CountryCode)
 		return rd
 	}

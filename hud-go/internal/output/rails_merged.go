@@ -72,12 +72,53 @@ func writeRailsMerged(w io.Writer, tt *uasset.Timetable, opts RailsGeoJSONOption
 	anchor := geo.NewRouteAnchor(tt.OriginLat, tt.OriginLng)
 	paths := buildRibbonPaths(ribbons)
 
-	multi := make([][][2]float64, 0, len(paths))
+	// Build each path's coords AND remember its boundary NetworkNode
+	// GUIDs. We use those GUIDs in a moment to snap the endpoints of
+	// every path that shares a junction node onto a single canonical
+	// coordinate — eliminating the visible gaps where two ribbons meet
+	// at a junction but their independently-walked arcs end ~10–50 cm
+	// apart from float drift.
+	type pathOut struct {
+		coords    [][2]float64
+		startNode string
+		endNode   string
+	}
+	outs := make([]pathOut, 0, len(paths))
 	for _, p := range paths {
 		coords := buildPathCoords(p, anchor, opts, mode)
 		if len(coords) >= 2 {
-			multi = append(multi, coords)
+			sn, en := pathBoundaryNodes(p)
+			outs = append(outs, pathOut{coords: coords, startNode: sn, endNode: en})
 		}
+	}
+	// First-seen wins as the canonical coord for each node — alternatives
+	// only differ by sub-metre drift, so any of them is "right enough"
+	// and picking deterministically keeps the output stable across runs.
+	nodeCoord := map[string][2]float64{}
+	for _, o := range outs {
+		if o.startNode != "" {
+			if _, ok := nodeCoord[o.startNode]; !ok {
+				nodeCoord[o.startNode] = o.coords[0]
+			}
+		}
+		if o.endNode != "" {
+			if _, ok := nodeCoord[o.endNode]; !ok {
+				nodeCoord[o.endNode] = o.coords[len(o.coords)-1]
+			}
+		}
+	}
+	for i := range outs {
+		if c, ok := nodeCoord[outs[i].startNode]; ok {
+			outs[i].coords[0] = c
+		}
+		if c, ok := nodeCoord[outs[i].endNode]; ok {
+			outs[i].coords[len(outs[i].coords)-1] = c
+		}
+	}
+
+	multi := make([][][2]float64, 0, len(outs))
+	for _, o := range outs {
+		multi = append(multi, o.coords)
 	}
 
 	geomMode := "arc"
@@ -234,6 +275,10 @@ func buildPathCoords(path []edgeRole, anchor *geo.RouteAnchor, opts RailsGeoJSON
 	out := make([][2]float64, 0)
 	for i, e := range path {
 		var rc [][2]float64
+		// (Clothoid Hermite handling temporarily disabled — the role
+		// logic for picking the "other end" path neighbour was
+		// drawing phantom diagonals across loops. Will revisit with
+		// correct role-based neighbour selection.)
 		switch mode {
 		case railsArc:
 			rc = sampleRibbonLatLng(e.rib, anchor, opts)
@@ -259,6 +304,130 @@ func buildPathCoords(path []edgeRole, anchor *geo.RouteAnchor, opts RailsGeoJSON
 		out = append(out, rc...)
 	}
 	return out
+}
+
+// sampleClothoidPath produces a smooth polyline for a clothoid-spiral
+// ribbon by Hermite-interpolating between its own start anchor and the
+// next ribbon's start anchor in the chain. The curvature varies along
+// the segment; the constant-radius walker's straight chord is wrong
+// here. Cubic Hermite with the two endpoint tangents (scaled by the
+// segment length) reproduces the smooth railway transition that TSW
+// renders, without us having to walk the asset's polynomial / Fresnel
+// representation.
+//
+// Output is always in the ribbon's own start->end direction. The
+// caller reverses it for "end"-role traversal as usual.
+func sampleClothoidPath(cur, next edgeRole, anchor *geo.RouteAnchor, opts RailsGeoJSONOptions) [][2]float64 {
+	if cur.rib == nil || next.rib == nil || cur.rib.Length <= 0 {
+		return nil
+	}
+
+	// Endpoint world positions (UE cm). Cur's start = its arc-walked
+	// t=0 sample (== ribbonWorldOrigin). The clothoid's end equals
+	// the next ribbon's start (they share a NetworkNode). For the
+	// next ribbon, we pick the side of its arc that meets cur's
+	// EndNode — that's "start" of the next arc when next.role=="start"
+	// and "end" of the next arc otherwise. Either way, the WORLD
+	// position is just the next ribbon's t=0 sample (since
+	// ArcDelta walks from origin in the ribbon's own frame; the
+	// CachedStartPosition pinpoints where t=0 lives in world space).
+	curOX, curOY, _ := ribbonWorldOrigin(cur.rib)
+	endOX, endOY, _ := ribbonWorldOrigin(next.rib)
+
+	// Tangents (unit vectors). cur's tangent points along cur's own
+	// start->end. We need it oriented in the PATH direction. If
+	// cur.role=="start", path direction is cur.start->cur.end (= the
+	// stored tangent). If cur.role=="end", we entered at cur's end,
+	// so path direction is reversed.
+	cTx := cur.rib.TangentX
+	cTy := cur.rib.TangentY
+	if cur.role == "end" {
+		cTx, cTy = -cTx, -cTy
+	}
+	// next's tangent at its anchor end is similarly the stored tangent
+	// when role=="start" (we're entering its start) and the negated
+	// stored tangent when role=="end" (we'd be entering at its end).
+	nTx := next.rib.TangentX
+	nTy := next.rib.TangentY
+	if next.role == "end" {
+		nTx, nTy = -nTx, -nTy
+	}
+
+	// Hermite tangent magnitudes scale with the segment length so the
+	// curve doesn't overshoot. Length is in cm — same units as the
+	// world positions.
+	L := cur.rib.Length
+
+	// Sample density: same defaults the arc walker uses.
+	stepCm := opts.SampleStepMeters * 100.0
+	if stepCm <= 0 {
+		stepCm = 100.0
+	}
+	n := int(L/stepCm) + 1
+	if n+1 < opts.MinSamples {
+		n = opts.MinSamples - 1
+	}
+	if opts.MaxSamples > 0 && n+1 > opts.MaxSamples {
+		n = opts.MaxSamples - 1
+	}
+	if n < 1 {
+		n = 1
+	}
+
+	out := make([][2]float64, 0, n+1)
+	for i := 0; i <= n; i++ {
+		t := float64(i) / float64(n)
+		t2 := t * t
+		t3 := t2 * t
+		h00 := 2*t3 - 3*t2 + 1
+		h10 := t3 - 2*t2 + t
+		h01 := -2*t3 + 3*t2
+		h11 := t3 - t2
+		// Hermite tangents: cur exits its start with magnitude L in
+		// the path direction; next enters at start with magnitude L
+		// in the OPPOSITE of the path direction (so the curve points
+		// AT the next anchor). The start of the chord is `next anchor`,
+		// approached against next's outgoing tangent.
+		x := h00*curOX + h10*(cTx*L) + h01*endOX + h11*(-nTx*L)
+		y := h00*curOY + h10*(cTy*L) + h01*endOY + h11*(-nTy*L)
+		eastM := x / 100.0
+		southM := y / 100.0
+		lat, lng := anchor.WorldToLatLng(eastM, southM)
+		out = append(out, [2]float64{round7(lng), round7(lat)})
+	}
+	return out
+}
+
+// pathBoundaryNodes returns the NetworkNode GUIDs at the start and end
+// of a merged ribbon path. Used to snap shared junction endpoints
+// across paths so the rendered MultiLineString doesn't show tiny gaps
+// where two ribbons meet.
+//
+// The walk in buildRibbonPaths starts AT a junction node `n` with an
+// edgeRole `e` whose `role` describes which end of `e.rib` is attached
+// to `n`. So:
+//   - first ribbon's start-of-path node = the end matching first.role
+//   - last ribbon's end-of-path  node = the OPPOSITE end of last.role
+//     (we walked from one end of `last.rib` to the other; the path's
+//     end-boundary is the side we ended on, which is opposite of where
+//     we entered).
+func pathBoundaryNodes(path []edgeRole) (start, end string) {
+	if len(path) == 0 {
+		return "", ""
+	}
+	first := path[0]
+	if first.role == "start" {
+		start = first.rib.StartNodeGUID
+	} else {
+		start = first.rib.EndNodeGUID
+	}
+	last := path[len(path)-1]
+	if last.role == "start" {
+		end = last.rib.EndNodeGUID
+	} else {
+		end = last.rib.StartNodeGUID
+	}
+	return
 }
 
 func ribbonStartEndLatLng(rib *uasset.Ribbon, anchor *geo.RouteAnchor) (start, end [2]float64, ok bool) {

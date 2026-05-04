@@ -130,6 +130,15 @@ func (ra *RouteAnchor) WorldToLatLng(worldEastM, worldSouthM float64) (latDeg, l
 	return UTMInverse(ra.OriginE+worldEastM, ra.OriginN-worldSouthM, ra.Zone)
 }
 
+// LatLngToWorld is the inverse of WorldToLatLng — given a lat/lng, returns
+// the position in route-local UE world space (metres east, metres south of
+// the route's origin). Useful for matching live API geoLocation to ribbon
+// world cm without re-extracting the route.
+func (ra *RouteAnchor) LatLngToWorld(latDeg, lngDeg float64) (worldEastM, worldSouthM float64) {
+	e, n := UTMForward(latDeg, lngDeg, ra.Zone)
+	return e - ra.OriginE, ra.OriginN - n
+}
+
 // TileCenterToLatLng returns the lat/lng of a tile's centre (1000m tiles, centre
 // of tile (0,0) at origin).
 func (ra *RouteAnchor) TileCenterToLatLng(tileX, tileY int) (latDeg, lngDeg float64) {
