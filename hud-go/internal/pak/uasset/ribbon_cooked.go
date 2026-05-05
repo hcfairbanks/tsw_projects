@@ -31,6 +31,12 @@ type CookedRibbon struct {
 	// World position of the curve's t=0 = WorldLocation + StartPosition2D.
 	// Filled in by the parser before return.
 	StartX, StartY  float64
+	// StartZ is the world-cm Z (height) read from CachedStartPosition's
+	// FarVector. 0 when the ribbon ships no CachedStartPosition (the
+	// 2D-only fallback paths leave Z unset). Used downstream by
+	// per-service coordinate writers as the rail-elevation `height`
+	// field — without it 3D rail profiles flatline at sea level.
+	StartZ          float64
 	// Per-ribbon offset (cm). For ribbons authored in world coords this is
 	// (0,0); for tile-local ones it's the explicit offset stored on the
 	// ribbon. CachedStartPosition is preferred when present, else we use
@@ -100,8 +106,8 @@ func ParseCookedRibbonsFromUmap(uassetPath, tileName string) ([]CookedRibbon, er
 		var curveIdx int32
 		var wlX, wlY float64
 		var hasWL, hasCSP bool
-		var cspX, cspY float64
-		walkRibbonCookedFields(pr, &rb, &curveIdx, &wlX, &wlY, &hasWL, &cspX, &cspY, &hasCSP)
+		var cspX, cspY, cspZ float64
+		walkRibbonCookedFields(pr, &rb, &curveIdx, &wlX, &wlY, &hasWL, &cspX, &cspY, &cspZ, &hasCSP)
 		if c, ok := curves[curveIdx]; ok {
 			rb.CurveClass = c.class
 			rb.TangentX, rb.TangentY = c.tx, c.ty
@@ -121,6 +127,12 @@ func ParseCookedRibbonsFromUmap(uassetPath, tileName string) ([]CookedRibbon, er
 			rb.StartX, rb.StartY = cspX, cspY
 		default:
 			rb.StartX, rb.StartY = c.sx, c.sy
+		}
+		// Z (height) only ever lives on CachedStartPosition's FarVector. Use
+		// it whenever it's present — even when WorldLocation supplied X/Y,
+		// since IntVector/FVector2D doesn't carry Z.
+		if hasCSP {
+			rb.StartZ = cspZ
 		}
 		out = append(out, rb)
 	}
@@ -160,7 +172,7 @@ func walkCurveGeometry(r *reader, sx, sy, tx, ty, length, radius *float64, hasRa
 // and CachedStartPosition (FarVector — 2 doubles + 1 float).
 func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
 	wlX, wlY *float64, hasWL *bool,
-	cspX, cspY *float64, hasCSP *bool) {
+	cspX, cspY, cspZ *float64, hasCSP *bool) {
 	for r.remaining() > 8 {
 		t, ok := r.readTag()
 		if !ok {
@@ -196,9 +208,9 @@ func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
 			}
 		case t.name == "CachedStartPosition" && t.ptype == "StructProperty":
 			// Tagged FarVector: inner X (Double), Y (Double), Z (Float).
-			x, y, ok := readTaggedXY(&reader{d: r.d[dp:dp+t.size], nm: r.nm})
+			x, y, z, ok := readTaggedXYZ(&reader{d: r.d[dp:dp+t.size], nm: r.nm})
 			if ok {
-				*cspX, *cspY, *hasCSP = x, y, true
+				*cspX, *cspY, *cspZ, *hasCSP = x, y, z, true
 			}
 		}
 		r.seek(dp + t.size)
@@ -214,13 +226,23 @@ func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
 // run off the end. We catch the panic and return ok=false so the caller
 // falls through to its other-source priorities (CSP/StartPosition2D).
 func readTaggedXY(r *reader) (x, y float64, ok bool) {
+	x, y, _, ok = readTaggedXYZ(r)
+	return
+}
+
+// readTaggedXYZ walks a tagged sub-struct property stream and pulls X, Y,
+// and (optionally) Z. ok=true when both X and Y were found; Z is reported
+// when present but missing Z does NOT make ok=false — callers like
+// CachedStartPosition (FarVector: Double X / Double Y / Float Z) want all
+// three, but WorldLocation (IntVector: just X / Y / Z=0) needs only XY.
+func readTaggedXYZ(r *reader) (x, y, z float64, ok bool) {
 	defer func() {
 		if rec := recover(); rec != nil {
 			ok = false
 		}
 	}()
 	gotX, gotY := false, false
-	for r.remaining() >= 24 && !(gotX && gotY) {
+	for r.remaining() >= 24 {
 		t, more := r.readTag()
 		if !more {
 			break
@@ -251,10 +273,19 @@ func readTaggedXY(r *reader) (x, y float64, ok bool) {
 				y = readF64(r.d[dp:])
 				gotY = true
 			}
+		case "Z":
+			switch t.ptype {
+			case "IntProperty":
+				z = float64(int32(binary.LittleEndian.Uint32(r.d[dp:])))
+			case "FloatProperty":
+				z = float64(math.Float32frombits(binary.LittleEndian.Uint32(r.d[dp:])))
+			case "DoubleProperty":
+				z = readF64(r.d[dp:])
+			}
 		}
 		r.seek(dp + t.size)
 	}
-	return x, y, gotX && gotY
+	return x, y, z, gotX && gotY
 }
 
 func readF64(b []byte) float64 {

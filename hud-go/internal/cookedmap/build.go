@@ -180,6 +180,7 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 			Length:         cr.Length,
 			CachedStartX:   cr.StartX,
 			CachedStartY:   cr.StartY,
+			CachedStartZ:   cr.StartZ,
 			HasCachedStart: true,
 			IsClothoid:     cr.CurveClass == "NetworkCurveClothoidSpiral",
 		}

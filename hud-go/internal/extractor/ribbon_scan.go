@@ -88,6 +88,7 @@ func (e *Extractor) scanTileFeatures(extractRoot string) (map[string]*uasset.Rib
 					Length:         cr.Length,
 					CachedStartX:   cr.StartX,
 					CachedStartY:   cr.StartY,
+					CachedStartZ:   cr.StartZ,
 					HasCachedStart: true,
 					IsClothoid:     cr.CurveClass == "NetworkCurveClothoidSpiral",
 				}
