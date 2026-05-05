@@ -177,6 +177,13 @@ type Timetable struct {
 	// covers Platform markers ("Lake Platform 1") plus junction routing markers
 	// ("Smallbrook Junction Line 1") used for the in-game "Go Via" displays.
 	RouteMarkers []*RouteMarker `json:"-"`
+	// ExtractDir is the on-disk path where this timetable's pak was unpacked
+	// (typically `<workDir>/<route.Name>`). Stamped by the extractor when
+	// Config.KeepWorkDir is set so post-extract steps (e.g. cookedmap rail
+	// generation) can re-read the cooked tile binaries. Empty otherwise —
+	// the temp dir has already been deleted by the time the timetable is
+	// observed.
+	ExtractDir string `json:"-"`
 }
 
 // ---- Entry point ------------------------------------------------------------

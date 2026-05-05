@@ -37,6 +37,13 @@ type Config struct {
 	// free space without having to mutate process-wide TMP/TEMP env vars.
 	WorkDir string
 
+	// KeepWorkDir, when true, suppresses the deferred RemoveAll of the
+	// per-run temp dir (and therefore each route's `extractDir` inside it)
+	// so callers can read the unpacked tile binaries after Extract returns.
+	// Caller becomes responsible for cleanup. Each returned Timetable's
+	// ExtractDir field points at its route-scoped subdirectory.
+	KeepWorkDir bool
+
 	// Logger, if set, receives every progress line the extractor would
 	// otherwise write to stderr. Lets in-process callers (e.g. the hud-go
 	// /extractor SSE handler) intercept progress without scraping a

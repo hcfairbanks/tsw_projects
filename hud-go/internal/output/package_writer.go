@@ -630,23 +630,28 @@ func enrichScheduleLatLng(svc *uasset.Service, tt *uasset.Timetable) {
 	}
 }
 
-// WritePackage writes a set of timetables as shareable per-service JSON files.
-// If `out` ends in .zip, all files go into a single zip at that path.
-// Otherwise `out` is treated as a directory; one subfolder per route is created.
-func WritePackage(out string, timetables []*uasset.Timetable) (int, error) {
-	return WritePackageFiltered(out, timetables, "")
-}
+// RouteMapWriter renders the `route_<RouteDisplay>.json` content for one
+// route. `tt` is the geometry-owning timetable (the first one with ribbons);
+// `allTTs` is every timetable parsed for that route. Implementations write
+// a JSON document to w and return any error.
+type RouteMapWriter func(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable, opts RailsGeoJSONOptions) error
 
-// WritePackageFiltered behaves like WritePackage but only emits files for
-// services whose Name or FriendlyName contains serviceFilter (case-insensitive).
-// Empty filter = emit everything. The filter is applied when enumerating
-// output — it does NOT prune the timetable.Services list, so formation-chain
-// predecessor resolution and ribbon-to-platform maps still see every service.
-func WritePackageFiltered(out string, timetables []*uasset.Timetable, serviceFilter string) (int, error) {
-	if strings.HasSuffix(strings.ToLower(out), ".zip") {
-		return writeZip(out, timetables, serviceFilter)
+// WritePackageWith writes the per-route shareable bundle: per-service JSONs
+// plus the route-level files (`route_<X>.json` via mapWriter, and the
+// ribbons graph metadata). If `out` ends in .zip, output goes into a
+// single zip at that path; otherwise `out` is treated as a directory and
+// one subfolder per route is created. serviceFilter, when non-empty, keeps
+// only services whose Name or FriendlyName contains the substring
+// (case-insensitive); the filter is applied at enumeration time and does
+// not prune the timetable.Services list. mapWriter is required.
+func WritePackageWith(out string, timetables []*uasset.Timetable, serviceFilter string, mapWriter RouteMapWriter) (int, error) {
+	if mapWriter == nil {
+		return 0, fmt.Errorf("output: WritePackageWith requires a RouteMapWriter")
 	}
-	return writeDir(out, timetables, serviceFilter)
+	if strings.HasSuffix(strings.ToLower(out), ".zip") {
+		return writeZip(out, timetables, serviceFilter, mapWriter)
+	}
+	return writeDir(out, timetables, serviceFilter, mapWriter)
 }
 
 // serviceMatches reports whether a service satisfies the --service substring
@@ -660,7 +665,7 @@ func serviceMatches(svc *uasset.Service, filter string) bool {
 		strings.Contains(strings.ToLower(svc.FriendlyName), f)
 }
 
-func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string) (int, error) {
+func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string, mapWriter RouteMapWriter) (int, error) {
 	byRoute := groupByRoute(timetables)
 	ctxByTT := buildAllContexts(timetables)
 
@@ -713,8 +718,7 @@ func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string)
 				return werr
 			}
 			if err := writeOne(RouteDataFilename(routeName), func(w io.Writer) error {
-				_, e := WriteRouteDataJSON(w, allTTs, DefaultRailsOptions())
-				return e
+				return runRouteMapWriter(w, railsTT, allTTs, mapWriter)
 			}); err != nil {
 				return count, err
 			}
@@ -739,14 +743,14 @@ func buildAllContexts(timetables []*uasset.Timetable) map[*uasset.Timetable]*ttC
 	return m
 }
 
-func writeZip(zipPath string, timetables []*uasset.Timetable, serviceFilter string) (int, error) {
+func writeZip(zipPath string, timetables []*uasset.Timetable, serviceFilter string, mapWriter RouteMapWriter) (int, error) {
 	byRoute := groupByRoute(timetables)
 	ctxByTT := buildAllContexts(timetables)
 
 	// If the user provided a generic name but we only have one route, we still
 	// write a single zip. For multiple routes we fan out into sibling zips.
 	if len(byRoute) == 1 {
-		return writeOneZip(zipPath, firstMapEntry(byRoute), ctxByTT, serviceFilter)
+		return writeOneZip(zipPath, firstMapEntry(byRoute), ctxByTT, serviceFilter, mapWriter)
 	}
 
 	// Multiple routes: ignore the exact zipPath name, put each route in its own
@@ -755,13 +759,19 @@ func writeZip(zipPath string, timetables []*uasset.Timetable, serviceFilter stri
 	total := 0
 	for routeName, svcs := range byRoute {
 		rp := filepath.Join(dir, ZipFilename(routeName))
-		n, err := writeOneZip(rp, routeRun{name: routeName, pairs: svcs}, ctxByTT, serviceFilter)
+		n, err := writeOneZip(rp, routeRun{name: routeName, pairs: svcs}, ctxByTT, serviceFilter, mapWriter)
 		total += n
 		if err != nil {
 			return total, err
 		}
 	}
 	return total, nil
+}
+
+// runRouteMapWriter dispatches to the caller-supplied RouteMapWriter.
+// WritePackageWith ensures non-nil before reaching this point.
+func runRouteMapWriter(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable, mapWriter RouteMapWriter) error {
+	return mapWriter(w, tt, allTTs, DefaultRailsOptions())
 }
 
 type routePair struct {
@@ -800,7 +810,7 @@ func firstMapEntry(m map[string][]routePair) routeRun {
 	return routeRun{}
 }
 
-func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*ttContext, serviceFilter string) (int, error) {
+func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*ttContext, serviceFilter string, mapWriter RouteMapWriter) (int, error) {
 	if err := os.MkdirAll(filepath.Dir(zipPath), 0o755); err != nil {
 		return 0, err
 	}
@@ -851,7 +861,7 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 		count++
 	}
 	if railsTT != nil {
-		if err := addRailsToZip(zw, run.name, allTTs, railsTT); err != nil {
+		if err := addRailsToZip(zw, run.name, allTTs, railsTT, mapWriter); err != nil {
 			return count, err
 		}
 	}
@@ -861,7 +871,7 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 // addRailsToZip appends the per-route rail files to an open zip writer:
 //   - route_<route>.json    — combined rails + track features + platforms + signals + switches + trains[] + route metadata (the one file viewers/HUD should load)
 //   - <route>_ribbons.json  — per-ribbon graph metadata (endpoints + node guids), kept because its shape (JSON map keyed by ribbon GUID) is different from GeoJSON and useful for graph reasoning
-func addRailsToZip(zw *zip.Writer, routeDisplay string, tts []*uasset.Timetable, tt *uasset.Timetable) error {
+func addRailsToZip(zw *zip.Writer, routeDisplay string, tts []*uasset.Timetable, tt *uasset.Timetable, mapWriter RouteMapWriter) error {
 	addOne := func(name string, write func(io.Writer) error) error {
 		hdr := &zip.FileHeader{
 			Name:     name,
@@ -875,8 +885,7 @@ func addRailsToZip(zw *zip.Writer, routeDisplay string, tts []*uasset.Timetable,
 		return write(w)
 	}
 	if err := addOne(RouteDataFilename(routeDisplay), func(w io.Writer) error {
-		_, e := WriteRouteDataJSON(w, tts, DefaultRailsOptions())
-		return e
+		return runRouteMapWriter(w, tt, tts, mapWriter)
 	}); err != nil {
 		return err
 	}

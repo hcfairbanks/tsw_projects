@@ -71,7 +71,7 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 	}
 	if e.cfg.Debug {
 		fmt.Fprintf(os.Stderr, "[debug] temp dir: %s\n", workDir)
-	} else {
+	} else if !e.cfg.KeepWorkDir {
 		defer os.RemoveAll(workDir)
 	}
 
@@ -234,6 +234,9 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 				tt.Switches = switches
 				tt.CarStopSigns = carStopSigns
 				tt.RouteMarkers = routeMarkers
+				if e.cfg.KeepWorkDir {
+					tt.ExtractDir = extractDir
+				}
 				if routeDef != nil {
 					tt.RouteDisplayName = routeDef.DisplayName
 					tt.CountryCode = routeDef.CountryCode

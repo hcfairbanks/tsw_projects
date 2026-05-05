@@ -19,6 +19,7 @@ import (
 
 	"hud-go/internal/catalog"
 	"hud-go/internal/config"
+	"hud-go/internal/cookedmap"
 	"hud-go/internal/extractor"
 	"hud-go/internal/output"
 	"hud-go/internal/pak"
@@ -563,6 +564,11 @@ func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir,
 		TSWPath:     tswPath,
 		RouteFilter: route,
 		WorkDir:     tempDir,
+		// Keep the unpacked tiles around past Extract() so the route-map
+		// step (cookedmap.Build) can re-walk the cooked .umap binaries.
+		// Cleanup is owned by this function — see the deferred RemoveAll
+		// after WritePackageFiltered.
+		KeepWorkDir: true,
 		Verbose:     true,
 		Logger: func(format string, args ...any) {
 			line := strings.TrimRight(fmt.Sprintf(format, args...), "\r\n")
@@ -588,13 +594,26 @@ func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir,
 	if err != nil {
 		return -1, fmt.Errorf("extract: %w", err)
 	}
+	// Clean up the temp workdir we asked the extractor to keep alive past
+	// its own scope. Parent of any timetable's ExtractDir is the per-run
+	// workDir; all routes from one Extract call share it.
+	defer func() {
+		for _, tt := range timetables {
+			if tt != nil && tt.ExtractDir != "" {
+				if parent := filepath.Dir(tt.ExtractDir); parent != "" {
+					_ = os.RemoveAll(parent)
+				}
+				return
+			}
+		}
+	}()
 	if len(timetables) == 0 {
 		// No timetables in this pak — write nothing rather than an empty
 		// zip so resumability ("zip exists → skip") doesn't think we did
 		// the work. Treat as a successful no-op.
 		return 0, nil
 	}
-	if _, err := output.WritePackageFiltered(outZip, timetables, ""); err != nil {
+	if _, err := output.WritePackageWith(outZip, timetables, "", cookedmap.WriteRouteMap); err != nil {
 		return -1, fmt.Errorf("write package: %w", err)
 	}
 	return 0, nil
