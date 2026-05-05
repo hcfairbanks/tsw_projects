@@ -242,6 +242,16 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 					tt.RouteDisplayName = routeDef.DisplayName
 					tt.CountryCode = routeDef.CountryCode
 				}
+				// Prefer the catalog's pre-resolved display name when
+				// supplied — it's the same string the route-list UI
+				// shows, and it falls back to *_Gameplay.uplugin's
+				// Description when the asset binary's DisplayName is
+				// empty (Great Western Express, etc). Wins over the
+				// data-derived value so the JSON's `name` matches what
+				// the user picked in the route list.
+				if e.cfg.PackDisplayName != "" {
+					tt.RouteDisplayName = e.cfg.PackDisplayName
+				}
 				// Per-codename country override — wins over whatever
 				// the RouteDefinition supplied (or didn't supply, in
 				// Training Centre's case where it's blank in the data).

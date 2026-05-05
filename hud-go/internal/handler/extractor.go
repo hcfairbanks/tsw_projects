@@ -483,7 +483,7 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 		h.stateMu.Unlock()
 		h.broadcast(h.snapshotEvent("route_started", rt.codename, ""))
 
-		exitCode, runErr := h.runSingleRoute(ctx, tswPath, tempDir, rt.codename, zip)
+		exitCode, runErr := h.runSingleRoute(ctx, tswPath, tempDir, rt.codename, rt.displayName, zip)
 
 		// Don't leave a partial zip on cancel/failure — the next run should
 		// re-attempt this route from scratch.
@@ -559,11 +559,12 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 // context, and adding one means threading it through a couple of layers
 // of subprocess invocations (repak/UAssetGUI). Best-effort Stop is
 // adequate for the use case (per-route runs are minutes, not hours).
-func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir, route, outZip string) (int, error) {
+func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir, route, packDisplayName, outZip string) (int, error) {
 	cfg := extractor.Config{
-		TSWPath:     tswPath,
-		RouteFilter: route,
-		WorkDir:     tempDir,
+		TSWPath:         tswPath,
+		RouteFilter:     route,
+		WorkDir:         tempDir,
+		PackDisplayName: packDisplayName,
 		// Keep the unpacked tiles around past Extract() so the route-map
 		// step (cookedmap.Build) can re-walk the cooked .umap binaries.
 		// Cleanup is owned by this function — see the deferred RemoveAll

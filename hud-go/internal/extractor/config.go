@@ -44,6 +44,16 @@ type Config struct {
 	// ExtractDir field points at its route-scoped subdirectory.
 	KeepWorkDir bool
 
+	// PackDisplayName, if set, overrides whatever the per-pak
+	// RouteDefinition.DisplayName supplies — used for routes whose
+	// asset ships an empty DisplayName (Great Western Express ships
+	// nothing; the marketing name "Great Western Express" lives in
+	// the pak's *_Gameplay.uplugin Description, which the catalog
+	// scan reads via pak.PakDLCDisplayName). The handler passes the
+	// catalog's already-resolved display name through here so the
+	// route_<X>.json's `name` field matches the route list in the UI.
+	PackDisplayName string
+
 	// Logger, if set, receives every progress line the extractor would
 	// otherwise write to stderr. Lets in-process callers (e.g. the hud-go
 	// /extractor SSE handler) intercept progress without scraping a
