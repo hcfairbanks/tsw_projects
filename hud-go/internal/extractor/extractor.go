@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"hud-go/internal/geo"
 	"hud-go/internal/output"
 	"hud-go/internal/pak"
 	"hud-go/internal/pak/uasset"
@@ -248,6 +249,17 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 				// stay aligned.
 				if override := output.CountryOverrideForCodename(route.Name); override != "" {
 					tt.CountryCode = override
+				}
+				// Last-resort offline fallback: if the data didn't supply
+				// a country code AND no codename override exists, infer
+				// from the route's origin lat/lng using the bounding-box
+				// table in internal/geo. Lets new paks import cleanly
+				// without us having to remember to add a codename override
+				// for every release.
+				if tt.CountryCode == "" {
+					if c := geo.CountryFromOrigin(originLat, originLng); c != "" {
+						tt.CountryCode = c
+					}
 				}
 				// Sibling scenario / tutorial Definition. Lives in the
 				// same on-disk folder as the timetable, with one of two

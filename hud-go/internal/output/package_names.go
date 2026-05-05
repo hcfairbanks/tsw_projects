@@ -111,6 +111,7 @@ var codenameCountryOverride = map[string]string{
 	"EastCoastMainline":           "GB",
 	"MetrolinkAntelopeValleyLine": "US",
 	"TSW2TorontoIndustrial":       "CA",
+	"TSW2PaddingtonReading":       "GB", // Great Western Express; data ships empty
 }
 
 // CountryOverrideForCodename returns a hard-coded ISO country code
