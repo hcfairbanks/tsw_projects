@@ -110,11 +110,7 @@ func (e *Extractor) scanOnePakRVDs(pakPath, workRoot string) (map[string]*uasset
 		if !strings.HasPrefix(name, "RVD_") || !strings.HasSuffix(name, ".uasset") {
 			return nil
 		}
-		jsonPath := path + ".json"
-		if err := e.runUAssetGUI(path, jsonPath); err != nil {
-			return nil
-		}
-		rvd, err := uasset.ParseRVD(jsonPath)
+		rvd, err := uasset.ParseCookedRVD(path)
 		if err != nil {
 			return nil
 		}

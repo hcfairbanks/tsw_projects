@@ -75,12 +75,15 @@ type Config struct {
 
 // AutoDetect fills in tool paths if not provided.
 func (c *Config) AutoDetect() error {
+	// UAssetGUI is no longer required — every uasset parser used by the
+	// extractor now reads .uasset binaries directly via internal/pak/uasset's
+	// cooked walkers. We still try to discover it (cheap) so external
+	// tooling that reads c.UAssetGUIPath continues to function, but
+	// missing UAssetGUI is no longer fatal.
 	if c.UAssetGUIPath == "" {
-		p, err := findUAssetGUI()
-		if err != nil {
-			return fmt.Errorf("UAssetGUI not found — please provide --uassetgui: %w", err)
+		if p, err := findUAssetGUI(); err == nil {
+			c.UAssetGUIPath = p
 		}
-		c.UAssetGUIPath = p
 	}
 	// repak is preferred over UnrealPak (handles Oodle compression)
 	if c.RepakPath == "" {

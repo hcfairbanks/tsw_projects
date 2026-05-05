@@ -71,9 +71,9 @@ func PakHasTimetable(pakPath, repakPath string) (bool, error) {
 // (cargo / wagon DLCs that piggy-back on a parent route's definition) —
 // callers should treat that as "not a real route" and fall back to
 // CamelCase. Returns an error only on unexpected I/O / tool failures.
-func PakRouteDefinition(pakPath, repakPath, uassetGUIPath, scratchDir string) (*uasset.RouteDefinition, error) {
-	if pakPath == "" || repakPath == "" || uassetGUIPath == "" {
-		return nil, fmt.Errorf("PakRouteDefinition: empty pakPath / repakPath / uassetGUIPath")
+func PakRouteDefinition(pakPath, repakPath, _ /* uassetGUIPath, kept for caller compat */, scratchDir string) (*uasset.RouteDefinition, error) {
+	if pakPath == "" || repakPath == "" {
+		return nil, fmt.Errorf("PakRouteDefinition: empty pakPath / repakPath")
 	}
 	if scratchDir == "" {
 		return nil, fmt.Errorf("PakRouteDefinition: empty scratchDir")
@@ -140,11 +140,7 @@ func PakRouteDefinition(pakPath, repakPath, uassetGUIPath, scratchDir string) (*
 			continue
 		}
 		uassetPath := filepath.Join(root, filepath.FromSlash(entry))
-		jsonPath := uassetPath + ".json"
-		if err := exec.Command(uassetGUIPath, "tojson", uassetPath, jsonPath, "VER_UE4_27").Run(); err != nil {
-			continue
-		}
-		rd, err := uasset.ParseRouteDefinition(jsonPath)
+		rd, err := uasset.ParseCookedRouteDefinition(uassetPath)
 		if err != nil {
 			// Not a route-level definition — keep walking.
 			continue

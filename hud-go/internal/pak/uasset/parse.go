@@ -444,7 +444,7 @@ func (r *reader) readTag() (tagInfo, bool) {
 		r.fname()
 		r.fname()
 	case "SetProperty":
-		r.fname()
+		t.innerType = r.fname()
 	}
 	if r.u8() != 0 { // has_guid
 		r.guid()

@@ -31,9 +31,9 @@ import (
 // cleanup. The implementation chooses a private subdir keyed by pak
 // basename so concurrent calls don't collide. The subdir is removed
 // before return regardless of success.
-func PakRVDs(pakPath, repakPath, uassetGUIPath, scratchDir string) ([]*uasset.RVD, error) {
-	if pakPath == "" || repakPath == "" || uassetGUIPath == "" {
-		return nil, fmt.Errorf("PakRVDs: empty pakPath / repakPath / uassetGUIPath")
+func PakRVDs(pakPath, repakPath, _ /* uassetGUIPath, kept for caller compat */, scratchDir string) ([]*uasset.RVD, error) {
+	if pakPath == "" || repakPath == "" {
+		return nil, fmt.Errorf("PakRVDs: empty pakPath / repakPath")
 	}
 	if scratchDir == "" {
 		return nil, fmt.Errorf("PakRVDs: empty scratchDir")
@@ -105,11 +105,7 @@ func PakRVDs(pakPath, repakPath, uassetGUIPath, scratchDir string) ([]*uasset.RV
 		if !strings.HasPrefix(base, "RVD_") || !strings.HasSuffix(base, ".uasset") {
 			return nil
 		}
-		jsonPath := path + ".json"
-		if err := exec.Command(uassetGUIPath, "tojson", path, jsonPath, "VER_UE4_27").Run(); err != nil {
-			return nil // skip this RVD; log nothing per-file (caller already noisy enough)
-		}
-		rvd, err := uasset.ParseRVD(jsonPath)
+		rvd, err := uasset.ParseCookedRVD(path)
 		if err != nil {
 			return nil
 		}

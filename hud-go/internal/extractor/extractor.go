@@ -204,24 +204,30 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 		routeDef := e.scanRouteDefinition(extractDir, route.Name)
 
 		for _, ua := range uassets {
-			// Step 3: Convert uasset → JSON via UAssetGUI CLI
-			jsonPath := ua + ".json"
-			if err := e.runUAssetGUI(ua, jsonPath); err != nil {
-				fmt.Fprintf(os.Stderr, "[%s] WARNING: UAssetGUI failed on %s: %v\n", route.Name, filepath.Base(ua), err)
-				continue
-			}
-
-			// Step 4: Parse the JSON into our data model
+			// Step 3+4: Parse the timetable .uasset directly via the
+			// in-process binary walker. UAssetGUI was only ever an
+			// envelope here — the actual parser (parseTopLevel + the
+			// FPropertyTag walker in internal/pak/uasset/parse.go) is
+			// already binary; we just feed it the raw export property
+			// stream from ReadUmap instead of the base64 blob UAssetGUI
+			// emits. Saves ~2-3s of subprocess startup per timetable;
+			// dominates the per-route extraction cost on big paks
+			// (Great Western Express ships 600 timetables).
+			//
+			// Tutorials and other timetables that lack a top-level
+			// Services array still error here ("Services array not
+			// found in payload") — same as the legacy path. They get
+			// skipped with the WARNING below.
 			if e.cfg.Debug {
-				fmt.Fprintf(os.Stderr, "[debug] parsing JSON: %s\n", jsonPath)
+				fmt.Fprintf(os.Stderr, "[debug] parsing uasset (cooked): %s\n", ua)
 			}
-			tt, err := uasset.Parse(jsonPath, route.Name)
+			tt, err := uasset.ParseCookedTimetable(ua, route.Name)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "[%s] WARNING: parse failed on %s: %v\n", route.Name, filepath.Base(jsonPath), err)
+				fmt.Fprintf(os.Stderr, "[%s] WARNING: parse failed on %s: %v\n", route.Name, filepath.Base(ua), err)
 				continue
 			}
 			if e.cfg.Debug {
-				fmt.Fprintf(os.Stderr, "[debug] parsed %d services from %s\n", len(tt.Services), filepath.Base(jsonPath))
+				fmt.Fprintf(os.Stderr, "[debug] parsed %d services from %s\n", len(tt.Services), filepath.Base(ua))
 			}
 			if len(tt.Services) > 0 {
 				// Attach the per-route RVD map so the writer can resolve vehicle classes.
@@ -318,14 +324,7 @@ func loadSiblingDefinition(timetableAsset string, e *Extractor) *uasset.Scenario
 		if _, err := os.Stat(candidate); err != nil {
 			continue
 		}
-		jsonPath := candidate + ".json"
-		if err := e.runUAssetGUI(candidate, jsonPath); err != nil {
-			if e.cfg.Debug {
-				fmt.Fprintf(os.Stderr, "[scenario-def] convert %s: %v\n", filepath.Base(candidate), err)
-			}
-			continue
-		}
-		def, err := uasset.ParseScenarioDefinition(jsonPath)
+		def, err := uasset.ParseCookedScenarioDefinition(candidate)
 		if err != nil {
 			if e.cfg.Debug {
 				fmt.Fprintf(os.Stderr, "[scenario-def] parse %s: %v\n", filepath.Base(candidate), err)
@@ -360,14 +359,7 @@ func (e *Extractor) scanRouteDefinition(root, routeName string) *uasset.RouteDef
 		return nil
 	})
 	for _, ua := range candidates {
-		jsonPath := ua + ".json"
-		if err := e.runUAssetGUI(ua, jsonPath); err != nil {
-			if e.cfg.Debug {
-				fmt.Fprintf(os.Stderr, "[%s] RouteDefinition convert failed on %s: %v\n", routeName, filepath.Base(ua), err)
-			}
-			continue
-		}
-		rd, err := uasset.ParseRouteDefinition(jsonPath)
+		rd, err := uasset.ParseCookedRouteDefinition(ua)
 		if err != nil {
 			if e.cfg.Debug {
 				fmt.Fprintf(os.Stderr, "[%s] RouteDefinition skip %s: %v\n", routeName, filepath.Base(ua), err)
@@ -412,14 +404,7 @@ func (e *Extractor) scanRVDs(root, routeName string) map[string]*uasset.RVD {
 	e.logf("[%s] Parsing %d RVD asset(s)...\n", routeName, len(rvdPaths))
 	out := make(map[string]*uasset.RVD, len(rvdPaths))
 	for _, ua := range rvdPaths {
-		jsonPath := ua + ".json"
-		if err := e.runUAssetGUI(ua, jsonPath); err != nil {
-			if e.cfg.Debug {
-				fmt.Fprintf(os.Stderr, "[%s] RVD convert failed on %s: %v\n", routeName, filepath.Base(ua), err)
-			}
-			continue
-		}
-		rvd, err := uasset.ParseRVD(jsonPath)
+		rvd, err := uasset.ParseCookedRVD(ua)
 		if err != nil {
 			if e.cfg.Debug {
 				fmt.Fprintf(os.Stderr, "[%s] RVD parse failed on %s: %v\n", routeName, filepath.Base(ua), err)
@@ -524,16 +509,6 @@ func writeCryptoJSON(aesKey string) (string, error) {
 	defer f.Close()
 	fmt.Fprintf(f, tmpl, aesKey)
 	return f.Name(), nil
-}
-
-// runUAssetGUI converts a .uasset to JSON using the UAssetGUI CLI.
-func (e *Extractor) runUAssetGUI(uassetPath, jsonPath string) error {
-	// UAssetGUI tojson <source> <destination> VER_UE4_27
-	cmd := exec.Command(e.cfg.UAssetGUIPath,
-		"tojson", uassetPath, jsonPath, "VER_UE4_27")
-	cmd.Stdout = e.logWriter()
-	cmd.Stderr = e.logWriter()
-	return cmd.Run()
 }
 
 // findTimetableAssets walks the extracted pak directory looking for .uasset
