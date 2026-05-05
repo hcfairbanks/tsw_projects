@@ -34,3 +34,6 @@ tsw_api_reader/notes/
 bot/claude_reports/
 bot/screenshots/
 bot/run_report.txt
+
+# Unpacked TSW6 pak content (tens of GB; reproducible from the install)
+map_files/

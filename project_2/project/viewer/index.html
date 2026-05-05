@@ -76,6 +76,55 @@
       white-space: nowrap;
     }
     .switch-label::before { display: none; }
+    .marker-label {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.25);
+      border-radius: 3px;
+      padding: 0 3px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .marker-label::before { display: none; }
+    /* Per marker_type styling — colour-codes the small label-tag border. */
+    .marker-label.platform-mt { color: #1a5b1a; border-color: rgba(40,140,40,0.55); }
+    .marker-label.siding-mt   { color: #774a00; border-color: rgba(180,120,0,0.55); }
+    .marker-label.junction-mt { color: #8a1d1d; border-color: rgba(180,40,40,0.55); }
+    .marker-label.other-mt    { color: #444;    border-color: rgba(0,0,0,0.25); }
+    .cabstop-label {
+      background: rgba(225,235,255,0.92);
+      border: 1px solid rgba(40,80,180,0.55);
+      border-radius: 2px;
+      padding: 0 3px;
+      font-size: 9px;
+      color: #1a3a78;
+      white-space: nowrap;
+    }
+    .cabstop-label::before { display: none; }
+    /* Collectable icons — one shape per actor-class category. Used both in
+       the legend (inline span) and as the L.divIcon HTML on the map. */
+    .collectable-icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      line-height: 14px;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: system-ui, sans-serif;
+      color: #fff;
+      vertical-align: middle;
+      margin-right: 4px;
+      border-radius: 3px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+    }
+    .collectable-robot    { background: #5b6470; }
+    .collectable-scarf    { background: #c0392b; }
+    .collectable-routemap { background: #2980b9; }
+    .collectable-defib    { background: #e74c3c; }
+    .collectable-other    { background: #7f8c8d; }
+    /* On-map icon (no margin so the divIcon centres correctly). */
+    .collectable-pin .collectable-icon { margin-right: 0; }
   </style>
 </head>
 <body>
@@ -91,6 +140,8 @@
         <input type="file" id="serviceFile" accept=".json" multiple />
       </label>
       <button id="clearServicesBtn" type="button">Clear imports</button>
+      <button id="trackBtn" type="button">▶ Track player</button>
+      <span id="trackStatus" style="font-size:12px;opacity:0.85"></span>
       <span class="stats" id="stats">No data loaded.</span>
     </header>
     <div id="map"></div>
@@ -114,13 +165,19 @@
       div.innerHTML = `
         <div><span class="swatch" style="background:#0066ff;opacity:0.9"></span>Rail</div>
         <div><span class="swatch" style="background:#ff7f00;opacity:0.85;height:5px"></span>Platform track</div>
-        <div><span class="swatch" style="background:#9467bd;opacity:0.7;height:4px"></span>Siding</div>
+        <div><span style="display:inline-block;width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;vertical-align:middle;margin-right:4px;transform:rotate(45deg)"></span>Platform Marker</div>
         <div><span class="swatch" style="background:#17becf;opacity:0.7;height:4px"></span>Line</div>
-        <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff7f00;border:1.5px solid white;vertical-align:middle;margin-right:4px"></span>Platform (used)</div>
-        <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#a8a8a8;border:1.5px solid white;vertical-align:middle;margin-right:4px"></span>Platform (unused)</div>
+        <div><span class="swatch" style="background:#9467bd;opacity:0.7;height:4px"></span>Siding</div>
         <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#2ca02c;border:1px solid #003a00;vertical-align:middle;margin-right:4px"></span>Signal</div>
         <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#cc8400;border:1.5px solid #663300;vertical-align:middle;margin-right:4px"></span>Switch</div>
+        <div><span style="display:inline-block;width:8px;height:8px;background:#3f6fd9;border:1.5px solid white;border-radius:50%;vertical-align:middle;margin-right:4px"></span>Cab stop sign</div>
         <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#d62728;border:2px solid white;vertical-align:middle;margin-right:4px"></span>Service stop</div>
+        <div style="margin-top:4px;font-weight:600">Collectables</div>
+        <div style="margin-left:8px"><span class="collectable-icon collectable-robot">R</span>Delivery Robot</div>
+        <div style="margin-left:8px"><span class="collectable-icon collectable-scarf">S</span>Scarf</div>
+        <div style="margin-left:8px"><span class="collectable-icon collectable-routemap">M</span>Route Map</div>
+        <div style="margin-left:8px"><span class="collectable-icon collectable-defib">+</span>Defibrillator</div>
+        <div style="margin-left:8px"><span class="collectable-icon collectable-other">?</span>Other</div>
       `;
       return div;
     };
@@ -131,6 +188,9 @@
     let platformCount = 0;
     let signalCount = 0;
     let switchCount = 0;
+    let markerCount = 0;
+    let cabStopCount = 0;
+    let collectableCount = 0;
     // Per-category sub-layers built from the combined data file. Keys match
     // the labels shown in the layer-toggle control.
     let dataSubLayers = {};
@@ -147,6 +207,9 @@
       if (platformCount) parts.push(`${platformCount.toLocaleString()} platforms`);
       if (signalCount) parts.push(`${signalCount.toLocaleString()} signals`);
       if (switchCount) parts.push(`${switchCount.toLocaleString()} switches`);
+      if (markerCount) parts.push(`${markerCount.toLocaleString()} markers`);
+      if (cabStopCount) parts.push(`${cabStopCount.toLocaleString()} cab-stops`);
+      if (collectableCount) parts.push(`${collectableCount.toLocaleString()} collectables`);
       if (serviceCount) parts.push(`${serviceCount.toLocaleString()} service${serviceCount === 1 ? '' : 's'} imported`);
       if (extra) parts.push(extra);
       stats.textContent = parts.length ? parts.join(' · ') : 'No data loaded.';
@@ -156,6 +219,7 @@
     const TRACK_FEATURE_STYLE = {
       platform_track: { color: '#ff7f00', weight: 5, opacity: 0.85 }, // orange — platforms
       siding_track:   { color: '#9467bd', weight: 4, opacity: 0.7  }, // purple — sidings
+      junction_track: { color: '#d62728', weight: 4, opacity: 0.7  }, // red — junctions
       line_track:     { color: '#17becf', weight: 4, opacity: 0.7  }, // teal — lines
       running_track:  { color: '#1f77b4', weight: 4, opacity: 0.7  }, // blue — running
     };
@@ -280,6 +344,112 @@
       if (lines.length) layer.bindPopup(lines.join('<br>'));
     }
 
+    // Track marker (TrackMarkerProperty) — Platform / Siding / Junction / etc.
+    // Shape: small diamond (rotated square via L.divIcon).
+    const MARKER_STYLE = {
+      Platform: { fill: '#2ca02c', edge: '#003a00', cls: 'platform-mt' },
+      Siding:   { fill: '#d4a017', edge: '#774a00', cls: 'siding-mt'   },
+      Junction: { fill: '#d62728', edge: '#8a1d1d', cls: 'junction-mt' },
+    };
+    function trackMarkerPointToLayer(feature, latlng) {
+      const p = feature.properties || {};
+      const style = MARKER_STYLE[p.marker_type] || { fill: '#888', edge: '#222', cls: 'other-mt' };
+      // Diamond icon as a 12×12 div rotated 45°, centred on the lat/lng.
+      const iconHtml = `<div style="
+        width:10px;height:10px;background:${style.fill};
+        border:1px solid ${style.edge};transform:rotate(45deg);
+        box-shadow:0 0 0 1px rgba(255,255,255,0.6)"></div>`;
+      const icon = L.divIcon({
+        html: iconHtml,
+        className: '',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      });
+      const m = L.marker(latlng, { icon });
+      if (p.name) {
+        m.bindTooltip(p.name, {
+          permanent: true,
+          direction: 'right',
+          offset: [8, 0],
+          className: 'marker-label ' + style.cls,
+        });
+      }
+      return m;
+    }
+    function bindTrackMarkerPopup(feature, layer) {
+      const p = feature.properties || {};
+      const lines = [];
+      if (p.name) lines.push(`<b>${p.name}</b>`);
+      if (p.marker_type) lines.push(`type: ${p.marker_type}`);
+      if (p.line_side) lines.push(`side: ${p.line_side}`);
+      if (p.ribbon_guid) lines.push(`<code style="font-size:10px">${p.ribbon_guid.slice(0,18)}…</code>`);
+      if (lines.length) layer.bindPopup(lines.join('<br>'));
+    }
+
+    // Cab stop sign — small blue dot with the max-vehicle count label.
+    function cabStopSignPointToLayer(feature, latlng) {
+      const p = feature.properties || {};
+      const m = L.circleMarker(latlng, {
+        radius: 3,
+        color: '#ffffff',
+        weight: 1,
+        fillColor: '#3f6fd9',
+        fillOpacity: 1
+      });
+      const n = p.max_rail_vehicles;
+      if (Number.isFinite(n) && n > 0) {
+        m.bindTooltip(String(n), {
+          permanent: true,
+          direction: 'right',
+          offset: [5, 0],
+          className: 'cabstop-label',
+        });
+      }
+      return m;
+    }
+    function bindCabStopSignPopup(feature, layer) {
+      const p = feature.properties || {};
+      const lines = [];
+      const n = p.max_rail_vehicles;
+      if (Number.isFinite(n) && n > 0) lines.push(`<b>Cab stop — ${n}-car</b>`);
+      else lines.push(`<b>Cab stop sign</b>`);
+      if (p.location != null) lines.push(`location: ${(+p.location).toFixed(3)}`);
+      if (p.ribbon_guid) lines.push(`<code style="font-size:10px">${p.ribbon_guid.slice(0,18)}…</code>`);
+      if (lines.length) layer.bindPopup(lines.join('<br>'));
+    }
+
+    // Map a collectable's actor_class onto a category — one icon per
+     // category. Single layer toggle ("Collectables") covers all of them.
+    function collectableCategory(actorClass) {
+      const c = String(actorClass || '');
+      if (c.includes('Robot')) return { label: 'Delivery Robot', cls: 'collectable-robot', sym: 'R' };
+      if (c.includes('Scarf')) return { label: 'Scarf', cls: 'collectable-scarf', sym: 'S' };
+      if (c.includes('RouteMap')) return { label: 'Route Map', cls: 'collectable-routemap', sym: 'M' };
+      if (c.includes('Defibrillator')) return { label: 'Defibrillator', cls: 'collectable-defib', sym: '+' };
+      return { label: 'Other', cls: 'collectable-other', sym: '?' };
+    }
+    function collectablePointToLayer(feature, latlng) {
+      const p = feature.properties || {};
+      const cat = collectableCategory(p.actor_class);
+      const icon = L.divIcon({
+        className: 'collectable-pin',
+        html: `<span class="collectable-icon ${cat.cls}">${cat.sym}</span>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      });
+      return L.marker(latlng, { icon });
+    }
+    function bindCollectablePopup(feature, layer) {
+      const p = feature.properties || {};
+      const cat = collectableCategory(p.actor_class);
+      const lines = [`<b>${cat.label}</b>`];
+      if (p.actor_class) lines.push(`class: <code>${p.actor_class}</code>`);
+      if (p.instance) lines.push(`instance: <code>${p.instance}</code>`);
+      if (p.tile) lines.push(`tile: ${p.tile}`);
+      if (p.collectable_id) lines.push(`<code style="font-size:10px">${p.collectable_id.slice(0,18)}…</code>`);
+      layer.bindPopup(lines.join('<br>'));
+    }
+
     function bindTrackFeaturePopup(feature, layer) {
       const p = feature.properties || {};
       const lines = [];
@@ -321,27 +491,39 @@
 
         // Split features by category into separate L.LayerGroup so each can
         // be toggled independently in the control.
+        // Layer-group whitelist — order here drives the layer-control list.
+        // Anything in the GeoJSON file that doesn't map to one of these
+        // (junction_track, running_track, junction marker pins, etc.) is
+        // simply not surfaced in the viewer. The data still lives in the
+        // file for downstream tools.
         const groups = {
-          'Rails':           L.layerGroup(),
-          'Platform tracks': L.layerGroup(),
-          'Siding tracks':   L.layerGroup(),
-          'Line tracks':     L.layerGroup(),
-          'Running tracks':  L.layerGroup(),
-          'Platforms':       L.layerGroup(),
-          'Signals':         L.layerGroup(),
-          'Switches':        L.layerGroup(),
+          'Rail':            L.layerGroup(),
+          'Platform track':  L.layerGroup(),
+          'Platform Marker': L.layerGroup(),
+          'Line':            L.layerGroup(),
+          'Siding':          L.layerGroup(),
+          'Signal':          L.layerGroup(),
+          'Switch':          L.layerGroup(),
+          'Cab stop sign':   L.layerGroup(),
+          'Service stop':    L.layerGroup(),
+          'Collectables':    L.layerGroup(),
+        };
+        const MARKER_GROUP = {
+          Platform: 'Platform Marker',
         };
         const FT_GROUP = {
-          platform_track: 'Platform tracks',
-          siding_track:   'Siding tracks',
-          line_track:     'Line tracks',
-          running_track:  'Running tracks',
+          platform_track: 'Platform track',
+          siding_track:   'Siding',
+          line_track:     'Line',
         };
 
         railsCount = 0;
         platformCount = 0;
         signalCount = 0;
         switchCount = 0;
+        markerCount = 0;
+        cabStopCount = 0;
+        collectableCount = 0;
 
         const allBounds = L.latLngBounds();
         for (const f of (gj.features || [])) {
@@ -353,36 +535,59 @@
           if (t === 'Point') {
             const c = f.geometry.coordinates;
             const latlng = L.latLng(c[1], c[0]);
-            if (p.jct_guid != null) {
+            if (p.feature_kind === 'track_marker') {
+              // Only Platform marker pins are kept (per the legend whitelist).
+              // Siding / Junction / Other are conveyed by their LineString
+              // overlays instead — drop their pins.
+              const grp = MARKER_GROUP[p.marker_type];
+              if (!grp) continue;
+              layer = trackMarkerPointToLayer(f, latlng);
+              bindTrackMarkerPopup(f, layer);
+              group = grp;
+              markerCount += 1;
+            } else if (p.feature_kind === 'cab_stop_sign') {
+              layer = cabStopSignPointToLayer(f, latlng);
+              bindCabStopSignPopup(f, layer);
+              group = 'Cab stop sign';
+              cabStopCount += 1;
+            } else if (p.jct_guid != null) {
               layer = switchPointToLayer(f, latlng);
               bindSwitchPopup(f, layer);
-              group = 'Switches';
+              group = 'Switch';
               switchCount += 1;
             } else if (p.signal_id) {
               layer = signalPointToLayer(f, latlng);
               bindSignalPopup(f, layer);
-              group = 'Signals';
+              group = 'Signal';
               signalCount += 1;
+            } else if (p.feature_kind === 'collectable') {
+              layer = collectablePointToLayer(f, latlng);
+              bindCollectablePopup(f, layer);
+              group = 'Collectables';
+              collectableCount += 1;
             } else {
-              layer = platformPointToLayer(f, latlng);
-              bindPlatformPopup(f, layer);
-              group = 'Platforms';
-              platformCount += 1;
+              // Unrecognised Point (legacy LinkedPlatform etc.) — not in the
+              // whitelist; skip silently.
+              continue;
             }
             allBounds.extend(latlng);
           } else if (p.feature_type) {
+            // Only known track-feature types are routed; junction_track /
+            // running_track and any others are dropped per the legend.
+            const grp = FT_GROUP[p.feature_type];
+            if (!grp) continue;
             layer = L.geoJSON(f, {
               style: styleRibbon,
               onEachFeature: bindTrackFeaturePopup
             });
-            group = FT_GROUP[p.feature_type] || 'Rails';
+            group = grp;
             try { allBounds.extend(layer.getBounds()); } catch (_) {}
           } else {
             layer = L.geoJSON(f, {
               style: styleRibbon,
               onEachFeature: bindRibbonPopup
             });
-            group = 'Rails';
+            group = 'Rail';
             if (p.ribbon_count != null) railsCount += p.ribbon_count;
             else railsCount += 1;
             try { allBounds.extend(layer.getBounds()); } catch (_) {}
@@ -402,12 +607,15 @@
           dataSubLayers[name] = g;
           overlays[name] = g;
         }
-        layerControl = L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+        layerControl = L.control.layers(null, overlays, {
+          collapsed: false,
+          position: 'bottomleft',
+        }).addTo(map);
 
         // Keep a "rails layer" handle for backward compat (the file picker
         // tear-down above clears all sublayers; this just lets us know
         // something is loaded).
-        railsLayer = groups['Rails'].getLayers().length ? groups['Rails'] : null;
+        railsLayer = groups['Rail'].getLayers().length ? groups['Rail'] : null;
 
         try { if (allBounds.isValid()) map.fitBounds(allBounds, { padding: [20, 20] }); } catch (_) {}
         setStats();
@@ -458,7 +666,10 @@
       for (const s of importedServices) {
         overlays[`<span style="border-bottom:3px solid ${s.layer.serviceColor}">${s.name}</span>`] = s.layer;
       }
-      layerControl = L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+      layerControl = L.control.layers(null, overlays, {
+        collapsed: false,
+        position: 'bottomleft',
+      }).addTo(map);
     }
 
     document.getElementById('serviceFile').addEventListener('change', async (e) => {
@@ -494,6 +705,108 @@
       rebuildLayerControl();
       setStats();
     });
+
+    // ---------- Live player tracker ----------
+    // Polls /api/playerinfo (server.py forwards to TSW CommAPI). Shows the
+    // player's lat/lng as a circle marker. The button toggles polling on/off.
+    // Requires the page to be served from server.py (or any same-origin
+    // proxy) — opening index.html via file:// will not work because the
+    // browser blocks direct calls to localhost:31270 from a file origin.
+    const trackBtn      = document.getElementById('trackBtn');
+    const trackStatus   = document.getElementById('trackStatus');
+    let playerMarker    = null;        // L.CircleMarker for current pos
+    let playerHeadingMk = null;        // L.Polyline showing heading
+    let playerTrail     = null;        // L.Polyline of recent positions
+    const trailCoords   = [];          // list of [lat,lng]
+    const TRAIL_MAX     = 600;         // keep last 60s at 10 Hz
+    let pollHandle      = null;
+    let lastPoll        = 0;
+    let followPlayer    = true;        // map auto-pans to the marker
+    const POLL_MS       = 250;         // 4 Hz — fast enough for visible motion
+                                       // without hammering the API
+
+    function updatePlayerMarker(latlng, headingDegOrNull) {
+      if (!playerMarker) {
+        playerMarker = L.circleMarker(latlng, {
+          radius: 7,
+          color: '#ffffff',
+          weight: 2,
+          fillColor: '#e60023',
+          fillOpacity: 1,
+        }).addTo(map);
+        playerTrail = L.polyline([], { color: '#e60023', weight: 2, opacity: 0.6 }).addTo(map);
+      }
+      playerMarker.setLatLng(latlng);
+      // heading line
+      if (headingDegOrNull != null) {
+        const rad = headingDegOrNull * Math.PI / 180;
+        const lenM = 25;            // 25 m heading indicator
+        const dlat = (lenM * Math.cos(rad)) / 111_000;
+        const dlng = (lenM * Math.sin(rad)) / (111_000 * Math.cos(latlng.lat * Math.PI/180));
+        const tip = L.latLng(latlng.lat + dlat, latlng.lng + dlng);
+        if (!playerHeadingMk) {
+          playerHeadingMk = L.polyline([latlng, tip], { color: '#e60023', weight: 3 }).addTo(map);
+        } else {
+          playerHeadingMk.setLatLngs([latlng, tip]);
+        }
+      }
+      trailCoords.push([latlng.lat, latlng.lng]);
+      while (trailCoords.length > TRAIL_MAX) trailCoords.shift();
+      playerTrail.setLatLngs(trailCoords);
+      if (followPlayer) {
+        // Recenter only if marker drifted near the edge of the current view
+        if (!map.getBounds().pad(-0.2).contains(latlng)) {
+          map.panTo(latlng, { animate: true, duration: 0.3 });
+        }
+      }
+    }
+
+    async function pollPlayerInfo() {
+      try {
+        const r = await fetch('/api/playerinfo', { cache: 'no-store' });
+        if (!r.ok) {
+          trackStatus.textContent = `tracker: HTTP ${r.status}`;
+          return;
+        }
+        const j = await r.json();
+        if (j.Result !== 'Success' || !j.Values) {
+          trackStatus.textContent = `tracker: ${j.error || 'no data'}`;
+          return;
+        }
+        const v = j.Values;
+        const loc = v.geoLocation;
+        if (!loc || typeof loc.latitude !== 'number') {
+          trackStatus.textContent = 'tracker: no geoLocation';
+          return;
+        }
+        const latlng = L.latLng(loc.latitude, loc.longitude);
+        updatePlayerMarker(latlng, null);
+        const tile = v.currentTile ? `tile (${v.currentTile.x},${v.currentTile.y})` : '';
+        trackStatus.textContent = `tracker: ${loc.latitude.toFixed(6)}, ${loc.longitude.toFixed(6)}  ${tile}`;
+      } catch (e) {
+        trackStatus.textContent = `tracker: ${e.message}`;
+      }
+    }
+
+    function startTracker() {
+      if (pollHandle) return;
+      pollPlayerInfo();
+      pollHandle = setInterval(pollPlayerInfo, POLL_MS);
+      trackBtn.textContent = '⏸ Stop tracker';
+    }
+    function stopTracker() {
+      if (pollHandle) { clearInterval(pollHandle); pollHandle = null; }
+      trackBtn.textContent = '▶ Track player';
+    }
+    trackBtn.addEventListener('click', () => {
+      if (pollHandle) stopTracker(); else startTracker();
+    });
+    // Holding the marker centred is helpful while learning the map; click
+    // anywhere else to disable auto-follow (panning manually re-enables it
+    // on the next poll if the marker leaves the viewport).
+    map.on('dragstart', () => { followPlayer = false; });
+    map.on('zoomstart', () => { followPlayer = false; });
+    map.on('dblclick',  () => { followPlayer = true; });
 
     setStats();
   </script>
