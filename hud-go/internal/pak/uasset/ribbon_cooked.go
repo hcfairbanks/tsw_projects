@@ -209,9 +209,18 @@ func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
 // and Y named scalars (Int, Float, or Double). Returns ok=true if both are
 // found. Used for WorldLocation (IntVector or FVector) and
 // CachedStartPosition (FarVector).
+//
+// Defensive: structs with unusual body sizes can lead the inner readTag to
+// run off the end. We catch the panic and return ok=false so the caller
+// falls through to its other-source priorities (CSP/StartPosition2D).
 func readTaggedXY(r *reader) (x, y float64, ok bool) {
+	defer func() {
+		if rec := recover(); rec != nil {
+			ok = false
+		}
+	}()
 	gotX, gotY := false, false
-	for r.remaining() > 8 && !(gotX && gotY) {
+	for r.remaining() >= 24 && !(gotX && gotY) {
 		t, more := r.readTag()
 		if !more {
 			break
