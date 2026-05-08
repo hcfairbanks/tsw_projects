@@ -374,7 +374,7 @@ func (h *RouteHandler) Update(w http.ResponseWriter, r *http.Request) {
 // automatically.
 //
 // route_coordinates / route_markers / route_locations / route_trains /
-// locations / station_name_mappings / sections / cab_stop_signs /
+// locations / station_name_mappings / sections / car_stop_signs /
 // track_markers all use `ON DELETE CASCADE` on route_id and are removed
 // when the route row itself is deleted at the end.
 //

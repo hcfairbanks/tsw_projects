@@ -989,9 +989,16 @@ function drawStationSelector(options, timetableItems, selectedIdx, playerPositio
         options.ctx.textAlign = 'left';
         options.ctx.textBaseline = 'middle';
 
-        var displayName = item.location || 'Unknown';
-        if (item.isPassThrough) {
-            displayName += ' [VIA]';
+        // Same render rule as desktop.html: null-location pass-through rows
+        // read as "VIA Location" instead of "Unknown [VIA]".
+        var displayName;
+        if (item.isPassThrough && !item.location) {
+            displayName = 'VIA Location';
+        } else {
+            displayName = item.location || 'Unknown';
+            if (item.isPassThrough) {
+                displayName += ' [VIA]';
+            }
         }
         if (displayName.length > 18) {
             displayName = displayName.substring(0, 17) + '...';
@@ -1062,9 +1069,13 @@ function drawTimetableBox(options, timetableTime, timetableLabel, distanceToStat
         var selectedStation = cachedTimetableItems[selectedStationIndex];
         displayArrival = selectedStation.arrival || '--:--:--';
         displayDeparture = selectedStation.departure || '--:--:--';
-        displayLabel = selectedStation.location || '';
-        if (selectedStation.isPassThrough) {
-            displayLabel += ' [VIA]';
+        if (selectedStation.isPassThrough && !selectedStation.location) {
+            displayLabel = 'VIA Location';
+        } else {
+            displayLabel = selectedStation.location || '';
+            if (selectedStation.isPassThrough) {
+                displayLabel += ' [VIA]';
+            }
         }
         displayIndex = selectedStationIndex + 1;
 

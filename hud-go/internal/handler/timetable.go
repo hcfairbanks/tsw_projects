@@ -23,6 +23,15 @@ import (
 	"hud-go/internal/util"
 )
 
+// importError is the per-file error record returned in the bulk-import
+// response body. Lifted to package scope (was a function-local type inside
+// ImportZip) so cross-pak merge helpers can append to the same `errs`
+// slice without redeclaring the shape.
+type importError struct {
+	File  string `json:"file"`
+	Error string `json:"error"`
+}
+
 type TimetableHandler struct {
 	db *sql.DB
 }
@@ -1895,11 +1904,6 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	type importError struct {
-		File  string `json:"file"`
-		Error string `json:"error"`
-	}
-
 	var (
 		routeName      string
 		routeCreated   bool
@@ -2162,11 +2166,11 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		}
 
 		// Replace route_markers from platform / signal / switch Point features,
-		// AND write the new pak-derived cab_stop_signs + track_markers tables
+		// AND write the new pak-derived car_stop_signs + track_markers tables
 		// from features tagged with `feature_kind`.
 		if feats, ok := rf["features"].([]any); ok && routeID != nil {
 			h.db.Exec("DELETE FROM route_markers WHERE route_id = ?", *routeID)
-			h.db.Exec("DELETE FROM cab_stop_signs WHERE route_id = ?", *routeID)
+			h.db.Exec("DELETE FROM car_stop_signs WHERE route_id = ?", *routeID)
 			h.db.Exec("DELETE FROM track_markers WHERE route_id = ?", *routeID)
 			for _, raw := range feats {
 				feat, ok := raw.(map[string]any)
@@ -2196,14 +2200,14 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 				// player-recorded route_markers table.
 				kind, _ := props["feature_kind"].(string)
 				switch kind {
-				case "cab_stop_sign":
+				case "car_stop_sign":
 					ribbonGUID, _ := props["ribbon_guid"].(string)
 					location, _ := props["location"].(float64)
 					maxRail := 0
 					if v, ok := props["max_rail_vehicles"].(float64); ok {
 						maxRail = int(v)
 					}
-					h.db.Exec(`INSERT INTO cab_stop_signs
+					h.db.Exec(`INSERT INTO car_stop_signs
 						(route_id, ribbon_guid, location, max_rail_vehicles, latitude, longitude)
 						VALUES (?, ?, ?, ?, ?, ?)`,
 						*routeID, ribbonGUID, location, maxRail, lat, lng)
@@ -2237,17 +2241,17 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 					*routeID, stationName, mtype, lat, lng)
 			}
 
-			// Denormalise platform_name onto each cab_stop_sign by joining
+			// Denormalise platform_name onto each car_stop_sign by joining
 			// to track_markers on shared ribbon_guid (where marker_type is
 			// "Platform" — that's the marker kind tied to a stoppable
 			// platform). This is what makes the runtime lookup
 			// (route_id + platform_name + max_rail_vehicles) hit a single
 			// index.
-			h.db.Exec(`UPDATE cab_stop_signs
+			h.db.Exec(`UPDATE car_stop_signs
 				SET platform_name = (
 					SELECT name FROM track_markers
-					WHERE track_markers.route_id = cab_stop_signs.route_id
-					  AND track_markers.ribbon_guid = cab_stop_signs.ribbon_guid
+					WHERE track_markers.route_id = car_stop_signs.route_id
+					  AND track_markers.ribbon_guid = car_stop_signs.ribbon_guid
 					  AND track_markers.marker_type = 'Platform'
 					LIMIT 1
 				)
@@ -2310,11 +2314,39 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			}
 		}
 
-		// Skip duplicates by service_name; the unique index spans
-		// (service_name, route_id) so the same name in a different route is
-		// allowed.
+		// Duplicate by service_name? Don't blindly skip — when a service is
+		// split across multiple .pak files (e.g. Boston Sprinter ships its
+		// main timetable in BostonProvidence.pak and the HSP-46 variant in
+		// BostonProvidenceGameplayPack.pak), each pak imports separately and
+		// the second one's section + train linkages would be lost. Merge
+		// them into the existing row, then continue without re-inserting.
+		//
+		// Match rule: same service_name AND existing.route_id is either the
+		// resolved route OR NULL. The NULL leg matters: a previous pass that
+		// failed to resolve a route inserted an orphan (route_id NULL); the
+		// current pass needs to find and UPGRADE that orphan rather than
+		// insert a parallel canonical row beside it (cause of the GWE dupe
+		// epidemic — 5,535 orphan/canonical pairs all on Great Western
+		// Express). Canonical rows are preferred over orphans when both
+		// exist, so the orphan stays for cleanup-by-delete tooling.
 		var existingID int
-		if h.db.QueryRow("SELECT id FROM timetables WHERE service_name = ? AND (route_id IS ? OR route_id = ?)", serviceName, entryRouteID, entryRouteID).Scan(&existingID) == nil {
+		var existingRouteID *int
+		err = h.db.QueryRow(`
+			SELECT id, route_id FROM timetables
+			WHERE service_name = ?
+			  AND (route_id = ? OR route_id IS NULL)
+			ORDER BY (route_id IS NULL) ASC
+			LIMIT 1
+		`, serviceName, entryRouteID).Scan(&existingID, &existingRouteID)
+		if err == nil {
+			// If we matched an orphan and we DO have a route_id this pass,
+			// upgrade the orphan's route_id (and section_id when known) so
+			// it stops being an orphan. Skip when entryRouteID is also nil
+			// (orphan-merge-into-orphan: nothing to upgrade).
+			if existingRouteID == nil && entryRouteID != nil {
+				h.db.Exec("UPDATE timetables SET route_id = ? WHERE id = ? AND route_id IS NULL", *entryRouteID, existingID)
+			}
+			h.mergeServiceLinkagesIntoExisting(existingID, entryRouteID, entry, &errs, f.Name, trainIDByName, seenTrains, &trainsCreated)
 			ttSkipped++
 			continue
 		}
@@ -2404,6 +2436,38 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			// of the same train across services don't duplicate.
 			if entryRouteID != nil {
 				h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, *trainID)
+			}
+		}
+		// additional_formations: extra trains contributed by sibling
+		// timetable binaries that declared this same service. Each entry
+		// has its own formation_name + trains[] consist data so we can
+		// resolve each independently and link them all to the single
+		// timetable row via timetable_trains.
+		if extras, ok := entry["additional_formations"].([]any); ok {
+			for _, e := range extras {
+				em, ok := e.(map[string]any)
+				if !ok {
+					continue
+				}
+				extraFormation, _ := em["formation_name"].(string)
+				extraFormation = strings.TrimSpace(extraFormation)
+				if extraFormation == "" {
+					continue
+				}
+				eid, created, err := h.resolveTrainFromService(extraFormation, em)
+				if err != nil {
+					errs = append(errs, importError{File: f.Name, Error: "resolve additional train (" + extraFormation + "): " + err.Error()})
+					continue
+				}
+				trainIDByName[extraFormation] = eid
+				if created && !seenTrains[extraFormation] {
+					seenTrains[extraFormation] = true
+					trainsCreated = append(trainsCreated, extraFormation)
+				}
+				h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", ttID, eid)
+				if entryRouteID != nil {
+					h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, eid)
+				}
 			}
 		}
 		for _, sid := range sectionIDs {
@@ -2499,11 +2563,11 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			}
 		}
 
-		// Pre-resolve cab_stop_sign_id for every entry in this timetable so
+		// Pre-resolve car_stop_sign_id for every entry in this timetable so
 		// the HUD can do a single PK lookup at runtime rather than recomputing
 		// the (platform, car-count, direction) match on every position update.
 		if entryRouteID != nil && trainID != nil {
-			h.resolveCabStopSignsForTimetable(ttID, *entryRouteID, *trainID, bound)
+			h.resolveCarStopSignsForTimetable(ttID, *entryRouteID, *trainID, bound)
 		}
 		if entryRouteID != nil {
 			h.resolveTrackMarkersForTimetable(ttID, *entryRouteID)
@@ -2538,6 +2602,88 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		"timetablesSkipped":  ttSkipped,
 		"errors":             errs,
 	})
+}
+
+// mergeServiceLinkagesIntoExisting absorbs section + train info from a
+// per-service JSON into an already-imported timetable row, then drops the
+// rest of the entry. Used for cross-pak duplicates: when a service is
+// declared in two .pak files (e.g. Boston Sprinter's main pak +
+// BostonProvidenceGameplayPack with the HSP-46 timetable), the second
+// import would otherwise be dropped wholesale by the (service_name,
+// route_id) dedup, taking its sections + formations down with it.
+//
+// Other fields (schedule, coords, contributor, etc.) follow first-wins —
+// we trust the canonical pak's data and don't try to reconcile differences.
+//
+// Errors are appended to `errs` (caller's slice, mutated through the
+// pointer) so a single bad linkage doesn't abort the whole import.
+func (h *TimetableHandler) mergeServiceLinkagesIntoExisting(
+	existingID int,
+	entryRouteID *int,
+	entry map[string]any,
+	errs *[]importError,
+	fileName string,
+	trainIDByName map[string]int,
+	seenTrains map[string]bool,
+	trainsCreated *[]string,
+) {
+	// Sections — link any from the JSON's sectionNames[] that aren't
+	// already linked. INSERT OR IGNORE makes the loop idempotent across
+	// re-imports.
+	if entryRouteID != nil {
+		if sectionNames, ok := entry["sectionNames"].([]any); ok {
+			for _, sn := range sectionNames {
+				name, ok := sn.(string)
+				if !ok || strings.TrimSpace(name) == "" {
+					continue
+				}
+				sid, err := h.findOrCreateSection(*entryRouteID, name)
+				if err != nil {
+					*errs = append(*errs, importError{File: fileName, Error: "merge section (" + name + "): " + err.Error()})
+					continue
+				}
+				h.db.Exec("INSERT OR IGNORE INTO timetable_sections (timetable_id, section_id) VALUES (?, ?)", existingID, sid)
+			}
+		}
+	}
+
+	// Trains — resolve the canonical formation (entry["formation_name"])
+	// AND every additional_formations[].formation_name, link each via
+	// timetable_trains + route_trains. Same resolver the main path uses.
+	resolveAndLink := func(formation string, payload map[string]any) {
+		formation = strings.TrimSpace(formation)
+		if formation == "" {
+			return
+		}
+		tid, created, err := h.resolveTrainFromService(formation, payload)
+		if err != nil {
+			*errs = append(*errs, importError{File: fileName, Error: "merge train (" + formation + "): " + err.Error()})
+			return
+		}
+		trainIDByName[formation] = tid
+		if created && !seenTrains[formation] {
+			seenTrains[formation] = true
+			*trainsCreated = append(*trainsCreated, formation)
+		}
+		h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", existingID, tid)
+		if entryRouteID != nil {
+			h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, tid)
+		}
+	}
+
+	formationName, _ := entry["formation_name"].(string)
+	resolveAndLink(formationName, entry)
+
+	if extras, ok := entry["additional_formations"].([]any); ok {
+		for _, e := range extras {
+			em, ok := e.(map[string]any)
+			if !ok {
+				continue
+			}
+			extraFormation, _ := em["formation_name"].(string)
+			resolveAndLink(extraFormation, em)
+		}
+	}
 }
 
 // resolveTrainFromService finds-or-creates a trains row from a per-service
@@ -2790,8 +2936,8 @@ func classifyMarker(props map[string]any) (string, string) {
 	return "", ""
 }
 
-// resolveCabStopSignsForTimetable populates timetable_entries.cab_stop_sign_id
-// for every row of the given timetable by joining to cab_stop_signs on
+// resolveCarStopSignsForTimetable populates timetable_entries.car_stop_sign_id
+// for every row of the given timetable by joining to car_stop_signs on
 // (route_id, platform_name, max_rail_vehicles) and disambiguating by direction
 // using the timetable's bound field.
 //
@@ -2815,11 +2961,11 @@ func classifyMarker(props map[string]any) (string, string) {
 // Trains with car_count NULL fall through to max_rail_vehicles=0 ("any").
 //
 // Idempotent: re-running the same timetable rewrites the same FKs.
-func (h *TimetableHandler) resolveCabStopSignsForTimetable(timetableID, routeID, trainID int, bound string) {
+func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID, trainID int, bound string) {
 	bound = strings.ToLower(strings.TrimSpace(bound))
 
 	// Pull the train's car count. NULL → 0 (which matches the "any" sentinel
-	// in cab_stop_signs.max_rail_vehicles).
+	// in car_stop_signs.max_rail_vehicles).
 	var carCount sql.NullInt64
 	h.db.QueryRow("SELECT car_count FROM trains WHERE id = ?", trainID).Scan(&carCount)
 	cars := 0
@@ -2831,8 +2977,8 @@ func (h *TimetableHandler) resolveCabStopSignsForTimetable(timetableID, routeID,
 	// per-bound extreme; LIMIT 1 collapses to a single FK.
 	_, err := h.db.Exec(`
 		UPDATE timetable_entries
-		SET cab_stop_sign_id = (
-			SELECT css.id FROM cab_stop_signs css
+		SET car_stop_sign_id = (
+			SELECT css.id FROM car_stop_signs css
 			JOIN locations l ON l.id = timetable_entries.location_id
 			WHERE css.route_id = ?
 			  AND css.platform_name = TRIM(l.name || ' ' ||
@@ -2855,7 +3001,7 @@ func (h *TimetableHandler) resolveCabStopSignsForTimetable(timetableID, routeID,
 		  AND timetable_entries.location_id IS NOT NULL
 	`, routeID, cars, bound, timetableID)
 	if err != nil {
-		log.Printf("[cab-stop-sign-resolve] tt=%d: %v", timetableID, err)
+		log.Printf("[car-stop-sign-resolve] tt=%d: %v", timetableID, err)
 	}
 }
 
@@ -2863,19 +3009,19 @@ func (h *TimetableHandler) resolveCabStopSignsForTimetable(timetableID, routeID,
 // for every row of the given timetable by joining to track_markers on
 // (route_id, name) where the row's reconstructed name matches.
 //
-// Reconstructed name uses the same composition rule as the cab_stop_sign
+// Reconstructed name uses the same composition rule as the car_stop_sign
 // resolver:
 //
 //	locations.name + ' ' + structure + ' ' + structure_number
 //
 // matching the extractor's TrackMarker.name field directly. Examples:
 //
-//	"Lake Platform 1"                  (also covered by cab_stop_signs)
+//	"Lake Platform 1"                  (also covered by car_stop_signs)
 //	"Smallbrook Junction Line 1"       (Go Via routing marker — only here)
 //	"Sandown Siding 2"                 (depot/yard marker)
 //
-// A platform row will resolve to BOTH cab_stop_sign_id AND track_marker_id;
-// downstream code prefers cab_stop_sign coords when both exist (the green
+// A platform row will resolve to BOTH car_stop_sign_id AND track_marker_id;
+// downstream code prefers car_stop_sign coords when both exist (the green
 // ring is the higher-precision target for stopping). A non-platform row
 // (Line / Siding / Track) only resolves to track_marker_id and is what
 // drives the in-game "Go Via X" instruction position.

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -474,6 +475,13 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 	// Get entries and build timetable array
 	timetableArray := buildTimetableArrayFromEntries(h.db, timetableID)
 
+	// Trim path coords to start at the first scheduled stop and end at the
+	// last. GO VIA LOCATION entries are routing-only — the polyline shouldn't
+	// extend past actual stops at either end. Done server-side so every
+	// consumer (/map, /desktop, /tablet, the upload-route round-trip) is
+	// consistent without each having to repeat the logic.
+	filteredCoords = trimCoordsToStops(filteredCoords, timetableArray)
+
 	util.JSON(w, http.StatusOK, map[string]any{
 		"routeName":   serviceName,
 		"routeId":     routeID,
@@ -485,11 +493,81 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 	})
 }
 
+// trimCoordsToStops slices `coords` so the polyline starts at the first
+// scheduled stop and ends at the last. Stops are entries with action
+// `STOP AT LOCATION` or `WAIT FOR SERVICE`; `GO VIA LOCATION` entries don't
+// bound the polyline. The trimmed endpoints are replaced with the stop
+// markers' actual lat/lngs so the line visibly reaches the marker (the
+// rail-builder polyline can land 1-20 m off from the in-game marker).
+// No-op when there are no stops, fewer than two coords, or trimming would
+// leave fewer than two coords (single-coord paths don't render).
+func trimCoordsToStops(coords []any, entries []map[string]any) []any {
+	if len(coords) < 2 || len(entries) == 0 {
+		return coords
+	}
+	type stopRef struct{ lat, lng float64 }
+	var stops []stopRef
+	for _, e := range entries {
+		action, _ := e["action"].(string)
+		if action != "STOP AT LOCATION" && action != "WAIT FOR SERVICE" {
+			continue
+		}
+		lat, latOK := e["latitude"].(float64)
+		lng, lngOK := e["longitude"].(float64)
+		if !latOK || !lngOK || (lat == 0 && lng == 0) {
+			continue
+		}
+		stops = append(stops, stopRef{lat, lng})
+	}
+	if len(stops) == 0 {
+		return coords
+	}
+	nearestIdx := func(la, ln float64) int {
+		best, bestD := 0, math.Inf(1)
+		for i, c := range coords {
+			cm, ok := c.(map[string]any)
+			if !ok {
+				continue
+			}
+			clat, _ := cm["latitude"].(float64)
+			clng, _ := cm["longitude"].(float64)
+			dLat := (clat - la) * math.Pi / 180
+			dLng := (clng - ln) * math.Pi / 180
+			m := (la + clat) * 0.5 * math.Pi / 180
+			x := dLng * math.Cos(m)
+			d := dLat*dLat + x*x
+			if d < bestD {
+				bestD = d
+				best = i
+			}
+		}
+		return best
+	}
+	first, last := stops[0], stops[len(stops)-1]
+	s := nearestIdx(first.lat, first.lng)
+	e := nearestIdx(last.lat, last.lng)
+	lo, hi := s, e
+	if lo > hi {
+		lo, hi = hi, lo
+	}
+	if hi-lo+1 < 2 {
+		return coords
+	}
+	sliced := make([]any, hi-lo+1)
+	copy(sliced, coords[lo:hi+1])
+	// Anchor the endpoints at the actual stop markers so the polyline
+	// visibly reaches them (instead of ending at the nearest existing path
+	// vertex, which can be a few metres off in either direction).
+	sliced[0] = map[string]any{"latitude": first.lat, "longitude": first.lng}
+	sliced[len(sliced)-1] = map[string]any{"latitude": last.lat, "longitude": last.lng}
+	return sliced
+}
+
 // buildTimetableArrayFromEntries builds a timetable array from DB entries.
 //
 // Coordinate resolution priority (best-precision first):
 //
-//  1. cab_stop_signs (the in-game green stop ring; ~3 m of the visible
+//  1. car_stop_signs (the in-game green stop ring; ~3 m of the visible
 //     marker; only set on Platform rows).
 //  2. track_markers (the in-game "Go Via X" routing marker; ~6 m of the
 //     visible marker; the only source for non-Platform rows like
@@ -499,21 +577,21 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 //     depot/scenario services and any unmapped stop still display
 //     something).
 //
-// `coord_source` on each output row records which tier won: "cab_stop_sign",
+// `coord_source` on each output row records which tier won: "car_stop_sign",
 // "track_marker", or "timetable_entry". Field is omitted when no coords
 // exist at all.
 func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]any {
 	rows, err := db.Query(`
-		SELECT te.id, te.sort_order, te.structure_number, te.time1, te.time2,
+		SELECT te.id, te.sort_order, te.structure, te.structure_number, te.time1, te.time2,
 		       te.latitude, te.longitude, te.api_name,
-		       css.latitude AS cab_lat, css.longitude AS cab_lng,
+		       css.latitude AS car_lat, css.longitude AS car_lng,
 		       tm.latitude  AS tm_lat,  tm.longitude  AS tm_lng,
 		       COALESCE(l.name, '') AS location,
 		       COALESCE(ta.name, '') AS action
 		FROM timetable_entries te
 		LEFT JOIN locations l ON te.location_id = l.id
 		LEFT JOIN timetable_actions ta ON te.action_id = ta.id
-		LEFT JOIN cab_stop_signs css ON css.id = te.cab_stop_sign_id
+		LEFT JOIN car_stop_signs css ON css.id = te.car_stop_sign_id
 		LEFT JOIN track_markers   tm  ON tm.id  = te.track_marker_id
 		WHERE te.timetable_id = ?
 		ORDER BY te.sort_order
@@ -526,14 +604,18 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	type entryRow struct {
 		ID              int
 		SortOrder       *int
+		Structure       *string  // structure word ("Track", "Platform"); needed by /map
+		                         // to compose the platform name "Loc Struct Num"
+		                         // when matching schedule entries against feature
+		                         // names like "Boston South Station Track 08"
 		StructureNumber *string
 		Time1           *string
 		Time2           *string
 		Latitude        *string  // timetable_entries.latitude (TEXT, legacy fallback)
 		Longitude       *string  // timetable_entries.longitude (TEXT, legacy fallback)
 		ApiName         *string
-		CabLat          *float64 // cab_stop_signs.latitude (REAL, top priority)
-		CabLng          *float64 // cab_stop_signs.longitude (REAL, top priority)
+		CarLat          *float64 // car_stop_signs.latitude (REAL, top priority)
+		CarLng          *float64 // car_stop_signs.longitude (REAL, top priority)
 		TmLat           *float64 // track_markers.latitude   (REAL, second priority)
 		TmLng           *float64 // track_markers.longitude  (REAL, second priority)
 		Location        string
@@ -544,9 +626,9 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	for rows.Next() {
 		var e entryRow
 		if err := rows.Scan(
-			&e.ID, &e.SortOrder, &e.StructureNumber, &e.Time1, &e.Time2,
+			&e.ID, &e.SortOrder, &e.Structure, &e.StructureNumber, &e.Time1, &e.Time2,
 			&e.Latitude, &e.Longitude, &e.ApiName,
-			&e.CabLat, &e.CabLng,
+			&e.CarLat, &e.CarLng,
 			&e.TmLat, &e.TmLng,
 			&e.Location, &e.Action,
 		); err != nil {
@@ -559,8 +641,35 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 	entryIndex := 0
 
 	for i, entry := range entries {
-		// Only include entries with a location
-		if strings.TrimSpace(entry.Location) == "" {
+		// Resolve a usable coord up-front (lat/lng either from
+		// car_stop_signs, track_markers, or the legacy entry text). We need
+		// it now so that GO VIA LOCATION rows without a `location_id` can
+		// still display when they have a coord — they're routing waypoints
+		// the player should be able to navigate to in the HUD.
+		var resolvedLat, resolvedLng *float64
+		var coordSource string
+		switch {
+		case entry.CarLat != nil && entry.CarLng != nil:
+			resolvedLat, resolvedLng = entry.CarLat, entry.CarLng
+			coordSource = "car_stop_sign"
+		case entry.TmLat != nil && entry.TmLng != nil:
+			resolvedLat, resolvedLng = entry.TmLat, entry.TmLng
+			coordSource = "track_marker"
+		case entry.Latitude != nil && entry.Longitude != nil &&
+			*entry.Latitude != "" && *entry.Longitude != "":
+			lat, errLat := strconv.ParseFloat(*entry.Latitude, 64)
+			lng, errLng := strconv.ParseFloat(*entry.Longitude, 64)
+			if errLat == nil && errLng == nil {
+				resolvedLat, resolvedLng = &lat, &lng
+				coordSource = "timetable_entry"
+			}
+		}
+		hasCoord := resolvedLat != nil && resolvedLng != nil
+		// Skip only when the row has nothing the HUD/map can show — neither
+		// a location label nor a coord. Previously this filtered on location
+		// alone, which dropped GO VIA LOCATION routing waypoints whose
+		// `location_id` is null but whose track_marker resolved a coord.
+		if strings.TrimSpace(entry.Location) == "" && !hasCoord {
 			continue
 		}
 
@@ -584,6 +693,10 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 			}
 		}
 
+		structure := ""
+		if entry.Structure != nil {
+			structure = *entry.Structure
+		}
 		structureNumber := ""
 		if entry.StructureNumber != nil {
 			structureNumber = *entry.StructureNumber
@@ -594,36 +707,24 @@ func buildTimetableArrayFromEntries(db *sql.DB, timetableID int) []map[string]an
 		}
 
 		item := map[string]any{
-			"id":        entry.ID,
-			"index":     entryIndex,
-			"location":  entry.Location,
-			"arrival":   arrival,
-			"departure": departure,
+			"id":               entry.ID,
+			"index":            entryIndex,
+			"location":         entry.Location,
+			"action":           entry.Action,
+			"arrival":          arrival,
+			"departure":        departure,
+			"structure":        structure,
 			"structure_number": structureNumber,
-			"apiName":   apiName,
+			"apiName":          apiName,
 		}
 
-		// Coordinate resolution — prefer the highest-precision source the
-		// importer was able to resolve. See function-level comment for the
-		// full priority order and accuracy expectations.
-		switch {
-		case entry.CabLat != nil && entry.CabLng != nil:
-			item["latitude"] = *entry.CabLat
-			item["longitude"] = *entry.CabLng
-			item["coord_source"] = "cab_stop_sign"
-		case entry.TmLat != nil && entry.TmLng != nil:
-			item["latitude"] = *entry.TmLat
-			item["longitude"] = *entry.TmLng
-			item["coord_source"] = "track_marker"
-		case entry.Latitude != nil && entry.Longitude != nil &&
-			*entry.Latitude != "" && *entry.Longitude != "":
-			lat, errLat := strconv.ParseFloat(*entry.Latitude, 64)
-			lng, errLng := strconv.ParseFloat(*entry.Longitude, 64)
-			if errLat == nil && errLng == nil {
-				item["latitude"] = lat
-				item["longitude"] = lng
-				item["coord_source"] = "timetable_entry"
-			}
+		// Attach the coord we resolved at the top of the loop. See the
+		// function-level comment for the full priority order and accuracy
+		// expectations across the three sources.
+		if hasCoord {
+			item["latitude"] = *resolvedLat
+			item["longitude"] = *resolvedLng
+			item["coord_source"] = coordSource
 		}
 
 		// Include isPassThrough flag for GO VIA LOCATION entries

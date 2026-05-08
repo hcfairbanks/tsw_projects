@@ -113,6 +113,24 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 			continue
 		}
 
+		// Step 1b: Overlay any additional paks into the SAME extractDir.
+		// This is how child paks (gameplay packs / cargo add-ons) inherit
+		// the parent route's persistent map + tile umaps so origin lookup
+		// and ribbon scans actually find content. The child pak alone has
+		// only its timetable .uassets — no tiles, no RouteDefinition.
+		// Failures here are warnings, not fatal: even an incomplete overlay
+		// gives the per-service JSONs SOMETHING (e.g. timetables without
+		// path coords are still useful in the DB).
+		for _, overlay := range e.cfg.OverlayPakPaths {
+			if overlay == "" {
+				continue
+			}
+			e.logf("[%s] Overlaying pak: %s\n", route.Name, filepath.Base(overlay))
+			if err := e.runUnrealPak(overlay, extractDir); err != nil {
+				e.logf("[%s] WARNING: overlay unpack failed for %s: %v — continuing\n", route.Name, filepath.Base(overlay), err)
+			}
+		}
+
 		// Step 2: Find timetable uasset files in the extracted output
 		uassets, err := findTimetableAssets(extractDir)
 		if err != nil || len(uassets) == 0 {

@@ -7,18 +7,15 @@
 (function() {
     var navLinks = [
         { href: '/start', label: 'Start', i18n: 'nav.start' },
-        { href: '/huds', label: 'HUD', i18n: 'nav.hud', devOnly: true },
         { href: '/timetables', label: 'Timetables', i18n: 'nav.timetables' },
         { href: '/routes', label: 'Routes', i18n: 'nav.routes' },
         { href: '/weather', label: 'Weather', i18n: 'nav.weather' },
         { href: '/map', label: 'Tracking Map', i18n: 'nav.map' },
         { href: '/settings', label: 'Settings', i18n: 'nav.settings' },
-        { href: '/analysis', label: 'Analysis', i18n: 'nav.analysis', devOnly: true },
         { href: '/countries', label: 'Countries', i18n: 'nav.countries', devOnly: true },
-        { href: '/instructions', label: 'Instructions', i18n: 'nav.instructions', devOnly: true },
         { href: '/locations', label: 'Locations', i18n: 'nav.locations', devOnly: true },
         { href: '/trains', label: 'Trains', i18n: 'nav.trains', devOnly: true },
-        { href: '/extractor', label: 'Extractor', i18n: 'nav.extractor', devOnly: true }
+        { href: '/extractor', label: 'Extractor', i18n: 'nav.extractor' }
     ];
 
     // Language data for rendering flags (must match i18n.js SUPPORTED_LANGUAGES)

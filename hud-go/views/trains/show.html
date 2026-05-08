@@ -128,10 +128,6 @@
         </div>
     </div>
 
-    <div id="extractionContainer" class="edit-only" style="display:none;">
-        <!-- Extraction module will be rendered here -->
-    </div>
-
     <script src="/js/i18n.js"></script>
     <div class="card">
         <h2 data-i18n="nav.timetables">Timetables</h2>
@@ -645,48 +641,6 @@
         }
     </script>
     <script src="/js/timetable-actions.js"></script>
-    <script src="/js/extraction.js"></script>
-    <script>
-        // Initialize extraction module after train data is loaded
-        // We need to wait for the train data to be available for pre-filling
-        let extractionInitialized = false;
-
-        function initExtractionWhenReady() {
-            if (extractionInitialized) return;
-            if (!currentTrain) {
-                // Wait for train to load
-                setTimeout(initExtractionWhenReady, 100);
-                return;
-            }
-
-            extractionInitialized = true;
-
-            // Get route info if available
-            let prefilledRouteId = fromRouteId || null;
-            let prefilledRouteName = null;
-            if (prefilledRouteId && allRoutes.length > 0) {
-                const route = allRoutes.find(function(r) { return r.id == prefilledRouteId; });
-                if (route) {
-                    prefilledRouteName = route.name;
-                }
-            }
-
-            // Initialize the extraction module
-            ExtractionModule.init({
-                containerId: 'extractionContainer',
-                prefilledRouteId: prefilledRouteId,
-                prefilledRouteName: prefilledRouteName,
-                prefilledTrainId: currentTrain.id,
-                prefilledTrainName: currentTrain.name,
-                onTimetableCreated: function(result) {
-                    console.log('Timetable created:', result);
-                }
-            });
-        }
-
-        // Start checking for train data
-        setTimeout(initExtractionWhenReady, 100);
-    </script>
     <script src="/js/navbar.js"></script>
 </body>
 </html>

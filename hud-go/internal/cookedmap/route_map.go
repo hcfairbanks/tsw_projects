@@ -16,7 +16,14 @@ import (
 // Requires tt.ExtractDir to be set (extractor.Config.KeepWorkDir = true).
 // Returns a descriptive error otherwise rather than silently producing an
 // empty FeatureCollection.
-func WriteRouteMap(w io.Writer, tt *uasset.Timetable, _ []*uasset.Timetable, _ output.RailsGeoJSONOptions) error {
+//
+// SIDE EFFECT — populates `RibbonVertices` on `tt` AND every entry in
+// `allTTs` after the rails finish sampling. The per-service path-builder
+// reads this map to slice each ribbon's polyline directly from the rails-
+// builder's output, guaranteeing the timetable path overlaps the rendered
+// rail line bit-identically. The mutation is safe because `package_writer`
+// runs the rails phase BEFORE per-service writes for exactly this reason.
+func WriteRouteMap(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable, _ output.RailsGeoJSONOptions) error {
 	if tt == nil {
 		return fmt.Errorf("cookedmap: nil timetable")
 	}
@@ -29,7 +36,7 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, _ []*uasset.Timetable, _ o
 		displayName = output.RouteDisplayName(tt.Route)
 	}
 
-	_, err := Build(Options{
+	stats, err := Build(Options{
 		Workdir:               tt.ExtractDir,
 		RouteName:             tt.Route,
 		OriginLat:             tt.OriginLat,
@@ -39,5 +46,19 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, _ []*uasset.Timetable, _ o
 		CountryCode:           output.CountryISOFromCode(tt.CountryCode),
 		CrossPakReferenceName: tt.CrossPakReferenceName,
 	}, w)
-	return err
+	if err != nil {
+		return err
+	}
+	// Propagate the per-ribbon vertex map to every timetable on this route
+	// so all service-path builds see it, regardless of which tt instance
+	// they happened to be parsed from.
+	if stats.RibbonVertices != nil {
+		tt.RibbonVertices = stats.RibbonVertices
+		for _, t := range allTTs {
+			if t != nil {
+				t.RibbonVertices = stats.RibbonVertices
+			}
+		}
+	}
+	return nil
 }

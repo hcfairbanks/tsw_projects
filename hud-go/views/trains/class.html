@@ -137,22 +137,29 @@
             }
         })();
 
-        if (fromRouteId) {
-            (async function() {
-                try {
-                    var r = await fetch('/api/routes/' + fromRouteId);
-                    if (r.ok) {
-                        var route = await r.json();
-                        var backToLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.backTo') : 'Back to';
-                        document.getElementById('backLink').innerHTML = '<a href="/routes/' + route.id + '">&larr; ' + backToLabel + ' ' + escapeHtml(route.name) + '</a>';
-                    }
-                } catch (e) { /* ignore */ }
-            })();
+        // Build the "← Back to <Route Name>" link AFTER i18n has loaded the
+        // locale, otherwise i18n.t('common.backTo') returns the literal key
+        // ("common.backTo") since the JSON hasn't been fetched yet — the
+        // user-visible bug we're fixing here.
+        function renderBackLink() {
+            if (!fromRouteId) return Promise.resolve();
+            return fetch('/api/routes/' + fromRouteId)
+                .then(function(r) { return r.ok ? r.json() : null; })
+                .then(function(route) {
+                    if (!route) return;
+                    var backToLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.backTo') : 'Back to';
+                    document.getElementById('backLink').innerHTML = '<a href="/routes/' + route.id + '">&larr; ' + backToLabel + ' ' + escapeHtml(route.name) + '</a>';
+                })
+                .catch(function() { /* ignore */ });
         }
 
         if (typeof i18n !== 'undefined' && i18n.init) {
-            i18n.init().then(loadClass);
+            i18n.init().then(function() {
+                renderBackLink();
+                loadClass();
+            });
         } else {
+            renderBackLink();
             loadClass();
         }
     </script>

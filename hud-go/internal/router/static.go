@@ -34,9 +34,7 @@ func registerStaticRoutes(r *chi.Mux) {
 
 	// Named page routes
 	r.Get("/", servePage("huds/start.html"))
-	r.Get("/instructions", servePage("index.html"))
 	r.Get("/extract", servePage("extract.html"))
-	r.Get("/huds", servePage("huds/index.html"))
 	r.Get("/experiment", servePage("huds/experiment.html"))
 	r.Get("/tablet", servePage("huds/tablet.html"))
 	r.Get("/mobile", servePage("huds/mobile.html"))
@@ -51,7 +49,6 @@ func registerStaticRoutes(r *chi.Mux) {
 	r.Get("/settings", servePage("settings.html"))
 	r.Get("/api-subscriptions", servePage("api-subscriptions.html"))
 	r.Get("/recording-settings", servePage("recording-settings.html"))
-	r.Get("/analysis", servePage("analysis/index.html"))
 	r.Get("/locations", servePage("locations/index.html"))
 	r.Get("/extractor", servePage("extractor/index.html"))
 
@@ -74,9 +71,12 @@ func registerStaticRoutes(r *chi.Mux) {
 	// bookmarks that still reference the old path.
 	r.Get("/timetables", servePage("timetables/index.html"))
 	r.Get("/timetables/create", servePage("timetables/create.html"))
-	r.Get("/timetables/{id}", servePage("timetables/view.html"))
-	r.Get("/timetables/{id}/edit", servePage("timetables/show.html"))
-	r.Get("/timetables/{id}/view", servePage("timetables/view.html"))
+	r.Get("/timetables/{id}", servePage("timetables/show.html"))
+	r.Get("/timetables/{id}/edit", servePage("timetables/edit.html"))
+	// Legacy alias — earlier the read-only page was view.html and was
+	// served at /timetables/{id}/view alongside /timetables/{id}. Both
+	// now point at show.html so old bookmarks keep working.
+	r.Get("/timetables/{id}/view", servePage("timetables/show.html"))
 
 	// Dynamic page routes - countries
 	r.Get("/countries", servePage("countries/index.html"))

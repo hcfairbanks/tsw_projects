@@ -177,6 +177,15 @@ type Timetable struct {
 	// covers Platform markers ("Lake Platform 1") plus junction routing markers
 	// ("Smallbrook Junction Line 1") used for the in-game "Go Via" displays.
 	RouteMarkers []*RouteMarker `json:"-"`
+	// RibbonVertices is the per-ribbon sampled polyline produced by the rails
+	// builder (cookedmap.buildRailsFeature). Keys are normalised ribbon GUIDs;
+	// values are [lng, lat] pairs in the same order and resolution the rails
+	// GeoJSON layer renders. The per-service path-builder slices from this
+	// map instead of arc-walking ribbon geometry independently — guarantees
+	// the timetable path lies bit-identically on the rendered rail line, with
+	// no risk of analytical drift on clothoid / curved sections.
+	// Empty when the rails builder hasn't been run yet (legacy code paths).
+	RibbonVertices map[string][][2]float64 `json:"-"`
 	// ExtractDir is the on-disk path where this timetable's pak was unpacked
 	// (typically `<workDir>/<route.Name>`). Stamped by the extractor when
 	// Config.KeepWorkDir is set so post-extract steps (e.g. cookedmap rail

@@ -71,6 +71,20 @@ type Config struct {
 	// catalog.LoadAllRVDs (which the catalog scan persisted once at
 	// scan time). Saves ~1–2 minutes per route extraction.
 	PreloadedRVDs map[string]*uasset.RVD
+
+	// OverlayPakPaths lists additional .pak files to unpack INTO THE SAME
+	// per-route work directory before the timetable / origin / ribbon
+	// scans run. Used for child paks (gameplay packs / DLC add-ons) that
+	// don't ship a persistent map or tile .umap files of their own — the
+	// parent pak's content has to be present in extractDir for
+	// findRouteOrigin and the ribbon-tile walker to find anything.
+	// Without this the child pak's per-service JSONs end up with no
+	// origin_lat / origin_lng and no path coordinates.
+	//
+	// Order matters only for collision handling (later wins on file
+	// overwrite) — the parent's persistent map should NOT collide with
+	// the child's timetable assets in practice.
+	OverlayPakPaths []string
 }
 
 // AutoDetect fills in tool paths if not provided.

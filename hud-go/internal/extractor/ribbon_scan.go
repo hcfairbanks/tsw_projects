@@ -100,7 +100,7 @@ func (e *Extractor) scanTileFeatures(extractRoot string) (map[string]*uasset.Rib
 				}
 			}
 		}
-		// Platforms / signals / switches / cab-stops / route-markers.
+		// Platforms / signals / switches / car-stops / route-markers.
 		if fts, err := uasset.ParseCookedFeaturesFromUmap(ua, tileName); err == nil && fts != nil {
 			platforms = append(platforms, fts.Platforms...)
 			signals = append(signals, fts.Signals...)

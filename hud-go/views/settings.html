@@ -788,21 +788,25 @@
         let defaultPaths = { tsw5: '', tsw6: '' };
         let serverUrls = { local: '', network: '' };
 
-        // ---------- Map Layers (HUD desktop + tablet) ----------
-        // Stored under huddev.hudMap.layers — same key the desktop and tablet
-        // HUDs read in service-map.js. Each entry is layerKey -> bool. Missing
-        // keys default to true (visible).
-        const HUD_LAYER_KEY = 'huddev.hudMap.layers';
+        // ---------- Map Layers (every map surface) ----------
+        // Stored under huddev.mapLayers — the single shared key every map
+        // page (timetable show / edit, route show, /map, /desktop, /tablet)
+        // reads. Each entry is layerKey -> bool. Missing keys default to
+        // true (visible).
+        const HUD_LAYER_KEY = 'huddev.mapLayers';
         const HUD_LAYER_DEFS = [
-            ['path',           'Path',           '<span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>'],
-            ['platform_track', 'Platform tracks','<span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>'],
-            ['siding_track',   'Siding tracks',  '<span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>'],
-            ['line_track',     'Line tracks',    '<span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>'],
-            ['running_track',  'Running tracks', '<span style="display:inline-block;width:28px;height:5px;background:#1f77b4;border-radius:2px"></span>'],
-            ['stops',          'Stops',          '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#00cc66;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
-            ['platforms',      'Platforms',      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
-            ['signals',        'Signals',        '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>'],
-            ['switches',       'Switches',       '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>'],
+            ['path',             'Rails',          '<span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>'],
+            ['platform_track',   'Platform tracks','<span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>'],
+            ['siding_track',     'Siding tracks',  '<span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>'],
+            ['line_track',       'Line tracks',    '<span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>'],
+            ['running_track',    'Running tracks', '<span style="display:inline-block;width:28px;height:5px;background:#1f77b4;border-radius:2px"></span>'],
+            ['stops',            'Stops',          '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#00cc66;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
+            ['platforms',        'Platforms',      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid var(--bg-secondary);box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
+            ['signals',          'Signals',        '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>'],
+            ['switches',         'Switches',       '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>'],
+            ['car_stop_signs',   'Car Stop Signs', '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#3f6fd9;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>'],
+            ['platform_markers', 'Platform markers','<span style="display:inline-block;width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);margin:2px"></span>'],
+            ['collectables',     'Collectables',   '<span style="display:inline-block;width:14px;height:14px;line-height:12px;text-align:center;font-size:10px;font-weight:700;font-family:system-ui,sans-serif;color:#000;background:#ffd700;border:1px solid #000;border-radius:3px;box-sizing:border-box;vertical-align:middle">C</span>'],
         ];
 
         function loadHudLayerPrefs() {

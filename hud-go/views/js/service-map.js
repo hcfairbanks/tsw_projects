@@ -4,8 +4,8 @@
 // switches), a layer toggle bar, and persisted on/off preferences.
 //
 // Pages that use this:
-//   - /timetables/{id} (show.html)        — embedded directly, predates this helper
-//   - /timetables/{id}/view (view.html)   — embedded directly, predates this helper
+//   - /timetables/{id}      (show.html)   — embedded directly, predates this helper
+//   - /timetables/{id}/edit (edit.html)   — embedded directly, predates this helper
 //   - /map (live tracking)                — uses ServiceMap.attach
 //   - /huds/desktop|tablet|mobile         — uses ServiceMap.attach
 //
@@ -33,7 +33,7 @@
 //                    rendered. Used by space-constrained HUDs that surface
 //                    the toggles on /settings instead.
 //   storageKey       (optional) localStorage key for layer prefs.
-//                    Default: 'huddev.serviceMap.layers'
+//                    Default: 'huddev.mapLayers'
 //   signalProxM      (optional) signal proximity threshold (m). Default 3.
 //   markerProxM      (optional) generic point proximity threshold (m).
 //                    Default 50.
@@ -41,10 +41,16 @@
 (function () {
     'use strict';
 
-    var DEFAULT_STORAGE_KEY = 'huddev.serviceMap.layers';
+    // Single shared key across every map surface (timetable show / edit,
+    // route show, /map, /desktop, /tablet). Toggling a layer on any one of
+    // them propagates the new visibility to all the others on the next
+    // load. Old per-surface keys (huddev.serviceMap.layers,
+    // huddev.trackingMap.layers, huddev.hudMap.layers) are now ignored.
+    var DEFAULT_STORAGE_KEY = 'huddev.mapLayers';
     var LAYER_KEYS = [
         'path', 'platform_track', 'siding_track', 'line_track',
-        'running_track', 'stops', 'platforms', 'signals', 'switches'
+        'running_track', 'stops', 'platforms', 'signals', 'switches',
+        'car_stop_signs', 'platform_markers', 'collectables'
     ];
 
     var TRACK_FEATURE_STYLE = {
@@ -59,6 +65,41 @@
         var d = document.createElement('div');
         d.textContent = String(s);
         return d.innerHTML;
+    }
+
+    // Display-time normalisation. Pak data ships zero-padded platform
+    // numbers ("08") which look weird next to platforms that skip the
+    // pad. Strip leading zeros only when the value is purely numeric —
+    // alphanumeric IDs like "01A" stay untouched.
+    function fmtStructureNumber(v) {
+        var s = String(v == null ? '' : v).trim();
+        return /^0+\d+$/.test(s) ? s.replace(/^0+/, '') : s;
+    }
+    // Same idea for composed names like "Boston South Station Track 08".
+    function fmtMarkerName(s) {
+        return String(s == null ? '' : s).replace(/\b0+(\d+)\b/g, '$1');
+    }
+    // Categorise a collectable's actor_class into a short user-facing
+    // label. Order matters where substrings overlap. Falls back to
+    // "Collectable" so the popup still says something meaningful.
+    function collectableLabel(actorClass) {
+        var c = String(actorClass || '');
+        if (c.indexOf('Robot') !== -1)            return 'Robot';
+        if (c.indexOf('Scarf') !== -1)            return 'Scarf';
+        if (c.indexOf('RouteMap') !== -1)         return 'Map';
+        if (c.indexOf('TtcMap') !== -1)           return 'Map';
+        if (c.indexOf('Defibrillator') !== -1)    return 'Defibrillator';
+        if (c.indexOf('FireExtinguisher') !== -1) return 'Fire Extinguisher';
+        if (c.indexOf('SnowShovel') !== -1)       return 'Snow Shovel';
+        if (c.indexOf('WhistlePost') !== -1)      return 'Whistle Post';
+        if (c.indexOf('SafetyHelmet') !== -1)     return 'Helmet';
+        if (c.indexOf('RailfanTripod') !== -1)    return 'Tripod';
+        if (c.indexOf('DispatchBaton') !== -1)    return 'Baton';
+        if (c.indexOf('SafetySign') !== -1)       return 'Sign';
+        if (c.indexOf('SignDANGER') !== -1)       return 'Danger Sign';
+        if (c.indexOf('Poster') !== -1)           return 'Poster';
+        if (c.indexOf('RedSocks') !== -1)         return 'Red Socks';
+        return 'Collectable';
     }
 
     function distMeters(lat1, lng1, lat2, lng2) {
@@ -116,7 +157,10 @@
             + '<div data-svc-layer-bar="1" style="margin-top:10px;padding:12px 14px;background:var(--bg-tertiary,#222);border-radius:6px;font-size:14px;">'
             + '  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">'
             + '    <strong style="font-size:14px;">Layers:</strong>'
-            + layerLabel('path',           'Path',           '<span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>')
+            // Single "Rails" toggle covers both the service path polyline
+            // (in timetable mode) AND the route-wide merged-rails layer
+            // (in route-only mode). Both go into the 'path' group.
+            + layerLabel('path',           'Rails',          '<span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>')
             + layerLabel('platform_track', 'Platform tracks','<span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>')
             + layerLabel('siding_track',   'Siding tracks',  '<span style="display:inline-block;width:28px;height:5px;background:#9467bd;border-radius:2px"></span>')
             + layerLabel('line_track',     'Line tracks',    '<span style="display:inline-block;width:28px;height:5px;background:#17becf;border-radius:2px"></span>')
@@ -125,6 +169,13 @@
             + layerLabel('platforms',      'Platforms',      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ff7f00;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>')
             + layerLabel('signals',        'Signals',        '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ffd700;border:2px solid #806800"></span>')
             + layerLabel('switches',       'Switches',       '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#cc8400;border:2px solid #663300"></span>')
+            + layerLabel('car_stop_signs', 'Car Stop Signs', '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#3f6fd9;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>')
+            + layerLabel('platform_markers','Platform markers','<span style="display:inline-block;width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);margin:2px"></span>')
+            // Inline-styled swatch so the icon renders correctly on every
+            // page that includes service-map.js, even those that don't
+            // ship the .collectable-icon CSS class (the HUD pages don't).
+            // Same yellow chip + black "C" used elsewhere.
+            + layerLabel('collectables',   'Collectables',   '<span style="display:inline-block;width:12px;height:12px;line-height:10px;text-align:center;font-size:9px;font-weight:700;font-family:system-ui,sans-serif;color:#000;background:#ffd700;border:1px solid #000;border-radius:3px;box-sizing:border-box;vertical-align:middle">C</span>')
             + '  </div>'
             + '</div>';
     }
@@ -156,8 +207,18 @@
         var pathLatLngs = Array.isArray(opts.pathLatLngs) ? opts.pathLatLngs : [];
         var entries = Array.isArray(opts.scheduleEntries) ? opts.scheduleEntries : [];
         var storageKey = opts.storageKey || DEFAULT_STORAGE_KEY;
+        // Default proximity thresholds match the per-page rules used on
+        // /timetables/{id} and /timetables/{id}/edit:
+        //   - Rail-bound items (signals, switches, car stop signs, platform
+        //     markers) sit ON the path, so 3 m point-to-segment is enough
+        //     to keep them while excluding parallel-track copies at stations
+        //     (typical track-to-track separation is ~4-5 m).
+        //   - Collectables sit on platforms / in stations, naturally further
+        //     from the rail. A 50 m threshold matches the pre-tightening
+        //     behaviour and keeps platform-side pickups visible.
         var signalProxM = typeof opts.signalProxM === 'number' ? opts.signalProxM : 3;
-        var markerProxM = typeof opts.markerProxM === 'number' ? opts.markerProxM : 50;
+        var markerProxM = typeof opts.markerProxM === 'number' ? opts.markerProxM : 3;
+        var collectableProxM = typeof opts.collectableProxM === 'number' ? opts.collectableProxM : 50;
 
         var hideBar = !!opts.hideBar;
         if (!hideBar) buildToggleBar(opts.barContainer);
@@ -192,11 +253,18 @@
         var usedStructuresFull = new Set();
         var usedStructuresLoose = new Set();
         // Defensive: coerce property values to string before .trim(). Some
-        // GeoJSON property keys (e.g. cab_stop_sign features' `location`)
+        // GeoJSON property keys (e.g. car_stop_sign features' `location`)
         // collide with this function's expected string fields but carry a
         // numeric scalar — without coercion, .trim() throws.
         function strProp(v) { return String(v == null ? '' : v).trim(); }
 
+        // usedNames carries the composite-name form of each schedule entry —
+        // matches features whose `name` / `platform_name` / `location` field
+        // ships the composed string (e.g. "Boston South Station Track 08")
+        // instead of the split tuple. Track markers and car stop signs use
+        // this shape; cookedmap track-feature LineStrings put the same
+        // composed string in their `location` property too.
+        var usedNames = new Set();
         entries.forEach(function (e) {
             var loc = strProp(e.location);
             var num = strProp(e.structure_number);
@@ -204,6 +272,7 @@
             var st = strProp(e.structure);
             usedStructuresFull.add(loc + '|' + st + '|' + num);
             usedStructuresLoose.add(loc + '|' + num);
+            usedNames.add([loc, st, num].filter(Boolean).join(' '));
         });
         function structureMatchesSchedule(p) {
             var loc = strProp(p.location);
@@ -253,17 +322,18 @@
                 var group = groups[p.feature_type];
                 if (!group) return;
                 if (p.feature_type === 'platform_track') {
-                    // Strict schedule-match when we have a schedule, else
-                    // proximity to path (best-effort), else show.
+                    // Prefer schedule match; fall back to proximity. Strict-
+                    // only filtering hid Platform Tracks on services whose
+                    // schedule entries lacked location/structure/number.
                     if (hasEntries) {
-                        if (!structureMatchesSchedule(p)) return;
+                        if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
                     } else if (hasPath) {
                         if (!lineNearPath(geom)) return;
                     }
                 } else {
                     var named = p.structure && p.structure_number;
                     if (hasEntries && named) {
-                        if (!structureMatchesSchedule(p)) return;
+                        if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
                     } else if (hasPath) {
                         if (!lineNearPath(geom)) return;
                     }
@@ -272,8 +342,8 @@
                     style: TRACK_FEATURE_STYLE[p.feature_type] || { color: '#0066ff', weight: 3, opacity: 0.8 }
                 });
                 var popupParts = [];
-                if (p.location) popupParts.push('<b>' + escapeHtml(p.location) + '</b>');
-                var sub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+                if (p.location) popupParts.push('<b>' + escapeHtml(fmtMarkerName(p.location)) + '</b>');
+                var sub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
                 if (sub) popupParts.push(escapeHtml(sub));
                 if (p.length_m != null) popupParts.push('Length: ' + p.length_m + ' m');
                 if (popupParts.length) {
@@ -282,19 +352,100 @@
                 group.addLayer(layer);
                 return;
             }
-            // Point features: platforms / signals / switches.
-            //
-            // Skip pak-derived feature kinds that have their own DB tables and
-            // are consumed elsewhere (cab_stop_signs feed the HUD's distance
-            // calc; track_markers drive Go-Via lookups). They share the
-            // FeatureCollection with the platform/signal/switch points but
-            // would crash this layer pipeline because their `location`
-            // property is a numeric scalar, not a station-name string.
+            // Merged rails: the route-level MultiLineString that covers the
+            // whole rail network. Has no feature_type (just `route` /
+            // `ribbon_count` / `geometry_mode`), so it falls through the
+            // typed-track branch above. Only render in route-only mode —
+            // when a timetable is loaded the user wants their service's
+            // path + schedule-matched track features, NOT the whole network
+            // underneath. Detected by the absence of both a service path
+            // and any schedule entries. Routed into the 'path' group so the
+            // single "Rails" toggle controls both this and the per-service
+            // path polyline.
+            if ((geom.type === 'LineString' || geom.type === 'MultiLineString') && !p.feature_type) {
+                if (hasPath || hasEntries) return;
+                var rl = L.geoJSON(feat, { style: { color: '#0066ff', weight: 2, opacity: 0.9 } });
+                groups.path.addLayer(rl);
+                return;
+            }
+            // Point features.
             if (geom.type !== 'Point') return;
-            if (p.feature_kind === 'cab_stop_sign' || p.feature_kind === 'track_marker') return;
             var c = geom.coordinates;
             if (!Array.isArray(c) || c.length < 2) return;
             var flng = c[0], flat = c[1];
+
+            // Pak-derived feature kinds have their own renderers. Branch on
+            // feature_kind FIRST so they don't fall into the legacy
+            // platform/signal/switch dispatch.
+            if (p.feature_kind === 'car_stop_sign') {
+                // Schedule-strict by platform_name when entries exist; else
+                // fall back to path proximity for the generic-map case.
+                if (hasEntries) {
+                    var csName = strProp(p.platform_name);
+                    if (!csName || !usedNames.has(csName)) return;
+                } else if (hasPath) {
+                    if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                }
+                var csm = L.circleMarker([flat, flng], {
+                    radius: 3, color: '#ffffff', weight: 1, fillColor: '#3f6fd9', fillOpacity: 1
+                });
+                var n = p.max_rail_vehicles;
+                if (Number.isFinite(n) && n > 0) {
+                    csm.bindTooltip(String(n), { permanent: true, direction: 'right', offset: [5, 0], className: 'carstop-label' });
+                }
+                var cLines = [];
+                if (Number.isFinite(n) && n > 0) cLines.push('<b>Car stop — ' + n + '-car</b>');
+                else cLines.push('<b>Car stop sign</b>');
+                if (p.platform_name) cLines.push(escapeHtml(strProp(p.platform_name)));
+                if (p.location != null) cLines.push('location: ' + (+p.location).toFixed(3));
+                csm.bindPopup(cLines.join('<br>'));
+                groups.car_stop_signs.addLayer(csm);
+                return;
+            }
+            if (p.feature_kind === 'track_marker') {
+                // Only Platform marker pins (matches the viewer whitelist).
+                if (p.marker_type !== 'Platform') return;
+                if (hasEntries) {
+                    var tmName = strProp(p.name);
+                    if (!tmName || !usedNames.has(tmName)) return;
+                } else if (hasPath) {
+                    if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                }
+                var iconHtml = '<div style="width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(255,255,255,0.6)"></div>';
+                var tm = L.marker([flat, flng], {
+                    icon: L.divIcon({ html: iconHtml, className: '', iconSize: [12, 12], iconAnchor: [6, 6] })
+                });
+                if (p.name) tm.bindTooltip(escapeHtml(fmtMarkerName(strProp(p.name))), { permanent: false, direction: 'right', offset: [8, 0] });
+                var tLines = [];
+                if (p.name) tLines.push('<b>' + escapeHtml(fmtMarkerName(strProp(p.name))) + '</b>');
+                if (p.marker_type) tLines.push('type: ' + escapeHtml(strProp(p.marker_type)));
+                if (p.line_side) tLines.push('side: ' + escapeHtml(strProp(p.line_side)));
+                if (tLines.length) tm.bindPopup(tLines.join('<br>'));
+                groups.platform_markers.addLayer(tm);
+                return;
+            }
+            if (p.feature_kind === 'collectable') {
+                // Collectables sit on platforms / in stations rather than
+                // ON the rail, so they need a wider proximity than the 3 m
+                // used for rail-bound items. Without this, a 3 m filter
+                // would prune almost every platform-side pickup. See
+                // collectableProxM (defaults to 50 m, matches the timetable
+                // pages' COLLECTABLE_PROX_M constant).
+                if (hasPath) {
+                    if (minDistanceToPathSegments(flat, flng, pathLatLngs) > collectableProxM) return;
+                }
+                var colMk = L.marker([flat, flng], {
+                    icon: L.divIcon({
+                        className: 'collectable-pin',
+                        html: '<span class="collectable-icon">C</span>',
+                        iconSize: [14, 14], iconAnchor: [7, 7]
+                    })
+                });
+                colMk.bindPopup('<b>Collectable: ' + escapeHtml(collectableLabel(p.actor_class)) + '</b>');
+                groups.collectables.addLayer(colMk);
+                return;
+            }
+
             var groupKey = 'platforms', fill = '#ff7f00', radius = 4;
             if (p.signal_id) { groupKey = 'signals'; fill = '#ffd700'; radius = 3; }
             else if (p.jct_guid != null) { groupKey = 'switches'; fill = '#cc8400'; }
@@ -317,15 +468,15 @@
             });
             var label = '';
             if (p.name) {
-                var ssub = [p.structure, p.structure_number].filter(Boolean).join(' ');
-                label = ssub ? p.name + ' — ' + ssub : p.name;
+                var ssub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
+                label = ssub ? fmtMarkerName(p.name) + ' — ' + ssub : fmtMarkerName(p.name);
             } else if (p.display_label) {
                 label = p.display_label;
             }
             if (label) m.bindTooltip(label, { permanent: false, direction: 'right', offset: [6, 0] });
             var lines = [];
-            if (p.name) lines.push('<b>' + escapeHtml(p.name) + '</b>');
-            var psub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+            if (p.name) lines.push('<b>' + escapeHtml(fmtMarkerName(p.name)) + '</b>');
+            var psub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
             if (psub) lines.push(escapeHtml(psub));
             if (p.signal_id) lines.push('Signal ID: <code>' + escapeHtml(p.signal_id) + '</code>');
             if (p.signal_type) lines.push('Type: ' + escapeHtml(p.signal_type));

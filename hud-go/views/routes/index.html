@@ -567,13 +567,13 @@
 
             const baseMsg = 'This will permanently delete the route AND all of its data: ' +
                             'timetables, schedule entries, coordinates, platform markers, ' +
-                            'cab-stop signs, and track markers. This cannot be undone.';
+                            'car-stop signs, and track markers. This cannot be undone.';
             const scopeMsg = ttCount === null
                 ? baseMsg
                 : (ttCount === 0
-                    ? 'This will delete the route and its associated coordinates, markers, and cab-stop signs. This cannot be undone.'
+                    ? 'This will delete the route and its associated coordinates, markers, and car-stop signs. This cannot be undone.'
                     : 'This will delete the route, ' + ttCount + ' timetable' + (ttCount === 1 ? '' : 's') +
-                      ', and all associated coordinates, markers, and cab-stop signs. This cannot be undone.');
+                      ', and all associated coordinates, markers, and car-stop signs. This cannot be undone.');
 
             if (!confirm(scopeMsg + '\n\nProceed?')) return;
 

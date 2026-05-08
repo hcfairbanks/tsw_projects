@@ -444,7 +444,22 @@ var migrations = []string{
 	`CREATE INDEX IF NOT EXISTS idx_timetables_playable ON timetables(playable)`,
 
 	// ---------------------------------------------------------------------
-	// 2026-04-26 cab stop signs (the in-game "Car Stop" / green ring) and
+	// 2026-05-06 rename legacy `cab_stop_*` SQL identifiers to `car_stop_*`
+	// to match the UE source name (CarStopSignProperty). On fresh DBs these
+	// ALTERs no-op (no such table/column) — the loop tolerates ALTER TABLE
+	// failures. On legacy DBs they rename the table + column so the new
+	// CREATE TABLE / CREATE INDEX statements below find them already in
+	// place. Old indexes are dropped explicitly so they don't linger after
+	// the table they pointed at was renamed.
+	// ---------------------------------------------------------------------
+	`ALTER TABLE cab_stop_signs RENAME TO car_stop_signs`,
+	`ALTER TABLE timetable_entries RENAME COLUMN cab_stop_sign_id TO car_stop_sign_id`,
+	`DROP INDEX IF EXISTS idx_cab_stop_signs_lookup`,
+	`DROP INDEX IF EXISTS idx_cab_stop_signs_ribbon`,
+	`DROP INDEX IF EXISTS idx_timetable_entries_cab_stop_sign`,
+
+	// ---------------------------------------------------------------------
+	// 2026-04-26 car stop signs (the in-game "Car Stop" / green ring) and
 	// pak track markers (TrackMarkerProperty: platform names + junction
 	// routing markers like "Smallbrook Junction Line 1").
 	//
@@ -453,11 +468,11 @@ var migrations = []string{
 	// derived markers can have multiple rows per (route, name) — one per
 	// ribbon they appear on (chained platform geometry).
 	//
-	// cab_stop_signs.platform_name is denormalised from track_markers at
+	// car_stop_signs.platform_name is denormalised from track_markers at
 	// import time (joined on ribbon_guid + marker_type='Platform') so the
 	// HUD-side lookup can hit a single index without a join.
 	// ---------------------------------------------------------------------
-	`CREATE TABLE IF NOT EXISTS cab_stop_signs (
+	`CREATE TABLE IF NOT EXISTS car_stop_signs (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		route_id INTEGER NOT NULL,
 		platform_name TEXT,
@@ -468,10 +483,10 @@ var migrations = []string{
 		longitude REAL NOT NULL,
 		FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE
 	)`,
-	`CREATE INDEX IF NOT EXISTS idx_cab_stop_signs_lookup
-		ON cab_stop_signs (route_id, platform_name, max_rail_vehicles)`,
-	`CREATE INDEX IF NOT EXISTS idx_cab_stop_signs_ribbon
-		ON cab_stop_signs (route_id, ribbon_guid)`,
+	`CREATE INDEX IF NOT EXISTS idx_car_stop_signs_lookup
+		ON car_stop_signs (route_id, platform_name, max_rail_vehicles)`,
+	`CREATE INDEX IF NOT EXISTS idx_car_stop_signs_ribbon
+		ON car_stop_signs (route_id, ribbon_guid)`,
 
 	`CREATE TABLE IF NOT EXISTS track_markers (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -492,18 +507,18 @@ var migrations = []string{
 	`CREATE INDEX IF NOT EXISTS idx_track_markers_ribbon
 		ON track_markers (route_id, ribbon_guid)`,
 
-	// Pre-resolved cab-stop-sign per timetable_entries row (the single
+	// Pre-resolved car-stop-sign per timetable_entries row (the single
 	// CarStopSign that applies given the timetable's bound + train car
 	// count). NULL when no match was found (e.g. depot/scenario services
 	// with no platform context, or routes without pak-derived data).
-	`ALTER TABLE timetable_entries ADD COLUMN cab_stop_sign_id INTEGER REFERENCES cab_stop_signs(id)`,
-	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_cab_stop_sign
-		ON timetable_entries(cab_stop_sign_id)`,
+	`ALTER TABLE timetable_entries ADD COLUMN car_stop_sign_id INTEGER REFERENCES car_stop_signs(id)`,
+	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_car_stop_sign
+		ON timetable_entries(car_stop_sign_id)`,
 
 	// Pre-resolved track-marker per timetable_entries row. Covers the
 	// non-Platform routing markers (e.g. "Smallbrook Junction Line 1") that
 	// drive the in-game "Go Via X" instructions. Distinct from
-	// cab_stop_sign_id (which is Platform-only) — a single row will only
+	// car_stop_sign_id (which is Platform-only) — a single row will only
 	// ever resolve to one or the other depending on its structure.
 	`ALTER TABLE timetable_entries ADD COLUMN track_marker_id INTEGER REFERENCES track_markers(id)`,
 	`CREATE INDEX IF NOT EXISTS idx_timetable_entries_track_marker

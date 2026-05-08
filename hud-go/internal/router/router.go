@@ -147,9 +147,6 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Post("/api/extractor/completed/{route}", h.Extractor.MarkCompleted)
 	r.Delete("/api/extractor/completed/{route}", h.Extractor.UnmarkCompleted)
 
-	// OCR
-	r.Get("/api/ocr-status", h.OCR.GetStatus)
-	r.Post("/api/extract", h.OCR.Extract)
 
 	// Stream / HUD
 	r.Get("/stream", h.Stream.Handle)
@@ -201,8 +198,7 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Post("/api/subscription/delete", h.Subscription.Delete)
 	r.Post("/api/subscription/create", h.Subscription.Create)
 
-	// Analysis & Route Processing
-	r.Get("/api/analysis", h.Analysis.Analyze)
+	// Route Processing
 	r.Post("/api/route-processing/process-latest", h.RouteProcessing.ProcessLatest)
 	r.Get("/api/route-processing/list", h.RouteProcessing.List)
 	r.Get("/api/route-processing/file", h.RouteProcessing.GetFile)

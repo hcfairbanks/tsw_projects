@@ -5,7 +5,7 @@
 // Output shape mirrors the existing route_<RouteDisplay>.json file the
 // extractor zip ships today: rails (MultiLineString) + track-feature
 // LineStrings + per-feature Point layers (platforms, signals, switches,
-// route markers, cab-stop signs) + collectables. Top-level `route`,
+// route markers, car-stop signs) + collectables. Top-level `route`,
 // `name`, `origin_lat/lng`, `country`, `country_code` and
 // `cross_pak_reference_name` fields stay drop-in compatible with the
 // importer.
@@ -62,6 +62,12 @@ type Stats struct {
 	Collectables int
 	Features     int
 	Elapsed      time.Duration
+	// RibbonVertices is the per-ribbon-GUID map of sampled polylines produced
+	// by the rails builder. Surfaced here so callers (cookedmap.WriteRouteMap)
+	// can stamp it onto the calling timetable struct(s), letting the per-
+	// service path-builder slice from these exact vertices instead of re-
+	// sampling. Keys are normalised ribbon GUIDs; values are [lng, lat].
+	RibbonVertices map[string][][2]float64
 }
 
 // Build walks Workdir, parses the cooked binaries, and emits the
@@ -164,7 +170,7 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 	logf("[cookedmap] collectables: %d across %d umaps\n", len(allCollectables), len(allUmaps))
 
 	// Adapt CookedRibbons → uasset.Ribbon for the existing per-feature
-	// writers (signals/switches/cab-stops/route-markers). They look up
+	// writers (signals/switches/car-stops/route-markers). They look up
 	// ribbon CachedStartX/Y to convert ribbon-local offsets into world cm.
 	ribbonsByGUID := map[string]*uasset.Ribbon{}
 	for i := range allRibbons {
@@ -201,8 +207,13 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 
 	// Geometry — rails MultiLineString, then track-feature LineStrings
 	// (platform/siding/junction extents) so they layer beneath the rails.
+	// `perRibbonVerts` is the SAME per-ribbon polylines indexed by ribbon
+	// GUID — handed off via tt.RibbonVertices so the per-service path
+	// builder can slice from these exact vertices instead of re-sampling
+	// (which would diverge on clothoid ribbons).
 	anchor := geo.NewRouteAnchor(originLat, originLng)
-	rails := buildRailsFeature(allRibbons, anchor)
+	rails, perRibbonVerts := buildRailsFeature(allRibbons, anchor)
+	tt.RibbonVertices = perRibbonVerts
 	railsFeat := map[string]any{
 		"type": "Feature",
 		"properties": map[string]any{
@@ -305,17 +316,18 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 	}
 
 	return Stats{
-		TTTiles:      len(ttTiles),
-		UmapsScanned: len(allUmaps),
-		Ribbons:      len(allRibbons),
-		Platforms:    len(allPlatforms),
-		Signals:      len(allSignals),
-		Switches:     len(allSwitches),
-		CarStopSigns: len(allStops),
-		RouteMarkers: len(allMarkers),
-		Collectables: len(allCollectables),
-		Features:     len(allFeatures),
-		Elapsed:      time.Since(t0),
+		TTTiles:        len(ttTiles),
+		UmapsScanned:   len(allUmaps),
+		Ribbons:        len(allRibbons),
+		Platforms:      len(allPlatforms),
+		Signals:        len(allSignals),
+		Switches:       len(allSwitches),
+		CarStopSigns:   len(allStops),
+		RouteMarkers:   len(allMarkers),
+		Collectables:   len(allCollectables),
+		Features:       len(allFeatures),
+		Elapsed:        time.Since(t0),
+		RibbonVertices: perRibbonVerts,
 	}, nil
 }
 

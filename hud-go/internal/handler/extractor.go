@@ -264,9 +264,30 @@ func (h *ExtractorHandler) Start(w http.ResponseWriter, r *http.Request) {
 
 	go h.runJob(ctx, tswPath, outDir, cfg.ExtractorTempDir, selected, skipExisting)
 
+	// Surface the resolved route list (codename + display name) so the UI
+	// can tell the user which child paks were auto-pulled in via the
+	// cross-pak-reference resolution. Order matches what the job actually
+	// runs.
+	resolved := make([]map[string]string, 0, len(selected))
+	requestedSet := map[string]bool{}
+	for _, r := range body.Routes {
+		requestedSet[r] = true
+	}
+	for _, rt := range selected {
+		entry := map[string]string{
+			"codename":     rt.codename,
+			"display_name": rt.displayName,
+		}
+		if !requestedSet[rt.codename] {
+			entry["auto_included"] = "true"
+		}
+		resolved = append(resolved, entry)
+	}
+
 	util.JSON(w, http.StatusAccepted, map[string]any{
 		"status":       "running",
 		"total_routes": len(selected),
+		"routes":       resolved,
 	})
 }
 
@@ -462,9 +483,47 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 
 	h.broadcast(h.snapshotEvent("started", "", ""))
 
+	// Group selected routes so each parent pak absorbs every selected
+	// child pak that points at it (via crossPakRefs). Result: ONE zip per
+	// parent containing the parent's content + every child's content
+	// merged. Skipped children are reported as `route_skipped` with a
+	// note pointing at the parent they were folded into. Children whose
+	// parent isn't in the selection still run on their own (with the
+	// parent's pak overlaid via the catalog so they don't ship paths
+	// with empty origin / no coordinates).
+	selectedSet := map[string]bool{}
+	for _, r := range routes {
+		selectedSet[r.codename] = true
+	}
+	// Pre-compute, per route, the parent codename in the selection (if any).
+	parentInSelection := map[string]string{} // child codename → parent codename
+	for _, rt := range routes {
+		if rt.hasRouteDef {
+			continue
+		}
+		for _, ref := range rt.crossPakRefs {
+			if selectedSet[ref] {
+				parentInSelection[rt.codename] = ref
+				break
+			}
+		}
+	}
+
 	for _, rt := range routes {
 		if ctx.Err() != nil {
 			break
+		}
+
+		// If this is a child whose parent IS in the selection, skip — it
+		// will be unpacked as part of the parent's job.
+		if !rt.hasRouteDef {
+			if parentName, ok := parentInSelection[rt.codename]; ok {
+				h.stateMu.Lock()
+				h.state.skippedCount++
+				h.stateMu.Unlock()
+				h.broadcast(h.snapshotEvent("route_skipped", rt.codename, "merged into parent: "+parentName))
+				continue
+			}
 		}
 
 		zip := filepath.Join(outDir, rt.zipFilename())
@@ -483,7 +542,32 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 		h.stateMu.Unlock()
 		h.broadcast(h.snapshotEvent("route_started", rt.codename, ""))
 
-		exitCode, runErr := h.runSingleRoute(ctx, tswPath, tempDir, rt.codename, rt.displayName, zip)
+		// Build the overlay-pak list for this job.
+		// - PARENT route: every selected child pak whose crossPakRefs lists
+		//   this parent's codename. They get unpacked into the same
+		//   workdir; their timetable .uassets, tiles, etc. all participate
+		//   in this single extraction.
+		// - ORPHAN CHILD: parent isn't in the selection. Pull the parent
+		//   pak from the catalog so origin + tile scans still find content
+		//   (otherwise the resulting JSONs ship empty origin + no coords).
+		var overlays []string
+		if rt.hasRouteDef {
+			for _, other := range routes {
+				if other.hasRouteDef || other.codename == rt.codename {
+					continue
+				}
+				for _, ref := range other.crossPakRefs {
+					if ref == rt.codename {
+						overlays = append(overlays, other.pakPath)
+						break
+					}
+				}
+			}
+		} else {
+			overlays = h.resolveOverlayPaks(rt)
+		}
+
+		exitCode, runErr := h.runSingleRoute(ctx, tswPath, tempDir, rt.codename, rt.displayName, zip, overlays)
 
 		// Don't leave a partial zip on cancel/failure — the next run should
 		// re-attempt this route from scratch.
@@ -512,7 +596,7 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 
 		// Auto-import: if the user has the toggle on in /extractor settings,
 		// wipe the existing route from the DB (cascades timetables / coords
-		// / markers / cab_stop_signs / track_markers) and re-import the
+		// / markers / car_stop_signs / track_markers) and re-import the
 		// freshly-written zip. Failures here don't fail the route — the zip
 		// is on disk and can be uploaded manually.
 		if config.Get().ExtractorAutoImport {
@@ -559,12 +643,13 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 // context, and adding one means threading it through a couple of layers
 // of subprocess invocations (repak/UAssetGUI). Best-effort Stop is
 // adequate for the use case (per-route runs are minutes, not hours).
-func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir, route, packDisplayName, outZip string) (int, error) {
+func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir, route, packDisplayName, outZip string, overlayPaks []string) (int, error) {
 	cfg := extractor.Config{
 		TSWPath:         tswPath,
 		RouteFilter:     route,
 		WorkDir:         tempDir,
 		PackDisplayName: packDisplayName,
+		OverlayPakPaths: overlayPaks,
 		// Keep the unpacked tiles around past Extract() so the route-map
 		// step (cookedmap.Build) can re-walk the cooked .umap binaries.
 		// Cleanup is owned by this function — see the deferred RemoveAll
@@ -676,7 +761,7 @@ func (h *ExtractorHandler) snapshotEvent(typ, route, msg string) extractorEvent 
 // ---------- auto-import ----------
 
 // autoImportZip wipes any existing DB row for `routeName` (cascading
-// timetables / route_coordinates / route_markers / cab_stop_signs /
+// timetables / route_coordinates / route_markers / car_stop_signs /
 // track_markers via the FK constraints we set up in migrations) and
 // re-imports the just-written zip via the same handler the
 // /api/routes/import-zip endpoint serves.
@@ -753,6 +838,17 @@ type routeListEntry struct {
 	displayName string
 	country     string
 	pakPath     string
+	// hasRouteDef = parent route (ships its own RouteDefinition); used to
+	// gate the auto-include logic so we never silently pull in another
+	// parent route just because it appears in some pak's cross-references.
+	hasRouteDef bool
+	// crossPakRefs lists every cross_pak_reference_name found inside this
+	// pak's timetables / scenario defs. For a child pak (HasRouteDef=false)
+	// these point UP to parent routes the pak adds content to (e.g.
+	// BostonProvidenceGameplayPack → ["BostonProvidence","TrainingCentre"]).
+	// resolveTargetRoutes walks this list to drag in every child pak whose
+	// references include a user-selected parent.
+	crossPakRefs []string
 }
 
 // zipFilenameForCodename returns the per-route zip's basename. We use
@@ -817,10 +913,12 @@ func (h *ExtractorHandler) listRoutes(tswPath string) ([]routeListEntry, error) 
 			dn = output.RouteDisplayName(p.Codename)
 		}
 		out = append(out, routeListEntry{
-			codename:    p.Codename,
-			displayName: dn,
-			country:     output.CountryNameFromCode(p.CountryCode),
-			pakPath:     p.PakPath,
+			codename:     p.Codename,
+			displayName:  dn,
+			country:      output.CountryNameFromCode(p.CountryCode),
+			pakPath:      p.PakPath,
+			hasRouteDef:  p.HasRouteDef,
+			crossPakRefs: p.CrossPakRefs,
 		})
 	}
 	return out, nil
@@ -962,13 +1060,72 @@ func (h *ExtractorHandler) resolveTargetRoutes(tswPath string, requested []strin
 	for _, r := range requested {
 		want[r] = true
 	}
+
+	// Two-pass selection. Pass 1: every pak the user explicitly asked for.
+	// Pass 2: every CHILD pak (HasRouteDef=false) whose cross_pak_references
+	// list includes a codename from pass 1 — these are gameplay packs / DLC
+	// add-ons that ship additional timetables for an already-selected parent
+	// route (e.g. BostonProvidenceGameplayPack ships the HSP-46 timetable
+	// for the Boston Sprinter route). Without auto-pulling them, the user
+	// would have to know the relationship and tick each child manually.
+	//
+	// The HasRouteDef=false guard prevents another parent route from being
+	// silently dragged in just because its xpak_refs happens to mention one
+	// of the selected codenames; parents always need to be picked explicitly.
+	picked := map[string]bool{}
 	out := make([]routeListEntry, 0, len(requested))
 	for _, r := range all {
-		if want[r.codename] {
+		if want[r.codename] && !picked[r.codename] {
 			out = append(out, r)
+			picked[r.codename] = true
+		}
+	}
+	for _, r := range all {
+		if picked[r.codename] || r.hasRouteDef {
+			continue
+		}
+		for _, ref := range r.crossPakRefs {
+			if want[ref] {
+				out = append(out, r)
+				picked[r.codename] = true
+				break
+			}
 		}
 	}
 	return out, nil
+}
+
+// resolveOverlayPaks returns the list of additional pak paths that should
+// be unpacked alongside `rt`'s pak so the extractor's origin + tile
+// scans find content. Only fires for child paks (HasRouteDef=false):
+// they don't ship a RouteDefinition or tile umaps of their own, so the
+// per-service JSONs end up with no origin_lat / origin_lng and no path
+// coordinates unless the parent pak's persistent map + tiles are
+// overlaid into the same workdir.
+//
+// The parent is identified by walking the catalog and finding any
+// HasRouteDef=true pak whose codename appears in this child's
+// crossPakRefs. Multiple matches are all returned (rare in practice —
+// most children point at one parent route).
+func (h *ExtractorHandler) resolveOverlayPaks(rt routeListEntry) []string {
+	if rt.hasRouteDef || len(rt.crossPakRefs) == 0 {
+		return nil
+	}
+	all, err := catalog.LoadAll(h.db)
+	if err != nil || len(all) == 0 {
+		return nil
+	}
+	refSet := map[string]bool{}
+	for _, r := range rt.crossPakRefs {
+		refSet[r] = true
+	}
+	var overlays []string
+	for _, p := range all {
+		if p.HasRouteDef && refSet[p.Codename] {
+			overlays = append(overlays, p.PakPath)
+		}
+	}
+	return overlays
 }
 
 // filterRoutesOnly drops paks that don't ship any timetable / scenario

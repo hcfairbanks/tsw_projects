@@ -63,6 +63,23 @@ type TrainClassEntry struct {
 	Consists  []Consist `json:"consists"`
 }
 
+// AdditionalFormation carries the formation_name + trains[] payload from a
+// non-canonical timetable binary that shares this service. When the same
+// service is declared in multiple .uasset binaries on the same route (e.g.
+// "Boston - Providence Timetable" + "Boston - Providence HSP-46 Timetable"),
+// we collapse them into one per-service JSON to avoid the importer's
+// (service_name, route_id) dedup silently dropping the second one. The
+// canonical pair drives the top-level fields; every other pair's formation
+// data lands here so the importer can still link each train via the
+// timetable_trains junction.
+//
+// Empty / omitted in the common case where a service only appears in one
+// binary.
+type AdditionalFormation struct {
+	FormationName string            `json:"formation_name,omitempty"`
+	Trains        []TrainClassEntry `json:"trains,omitempty"`
+}
+
 // PackageService is the shareable per-service JSON schema used by the import format.
 // Field ordering: identity + metadata up top, bulk arrays (csvData / timetable /
 // coordinates / markers) at the bottom for easier inspection.
@@ -113,6 +130,12 @@ type PackageService struct {
 	// to deterministically link a service to a previously-uploaded train
 	// row, falling back to vehicle-GUID-set matching when names disagree.
 	FormationName string `json:"formation_name,omitempty"`
+	// AdditionalFormations carries the train data from sibling timetable
+	// binaries that declare this same service (typically a route-specific
+	// timetable like "Boston-Providence HSP-46 Timetable" alongside the
+	// generic one). Empty when the service appears in only one binary —
+	// most services. See AdditionalFormation docs for the merge model.
+	AdditionalFormations []AdditionalFormation `json:"additional_formations,omitempty"`
 
 	// --- counters / identifiers ---
 	TotalPoints  int `json:"totalPoints"`

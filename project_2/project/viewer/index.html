@@ -101,28 +101,25 @@
       white-space: nowrap;
     }
     .cabstop-label::before { display: none; }
-    /* Collectable icons — one shape per actor-class category. Used both in
-       the legend (inline span) and as the L.divIcon HTML on the map. */
+    /* Collectable icons — uniform yellow chip with a black "C". Used both
+       in the legend (inline span) and as the L.divIcon HTML on the map. */
     .collectable-icon {
       display: inline-block;
       width: 14px;
       height: 14px;
-      line-height: 14px;
+      line-height: 12px;
       text-align: center;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 700;
       font-family: system-ui, sans-serif;
-      color: #fff;
+      color: #000;
+      background: #ffd700;
+      border: 1px solid #000;
       vertical-align: middle;
       margin-right: 4px;
       border-radius: 3px;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+      box-sizing: border-box;
     }
-    .collectable-robot    { background: #5b6470; }
-    .collectable-scarf    { background: #c0392b; }
-    .collectable-routemap { background: #2980b9; }
-    .collectable-defib    { background: #e74c3c; }
-    .collectable-other    { background: #7f8c8d; }
     /* On-map icon (no margin so the divIcon centres correctly). */
     .collectable-pin .collectable-icon { margin-right: 0; }
   </style>
@@ -172,12 +169,7 @@
         <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#cc8400;border:1.5px solid #663300;vertical-align:middle;margin-right:4px"></span>Switch</div>
         <div><span style="display:inline-block;width:8px;height:8px;background:#3f6fd9;border:1.5px solid white;border-radius:50%;vertical-align:middle;margin-right:4px"></span>Cab stop sign</div>
         <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#d62728;border:2px solid white;vertical-align:middle;margin-right:4px"></span>Service stop</div>
-        <div style="margin-top:4px;font-weight:600">Collectables</div>
-        <div style="margin-left:8px"><span class="collectable-icon collectable-robot">R</span>Delivery Robot</div>
-        <div style="margin-left:8px"><span class="collectable-icon collectable-scarf">S</span>Scarf</div>
-        <div style="margin-left:8px"><span class="collectable-icon collectable-routemap">M</span>Route Map</div>
-        <div style="margin-left:8px"><span class="collectable-icon collectable-defib">+</span>Defibrillator</div>
-        <div style="margin-left:8px"><span class="collectable-icon collectable-other">?</span>Other</div>
+        <div><span class="collectable-icon">C</span>Collectable</div>
       `;
       return div;
     };
@@ -242,10 +234,22 @@
       };
     }
 
+    // Display-time normalisation. Pak data ships zero-padded platform
+    // numbers ("08") which look weird next to platforms that skip the pad.
+    // Strip leading zeros only when the value is purely numeric.
+    function fmtStructureNumber(v) {
+      const s = String(v == null ? '' : v).trim();
+      return /^0+\d+$/.test(s) ? s.replace(/^0+/, '') : s;
+    }
+    // Same idea for composed names like "Boston South Station Track 08".
+    function fmtMarkerName(s) {
+      return String(s == null ? '' : s).replace(/\b0+(\d+)\b/g, '$1');
+    }
+
     function platformLabelText(p) {
       const parts = [];
-      if (p.name) parts.push(p.name);
-      const sub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+      if (p.name) parts.push(fmtMarkerName(p.name));
+      const sub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
       if (sub) parts.push(sub);
       return parts.join(' — ');
     }
@@ -278,8 +282,8 @@
     function bindPlatformPopup(feature, layer) {
       const p = feature.properties || {};
       const lines = [];
-      if (p.name) lines.push(`<b>${p.name}</b>`);
-      const sub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+      if (p.name) lines.push(`<b>${fmtMarkerName(p.name)}</b>`);
+      const sub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
       if (sub) lines.push(sub);
       if (p.ribbon_guid) lines.push(`<code style="font-size:10px">${p.ribbon_guid.slice(0,18)}…</code>`);
       if (lines.length) layer.bindPopup(lines.join('<br>'));
@@ -367,7 +371,7 @@
       });
       const m = L.marker(latlng, { icon });
       if (p.name) {
-        m.bindTooltip(p.name, {
+        m.bindTooltip(fmtMarkerName(p.name), {
           permanent: true,
           direction: 'right',
           offset: [8, 0],
@@ -379,7 +383,7 @@
     function bindTrackMarkerPopup(feature, layer) {
       const p = feature.properties || {};
       const lines = [];
-      if (p.name) lines.push(`<b>${p.name}</b>`);
+      if (p.name) lines.push(`<b>${fmtMarkerName(p.name)}</b>`);
       if (p.marker_type) lines.push(`type: ${p.marker_type}`);
       if (p.line_side) lines.push(`side: ${p.line_side}`);
       if (p.ribbon_guid) lines.push(`<code style="font-size:10px">${p.ribbon_guid.slice(0,18)}…</code>`);
@@ -418,22 +422,33 @@
       if (lines.length) layer.bindPopup(lines.join('<br>'));
     }
 
-    // Map a collectable's actor_class onto a category — one icon per
-     // category. Single layer toggle ("Collectables") covers all of them.
-    function collectableCategory(actorClass) {
+    // Resolve a friendly label for the popup. Icon is uniform (yellow chip
+    // + black "C") regardless of category. Order matters where substrings
+    // overlap. Falls back to "Collectable" so the popup still shows
+    // something for unknown classes.
+    function collectableLabel(actorClass) {
       const c = String(actorClass || '');
-      if (c.includes('Robot')) return { label: 'Delivery Robot', cls: 'collectable-robot', sym: 'R' };
-      if (c.includes('Scarf')) return { label: 'Scarf', cls: 'collectable-scarf', sym: 'S' };
-      if (c.includes('RouteMap')) return { label: 'Route Map', cls: 'collectable-routemap', sym: 'M' };
-      if (c.includes('Defibrillator')) return { label: 'Defibrillator', cls: 'collectable-defib', sym: '+' };
-      return { label: 'Other', cls: 'collectable-other', sym: '?' };
+      if (c.includes('Robot'))            return 'Robot';
+      if (c.includes('Scarf'))            return 'Scarf';
+      if (c.includes('RouteMap'))         return 'Map';
+      if (c.includes('TtcMap'))           return 'Map';
+      if (c.includes('Defibrillator'))    return 'Defibrillator';
+      if (c.includes('FireExtinguisher')) return 'Fire Extinguisher';
+      if (c.includes('SnowShovel'))       return 'Snow Shovel';
+      if (c.includes('WhistlePost'))      return 'Whistle Post';
+      if (c.includes('SafetyHelmet'))     return 'Helmet';
+      if (c.includes('RailfanTripod'))    return 'Tripod';
+      if (c.includes('DispatchBaton'))    return 'Baton';
+      if (c.includes('SafetySign'))       return 'Sign';
+      if (c.includes('SignDANGER'))       return 'Danger Sign';
+      if (c.includes('Poster'))           return 'Poster';
+      if (c.includes('RedSocks'))         return 'Red Socks';
+      return 'Collectable';
     }
     function collectablePointToLayer(feature, latlng) {
-      const p = feature.properties || {};
-      const cat = collectableCategory(p.actor_class);
       const icon = L.divIcon({
         className: 'collectable-pin',
-        html: `<span class="collectable-icon ${cat.cls}">${cat.sym}</span>`,
+        html: '<span class="collectable-icon">C</span>',
         iconSize: [14, 14],
         iconAnchor: [7, 7],
       });
@@ -441,20 +456,14 @@
     }
     function bindCollectablePopup(feature, layer) {
       const p = feature.properties || {};
-      const cat = collectableCategory(p.actor_class);
-      const lines = [`<b>${cat.label}</b>`];
-      if (p.actor_class) lines.push(`class: <code>${p.actor_class}</code>`);
-      if (p.instance) lines.push(`instance: <code>${p.instance}</code>`);
-      if (p.tile) lines.push(`tile: ${p.tile}`);
-      if (p.collectable_id) lines.push(`<code style="font-size:10px">${p.collectable_id.slice(0,18)}…</code>`);
-      layer.bindPopup(lines.join('<br>'));
+      layer.bindPopup(`<b>Collectable: ${collectableLabel(p.actor_class)}</b>`);
     }
 
     function bindTrackFeaturePopup(feature, layer) {
       const p = feature.properties || {};
       const lines = [];
-      if (p.location) lines.push(`<b>${p.location}</b>`);
-      const sub = [p.structure, p.structure_number].filter(Boolean).join(' ');
+      if (p.location) lines.push(`<b>${fmtMarkerName(p.location)}</b>`);
+      const sub = [p.structure, fmtStructureNumber(p.structure_number)].filter(Boolean).join(' ');
       if (sub) lines.push(sub);
       if (p.feature_type) lines.push(`type: ${p.feature_type}`);
       if (p.length_m != null) lines.push(`length: ${p.length_m} m`);
@@ -628,12 +637,25 @@
     const SERVICE_PALETTE = ['#0066ff','#d62728','#9467bd','#17becf','#bcbd22','#e377c2','#8c564b','#7f7f7f'];
     function buildServiceLayer(svc, fallbackName) {
       const lg = L.layerGroup();
-      const coords = (svc.coordinates || [])
-        .filter(c => Number.isFinite(c.latitude) && Number.isFinite(c.longitude))
-        .map(c => [c.latitude, c.longitude]);
+      // Split per-service coords into segments at `break: true` boundaries —
+      // the extractor sets that flag where it couldn't find a rail-graph
+      // route between two scheduled stops, so the polyline gets a visible
+      // gap instead of a straight line through non-rail terrain.
+      const segments = [];
+      let curSeg = [];
+      for (const c of (svc.coordinates || [])) {
+        if (!Number.isFinite(c.latitude) || !Number.isFinite(c.longitude)) continue;
+        if (c.break && curSeg.length > 0) {
+          segments.push(curSeg);
+          curSeg = [];
+        }
+        curSeg.push([c.latitude, c.longitude]);
+      }
+      if (curSeg.length > 0) segments.push(curSeg);
+      const drawable = segments.filter(s => s.length >= 2);
       const color = SERVICE_PALETTE[importedServices.length % SERVICE_PALETTE.length];
-      if (coords.length >= 2) {
-        L.polyline(coords, { color, weight: 4, opacity: 0.75 }).addTo(lg);
+      if (drawable.length > 0) {
+        L.polyline(drawable, { color, weight: 4, opacity: 0.75 }).addTo(lg);
       }
       // Stops from timetable[]: one red dot per scheduled stop.
       for (const row of (svc.timetable || [])) {
@@ -641,8 +663,8 @@
         const lng = parseFloat(row.longitude);
         if (!Number.isFinite(lat) || !Number.isFinite(lng) || (lat === 0 && lng === 0)) continue;
         const subParts = [];
-        if (row.location) subParts.push(`<b>${row.location}</b>`);
-        const sub = [row.structure, row.structure_number].filter(Boolean).join(' ');
+        if (row.location) subParts.push(`<b>${fmtMarkerName(row.location)}</b>`);
+        const sub = [row.structure, fmtStructureNumber(row.structure_number)].filter(Boolean).join(' ');
         if (sub) subParts.push(sub);
         if (row.arrival) subParts.push(`arr ${row.arrival}`);
         if (row.departure) subParts.push(`dep ${row.departure}`);

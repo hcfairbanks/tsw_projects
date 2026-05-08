@@ -32,7 +32,14 @@ func isCurvedArc(r *uasset.CookedRibbon) bool {
 // buildRailsFeature samples every ribbon's curve into a polyline. Clothoid
 // endpoints are resolved through the topology graph (next ribbon's start
 // point) so the spline lands on the network rather than overshooting.
-func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) [][][2]float64 {
+//
+// Returns the multi-line array (each sub-line one ribbon, in caller-order)
+// AND a per-ribbon-GUID map of the SAME vertex arrays so the per-service
+// path-builder can slice from them. Map keys are normalised ribbon GUIDs.
+// Ribbons that fail the geometry checks (zero length / zero tangent) are
+// absent from both outputs, so a missing key means "no rail geometry for
+// this ribbon" and the path-builder must treat it as a break.
+func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) ([][][2]float64, map[string][][2]float64) {
 	type endRef struct {
 		ribIdx  int
 		atStart bool
@@ -120,6 +127,7 @@ func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) [
 		}
 	}
 	var out [][][2]float64
+	perRibbon := make(map[string][][2]float64, len(ribbons))
 	for i := range ribbons {
 		r := &ribbons[i]
 		if r.Length <= 0 || math.Hypot(r.TangentX, r.TangentY) == 0 {
@@ -128,9 +136,10 @@ func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) [
 		coords := sampleRibbon(r, ends[i], anchor)
 		if len(coords) >= 2 {
 			out = append(out, coords)
+			perRibbon[uasset.NormalizeGUID(r.RibbonGUID)] = coords
 		}
 	}
-	return out
+	return out, perRibbon
 }
 
 func sampleRibbon(r *uasset.CookedRibbon, e ribbonEnd, anchor *geo.RouteAnchor) [][2]float64 {

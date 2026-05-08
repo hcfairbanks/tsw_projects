@@ -23,14 +23,12 @@ type Handlers struct {
 	LiveWeather     *LiveWeatherHandler
 	HistWeather     *HistoricalWeatherHandler
 	Config          *ConfigHandler
-	OCR             *OCRHandler
 	Stream          *StreamHandler
 	HUD             *HUDHandler
 	Recording       *RecordingHandler
 	Processing      *ProcessingHandler
 	MapData         *MapDataHandler
 	Subscription    *SubscriptionHandler
-	Analysis        *AnalysisHandler
 	RouteProcessing *RouteProcessingHandler
 	Action          *ActionHandler
 	TrainConsist    *TrainConsistHandler
@@ -119,14 +117,12 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		LiveWeather:     &LiveWeatherHandler{client: tswClient, httpClient: &http.Client{Timeout: 10 * time.Second}},
 		HistWeather:     &HistoricalWeatherHandler{client: tswClient, httpClient: &http.Client{Timeout: 10 * time.Second}},
 		Config:          &ConfigHandler{db: db},
-		OCR:             &OCRHandler{db: db},
 		Stream:          &StreamHandler{db: db, GetData: getData},
 		HUD:             &HUDHandler{db: db},
 		Recording:       rec,
 		Processing:      &ProcessingHandler{db: db},
 		MapData:         &MapDataHandler{db: db},
 		Subscription:    &SubscriptionHandler{client: tswClient},
-		Analysis:        &AnalysisHandler{db: db},
 		RouteProcessing: &RouteProcessingHandler{db: db},
 		Action:          &ActionHandler{db: db},
 		TrainConsist:    &TrainConsistHandler{db: db},

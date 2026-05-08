@@ -385,6 +385,16 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Service-map overlay icon styles — used by /js/service-map.js for
+           car stop signs (small blue dot + max-rail-vehicles tooltip),
+           platform markers (green diamond pin), and collectables (yellow
+           chip with black "C"). Required so the L.divIcon HTML emitted by
+           service-map.js renders correctly on this page too. */
+        .carstop-label { background: rgba(225,235,255,0.92); border: 1px solid rgba(40,80,180,0.55); border-radius: 2px; padding: 0 3px; font-size: 9px; color: #1a3a78; white-space: nowrap; }
+        .carstop-label::before { display: none; }
+        .collectable-icon { display: inline-block; width: 14px; height: 14px; line-height: 12px; text-align: center; font-size: 10px; font-weight: 700; font-family: system-ui, sans-serif; color: #000; background: #ffd700; border: 1px solid #000; vertical-align: middle; border-radius: 3px; box-sizing: border-box; }
+        .collectable-pin .collectable-icon { margin: 0; }
     </style>
     <script>
 
@@ -1093,9 +1103,16 @@ function drawStationSelector(options, timetableItems, selectedIdx, playerPositio
         options.ctx.textAlign = 'left';
         options.ctx.textBaseline = 'middle';
 
-        var displayName = item.location || 'Unknown';
-        if (item.isPassThrough) {
-            displayName += ' [VIA]';
+        // Same render rule as desktop.html: null-location pass-through rows
+        // read as "VIA Location" instead of "Unknown [VIA]".
+        var displayName;
+        if (item.isPassThrough && !item.location) {
+            displayName = 'VIA Location';
+        } else {
+            displayName = item.location || 'Unknown';
+            if (item.isPassThrough) {
+                displayName += ' [VIA]';
+            }
         }
         if (displayName.length > 18) {
             displayName = displayName.substring(0, 17) + '...';
@@ -1217,9 +1234,13 @@ function drawTimetableBox(options, timetableTime, timetableLabel, distanceToStat
         var selectedStation = cachedTimetableItems[selectedStationIndex];
         displayArrival = selectedStation.arrival || '--:--:--';
         displayDeparture = selectedStation.departure || '--:--:--';
-        displayLabel = selectedStation.location || '';
-        if (selectedStation.isPassThrough) {
-            displayLabel += ' [VIA]';
+        if (selectedStation.isPassThrough && !selectedStation.location) {
+            displayLabel = 'VIA Location';
+        } else {
+            displayLabel = selectedStation.location || '';
+            if (selectedStation.isPassThrough) {
+                displayLabel += ' [VIA]';
+            }
         }
         displayIndex = selectedStationIndex + 1;
 
@@ -1735,10 +1756,66 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
     <div id="mapOverlay" class="map-overlay">
         <button class="close-btn" onclick="hideMapOverlay()">&times;</button>
         <div id="overlayMap"></div>
-        <!-- The in-map toggle bar is intentionally hidden on the tablet HUD
-             (limited screen space). Layer prefs are configured at /settings. -->
-        <div id="overlayServiceLayerBar" style="display: none;"></div>
+        <!-- Layer toggle bar — bottom-left of the map overlay. Same shape
+             and behaviour as /map: a "Layers" button collapses/expands the
+             bar of per-layer checkboxes. State (open/closed AND each
+             layer's on/off) is persisted in localStorage under shared keys
+             (huddev.mapLayers + huddev.mapLayerPanel) so toggling any layer
+             on /map, /desktop, /tablet, or any timetable view propagates to
+             the others on next load. -->
+        <div id="overlayServiceLayerWrapper" data-state="open" style="position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3001; display: flex; flex-direction: row; align-items: flex-end; gap: 8px;">
+            <button id="overlayServiceLayerToggleBtn" onclick="toggleOverlayServiceLayerPanel()" style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 12px; background: rgba(0,0,0,0.85); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                <span id="overlayServiceLayerToggleArrow">&#9662;</span>
+                <span id="overlayServiceLayerToggleLabel">Layers</span>
+            </button>
+            <div id="overlayServiceLayerBar" style="flex: 1 1 auto; min-width: 0;"></div>
+        </div>
     </div>
+    <style>
+        /* Style the layer-toggle bar inside the tablet HUD's map overlay.
+           Tablet has limited horizontal space — twelve toggles don't fit on
+           one line at typical tablet widths (1024-1280px), so the bar wraps
+           to multiple rows here instead of forcing horizontal scroll. The
+           bar spans nearly the full width of the overlay (left: 12px right:
+           12px) and grows upward as rows wrap. */
+        #overlayServiceLayerWrapper, #overlayServiceLayerWrapper * { color: #fff; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerBar { display: none; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerToggleLabel { display: none; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerToggleBtn { padding: 0; min-width: 44px; width: 44px; }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] {
+            min-height: 44px;
+            display: flex !important;
+            align-items: center !important;
+            padding: 6px 14px !important;
+            margin: 0 !important;
+        }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] > div {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 8px 14px !important;
+        }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] strong { display: none; }
+    </style>
+    <script>
+        // Toggle the layer panel between full-bar and just-button states.
+        // Persisted under huddev.mapLayerPanel (shared with /map and desktop).
+        function toggleOverlayServiceLayerPanel() {
+            var wrap = document.getElementById('overlayServiceLayerWrapper');
+            var arrow = document.getElementById('overlayServiceLayerToggleArrow');
+            var next = wrap.getAttribute('data-state') === 'open' ? 'closed' : 'open';
+            wrap.setAttribute('data-state', next);
+            arrow.innerHTML = next === 'open' ? '&#9662;' : '&#9652;';
+            try { localStorage.setItem('huddev.mapLayerPanel', next); } catch (_) {}
+        }
+        (function () {
+            try {
+                if (localStorage.getItem('huddev.mapLayerPanel') === 'closed') {
+                    document.getElementById('overlayServiceLayerWrapper').setAttribute('data-state', 'closed');
+                    document.getElementById('overlayServiceLayerToggleArrow').innerHTML = '&#9652;';
+                }
+            } catch (_) { /* ignore */ }
+        })();
+    </script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/js/leaflet-extras.js"></script>
     <script src="/js/service-map.js"></script>
@@ -2277,7 +2354,7 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                 // Draw route polyline + station markers WITHOUT adding to the
                 // map yet — ServiceMap.attach (called below) takes ownership
                 // and applies the user's "Path" / "Stops" visibility prefs
-                // from /settings (huddev.hudMap.layers). The fallback path
+                // from /settings (huddev.mapLayers). The fallback path
                 // inside attachOverlayServiceLayers adds them directly when
                 // the route can't be resolved (so the basic map still works).
                 var routeCoords = data.coordinates.map(function(coord) {
@@ -2366,8 +2443,9 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                 stopLayers: stopLayers,
                 scheduleEntries: entries,
                 // Shared with the desktop HUD; configured at /settings.
-                storageKey: 'huddev.hudMap.layers',
-                hideBar: true
+                // Single shared storage key across every map surface.
+                storageKey: 'huddev.mapLayers',
+                hideBar: false
             });
             overlayLastAttachedRouteId = resolvedRouteId;
         }

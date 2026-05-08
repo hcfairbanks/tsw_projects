@@ -197,6 +197,15 @@
             margin-top: 10px;
         }
 
+        /* Service-map overlay icon styles — used by /js/service-map.js for
+           car stop signs (small blue dot + max-rail-vehicles tooltip),
+           platform markers (green diamond pin), and collectables (lettered
+           badge per actor class). */
+        .carstop-label { background: rgba(225,235,255,0.92); border: 1px solid rgba(40,80,180,0.55); border-radius: 2px; padding: 0 3px; font-size: 9px; color: #1a3a78; white-space: nowrap; }
+        .carstop-label::before { display: none; }
+        .collectable-icon { display: inline-block; width: 14px; height: 14px; line-height: 12px; text-align: center; font-size: 10px; font-weight: 700; font-family: system-ui, sans-serif; color: #000; background: #ffd700; border: 1px solid #000; vertical-align: middle; border-radius: 3px; box-sizing: border-box; }
+        .collectable-pin .collectable-icon { margin: 0; }
+
         .legend {
             margin-top: 15px;
             padding: 12px;
@@ -465,7 +474,6 @@
                 </select>
                 <button id="loadRouteBtn" onclick="loadSelectedTimetable()" disabled style="margin-top: 10px;" data-i18n="map.loadTimetable">Load Timetable</button>
                 <button id="clearRouteBtn" onclick="clearLoadedRoute()" style="width: 100%; margin-top: 8px; padding: 8px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; display: none;" data-i18n="map.clearLoadedRoute">Clear Loaded Route</button>
-                <a href="/huds" target="_blank" id="openHudLink" style="display: none; margin-top: 8px; text-align: center; padding: 8px; background: #8b5cf6; color: white; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: 600;" data-i18n="map.openHud">Open HUD</a>
                 <div id="routeInfoGroup" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
                     <h3 id="routeName" style="font-size: 13px; color: #333; margin: 0;">Loading...</h3>
                     <div class="info-item" style="display: none;">
@@ -526,7 +534,7 @@
     <!-- Service-map layer toggle bar. Lives at bottom-left.
          Open  : horizontal bar across the bottom (right margin clears the info panel).
          Closed: just the round button — a small square in the bottom-left corner. -->
-    <div id="serviceLayerWrapper" data-state="open" style="position: fixed; left: 12px; bottom: 12px; z-index: 1100; pointer-events: auto; display: flex; flex-direction: row; align-items: stretch; gap: 8px;">
+    <div id="serviceLayerWrapper" data-state="open" style="position: fixed; left: 12px; bottom: 12px; z-index: 1100; pointer-events: auto; display: flex; flex-direction: row; align-items: flex-end; gap: 8px;">
         <button id="serviceLayerToggleBtn" onclick="toggleServiceLayerPanel()" style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 12px; background: rgba(0,0,0,0.85); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
             <span id="serviceLayerToggleArrow">▾</span>
             <span id="serviceLayerToggleLabel" data-i18n="map.layers">Layers</span>
@@ -546,20 +554,20 @@
         #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleLabel { display: none; }
         #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleBtn { padding: 0; min-width: 44px; width: 44px; }
         /* Inside the bar, lay items out horizontally so the bar reads as a
-           strip across the bottom. */
+           strip across the bottom. Wraps to multiple rows when twelve toggles
+           don't fit on one line at narrower viewports — same responsive
+           pattern the tablet HUD uses. */
         #serviceLayerBar [data-svc-layer-bar="1"] {
-            height: 44px;
+            min-height: 44px;
             display: flex !important;
             align-items: center !important;
-            padding: 0 14px !important;
+            padding: 6px 14px !important;
             margin: 0 !important;
-            overflow-x: auto;
-            white-space: nowrap;
         }
         #serviceLayerBar [data-svc-layer-bar="1"] > div {
             flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 14px 18px !important;
+            flex-wrap: wrap !important;
+            gap: 8px 14px !important;
         }
         #serviceLayerBar [data-svc-layer-bar="1"] strong { display: none; }
     </style>
@@ -570,11 +578,11 @@
             const next = wrap.getAttribute('data-state') === 'open' ? 'closed' : 'open';
             wrap.setAttribute('data-state', next);
             arrow.textContent = next === 'open' ? '▾' : '▴';
-            try { localStorage.setItem('huddev.trackingMap.layerPanel', next); } catch (_) {}
+            try { localStorage.setItem('huddev.mapLayerPanel', next); } catch (_) {}
         }
         (function () {
             try {
-                if (localStorage.getItem('huddev.trackingMap.layerPanel') === 'closed') {
+                if (localStorage.getItem('huddev.mapLayerPanel') === 'closed') {
                     document.getElementById('serviceLayerWrapper').setAttribute('data-state', 'closed');
                     document.getElementById('serviceLayerToggleArrow').textContent = '▴';
                 }
@@ -774,7 +782,6 @@
                                     initializeRoute(mapData);
 
                                     document.getElementById('clearRouteBtn').style.display = 'block';
-                                    document.getElementById('openHudLink').style.display = 'block';
 
                                     if (mapData.timetableId) {
                                         selectTimetableInDropdowns(mapData.timetableId);
@@ -853,6 +860,54 @@
             return { name: routeName, duration: durationStr };
         }
 
+        // Trim path coords to start at the first scheduled stop and end at
+        // the last. GO VIA LOCATION is routing-only and doesn't bound the
+        // polyline; the trimmed endpoints are anchored at the actual stop
+        // marker lat/lngs so the line visibly reaches them.
+        function trimPathToStops(coords, allEntries) {
+            if (!Array.isArray(coords) || coords.length < 2) return coords;
+            function isStopEntry(e) {
+                if (!e) return false;
+                if (e.action) return e.action === 'STOP AT LOCATION' || e.action === 'WAIT FOR SERVICE';
+                // Fallback for older /api/map/route-data responses without
+                // `action`: anything not flagged as a routing-only pass-through.
+                return !e.isPassThrough;
+            }
+            var stops = (allEntries || []).filter(function(e) {
+                if (!isStopEntry(e)) return false;
+                var lat = parseFloat(e.latitude), lng = parseFloat(e.longitude);
+                return !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
+            });
+            if (stops.length === 0) return coords;
+            function distM(la1, ln1, la2, ln2) {
+                var R = 6371000;
+                var dLat = (la2 - la1) * Math.PI / 180;
+                var dLng = (ln2 - ln1) * Math.PI / 180;
+                var m = (la1 + la2) * 0.5 * Math.PI / 180;
+                var x = dLng * Math.cos(m);
+                return Math.hypot(dLat, x) * R;
+            }
+            function nearestIdx(la, ln) {
+                var best = 0, bestD = Infinity;
+                for (var i = 0; i < coords.length; i++) {
+                    var d = distM(la, ln, coords[i].latitude, coords[i].longitude);
+                    if (d < bestD) { bestD = d; best = i; }
+                }
+                return best;
+            }
+            var first = stops[0], last = stops[stops.length - 1];
+            var fLat = parseFloat(first.latitude), fLng = parseFloat(first.longitude);
+            var lLat = parseFloat(last.latitude), lLng = parseFloat(last.longitude);
+            var s = nearestIdx(fLat, fLng);
+            var e = nearestIdx(lLat, lLng);
+            var lo = Math.min(s, e), hi = Math.max(s, e);
+            if (hi - lo + 1 < 2) return coords;
+            var sliced = coords.slice(lo, hi + 1);
+            sliced[0] = { latitude: fLat, longitude: fLng };
+            sliced[sliced.length - 1] = { latitude: lLat, longitude: lLng };
+            return sliced;
+        }
+
         // Create custom train icon
         const trainIcon = L.divIcon({
             className: 'train-icon',
@@ -875,9 +930,13 @@
                 const fileInput = document.getElementById('jsonFileInput');
                 if (fileInput) fileInput.value = '';
 
-                // Hide the clear button and HUD link
+                // Hide the clear button
                 document.getElementById('clearRouteBtn').style.display = 'none';
-                document.getElementById('openHudLink').style.display = 'none';
+
+                // Strip both URL params so the next reload doesn't re-load
+                // whatever we just cleared.
+                if (typeof syncUrlTimetableParam === 'function') syncUrlTimetableParam(0);
+                if (typeof syncUrlRouteParam === 'function') syncUrlRouteParam(0);
 
                 setTimeout(() => {
                     location.reload();
@@ -1197,9 +1256,12 @@
                 routeData = data;
                 initializeRoute(data);
 
-                // Show the clear route button and HUD link
+                // Show the clear route button
                 document.getElementById('clearRouteBtn').style.display = 'block';
-                document.getElementById('openHudLink').style.display = 'block';
+
+                // Reflect the choice in the URL so the user can copy /
+                // bookmark / hand-edit it.
+                syncUrlTimetableParam(timetableId);
 
             } catch (err) {
                 console.error('Failed to load timetable:', err);
@@ -1245,10 +1307,20 @@
             try {
                 // Get timetable details to find route_id and train_id
                 const response = await fetch(`/api/timetables/${timetableId}`);
+                if (response.status === 404) {
+                    // Stale id pointing at a deleted/re-imported timetable.
+                    // Strip the cached state so the next page load doesn't
+                    // keep firing the same 404 against the same dead id.
+                    clearStaleCustomRoute('timetable ' + timetableId + ' returned 404');
+                    syncUrlTimetableParam(0);
+                    return;
+                }
                 const timetable = await response.json();
 
                 if (!timetable || timetable.error) {
                     console.log('Could not find timetable:', timetableId);
+                    clearStaleCustomRoute('timetable ' + timetableId + ' lookup returned error');
+                    syncUrlTimetableParam(0);
                     return;
                 }
 
@@ -1299,8 +1371,174 @@
         restoreTimetableSectionState();
         restorePanelState();
 
-        // Check server first for loaded route, then fall back to localStorage
+        // Update the browser URL to reflect the currently-loaded timetable
+        // without reloading the page. Lets users bookmark / share / hand-edit
+        // a specific service. Empty/zero id strips the param. Always strips
+        // ?route= so the two are mutually exclusive — selecting a timetable
+        // implies "show the service's path", not "show the whole route".
+        function syncUrlTimetableParam(timetableId) {
+            try {
+                const url = new URL(window.location.href);
+                if (timetableId) {
+                    url.searchParams.set('timetable', String(timetableId));
+                    url.searchParams.delete('route');
+                    url.searchParams.delete('r');
+                } else {
+                    url.searchParams.delete('timetable');
+                    url.searchParams.delete('tt');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (_) { /* old browsers; ignore */ }
+        }
+
+        // Mirror of syncUrlTimetableParam for the ?route= form. Sets the
+        // route param and strips any timetable param so the URL only ever
+        // names ONE source-of-truth (route OR timetable, never both).
+        function syncUrlRouteParam(routeId) {
+            try {
+                const url = new URL(window.location.href);
+                if (routeId) {
+                    url.searchParams.set('route', String(routeId));
+                    url.searchParams.delete('timetable');
+                    url.searchParams.delete('tt');
+                } else {
+                    url.searchParams.delete('route');
+                    url.searchParams.delete('r');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (_) { /* old browsers; ignore */ }
+        }
+
+        // Drop the cached "currently loaded" route from localStorage. Used
+        // when a stale id 404s so the next page-load doesn't keep retrying
+        // the dead reference.
+        function clearStaleCustomRoute(reason) {
+            console.warn('clearing cached customRoute:', reason);
+            localStorage.removeItem('customRoute');
+            localStorage.removeItem('customRouteFilename');
+            const clearBtn = document.getElementById('clearRouteBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
+        }
+
+        // Pull a timetable id from the page URL. Accepts `?timetable=<id>`
+        // (long form) and `?tt=<id>` (short alias) — first match wins.
+        // Returns 0 when neither is present or the value isn't a positive
+        // integer.
+        function readUrlTimetableId() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('timetable') || params.get('tt');
+            if (!raw) return 0;
+            const id = Number(raw);
+            return Number.isFinite(id) && id > 0 ? id : 0;
+        }
+
+        // Same idea for `?route=<id>` (or `?r=<id>`). When present, the
+        // route-only branch takes priority over `?timetable=` — the user
+        // wants the rails layer for the whole route, no service-specific
+        // path or stops.
+        function readUrlRouteId() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('route') || params.get('r');
+            if (!raw) return 0;
+            const id = Number(raw);
+            return Number.isFinite(id) && id > 0 ? id : 0;
+        }
+
+        // Load a route by id without picking a timetable — only the rails
+        // layer (and any route-derived markers) get rendered, no service
+        // path or stops. Used by the `?route=<id>` URL parameter for users
+        // who want to inspect the route's track layout standalone.
+        // Returns true on success, false if the id is dead.
+        async function loadRouteById(routeId) {
+            try {
+                const r = await fetch('/api/routes/' + routeId);
+                if (!r.ok) return false;
+                const route = await r.json();
+                if (!route || route.error || !route.id) return false;
+                // Build a minimal data shape that initializeRoute knows how
+                // to render: routeId drives the route-derived layer fetch
+                // inside attachServiceLayers; empty coordinates[] / timetable[]
+                // skip the service polyline + stops.
+                const data = {
+                    routeId:    route.id,
+                    routeName:  route.name || ('Route ' + route.id),
+                    coordinates: [],
+                    timetable:   [],
+                };
+                routeData = data;
+                initializeRoute(data);
+                // Do NOT cache route-only mode in localStorage. The
+                // empty-coordinates blob would otherwise leak into later
+                // page-loads via the localStorage fallback (when no URL
+                // param is set or a ?timetable= id 404s) and silently
+                // overwrite the previously-cached timetable's path.
+                // Wipe any stale cache so the fallback only ever sees a
+                // valid timetable blob — the URL param is the persistence
+                // for route-only mode.
+                localStorage.removeItem('customRoute');
+                localStorage.removeItem('customRouteFilename');
+                document.getElementById('clearRouteBtn').style.display = 'block';
+                document.getElementById('routeInfoGroup').style.display = 'block';
+                syncUrlRouteParam(routeId);
+                return true;
+            } catch (err) {
+                console.warn('loadRouteById failed:', err);
+                return false;
+            }
+        }
+
+        // Load a specific timetable by id from the DB (route + coords +
+        // timetable entries) and drive initializeRoute with it. Mirrors what
+        // loadInitialRoute does after fetching server / localStorage state.
+        // Returns true on success, false if the id is dead.
+        async function loadTimetableById(timetableId) {
+            try {
+                const r = await fetch('/api/map/route-data/' + timetableId);
+                if (!r.ok) return false;
+                const data = await r.json();
+                if (!data || data.error) return false;
+                routeData = data;
+                initializeRoute(data);
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                if (data.routeName) localStorage.setItem('customRouteFilename', data.routeName);
+                document.getElementById('clearRouteBtn').style.display = 'block';
+                document.getElementById('routeInfoGroup').style.display = 'block';
+                if (data.timetableId) {
+                    await selectTimetableInDropdowns(data.timetableId);
+                }
+                syncUrlTimetableParam(timetableId);
+                return true;
+            } catch (err) {
+                console.warn('loadTimetableById failed:', err);
+                return false;
+            }
+        }
+
+        // Loading priority:
+        //   1. ?route=<id>     URL parameter — route-only mode (wins; any
+        //                      ?timetable= is ignored when present).
+        //   2. ?timetable=<id> URL parameter — service-specific mode.
+        //   3. server-side /route-data (a route loaded into the HUD process)
+        //   4. localStorage customRoute (last route this browser loaded)
+        // Each step is self-healing: a 404 on the cached id strips the
+        // stale state instead of looping on the next page load.
         async function loadInitialRoute() {
+            const urlRouteId = readUrlRouteId();
+            if (urlRouteId) {
+                if (await loadRouteById(urlRouteId)) return;
+                console.warn('?route=' + urlRouteId + ' did not resolve to a valid route');
+                syncUrlRouteParam(0);
+            }
+
+            const urlTtId = readUrlTimetableId();
+            if (urlTtId) {
+                if (await loadTimetableById(urlTtId)) return;
+                console.warn('?timetable=' + urlTtId + ' did not resolve to a valid timetable');
+                // Strip the bad param from the URL so subsequent reloads
+                // don't keep firing the same 404.
+                syncUrlTimetableParam(0);
+            }
+
             try {
                 // Check server first
                 const response = await fetch('/route-data');
@@ -1317,7 +1555,6 @@
 
                     // Show clear button and HUD link
                     document.getElementById('clearRouteBtn').style.display = 'block';
-                    document.getElementById('openHudLink').style.display = 'block';
                     document.getElementById('routeInfoGroup').style.display = 'block';
 
                     // Select the timetable in dropdowns
@@ -1337,13 +1574,22 @@
             if (customRoute) {
                 try {
                     const data = JSON.parse(customRoute);
+                    // Reject cached blobs that have no path coords — they
+                    // were likely written before route-only mode stopped
+                    // caching, and loading them silently produces an empty
+                    // map. Treat as a stale cache and clear it.
+                    if (!Array.isArray(data.coordinates) || data.coordinates.length === 0) {
+                        console.warn('cached customRoute has no coordinates — clearing');
+                        localStorage.removeItem('customRoute');
+                        localStorage.removeItem('customRouteFilename');
+                        return;
+                    }
                     console.log('Loading custom route from localStorage:', customRouteFilename);
                     routeData = data;
                     initializeRoute(data);
 
-                    // Show clear button and HUD link since a route is loaded
+                    // Show clear button since a route is loaded
                     document.getElementById('clearRouteBtn').style.display = 'block';
-                    document.getElementById('openHudLink').style.display = 'block';
 
                     // Select the timetable in dropdowns
                     if (data.timetableId) {
@@ -1378,6 +1624,9 @@
             // Build the route polyline and station markers but DON'T add them
             // directly to the map — pass them to ServiceMap.attach so the
             // "Path" / "Stops" toggle checkboxes can hide/show them.
+            // Trim to start at first scheduled stop and end at last — GO VIA
+            // LOCATION entries are routing-only, not endpoints.
+            data.coordinates = trimPathToStops(data.coordinates, data.timetable);
             const coordinates = data.coordinates.map(coord => [coord.latitude, coord.longitude]);
             routePolyline = L.polyline(coordinates, {
                 color: '#0066ff',
@@ -1399,9 +1648,32 @@
             // features). Toggling now works for every layer.
             attachServiceLayers(data, coordinates, routePolyline, stopMarkerLayers)
                 .then(function () {
-                    // Fit bounds after attach so the polyline is on the map.
+                    // Fit bounds after attach. If the loader gave us a
+                    // service path, prefer that. Otherwise (route-only mode
+                    // — `?route=<id>` URL param) the path is empty, so fall
+                    // back to the bounds of every rail / point feature in
+                    // the route-derived layer groups. Without this fallback
+                    // the map sticks to wherever the previous load left it
+                    // and the rails draw off-screen.
                     if (coordinates.length >= 2) {
                         map.fitBounds(L.latLngBounds(coordinates), { padding: [50, 50] });
+                        return;
+                    }
+                    if (!serviceMapHandle || !serviceMapHandle.groups) return;
+                    var bounds = L.latLngBounds();
+                    Object.keys(serviceMapHandle.groups).forEach(function (k) {
+                        serviceMapHandle.groups[k].eachLayer(function (layer) {
+                            try {
+                                if (typeof layer.getBounds === 'function') {
+                                    bounds.extend(layer.getBounds());
+                                } else if (typeof layer.getLatLng === 'function') {
+                                    bounds.extend(layer.getLatLng());
+                                }
+                            } catch (_) { /* skip layers without bounds */ }
+                        });
+                    });
+                    if (bounds.isValid()) {
+                        map.fitBounds(bounds, { padding: [50, 50] });
                     }
                 })
                 .catch(function (e) { console.warn('serviceLayerBar attach failed', e); });
@@ -1446,7 +1718,7 @@
                 scheduleEntries: entries,
                 pathLayer: pathLayer,
                 stopLayers: stopLayers,
-                storageKey: 'huddev.trackingMap.layers'
+                storageKey: 'huddev.mapLayers'
             });
             lastAttachedRouteId = resolvedRouteId;
         }

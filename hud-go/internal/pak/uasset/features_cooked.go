@@ -1,6 +1,6 @@
 // features_cooked.go — binary-walker extraction of NetworkTurnoutJunction
 // (switches), TrackMarkerProperty (platform / junction route markers),
-// CarStopSignProperty (cab-stop signs), Signal (trackside signals), and
+// CarStopSignProperty (car-stop signs), Signal (trackside signals), and
 // LinkedPlatform (station-platform anchors) from a single TT_*.umap.
 //
 // All data lands as `*uasset.<Type>` records with the same shape the

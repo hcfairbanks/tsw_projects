@@ -8,6 +8,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -497,10 +498,21 @@ func isConductorService(svc *uasset.Service, ctx *ttContext) bool {
 // BuildPackageService converts our extracted Service (+ its parent Timetable)
 // into the shareable PackageService format.
 func BuildPackageService(tt *uasset.Timetable, svc *uasset.Service) *PackageService {
-	return buildPackageServiceWithCtx(tt, svc, buildTTContext(tt))
+	return buildPackageServiceWithCtx(tt, svc, buildTTContext(tt), nil)
 }
 
-func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *ttContext) *PackageService {
+// buildPackageServiceWithCtx writes one shareable per-service JSON.
+//
+// `variant` (when non-nil) carries the route-wide grouping data: the union
+// of section names across every .uasset binary that contains this service,
+// plus the formation/train data from non-canonical pairs. We use it instead
+// of just `tt.SectionName` / `tt.Services[i].Formation` so a service that
+// appears in multiple binaries (e.g. Boston-Providence Timetable +
+// Boston-Providence HSP-46 Timetable) gets both section names AND every
+// formation linked when the importer ingests the JSON. Pass nil only for
+// legacy single-tt callers; the resulting JSON will then list at most one
+// section and one formation.
+func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *ttContext, variant *serviceVariant) *PackageService {
 	startHM := hmOnly(svc.StartTime)
 	duration := computeDuration(svc)
 
@@ -540,13 +552,51 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 	}
 	ps.OriginLat = tt.OriginLat
 	ps.OriginLng = tt.OriginLng
+	// Section names: when a variant is supplied, use its precomputed union
+	// (every section that contains this composed service name across all
+	// .uasset binaries on the route). Without a variant, fall back to just
+	// this tt's own SectionName.
 	ps.SectionNames = []string{}
-	if tt.SectionName != "" {
+	if variant != nil && len(variant.sectionNames) > 0 {
+		ps.SectionNames = append(ps.SectionNames, variant.sectionNames...)
+	} else if tt.SectionName != "" {
 		ps.SectionNames = []string{tt.SectionName}
 	}
 	ps.Trains = buildTrains(ctx, svc)
 	if f := strings.TrimSpace(svc.Formation); f != "" && f != "None" {
 		ps.FormationName = f
+	}
+	// Pull formation/train data from non-canonical pairs in the same variant
+	// (other binaries declaring the same service). Dedupe by formation_name —
+	// when two binaries happen to use the same formation it'd just create
+	// noise. Skips the canonical pair's own formation since it's already on
+	// ps.FormationName / ps.Trains.
+	if variant != nil && len(variant.additional) > 0 {
+		seen := map[string]struct{}{}
+		if ps.FormationName != "" {
+			seen[ps.FormationName] = struct{}{}
+		}
+		extras := make([]AdditionalFormation, 0, len(variant.additional))
+		for _, p := range variant.additional {
+			if p.svc == nil {
+				continue
+			}
+			f := strings.TrimSpace(p.svc.Formation)
+			if f == "" || f == "None" {
+				continue
+			}
+			if _, dup := seen[f]; dup {
+				continue
+			}
+			seen[f] = struct{}{}
+			extras = append(extras, AdditionalFormation{
+				FormationName: f,
+				Trains:        buildTrains(ctx, p.svc),
+			})
+		}
+		if len(extras) > 0 {
+			ps.AdditionalFormations = extras
+		}
 	}
 	startPlatform := ctx.resolveStartPlatform(svc)
 	// WAIT FOR SERVICE doesn't carry its own ribbon reference. Inject the
@@ -573,7 +623,7 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 		}
 		if len(ribs) > 0 {
 			anchor := geo.NewRouteAnchor(tt.OriginLat, tt.OriginLng)
-			coords := BuildServicePath(svc, ribs, anchor)
+			coords := BuildServicePath(svc, ribs, tt.Switches, tt.RibbonVertices, anchor)
 			if len(coords) > 0 {
 				ps.Coordinates = coords
 				ps.TotalPoints = len(coords)
@@ -584,8 +634,21 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 }
 
 // enrichScheduleLatLng populates Lat/Lng on each ScheduleItem whose ribbon is
-// resolvable from the route's tile index. Uses the route origin + WGS84 UTM
-// inverse (see internal/geo). No-op if the timetable lacks origin or ribbons.
+// resolvable from the route's tile index.
+//
+// CRITICAL: when `tt.RibbonVertices` is populated (the rails phase has run),
+// stops are snapped to the nearest rail vertex from that map — the SAME
+// vertex set the path-builder slices from. Without this, the analytical arc
+// walker used for stops disagrees with the rails sampler at clothoid spirals
+// (which the rails sampler renders via cubic Hermite while ArcDelta treats
+// them as straight chords). The visible symptom is a small gap between a
+// stop marker and the start/end of the polyline at curve-transition
+// platforms. Snapping to the rails' vertex set keeps the marker on the
+// rendered polyline.
+//
+// Falls back to the legacy analytical walker when RibbonVertices isn't
+// populated (legacy code paths or extractor invocations that skip the rails
+// phase).
 func enrichScheduleLatLng(svc *uasset.Service, tt *uasset.Timetable) {
 	if tt == nil || tt.OriginLat == 0 && tt.OriginLng == 0 {
 		return
@@ -609,12 +672,18 @@ func enrichScheduleLatLng(svc *uasset.Service, tt *uasset.Timetable) {
 		if !ok || rib.Length <= 0 {
 			continue
 		}
-		// Walk the arc from the ribbon's true world-space origin
-		// (CachedStartPosition on every TSW6 NetworkRibbon). ArcDelta is
-		// frame-invariant — only TangentX/Y, Radius, and the arc-length
-		// position determine the displacement from the start, so we don't
-		// need to know whether the curve's StartX/Y is in world or local
-		// coords. RibbonLocation is in UE cm (float32 from the asset).
+
+		// Preferred path: snap to the rails-builder vertex set so the stop
+		// lies exactly on a vertex of the rendered rail polyline.
+		if pts := lookupRibbonVerts(rib, tt.RibbonVertices); len(pts) > 0 {
+			vIdx := nearestVertexIndex(pts, float64(it.RibbonLocation))
+			it.Lat = pts[vIdx][1]
+			it.Lng = pts[vIdx][0]
+			continue
+		}
+
+		// Legacy fallback: analytical walk of the ribbon arc. Drifts from
+		// the rails layer at clothoid sections.
 		dx, dy := geo.ArcDelta(0, 0, rib.TangentX, rib.TangentY, rib.Radius, float64(it.RibbonLocation))
 		originX, originY, _ := ribbonWorldOrigin(rib)
 		// Convert to metres east/south of origin. TSW6 stores ribbon
@@ -676,6 +745,14 @@ func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string,
 			return count, err
 		}
 		used := map[string]bool{}
+		// Gather railsTT + allTTs first so we can run the rails writer BEFORE
+		// the per-service writer. The rails writer (cookedmap.WriteRouteMap)
+		// populates `tt.RibbonVertices` on every timetable in allTTs; the
+		// per-service path-builder slices from those vertex arrays so the
+		// service path lies bit-identically on the rendered rails. If we ran
+		// services first, RibbonVertices would be empty and BuildServicePath
+		// would have to fall back to its own re-sampler — which diverges from
+		// the rails layer at clothoid sections.
 		var railsTT *uasset.Timetable
 		seenTT := map[*uasset.Timetable]bool{}
 		allTTs := []*uasset.Timetable{}
@@ -687,10 +764,41 @@ func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string,
 			if railsTT == nil && pair.tt != nil && len(pair.tt.Ribbons) > 0 {
 				railsTT = pair.tt
 			}
-			if !serviceMatches(pair.svc, serviceFilter) {
+		}
+		writeOne := func(name string, fn func(io.Writer) error) error {
+			p := filepath.Join(dir, name)
+			f, err := os.Create(p)
+			if err != nil {
+				return err
+			}
+			werr := fn(f)
+			f.Close()
+			return werr
+		}
+		if railsTT != nil {
+			if err := writeOne(RouteDataFilename(routeName), func(w io.Writer) error {
+				return runRouteMapWriter(w, railsTT, allTTs, mapWriter)
+			}); err != nil {
+				return count, err
+			}
+			if err := writeOne(RibbonsMetaFilename(routeName), func(w io.Writer) error {
+				_, e := WriteRibbonsMeta(w, railsTT)
+				return e
+			}); err != nil {
+				return count, err
+			}
+		}
+		// Per-service writes — RibbonVertices is now populated.
+		// Group routePairs into variants so a service that appears in
+		// multiple .uasset binaries collapses into ONE JSON per playable
+		// flag (the importer's dedup key). Section + train data from the
+		// non-canonical pairs rides along on the canonical's JSON.
+		variants := groupServiceVariants(svcs)
+		for _, v := range variants {
+			if !serviceMatches(v.canonical.svc, serviceFilter) {
 				continue
 			}
-			ps := buildPackageServiceWithCtx(pair.tt, pair.svc, ctxByTT[pair.tt])
+			ps := buildPackageServiceWithCtx(v.canonical.tt, v.canonical.svc, ctxByTT[v.canonical.tt], &v)
 			stem := filenameStem(ps)
 			name := uniqueName(used, stem)
 			used[name] = true
@@ -706,29 +814,6 @@ func writeDir(root string, timetables []*uasset.Timetable, serviceFilter string,
 			}
 			count++
 		}
-		if railsTT != nil {
-			writeOne := func(name string, fn func(io.Writer) error) error {
-				p := filepath.Join(dir, name)
-				f, err := os.Create(p)
-				if err != nil {
-					return err
-				}
-				werr := fn(f)
-				f.Close()
-				return werr
-			}
-			if err := writeOne(RouteDataFilename(routeName), func(w io.Writer) error {
-				return runRouteMapWriter(w, railsTT, allTTs, mapWriter)
-			}); err != nil {
-				return count, err
-			}
-			if err := writeOne(RibbonsMetaFilename(routeName), func(w io.Writer) error {
-				_, e := WriteRibbonsMeta(w, railsTT)
-				return e
-			}); err != nil {
-				return count, err
-			}
-		}
 	}
 	return count, nil
 }
@@ -741,6 +826,91 @@ func buildAllContexts(timetables []*uasset.Timetable) map[*uasset.Timetable]*ttC
 		m[tt] = buildTTContext(tt)
 	}
 	return m
+}
+
+// serviceVariantKey buckets routePairs that the importer would treat as
+// the same DB row. The composed ServiceName is the importer's dedup key;
+// IsPlayerDrivable is added so a playable variant doesn't silently merge
+// with a non-playable AI version of the same service name (the user wants
+// those kept distinct in the DB).
+type serviceVariantKey struct {
+	name     string
+	playable bool
+}
+
+// serviceVariant is one (name, playable) bucket of routePairs that should
+// collapse into a single per-service JSON. `canonical` is the first-seen
+// pair and drives all the top-level fields (schedule, coords, primary
+// formation). `sectionNames` is the deduped + sorted union of every pair's
+// SectionName. `additional` are the other pairs whose formation data needs
+// to ride along on the JSON so the importer can still link every train
+// via timetable_trains.
+type serviceVariant struct {
+	canonical    routePair
+	sectionNames []string
+	additional   []routePair
+}
+
+// groupServiceVariants buckets every (tt, svc) pair on a route into
+// variants the per-service writer should emit, one JSON per variant.
+// Two pairs collapse together when both:
+//
+//	(a) compose to the same ServiceName (mirrors importer's dedup)
+//	(b) share IsPlayerDrivable
+//
+// Returns variants in first-seen order so output is stable across runs.
+//
+// This replaces a previous "write every pair, let the importer drop
+// duplicates" approach that silently lost the second binary's section
+// linkage and any non-canonical formation data.
+func groupServiceVariants(svcs []routePair) []serviceVariant {
+	type bucket struct {
+		canonical routePair
+		nameSet   map[string]struct{}
+		additions []routePair
+	}
+	buckets := map[serviceVariantKey]*bucket{}
+	order := []serviceVariantKey{}
+	for _, p := range svcs {
+		if p.tt == nil || p.svc == nil {
+			continue
+		}
+		startHM := hmOnly(p.svc.StartTime)
+		duration := computeDuration(p.svc)
+		key := serviceVariantKey{
+			name:     buildServiceName(p.tt, p.svc, startHM, duration),
+			playable: p.svc.IsPlayerDrivable,
+		}
+		b, ok := buckets[key]
+		if !ok {
+			b = &bucket{
+				canonical: p,
+				nameSet:   map[string]struct{}{},
+			}
+			buckets[key] = b
+			order = append(order, key)
+		} else {
+			b.additions = append(b.additions, p)
+		}
+		if name := strings.TrimSpace(p.tt.SectionName); name != "" {
+			b.nameSet[name] = struct{}{}
+		}
+	}
+	out := make([]serviceVariant, 0, len(order))
+	for _, key := range order {
+		b := buckets[key]
+		names := make([]string, 0, len(b.nameSet))
+		for n := range b.nameSet {
+			names = append(names, n)
+		}
+		sort.Strings(names)
+		out = append(out, serviceVariant{
+			canonical:    b.canonical,
+			sectionNames: names,
+			additional:   b.additions,
+		})
+	}
+	return out
 }
 
 func writeZip(zipPath string, timetables []*uasset.Timetable, serviceFilter string, mapWriter RouteMapWriter) (int, error) {
@@ -823,6 +993,12 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 	zw := zip.NewWriter(f)
 	count := 0
 	used := map[string]bool{}
+	// Gather railsTT + allTTs first so we can run the rails writer BEFORE
+	// the per-service writer. The rails writer (cookedmap.WriteRouteMap)
+	// populates `tt.RibbonVertices` on every timetable in allTTs; the
+	// per-service path-builder slices from those vertex arrays so the
+	// service path lies bit-identically on the rendered rails. See writeDir
+	// for the full rationale.
 	var railsTT *uasset.Timetable
 	seenTT := map[*uasset.Timetable]bool{}
 	allTTs := []*uasset.Timetable{}
@@ -834,14 +1010,27 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 		if railsTT == nil && pair.tt != nil && (len(pair.tt.RouteRibbons) > 0 || len(pair.tt.Ribbons) > 0) {
 			railsTT = pair.tt
 		}
-		if !serviceMatches(pair.svc, serviceFilter) {
+	}
+	if railsTT != nil {
+		if err := addRailsToZip(zw, run.name, allTTs, railsTT, mapWriter); err != nil {
+			return count, err
+		}
+	}
+	// Per-service writes — RibbonVertices is now populated.
+	// Group routePairs into variants so a service that appears in multiple
+	// .uasset binaries collapses into ONE JSON per playable flag (the
+	// importer's dedup key). Section + train data from the non-canonical
+	// pairs rides along on the canonical's JSON.
+	variants := groupServiceVariants(run.pairs)
+	for _, v := range variants {
+		if !serviceMatches(v.canonical.svc, serviceFilter) {
 			continue
 		}
-		ctx := ctxByTT[pair.tt]
+		ctx := ctxByTT[v.canonical.tt]
 		if ctx == nil {
-			ctx = buildTTContext(pair.tt)
+			ctx = buildTTContext(v.canonical.tt)
 		}
-		ps := buildPackageServiceWithCtx(pair.tt, pair.svc, ctx)
+		ps := buildPackageServiceWithCtx(v.canonical.tt, v.canonical.svc, ctx, &v)
 		stem := filenameStem(ps)
 		name := uniqueName(used, stem)
 		used[name] = true
@@ -859,11 +1048,6 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 			return count, err
 		}
 		count++
-	}
-	if railsTT != nil {
-		if err := addRailsToZip(zw, run.name, allTTs, railsTT, mapWriter); err != nil {
-			return count, err
-		}
 	}
 	return count, zw.Close()
 }
