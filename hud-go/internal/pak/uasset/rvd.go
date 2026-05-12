@@ -22,6 +22,51 @@ type RVD struct {
 	SubstitutableUnit bool     `json:"substitutable_unit,omitempty"`
 	HasGuardControls  bool     `json:"has_guard_controls,omitempty"` // bHasGuardModeControls
 	ServiceTypes      int      `json:"service_types,omitempty"`      // bitmask: 3 = commuter, 5/6 = intercity
+
+	// IsElectric reflects the asset's `bIsElectric` flag — true when the
+	// vehicle draws power from external electrification (catenary / third
+	// rail / etc.). False covers diesel, steam, hybrid not-electrified-
+	// mode. We don't yet distinguish those subtypes; if needed later, the
+	// asset's RailVehicleClass name often leaks it ("BR66" diesel).
+	IsElectric bool `json:"is_electric,omitempty"`
+	// MaxSpeedKph and MaxPowerKw are decoded from MaximumSpeed
+	// (SpeedQuantity struct, 4-byte float) and PowerOutput (PowerQuantity
+	// struct, 4-byte float). Stored unscaled; UI scaling is the caller's
+	// job. The asset values are believed to be SI internally — m/s and
+	// watts respectively — so we convert at parse time.
+	MaxSpeedKph float32 `json:"max_speed_kph,omitempty"`
+	MaxPowerKw  float32 `json:"max_power_kw,omitempty"`
+	// PoweredAxleCount mirrors the UInt32Property of the same name.
+	PoweredAxleCount uint32 `json:"powered_axle_count,omitempty"`
+
+	// ManufacturerName, EngineDescription, TypeDescription are TSW's
+	// UI-friendly strings; useful for the Train Classes search page.
+	ManufacturerName    string `json:"manufacturer_name,omitempty"`
+	EngineDescription   string `json:"engine_description,omitempty"`
+	TypeDescription     string `json:"type_description,omitempty"`
+
+	// ThumbnailAssetRef is the unresolved SoftObjectProperty package
+	// path for the train's thumbnail texture (e.g.
+	// "/IOW_BR_Class483/Data/RailVehicleDefinition/FrontEndAssets/TSW_483Loco_DLC_Thumbnail").
+	// Caller resolves it against the unpacked tree and extracts the PNG
+	// via ExtractTexture2DPNG.
+	ThumbnailAssetRef string `json:"thumbnail_asset_ref,omitempty"`
+
+	// Electrification lists every electrification system the vehicle is
+	// compatible with. Decoded from the `ElectrificationRequirements`
+	// ArrayProperty<StructProperty>. Empty on non-electric vehicles.
+	Electrification []ElectrificationSpec `json:"electrification,omitempty"`
+}
+
+// ElectrificationSpec is one entry in an RVD's ElectrificationRequirements
+// list. Captures the four fields TSW writes on each struct element:
+// Current (overhead / third-rail / etc.), PickupSide (top/bottom/etc.),
+// Voltage in volts, Frequency in Hz (0 == DC).
+type ElectrificationSpec struct {
+	Current    string `json:"current,omitempty"`    // "OverheadWires", "ThirdRail", "FourthRail"…
+	PickupSide string `json:"pickup_side,omitempty"`
+	VoltageV   int32  `json:"voltage_v,omitempty"`
+	FrequencyHz int32 `json:"frequency_hz,omitempty"` // 0 == DC
 }
 
 // ParseRVD reads the JSON produced by UAssetGUI for an RVD asset file and

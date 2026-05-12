@@ -15,8 +15,10 @@ type Route struct {
 	TswVersion int    `db:"tsw_version" json:"tsw_version"`
 }
 
-// Train represents a train/rolling stock (a single physical formation).
-type Train struct {
+// Formation represents one assembled formation of rolling stock — a single
+// physical arrangement of vehicles. Class lives separately in
+// train_classes; per-car detail lives in formation_vehicles.
+type Formation struct {
 	ID        int      `db:"id"          json:"id"`
 	Name      string   `db:"name"        json:"name"`
 	ClassID   *int     `db:"class_id"    json:"class_id,omitempty"`
@@ -26,11 +28,12 @@ type Train struct {
 	CarCount  *int     `db:"car_count"   json:"car_count,omitempty"`
 }
 
-// RouteTrain represents a many-to-many link between routes and trains.
-type RouteTrain struct {
-	ID      int `db:"id"       json:"id"`
-	RouteID int `db:"route_id" json:"route_id"`
-	TrainID int `db:"train_id" json:"train_id"`
+// RouteFormation represents a many-to-many link between routes and
+// formations.
+type RouteFormation struct {
+	ID          int `db:"id"            json:"id"`
+	RouteID     int `db:"route_id"      json:"route_id"`
+	FormationID int `db:"formation_id"  json:"formation_id"`
 }
 
 // Timetable represents a timetable/service definition.
@@ -38,7 +41,7 @@ type Timetable struct {
 	ID                     int      `db:"id"                       json:"id"`
 	ServiceName            string   `db:"service_name"             json:"service_name"`
 	RouteID                *int     `db:"route_id"                 json:"route_id"`
-	TrainID                *int     `db:"train_id"                 json:"train_id"`
+	FormationID            *int     `db:"formation_id"             json:"formation_id"`
 	ServiceType            string   `db:"service_type"             json:"service_type"`
 	Contributor            *string  `db:"contributor"              json:"contributor"`
 	CoordinatesContributor *string  `db:"coordinates_contributor"  json:"coordinates_contributor"`
@@ -93,18 +96,18 @@ type Section struct {
 	Name    string `db:"name"     json:"name"`
 }
 
-// SectionTrain links a section to a train.
-type SectionTrain struct {
-	ID        int `db:"id"         json:"id"`
-	SectionID int `db:"section_id" json:"section_id"`
-	TrainID   int `db:"train_id"   json:"train_id"`
+// SectionFormation links a section to a formation.
+type SectionFormation struct {
+	ID          int `db:"id"            json:"id"`
+	SectionID   int `db:"section_id"    json:"section_id"`
+	FormationID int `db:"formation_id"  json:"formation_id"`
 }
 
-// TimetableTrain links a timetable to a train.
-type TimetableTrain struct {
-	ID          int `db:"id"           json:"id"`
-	TimetableID int `db:"timetable_id" json:"timetable_id"`
-	TrainID     int `db:"train_id"     json:"train_id"`
+// TimetableFormation links a timetable to a formation.
+type TimetableFormation struct {
+	ID          int `db:"id"            json:"id"`
+	TimetableID int `db:"timetable_id"  json:"timetable_id"`
+	FormationID int `db:"formation_id"  json:"formation_id"`
 }
 
 // TimetableSection links a timetable to a section.

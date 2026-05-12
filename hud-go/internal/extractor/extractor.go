@@ -248,6 +248,13 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 				fmt.Fprintf(os.Stderr, "[debug] parsed %d services from %s\n", len(tt.Services), filepath.Base(ua))
 			}
 			if len(tt.Services) > 0 {
+				// Per-uasset success line for the Live Log feed. One asset
+				// can contain many Services (a "timetable" in the user's
+				// sense is the per-service .json the writer emits later);
+				// surfacing the per-asset progress here lets the user see
+				// the extractor chewing through 600+ files on a big DLC
+				// without flooding the log with one line per service.
+				e.logf("[%s] Parsed %s (%d services)\n", route.Name, filepath.Base(ua), len(tt.Services))
 				// Attach the per-route RVD map so the writer can resolve vehicle classes.
 				tt.RVDByPath = rvdMap
 				tt.OriginLat = originLat

@@ -136,6 +136,14 @@
                     </label>
                     <span></span>
                 </div>
+                <div class="settings-row">
+                    <label for="cfgBuildTimetableMaps" data-i18n="extractor.buildTimetableMaps">Build Timetable Maps:</label>
+                    <label style="justify-self:start;">
+                        <input id="cfgBuildTimetableMaps" type="checkbox" onchange="saveCfgBoolField('extractorBuildTimetableMaps', 'cfgBuildTimetableMaps')">
+                        <span data-i18n="extractor.buildTimetableMapsDesc">Pre-build per-timetable map data during import. SLOW on big DLCs (~30 sec per timetable). Off by default; build on demand from the route or timetable pages instead.</span>
+                    </label>
+                    <span></span>
+                </div>
             </div>
         </details>
     </div>
@@ -262,6 +270,7 @@
                 document.getElementById('cfgOutputDir').value    = cfg.extractorOutputDir  || '';
                 document.getElementById('cfgTempDir').value      = cfg.extractorTempDir    || '';
                 document.getElementById('cfgAutoImport').checked = !!cfg.extractorAutoImport;
+                document.getElementById('cfgBuildTimetableMaps').checked = !!cfg.extractorBuildTimetableMaps;
             } catch (e) { console.error('config load:', e); }
         }
 
@@ -276,6 +285,7 @@
             const value = !!document.getElementById(inputId).checked;
             await putConfigKey(key, value);
         }
+
 
         async function putConfigKey(key, value) {
             try {
@@ -305,7 +315,7 @@
                 routes.clear();
                 // The API now returns a tree: top-level rows are parent
                 // routes (the user's installed RouteDefinitions); each
-                // carries `children` — addon paks (cargo / wagon / train
+                // carries `children` — addon paks (cargo / wagon / formation
                 // DLCs) whose timetables ship services for that parent.
                 // The current UI is one row per route; we keep that shape
                 // for the parent rows and stash `children` on the row so
@@ -405,7 +415,7 @@
                         '</tr>'
                     );
                 }
-                // Addon children (cargo / wagon / train DLCs that ship
+                // Addon children (cargo / wagon / formation DLCs that ship
                 // services for this parent). Indented, no checkbox, no
                 // actions — they're rolled into the parent's extraction
                 // bundle, not separate operations.
@@ -473,7 +483,8 @@
                 const e = routes.get(name); if (e) { e.completed = true; }
                 selected.delete(name);
                 renderRoutes();
-                appendLog('✓ ' + name + ': ' + t('extractor.markedComplete', 'marked complete'), 'ok');
+                const label = (e && e.displayName) || name;
+                appendLog('✓ ' + label + ': ' + t('extractor.markedComplete', 'marked complete'), 'ok');
             } catch (e) { appendLog(t('extractor.markFailed', 'mark complete failed') + ': ' + e.message, 'err'); }
         }
 
@@ -483,7 +494,8 @@
                 if (!r.ok) throw new Error(await r.text());
                 const e = routes.get(name); if (e) { e.completed = false; }
                 renderRoutes();
-                appendLog('↶ ' + name + ': ' + t('extractor.movedToRoutes', 'moved back to Routes'), 'ok');
+                const label = (e && e.displayName) || name;
+                appendLog('↶ ' + label + ': ' + t('extractor.movedToRoutes', 'moved back to Routes'), 'ok');
             } catch (e) { appendLog(t('extractor.unmarkFailed', 'unmark failed') + ': ' + e.message, 'err'); }
         }
 
@@ -677,7 +689,7 @@
         // pak — produces ~80 log lines (one [rvd-scan] + one "Unpacked N files"
         // per pak) before the actual route work even starts. From the user's
         // perspective that's pure noise; collapse it into a single "Scanning
-        // for trains..." line, then a "Done — found N trains" line at the end.
+        // for formations..." line, then a "Done — found N formations" line at the end.
         // The binary still does the full scan; we just hide the chatter.
         let rvdScanPhase = false;
         let rvdScanLineId = 0;
@@ -688,7 +700,7 @@
             const s = line || '';
             if (/Scanning all paks for RVD assets/i.test(s)) {
                 rvdScanPhase = true;
-                appendCollapsedLog(t('extractor.scanningTrains', 'Scanning for trains…'), 'rvdScan');
+                appendCollapsedLog(t('extractor.scanningFormations', 'Scanning for formations…'), 'rvdScan');
                 return true;
             }
             if (rvdScanPhase) {
@@ -696,7 +708,7 @@
                     rvdScanPhase = false;
                     const m = s.match(/discovered (\d+) unique RVDs/i);
                     const n = m ? m[1] : '?';
-                    appendLog(t('extractor.scanningTrainsDone', 'Found {n} trains across all paks').replace('{n}', n), 'ok');
+                    appendLog(t('extractor.scanningFormationsDone', 'Found {n} formations across all paks').replace('{n}', n), 'ok');
                     return true;
                 }
                 // While in the scan phase, swallow the per-pak chatter:

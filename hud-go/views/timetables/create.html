@@ -64,11 +64,11 @@
         .clear-btn { padding: 5px 10px; font-size: 12px; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; }
         .clear-btn:hover { background: var(--btn-danger-bg); color: #fff; }
 
-        /* Selected trains list */
-        .selected-trains { margin-top: 10px; }
-        .selected-train { display: inline-flex; align-items: center; gap: 5px; background: var(--bg-tertiary); padding: 5px 10px; border-radius: 4px; margin-right: 8px; margin-bottom: 8px; font-size: 13px; }
-        .selected-train .remove-train { background: none; border: none; color: var(--btn-danger-bg); cursor: pointer; font-size: 14px; padding: 0 2px; }
-        .selected-train .remove-train:hover { color: var(--btn-danger-hover); }
+        /* Selected formations list */
+        .selected-formations { margin-top: 10px; }
+        .selected-formation { display: inline-flex; align-items: center; gap: 5px; background: var(--bg-tertiary); padding: 5px 10px; border-radius: 4px; margin-right: 8px; margin-bottom: 8px; font-size: 13px; }
+        .selected-formation .remove-formation { background: none; border: none; color: var(--btn-danger-bg); cursor: pointer; font-size: 14px; padding: 0 2px; }
+        .selected-formation .remove-formation:hover { color: var(--btn-danger-hover); }
     </style>
 </head>
 <body data-theme="dark">
@@ -108,8 +108,8 @@
                     <input type="number" step="1" id="carCount" placeholder="e.g., 7">
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 120px;">
-                    <label for="trainLength" data-i18n="timetables.trainLength">Train Length (m)</label>
-                    <input type="number" step="0.1" id="trainLength" placeholder="e.g., 113.9">
+                    <label for="formationLength" data-i18n="timetables.formationLength">Formation Length (m)</label>
+                    <input type="number" step="0.1" id="formationLength" placeholder="e.g., 113.9">
                 </div>
             </div>
             <div class="form-row">
@@ -149,21 +149,21 @@
                     <label data-i18n="timetables.route">Route *</label>
                     <div class="typeahead-row">
                         <div class="typeahead-wrapper">
-                            <input type="text" class="typeahead-input" id="routeSearch" data-i18n-placeholder="trains.searchRoutesPlaceholder" placeholder="Type to search routes..." autocomplete="off">
+                            <input type="text" class="typeahead-input" id="routeSearch" data-i18n-placeholder="formations.searchRoutesPlaceholder" placeholder="Type to search routes..." autocomplete="off">
                             <div class="typeahead-dropdown" id="routeDropdown"></div>
                         </div>
                         <button type="button" class="clear-btn" onclick="clearRoute()" data-i18n="common.clear">Clear</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="timetables.trains">Trains * (at least one)</label>
+                    <label data-i18n="timetables.formations">Formations * (at least one)</label>
                     <div class="typeahead-row">
                         <div class="typeahead-wrapper">
-                            <input type="text" class="typeahead-input" id="trainSearch" placeholder="Type to search and add trains..." autocomplete="off">
-                            <div class="typeahead-dropdown" id="trainDropdown"></div>
+                            <input type="text" class="typeahead-input" id="formationSearch" placeholder="Type to search and add formations..." autocomplete="off">
+                            <div class="typeahead-dropdown" id="formationDropdown"></div>
                         </div>
                     </div>
-                    <div class="selected-trains" id="selectedTrains"></div>
+                    <div class="selected-formations" id="selectedFormations"></div>
                 </div>
             </div>
         </div>
@@ -217,17 +217,17 @@
         let entries = [];
         let entryIdCounter = 0;
         let allRoutes = [];
-        let allTrains = [];
-        let routeTrains = []; // Trains available for the selected route
+        let allFormations = [];
+        let routeFormations = []; // Formations available for the selected route
         let selectedRouteId = null;
-        let selectedTrains = []; // Array of {id, name}
+        let selectedFormations = []; // Array of {id, name}
         let routeLocations = []; // Locations for the selected route
         let routeActiveIndex = -1;
-        let trainActiveIndex = -1;
+        let formationActiveIndex = -1;
 
         const ACTIONS = TIMETABLE_ACTIONS;
 
-        // Load routes and trains
+        // Load routes and formations
         async function loadRoutes() {
             try {
                 const response = await fetch('/api/routes');
@@ -237,12 +237,12 @@
             }
         }
 
-        async function loadTrains() {
+        async function loadFormations() {
             try {
-                const response = await fetch('/api/trains');
-                allTrains = await response.json();
+                const response = await fetch('/api/formations');
+                allFormations = await response.json();
             } catch (err) {
-                console.error('Failed to load trains:', err);
+                console.error('Failed to load formations:', err);
             }
         }
 
@@ -279,25 +279,25 @@
             document.getElementById('routeDropdown').classList.remove('show');
             routeActiveIndex = -1;
 
-            // Clear selected trains when route changes (they may not be valid for new route)
-            selectedTrains = [];
-            renderSelectedTrains();
+            // Clear selected formations when route changes (they may not be valid for new route)
+            selectedFormations = [];
+            renderSelectedFormations();
 
-            // Fetch trains available for this route
+            // Fetch formations available for this route
             try {
-                const response = await fetch('/api/routes/' + id + '/trains');
-                routeTrains = await response.json();
+                const response = await fetch('/api/routes/' + id + '/formations');
+                routeFormations = await response.json();
             } catch (err) {
-                console.error('Failed to load trains for route:', err);
-                routeTrains = [];
+                console.error('Failed to load formations for route:', err);
+                routeFormations = [];
             }
 
-            // Enable train input and update placeholder
-            const trainInput = document.getElementById('trainSearch');
-            trainInput.disabled = false;
-            trainInput.placeholder = routeTrains.length > 0
-                ? 'Type to search and add trains...'
-                : 'No trains available for this route';
+            // Enable formation input and update placeholder
+            const formationInput = document.getElementById('formationSearch');
+            formationInput.disabled = false;
+            formationInput.placeholder = routeFormations.length > 0
+                ? 'Type to search and add formations...'
+                : 'No formations available for this route';
 
             // Fetch locations available for this route
             try {
@@ -312,17 +312,17 @@
         function clearRoute() {
             document.getElementById('routeSearch').value = '';
             selectedRouteId = null;
-            routeTrains = [];
+            routeFormations = [];
 
-            // Clear selected trains since no route is selected
-            selectedTrains = [];
-            renderSelectedTrains();
+            // Clear selected formations since no route is selected
+            selectedFormations = [];
+            renderSelectedFormations();
 
-            // Disable train input until a route is selected
-            const trainInput = document.getElementById('trainSearch');
-            trainInput.disabled = true;
-            trainInput.placeholder = 'Select a route first...';
-            trainInput.value = '';
+            // Disable formation input until a route is selected
+            const formationInput = document.getElementById('formationSearch');
+            formationInput.disabled = true;
+            formationInput.placeholder = 'Select a route first...';
+            formationInput.value = '';
         }
 
         function setupRouteTypeahead() {
@@ -363,16 +363,16 @@
             });
         }
 
-        // Train typeahead (multi-select) - filtered by selected route
-        function filterTrains(query) {
-            // Only show trains available for the selected route
-            if (!selectedRouteId || routeTrains.length === 0) {
+        // Formation typeahead (multi-select) - filtered by selected route
+        function filterFormations(query) {
+            // Only show formations available for the selected route
+            if (!selectedRouteId || routeFormations.length === 0) {
                 return [];
             }
 
-            // Filter out already selected trains
-            const selectedIds = selectedTrains.map(function(t) { return t.id; });
-            let available = routeTrains.filter(function(t) {
+            // Filter out already selected formations
+            const selectedIds = selectedFormations.map(function(t) { return t.id; });
+            let available = routeFormations.filter(function(t) {
                 return !selectedIds.includes(t.id);
             });
 
@@ -383,86 +383,86 @@
             }).slice(0, 10);
         }
 
-        function renderTrainDropdown(trains) {
-            const dropdown = document.getElementById('trainDropdown');
+        function renderFormationDropdown(formations) {
+            const dropdown = document.getElementById('formationDropdown');
             if (!selectedRouteId) {
                 dropdown.innerHTML = '<div class="typeahead-empty">Please select a route first</div>';
-            } else if (trains.length === 0) {
-                dropdown.innerHTML = '<div class="typeahead-empty">No trains available for this route</div>';
+            } else if (formations.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">No formations available for this route</div>';
             } else {
-                dropdown.innerHTML = trains.map(function(train, index) {
-                    return '<div class="typeahead-item' + (index === trainActiveIndex ? ' active' : '') + '" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' + escapeHtml(train.name) + '</div>';
+                dropdown.innerHTML = formations.map(function(formation, index) {
+                    return '<div class="typeahead-item' + (index === formationActiveIndex ? ' active' : '') + '" data-id="' + formation.id + '" data-name="' + escapeHtml(formation.name) + '">' + escapeHtml(formation.name) + '</div>';
                 }).join('');
 
                 dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
                     item.addEventListener('click', function() {
-                        addTrain(parseInt(item.dataset.id), item.dataset.name);
+                        addFormation(parseInt(item.dataset.id), item.dataset.name);
                     });
                 });
             }
             dropdown.classList.add('show');
         }
 
-        function addTrain(id, name) {
+        function addFormation(id, name) {
             // Check if already added
-            if (selectedTrains.some(function(t) { return t.id === id; })) return;
+            if (selectedFormations.some(function(t) { return t.id === id; })) return;
 
-            selectedTrains.push({ id: id, name: name });
-            document.getElementById('trainSearch').value = '';
-            document.getElementById('trainDropdown').classList.remove('show');
-            trainActiveIndex = -1;
-            renderSelectedTrains();
+            selectedFormations.push({ id: id, name: name });
+            document.getElementById('formationSearch').value = '';
+            document.getElementById('formationDropdown').classList.remove('show');
+            formationActiveIndex = -1;
+            renderSelectedFormations();
         }
 
-        function removeTrain(id) {
-            selectedTrains = selectedTrains.filter(function(t) { return t.id !== id; });
-            renderSelectedTrains();
+        function removeFormation(id) {
+            selectedFormations = selectedFormations.filter(function(t) { return t.id !== id; });
+            renderSelectedFormations();
         }
 
-        function renderSelectedTrains() {
-            const container = document.getElementById('selectedTrains');
-            if (selectedTrains.length === 0) {
+        function renderSelectedFormations() {
+            const container = document.getElementById('selectedFormations');
+            if (selectedFormations.length === 0) {
                 container.innerHTML = '';
                 return;
             }
-            container.innerHTML = selectedTrains.map(function(train) {
-                return '<span class="selected-train">' + escapeHtml(train.name) + '<button type="button" class="remove-train" onclick="removeTrain(' + train.id + ')">&times;</button></span>';
+            container.innerHTML = selectedFormations.map(function(formation) {
+                return '<span class="selected-formation">' + escapeHtml(formation.name) + '<button type="button" class="remove-formation" onclick="removeFormation(' + formation.id + ')">&times;</button></span>';
             }).join('');
         }
 
-        function setupTrainTypeahead() {
-            const searchInput = document.getElementById('trainSearch');
-            const dropdown = document.getElementById('trainDropdown');
+        function setupFormationTypeahead() {
+            const searchInput = document.getElementById('formationSearch');
+            const dropdown = document.getElementById('formationDropdown');
 
             searchInput.addEventListener('input', function() {
-                trainActiveIndex = -1;
-                const filtered = filterTrains(searchInput.value.trim());
-                renderTrainDropdown(filtered);
+                formationActiveIndex = -1;
+                const filtered = filterFormations(searchInput.value.trim());
+                renderFormationDropdown(filtered);
             });
 
             searchInput.addEventListener('focus', function() {
-                const filtered = filterTrains(searchInput.value.trim());
-                renderTrainDropdown(filtered);
+                const filtered = filterFormations(searchInput.value.trim());
+                renderFormationDropdown(filtered);
             });
 
             searchInput.addEventListener('keydown', function(e) {
                 const items = dropdown.querySelectorAll('.typeahead-item');
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    trainActiveIndex = Math.min(trainActiveIndex + 1, items.length - 1);
-                    updateActiveItem(items, trainActiveIndex);
+                    formationActiveIndex = Math.min(formationActiveIndex + 1, items.length - 1);
+                    updateActiveItem(items, formationActiveIndex);
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    trainActiveIndex = Math.max(trainActiveIndex - 1, 0);
-                    updateActiveItem(items, trainActiveIndex);
+                    formationActiveIndex = Math.max(formationActiveIndex - 1, 0);
+                    updateActiveItem(items, formationActiveIndex);
                 } else if (e.key === 'Enter') {
                     e.preventDefault();
-                    if (trainActiveIndex >= 0 && items[trainActiveIndex]) {
-                        addTrain(parseInt(items[trainActiveIndex].dataset.id), items[trainActiveIndex].dataset.name);
+                    if (formationActiveIndex >= 0 && items[formationActiveIndex]) {
+                        addFormation(parseInt(items[formationActiveIndex].dataset.id), items[formationActiveIndex].dataset.name);
                     }
                 } else if (e.key === 'Escape') {
                     dropdown.classList.remove('show');
-                    trainActiveIndex = -1;
+                    formationActiveIndex = -1;
                 }
             });
         }
@@ -483,9 +483,9 @@
             var wrapper = e.target.closest('.typeahead-wrapper');
             if (!wrapper) {
                 document.getElementById('routeDropdown').classList.remove('show');
-                document.getElementById('trainDropdown').classList.remove('show');
+                document.getElementById('formationDropdown').classList.remove('show');
                 routeActiveIndex = -1;
-                trainActiveIndex = -1;
+                formationActiveIndex = -1;
             }
         });
 
@@ -679,20 +679,20 @@
             if (!confirm('Clear all entries and start over?')) return;
             entries = [];
             entryIdCounter = 0;
-            selectedTrains = [];
+            selectedFormations = [];
             selectedRouteId = null;
-            routeTrains = [];
+            routeFormations = [];
             document.getElementById('serviceName').value = '';
             document.getElementById('serviceType').value = 'passenger';
             document.getElementById('routeSearch').value = '';
-            document.getElementById('trainSearch').value = '';
+            document.getElementById('formationSearch').value = '';
 
-            // Disable train input until a route is selected
-            const trainInput = document.getElementById('trainSearch');
-            trainInput.disabled = true;
-            trainInput.placeholder = 'Select a route first...';
+            // Disable formation input until a route is selected
+            const formationInput = document.getElementById('formationSearch');
+            formationInput.disabled = true;
+            formationInput.placeholder = 'Select a route first...';
 
-            renderSelectedTrains();
+            renderSelectedFormations();
             renderEntries();
         }
 
@@ -748,12 +748,12 @@
 
             const tonnageVal = document.getElementById('tonnage').value.trim();
             const carCountVal = document.getElementById('carCount').value.trim();
-            const trainLengthVal = document.getElementById('trainLength').value.trim();
+            const formationLengthVal = document.getElementById('formationLength').value.trim();
             const startTimeVal = document.getElementById('startTime').value.trim();
             const durationVal = document.getElementById('duration').value.trim();
             if (tonnageVal) body.tonnage = parseFloat(tonnageVal);
             if (carCountVal) body.car_count = parseInt(carCountVal, 10);
-            if (trainLengthVal) body.train_length = parseFloat(trainLengthVal);
+            if (formationLengthVal) body.formation_length = parseFloat(formationLengthVal);
             if (startTimeVal) body.start_time = startTimeVal;
             if (durationVal) body.duration = durationVal;
             const boundVal = document.getElementById('bound').value || null;
@@ -763,8 +763,8 @@
             body.conductor_compatible = document.getElementById('conductorCompatible').checked;
 
             if (selectedRouteId) body.route_id = selectedRouteId;
-            if (selectedTrains.length > 0) {
-                body.train_ids = selectedTrains.map(function(t) { return t.id; });
+            if (selectedFormations.length > 0) {
+                body.formation_ids = selectedFormations.map(function(t) { return t.id; });
             }
 
             try {
@@ -807,20 +807,20 @@
 
         // Initialize
         async function init() {
-            await Promise.all([loadRoutes(), loadTrains()]);
+            await Promise.all([loadRoutes(), loadFormations()]);
             setupRouteTypeahead();
-            setupTrainTypeahead();
+            setupFormationTypeahead();
             renderEntries();
 
-            // Disable train input until a route is selected
-            const trainInput = document.getElementById('trainSearch');
-            trainInput.disabled = true;
-            trainInput.placeholder = 'Select a route first...';
+            // Disable formation input until a route is selected
+            const formationInput = document.getElementById('formationSearch');
+            formationInput.disabled = true;
+            formationInput.placeholder = 'Select a route first...';
 
-            // Check for URL params to pre-fill route and train
+            // Check for URL params to pre-fill route and formation
             const urlParams = new URLSearchParams(window.location.search);
             const prefilledRouteId = urlParams.get('route_id');
-            const prefilledTrainId = urlParams.get('train_id');
+            const prefilledFormationId = urlParams.get('formation_id');
 
             if (prefilledRouteId) {
                 // Find the route and select it
@@ -828,12 +828,12 @@
                 if (route) {
                     await selectRoute(route.id, route.name);
 
-                    // Now check for train if provided
-                    if (prefilledTrainId) {
-                        // Find the train in route trains
-                        const train = routeTrains.find(function(t) { return t.id == prefilledTrainId; });
-                        if (train) {
-                            addTrain(train.id, train.name);
+                    // Now check for formation if provided
+                    if (prefilledFormationId) {
+                        // Find the formation in route formations
+                        const formation = routeFormations.find(function(t) { return t.id == prefilledFormationId; });
+                        if (formation) {
+                            addFormation(formation.id, formation.name);
                         }
                     }
                 }

@@ -6,6 +6,7 @@ import (
 
 	"hud-go/internal/geo"
 	"hud-go/internal/pak/uasset"
+	"hud-go/internal/timetableaction"
 )
 
 // ServiceCoord matches hud-go's coordinates[] schema. We populate
@@ -90,7 +91,7 @@ func BuildServicePath(svc *uasset.Service, ribbons map[string]*uasset.Ribbon, sw
 		wps = append(wps, waypoint{
 			ribbon:   rib,
 			fraction: f,
-			isStop:   it.Action == "STOP AT LOCATION" || it.Action == "WAIT FOR SERVICE",
+			isStop:   timetableaction.IsStop(it.Action),
 		})
 	}
 	if len(wps) == 0 {

@@ -3,6 +3,7 @@ package handler
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"database/sql"
 	"encoding/csv"
 	"encoding/json"
@@ -11,13 +12,17 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 
+	"hud-go/internal/catalog"
 	"hud-go/internal/config"
 	"hud-go/internal/output"
 	"hud-go/internal/util"
@@ -34,18 +39,40 @@ type importError struct {
 
 type TimetableHandler struct {
 	db *sql.DB
+
+	// In-memory tracking of in-progress map-features bulk builds, keyed by
+	// route_id. Single-user app — at most one build per route at a time.
+	// Lost on restart, which is fine: the worst case is the user has to
+	// click "Build Maps" again.
+	mapBuildMu   sync.Mutex
+	mapBuildJobs map[int]*mapBuildJob
+}
+
+// mapBuildJob captures live progress of a per-route bulk build of
+// timetable_map_features. Read by the status endpoint, mutated by the
+// worker goroutine. Embed a sync.Mutex on TimetableHandler instead of one
+// per job — total job count is small (≤ active routes) and reading is
+// rare (poll-driven).
+type mapBuildJob struct {
+	Done        int        `json:"done"`
+	Total       int        `json:"total"`
+	StartedAt   time.Time  `json:"startedAt"`
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
+	Err         string     `json:"err,omitempty"`
+	Current     string     `json:"current,omitempty"` // service_name being built right now
 }
 
 // ---------- helpers ----------
 
 // timetableRow holds all columns from the timetables table, with nullable fields as pointers.
 // 2026-04-26: dropped tonnage / car_count / train_length — these now live on
-// the linked train (trains.length_m, trains.car_count) instead of inline.
+// the linked formation (formations.length_m, formations.car_count) instead
+// of inline.
 type timetableRow struct {
 	ID                     int     `json:"id"`
 	ServiceName            string  `json:"service_name"`
 	RouteID                *int    `json:"route_id"`
-	TrainID                *int    `json:"train_id"`
+	FormationID                *int    `json:"formation_id"`
 	ServiceType            string  `json:"service_type"`
 	Contributor            *string `json:"contributor"`
 	CoordinatesContributor *string `json:"coordinates_contributor"`
@@ -65,7 +92,7 @@ type timetableRow struct {
 func scanTimetable(s interface{ Scan(...any) error }) (timetableRow, error) {
 	var t timetableRow
 	err := s.Scan(
-		&t.ID, &t.ServiceName, &t.RouteID, &t.TrainID, &t.ServiceType,
+		&t.ID, &t.ServiceName, &t.RouteID, &t.FormationID, &t.ServiceType,
 		&t.Contributor, &t.CoordinatesContributor, &t.CreatedAt,
 		&t.StartTime, &t.Duration,
 		&t.ServiceImages, &t.SectionID, &t.ConductorCompatible,
@@ -75,7 +102,7 @@ func scanTimetable(s interface{ Scan(...any) error }) (timetableRow, error) {
 	return t, err
 }
 
-const timetableCols = `id, service_name, route_id, train_id, service_type,
+const timetableCols = `id, service_name, route_id, formation_id, service_type,
 	contributor, coordinates_contributor, created_at,
 	start_time, duration,
 	service_images, section_id, conductor_compatible,
@@ -94,7 +121,7 @@ func (h *TimetableHandler) getTimetableByID(id int) (*timetableRow, error) {
 	return &t, nil
 }
 
-type trainInfo struct {
+type formationInfo struct {
 	ID        int     `json:"id"`
 	Name      string  `json:"name"`                  // canonical formation_name (e.g. "Class483_006")
 	ClassName *string `json:"class_name,omitempty"`  // display name (e.g. "Isle Of Wight Class 483")
@@ -107,25 +134,25 @@ type sectionInfo struct {
 	Name string `json:"name"`
 }
 
-func (h *TimetableHandler) getTrainsForTimetable(timetableID int) ([]trainInfo, error) {
+func (h *TimetableHandler) getFormationsForTimetable(timetableID int) ([]formationInfo, error) {
 	rows, err := h.db.Query(`
-		SELECT t.id, t.name, t.class_name, t.length_m, t.car_count FROM trains t
-		INNER JOIN timetable_trains tt ON t.id = tt.train_id
+		SELECT t.id, t.name, t.class_name, t.length_m, t.car_count FROM formations t
+		INNER JOIN timetable_formations tt ON t.id = tt.formation_id
 		WHERE tt.timetable_id = ? ORDER BY t.name`, timetableID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var out []trainInfo
+	var out []formationInfo
 	for rows.Next() {
-		var ti trainInfo
+		var ti formationInfo
 		if err := rows.Scan(&ti.ID, &ti.Name, &ti.ClassName, &ti.LengthM, &ti.CarCount); err != nil {
 			return nil, err
 		}
 		out = append(out, ti)
 	}
 	if out == nil {
-		out = []trainInfo{}
+		out = []formationInfo{}
 	}
 	return out, nil
 }
@@ -243,10 +270,10 @@ func (h *TimetableHandler) findOrCreateLocation(routeID int, name string) (int, 
 	return id, err
 }
 
-// enrichTimetable adds trains, sections, entry_count, coordinate info to a timetable map.
+// enrichTimetable adds formations, sections, entry_count, coordinate info to a timetable map.
 func (h *TimetableHandler) enrichTimetable(t map[string]any) error {
 	id := t["id"].(int)
-	trains, err := h.getTrainsForTimetable(id)
+	formations, err := h.getFormationsForTimetable(id)
 	if err != nil {
 		return err
 	}
@@ -254,7 +281,7 @@ func (h *TimetableHandler) enrichTimetable(t map[string]any) error {
 	if err != nil {
 		return err
 	}
-	t["trains"] = trains
+	t["formations"] = formations
 	t["sections"] = sections
 
 	// stop count (only WAIT FOR SERVICE and STOP AT LOCATION)
@@ -292,7 +319,7 @@ func timetableToMap(t *timetableRow) map[string]any {
 		"id":                       t.ID,
 		"service_name":             t.ServiceName,
 		"route_id":                 t.RouteID,
-		"train_id":                 t.TrainID,
+		"formation_id":                 t.FormationID,
 		"service_type":             t.ServiceType,
 		"contributor":              t.Contributor,
 		"coordinates_contributor":  t.CoordinatesContributor,
@@ -314,7 +341,7 @@ func timetableToMap(t *timetableRow) map[string]any {
 
 func (h *TimetableHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	routeIDStr := r.URL.Query().Get("route_id")
-	trainIDStr := r.URL.Query().Get("train_id")
+	formationIDStr := r.URL.Query().Get("formation_id")
 
 	query := "SELECT " + timetableCols + " FROM timetables"
 	var args []any
@@ -346,11 +373,11 @@ func (h *TimetableHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		timetables = append(timetables, t)
 	}
 
-	// Filter by train_id via timetable_trains junction table
-	if trainIDStr != "" {
-		trainID, _ := strconv.Atoi(trainIDStr)
+	// Filter by formation_id via timetable_formations junction table
+	if formationIDStr != "" {
+		formationID, _ := strconv.Atoi(formationIDStr)
 		ttIDs := map[int]bool{}
-		jRows, err := h.db.Query("SELECT timetable_id FROM timetable_trains WHERE train_id = ?", trainID)
+		jRows, err := h.db.Query("SELECT timetable_id FROM timetable_formations WHERE formation_id = ?", formationID)
 		if err == nil {
 			defer jRows.Close()
 			for jRows.Next() {
@@ -361,7 +388,7 @@ func (h *TimetableHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		}
 		var filtered []timetableRow
 		for _, t := range timetables {
-			if (t.TrainID != nil && *t.TrainID == trainID) || ttIDs[t.ID] {
+			if (t.FormationID != nil && *t.FormationID == formationID) || ttIDs[t.ID] {
 				filtered = append(filtered, t)
 			}
 		}
@@ -370,7 +397,7 @@ func (h *TimetableHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	// Build results — skip expensive enrichment if not filtered by route/train
 	result := make([]map[string]any, 0, len(timetables))
-	enrich := routeIDStr != "" || trainIDStr != "" || len(timetables) <= 200
+	enrich := routeIDStr != "" || formationIDStr != "" || len(timetables) <= 200
 	for _, t := range timetables {
 		m := timetableToMap(&t)
 		if enrich {
@@ -399,7 +426,7 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 	search := q.Get("search")
 	routeIDStr := q.Get("route_id")
 	countryIDStr := q.Get("country_id")
-	trainIDStr := q.Get("train_id")
+	formationIDStr := q.Get("formation_id")
 	classIDStr := q.Get("class_id")
 	section := q.Get("section")
 	coordSource := q.Get("coord_source")
@@ -428,16 +455,16 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 		conditions = append(conditions, "t.route_id = ?")
 		params = append(params, routeIDStr)
 	}
-	if trainIDStr != "" {
-		joins = append(joins, "JOIN timetable_trains tt_train ON tt_train.timetable_id = t.id")
-		conditions = append(conditions, "tt_train.train_id = ?")
-		params = append(params, trainIDStr)
+	if formationIDStr != "" {
+		joins = append(joins, "JOIN timetable_formations tt_train ON tt_train.timetable_id = t.id")
+		conditions = append(conditions, "tt_train.formation_id = ?")
+		params = append(params, formationIDStr)
 	}
 	// class_id filters timetables for any formation belonging to the class
 	// — that's how the train typeahead returns "all timetables for Isle Of
 	// Wight Class 483" with a single click rather than per-formation rows.
 	if classIDStr != "" {
-		joins = append(joins, "JOIN timetable_trains tt_class ON tt_class.timetable_id = t.id JOIN trains tr_class ON tr_class.id = tt_class.train_id")
+		joins = append(joins, "JOIN timetable_formations tt_class ON tt_class.timetable_id = t.id JOIN formations tr_class ON tr_class.id = tt_class.formation_id")
 		conditions = append(conditions, "tr_class.class_id = ?")
 		params = append(params, classIDStr)
 	}
@@ -517,7 +544,7 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 	h.db.QueryRow(countSQL, params...).Scan(&total)
 
 	// Data
-	dataSQL := "SELECT DISTINCT t.id, t.service_name, t.route_id, t.train_id, t.service_type, t.contributor, t.coordinates_contributor, t.created_at, t.start_time, t.duration, t.service_images, t.section_id, t.conductor_compatible, t.bound, t.service, t.current_service_name, t.source, t.playable " + fromClause + joinClause + whereClause + " ORDER BY t.id DESC LIMIT ? OFFSET ?"
+	dataSQL := "SELECT DISTINCT t.id, t.service_name, t.route_id, t.formation_id, t.service_type, t.contributor, t.coordinates_contributor, t.created_at, t.start_time, t.duration, t.service_images, t.section_id, t.conductor_compatible, t.bound, t.service, t.current_service_name, t.source, t.playable " + fromClause + joinClause + whereClause + " ORDER BY t.id DESC LIMIT ? OFFSET ?"
 	dataParams := append(params, limit, offset)
 	dataRows, err := h.db.Query(dataSQL, dataParams...)
 	if err != nil {
@@ -712,17 +739,17 @@ func (h *TimetableHandler) Detect(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h *TimetableHandler) GetServicesByTrain(w http.ResponseWriter, r *http.Request) {
-	trainIDStr := r.URL.Query().Get("train_id")
-	if trainIDStr == "" {
-		util.Error(w, 400, "Provide ?train_id= query parameter")
+func (h *TimetableHandler) GetServicesByFormation(w http.ResponseWriter, r *http.Request) {
+	formationIDStr := r.URL.Query().Get("formation_id")
+	if formationIDStr == "" {
+		util.Error(w, 400, "Provide ?formation_id= query parameter")
 		return
 	}
 
 	rows, err := h.db.Query(`
 		SELECT DISTINCT t.service FROM timetables t
-		INNER JOIN timetable_trains tt ON tt.timetable_id = t.id
-		WHERE tt.train_id = ? AND t.service IS NOT NULL`, trainIDStr)
+		INNER JOIN timetable_formations tt ON tt.timetable_id = t.id
+		WHERE tt.formation_id = ? AND t.service IS NOT NULL`, formationIDStr)
 	if err != nil {
 		util.Error(w, 500, err.Error())
 		return
@@ -742,8 +769,8 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		ServiceName        string   `json:"service_name"`
 		RouteID            *int     `json:"route_id"`
-		TrainID            *int     `json:"train_id"`
-		TrainIDs           []int    `json:"train_ids"`
+		FormationID            *int     `json:"formation_id"`
+		FormationIDs           []int    `json:"formation_ids"`
 		ServiceType        string   `json:"service_type"`
 		Bound              *string  `json:"bound"`
 		Service            *string  `json:"service"`
@@ -785,12 +812,12 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	routeID := *body.RouteID
 
-	trainIDs := body.TrainIDs
-	if len(trainIDs) == 0 && body.TrainID != nil {
-		trainIDs = []int{*body.TrainID}
+	formationIDs := body.FormationIDs
+	if len(formationIDs) == 0 && body.FormationID != nil {
+		formationIDs = []int{*body.FormationID}
 	}
-	if len(trainIDs) == 0 {
-		util.Error(w, 400, "A timetable must have at least one train. Please select a train.")
+	if len(formationIDs) == 0 {
+		util.Error(w, 400, "A timetable must have at least one formation. Please select a formation.")
 		return
 	}
 
@@ -799,14 +826,14 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 	err := h.db.QueryRow("SELECT id FROM timetables WHERE service_name = ? AND route_id = ?", serviceName, routeID).Scan(&existingID)
 	if err == nil {
 		// Timetable exists - add trains/sections to it
-		trainsAdded := 0
+		formationsAdded := 0
 		sectionsAdded := 0
-		for _, tid := range trainIDs {
+		for _, tid := range formationIDs {
 			var cnt int
-			h.db.QueryRow("SELECT COUNT(*) FROM timetable_trains WHERE timetable_id = ? AND train_id = ?", existingID, tid).Scan(&cnt)
+			h.db.QueryRow("SELECT COUNT(*) FROM timetable_formations WHERE timetable_id = ? AND formation_id = ?", existingID, tid).Scan(&cnt)
 			if cnt == 0 {
-				h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", existingID, tid)
-				trainsAdded++
+				h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", existingID, tid)
+				formationsAdded++
 			}
 		}
 		if body.SectionID != nil {
@@ -818,22 +845,22 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		msg := "Timetable already exists"
-		if trainsAdded > 0 || sectionsAdded > 0 {
+		if formationsAdded > 0 || sectionsAdded > 0 {
 			parts := []string{}
-			if trainsAdded > 0 {
-				parts = append(parts, fmt.Sprintf("%d new train(s)", trainsAdded))
+			if formationsAdded > 0 {
+				parts = append(parts, fmt.Sprintf("%d new formation(s)", formationsAdded))
 			}
 			if sectionsAdded > 0 {
 				parts = append(parts, fmt.Sprintf("%d new section(s)", sectionsAdded))
 			}
 			msg += ". Added " + strings.Join(parts, " and ") + " to it."
 		} else {
-			msg += " and all specified trains/sections are already linked to it."
+			msg += " and all specified formations/sections are already linked to it."
 		}
 		util.JSON(w, 200, map[string]any{
 			"message":        msg,
 			"timetable_id":   existingID,
-			"trains_added":   trainsAdded,
+			"formations_added":   formationsAdded,
 			"sections_added": sectionsAdded,
 		})
 		return
@@ -848,7 +875,7 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	trainID := trainIDs[0]
+	formationID := formationIDs[0]
 	serviceType := body.ServiceType
 	if serviceType == "" {
 		serviceType = "passenger"
@@ -858,9 +885,9 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 		conductorVal = 1
 	}
 
-	res, err := h.db.Exec(`INSERT INTO timetables (service_name, route_id, train_id, service_type, bound, service, service_images, section_id, conductor_compatible, current_service_name)
+	res, err := h.db.Exec(`INSERT INTO timetables (service_name, route_id, formation_id, service_type, bound, service, service_images, section_id, conductor_compatible, current_service_name)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		serviceName, routeID, trainID, serviceType,
+		serviceName, routeID, formationID, serviceType,
 		body.Bound, body.Service, body.ServiceImages, body.SectionID,
 		conductorVal, body.CurrentServiceName)
 	if err != nil {
@@ -871,8 +898,8 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 	timetableID := int(timetableID64)
 
 	// Insert trains into junction table
-	for _, tid := range trainIDs {
-		h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", timetableID, tid)
+	for _, tid := range formationIDs {
+		h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", timetableID, tid)
 	}
 
 	// Add section if provided
@@ -939,7 +966,7 @@ func (h *TimetableHandler) Create(w http.ResponseWriter, r *http.Request) {
 		"service_name": serviceName,
 		"service":      body.Service,
 		"route_id":     routeID,
-		"train_id":     trainID,
+		"formation_id":     formationID,
 		"service_type": serviceType,
 		"entries":      savedEntries,
 	})
@@ -1026,12 +1053,12 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Resolve trains by name
-	trainNamesRaw, _ := body["trainNames"].([]any)
-	var trainIDs []int
+	formationNamesRaw, _ := body["formationNames"].([]any)
+	var formationIDs []int
 	var missingTrains []string
-	trainNames := make([]string, 0)
+	formationNames := make([]string, 0)
 	seen := map[string]bool{}
-	for _, tn := range trainNamesRaw {
+	for _, tn := range formationNamesRaw {
 		name, ok := tn.(string)
 		if !ok || strings.TrimSpace(name) == "" {
 			continue
@@ -1041,11 +1068,11 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		seen[name] = true
-		trainNames = append(trainNames, name)
+		formationNames = append(formationNames, name)
 		var tid int
-		err := h.db.QueryRow("SELECT id FROM trains WHERE name = ?", name).Scan(&tid)
+		err := h.db.QueryRow("SELECT id FROM formations WHERE name = ?", name).Scan(&tid)
 		if err == nil {
-			trainIDs = append(trainIDs, tid)
+			formationIDs = append(formationIDs, tid)
 		} else {
 			missingTrains = append(missingTrains, name)
 		}
@@ -1056,15 +1083,15 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 			quoted[i] = fmt.Sprintf("\"%s\"", t)
 		}
 		util.JSON(w, 400, map[string]any{
-			"error":         fmt.Sprintf("The following trains do not exist: %s. Please create them first.", strings.Join(quoted, ", ")),
+			"error":         fmt.Sprintf("The following formations do not exist: %s. Please create them first.", strings.Join(quoted, ", ")),
 			"missingTrains": missingTrains,
 		})
 		return
 	}
 
-	var trainID *int
-	if len(trainIDs) > 0 {
-		trainID = &trainIDs[0]
+	var formationID *int
+	if len(formationIDs) > 0 {
+		formationID = &formationIDs[0]
 	}
 
 	importedContributor, _ := body["contributor"].(string)
@@ -1111,9 +1138,9 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 		conductorVal = 1
 	}
 
-	res, err := h.db.Exec(`INSERT INTO timetables (service_name, route_id, train_id, service_type, contributor, bound, service, section_id, conductor_compatible, current_service_name)
+	res, err := h.db.Exec(`INSERT INTO timetables (service_name, route_id, formation_id, service_type, contributor, bound, service, section_id, conductor_compatible, current_service_name)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		serviceName, routeID, trainID, importedServiceType,
+		serviceName, routeID, formationID, importedServiceType,
 		nilIfEmpty(importedContributor), nilIfEmpty(importedBound), nilIfEmpty(importedService),
 		importedSectionID, conductorVal, nilIfEmpty(importedCurrentServiceName))
 	if err != nil {
@@ -1124,8 +1151,8 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 	timetableID := int(timetableID64)
 
 	// Insert trains
-	for _, tid := range trainIDs {
-		h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", timetableID, tid)
+	for _, tid := range formationIDs {
+		h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", timetableID, tid)
 	}
 
 	// Insert sections
@@ -1271,9 +1298,9 @@ func (h *TimetableHandler) Import(w http.ResponseWriter, r *http.Request) {
 		"route_id":                 routeID,
 		"route_name":               nilIfEmpty(routeNameStr),
 		"route_created":            routeCreated,
-		"train_id":                 trainID,
-		"train_ids":                trainIDs,
-		"train_names":              trainNames,
+		"formation_id":                 formationID,
+		"formation_ids":                formationIDs,
+		"formation_names":              formationNames,
 		"service_type":             importedServiceType,
 		"contributor":              nilIfEmpty(importedContributor),
 		"coordinates_contributor":  nilIfEmpty(func() string { v, _ := body["coordinates_contributor"].(string); return v }()),
@@ -1316,16 +1343,16 @@ func (h *TimetableHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		result["route_name"] = nil
 	}
 
-	// Add train_name
-	if t.TrainID != nil {
-		var trainName string
-		if h.db.QueryRow("SELECT name FROM trains WHERE id = ?", *t.TrainID).Scan(&trainName) == nil {
-			result["train_name"] = trainName
+	// Add formation_name
+	if t.FormationID != nil {
+		var formationName string
+		if h.db.QueryRow("SELECT name FROM formations WHERE id = ?", *t.FormationID).Scan(&formationName) == nil {
+			result["formation_name"] = formationName
 		} else {
-			result["train_name"] = nil
+			result["formation_name"] = nil
 		}
 	} else {
-		result["train_name"] = nil
+		result["formation_name"] = nil
 	}
 
 	// Entries
@@ -1337,12 +1364,12 @@ func (h *TimetableHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	result["entries"] = entries
 
 	// Trains
-	trains, err := h.getTrainsForTimetable(id)
+	formations, err := h.getFormationsForTimetable(id)
 	if err != nil {
 		util.Error(w, 500, err.Error())
 		return
 	}
-	result["trains"] = trains
+	result["formations"] = formations
 
 	// Sections
 	sections, err := h.getSectionsForTimetable(id)
@@ -1430,7 +1457,7 @@ func (h *TimetableHandler) Update(w http.ResponseWriter, r *http.Request) {
 	fieldMap := map[string]string{
 		"service_name":          "service_name",
 		"route_id":              "route_id",
-		"train_id":              "train_id",
+		"formation_id":              "formation_id",
 		"service_type":          "service_type",
 		"contributor":           "contributor",
 		"coordinates_contributor": "coordinates_contributor",
@@ -1496,12 +1523,12 @@ func (h *TimetableHandler) Update(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Handle train_ids
-	if tids, ok := body["train_ids"].([]any); ok {
-		h.db.Exec("DELETE FROM timetable_trains WHERE timetable_id = ?", id)
+	// Handle formation_ids
+	if tids, ok := body["formation_ids"].([]any); ok {
+		h.db.Exec("DELETE FROM timetable_formations WHERE timetable_id = ?", id)
 		for _, tid := range tids {
 			if tidF, ok := tid.(float64); ok {
-				h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", id, int(tidF))
+				h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", id, int(tidF))
 			}
 		}
 	}
@@ -1518,9 +1545,9 @@ func (h *TimetableHandler) Update(w http.ResponseWriter, r *http.Request) {
 	// Return updated timetable
 	updated, _ := h.getTimetableByID(id)
 	result := timetableToMap(updated)
-	trains, _ := h.getTrainsForTimetable(id)
+	formations, _ := h.getFormationsForTimetable(id)
 	sections, _ := h.getSectionsForTimetable(id)
-	result["trains"] = trains
+	result["formations"] = formations
 	result["sections"] = sections
 	util.JSON(w, 200, result)
 }
@@ -1533,11 +1560,12 @@ func (h *TimetableHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.db.Exec("DELETE FROM timetable_trains WHERE timetable_id = ?", id)
+	h.db.Exec("DELETE FROM timetable_formations WHERE timetable_id = ?", id)
 	h.db.Exec("DELETE FROM timetable_sections WHERE timetable_id = ?", id)
 	h.db.Exec("DELETE FROM timetable_entries WHERE timetable_id = ?", id)
 	h.db.Exec("DELETE FROM timetable_coordinates WHERE timetable_id = ?", id)
 	h.db.Exec("DELETE FROM timetable_markers WHERE timetable_id = ?", id)
+	h.db.Exec("DELETE FROM timetable_map_features WHERE timetable_id = ?", id)
 	h.db.Exec("DELETE FROM timetables WHERE id = ?", id)
 
 	util.JSON(w, 200, map[string]bool{"success": true})
@@ -1576,6 +1604,224 @@ func (h *TimetableHandler) Export(w http.ResponseWriter, r *http.Request) {
 	}
 
 	util.JSON(w, 200, exportData)
+}
+
+// MapFeatures returns the pre-built filtered route GeoJSON blob for this
+// timetable. The blob is computed at import time (or on the first read of
+// a missing row) by FilterRouteFeaturesForTimetable; the runtime path is
+// just one SELECT — no per-feature filtering. Falls back to a lazy
+// rebuild + serve when the row is missing (re-extract dropped it).
+//
+// Response shape mirrors the relevant slice of /api/routes/{id}/map-data
+// so frontend code can swap fetch URLs without changing render code:
+//
+//	{"timetable_id": N, "features": [GeoJSON Feature, ...]}
+func (h *TimetableHandler) MapFeatures(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		util.Error(w, 400, "invalid id")
+		return
+	}
+	var blob string
+	err = h.db.QueryRow("SELECT features FROM timetable_map_features WHERE timetable_id = ?", id).Scan(&blob)
+	if err != nil {
+		// Missing row: don't lazy-build inline. The build is 30+ sec on
+		// big DLCs and would deadline the request. The frontend handles
+		// 404 by surfacing a "Generate Map" button (see show.html); the
+		// HUD load path triggers a background build via
+		// BuildMapFeaturesForTimetable. Either way, the explicit POST is
+		// the only way to populate.
+		util.Error(w, 404, "no map features for timetable")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// Hand-write so the embedded JSON blob is served verbatim — wrapping
+	// it in another util.JSON would re-marshal the parsed features and
+	// burn CPU + memory for no gain.
+	w.Write([]byte(`{"timetable_id":`))
+	w.Write([]byte(strconv.Itoa(id)))
+	w.Write([]byte(`,"features":`))
+	w.Write([]byte(blob))
+	w.Write([]byte(`}`))
+}
+
+// ensureMapFeaturesAsync builds the per-timetable map-features blob for
+// timetableID if it doesn't already exist. Designed to run in a goroutine
+// from the HUD's UploadRoute handler so player service-selection silently
+// primes the data the HUD will want a few minutes later.
+//
+// Skips quickly when:
+//   - the row already exists (most common case after the first build)
+//   - the timetable has no route_id (orphan; nothing to filter)
+//
+// Logs at warn level on real errors but never panics — caller is a
+// background goroutine; nothing should crash the server here.
+func (h *TimetableHandler) ensureMapFeaturesAsync(timetableID int) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("[map-features-async] tt=%d panic: %v", timetableID, r)
+		}
+	}()
+	var exists int
+	if err := h.db.QueryRow("SELECT 1 FROM timetable_map_features WHERE timetable_id = ?", timetableID).Scan(&exists); err == nil {
+		return // already built
+	}
+	var routeID *int
+	if err := h.db.QueryRow("SELECT route_id FROM timetables WHERE id = ?", timetableID).Scan(&routeID); err != nil || routeID == nil {
+		return
+	}
+	h.buildTimetableMapFeatures(timetableID, *routeID)
+}
+
+// BuildMapFeaturesForTimetable triggers a single-timetable map-features
+// build synchronously. Returns the freshly-built feature blob on success
+// so the caller (e.g. the "Generate Map" button on /timetables/{id}) can
+// re-render the map without an extra fetch.
+//
+// POST /api/timetables/{id}/build-map-features
+func (h *TimetableHandler) BuildMapFeaturesForTimetable(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		util.Error(w, 400, "invalid id")
+		return
+	}
+	var routeID *int
+	if err := h.db.QueryRow("SELECT route_id FROM timetables WHERE id = ?", id).Scan(&routeID); err != nil {
+		util.Error(w, 404, "timetable not found")
+		return
+	}
+	if routeID == nil {
+		util.Error(w, 400, "timetable has no route_id (orphan); cannot build map features")
+		return
+	}
+	h.buildTimetableMapFeatures(id, *routeID)
+	var blob string
+	if err := h.db.QueryRow("SELECT features FROM timetable_map_features WHERE timetable_id = ?", id).Scan(&blob); err != nil {
+		util.Error(w, 500, "build failed (no row written)")
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write([]byte(`{"timetable_id":`))
+	w.Write([]byte(strconv.Itoa(id)))
+	w.Write([]byte(`,"features":`))
+	w.Write([]byte(blob))
+	w.Write([]byte(`}`))
+}
+
+// BuildMapFeaturesForRoute starts a background bulk build of map features
+// for every timetable on the route that doesn't already have a row in
+// timetable_map_features. Returns 202 immediately; clients poll the
+// status endpoint for progress + ETA.
+//
+// POST /api/routes/{id}/build-timetable-maps
+func (h *TimetableHandler) BuildMapFeaturesForRoute(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	routeID, err := strconv.Atoi(idStr)
+	if err != nil {
+		util.Error(w, 400, "invalid route id")
+		return
+	}
+
+	h.mapBuildMu.Lock()
+	if existing, running := h.mapBuildJobs[routeID]; running && existing.CompletedAt == nil {
+		// A build is already in flight for this route. Return its current
+		// state so the UI can resume polling without a duplicate worker.
+		h.mapBuildMu.Unlock()
+		util.JSON(w, 200, existing)
+		return
+	}
+	rows, err := h.db.Query(`
+		SELECT id FROM timetables
+		WHERE route_id = ?
+		  AND id NOT IN (SELECT timetable_id FROM timetable_map_features)
+	`, routeID)
+	if err != nil {
+		h.mapBuildMu.Unlock()
+		util.Error(w, 500, "query missing: "+err.Error())
+		return
+	}
+	var missing []int
+	for rows.Next() {
+		var id int
+		if err := rows.Scan(&id); err == nil {
+			missing = append(missing, id)
+		}
+	}
+	rows.Close()
+
+	job := &mapBuildJob{
+		Total:     len(missing),
+		StartedAt: time.Now(),
+	}
+	h.mapBuildJobs[routeID] = job
+	h.mapBuildMu.Unlock()
+
+	// Empty case: nothing to do. Mark the job complete immediately so the
+	// UI sees a fast "done, 0 of 0" response and stops polling.
+	if len(missing) == 0 {
+		now := time.Now()
+		h.mapBuildMu.Lock()
+		job.CompletedAt = &now
+		h.mapBuildMu.Unlock()
+		util.JSON(w, 200, job)
+		return
+	}
+
+	go h.runMapBuildJob(routeID, missing, job)
+	w.WriteHeader(http.StatusAccepted)
+	util.JSON(w, http.StatusAccepted, job)
+}
+
+// runMapBuildJob is the worker that iterates the missing timetables and
+// builds each one, updating the in-memory job state as it goes. Uses one
+// shared routeFeatsCache so the route GeoJSON parses once for the whole
+// batch (same optimisation the import loop uses).
+func (h *TimetableHandler) runMapBuildJob(routeID int, ids []int, job *mapBuildJob) {
+	routeFeatsCache := map[int][]map[string]any{}
+	for _, ttID := range ids {
+		// Best-effort service-name lookup for the "current" display. Tiny
+		// query, no big deal if it fails.
+		var name string
+		h.db.QueryRow("SELECT service_name FROM timetables WHERE id = ?", ttID).Scan(&name)
+		h.mapBuildMu.Lock()
+		job.Current = name
+		h.mapBuildMu.Unlock()
+
+		h.buildTimetableMapFeaturesCached(ttID, routeID, routeFeatsCache)
+
+		h.mapBuildMu.Lock()
+		job.Done++
+		h.mapBuildMu.Unlock()
+	}
+	now := time.Now()
+	h.mapBuildMu.Lock()
+	job.CompletedAt = &now
+	job.Current = ""
+	h.mapBuildMu.Unlock()
+}
+
+// BuildMapFeaturesForRouteStatus returns the live progress of a bulk
+// build for this route (or 404 if none has run since server start).
+//
+// GET /api/routes/{id}/build-timetable-maps
+func (h *TimetableHandler) BuildMapFeaturesForRouteStatus(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	routeID, err := strconv.Atoi(idStr)
+	if err != nil {
+		util.Error(w, 400, "invalid route id")
+		return
+	}
+	h.mapBuildMu.Lock()
+	job, ok := h.mapBuildJobs[routeID]
+	h.mapBuildMu.Unlock()
+	if !ok {
+		util.Error(w, 404, "no build in progress or recently completed for this route")
+		return
+	}
+	util.JSON(w, 200, job)
 }
 
 func (h *TimetableHandler) ExportDownload(w http.ResponseWriter, r *http.Request) {
@@ -1639,7 +1885,7 @@ func (h *TimetableHandler) ExportDownload(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(exportData)
 }
 
-func (h *TimetableHandler) GetTrains(w http.ResponseWriter, r *http.Request) {
+func (h *TimetableHandler) GetFormations(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -1651,15 +1897,15 @@ func (h *TimetableHandler) GetTrains(w http.ResponseWriter, r *http.Request) {
 		util.Error(w, 404, "Timetable not found")
 		return
 	}
-	trains, err := h.getTrainsForTimetable(id)
+	formations, err := h.getFormationsForTimetable(id)
 	if err != nil {
 		util.Error(w, 500, err.Error())
 		return
 	}
-	util.JSON(w, 200, trains)
+	util.JSON(w, 200, formations)
 }
 
-func (h *TimetableHandler) AddTrain(w http.ResponseWriter, r *http.Request) {
+func (h *TimetableHandler) AddFormation(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -1672,22 +1918,22 @@ func (h *TimetableHandler) AddTrain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var body struct {
-		TrainID int `json:"train_id"`
+		FormationID int `json:"formation_id"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		util.Error(w, 400, "invalid JSON body")
 		return
 	}
-	if body.TrainID == 0 {
-		util.Error(w, 400, "train_id is required")
+	if body.FormationID == 0 {
+		util.Error(w, 400, "formation_id is required")
 		return
 	}
-	h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", id, body.TrainID)
-	trains, _ := h.getTrainsForTimetable(id)
-	util.JSON(w, 201, map[string]any{"success": true, "trains": trains})
+	h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", id, body.FormationID)
+	formations, _ := h.getFormationsForTimetable(id)
+	util.JSON(w, 201, map[string]any{"success": true, "formations": formations})
 }
 
-func (h *TimetableHandler) RemoveTrain(w http.ResponseWriter, r *http.Request) {
+func (h *TimetableHandler) RemoveFormation(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -1700,32 +1946,32 @@ func (h *TimetableHandler) RemoveTrain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var body struct {
-		TrainID int `json:"train_id"`
+		FormationID int `json:"formation_id"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		util.Error(w, 400, "invalid JSON body")
 		return
 	}
-	if body.TrainID == 0 {
-		util.Error(w, 400, "train_id is required")
+	if body.FormationID == 0 {
+		util.Error(w, 400, "formation_id is required")
 		return
 	}
-	h.db.Exec("DELETE FROM timetable_trains WHERE timetable_id = ? AND train_id = ?", id, body.TrainID)
-	trains, _ := h.getTrainsForTimetable(id)
-	util.JSON(w, 200, map[string]any{"success": true, "trains": trains})
+	h.db.Exec("DELETE FROM timetable_formations WHERE timetable_id = ? AND formation_id = ?", id, body.FormationID)
+	formations, _ := h.getFormationsForTimetable(id)
+	util.JSON(w, 200, map[string]any{"success": true, "formations": formations})
 }
 
-func (h *TimetableHandler) RemoveTrainByID(w http.ResponseWriter, r *http.Request) {
+func (h *TimetableHandler) RemoveFormationByID(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		util.Error(w, 400, "invalid id")
 		return
 	}
-	trainIDStr := chi.URLParam(r, "trainId")
-	trainID, err := strconv.Atoi(trainIDStr)
+	formationIDStr := chi.URLParam(r, "formationId")
+	formationID, err := strconv.Atoi(formationIDStr)
 	if err != nil {
-		util.Error(w, 400, "invalid trainId")
+		util.Error(w, 400, "invalid formationId")
 		return
 	}
 	t, _ := h.getTimetableByID(id)
@@ -1733,9 +1979,9 @@ func (h *TimetableHandler) RemoveTrainByID(w http.ResponseWriter, r *http.Reques
 		util.Error(w, 404, "Timetable not found")
 		return
 	}
-	h.db.Exec("DELETE FROM timetable_trains WHERE timetable_id = ? AND train_id = ?", id, trainID)
-	trains, _ := h.getTrainsForTimetable(id)
-	util.JSON(w, 200, map[string]any{"success": true, "trains": trains})
+	h.db.Exec("DELETE FROM timetable_formations WHERE timetable_id = ? AND formation_id = ?", id, formationID)
+	formations, _ := h.getFormationsForTimetable(id)
+	util.JSON(w, 200, map[string]any{"success": true, "formations": formations})
 }
 
 func (h *TimetableHandler) GetSections(w http.ResponseWriter, r *http.Request) {
@@ -1885,12 +2131,82 @@ func (h *TimetableHandler) ExportAllForRoute(w http.ResponseWriter, r *http.Requ
 //
 //  2. Iterate every per-service `<service>.json`. Each carries its own
 //     formation_name + trains[] consist; resolve to a row in the trains
-//     table (creating it + train_vehicles on first sighting), then insert
+//     table (creating it + formation_vehicles on first sighting), then insert
 //     the timetable + entries + coordinates.
 //
 // Different from the old format: route metadata no longer comes from the
 // per-service files, tonnage/car_count/train_length live on the train (not
-// the timetable), and there is no longer a top-level trainNames list.
+// the timetable), and there is no longer a top-level formationNames list.
+// ImportProgressFunc receives one call per timetable file imported, with
+// running and total counts so callers (typically the auto-import path) can
+// surface "27 of 4000" progress to the user. `label` is the per-service
+// JSON's display name when available, falling back to the filename.
+type ImportProgressFunc func(done, total int, label string)
+
+// importProgressKey is the context key the auto-import flow uses to
+// inject a progress callback into ImportRouteZip without changing its
+// HTTP-handler signature. Unset → no progress lines emitted.
+type importProgressKey struct{}
+
+// WithImportProgress returns a derived context that carries the given
+// progress callback. Used by the auto-import path so the progress lines
+// can be broadcast over the extractor's SSE log.
+func WithImportProgress(ctx context.Context, fn ImportProgressFunc) context.Context {
+	return context.WithValue(ctx, importProgressKey{}, fn)
+}
+
+func progressFromContext(ctx context.Context) ImportProgressFunc {
+	if v, ok := ctx.Value(importProgressKey{}).(ImportProgressFunc); ok {
+		return v
+	}
+	return nil
+}
+
+// extractClassThumbnailsFromZip pulls every `images/train_classes/*.png`
+// entry out of an extract zip and writes it under <appDir>/images/
+// train_classes/. Matches the path the writer packs them into (see
+// internal/output/package_writer.go:addClassThumbnailsToZip) and the
+// static-file route that serves /images/* (router/static.go).
+//
+// Best-effort: a write failure on one PNG doesn't stop the import.
+// Existing files are overwritten so a re-import picks up updated
+// textures.
+func extractClassThumbnailsFromZip(zr *zip.Reader) {
+	outDir := filepath.Join(config.AppDir(), "images", "train_classes")
+	for _, f := range zr.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
+		if !strings.HasPrefix(f.Name, "images/train_classes/") {
+			continue
+		}
+		base := filepath.Base(f.Name)
+		if !strings.HasSuffix(strings.ToLower(base), ".png") {
+			continue
+		}
+		if err := os.MkdirAll(outDir, 0o755); err != nil {
+			log.Printf("[import] mkdir thumbs dir: %v", err)
+			return
+		}
+		rc, err := f.Open()
+		if err != nil {
+			log.Printf("[import] open thumb %s: %v", f.Name, err)
+			continue
+		}
+		dst, err := os.Create(filepath.Join(outDir, base))
+		if err != nil {
+			rc.Close()
+			log.Printf("[import] create thumb %s: %v", base, err)
+			continue
+		}
+		if _, err := io.Copy(dst, rc); err != nil {
+			log.Printf("[import] copy thumb %s: %v", base, err)
+		}
+		dst.Close()
+		rc.Close()
+	}
+}
+
 func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -1904,6 +2220,32 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	// Pull any class-thumbnail PNGs out of the zip first — the
+	// extractor packs them under `images/train_classes/*.png` so a
+	// receiver without TSW6 paks installed still gets the same
+	// images the /train-classes page renders. We write to
+	// <appDir>/images/train_classes/ to match the static-file route
+	// in router/static.go that serves /images/.
+	extractClassThumbnailsFromZip(zr)
+
+	progress := progressFromContext(r.Context())
+	// Pre-count per-service JSONs so the progress callback can show
+	// "done/total". Same filter the per-service loop uses below — skip
+	// route_*.json (handled in pass 1) and *_ribbons.json metadata.
+	totalServices := 0
+	if progress != nil {
+		for _, f := range zr.File {
+			if f.FileInfo().IsDir() || !strings.HasSuffix(strings.ToLower(f.Name), ".json") {
+				continue
+			}
+			base := filepath.Base(f.Name)
+			if strings.HasPrefix(base, "route_") || strings.HasSuffix(base, "_ribbons.json") {
+				continue
+			}
+			totalServices++
+		}
+	}
+
 	var (
 		routeName      string
 		routeCreated   bool
@@ -1911,14 +2253,14 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		countryName    string
 		countryCreated bool
 		countryID      *int
-		trainsCreated  []string
+		formationsCreated  []string
 		ttImported     int
 		ttSkipped      int
 		errs           []importError
 		routeFileSeen  bool
 	)
-	trainIDByName := map[string]int{} // formation_name → trains.id
-	seenTrains := map[string]bool{}
+	formationIDByName := map[string]int{} // formation_name → trains.id
+	seenFormations := map[string]bool{}
 
 	// Per-entry route resolver. Each timetable file in a cargo / scenario
 	// DLC zip can reference a different parent route via its
@@ -2163,6 +2505,15 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			featJSON, _ := json.Marshal(feats)
 			h.db.Exec("DELETE FROM route_coordinates WHERE route_id = ?", *routeID)
 			h.db.Exec("INSERT INTO route_coordinates (route_id, coordinates) VALUES (?, ?)", *routeID, string(featJSON))
+
+			// Pre-built per-timetable feature blobs reference the OLD
+			// route GeoJSON we just dropped. Delete them so the next
+			// timetable build (later in this import) populates fresh ones,
+			// and any timetable that doesn't get re-imported in this pass
+			// rebuilds lazily on first read instead of returning stale data.
+			h.db.Exec(`DELETE FROM timetable_map_features
+				WHERE timetable_id IN (SELECT id FROM timetables WHERE route_id = ?)`,
+				*routeID)
 		}
 
 		// Replace route_markers from platform / signal / switch Point features,
@@ -2264,6 +2615,13 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 	// Pass 2: per-service files. Skip the route file (already handled above)
 	// and any non-.json. Each per-service file carries its own formation_name
 	// + trains[] consist details; resolve trains lazily.
+	//
+	// routeFeatsCache is per-import scratch state for buildTimetableMap-
+	// FeaturesCached — every timetable on the same route shares one parse
+	// of the 5-15 MB route GeoJSON. Without this Boston Sprinter (5,500
+	// timetables × 12 MB blob × 50-200 ms parse) stalls the import for
+	// 5-20 minutes after "[auto-import] starting…".
+	routeFeatsCache := map[int][]map[string]any{}
 	for _, f := range zr.File {
 		if f.FileInfo().IsDir() || !strings.HasSuffix(strings.ToLower(f.Name), ".json") {
 			continue
@@ -2346,8 +2704,12 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			if existingRouteID == nil && entryRouteID != nil {
 				h.db.Exec("UPDATE timetables SET route_id = ? WHERE id = ? AND route_id IS NULL", *entryRouteID, existingID)
 			}
-			h.mergeServiceLinkagesIntoExisting(existingID, entryRouteID, entry, &errs, f.Name, trainIDByName, seenTrains, &trainsCreated)
+			h.mergeServiceLinkagesIntoExisting(existingID, entryRouteID, entry, &errs, f.Name, formationIDByName, seenFormations, &formationsCreated)
 			ttSkipped++
+			if progress != nil {
+				label := serviceName + " (merged)"
+				progress(ttImported+ttSkipped, totalServices, label)
+			}
 			continue
 		}
 
@@ -2356,17 +2718,17 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		// per-service trains[].class (display name) when missing.
 		formationName, _ := entry["formation_name"].(string)
 		formationName = strings.TrimSpace(formationName)
-		var trainID *int
+		var formationID *int
 		if formationName != "" {
-			tid, created, err := h.resolveTrainFromService(formationName, entry)
+			tid, created, err := h.resolveFormationFromService(formationName, entry)
 			if err != nil {
 				errs = append(errs, importError{File: f.Name, Error: "resolve train: " + err.Error()})
 			} else {
-				trainID = &tid
-				trainIDByName[formationName] = tid
-				if created && !seenTrains[formationName] {
-					seenTrains[formationName] = true
-					trainsCreated = append(trainsCreated, formationName)
+				formationID = &tid
+				formationIDByName[formationName] = tid
+				if created && !seenFormations[formationName] {
+					seenFormations[formationName] = true
+					formationsCreated = append(formationsCreated, formationName)
 				}
 			}
 		}
@@ -2413,11 +2775,11 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		}
 
 		res, err := h.db.Exec(`INSERT INTO timetables
-			(service_name, route_id, train_id, service_type, contributor, bound, service,
+			(service_name, route_id, formation_id, service_type, contributor, bound, service,
 			 section_id, conductor_compatible, current_service_name, start_time, duration,
 			 source, playable)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			serviceName, entryRouteID, trainID, serviceType,
+			serviceName, entryRouteID, formationID, serviceType,
 			nilIfEmpty(contributor), nilIfEmpty(bound), nilIfEmpty(service),
 			sectionID, conductorVal, nilIfEmpty(currentServiceName),
 			nilIfEmpty(startTime), nilIfEmpty(duration),
@@ -2429,20 +2791,20 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		ttID64, _ := res.LastInsertId()
 		ttID := int(ttID64)
 
-		if trainID != nil {
-			h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", ttID, *trainID)
+		if formationID != nil {
+			h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", ttID, *formationID)
 			// Also link the train to the route (powers /routes/<id>'s
 			// "Trains on this Route" panel). INSERT OR IGNORE so re-imports
 			// of the same train across services don't duplicate.
 			if entryRouteID != nil {
-				h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, *trainID)
+				h.db.Exec("INSERT OR IGNORE INTO route_formations (route_id, formation_id) VALUES (?, ?)", *entryRouteID, *formationID)
 			}
 		}
 		// additional_formations: extra trains contributed by sibling
 		// timetable binaries that declared this same service. Each entry
 		// has its own formation_name + trains[] consist data so we can
 		// resolve each independently and link them all to the single
-		// timetable row via timetable_trains.
+		// timetable row via timetable_formations.
 		if extras, ok := entry["additional_formations"].([]any); ok {
 			for _, e := range extras {
 				em, ok := e.(map[string]any)
@@ -2454,19 +2816,19 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 				if extraFormation == "" {
 					continue
 				}
-				eid, created, err := h.resolveTrainFromService(extraFormation, em)
+				eid, created, err := h.resolveFormationFromService(extraFormation, em)
 				if err != nil {
 					errs = append(errs, importError{File: f.Name, Error: "resolve additional train (" + extraFormation + "): " + err.Error()})
 					continue
 				}
-				trainIDByName[extraFormation] = eid
-				if created && !seenTrains[extraFormation] {
-					seenTrains[extraFormation] = true
-					trainsCreated = append(trainsCreated, extraFormation)
+				formationIDByName[extraFormation] = eid
+				if created && !seenFormations[extraFormation] {
+					seenFormations[extraFormation] = true
+					formationsCreated = append(formationsCreated, extraFormation)
 				}
-				h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", ttID, eid)
+				h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", ttID, eid)
 				if entryRouteID != nil {
-					h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, eid)
+					h.db.Exec("INSERT OR IGNORE INTO route_formations (route_id, formation_id) VALUES (?, ?)", *entryRouteID, eid)
 				}
 			}
 		}
@@ -2566,14 +2928,36 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		// Pre-resolve car_stop_sign_id for every entry in this timetable so
 		// the HUD can do a single PK lookup at runtime rather than recomputing
 		// the (platform, car-count, direction) match on every position update.
-		if entryRouteID != nil && trainID != nil {
-			h.resolveCarStopSignsForTimetable(ttID, *entryRouteID, *trainID, bound)
+		if entryRouteID != nil && formationID != nil {
+			h.resolveCarStopSignsForTimetable(ttID, *entryRouteID, *formationID, bound)
 		}
 		if entryRouteID != nil {
 			h.resolveTrackMarkersForTimetable(ttID, *entryRouteID)
 		}
 
+		// Build the per-timetable filtered map-features blob now that the
+		// path coords and stop-marker resolutions are in place. Doing it
+		// here at import time means /api/timetables/{id}/map-features serves
+		// a single SELECT instead of fetching the whole route GeoJSON and
+		// running the per-feature filter on every page load. Pass the
+		// per-import cache so the route GeoJSON parses once across all
+		// timetables on the same route (the Boston Sprinter unstall).
+		// Pre-build is opt-in via the ExtractorBuildTimetableMaps setting.
+		// Default-off keeps the importer fast on big DLCs; the user builds
+		// lazily on demand from /routes/{id}/edit, /timetables/{id}, or
+		// implicitly when a HUD loads a timetable that lacks features.
+		if entryRouteID != nil && config.Get().ExtractorBuildTimetableMaps {
+			h.buildTimetableMapFeaturesCached(ttID, *entryRouteID, routeFeatsCache)
+		}
+
 		ttImported++
+		if progress != nil {
+			label := serviceName
+			if label == "" {
+				label = filepath.Base(f.Name)
+			}
+			progress(ttImported+ttSkipped, totalServices, label)
+		}
 	}
 
 	// Only complain about a missing route_*.json if no per-entry
@@ -2581,8 +2965,8 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 	if !routeFileSeen && routeID == nil && len(routeIDByCrossPakRef) == 0 {
 		errs = append(errs, importError{File: "(none)", Error: "no route_*.json file in zip and no cross_pak_reference_name in per-service files — route metadata missing"})
 	}
-	if trainsCreated == nil {
-		trainsCreated = []string{}
+	if formationsCreated == nil {
+		formationsCreated = []string{}
 	}
 	if errs == nil {
 		errs = []importError{}
@@ -2597,7 +2981,7 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			"name":    countryName,
 			"created": countryCreated,
 		},
-		"trainsCreated":      trainsCreated,
+		"formationsCreated":      formationsCreated,
 		"timetablesImported": ttImported,
 		"timetablesSkipped":  ttSkipped,
 		"errors":             errs,
@@ -2623,9 +3007,9 @@ func (h *TimetableHandler) mergeServiceLinkagesIntoExisting(
 	entry map[string]any,
 	errs *[]importError,
 	fileName string,
-	trainIDByName map[string]int,
-	seenTrains map[string]bool,
-	trainsCreated *[]string,
+	formationIDByName map[string]int,
+	seenFormations map[string]bool,
+	formationsCreated *[]string,
 ) {
 	// Sections — link any from the JSON's sectionNames[] that aren't
 	// already linked. INSERT OR IGNORE makes the loop idempotent across
@@ -2649,25 +3033,25 @@ func (h *TimetableHandler) mergeServiceLinkagesIntoExisting(
 
 	// Trains — resolve the canonical formation (entry["formation_name"])
 	// AND every additional_formations[].formation_name, link each via
-	// timetable_trains + route_trains. Same resolver the main path uses.
+	// timetable_formations + route_formations. Same resolver the main path uses.
 	resolveAndLink := func(formation string, payload map[string]any) {
 		formation = strings.TrimSpace(formation)
 		if formation == "" {
 			return
 		}
-		tid, created, err := h.resolveTrainFromService(formation, payload)
+		tid, created, err := h.resolveFormationFromService(formation, payload)
 		if err != nil {
 			*errs = append(*errs, importError{File: fileName, Error: "merge train (" + formation + "): " + err.Error()})
 			return
 		}
-		trainIDByName[formation] = tid
-		if created && !seenTrains[formation] {
-			seenTrains[formation] = true
-			*trainsCreated = append(*trainsCreated, formation)
+		formationIDByName[formation] = tid
+		if created && !seenFormations[formation] {
+			seenFormations[formation] = true
+			*formationsCreated = append(*formationsCreated, formation)
 		}
-		h.db.Exec("INSERT OR IGNORE INTO timetable_trains (timetable_id, train_id) VALUES (?, ?)", existingID, tid)
+		h.db.Exec("INSERT OR IGNORE INTO timetable_formations (timetable_id, formation_id) VALUES (?, ?)", existingID, tid)
 		if entryRouteID != nil {
-			h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", *entryRouteID, tid)
+			h.db.Exec("INSERT OR IGNORE INTO route_formations (route_id, formation_id) VALUES (?, ?)", *entryRouteID, tid)
 		}
 	}
 
@@ -2686,7 +3070,7 @@ func (h *TimetableHandler) mergeServiceLinkagesIntoExisting(
 	}
 }
 
-// resolveTrainFromService finds-or-creates a trains row from a per-service
+// resolveFormationFromService finds-or-creates a trains row from a per-service
 // JSON.
 //
 // Lookup priority:
@@ -2699,14 +3083,111 @@ func (h *TimetableHandler) mergeServiceLinkagesIntoExisting(
 // names like "PlayerFormation" / "AIFormation". Matching by name first
 // would let an IoW PlayerFormation (Class 483 vehicles) collide with a
 // Boston PlayerFormation (CTC-3 Cab Car vehicles). Matching by GUID set
+// classMetaAgg holds the class-level aggregate values rolled up from a
+// formation's vehicles list. Each field uses a pointer / nullable type so
+// that "absent" (the lead vehicle didn't report it) is distinct from
+// "false" / "zero" — that distinction matters when we COALESCE-update
+// the train_classes row instead of overwriting good values with zeros.
+type classMetaAgg struct {
+	isElectric      any // *int (0/1) or nil
+	maxSpeed        any // *float64 or nil
+	maxPower        any // *float64 or nil
+	manufacturer    any // *string or nil
+	engineDesc      any // *string or nil
+	typeDesc        any // *string or nil
+	vehicleCategory any // *string or nil  — Locomotive / FreightWagon / etc.
+	electrification []output.ElectrificationSpec
+}
+
+// aggregateClassMetadata rolls a formation's per-vehicle RVD fields up to
+// a single class-level summary. Prefers the LEAD vehicle's values (the
+// drivable power car / cab car), falls back to the first vehicle that
+// actually populates each field. Electrification specs are unioned
+// across every vehicle in the consist.
+func aggregateClassMetadata(vehicles []map[string]any) classMetaAgg {
+	var meta classMetaAgg
+	// Two-pass: prefer lead's values, then fill blanks from any vehicle.
+	for _, lead := range []bool{true, false} {
+		for _, v := range vehicles {
+			isLead, _ := v["is_lead"].(bool)
+			if lead && !isLead {
+				continue
+			}
+			if lead == false && isLead {
+				continue
+			}
+			if meta.isElectric == nil {
+				if b, ok := v["is_electric"].(bool); ok {
+					n := 0
+					if b {
+						n = 1
+					}
+					meta.isElectric = n
+				}
+			}
+			if meta.maxSpeed == nil {
+				if f, ok := v["max_speed_kph"].(float64); ok && f > 0 {
+					meta.maxSpeed = f
+				}
+			}
+			if meta.maxPower == nil {
+				if f, ok := v["max_power_kw"].(float64); ok && f > 0 {
+					meta.maxPower = f
+				}
+			}
+			if meta.manufacturer == nil {
+				if s, ok := v["manufacturer_name"].(string); ok && s != "" {
+					meta.manufacturer = s
+				}
+			}
+			if meta.engineDesc == nil {
+				if s, ok := v["engine_description"].(string); ok && s != "" {
+					meta.engineDesc = s
+				}
+			}
+			if meta.typeDesc == nil {
+				if s, ok := v["type_description"].(string); ok && s != "" {
+					meta.typeDesc = s
+				}
+			}
+			if meta.vehicleCategory == nil {
+				if s, ok := v["vehicle_category"].(string); ok && s != "" {
+					meta.vehicleCategory = s
+				}
+			}
+			if specs, ok := v["electrification"].([]any); ok {
+				for _, sp := range specs {
+					m, ok := sp.(map[string]any)
+					if !ok {
+						continue
+					}
+					cur, _ := m["current"].(string)
+					side, _ := m["pickup_side"].(string)
+					var volt, freq int32
+					if f, ok := m["voltage_v"].(float64); ok {
+						volt = int32(f)
+					}
+					if f, ok := m["frequency_hz"].(float64); ok {
+						freq = int32(f)
+					}
+					meta.electrification = append(meta.electrification, output.ElectrificationSpec{
+						Current: cur, PickupSide: side, VoltageV: volt, FrequencyHz: freq,
+					})
+				}
+			}
+		}
+	}
+	return meta
+}
+
 // gives each its own row.
 //
-// On creation, populates train_vehicles from the service file's
+// On creation, populates formation_vehicles from the service file's
 // trains[].consists[0].vehicles[].
 //
-// Returns (train_id, created, error). `created` is true only when a brand-new
+// Returns (formation_id, created, error). `created` is true only when a brand-new
 // trains row was inserted on this call.
-func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map[string]any) (int, bool, error) {
+func (h *TimetableHandler) resolveFormationFromService(formationName string, svc map[string]any) (int, bool, error) {
 	// Pull the default-class consist (one with is_default=true, or the only
 	// entry if none flagged). That entry carries the per-vehicle GUIDs.
 	defaultConsist := pickDefaultConsist(svc)
@@ -2725,7 +3206,7 @@ func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map
 	// the same vehicle composition are the same physical formation.
 	if len(vehicles) > 0 {
 		guids := vehicleGUIDSet(vehicles)
-		if existing := h.findTrainByVehicleSet(guids); existing > 0 {
+		if existing := h.findFormationByVehicleSet(guids); existing > 0 {
 			return existing, false, nil
 		}
 		// No GUID match → genuinely a new formation, fall through to
@@ -2735,13 +3216,13 @@ func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map
 	} else {
 		// Step 2 (legacy): no vehicle data → name match is the only key.
 		var existing int
-		if h.db.QueryRow("SELECT id FROM trains WHERE name = ?", formationName).Scan(&existing) == nil {
+		if h.db.QueryRow("SELECT id FROM formations WHERE name = ?", formationName).Scan(&existing) == nil {
 			return existing, false, nil
 		}
 	}
 
 	// New train: insert a row with display info from the default consist's
-	// lead vehicle, then populate train_vehicles.
+	// lead vehicle, then populate formation_vehicles.
 	var className, livery string
 	var lengthM float64
 	if defaultConsist != nil {
@@ -2772,21 +3253,63 @@ func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map
 	var classID *int
 	if className != "" {
 		var cid int
+		meta := aggregateClassMetadata(vehicles)
 		if h.db.QueryRow("SELECT id FROM train_classes WHERE name = ?", className).Scan(&cid) == nil {
 			classID = &cid
+			// Class already exists; refresh aggregates only when the new
+			// vehicles' lead carries data we previously didn't have. Cheap
+			// COALESCE-style update — never overwrites a non-NULL with NULL.
+			h.db.Exec(`UPDATE train_classes SET
+				is_electric        = COALESCE(?, is_electric),
+				max_speed_kph      = COALESCE(?, max_speed_kph),
+				max_power_kw       = COALESCE(?, max_power_kw),
+				manufacturer_name  = COALESCE(?, manufacturer_name),
+				engine_description = COALESCE(?, engine_description),
+				type_description   = COALESCE(?, type_description),
+				vehicle_category   = COALESCE(?, vehicle_category)
+				WHERE id = ?`,
+				meta.isElectric, meta.maxSpeed, meta.maxPower,
+				meta.manufacturer, meta.engineDesc, meta.typeDesc,
+				meta.vehicleCategory, cid)
 		} else {
+			// thumbnail_path is the URL the web UI uses; the actual PNG
+			// is written under <appDir>/images/train_classes/ during the
+			// pak catalog scan. We always set this even when no file
+			// exists yet — the page handles 404 with a placeholder.
+			thumbURL := catalog.ThumbnailURLPath(className)
 			cres, cerr := h.db.Exec(
-				"INSERT INTO train_classes (name, livery_id, typical_length_m, typical_car_count) VALUES (?, ?, ?, ?)",
-				className, nilIfEmpty(livery), lengthM, len(vehicles))
+				`INSERT INTO train_classes
+					(name, livery_id, typical_length_m, typical_car_count,
+					 is_electric, max_speed_kph, max_power_kw,
+					 manufacturer_name, engine_description, type_description,
+					 vehicle_category, thumbnail_path)
+				 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				className, nilIfEmpty(livery), lengthM, len(vehicles),
+				meta.isElectric, meta.maxSpeed, meta.maxPower,
+				meta.manufacturer, meta.engineDesc, meta.typeDesc,
+				meta.vehicleCategory, thumbURL)
 			if cerr == nil {
 				id64, _ := cres.LastInsertId()
 				cid = int(id64)
 				classID = &cid
 			}
 		}
+		// Union electrification specs into train_class_electrification.
+		// INSERT OR IGNORE — the UNIQUE constraint dedupes silently when
+		// the same (current, voltage, frequency) tuple already exists for
+		// this class.
+		if classID != nil {
+			for _, e := range meta.electrification {
+				h.db.Exec(`INSERT OR IGNORE INTO train_class_electrification
+					(train_class_id, current, pickup_side, voltage_v, frequency_hz)
+					VALUES (?, ?, ?, ?, ?)`,
+					*classID, nilIfEmpty(e.Current), nilIfEmpty(e.PickupSide),
+					e.VoltageV, e.FrequencyHz)
+			}
+		}
 	}
 
-	res, err := h.db.Exec(`INSERT INTO trains (name, class_name, livery_id, length_m, car_count, class_id) VALUES (?, ?, ?, ?, ?, ?)`,
+	res, err := h.db.Exec(`INSERT INTO formations(name, class_name, livery_id, length_m, car_count, class_id) VALUES (?, ?, ?, ?, ?, ?)`,
 		formationName, nilIfEmpty(className), nilIfEmpty(livery), lengthM, len(vehicles), classID)
 	if err != nil {
 		return 0, false, err
@@ -2814,8 +3337,8 @@ func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map
 		if b, _ := v["is_flipped"].(bool); b {
 			isFlipped = 1
 		}
-		h.db.Exec(`INSERT INTO train_vehicles
-			(train_id, position, vehicle_id, class_name, friendly_name, livery_id, vehicle_category, length_m, is_lead, is_flipped)
+		h.db.Exec(`INSERT INTO formation_vehicles
+			(formation_id, position, vehicle_id, class_name, friendly_name, livery_id, vehicle_category, length_m, is_lead, is_flipped)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			tid, i, vehID, nilIfEmpty(cls), nilIfEmpty(fn), nilIfEmpty(liv), nilIfEmpty(cat), lm, isLead, isFlipped)
 	}
@@ -2825,8 +3348,8 @@ func (h *TimetableHandler) resolveTrainFromService(formationName string, svc map
 // pickDefaultConsist returns the trains[].consists[0] entry whose class is
 // flagged is_default, or the first non-empty consists[0] otherwise.
 func pickDefaultConsist(svc map[string]any) map[string]any {
-	trains, _ := svc["trains"].([]any)
-	for _, t := range trains {
+	formations, _ := svc["formations"].([]any)
+	for _, t := range formations {
 		te, ok := t.(map[string]any)
 		if !ok {
 			continue
@@ -2845,7 +3368,7 @@ func pickDefaultConsist(svc map[string]any) map[string]any {
 		}
 	}
 	// Fallback: first non-empty consists[0]
-	for _, t := range trains {
+	for _, t := range formations {
 		te, ok := t.(map[string]any)
 		if !ok {
 			continue
@@ -2876,15 +3399,15 @@ func vehicleGUIDSet(vehicles []map[string]any) string {
 	return strings.Join(guids, ",")
 }
 
-// findTrainByVehicleSet returns an existing trains.id whose train_vehicles
+// findFormationByVehicleSet returns an existing trains.id whose formation_vehicles
 // rows have exactly the given GUID set, or 0 if none.
-func (h *TimetableHandler) findTrainByVehicleSet(targetSig string) int {
+func (h *TimetableHandler) findFormationByVehicleSet(targetSig string) int {
 	if targetSig == "" {
 		return 0
 	}
-	rows, err := h.db.Query(`SELECT train_id, GROUP_CONCAT(vehicle_id, ',') FROM (
-		SELECT train_id, vehicle_id FROM train_vehicles ORDER BY train_id, vehicle_id
-	) GROUP BY train_id`)
+	rows, err := h.db.Query(`SELECT formation_id, GROUP_CONCAT(vehicle_id, ',') FROM (
+		SELECT formation_id, vehicle_id FROM formation_vehicles ORDER BY formation_id, vehicle_id
+	) GROUP BY formation_id`)
 	if err != nil {
 		return 0
 	}
@@ -2961,13 +3484,13 @@ func classifyMarker(props map[string]any) (string, string) {
 // Trains with car_count NULL fall through to max_rail_vehicles=0 ("any").
 //
 // Idempotent: re-running the same timetable rewrites the same FKs.
-func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID, trainID int, bound string) {
+func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID, formationID int, bound string) {
 	bound = strings.ToLower(strings.TrimSpace(bound))
 
 	// Pull the train's car count. NULL → 0 (which matches the "any" sentinel
 	// in car_stop_signs.max_rail_vehicles).
 	var carCount sql.NullInt64
-	h.db.QueryRow("SELECT car_count FROM trains WHERE id = ?", trainID).Scan(&carCount)
+	h.db.QueryRow("SELECT car_count FROM formations WHERE id = ?", formationID).Scan(&carCount)
 	cars := 0
 	if carCount.Valid {
 		cars = int(carCount.Int64)
@@ -3052,6 +3575,137 @@ func (h *TimetableHandler) resolveTrackMarkersForTimetable(timetableID, routeID 
 	}
 }
 
+// buildTimetableMapFeatures pre-computes the per-timetable filtered route
+// GeoJSON blob and stores it in `timetable_map_features`. Called from the
+// importer right after car_stop_signs / track_markers are resolved.
+//
+// Replaces the request-time JS filter in views/js/service-map.js (and the
+// duplicates in show.html / edit.html) — the runtime fetch becomes a
+// single SELECT instead of pulling the whole route GeoJSON and walking
+// every feature × every path vertex on each map render.
+//
+// Failure is logged and swallowed: a missing blob just means the runtime
+// endpoint will return 404 and the frontend can fall back to the legacy
+// route-fetch + filter path. We don't want to break the import for what's
+// effectively a cache miss.
+//
+// Convenience wrapper around buildTimetableMapFeaturesCached for callers
+// that build a single timetable (the lazy-rebuild path on /api/.../map-
+// features). Bulk callers (the import loop) MUST use the cached version
+// or every timetable re-parses the 12 MB route GeoJSON, which turns a
+// 5,500-service Boston Sprinter import into a 5-20 minute stall.
+func (h *TimetableHandler) buildTimetableMapFeatures(timetableID, routeID int) {
+	h.buildTimetableMapFeaturesCached(timetableID, routeID, nil)
+}
+
+// buildTimetableMapFeaturesCached does the actual work. `routeFeatsCache`
+// (nullable) lets a caller share parsed route features across many
+// timetables on the same route — saves a JSON parse of the 5-15 MB blob
+// per timetable. The cache is keyed by route_id; an empty/nil entry
+// triggers a parse and stores it.
+func (h *TimetableHandler) buildTimetableMapFeaturesCached(timetableID, routeID int, routeFeatsCache map[int][]map[string]any) {
+	routeFeats, err := h.loadRouteFeatures(routeID, routeFeatsCache)
+	if err != nil || len(routeFeats) == 0 {
+		// No route_coordinates (extractor skipped rails phase) or
+		// unparseable. Nothing to filter; leave the row absent. Errors
+		// are logged inside the loader.
+		return
+	}
+
+	// Path coords — read the same blob the renderer uses, decode just the
+	// {latitude, longitude} we need for proximity math.
+	var pathJSON string
+	if err := h.db.QueryRow("SELECT coordinates FROM timetable_coordinates WHERE timetable_id = ?", timetableID).Scan(&pathJSON); err != nil {
+		// Service has no path (some scenarios don't ship one). Filter still
+		// runs — schedule-tuple matches still work, only proximity drops out.
+		pathJSON = "[]"
+	}
+	var rawCoords []map[string]any
+	json.Unmarshal([]byte(pathJSON), &rawCoords)
+	pathCoords := make([]output.ServiceCoord, 0, len(rawCoords))
+	for _, c := range rawCoords {
+		lat, _ := c["latitude"].(float64)
+		lng, _ := c["longitude"].(float64)
+		pathCoords = append(pathCoords, output.ServiceCoord{Latitude: lat, Longitude: lng})
+	}
+
+	// Schedule entries — pull just the (location, structure, number) tuple
+	// the filter needs. Mirrors the JS `entries.forEach` index-build loop.
+	rows, err := h.db.Query(`
+		SELECT COALESCE(l.name, ''),
+		       COALESCE(te.structure, ''),
+		       COALESCE(te.structure_number, '')
+		FROM timetable_entries te
+		LEFT JOIN locations l ON l.id = te.location_id
+		WHERE te.timetable_id = ?
+		ORDER BY te.sort_order
+	`, timetableID)
+	if err != nil {
+		log.Printf("[map-features-build] tt=%d: query entries: %v", timetableID, err)
+		return
+	}
+	var entryRefs []output.ScheduleEntryRef
+	for rows.Next() {
+		var ref output.ScheduleEntryRef
+		if err := rows.Scan(&ref.Location, &ref.Structure, &ref.StructureNumber); err == nil {
+			entryRefs = append(entryRefs, ref)
+		}
+	}
+	rows.Close()
+
+	filtered := output.FilterRouteFeaturesForTimetable(routeFeats, entryRefs, pathCoords, output.DefaultFilterOptions())
+	blob, err := json.Marshal(filtered)
+	if err != nil {
+		log.Printf("[map-features-build] tt=%d: marshal: %v", timetableID, err)
+		return
+	}
+	if _, err := h.db.Exec(`
+		INSERT INTO timetable_map_features (timetable_id, features)
+		VALUES (?, ?)
+		ON CONFLICT(timetable_id) DO UPDATE SET
+			features = excluded.features,
+			built_at = CURRENT_TIMESTAMP
+	`, timetableID, string(blob)); err != nil {
+		log.Printf("[map-features-build] tt=%d: upsert: %v", timetableID, err)
+	}
+}
+
+// loadRouteFeatures returns the parsed route GeoJSON features for routeID,
+// reading from cache when present and otherwise SELECTing + parsing once
+// and storing the result in cache for the rest of the import. The cache
+// is per-import scratch state owned by the caller — pass nil to skip
+// caching (one-off lazy-rebuild path).
+//
+// Returns (nil, nil) when route_coordinates has no row for routeID — that
+// route's rails phase hasn't run yet. Caller treats this as "no work" and
+// silently skips.
+func (h *TimetableHandler) loadRouteFeatures(routeID int, cache map[int][]map[string]any) ([]map[string]any, error) {
+	if cache != nil {
+		if cached, ok := cache[routeID]; ok {
+			return cached, nil
+		}
+	}
+	var routeJSON string
+	if err := h.db.QueryRow("SELECT coordinates FROM route_coordinates WHERE route_id = ?", routeID).Scan(&routeJSON); err != nil {
+		if cache != nil {
+			cache[routeID] = nil // negative-cache so we don't re-query per timetable
+		}
+		return nil, nil
+	}
+	var feats []map[string]any
+	if err := json.Unmarshal([]byte(routeJSON), &feats); err != nil {
+		log.Printf("[map-features-build] route=%d: parse route_coordinates: %v", routeID, err)
+		if cache != nil {
+			cache[routeID] = nil
+		}
+		return nil, err
+	}
+	if cache != nil {
+		cache[routeID] = feats
+	}
+	return feats, nil
+}
+
 // ---------- internal helpers ----------
 
 func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
@@ -3064,7 +3718,7 @@ func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
 	}
 
 	entries, _ := h.getEntriesForTimetable(id)
-	trains, _ := h.getTrainsForTimetable(id)
+	formations, _ := h.getFormationsForTimetable(id)
 	sections, _ := h.getSectionsForTimetable(id)
 
 	// Route name
@@ -3084,9 +3738,9 @@ func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
 		}
 	}
 
-	trainNames := make([]string, len(trains))
-	for i, tr := range trains {
-		trainNames[i] = tr.Name
+	formationNames := make([]string, len(formations))
+	for i, tr := range formations {
+		formationNames[i] = tr.Name
 	}
 
 	sectionNames := make([]string, len(sections))
@@ -3196,7 +3850,7 @@ func (h *TimetableHandler) buildExportData(id int) (map[string]any, error) {
 		"service":                 t.Service,
 		"routeName":               routeName,
 		"countryName":             countryName,
-		"trainNames":              trainNames,
+		"formationNames":              formationNames,
 		"serviceType":             t.ServiceType,
 		"contributor":             t.Contributor,
 		"coordinates_contributor": t.CoordinatesContributor,

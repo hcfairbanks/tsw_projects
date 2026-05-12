@@ -10,7 +10,7 @@
 // opts:
 //   routeId    (optional) preselect & lock the Route filter (route page)
 //   countryId  (optional) preselect the Country filter
-//   trainId    (optional) preselect the Train filter
+//   formationId (optional) preselect the Formation filter
 //   readUrlParams  (optional, default false) — also read the same presets
 //                  from the page's URL query string (used by /timetables)
 //   lockRoute  (optional, derived true when routeId set) — hide the Route
@@ -119,11 +119,11 @@
         + '      <option value="" data-i18n="common.all">All</option>'
         + '      <option value="__none__" data-i18n="timetables.noSection">No Section</option>'
         + '    </select>'
-        + '    <label data-i18n="trains.title">Train:</label>'
+        + '    <label data-i18n="formations.title">Formation:</label>'
         + '    <div class="typeahead-container">'
-        + '      <input type="text" id="tts_trainInput" data-i18n-placeholder="common.search" placeholder="Type to search trains..." autocomplete="off">'
-        + '      <div id="tts_trainDropdown" class="typeahead-dropdown"></div>'
-        + '      <input type="hidden" id="tts_trainFilter" value="">'
+        + '      <input type="text" id="tts_formationInput" data-i18n-placeholder="common.search" placeholder="Type to search formations..." autocomplete="off">'
+        + '      <div id="tts_formationDropdown" class="typeahead-dropdown"></div>'
+        + '      <input type="hidden" id="tts_formationFilter" value="">'
         + '    </div>'
         + '  </div>'
         + '  <div class="filter-box tts-filter-row2">'
@@ -211,7 +211,7 @@
             var qs = new URLSearchParams(window.location.search);
             if (!opts.routeId && qs.get('route_id')) opts.routeId = qs.get('route_id');
             if (!opts.countryId && qs.get('country_id')) opts.countryId = qs.get('country_id');
-            if (!opts.trainId && qs.get('train_id')) opts.trainId = qs.get('train_id');
+            if (!opts.formationId && qs.get('formation_id')) opts.formationId = qs.get('formation_id');
         }
 
         var lockRoute = opts.lockRoute !== undefined ? !!opts.lockRoute : !!opts.routeId;
@@ -220,11 +220,11 @@
             opts: opts,
             lockRoute: lockRoute,
             allRoutes: [],
-            allTrains: [],
+            allFormations: [],
             allCountries: [],
             routeSummary: [],
             allTimetables: [],
-            highlightedIndex: { service: -1, route: -1, train: -1 },
+            highlightedIndex: { service: -1, route: -1, formation: -1 },
             currentPage: 1,
             currentLimit: 15,
             devMode: false,
@@ -281,29 +281,29 @@
 
     async function loadData(container, state) {
         try {
-            // When the page is locked to one route, scope the train list to
-            // trains used on that route only — otherwise the typeahead
-            // surfaces every train in the DB, including ones belonging to
+            // When the page is locked to one route, scope the formation list to
+            // formations used on that route only — otherwise the typeahead
+            // surfaces every formation in the DB, including ones belonging to
             // entirely different routes (e.g. Boston's CTC-3 Cab Car
             // formations showing up on the IoW page).
-            var trainsUrl = (state.lockRoute && state.opts.routeId)
-                ? ('/api/routes/' + state.opts.routeId + '/trains')
-                : '/api/trains';
+            var formationsUrl = (state.lockRoute && state.opts.routeId)
+                ? ('/api/routes/' + state.opts.routeId + '/formations')
+                : '/api/formations';
             var responses = await Promise.all([
                 fetch('/api/timetables/route-summary'),
                 fetch('/api/routes'),
-                fetch(trainsUrl),
+                fetch(formationsUrl),
                 fetch('/api/countries')
             ]);
             state.routeSummary = await responses[0].json();
             state.allRoutes = await responses[1].json();
-            state.allTrains = await responses[2].json();
+            state.allFormations = await responses[2].json();
             state.allCountries = await responses[3].json();
-            // /api/routes/<id>/trains returns {data: [...]} when wrapped in
+            // /api/routes/<id>/formations returns {data: [...]} when wrapped in
             // util.Success — flatten so the typeahead/render code can treat
             // both endpoints the same.
-            if (state.allTrains && !Array.isArray(state.allTrains) && Array.isArray(state.allTrains.data)) {
-                state.allTrains = state.allTrains.data;
+            if (state.allFormations && !Array.isArray(state.allFormations) && Array.isArray(state.allFormations.data)) {
+                state.allFormations = state.allFormations.data;
             }
 
             populateCountryFilter(container, state);
@@ -338,11 +338,11 @@
                 disp.innerHTML = countryCodeToFlag(country.code || '') + escapeHtml(country.name);
             }
         }
-        if (state.opts.trainId) {
-            var train = state.allTrains.find(function (t) { return String(t.id) === String(state.opts.trainId); });
-            if (train) {
-                container.querySelector('#tts_trainFilter').value = train.id;
-                container.querySelector('#tts_trainInput').value = train.name;
+        if (state.opts.formationId) {
+            var formation = state.allFormations.find(function (t) { return String(t.id) === String(state.opts.formationId); });
+            if (formation) {
+                container.querySelector('#tts_formationFilter').value = formation.id;
+                container.querySelector('#tts_formationInput').value = formation.name;
             }
         }
     }
@@ -458,12 +458,12 @@
     function setupTypeaheads(container, state) {
         setupServiceTypeahead(container, state);
         setupRouteTypeahead(container, state);
-        setupTrainTypeahead(container, state);
+        setupFormationTypeahead(container, state);
 
         // Hide dropdowns when clicking outside any typeahead container.
         document.addEventListener('click', function (e) {
             if (!e.target.closest('.typeahead-container')) {
-                ['tts_serviceDropdown', 'tts_routeDropdown', 'tts_trainDropdown'].forEach(function (id) {
+                ['tts_serviceDropdown', 'tts_routeDropdown', 'tts_formationDropdown'].forEach(function (id) {
                     var el = container.querySelector('#' + id);
                     if (el) el.style.display = 'none';
                 });
@@ -502,18 +502,18 @@
         input.addEventListener('keydown', function (e) { handleTypeaheadKeydown(e, state, 'route', dropdown); });
     }
 
-    function setupTrainTypeahead(container, state) {
-        var input = container.querySelector('#tts_trainInput');
-        var dropdown = container.querySelector('#tts_trainDropdown');
-        var hidden = container.querySelector('#tts_trainFilter');
+    function setupFormationTypeahead(container, state) {
+        var input = container.querySelector('#tts_formationInput');
+        var dropdown = container.querySelector('#tts_formationDropdown');
+        var hidden = container.querySelector('#tts_formationFilter');
 
-        input.addEventListener('focus', function () { showTrainDropdown(container, state, this.value); });
+        input.addEventListener('focus', function () { showFormationDropdown(container, state, this.value); });
         input.addEventListener('input', function () {
-            state.highlightedIndex.train = -1;
+            state.highlightedIndex.formation = -1;
             hidden.value = '';
-            showTrainDropdown(container, state, this.value);
+            showFormationDropdown(container, state, this.value);
         });
-        input.addEventListener('keydown', function (e) { handleTypeaheadKeydown(e, state, 'train', dropdown); });
+        input.addEventListener('keydown', function (e) { handleTypeaheadKeydown(e, state, 'formation', dropdown); });
     }
 
     function handleTypeaheadKeydown(e, state, type, dropdown) {
@@ -569,7 +569,7 @@
 
     var serviceSearcher = makeDebouncedSearch();
     var routeSearcher = makeDebouncedSearch();
-    var trainSearcher = makeDebouncedSearch();
+    var formationSearcher = makeDebouncedSearch();
 
     function showServiceDropdown(container, state, filter) {
         var dropdown = container.querySelector('#tts_serviceDropdown');
@@ -672,76 +672,76 @@
         });
     }
 
-    function showTrainDropdown(container, state, filter) {
-        var dropdown = container.querySelector('#tts_trainDropdown');
+    function showFormationDropdown(container, state, filter) {
+        var dropdown = container.querySelector('#tts_formationDropdown');
         dropdown.style.display = 'block';
         if (!dropdown.innerHTML.trim()) {
             dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">…</div>';
         }
-        trainSearcher.schedule(function (myToken) {
-            // Server-side search via /api/trains. Locked-route pages already
-            // route through /api/routes/<id>/trains in loadData (so the cache
+        formationSearcher.schedule(function (myToken) {
+            // Server-side search via /api/formations. Locked-route pages already
+            // route through /api/routes/<id>/formations in loadData (so the cache
             // is correct for the static page-load), but the typeahead
-            // re-queries the global train list with the search term so the
-            // user can find trains beyond what's already cached.
+            // re-queries the global formation list with the search term so the
+            // user can find formations beyond what's already cached.
             var params = new URLSearchParams({ limit: TYPEAHEAD_LIMIT });
             if (filter) params.set('search', filter);
             var endpoint = (state.lockRoute && state.opts.routeId)
-                ? '/api/routes/' + state.opts.routeId + '/trains'
-                : '/api/trains';
+                ? '/api/routes/' + state.opts.routeId + '/formations'
+                : '/api/formations';
             fetch(endpoint + '?' + params.toString())
                 .then(function (r) { return r.json(); })
                 .then(function (result) {
-                    if (!trainSearcher.isCurrent(myToken)) return;
-                    var trains = Array.isArray(result) ? result : (result && result.data) || [];
+                    if (!formationSearcher.isCurrent(myToken)) return;
+                    var formations = Array.isArray(result) ? result : (result && result.data) || [];
                     // Locked-route endpoint doesn't yet honour ?search — so
                     // filter client-side as a safety net.
                     if (filter) {
                         var lower = filter.toLowerCase();
-                        trains = trains.filter(function (t) {
+                        formations = formations.filter(function (t) {
                             return ((t.name || '').toLowerCase().indexOf(lower) !== -1)
                                 || ((t.class_name || '').toLowerCase().indexOf(lower) !== -1);
                         });
                     }
-                    renderTrainDropdown(container, dropdown, trains);
+                    renderFormationDropdown(container, dropdown, formations);
                 })
                 .catch(function () {
-                    if (!trainSearcher.isCurrent(myToken)) return;
+                    if (!formationSearcher.isCurrent(myToken)) return;
                     dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">Error</div>';
                 });
         });
     }
 
-    function renderTrainDropdown(container, dropdown, trains) {
+    function renderFormationDropdown(container, dropdown, formations) {
         // Group by class so the user sees one entry per class (e.g. "Isle
         // Of Wight Class 483") even when multiple formations share it.
         // Picking the entry filters timetables for ALL formations in that
-        // class via the backend's class_id query param. Trains without a
+        // class via the backend's class_id query param. Formations without a
         // class_id surface as a single formation entry (their own row).
         var classBuckets = {};            // class_id → { class_name, formationIds[], formationNames[] }
-        var formationOnly = [];           // legacy trains with no class_id
-        trains.forEach(function (train) {
-            if (train.class_id) {
-                var key = train.class_id;
+        var formationOnly = [];           // legacy formations with no class_id
+        formations.forEach(function (formation) {
+            if (formation.class_id) {
+                var key = formation.class_id;
                 if (!classBuckets[key]) {
                     classBuckets[key] = {
-                        class_id: train.class_id,
-                        class_name: train.class_name || train.name,
+                        class_id: formation.class_id,
+                        class_name: formation.class_name || formation.name,
                         formationIds: [],
                         formationNames: []
                     };
                 }
-                classBuckets[key].formationIds.push(train.id);
-                if (train.name && train.name !== classBuckets[key].class_name) {
-                    classBuckets[key].formationNames.push(train.name);
+                classBuckets[key].formationIds.push(formation.id);
+                if (formation.name && formation.name !== classBuckets[key].class_name) {
+                    classBuckets[key].formationNames.push(formation.name);
                 }
             } else {
-                formationOnly.push(train);
+                formationOnly.push(formation);
             }
         });
         var entries = [];
         Object.keys(classBuckets).forEach(function (k) { entries.push({ kind: 'class', data: classBuckets[k] }); });
-        formationOnly.forEach(function (t) { entries.push({ kind: 'train', data: t }); });
+        formationOnly.forEach(function (t) { entries.push({ kind: 'formation', data: t }); });
         entries.sort(function (a, b) {
             var an = a.kind === 'class' ? a.data.class_name : a.data.name;
             var bn = b.kind === 'class' ? b.data.class_name : b.data.name;
@@ -749,7 +749,7 @@
         });
 
         if (entries.length === 0) {
-            dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + tt('timetables.noTrainsFound', 'No trains found') + '</div>';
+            dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + tt('timetables.noFormationsFound', 'No formations found') + '</div>';
         } else {
             dropdown.innerHTML = entries.map(function (e) {
                 if (e.kind === 'class') {
@@ -763,15 +763,15 @@
                         + '</div>';
                 }
                 var t = e.data;
-                return '<div class="typeahead-item" data-kind="train" data-id="' + t.id + '" data-label="' + escapeHtml(t.name) + '">'
+                return '<div class="typeahead-item" data-kind="formation" data-id="' + t.id + '" data-label="' + escapeHtml(t.name) + '">'
                     + '<div class="item-name">' + escapeHtml(t.name) + '</div></div>';
             }).join('');
             dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function (item) {
                 item.addEventListener('click', function () {
-                    container.querySelector('#tts_trainInput').value = this.dataset.label;
+                    container.querySelector('#tts_formationInput').value = this.dataset.label;
                     // Encode the kind alongside the id so fetchAndRender
                     // knows which API param to set.
-                    container.querySelector('#tts_trainFilter').value = this.dataset.kind + ':' + this.dataset.id;
+                    container.querySelector('#tts_formationFilter').value = this.dataset.kind + ':' + this.dataset.id;
                     dropdown.style.display = 'none';
                 });
             });
@@ -797,12 +797,12 @@
         container.querySelector('#tts_serviceInput').value = '';
         container.querySelector('#tts_serviceFilter').value = '';
         container.querySelector('#tts_serviceFilterType').value = '';
-        container.querySelector('#tts_trainInput').value = '';
-        container.querySelector('#tts_trainFilter').value = '';
+        container.querySelector('#tts_formationInput').value = '';
+        container.querySelector('#tts_formationFilter').value = '';
         updateSectionFilter(container, state, state.lockRoute && state.opts.routeId ? state.opts.routeId : null);
         ['tts_startTimeMin','tts_startTimeMax','tts_durationMin','tts_durationMax','tts_stopsMin','tts_stopsMax','tts_conductorFilter','tts_coordSourceFilter','tts_serviceTypeFilter','tts_playableFilter','tts_sourceFilter']
             .forEach(function (id) { var el = container.querySelector('#' + id); if (el) el.value = ''; });
-        ['tts_serviceDropdown','tts_routeDropdown','tts_trainDropdown']
+        ['tts_serviceDropdown','tts_routeDropdown','tts_formationDropdown']
             .forEach(function (id) { var el = container.querySelector('#' + id); if (el) el.style.display = 'none'; });
         // Re-apply locked route on next search.
         if (state.lockRoute && state.opts.routeId) {
@@ -827,20 +827,20 @@
         var routeId = state.lockRoute && state.opts.routeId
             ? state.opts.routeId
             : container.querySelector('#tts_routeFilter').value;
-        // Train filter encodes "kind:id" — `class:N` filters by all
-        // formations of a class, `train:N` by a single formation.
+        // Formation filter encodes "kind:id" — `class:N` filters by all
+        // formations of a class, `formation:N` by a single formation.
         // (Empty / legacy plain-id values are treated as a formation.)
-        var trainFilterRaw = container.querySelector('#tts_trainFilter').value;
-        var trainFilterKind = '';
-        var trainFilterId = '';
-        if (trainFilterRaw) {
-            var idx = trainFilterRaw.indexOf(':');
+        var formationFilterRaw = container.querySelector('#tts_formationFilter').value;
+        var formationFilterKind = '';
+        var formationFilterId = '';
+        if (formationFilterRaw) {
+            var idx = formationFilterRaw.indexOf(':');
             if (idx > 0) {
-                trainFilterKind = trainFilterRaw.slice(0, idx);
-                trainFilterId = trainFilterRaw.slice(idx + 1);
+                formationFilterKind = formationFilterRaw.slice(0, idx);
+                formationFilterId = formationFilterRaw.slice(idx + 1);
             } else {
-                trainFilterKind = 'train';
-                trainFilterId = trainFilterRaw;
+                formationFilterKind = 'formation';
+                formationFilterId = formationFilterRaw;
             }
         }
         var countryId = container.querySelector('#tts_countryFilter').value;
@@ -861,8 +861,8 @@
         else if (serviceInput) params.set('search', serviceInput);
         if (routeId) params.set('route_id', routeId);
         if (countryId) params.set('country_id', countryId);
-        if (trainFilterId && trainFilterKind === 'class') params.set('class_id', trainFilterId);
-        else if (trainFilterId) params.set('train_id', trainFilterId);
+        if (formationFilterId && formationFilterKind === 'class') params.set('class_id', formationFilterId);
+        else if (formationFilterId) params.set('formation_id', formationFilterId);
         if (sectionFilter) params.set('section', sectionFilter);
         // Dev-only knobs — never query on them outside dev mode. (Server
         // also enforces this for `playable`, but skipping the param
@@ -905,7 +905,7 @@
             // Hide Route column when the page is already scoped to one route.
             if (!state.lockRoute) html += '<th data-i18n="timetables.route">Route</th>';
             if (showSection) html += '<th data-i18n="timetables.section">Section</th>';
-            html += '<th data-i18n="timetables.trains">Trains</th>';
+            html += '<th data-i18n="timetables.formations">Formations</th>';
             html += '<th class="tts-c" data-i18n="timetables.startTime">Start Time</th>';
             html += '<th class="tts-c" data-i18n="timetables.duration">Duration</th>';
             html += '<th class="tts-c" data-i18n="timetables.stops">Stops</th>';
@@ -915,21 +915,21 @@
             html += '</tr></thead><tbody>';
             timetables.forEach(function (t) {
                 var route = state.allRoutes.find(function (r) { return r.id == t.route_id; });
-                var trainDisplay = '-';
+                var formationDisplay = '-';
                 // Show the user-facing class name when available (e.g. "Isle
                 // Of Wight Class 483") rather than the formation name (e.g.
                 // "Class483_006"). Falls back to formation when class is
                 // unset.
-                if (t.trains && t.trains.length > 0) {
-                    trainDisplay = t.trains.map(function (train) {
-                        var label = train.class_name || train.name;
-                        return '<a href="/trains/' + train.id + '">' + escapeHtml(label) + '</a>';
+                if (t.formations && t.formations.length > 0) {
+                    formationDisplay = t.formations.map(function (formation) {
+                        var label = formation.class_name || formation.name;
+                        return '<a href="/formations/' + formation.id + '">' + escapeHtml(label) + '</a>';
                     }).join(', ');
-                } else if (t.train_id) {
-                    var train = state.allTrains.find(function (tr) { return tr.id == t.train_id; });
-                    if (train) {
-                        var label = train.class_name || train.name;
-                        trainDisplay = '<a href="/trains/' + train.id + '">' + escapeHtml(label) + '</a>';
+                } else if (t.formation_id) {
+                    var formation = state.allFormations.find(function (tr) { return tr.id == t.formation_id; });
+                    if (formation) {
+                        var label = formation.class_name || formation.name;
+                        formationDisplay = '<a href="/formations/' + formation.id + '">' + escapeHtml(label) + '</a>';
                     }
                 }
 
@@ -939,7 +939,7 @@
                     html += '<td>' + (route ? '<a href="/routes/' + route.id + '">' + escapeHtml(route.name) + '</a>' : '-') + '</td>';
                 }
                 if (showSection) html += '<td>' + escapeHtml(t.section_name || '-') + '</td>';
-                html += '<td>' + trainDisplay + '</td>';
+                html += '<td>' + formationDisplay + '</td>';
                 html += '<td class="tts-c">' + escapeHtml(t.start_time || '-') + '</td>';
                 html += '<td class="tts-c">' + escapeHtml(t.duration || '-') + '</td>';
                 html += '<td class="tts-c">' + (t.entry_count || 0) + '</td>';

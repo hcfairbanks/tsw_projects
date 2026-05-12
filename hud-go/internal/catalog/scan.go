@@ -23,6 +23,10 @@ type Tools struct {
 	RepakPath     string // repak.exe — for unpacking + listing pak contents
 	UAssetGUIPath string // UAssetGUI.exe — for parsing RouteDefinition assets
 	ScratchDir    string // temp working directory for repak unpacks
+	// ThumbnailsDir is where per-class thumbnail PNGs get rendered to
+	// during the scan. Typically <appDir>/images/train_classes/. Empty
+	// disables thumbnail rendering — RVDs still get parsed.
+	ThumbnailsDir string
 	// Logger is an optional progress callback. ScanCatalog calls it
 	// before each pak with `("Scanning %s (i/total)…", codename)` so
 	// callers can pipe per-pak updates into the live extractor log.
@@ -121,7 +125,7 @@ func ScanCatalog(db *sql.DB, tswPath string, tools Tools, force bool) (ScanResul
 		// pak_rvds instead. RVD scanning costs ~5–20 s per pak with
 		// trains; paks that ship none short-circuit fast.
 		if tools.UAssetGUIPath != "" {
-			rvds, err := pak.PakRVDs(r.PakPath, tools.RepakPath, tools.UAssetGUIPath, tools.ScratchDir)
+			rvds, err := pak.PakRVDsWithThumbnails(r.PakPath, tools.RepakPath, tools.ScratchDir, tools.ThumbnailsDir)
 			if err != nil {
 				log.Printf("[catalog] PakRVDs(%s): %v", r.PakPath, err)
 			} else if err := ReplaceRVDs(db, r.PakPath, rvds); err != nil {

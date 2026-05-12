@@ -368,12 +368,12 @@ func (h *RouteHandler) Update(w http.ResponseWriter, r *http.Request) {
 // `timetables.route_id` uses `ON DELETE SET NULL` (so timetables otherwise
 // survive a route delete and orphan), but the user-facing intent of "delete
 // route" is "wipe everything tied to this route" — so we explicitly delete
-// the timetables here first. timetable_entries / timetable_trains /
+// the timetables here first. timetable_entries / timetable_formations /
 // timetable_sections / timetable_coordinates / timetable_markers /
 // train_consists all use `ON DELETE CASCADE` on timetable_id and clean up
 // automatically.
 //
-// route_coordinates / route_markers / route_locations / route_trains /
+// route_coordinates / route_markers / route_locations / route_formations /
 // locations / station_name_mappings / sections / car_stop_signs /
 // track_markers all use `ON DELETE CASCADE` on route_id and are removed
 // when the route row itself is deleted at the end.
@@ -396,32 +396,32 @@ func (h *RouteHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deleteOrphanTrains(h.db)
+	deleteOrphanFormations(h.db)
 
 	util.Success(w, map[string]any{"success": true})
 }
 
-// deleteOrphanTrains removes trains rows that no other table references.
+// deleteOrphanFormations removes formations rows that no other table references.
 // Cleans up after route/timetable deletion so re-imports don't reuse stale
 // formation rows by name.
-func deleteOrphanTrains(db *sql.DB) {
+func deleteOrphanFormations(db *sql.DB) {
 	db.Exec(`
-		DELETE FROM trains
-		WHERE id NOT IN (SELECT train_id FROM route_trains WHERE train_id IS NOT NULL)
-		  AND id NOT IN (SELECT train_id FROM timetable_trains WHERE train_id IS NOT NULL)
-		  AND id NOT IN (SELECT train_id FROM section_trains WHERE train_id IS NOT NULL)
-		  AND id NOT IN (SELECT train_id FROM timetables WHERE train_id IS NOT NULL)
+		DELETE FROM formations
+		WHERE id NOT IN (SELECT formation_id FROM route_formations WHERE formation_id IS NOT NULL)
+		  AND id NOT IN (SELECT formation_id FROM timetable_formations WHERE formation_id IS NOT NULL)
+		  AND id NOT IN (SELECT formation_id FROM section_formations WHERE formation_id IS NOT NULL)
+		  AND id NOT IN (SELECT formation_id FROM timetables WHERE formation_id IS NOT NULL)
 	`)
 	// Classes whose only members were just-deleted orphans are now empty —
 	// drop them too so the typeahead doesn't surface dead class entries.
 	db.Exec(`
 		DELETE FROM train_classes
-		WHERE id NOT IN (SELECT class_id FROM trains WHERE class_id IS NOT NULL)
+		WHERE id NOT IN (SELECT class_id FROM formations WHERE class_id IS NOT NULL)
 	`)
 }
 
 // GetTrainClasses returns the train CLASSES used on a route, deduped from
-// the per-formation route_trains rows. Each item carries the class summary
+// the per-formation route_formations rows. Each item carries the class summary
 // and the list of formation IDs (so the UI can drill from class → formation
 // without an extra round-trip per class).
 func (h *RouteHandler) GetTrainClasses(w http.ResponseWriter, r *http.Request) {
@@ -436,12 +436,12 @@ func (h *RouteHandler) GetTrainClasses(w http.ResponseWriter, r *http.Request) {
 			COALESCE(tc.livery_id, t.livery_id) AS livery_id,
 			COALESCE(tc.typical_length_m, t.length_m) AS length_m,
 			COALESCE(tc.typical_car_count, t.car_count) AS car_count,
-			t.id AS train_id, t.name AS train_name
-		FROM trains t
-		INNER JOIN route_trains rt ON t.id = rt.train_id
+			t.id AS formation_id, t.name AS formation_name
+		FROM formations t
+		INNER JOIN route_formations rt ON t.id = rt.formation_id
 		LEFT JOIN train_classes tc ON tc.id = t.class_id
 		WHERE rt.route_id = ?
-		ORDER BY class_name, train_name`, id)
+		ORDER BY class_name, formation_name`, id)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -492,17 +492,17 @@ func (h *RouteHandler) GetTrainClasses(w http.ResponseWriter, r *http.Request) {
 	util.JSON(w, http.StatusOK, out)
 }
 
-// ---------- 9. GetTrains ----------
+// ---------- 9. GetFormations ----------
 
-func (h *RouteHandler) GetTrains(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) GetFormations(w http.ResponseWriter, r *http.Request) {
 	id, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
 
 	rows, err := h.db.Query(`
-		SELECT t.* FROM trains t
-		INNER JOIN route_trains rt ON t.id = rt.train_id
+		SELECT t.* FROM formations t
+		INNER JOIN route_formations rt ON t.id = rt.formation_id
 		WHERE rt.route_id = ?
 		ORDER BY t.name`, id)
 	if err != nil {
@@ -519,22 +519,22 @@ func (h *RouteHandler) GetTrains(w http.ResponseWriter, r *http.Request) {
 	util.Success(w, results)
 }
 
-// ---------- 10. AddTrain ----------
+// ---------- 10. AddFormation ----------
 
-func (h *RouteHandler) AddTrain(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) AddFormation(w http.ResponseWriter, r *http.Request) {
 	id, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
 
 	var body struct {
-		TrainID int `json:"train_id"`
+		FormationID int `json:"formation_id"`
 	}
 	if !decodeBody(w, r, &body) {
 		return
 	}
 
-	_, err := h.db.Exec("INSERT OR IGNORE INTO route_trains (route_id, train_id) VALUES (?, ?)", id, body.TrainID)
+	_, err := h.db.Exec("INSERT OR IGNORE INTO route_formations (route_id, formation_id) VALUES (?, ?)", id, body.FormationID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -542,22 +542,22 @@ func (h *RouteHandler) AddTrain(w http.ResponseWriter, r *http.Request) {
 	util.JSON(w, http.StatusCreated, map[string]any{"success": true})
 }
 
-// ---------- 11. RemoveTrain ----------
+// ---------- 11. RemoveFormation ----------
 
-func (h *RouteHandler) RemoveTrain(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) RemoveFormation(w http.ResponseWriter, r *http.Request) {
 	id, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
 
 	var body struct {
-		TrainID int `json:"train_id"`
+		FormationID int `json:"formation_id"`
 	}
 	if !decodeBody(w, r, &body) {
 		return
 	}
 
-	_, err := h.db.Exec("DELETE FROM route_trains WHERE route_id = ? AND train_id = ?", id, body.TrainID)
+	_, err := h.db.Exec("DELETE FROM route_formations WHERE route_id = ? AND formation_id = ?", id, body.FormationID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -565,19 +565,19 @@ func (h *RouteHandler) RemoveTrain(w http.ResponseWriter, r *http.Request) {
 	util.Success(w, map[string]any{"success": true})
 }
 
-// ---------- 12. RemoveTrainByID ----------
+// ---------- 12. RemoveFormationByID ----------
 
-func (h *RouteHandler) RemoveTrainByID(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) RemoveFormationByID(w http.ResponseWriter, r *http.Request) {
 	routeID, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
-	trainID, ok := parseID(w, r, "trainId")
+	formationID, ok := parseID(w, r, "formationId")
 	if !ok {
 		return
 	}
 
-	_, err := h.db.Exec("DELETE FROM route_trains WHERE route_id = ? AND train_id = ?", routeID, trainID)
+	_, err := h.db.Exec("DELETE FROM route_formations WHERE route_id = ? AND formation_id = ?", routeID, formationID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -748,9 +748,9 @@ func (h *RouteHandler) DeleteSection(w http.ResponseWriter, r *http.Request) {
 	util.Success(w, map[string]any{"success": true})
 }
 
-// ---------- 17. GetSectionTrains ----------
+// ---------- 17. GetSectionFormations ----------
 
-func (h *RouteHandler) GetSectionTrains(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) GetSectionFormations(w http.ResponseWriter, r *http.Request) {
 	routeID, ok := parseID(w, r, "id")
 	if !ok {
 		return
@@ -773,8 +773,8 @@ func (h *RouteHandler) GetSectionTrains(w http.ResponseWriter, r *http.Request) 
 	}
 
 	rows, err := h.db.Query(`
-		SELECT t.* FROM trains t
-		INNER JOIN section_trains st ON t.id = st.train_id
+		SELECT t.* FROM formations t
+		INNER JOIN section_formations st ON t.id = st.formation_id
 		WHERE st.section_id = ?
 		ORDER BY t.name`, sectionID)
 	if err != nil {
@@ -791,9 +791,9 @@ func (h *RouteHandler) GetSectionTrains(w http.ResponseWriter, r *http.Request) 
 	util.Success(w, results)
 }
 
-// ---------- 18. AddSectionTrain ----------
+// ---------- 18. AddSectionFormation ----------
 
-func (h *RouteHandler) AddSectionTrain(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) AddSectionFormation(w http.ResponseWriter, r *http.Request) {
 	routeID, ok := parseID(w, r, "id")
 	if !ok {
 		return
@@ -816,17 +816,17 @@ func (h *RouteHandler) AddSectionTrain(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var body struct {
-		TrainID int `json:"train_id"`
+		FormationID int `json:"formation_id"`
 	}
 	if !decodeBody(w, r, &body) {
 		return
 	}
-	if body.TrainID == 0 {
-		util.Error(w, http.StatusBadRequest, "train_id is required")
+	if body.FormationID == 0 {
+		util.Error(w, http.StatusBadRequest, "formation_id is required")
 		return
 	}
 
-	_, err = h.db.Exec("INSERT OR IGNORE INTO section_trains (section_id, train_id) VALUES (?, ?)", sectionID, body.TrainID)
+	_, err = h.db.Exec("INSERT OR IGNORE INTO section_formations (section_id, formation_id) VALUES (?, ?)", sectionID, body.FormationID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -834,9 +834,9 @@ func (h *RouteHandler) AddSectionTrain(w http.ResponseWriter, r *http.Request) {
 	util.JSON(w, http.StatusCreated, map[string]any{"success": true})
 }
 
-// ---------- 19. RemoveSectionTrain ----------
+// ---------- 19. RemoveSectionFormation ----------
 
-func (h *RouteHandler) RemoveSectionTrain(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) RemoveSectionFormation(w http.ResponseWriter, r *http.Request) {
 	routeID, ok := parseID(w, r, "id")
 	if !ok {
 		return
@@ -845,7 +845,7 @@ func (h *RouteHandler) RemoveSectionTrain(w http.ResponseWriter, r *http.Request
 	if !ok {
 		return
 	}
-	trainID, ok := parseID(w, r, "trainId")
+	formationID, ok := parseID(w, r, "formationId")
 	if !ok {
 		return
 	}
@@ -862,7 +862,7 @@ func (h *RouteHandler) RemoveSectionTrain(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	_, err = h.db.Exec("DELETE FROM section_trains WHERE section_id = ? AND train_id = ?", sectionID, trainID)
+	_, err = h.db.Exec("DELETE FROM section_formations WHERE section_id = ? AND formation_id = ?", sectionID, formationID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return
@@ -870,18 +870,18 @@ func (h *RouteHandler) RemoveSectionTrain(w http.ResponseWriter, r *http.Request
 	util.Success(w, map[string]any{"success": true})
 }
 
-// ---------- 20. GetTrainsWithCoordinates ----------
+// ---------- 20. GetFormationsWithCoordinates ----------
 
-func (h *RouteHandler) GetTrainsWithCoordinates(w http.ResponseWriter, r *http.Request) {
+func (h *RouteHandler) GetFormationsWithCoordinates(w http.ResponseWriter, r *http.Request) {
 	id, ok := parseID(w, r, "id")
 	if !ok {
 		return
 	}
 
 	rows, err := h.db.Query(`
-		SELECT DISTINCT tr.* FROM trains tr
-		INNER JOIN route_trains rt ON tr.id = rt.train_id
-		INNER JOIN timetable_trains tt ON tt.train_id = tr.id
+		SELECT DISTINCT tr.* FROM formations tr
+		INNER JOIN route_formations rt ON tr.id = rt.formation_id
+		INNER JOIN timetable_formations tt ON tt.formation_id = tr.id
 		INNER JOIN timetables t ON t.id = tt.timetable_id AND t.route_id = ?
 		WHERE rt.route_id = ?
 		ORDER BY tr.name`, id, id)
@@ -1020,56 +1020,23 @@ func (h *RouteHandler) DeleteAllTimetables(w http.ResponseWriter, r *http.Reques
 
 	// Delete related rows for each timetable
 	for _, ttID := range ttIDs {
-		h.db.Exec("DELETE FROM timetable_trains WHERE timetable_id = ?", ttID)
+		h.db.Exec("DELETE FROM timetable_formations WHERE timetable_id = ?", ttID)
 		h.db.Exec("DELETE FROM timetable_sections WHERE timetable_id = ?", ttID)
 		h.db.Exec("DELETE FROM timetable_entries WHERE timetable_id = ?", ttID)
 		h.db.Exec("DELETE FROM timetable_coordinates WHERE timetable_id = ?", ttID)
 		h.db.Exec("DELETE FROM timetable_markers WHERE timetable_id = ?", ttID)
+		h.db.Exec("DELETE FROM timetable_map_features WHERE timetable_id = ?", ttID)
 	}
 
 	// Delete the timetables themselves
 	h.db.Exec("DELETE FROM timetables WHERE route_id = ?", id)
 
-	// Sweep orphan trains: rows no longer reachable from any route_trains,
-	// timetable_trains, section_trains, or timetables.train_id. Generic
+	// Sweep orphan formations: rows no longer reachable from any route_formations,
+	// timetable_formations, section_formations, or timetables.formation_id. Generic
 	// formation names like "PlayerFormation" become available for the
 	// next route's import without colliding by name.
-	deleteOrphanTrains(h.db)
+	deleteOrphanFormations(h.db)
 
 	util.Success(w, map[string]any{"success": true, "deleted": len(ttIDs)})
 }
 
-// ---------- 24. FillCoordinates ----------
-
-func (h *RouteHandler) FillCoordinates(w http.ResponseWriter, r *http.Request) {
-	var body struct {
-		RouteID json.Number `json:"routeId"`
-	}
-	if !decodeBody(w, r, &body) {
-		return
-	}
-	rid, err := body.RouteID.Int64()
-	if err != nil || rid == 0 {
-		util.Error(w, http.StatusBadRequest, "routeId is required")
-		return
-	}
-	routeID := int(rid)
-
-	output, err := fillCoordinatesForRoute(h.db, routeID)
-	if err != nil {
-		util.Error(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	// Build route map after filling coordinates
-	if mapErr := buildRouteMap(h.db, routeID); mapErr != nil {
-		output += fmt.Sprintf("\n\nWARNING: buildRouteMap failed: %s", mapErr.Error())
-	} else {
-		output += "\n\nRoute map rebuilt successfully."
-	}
-
-	util.Success(w, map[string]any{
-		"success": true,
-		"output":  output,
-	})
-}

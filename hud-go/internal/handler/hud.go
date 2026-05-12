@@ -24,6 +24,10 @@ type HUDHandler struct {
 	currentRoute   map[string]any
 	timetableIndex int
 	routeFilePath  string
+	// tt is held so UploadRoute can kick off a background build of the
+	// loaded timetable's map-features blob if it doesn't already exist.
+	// Optional — may be nil in test setups; callers must nil-check.
+	tt *TimetableHandler
 }
 
 // appDir returns the directory of the running executable (or working dir as fallback).
@@ -257,6 +261,28 @@ func (h *HUDHandler) UploadRoute(w http.ResponseWriter, r *http.Request) {
 	h.routeFilePath = body.Filename
 	h.timetableIndex = -1
 	h.mu.Unlock()
+
+	// If this route blob came from a timetable AND that timetable doesn't
+	// have its map-features blob yet, kick off the build in the
+	// background. The HUD will pick up the features whenever its periodic
+	// /api/timetables/{id}/map-features fetch starts succeeding. Doing it
+	// here means players never have to remember to click "Generate Map" —
+	// the act of selecting a service in the HUD primes the data they'll
+	// want a few minutes later.
+	if h.tt != nil {
+		if ttIDRaw, ok := body.RouteData["timetableId"]; ok {
+			ttID := 0
+			switch v := ttIDRaw.(type) {
+			case float64:
+				ttID = int(v)
+			case int:
+				ttID = v
+			}
+			if ttID > 0 {
+				go h.tt.ensureMapFeaturesAsync(ttID)
+			}
+		}
+	}
 
 	util.Success(w, map[string]any{
 		"success":      true,

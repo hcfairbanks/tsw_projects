@@ -14,7 +14,8 @@
         { href: '/settings', label: 'Settings', i18n: 'nav.settings' },
         { href: '/countries', label: 'Countries', i18n: 'nav.countries', devOnly: true },
         { href: '/locations', label: 'Locations', i18n: 'nav.locations', devOnly: true },
-        { href: '/trains', label: 'Trains', i18n: 'nav.trains', devOnly: true },
+        { href: '/formations', label: 'Formations', i18n: 'nav.formations', devOnly: true },
+        { href: '/train-classes', label: 'Train Classes', i18n: 'nav.trainClasses' },
         { href: '/extractor', label: 'Extractor', i18n: 'nav.extractor' }
     ];
 

@@ -1,5 +1,5 @@
 {
-  "developmentMode": false,
+  "developmentMode": true,
   "apiKey": "",
   "theme": "dark",
   "language": "en",
@@ -15,10 +15,11 @@
   "minPointsForStop": 0,
   "autoStopTimeoutSeconds": 0,
   "saveFrequency": 0,
-  "enableSubscriptions": true,
+  "enableSubscriptions": false,
   "colorScheme": "default",
   "extractorTswPath": "D:/SteamLibrary/steamapps/common/Train Sim World 6",
   "extractorOutputDir": "C:/Users/hcfai/Desktop/routes_data/new",
   "extractorTempDir": "C:/Users/hcfai/Desktop/routes_data/temp",
-  "extractorAutoImport": true
+  "extractorAutoImport": true,
+  "extractorBuildTimetableMaps": false
 }

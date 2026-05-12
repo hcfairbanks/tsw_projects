@@ -30,8 +30,12 @@ func ReplaceRVDs(db *sql.DB, pakPath string, rvds []*uasset.RVD) error {
 	stmt, err := tx.Prepare(`INSERT INTO pak_rvds
 		(pak_path, asset_path, rail_vehicle_class, friendly_name, livery_id,
 		 vehicle_category, approximate_length_m, drivable, substitutable_unit,
-		 has_guard_controls, service_types, regions)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+		 has_guard_controls, service_types, regions,
+		 is_electric, max_speed_kph, max_power_kw, powered_axle_count,
+		 manufacturer_name, engine_description, type_description,
+		 thumbnail_asset_ref, electrification_json)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+		        ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		return err
 	}
@@ -46,6 +50,11 @@ func ReplaceRVDs(db *sql.DB, pakPath string, rvds []*uasset.RVD) error {
 			b, _ := json.Marshal(r.Regions)
 			regions = sql.NullString{String: string(b), Valid: true}
 		}
+		var elec sql.NullString
+		if len(r.Electrification) > 0 {
+			b, _ := json.Marshal(r.Electrification)
+			elec = sql.NullString{String: string(b), Valid: true}
+		}
 		if _, err := stmt.Exec(
 			pakPath,
 			r.AssetPath,
@@ -59,6 +68,15 @@ func ReplaceRVDs(db *sql.DB, pakPath string, rvds []*uasset.RVD) error {
 			boolToInt(r.HasGuardControls),
 			r.ServiceTypes,
 			regions,
+			boolToInt(r.IsElectric),
+			nullableF32(r.MaxSpeedKph),
+			nullableF32(r.MaxPowerKw),
+			nullableU32(r.PoweredAxleCount),
+			nilIfEmpty(r.ManufacturerName),
+			nilIfEmpty(r.EngineDescription),
+			nilIfEmpty(r.TypeDescription),
+			nilIfEmpty(r.ThumbnailAssetRef),
+			elec,
 		); err != nil {
 			return err
 		}
@@ -66,13 +84,32 @@ func ReplaceRVDs(db *sql.DB, pakPath string, rvds []*uasset.RVD) error {
 	return tx.Commit()
 }
 
+func nullableF32(v float32) any {
+	if v == 0 {
+		return nil
+	}
+	return float64(v)
+}
+func nullableU32(v uint32) any {
+	if v == 0 {
+		return nil
+	}
+	return int64(v)
+}
+
 // LoadAllRVDs returns every RVD in the catalog keyed by its canonical
 // `asset_path`. Same map shape `extractor.ScanAllRVDs` produces, drop-in
-// replacement so the writer's lookup logic doesn't change.
+// replacement so the writer's lookup logic doesn't change. Rehydrates the
+// extended train-class fields (is_electric / max_speed_kph / max_power_kw
+// / thumbnail_asset_ref / electrification list) so the class-rollup at
+// import time can read them without re-parsing the RVD asset.
 func LoadAllRVDs(db *sql.DB) (map[string]*uasset.RVD, error) {
 	rows, err := db.Query(`SELECT asset_path, rail_vehicle_class, friendly_name, livery_id,
 		vehicle_category, approximate_length_m, drivable, substitutable_unit,
-		has_guard_controls, service_types, regions
+		has_guard_controls, service_types, regions,
+		is_electric, max_speed_kph, max_power_kw, powered_axle_count,
+		manufacturer_name, engine_description, type_description,
+		thumbnail_asset_ref, electrification_json
 		FROM pak_rvds`)
 	if err != nil {
 		return nil, err
@@ -81,20 +118,31 @@ func LoadAllRVDs(db *sql.DB) (map[string]*uasset.RVD, error) {
 	out := make(map[string]*uasset.RVD, 512)
 	for rows.Next() {
 		var (
-			r           uasset.RVD
-			class       sql.NullString
-			friendly    sql.NullString
-			livery      sql.NullString
-			category    sql.NullString
-			lengthM     sql.NullFloat64
-			drivable    int
-			subUnit     int
-			hasGuard    int
+			r            uasset.RVD
+			class        sql.NullString
+			friendly     sql.NullString
+			livery       sql.NullString
+			category     sql.NullString
+			lengthM      sql.NullFloat64
+			drivable     int
+			subUnit      int
+			hasGuard     int
 			serviceTypes sql.NullInt64
-			regionsJSON sql.NullString
+			regionsJSON  sql.NullString
+			isElectric   sql.NullInt64
+			maxSpeed     sql.NullFloat64
+			maxPower     sql.NullFloat64
+			axleCount    sql.NullInt64
+			manufacturer sql.NullString
+			engineDesc   sql.NullString
+			typeDesc     sql.NullString
+			thumbRef     sql.NullString
+			elecJSON     sql.NullString
 		)
 		if err := rows.Scan(&r.AssetPath, &class, &friendly, &livery, &category,
-			&lengthM, &drivable, &subUnit, &hasGuard, &serviceTypes, &regionsJSON); err != nil {
+			&lengthM, &drivable, &subUnit, &hasGuard, &serviceTypes, &regionsJSON,
+			&isElectric, &maxSpeed, &maxPower, &axleCount,
+			&manufacturer, &engineDesc, &typeDesc, &thumbRef, &elecJSON); err != nil {
 			return nil, err
 		}
 		r.RailVehicleClass = class.String
@@ -112,6 +160,25 @@ func LoadAllRVDs(db *sql.DB) (map[string]*uasset.RVD, error) {
 		}
 		if regionsJSON.Valid && regionsJSON.String != "" {
 			_ = json.Unmarshal([]byte(regionsJSON.String), &r.Regions)
+		}
+		if isElectric.Valid {
+			r.IsElectric = isElectric.Int64 != 0
+		}
+		if maxSpeed.Valid {
+			r.MaxSpeedKph = float32(maxSpeed.Float64)
+		}
+		if maxPower.Valid {
+			r.MaxPowerKw = float32(maxPower.Float64)
+		}
+		if axleCount.Valid {
+			r.PoweredAxleCount = uint32(axleCount.Int64)
+		}
+		r.ManufacturerName = manufacturer.String
+		r.EngineDescription = engineDesc.String
+		r.TypeDescription = typeDesc.String
+		r.ThumbnailAssetRef = thumbRef.String
+		if elecJSON.Valid && elecJSON.String != "" {
+			_ = json.Unmarshal([]byte(elecJSON.String), &r.Electrification)
 		}
 		out[r.AssetPath] = &r
 	}

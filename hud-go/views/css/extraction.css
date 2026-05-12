@@ -240,15 +240,15 @@
     margin-top: 2px;
 }
 
-/* Selected trains tags */
-.selected-trains {
+/* Selected formations tags */
+.selected-formations {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.selected-train-tag {
+.selected-formation-tag {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -259,7 +259,7 @@
     color: var(--text-primary);
 }
 
-.selected-train-tag .remove-train {
+.selected-formation-tag .remove-formation {
     background: none;
     border: none;
     color: var(--btn-danger-bg);
@@ -269,7 +269,7 @@
     line-height: 1;
 }
 
-.selected-train-tag .remove-train:hover {
+.selected-formation-tag .remove-formation:hover {
     color: var(--btn-danger-hover);
 }
 

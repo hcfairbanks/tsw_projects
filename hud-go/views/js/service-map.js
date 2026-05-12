@@ -13,14 +13,26 @@
 //   ServiceMap.attach(map, opts) → Promise<void>
 //
 // opts:
-//   routeId          (required) route to fetch /api/routes/<id>/map-data for
+//   routeId          (required when timetableId is absent) route to fetch
+//                    /api/routes/<id>/map-data for. Route-only mode: no
+//                    schedule, all features rendered (filter is a no-op).
+//   timetableId      (optional) when set, fetch the pre-built filtered
+//                    feature blob from /api/timetables/<id>/map-features
+//                    instead of pulling the full route GeoJSON and
+//                    running the per-feature filter at render time. The
+//                    blob is built at import time (see
+//                    internal/output/timetable_features.go) and is
+//                    typically 50-300 KB vs the route's 5-15 MB.
 //   barContainer     (required) Element to render the toggle bar inside
 //   pathLatLngs      (optional) [[lat,lng], ...] of the service path. Used
-//                    for proximity-based filtering of off-path features.
-//                    Omit/empty → no proximity filter (everything shown).
+//                    for proximity-based filtering of off-path features
+//                    when timetableId is absent. With timetableId set the
+//                    blob is already filtered so this is render-only.
 //   scheduleEntries  (optional) array of {location, structure,
 //                    structure_number} tuples. Used for STRICT filtering
-//                    of platforms/platform_track when present.
+//                    of platforms/platform_track in route-only mode. With
+//                    timetableId set the strict-match logic was already
+//                    applied server-side and this can be omitted.
 //   pathLayer        (optional) Leaflet layer (typically a polyline) for
 //                    the path. Pass it in so the "Path" toggle hides/
 //                    shows the caller's polyline. The caller should NOT
@@ -295,10 +307,33 @@
             return false;
         }
 
-        // Fetch route map-data (skip when no route id — route-derived layers
-        // stay empty in that case).
+        // Fetch features. Two paths:
+        //
+        //   timetableId set → /api/timetables/{id}/map-features. The blob
+        //   is pre-filtered server-side at import time (see
+        //   internal/output/timetable_features.go), so we set `preFiltered`
+        //   to skip the per-feature filter checks below and just render.
+        //
+        //   timetableId absent (route-only mode) → /api/routes/{id}/map-data
+        //   like before. The filter checks below stay live but with no
+        //   schedule entries they're mostly no-ops.
+        //
+        // No routeId AND no timetableId → caller-owned layers only; bail
+        // out of the fetch entirely.
         var feats = [];
-        if (opts.routeId) {
+        var preFiltered = false;
+        if (opts.timetableId) {
+            try {
+                var rtt = await fetch('/api/timetables/' + opts.timetableId + '/map-features');
+                if (rtt.ok) {
+                    var mtt = await rtt.json();
+                    feats = (mtt && Array.isArray(mtt.features)) ? mtt.features : [];
+                    preFiltered = true;
+                }
+            } catch (e) {
+                console.warn('ServiceMap.attach: timetable map-features fetch failed', e);
+            }
+        } else if (opts.routeId) {
             try {
                 var r = await fetch('/api/routes/' + opts.routeId + '/map-data');
                 if (r.ok) {
@@ -321,21 +356,23 @@
             if ((geom.type === 'LineString' || geom.type === 'MultiLineString') && p.feature_type) {
                 var group = groups[p.feature_type];
                 if (!group) return;
-                if (p.feature_type === 'platform_track') {
-                    // Prefer schedule match; fall back to proximity. Strict-
-                    // only filtering hid Platform Tracks on services whose
-                    // schedule entries lacked location/structure/number.
-                    if (hasEntries) {
-                        if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
-                    } else if (hasPath) {
-                        if (!lineNearPath(geom)) return;
-                    }
-                } else {
-                    var named = p.structure && p.structure_number;
-                    if (hasEntries && named) {
-                        if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
-                    } else if (hasPath) {
-                        if (!lineNearPath(geom)) return;
+                if (!preFiltered) {
+                    if (p.feature_type === 'platform_track') {
+                        // Prefer schedule match; fall back to proximity. Strict-
+                        // only filtering hid Platform Tracks on services whose
+                        // schedule entries lacked location/structure/number.
+                        if (hasEntries) {
+                            if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
+                        } else if (hasPath) {
+                            if (!lineNearPath(geom)) return;
+                        }
+                    } else {
+                        var named = p.structure && p.structure_number;
+                        if (hasEntries && named) {
+                            if (!structureMatchesSchedule(p) && !(hasPath && lineNearPath(geom))) return;
+                        } else if (hasPath) {
+                            if (!lineNearPath(geom)) return;
+                        }
                     }
                 }
                 var layer = L.geoJSON(feat, {
@@ -378,13 +415,15 @@
             // feature_kind FIRST so they don't fall into the legacy
             // platform/signal/switch dispatch.
             if (p.feature_kind === 'car_stop_sign') {
-                // Schedule-strict by platform_name when entries exist; else
-                // fall back to path proximity for the generic-map case.
-                if (hasEntries) {
-                    var csName = strProp(p.platform_name);
-                    if (!csName || !usedNames.has(csName)) return;
-                } else if (hasPath) {
-                    if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                if (!preFiltered) {
+                    // Schedule-strict by platform_name when entries exist; else
+                    // fall back to path proximity for the generic-map case.
+                    if (hasEntries) {
+                        var csName = strProp(p.platform_name);
+                        if (!csName || !usedNames.has(csName)) return;
+                    } else if (hasPath) {
+                        if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                    }
                 }
                 var csm = L.circleMarker([flat, flng], {
                     radius: 3, color: '#ffffff', weight: 1, fillColor: '#3f6fd9', fillOpacity: 1
@@ -405,11 +444,13 @@
             if (p.feature_kind === 'track_marker') {
                 // Only Platform marker pins (matches the viewer whitelist).
                 if (p.marker_type !== 'Platform') return;
-                if (hasEntries) {
-                    var tmName = strProp(p.name);
-                    if (!tmName || !usedNames.has(tmName)) return;
-                } else if (hasPath) {
-                    if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                if (!preFiltered) {
+                    if (hasEntries) {
+                        var tmName = strProp(p.name);
+                        if (!tmName || !usedNames.has(tmName)) return;
+                    } else if (hasPath) {
+                        if (minDistanceToPathSegments(flat, flng, pathLatLngs) > markerProxM) return;
+                    }
                 }
                 var iconHtml = '<div style="width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(255,255,255,0.6)"></div>';
                 var tm = L.marker([flat, flng], {
@@ -431,7 +472,7 @@
                 // would prune almost every platform-side pickup. See
                 // collectableProxM (defaults to 50 m, matches the timetable
                 // pages' COLLECTABLE_PROX_M constant).
-                if (hasPath) {
+                if (!preFiltered && hasPath) {
                     if (minDistanceToPathSegments(flat, flng, pathLatLngs) > collectableProxM) return;
                 }
                 var colMk = L.marker([flat, flng], {
@@ -450,16 +491,18 @@
             if (p.signal_id) { groupKey = 'signals'; fill = '#ffd700'; radius = 3; }
             else if (p.jct_guid != null) { groupKey = 'switches'; fill = '#cc8400'; }
 
-            if (groupKey === 'platforms') {
-                if (hasEntries) {
-                    if (!structureMatchesSchedule(p)) return;
-                } else if (hasPath) {
-                    if (minDistanceToPath(flat, flng, pathLatLngs) > markerProxM) return;
+            if (!preFiltered) {
+                if (groupKey === 'platforms') {
+                    if (hasEntries) {
+                        if (!structureMatchesSchedule(p)) return;
+                    } else if (hasPath) {
+                        if (minDistanceToPath(flat, flng, pathLatLngs) > markerProxM) return;
+                    }
+                } else if (groupKey === 'signals') {
+                    if (hasPath && minDistanceToPathSegments(flat, flng, pathLatLngs) > signalProxM) return;
+                } else {
+                    if (hasPath && minDistanceToPath(flat, flng, pathLatLngs) > markerProxM) return;
                 }
-            } else if (groupKey === 'signals') {
-                if (hasPath && minDistanceToPathSegments(flat, flng, pathLatLngs) > signalProxM) return;
-            } else {
-                if (hasPath && minDistanceToPath(flat, flng, pathLatLngs) > markerProxM) return;
             }
 
             var m = L.circleMarker([flat, flng], {

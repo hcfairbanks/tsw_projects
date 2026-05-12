@@ -220,7 +220,7 @@
         let timetable = null;
         let entries = [];
         let allRoutes = [];
-        let allTrains = [];
+        let allFormations = [];
         let allCountries = [];
         let hasUnsavedChanges = false;
         let deletedEntryIds = [];
@@ -229,10 +229,10 @@
 
         async function loadData() {
             try {
-                const [timetableRes, routesRes, trainsRes, countriesRes] = await Promise.all([
+                const [timetableRes, routesRes, formationsRes, countriesRes] = await Promise.all([
                     fetch('/api/timetables/' + timetableId),
                     fetch('/api/routes'),
-                    fetch('/api/trains'),
+                    fetch('/api/formations'),
                     fetch('/api/countries')
                 ]);
 
@@ -244,7 +244,7 @@
 
                 timetable = await timetableRes.json();
                 allRoutes = await routesRes.json();
-                allTrains = await trainsRes.json();
+                allFormations = await formationsRes.json();
                 allCountries = await countriesRes.json();
                 entries = timetable.entries || [];
 
@@ -269,13 +269,13 @@
 
         // Track selected route for typeahead
         let selectedRouteId = null;
-        let timetableTrains = []; // Trains assigned to this timetable
+        let timetableFormations = []; // Formations assigned to this timetable
         let timetableSections = []; // Sections assigned to this timetable
-        let routeTrains = []; // Trains available for selected route
+        let routeFormations = []; // Formations available for selected route
         let routeSections = []; // Sections available for selected route
         let routeLocations = []; // Locations for the selected route
         let routeActiveIndex = -1;
-        let trainActiveIndex = -1;
+        let formationActiveIndex = -1;
         let sectionActiveIndex = -1;
 
         function renderTimetable() {
@@ -296,7 +296,7 @@
 
             // Initialize selected IDs from timetable
             selectedRouteId = timetable.route_id || null;
-            timetableTrains = timetable.trains || [];
+            timetableFormations = timetable.formations || [];
             timetableSections = timetable.sections || [];
 
             var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
@@ -325,17 +325,17 @@
             html += '<button type="button" class="clear-btn" onclick="clearRoute()">' + _t('common.clear', 'Clear') + '</button>';
             html += '</span></div>';
 
-            // Sections (multi-section, same pattern as trains)
+            // Sections (multi-section, same pattern as formations)
             html += '<div class="detail-row" style="align-items: flex-start;"><span class="detail-label">' + _t('timetables.sectionLabel', 'Sections:') + '</span><span class="detail-value">';
             html += '<div id="sectionsSection">';
             html += renderSectionsSection();
             html += '</div>';
             html += '</span></div>';
 
-            // Trains section (multi-train)
-            html += '<div class="detail-row" style="align-items: flex-start;"><span class="detail-label">' + _t('timetables.trainsLabel', 'Trains:') + '</span><span class="detail-value">';
-            html += '<div id="trainsSection">';
-            html += renderTrainsSection();
+            // Formations section (multi-formation)
+            html += '<div class="detail-row" style="align-items: flex-start;"><span class="detail-label">' + _t('timetables.formationsLabel', 'Formations:') + '</span><span class="detail-value">';
+            html += '<div id="formationsSection">';
+            html += renderFormationsSection();
             html += '</div>';
             html += '</span></div>';
 
@@ -353,50 +353,50 @@
 
             // Setup typeahead event handlers
             setupRouteTypeahead();
-            setupAddTrainTypeahead();
+            setupAddFormationTypeahead();
 
-            // Load trains and sections for selected route
+            // Load formations and sections for selected route
             if (selectedRouteId) {
-                loadRouteTrains(selectedRouteId);
+                loadRouteFormations(selectedRouteId);
                 loadRouteSections(selectedRouteId);
             }
         }
 
-        function renderTrainsSection() {
+        function renderFormationsSection() {
             let html = '';
 
             var _t = function(key, fallback) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback; };
-            if (timetableTrains.length === 0) {
-                html += '<p style="color: var(--text-muted); margin: 0 0 10px 0;">' + _t('timetables.noTrainsAssigned', 'No trains assigned.') + '</p>';
+            if (timetableFormations.length === 0) {
+                html += '<p style="color: var(--text-muted); margin: 0 0 10px 0;">' + _t('timetables.noFormationsAssigned', 'No formations assigned.') + '</p>';
             } else {
                 html += '<div style="margin-bottom: 10px;">';
-                timetableTrains.forEach(function(train) {
+                timetableFormations.forEach(function(formation) {
                     html += '<div style="display: flex; align-items: center; gap: 10px; padding: 5px 0;">';
-                    var primaryT = train.class_name || train.name;
-                    var suffixT = (train.class_name && train.name && train.class_name !== train.name)
-                        ? ' <span style="color: var(--text-muted); font-size: 12px;">— ' + escapeHtml(train.name) + '</span>'
+                    var primaryT = formation.class_name || formation.name;
+                    var suffixT = (formation.class_name && formation.name && formation.class_name !== formation.name)
+                        ? ' <span style="color: var(--text-muted); font-size: 12px;">— ' + escapeHtml(formation.name) + '</span>'
                         : '';
-                    html += '<a href="/trains/' + train.id + '">' + escapeHtml(primaryT) + '</a>' + suffixT;
-                    html += '<button class="btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="removeTrain(' + train.id + ')">' + _t('common.remove', 'Remove') + '</button>';
+                    html += '<a href="/formations/' + formation.id + '">' + escapeHtml(primaryT) + '</a>' + suffixT;
+                    html += '<button class="btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="removeFormation(' + formation.id + ')">' + _t('common.remove', 'Remove') + '</button>';
                     html += '</div>';
                 });
                 html += '</div>';
             }
 
-            // Add train section
+            // Add formation section
             html += '<div class="typeahead-row" style="margin-top: 10px;">';
             html += '<div class="typeahead-wrapper">';
-            html += '<input type="text" class="typeahead-input" id="addTrainSearch" placeholder="' + (selectedRouteId ? _t('timetables.typeToSearchTrains', 'Type to search trains to add...') : _t('timetables.selectRouteFirst', 'Select a route first')) + '" autocomplete="off"' + (selectedRouteId ? '' : ' disabled') + ' style="font-size: 14px; padding: 8px;">';
-            html += '<div class="typeahead-dropdown" id="addTrainDropdown"></div>';
+            html += '<input type="text" class="typeahead-input" id="addFormationSearch" placeholder="' + (selectedRouteId ? _t('timetables.typeToSearchFormations', 'Type to search formations to add...') : _t('timetables.selectRouteFirst', 'Select a route first')) + '" autocomplete="off"' + (selectedRouteId ? '' : ' disabled') + ' style="font-size: 14px; padding: 8px;">';
+            html += '<div class="typeahead-dropdown" id="addFormationDropdown"></div>';
             html += '</div>';
             html += '</div>';
 
             return html;
         }
 
-        function refreshTrainsSection() {
-            document.getElementById('trainsSection').innerHTML = renderTrainsSection();
-            setupAddTrainTypeahead();
+        function refreshFormationsSection() {
+            document.getElementById('formationsSection').innerHTML = renderFormationsSection();
+            setupAddFormationTypeahead();
         }
 
         function renderSectionsSection() {
@@ -478,21 +478,21 @@
             }
         }
 
-        // Load trains for a specific route
-        async function loadRouteTrains(routeId) {
+        // Load formations for a specific route
+        async function loadRouteFormations(routeId) {
             try {
-                const response = await fetch('/api/routes/' + routeId + '/trains');
-                routeTrains = await response.json();
+                const response = await fetch('/api/routes/' + routeId + '/formations');
+                routeFormations = await response.json();
             } catch (error) {
-                console.error('Error loading route trains:', error);
-                routeTrains = [];
+                console.error('Error loading route formations:', error);
+                routeFormations = [];
             }
         }
 
-        // Get available trains for the route (not already added to timetable)
-        function getAvailableTrainsForRoute() {
-            return routeTrains.filter(function(t) {
-                return !timetableTrains.some(function(tt) { return tt.id === t.id; });
+        // Get available formations for the route (not already added to timetable)
+        function getAvailableFormationsForRoute() {
+            return routeFormations.filter(function(t) {
+                return !timetableFormations.some(function(tt) { return tt.id === t.id; });
             });
         }
 
@@ -553,14 +553,14 @@
             // Update view link
             viewLink.outerHTML = '<a href="/routes/' + id + '" class="view-link" id="routeViewLink">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.view') : 'View') + '</a>';
 
-            // Load trains for the new route
-            await loadRouteTrains(id);
+            // Load formations for the new route
+            await loadRouteFormations(id);
 
             // Load sections for the new route
             await loadRouteSections(id);
 
-            // Refresh the trains section to enable adding trains
-            refreshTrainsSection();
+            // Refresh the formations section to enable adding formations
+            refreshFormationsSection();
 
             // Load locations for the new route
             try {
@@ -581,14 +581,14 @@
             selectedRouteId = null;
             viewLink.outerHTML = '<span id="routeViewLink"></span>';
 
-            // Clear route trains
-            routeTrains = [];
+            // Clear route formations
+            routeFormations = [];
 
             // Clear sections
             loadRouteSections(null);
 
-            // Refresh trains section to disable adding trains
-            refreshTrainsSection();
+            // Refresh formations section to disable adding formations
+            refreshFormationsSection();
 
             markUnsaved();
         }
@@ -604,9 +604,9 @@
                 const filtered = filterRoutes(searchInput.value.trim());
                 renderRouteDropdown(filtered);
 
-                // Clear route trains when route is being edited
-                routeTrains = [];
-                refreshTrainsSection();
+                // Clear route formations when route is being edited
+                routeFormations = [];
+                refreshFormationsSection();
 
                 markUnsaved();
             });
@@ -649,96 +649,96 @@
             });
         }
 
-        // Add train typeahead functions (for multi-train)
-        let availableTrains = [];
+        // Add formation typeahead functions (for multi-formation)
+        let availableFormations = [];
 
-        function filterAddTrains(query) {
-            // Get available trains (not already added)
-            availableTrains = getAvailableTrainsForRoute();
-            if (!query) return availableTrains.slice(0, 10);
+        function filterAddFormations(query) {
+            // Get available formations (not already added)
+            availableFormations = getAvailableFormationsForRoute();
+            if (!query) return availableFormations.slice(0, 10);
             const lowerQuery = query.toLowerCase();
-            return availableTrains.filter(function(t) {
+            return availableFormations.filter(function(t) {
                 return t.name.toLowerCase().includes(lowerQuery);
             }).slice(0, 10);
         }
 
-        function renderAddTrainDropdown(trains) {
-            const dropdown = document.getElementById('addTrainDropdown');
+        function renderAddFormationDropdown(formations) {
+            const dropdown = document.getElementById('addFormationDropdown');
             if (!dropdown) return;
 
-            if (trains.length === 0) {
-                dropdown.innerHTML = '<div class="typeahead-empty">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noTrainsAvailable') : 'No trains available') + '</div>';
+            if (formations.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-empty">' + ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.noFormationsAvailable') : 'No formations available') + '</div>';
             } else {
-                dropdown.innerHTML = trains.map(function(train, index) {
-                    return '<div class="typeahead-item' + (index === trainActiveIndex ? ' active' : '') + '" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' + escapeHtml(train.name) + '</div>';
+                dropdown.innerHTML = formations.map(function(formation, index) {
+                    return '<div class="typeahead-item' + (index === formationActiveIndex ? ' active' : '') + '" data-id="' + formation.id + '" data-name="' + escapeHtml(formation.name) + '">' + escapeHtml(formation.name) + '</div>';
                 }).join('');
 
                 dropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
                     item.addEventListener('click', function() {
-                        addTrainToTimetable(parseInt(item.dataset.id), item.dataset.name);
+                        addFormationToTimetable(parseInt(item.dataset.id), item.dataset.name);
                     });
                 });
             }
             dropdown.classList.add('show');
         }
 
-        async function addTrainToTimetable(trainId, trainName) {
-            const dropdown = document.getElementById('addTrainDropdown');
-            const searchInput = document.getElementById('addTrainSearch');
+        async function addFormationToTimetable(formationId, formationName) {
+            const dropdown = document.getElementById('addFormationDropdown');
+            const searchInput = document.getElementById('addFormationSearch');
 
             dropdown.classList.remove('show');
             searchInput.value = '';
-            trainActiveIndex = -1;
+            formationActiveIndex = -1;
 
             try {
-                await fetch('/api/timetables/' + timetableId + '/trains', {
+                await fetch('/api/timetables/' + timetableId + '/formations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ train_id: trainId })
+                    body: JSON.stringify({ formation_id: formationId })
                 });
 
-                // Add the train to the timetable list
-                timetableTrains.push({ id: trainId, name: trainName });
+                // Add the formation to the timetable list
+                timetableFormations.push({ id: formationId, name: formationName });
 
-                refreshTrainsSection();
+                refreshFormationsSection();
             } catch (error) {
-                console.error('Error adding train:', error);
-                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorAddingTrain') : 'Error adding train to timetable');
+                console.error('Error adding formation:', error);
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorAddingFormation') : 'Error adding formation to timetable');
             }
         }
 
-        async function removeTrain(trainId) {
-            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.removeTrainConfirm') : 'Remove this train from the timetable?')) return;
+        async function removeFormation(formationId) {
+            if (!confirm((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.removeFormationConfirm') : 'Remove this formation from the timetable?')) return;
 
             try {
-                await fetch('/api/timetables/' + timetableId + '/trains/' + trainId, {
+                await fetch('/api/timetables/' + timetableId + '/formations/' + formationId, {
                     method: 'DELETE'
                 });
 
-                timetableTrains = timetableTrains.filter(function(t) { return t.id !== trainId; });
-                refreshTrainsSection();
+                timetableFormations = timetableFormations.filter(function(t) { return t.id !== formationId; });
+                refreshFormationsSection();
             } catch (error) {
-                console.error('Error removing train:', error);
-                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorRemovingTrain') : 'Error removing train from timetable');
+                console.error('Error removing formation:', error);
+                alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorRemovingFormation') : 'Error removing formation from timetable');
             }
         }
 
-        function setupAddTrainTypeahead() {
-            const searchInput = document.getElementById('addTrainSearch');
-            const dropdown = document.getElementById('addTrainDropdown');
+        function setupAddFormationTypeahead() {
+            const searchInput = document.getElementById('addFormationSearch');
+            const dropdown = document.getElementById('addFormationDropdown');
 
             if (!searchInput || !dropdown) return;
 
             searchInput.addEventListener('input', function() {
-                trainActiveIndex = -1;
-                const filtered = filterAddTrains(searchInput.value.trim());
-                renderAddTrainDropdown(filtered);
+                formationActiveIndex = -1;
+                const filtered = filterAddFormations(searchInput.value.trim());
+                renderAddFormationDropdown(filtered);
             });
 
             searchInput.addEventListener('focus', function() {
                 if (!searchInput.disabled) {
-                    const filtered = filterAddTrains(searchInput.value.trim());
-                    renderAddTrainDropdown(filtered);
+                    const filtered = filterAddFormations(searchInput.value.trim());
+                    renderAddFormationDropdown(filtered);
                 }
             });
 
@@ -746,27 +746,27 @@
                 const items = dropdown.querySelectorAll('.typeahead-item');
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    trainActiveIndex = Math.min(trainActiveIndex + 1, items.length - 1);
-                    updateActiveAddTrainItem(items);
+                    formationActiveIndex = Math.min(formationActiveIndex + 1, items.length - 1);
+                    updateActiveAddFormationItem(items);
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    trainActiveIndex = Math.max(trainActiveIndex - 1, 0);
-                    updateActiveAddTrainItem(items);
+                    formationActiveIndex = Math.max(formationActiveIndex - 1, 0);
+                    updateActiveAddFormationItem(items);
                 } else if (e.key === 'Enter') {
                     e.preventDefault();
-                    if (trainActiveIndex >= 0 && items[trainActiveIndex]) {
-                        addTrainToTimetable(parseInt(items[trainActiveIndex].dataset.id), items[trainActiveIndex].dataset.name);
+                    if (formationActiveIndex >= 0 && items[formationActiveIndex]) {
+                        addFormationToTimetable(parseInt(items[formationActiveIndex].dataset.id), items[formationActiveIndex].dataset.name);
                     }
                 } else if (e.key === 'Escape') {
                     dropdown.classList.remove('show');
-                    trainActiveIndex = -1;
+                    formationActiveIndex = -1;
                 }
             });
         }
 
-        function updateActiveAddTrainItem(items) {
+        function updateActiveAddFormationItem(items) {
             items.forEach(function(item, index) {
-                if (index === trainActiveIndex) {
+                if (index === formationActiveIndex) {
                     item.classList.add('active');
                     item.scrollIntoView({ block: 'nearest' });
                 } else {
@@ -779,11 +779,11 @@
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.typeahead-wrapper')) {
                 const routeDropdown = document.getElementById('routeDropdown');
-                const addTrainDropdown = document.getElementById('addTrainDropdown');
+                const addFormationDropdown = document.getElementById('addFormationDropdown');
                 if (routeDropdown) routeDropdown.classList.remove('show');
-                if (addTrainDropdown) addTrainDropdown.classList.remove('show');
+                if (addFormationDropdown) addFormationDropdown.classList.remove('show');
                 routeActiveIndex = -1;
-                trainActiveIndex = -1;
+                formationActiveIndex = -1;
             }
         });
 
@@ -1007,7 +1007,7 @@
 
         async function saveChanges() {
             try {
-                // Update timetable service name, service type, and route (trains are managed via junction table)
+                // Update timetable service name, service type, and route (formations are managed via junction table)
                 const serviceName = document.getElementById('serviceNameInput').value.trim();
                 const serviceType = document.getElementById('serviceTypeSelect').value;
 
@@ -1050,7 +1050,7 @@
 
                 const updatedTimetable = await updateRes.json();
                 timetable = { ...timetable, ...updatedTimetable };
-                timetable.trains = timetableTrains;
+                timetable.formations = timetableFormations;
 
                 // Update/create/delete entries
                 for (var i = 0; i < entries.length; i++) {
@@ -1575,92 +1575,30 @@
             // and keep only those within proximity of the service's path. We
             // wait for this fetch before showing the toggle bar so the layers
             // settle in their persisted state in one shot.
-            if (timetable && timetable.route_id && pathLatLngs.length > 0) {
+            if (timetable) {
                 try {
-                    const r = await fetch('/api/routes/' + timetable.route_id + '/map-data');
+                    // Pre-built per-timetable feature blob (server-side
+                    // filter at import time). Replaces the old route-
+                    // GeoJSON fetch + per-feature filter loop. See
+                    // internal/output/timetable_features.go for the
+                    // canonical filter rules.
+                    const r = await fetch('/api/timetables/' + timetableId + '/map-features');
                     if (r.ok) {
                         const md = await r.json();
-                        const feats = (md && Array.isArray(md.coordinates)) ? md.coordinates : [];
-                        // Style + classification helpers shared with the route page.
+                        const feats = (md && Array.isArray(md.features)) ? md.features : [];
                         const TRACK_FEATURE_STYLE = {
                             platform_track: { color: '#ff7f00', weight: 5, opacity: 0.85 },
                             siding_track:   { color: '#9467bd', weight: 4, opacity: 0.7  },
                             line_track:     { color: '#17becf', weight: 4, opacity: 0.7  },
                             running_track:  { color: '#1f77b4', weight: 4, opacity: 0.7  },
                         };
-                        // Returns true if any vertex of the (Multi)LineString
-                        // geometry is within proximity of the path.
-                        function lineNearPath(geom) {
-                            const lines = (geom.type === 'MultiLineString') ? geom.coordinates : [geom.coordinates];
-                            for (let i = 0; i < lines.length; i++) {
-                                const line = lines[i];
-                                for (let j = 0; j < line.length; j++) {
-                                    const c = line[j];
-                                    if (minDistanceToPathSegments(c[1], c[0], pathLatLngs) <= SERVICE_MARKER_PROX_M) return true;
-                                }
-                            }
-                            return false;
-                        }
-                        // Build two indexes from the schedule:
-                        //  - usedStructures: tuple set for matching features that
-                        //    carry (location, structure, structure_number) props
-                        //    — every track-line feature plus platform points.
-                        //  - usedNames: composite-name set for matching features
-                        //    that carry only `name` (track_markers — Platform
-                        //    pins, etc.). The extractor composes their `name`
-                        //    field as "Location Structure StructureNumber"
-                        //    (e.g. "Lake Platform 1"), which is the same shape
-                        //    we get by joining the schedule fields with spaces.
-                        const usedStructures = new Set();
-                        const usedNames = new Set();
-                        (entries || []).forEach(function(e) {
-                            const loc = (e.location || '').trim();
-                            const st = (e.structure || '').trim();
-                            const num = (e.structure_number || '').trim();
-                            if (!loc || !num) return;
-                            usedStructures.add(loc + '|' + st + '|' + num);
-                            usedNames.add([loc, st, num].filter(Boolean).join(' '));
-                        });
-                        function structureMatchesSchedule(p) {
-                            // Two property shapes exist in the route GeoJSON:
-                            //
-                            //  (a) Tuple form: separate `location`, `structure`,
-                            //      `structure_number` fields (used by the
-                            //      legacy platform Point features and by some
-                            //      schedule-imports). Match against the
-                            //      tuple set.
-                            //
-                            //  (b) Composed form: `location` already contains
-                            //      the full composed name (e.g.
-                            //      "Boston South Station Track 08") with
-                            //      `structure`/`structure_number` empty. The
-                            //      cooked-map track-feature LineStrings ship
-                            //      this shape. Match against usedNames.
-                            //
-                            // Either match is enough — they're alternative
-                            // representations of the same fact.
-                            const loc = (p.location || '').trim();
-                            const st = (p.structure || '').trim();
-                            const num = (p.structure_number || '').trim();
-                            if (loc && num && usedStructures.has(loc + '|' + st + '|' + num)) return true;
-                            if (loc && usedNames.has(loc)) return true;
-                            return false;
-                        }
                         feats.forEach(function(feat) {
                             const geom = feat.geometry;
                             if (!geom) return;
                             const p = feat.properties || {};
-                            // Track-feature LineStrings: classify by feature_type.
                             if ((geom.type === 'LineString' || geom.type === 'MultiLineString') && p.feature_type) {
                                 const group = serviceLayerGroups[p.feature_type];
                                 if (!group) return;
-                                // Track features: prefer schedule-tuple match,
-                                // fall back to path-proximity. Strict-only
-                                // hid Platform Tracks entirely on services
-                                // whose schedule entries lacked the
-                                // location/structure/number fields the
-                                // matcher expects.
-                                if (!structureMatchesSchedule(p) && !lineNearPath(geom)) return;
                                 const layer = L.geoJSON(feat, {
                                     style: TRACK_FEATURE_STYLE[p.feature_type] || { color: '#0066ff', weight: 3, opacity: 0.8 }
                                 });
@@ -1681,19 +1619,7 @@
                             if (!Array.isArray(c) || c.length < 2) return;
                             const flng = c[0], flat = c[1];
 
-                            // Car stop signs / track markers / collectables —
-                            // dispatched by feature_kind before falling through
-                            // to platform/signal/switch heuristics.
                             if (p.feature_kind === 'car_stop_sign') {
-                                // Schedule-strict: keep only signs whose joined
-                                // platform_name appears in this service's
-                                // schedule. The extractor stamps platform_name
-                                // on each car_stop_sign feature by joining to
-                                // the route's Platform track_markers via shared
-                                // ribbon_guid — same composition usedNames is
-                                // built from ("Location Structure Number").
-                                const csName = (p.platform_name || '').trim();
-                                if (!csName || !usedNames.has(csName)) return;
                                 const cm = L.circleMarker([flat, flng], {
                                     radius: 3, color: '#ffffff', weight: 1, fillColor: '#3f6fd9', fillOpacity: 1
                                 });
@@ -1710,15 +1636,7 @@
                                 return;
                             }
                             if (p.feature_kind === 'track_marker') {
-                                // Only Platform marker pins (matches the viewer's whitelist).
                                 if (p.marker_type !== 'Platform') return;
-                                // Schedule-strict: keep only markers whose name
-                                // appears in this service's schedule. The
-                                // extractor composes track_marker.name as
-                                // "Location Structure StructureNumber" — the
-                                // same composition usedNames is built from.
-                                const tmName = (p.name || '').trim();
-                                if (!tmName || !usedNames.has(tmName)) return;
                                 const iconHtml = '<div style="width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(255,255,255,0.6)"></div>';
                                 const tm = L.marker([flat, flng], {
                                     icon: L.divIcon({ html: iconHtml, className: '', iconSize: [12, 12], iconAnchor: [6, 6] })
@@ -1733,7 +1651,6 @@
                                 return;
                             }
                             if (p.feature_kind === 'collectable') {
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > COLLECTABLE_PROX_M) return;
                                 const colMk = L.marker([flat, flng], {
                                     icon: L.divIcon({
                                         className: 'collectable-pin',
@@ -1746,30 +1663,9 @@
                                 return;
                             }
 
-                            // Determine kind first so we can apply per-kind filters.
                             let group = 'platforms', fill = '#ff7f00', radius = 4;
                             if (p.signal_id) { group = 'signals'; fill = '#ffd700'; radius = 3; }
                             else if (p.jct_guid != null) { group = 'switches'; fill = '#cc8400'; }
-                            // Platforms: schedule-strict (same reason as platform_track).
-                            // Two adjacent platforms at one station are within 50 m of
-                            // each other, so geometric proximity catches the wrong
-                            // one. Only show platforms whose
-                            // (location, structure, structure_number) appears in the
-                            // service's schedule.
-                            if (group === 'platforms') {
-                                if (!structureMatchesSchedule(p)) return;
-                            } else if (group === 'signals') {
-                                // Signals must be ON the path — parallel-track signals
-                                // at the same station are within ~5 m so coarse
-                                // proximity catches the wrong one. Use point-to-
-                                // segment distance with a tight 3 m threshold.
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > SIGNAL_PROX_M) return;
-                            } else {
-                                // Switches: tight 3 m segment distance — junctions
-                                // sit on the path geometry of the ribbon they belong
-                                // to, so anything further is on a parallel track.
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > SERVICE_MARKER_PROX_M) return;
-                            }
                             const m = L.circleMarker([flat, flng], {
                                 radius: radius, color: '#ffffff', weight: 1.5,
                                 fillColor: fill, fillOpacity: 1

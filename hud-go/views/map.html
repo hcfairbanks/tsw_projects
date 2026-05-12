@@ -465,7 +465,7 @@
                     <input type="hidden" id="routeSelect" value="">
                 </div>
                 <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.train">Train:</label>
-                <select id="trainSelect" onchange="handleTrainChange()" disabled>
+                <select id="formationSelect" onchange="handleFormationChange()" disabled>
                     <option value="">-- Select a route first --</option>
                 </select>
                 <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.timetable">Timetable:</label>
@@ -1013,7 +1013,7 @@
         }
 
         // =============================================
-        // Cascading Selectors: Route → Train → Timetable
+        // Cascading Selectors: Route → Formation → Timetable
         // =============================================
 
         let allRoutes = [];
@@ -1121,16 +1121,16 @@
             dropdown.style.display = 'block';
         }
 
-        // Handle route selection - load trains for this route (only those with coordinates)
+        // Handle route selection - load formations for this route (only those with coordinates)
         async function handleRouteChange() {
             const routeId = document.getElementById('routeSelect').value;
-            const trainSelect = document.getElementById('trainSelect');
+            const formationSelect = document.getElementById('formationSelect');
             const timetableSelect = document.getElementById('timetableSelect');
             const loadBtn = document.getElementById('loadRouteBtn');
 
             // Reset dependent dropdowns
-            trainSelect.innerHTML = '<option value="">-- Select a train --</option>';
-            trainSelect.disabled = true;
+            formationSelect.innerHTML = '<option value="">-- Select a formation --</option>';
+            formationSelect.disabled = true;
             timetableSelect.innerHTML = '<option value="">-- Select a timetable --</option>';
             timetableSelect.disabled = true;
             loadBtn.disabled = true;
@@ -1138,29 +1138,29 @@
             if (!routeId) return;
 
             try {
-                const response = await fetch(`/api/routes/${routeId}/trains-with-coordinates`);
-                const trains = await response.json();
+                const response = await fetch(`/api/routes/${routeId}/formations-with-coordinates`);
+                const formations = await response.json();
 
-                if (trains.length > 0) {
-                    trainSelect.disabled = false;
-                    trains.forEach(train => {
+                if (formations.length > 0) {
+                    formationSelect.disabled = false;
+                    formations.forEach(formation => {
                         const option = document.createElement('option');
-                        option.value = train.id;
-                        option.textContent = train.name;
-                        trainSelect.appendChild(option);
+                        option.value = formation.id;
+                        option.textContent = formation.name;
+                        formationSelect.appendChild(option);
                     });
                 }
 
-                console.log('Trains with coordinates loaded:', trains.length);
+                console.log('Formations with coordinates loaded:', formations.length);
             } catch (err) {
-                console.error('Failed to load trains:', err);
+                console.error('Failed to load formations:', err);
             }
         }
 
-        // Handle train selection - load timetables for this route+train
-        async function handleTrainChange() {
+        // Handle formation selection - load timetables for this route+formation
+        async function handleFormationChange() {
             const routeId = document.getElementById('routeSelect').value;
-            const trainId = document.getElementById('trainSelect').value;
+            const formationId = document.getElementById('formationSelect').value;
             const timetableSelect = document.getElementById('timetableSelect');
             const loadBtn = document.getElementById('loadRouteBtn');
 
@@ -1169,10 +1169,10 @@
             timetableSelect.disabled = true;
             loadBtn.disabled = true;
 
-            if (!trainId) return;
+            if (!formationId) return;
 
             try {
-                const response = await fetch(`/api/timetables?route_id=${routeId}&train_id=${trainId}`);
+                const response = await fetch(`/api/timetables?route_id=${routeId}&formation_id=${formationId}`);
                 const timetables = await response.json();
 
                 // Only show timetables with recorded data
@@ -1305,7 +1305,7 @@
             if (!timetableId) return;
 
             try {
-                // Get timetable details to find route_id and train_id
+                // Get timetable details to find route_id and formation_id
                 const response = await fetch(`/api/timetables/${timetableId}`);
                 if (response.status === 404) {
                     // Stale id pointing at a deleted/re-imported timetable.
@@ -1335,21 +1335,21 @@
                     document.getElementById('routeInput').value = route.name;
                     document.getElementById('routeSelect').value = route.id;
 
-                    // Load trains for this route
+                    // Load formations for this route
                     await handleRouteChange();
 
-                    // Get the first train from timetable (trains array or legacy train_id)
-                    const trainId = timetable.trains && timetable.trains.length > 0
-                        ? timetable.trains[0].id
-                        : timetable.train_id;
+                    // Get the first formation from timetable (formations array or legacy formation_id)
+                    const formationId = timetable.formations && timetable.formations.length > 0
+                        ? timetable.formations[0].id
+                        : timetable.formation_id;
 
-                    if (trainId) {
-                        // Select the train
-                        const trainSelect = document.getElementById('trainSelect');
-                        trainSelect.value = trainId;
+                    if (formationId) {
+                        // Select the formation
+                        const formationSelect = document.getElementById('formationSelect');
+                        formationSelect.value = formationId;
 
-                        // Load timetables for this route+train
-                        await handleTrainChange();
+                        // Load timetables for this route+formation
+                        await handleFormationChange();
 
                         // Select the timetable
                         const timetableSelect = document.getElementById('timetableSelect');
@@ -1711,8 +1711,14 @@
             if (lastAttachedRouteId === resolvedRouteId && serviceMapHandle) return;
             if (serviceMapHandle && serviceMapHandle.destroy) serviceMapHandle.destroy();
             const entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
+            // Prefer the pre-built per-timetable feature blob when we know
+            // the timetable id — server-side filter at import time, single
+            // SELECT at runtime. Falls back to fetching the full route
+            // GeoJSON in route-only mode (no timetableId).
+            const tt_id = (data && data.timetableId) ? Number(data.timetableId) : 0;
             serviceMapHandle = await ServiceMap.attach(map, {
                 routeId: resolvedRouteId || 0,
+                timetableId: tt_id || undefined,
                 barContainer: document.getElementById('serviceLayerBar'),
                 pathLatLngs: pathLatLngs,
                 scheduleEntries: entries,

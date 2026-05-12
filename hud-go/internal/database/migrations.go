@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"strings"
@@ -14,6 +15,48 @@ var migrations = []string{
 		code TEXT
 	)`,
 
+	// ---------------------------------------------------------------------
+	// 2026-05-10 rename trains hierarchy to formations.
+	//
+	// The `trains` table holds assembled formations (one row per arrangement
+	// of vehicles, e.g. "Class483_006"). Class lives separately in
+	// `train_classes`, and the per-car list lives in `train_vehicles`. The
+	// table name "trains" caused user confusion with the live-API "train
+	// you're driving" concept, so the entity is renamed to "formation"
+	// across the schema, code, URLs, and UI. `train_classes` is left alone
+	// because "train class" is the standard railway term.
+	//
+	// These ALTERs are idempotent via RunMigrations' failure tolerance: on
+	// legacy DBs they perform the rename once; on fresh DBs (and on already-
+	// renamed DBs) they fail with "no such table/column" and are skipped.
+	// They run before every CREATE TABLE below that uses the new names, so
+	// IF NOT EXISTS doesn't accidentally create empty duplicate tables next
+	// to the populated originals.
+	//
+	// SQLite >=3.25 RENAME TO propagates the new parent name into the FK
+	// definitions of referencing tables, so the FKs in route_formations /
+	// section_formations / timetable_formations / formation_vehicles follow
+	// `trains` to `formations` automatically.
+	// ---------------------------------------------------------------------
+	`ALTER TABLE trains RENAME TO formations`,
+	`ALTER TABLE route_trains RENAME TO route_formations`,
+	`ALTER TABLE route_formations RENAME COLUMN train_id TO formation_id`,
+	`ALTER TABLE section_trains RENAME TO section_formations`,
+	`ALTER TABLE section_formations RENAME COLUMN train_id TO formation_id`,
+	`ALTER TABLE timetable_trains RENAME TO timetable_formations`,
+	`ALTER TABLE timetable_formations RENAME COLUMN train_id TO formation_id`,
+	`ALTER TABLE train_vehicles RENAME TO formation_vehicles`,
+	`ALTER TABLE formation_vehicles RENAME COLUMN train_id TO formation_id`,
+	`ALTER TABLE timetables RENAME COLUMN train_id TO formation_id`,
+	// Indexes were created under the old `trains_…` / `train_vehicles_…`
+	// names. They keep working after a table rename (SQLite preserves them),
+	// but the names become misleading. Drop the old names; the new-named
+	// CREATE INDEX statements further down in this slice rebuild them.
+	`DROP INDEX IF EXISTS idx_trains_class_id`,
+	`DROP INDEX IF EXISTS idx_trains_name`,
+	`DROP INDEX IF EXISTS idx_train_vehicles_train_id`,
+	`DROP INDEX IF EXISTS idx_train_vehicles_vehicle_id`,
+
 	// routes
 	`CREATE TABLE IF NOT EXISTS routes (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,28 +66,28 @@ var migrations = []string{
 		FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE RESTRICT
 	)`,
 
-	// trains
-	`CREATE TABLE IF NOT EXISTS trains (
+	// formations (was: trains; renamed 2026-05-10)
+	`CREATE TABLE IF NOT EXISTS formations (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL UNIQUE
 	)`,
 
-	// route_trains
-	`CREATE TABLE IF NOT EXISTS route_trains (
+	// route_formations (was: route_trains)
+	`CREATE TABLE IF NOT EXISTS route_formations (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		route_id INTEGER NOT NULL,
-		train_id INTEGER NOT NULL,
+		formation_id INTEGER NOT NULL,
 		FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
-		UNIQUE(route_id, train_id)
+		FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE,
+		UNIQUE(route_id, formation_id)
 	)`,
 
-	// timetables
+	// timetables (FK column train_id renamed to formation_id)
 	`CREATE TABLE IF NOT EXISTS timetables (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		service_name TEXT NOT NULL,
 		route_id INTEGER,
-		train_id INTEGER,
+		formation_id INTEGER,
 		service_type TEXT NOT NULL DEFAULT 'passenger',
 		contributor TEXT,
 		coordinates_contributor TEXT,
@@ -61,7 +104,7 @@ var migrations = []string{
 		service TEXT,
 		current_service_name TEXT,
 		FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE SET NULL,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE SET NULL
+		FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE SET NULL
 	)`,
 	`CREATE UNIQUE INDEX IF NOT EXISTS uq_timetable_service_route ON timetables(service_name, route_id)`,
 
@@ -74,24 +117,24 @@ var migrations = []string{
 		UNIQUE(route_id, name)
 	)`,
 
-	// section_trains
-	`CREATE TABLE IF NOT EXISTS section_trains (
+	// section_formations (was: section_trains)
+	`CREATE TABLE IF NOT EXISTS section_formations (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		section_id INTEGER NOT NULL,
-		train_id INTEGER NOT NULL,
+		formation_id INTEGER NOT NULL,
 		FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
-		UNIQUE(section_id, train_id)
+		FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE,
+		UNIQUE(section_id, formation_id)
 	)`,
 
-	// timetable_trains
-	`CREATE TABLE IF NOT EXISTS timetable_trains (
+	// timetable_formations (was: timetable_trains)
+	`CREATE TABLE IF NOT EXISTS timetable_formations (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		timetable_id INTEGER NOT NULL,
-		train_id INTEGER NOT NULL,
+		formation_id INTEGER NOT NULL,
 		FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
-		UNIQUE(timetable_id, train_id)
+		FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE,
+		UNIQUE(timetable_id, formation_id)
 	)`,
 
 	// timetable_sections
@@ -219,23 +262,10 @@ var migrations = []string{
 	)`,
 	`CREATE INDEX IF NOT EXISTS idx_route_markers_route_id ON route_markers(route_id)`,
 
-	// train_consists
-	`CREATE TABLE IF NOT EXISTS train_consists (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		timetable_id INTEGER NOT NULL,
-		train_id INTEGER NOT NULL,
-		weight REAL,
-		car_count INTEGER,
-		train_length REAL,
-		train_number INTEGER,
-		latitude REAL,
-		longitude REAL,
-		created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-		FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
-		UNIQUE(timetable_id, train_id, weight, car_count, train_length)
-	)`,
-	`CREATE INDEX IF NOT EXISTS idx_train_consists_timetable_id ON train_consists(timetable_id)`,
+	// (legacy `train_consists` table is dropped further down; its CREATE
+	// block has been removed because (a) fresh DBs don't need it and (b)
+	// its FK to `trains` would now be dangling. The DROP TABLE IF EXISTS
+	// below covers legacy DBs that still have the table.)
 
 	// route_locations
 	`CREATE TABLE IF NOT EXISTS route_locations (
@@ -256,28 +286,29 @@ var migrations = []string{
 	// ---------------------------------------------------------------------
 	// 2026-04-25 schema rework for the new TSW6 extractor output:
 	//
-	// Per-train consist data now lives on the trains table + a new
-	// train_vehicles table, rather than denormalised into per-timetable
+	// Per-formation consist data now lives on the formations table + a new
+	// formation_vehicles table, rather than denormalised into per-timetable
 	// columns. timetables.tonnage / car_count / train_length are dropped
 	// because TSW6 doesn't expose tonnage and the rest can be derived from
-	// the linked train. train_consists is dropped as it overlapped with
-	// the new train_vehicles structure.
+	// the linked formation. train_consists is dropped as it overlapped
+	// with the new formation_vehicles structure.
 	//
-	// trains.name is the canonical formation_name (e.g. "Class483_006").
+	// formations.name is the canonical formation_name (e.g. "Class483_006").
 	// Per-service JSONs link via their formation_name field; the upload
 	// pipeline dedupes any aliases by vehicle-GUID set.
 	// ---------------------------------------------------------------------
-	`ALTER TABLE trains ADD COLUMN class_name TEXT`,
-	`ALTER TABLE trains ADD COLUMN livery_id TEXT`,
-	`ALTER TABLE trains ADD COLUMN length_m REAL`,
-	`ALTER TABLE trains ADD COLUMN car_count INTEGER`,
+	`ALTER TABLE formations ADD COLUMN class_name TEXT`,
+	`ALTER TABLE formations ADD COLUMN livery_id TEXT`,
+	`ALTER TABLE formations ADD COLUMN length_m REAL`,
+	`ALTER TABLE formations ADD COLUMN car_count INTEGER`,
 
-	// train_vehicles: one row per car in a train, in formation order.
-	// vehicle_id is the GUID exposed by the TSW6 live API (CurrentFormation
-	// /<i>.VehicleID, no dashes), used to recognise the running train.
-	`CREATE TABLE IF NOT EXISTS train_vehicles (
+	// formation_vehicles: one row per car in a formation, in order.
+	// vehicle_id is the GUID exposed by the TSW6 live API
+	// (CurrentFormation/<i>.VehicleID, no dashes), used to recognise the
+	// running train.
+	`CREATE TABLE IF NOT EXISTS formation_vehicles (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		train_id INTEGER NOT NULL,
+		formation_id INTEGER NOT NULL,
 		position INTEGER NOT NULL,
 		vehicle_id TEXT NOT NULL,
 		class_name TEXT,
@@ -287,11 +318,11 @@ var migrations = []string{
 		length_m REAL,
 		is_lead INTEGER DEFAULT 0,
 		is_flipped INTEGER DEFAULT 0,
-		FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE,
-		UNIQUE(train_id, position)
+		FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE,
+		UNIQUE(formation_id, position)
 	)`,
-	`CREATE INDEX IF NOT EXISTS idx_train_vehicles_train_id ON train_vehicles(train_id)`,
-	`CREATE INDEX IF NOT EXISTS idx_train_vehicles_vehicle_id ON train_vehicles(vehicle_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_formation_vehicles_formation_id ON formation_vehicles(formation_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_formation_vehicles_vehicle_id ON formation_vehicles(vehicle_id)`,
 
 	// Drop legacy per-timetable train spec columns. Requires SQLite 3.35+;
 	// older versions will silently leave the columns (they just won't be
@@ -300,17 +331,19 @@ var migrations = []string{
 	`ALTER TABLE timetables DROP COLUMN car_count`,
 	`ALTER TABLE timetables DROP COLUMN train_length`,
 
-	// Replaced by train_vehicles + the existing timetables.train_id FK.
+	// Replaced by formation_vehicles + the existing timetables.formation_id FK.
 	`DROP TABLE IF EXISTS train_consists`,
 
 	// ---------------------------------------------------------------------
-	// 2026-04-26 train hierarchy: train_classes groups physical trains
-	// (formations) by their TSW class. Two Class 483 sets on Isle of Wight
+	// 2026-04-26 formation hierarchy: train_classes groups physical
+	// formations by their TSW class. Two Class 483 sets on Isle of Wight
 	// share the same class but have different vehicle GUIDs — searches and
 	// listings should key on the class, while runtime VehicleID matching
-	// stays on trains.id.
+	// stays on formations.id. The class table keeps its `train_classes`
+	// name because "train class" is the standard railway term and is a
+	// distinct concept from the formation itself.
 	//
-	// trains.class_name is kept as a denormalised cache so existing
+	// formations.class_name is kept as a denormalised cache so existing
 	// endpoints/templates that already read it don't need rewrites.
 	// ---------------------------------------------------------------------
 	`CREATE TABLE IF NOT EXISTS train_classes (
@@ -328,7 +361,7 @@ var migrations = []string{
 	`ALTER TABLE train_classes ADD COLUMN typical_length_m REAL`,
 	`ALTER TABLE train_classes ADD COLUMN typical_car_count INTEGER`,
 	`ALTER TABLE train_classes ADD COLUMN created_at TEXT DEFAULT CURRENT_TIMESTAMP`,
-	`ALTER TABLE trains ADD COLUMN class_id INTEGER REFERENCES train_classes(id)`,
+	`ALTER TABLE formations ADD COLUMN class_id INTEGER REFERENCES train_classes(id)`,
 
 	// cross_pak_reference_name is TSW's internal asset-mount path for a
 	// route (e.g. "EustonMiltonKeynes" for WCML South). Cargo / scenario
@@ -418,20 +451,21 @@ var migrations = []string{
 	`CREATE INDEX IF NOT EXISTS idx_pak_rvds_friendly_name ON pak_rvds(friendly_name)`,
 
 	// Backfill: one class row per distinct (class_name, livery_id) on
-	// trains that have a class_name set. The IGNORE clause keeps the
+	// formations that have a class_name set. The IGNORE clause keeps the
 	// migration idempotent across restarts.
 	`INSERT OR IGNORE INTO train_classes (name, livery_id, typical_length_m, typical_car_count)
 	 SELECT DISTINCT class_name, livery_id, length_m, car_count
-	 FROM trains
+	 FROM formations
 	 WHERE class_name IS NOT NULL AND class_name != ''`,
 
-	// Link existing trains to their class. (Trains created post-migration
-	// are linked at insert time by the import handler.)
-	`UPDATE trains SET class_id = (
-		SELECT id FROM train_classes WHERE train_classes.name = trains.class_name
+	// Link existing formations to their class. (Formations created
+	// post-migration are linked at insert time by the import handler.)
+	`UPDATE formations SET class_id = (
+		SELECT id FROM train_classes WHERE train_classes.name = formations.class_name
 	) WHERE class_id IS NULL AND class_name IS NOT NULL AND class_name != ''`,
 
-	`CREATE INDEX IF NOT EXISTS idx_trains_class_id ON trains(class_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_formations_class_id ON formations(class_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_formations_name ON formations(name)`,
 
 	// ---------------------------------------------------------------------
 	// 2026-04-26 timetable metadata: capture `source` (e.g. "Timetable",
@@ -532,6 +566,85 @@ var migrations = []string{
 		codename TEXT PRIMARY KEY,
 		completed_at TEXT DEFAULT CURRENT_TIMESTAMP
 	)`,
+
+	// timetable_map_features: per-timetable pre-filtered route GeoJSON
+	// blob, computed once at import time and served verbatim on map render.
+	// Replaces the request-time per-feature filter loop that walked every
+	// route feature × every path vertex. Invalidated by deleting rows when
+	// the parent route's `route_coordinates` is rewritten on re-extract.
+	`CREATE TABLE IF NOT EXISTS timetable_map_features (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		timetable_id INTEGER NOT NULL UNIQUE,
+		features TEXT NOT NULL,
+		built_at TEXT DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE
+	)`,
+	`CREATE INDEX IF NOT EXISTS idx_timetable_map_features_tt
+		ON timetable_map_features(timetable_id)`,
+
+	// ---------------------------------------------------------------------
+	// 2026-05-11 train-class metadata: propulsion / max speed / max power /
+	// electrification voltages / thumbnails. Captured from RVD assets
+	// during extraction; surfaces in the Train Classes search UI.
+	// ---------------------------------------------------------------------
+	// Per-vehicle source values live on pak_rvds (one row per RVD asset).
+	`ALTER TABLE pak_rvds ADD COLUMN is_electric INTEGER`,
+	`ALTER TABLE pak_rvds ADD COLUMN max_speed_kph REAL`,
+	`ALTER TABLE pak_rvds ADD COLUMN max_power_kw REAL`,
+	`ALTER TABLE pak_rvds ADD COLUMN powered_axle_count INTEGER`,
+	`ALTER TABLE pak_rvds ADD COLUMN manufacturer_name TEXT`,
+	`ALTER TABLE pak_rvds ADD COLUMN engine_description TEXT`,
+	`ALTER TABLE pak_rvds ADD COLUMN type_description TEXT`,
+	`ALTER TABLE pak_rvds ADD COLUMN thumbnail_asset_ref TEXT`,
+	// JSON-encoded []ElectrificationSpec. The rollup helper unmarshals
+	// at class-link time to build train_class_electrification rows. Not
+	// queried directly per-RVD by the UI, so a JSON blob is cheaper
+	// than a separate per-RVD child table.
+	`ALTER TABLE pak_rvds ADD COLUMN electrification_json TEXT`,
+
+	// Class-level aggregates, denormalised onto train_classes so the
+	// Train Classes search page can query without JOINs. Re-derived from
+	// pak_rvds whenever the importer rebuilds class linkages (any
+	// drivable RVD in the class wins for is_electric / max_speed / etc).
+	`ALTER TABLE train_classes ADD COLUMN is_electric INTEGER`,
+	`ALTER TABLE train_classes ADD COLUMN max_speed_kph REAL`,
+	`ALTER TABLE train_classes ADD COLUMN max_power_kw REAL`,
+	`ALTER TABLE train_classes ADD COLUMN manufacturer_name TEXT`,
+	`ALTER TABLE train_classes ADD COLUMN engine_description TEXT`,
+	`ALTER TABLE train_classes ADD COLUMN type_description TEXT`,
+	// vehicle_category mirrors the RVD's enum: Locomotive,
+	// MultipleUnitCar, PassengerCabCar, PassengerCoach, FreightWagon,
+	// CabooseBrakeVan, NPCCS. The Train Classes page filters on it so
+	// freight wagons ("50Ft Box Car") don't get treated like engines.
+	`ALTER TABLE train_classes ADD COLUMN vehicle_category TEXT`,
+	// thumbnail_path is the relative path under views/images/ where the
+	// RVD's ThumbnailTexture was rendered to PNG. Set by the importer
+	// when it can resolve the asset; left NULL otherwise.
+	`ALTER TABLE train_classes ADD COLUMN thumbnail_path TEXT`,
+	`CREATE INDEX IF NOT EXISTS idx_train_classes_is_electric
+		ON train_classes(is_electric)`,
+	`CREATE INDEX IF NOT EXISTS idx_train_classes_vehicle_category
+		ON train_classes(vehicle_category)`,
+
+	// One-to-many electrification compatibility table. Each row is one
+	// (current, pickup, voltage, frequency) entry from an RVD's
+	// ElectrificationRequirements list, rolled up to the class. The
+	// Train Classes search filters by voltage_v / frequency_hz over a
+	// JOIN on this table.
+	`CREATE TABLE IF NOT EXISTS train_class_electrification (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		train_class_id INTEGER NOT NULL,
+		current TEXT,         -- "OverheadWires", "ThirdRail", "FourthRail"…
+		pickup_side TEXT,     -- "TopContact", "BottomContact", …
+		voltage_v INTEGER,
+		frequency_hz INTEGER, -- 0 == DC
+		FOREIGN KEY (train_class_id) REFERENCES train_classes(id) ON DELETE CASCADE,
+		UNIQUE (train_class_id, current, voltage_v, frequency_hz)
+	)`,
+	`CREATE INDEX IF NOT EXISTS idx_train_class_electrification_class
+		ON train_class_electrification(train_class_id)`,
+	`CREATE INDEX IF NOT EXISTS idx_train_class_electrification_voltage
+		ON train_class_electrification(voltage_v)`,
 }
 
 // One-shot data backfills run exactly once per database. Tracked via
@@ -539,7 +652,7 @@ var migrations = []string{
 // new step. Heuristic-based backfills don't belong in the idempotent
 // `migrations` list because better data may arrive later (full re-imports
 // from the new extractor) and we don't want the heuristic re-firing on it.
-const currentSchemaVersion = 2
+const currentSchemaVersion = 3
 
 type oneShot struct {
 	version int
@@ -589,7 +702,7 @@ var oneShots = []oneShot{
 	},
 	{
 		version: 2,
-		name:    "trains: drop UNIQUE constraint on name (formations can share generic names)",
+		name:    "formations: drop UNIQUE constraint on name (formations can share generic names)",
 		run: func(db *sql.DB) error {
 			// SQLite has no DROP CONSTRAINT — rebuild the table without
 			// the UNIQUE on `name`. Generic formation names like
@@ -599,14 +712,19 @@ var oneShots = []oneShot{
 			// the same name but different vehicle GUIDs are genuinely
 			// different physical formations and must coexist.
 			//
-			// The columns mirror the trains table after all schema
+			// The columns mirror the formations table after all schema
 			// migrations have run (id, name, class_name, livery_id,
 			// length_m, car_count, class_id). Foreign keys from
-			// route_trains / timetable_trains / section_trains /
-			// train_vehicles all reference trains.id which we preserve,
-			// so cross-table relationships survive the rebuild.
+			// route_formations / timetable_formations / section_formations
+			// / formation_vehicles all reference formations.id which we
+			// preserve, so cross-table relationships survive the rebuild.
+			//
+			// (Pre-rename DBs ran an earlier version of this one-shot
+			// against the `trains` table; by the time this version runs
+			// in a fresh install, the rename ALTERs at the top of the
+			// schema migration list have already produced `formations`.)
 			steps := []string{
-				`CREATE TABLE trains_v2 (
+				`CREATE TABLE formations_v2 (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					name TEXT NOT NULL,
 					class_name TEXT,
@@ -615,15 +733,103 @@ var oneShots = []oneShot{
 					car_count INTEGER,
 					class_id INTEGER REFERENCES train_classes(id)
 				)`,
-				`INSERT INTO trains_v2 (id, name, class_name, livery_id, length_m, car_count, class_id)
-				 SELECT id, name, class_name, livery_id, length_m, car_count, class_id FROM trains`,
-				`DROP TABLE trains`,
-				`ALTER TABLE trains_v2 RENAME TO trains`,
-				`CREATE INDEX IF NOT EXISTS idx_trains_class_id ON trains(class_id)`,
-				`CREATE INDEX IF NOT EXISTS idx_trains_name ON trains(name)`,
+				`INSERT INTO formations_v2 (id, name, class_name, livery_id, length_m, car_count, class_id)
+				 SELECT id, name, class_name, livery_id, length_m, car_count, class_id FROM formations`,
+				`DROP TABLE formations`,
+				`ALTER TABLE formations_v2 RENAME TO formations`,
+				`CREATE INDEX IF NOT EXISTS idx_formations_class_id ON formations(class_id)`,
+				`CREATE INDEX IF NOT EXISTS idx_formations_name ON formations(name)`,
 			}
 			for _, s := range steps {
 				if _, err := db.Exec(s); err != nil {
+					return err
+				}
+			}
+			return nil
+		},
+	},
+	{
+		version: 3,
+		name:    "timetables: route_id ON DELETE SET NULL → CASCADE (prevents orphan timetables on raw route deletes)",
+		run: func(db *sql.DB) error {
+			// The original FK was SET NULL because route deletion was
+			// considered "soft" — kill the route, keep the timetables.
+			// In practice a timetable with no route is useless: no map,
+			// no listing, no association. Every code path that deletes
+			// a route already explicitly deletes its timetables first,
+			// so CASCADE preserves observed behaviour while preventing
+			// silent orphaning if anything ever bypasses the handler.
+			//
+			// SQLite has no ALTER...DROP CONSTRAINT — rebuild the table.
+			// Column list mirrors the timetables CREATE in `migrations`
+			// after all ALTERs. FKs on child tables (timetable_entries,
+			// timetable_coordinates, …) still point at timetables.id
+			// which we preserve.
+			//
+			// CRITICAL: we MUST disable foreign_keys for the rebuild.
+			// The connection URI sets foreign_keys=ON, which means
+			// `DROP TABLE timetables` would fire every child table's
+			// `ON DELETE CASCADE` action and wipe all
+			// timetable_entries / timetable_coordinates / etc rows on
+			// the way out. The rename pattern below preserves the
+			// existing timetables.id values, so the child rows still
+			// have valid parents after the swap — we just have to keep
+			// SQLite from cleaning up under us mid-swap.
+			//
+			// PRAGMA foreign_keys is a per-connection setting. The
+			// database/sql pool may route subsequent Execs to different
+			// connections, so pin one Conn for the entire rebuild.
+			ctx := context.Background()
+			conn, err := db.Conn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Close()
+			if _, err := conn.ExecContext(ctx, `PRAGMA foreign_keys = OFF`); err != nil {
+				return err
+			}
+			defer conn.ExecContext(ctx, `PRAGMA foreign_keys = ON`)
+			steps := []string{
+				`CREATE TABLE timetables_v3 (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					service_name TEXT NOT NULL,
+					route_id INTEGER,
+					formation_id INTEGER,
+					service_type TEXT NOT NULL DEFAULT 'passenger',
+					contributor TEXT,
+					coordinates_contributor TEXT,
+					created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+					start_time TEXT,
+					duration TEXT,
+					service_images TEXT,
+					section_id INTEGER,
+					conductor_compatible INTEGER DEFAULT 0,
+					bound TEXT,
+					service TEXT,
+					current_service_name TEXT,
+					source TEXT,
+					playable INTEGER DEFAULT 0,
+					FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
+					FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE SET NULL
+				)`,
+				`INSERT INTO timetables_v3
+				   (id, service_name, route_id, formation_id, service_type, contributor,
+				    coordinates_contributor, created_at, start_time, duration, service_images,
+				    section_id, conductor_compatible, bound, service, current_service_name,
+				    source, playable)
+				 SELECT id, service_name, route_id, formation_id, service_type, contributor,
+				        coordinates_contributor, created_at, start_time, duration, service_images,
+				        section_id, conductor_compatible, bound, service, current_service_name,
+				        source, playable
+				   FROM timetables`,
+				`DROP TABLE timetables`,
+				`ALTER TABLE timetables_v3 RENAME TO timetables`,
+				`CREATE UNIQUE INDEX IF NOT EXISTS uq_timetable_service_route ON timetables(service_name, route_id)`,
+				`CREATE INDEX IF NOT EXISTS idx_timetables_source ON timetables(source)`,
+				`CREATE INDEX IF NOT EXISTS idx_timetables_playable ON timetables(playable)`,
+			}
+			for _, s := range steps {
+				if _, err := conn.ExecContext(ctx, s); err != nil {
 					return err
 				}
 			}

@@ -66,7 +66,7 @@
     </div>
 
     <div class="card map-card" id="mapCard">
-        <h2 style="cursor: pointer; user-select: none;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span data-i18n="timetables.routeMap">Route Map</span><span id="coordSourceBadge"></span></h2>
+        <h2 style="cursor: pointer; user-select: none;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span data-i18n="timetables.routeMap">Route Map</span><span id="coordSourceBadge"></span><button id="generateMapBtn" type="button" onclick="event.stopPropagation(); generateTimetableMap();" style="display:none; margin-left:14px; padding:4px 10px; background:#0066ff; color:#fff; border:0; border-radius:4px; cursor:pointer; font-size:13px; font-weight:600;">Generate Map</button><span id="generateMapStatus" style="margin-left:10px; font-size:13px; color: var(--text-muted);"></span></h2>
         <div id="routeMapContainer">
             <div id="routeMap"></div>
             <div id="serviceLayerBar" style="display:none; margin-top: 10px; padding: 12px 14px; background: var(--bg-tertiary); border-radius: 6px; font-size: 14px;">
@@ -262,7 +262,7 @@
             const route = allRoutes.find(function(r) { return r.id == timetable.route_id; });
             const country = route ? allCountries.find(function(c) { return c.id == route.country_id; }) : null;
 
-            const trains = timetable.trains || [];
+            const formations = timetable.formations || [];
             const sections = timetable.sections || [];
 
             let html = '';
@@ -291,8 +291,8 @@
                 html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.sectionLabel', 'Sections:') + '</span><span class="detail-value">' + sections.map(function(s) { return '<span class="tag">' + escapeHtml(s.name) + '</span>'; }).join('') + '</span></div>';
             }
 
-            if (trains.length > 0) {
-                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.trainsLabel', 'Trains:') + '</span><span class="detail-value">' + trains.map(function(t) {
+            if (formations.length > 0) {
+                html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.formationsLabel', 'Formations:') + '</span><span class="detail-value">' + formations.map(function(t) {
                     var primary = t.class_name || t.name;
                     var suffix = (t.class_name && t.name && t.class_name !== t.name)
                         ? ' <span style="color: var(--text-muted); font-size: 11px;">— ' + escapeHtml(t.name) + '</span>'
@@ -312,7 +312,7 @@
             var specs = [];
             if (timetable.tonnage) specs.push(_t('timetables.tonnageLabel', 'Tonnage:') + ' ' + timetable.tonnage + 't');
             if (timetable.car_count) specs.push(_t('timetables.carCountLabel', 'Cars:') + ' ' + timetable.car_count);
-            if (timetable.train_length) specs.push(_t('timetables.trainLengthLabel', 'Length:') + ' ' + timetable.train_length + 'm');
+            if (timetable.formation_length) specs.push(_t('timetables.formationLengthLabel', 'Length:') + ' ' + timetable.formation_length + 'm');
             if (specs.length > 0) {
                 html += '<div class="detail-row"><span class="detail-label">' + _t('timetables.specs', 'Specs:') + '</span><span class="detail-value">' + specs.join(' &nbsp;|&nbsp; ') + '</span></div>';
             }
@@ -430,6 +430,36 @@
                 if (best < 0.3) return best;
             }
             return best;
+        }
+
+        // Generate the timetable's map features blob on demand. Called by
+        // the inline "Generate Map" button that appears when the map
+        // features for this timetable haven't been built yet (404 from
+        // /api/timetables/{id}/map-features). Synchronous on the server —
+        // can take 30 sec to a few minutes; the button is replaced with a
+        // status spinner while in flight.
+        async function generateTimetableMap() {
+            if (!confirm('Generating the map data for this timetable can take 2-3 minutes. Continue?')) return;
+            const btn = document.getElementById('generateMapBtn');
+            const status = document.getElementById('generateMapStatus');
+            if (btn) btn.disabled = true;
+            if (status) status.textContent = 'Building map data… (2-3 min)';
+            try {
+                const res = await fetch('/api/timetables/' + timetableId + '/build-map-features', { method: 'POST' });
+                if (!res.ok) {
+                    if (status) status.textContent = 'Build failed: ' + await res.text();
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+                if (status) status.textContent = 'Done.';
+                if (btn) btn.style.display = 'none';
+                // Re-render the map now that features exist.
+                initRouteMap();
+                setTimeout(function() { if (status) status.textContent = ''; }, 3000);
+            } catch (e) {
+                if (status) status.textContent = 'Error: ' + e.message;
+                if (btn) btn.disabled = false;
+            }
         }
 
         function toggleRouteMap() {
@@ -577,77 +607,32 @@
                 stopMarkers.push(marker);
             });
 
-            // Pull route's GeoJSON and filter platforms/signals/switches +
-            // track-feature lines to those relevant to this service's path.
-            if (timetable && timetable.route_id && pathLatLngs.length > 0) {
+            // Fetch the pre-built filtered feature blob for this timetable.
+            // Built at import time by FilterRouteFeaturesForTimetable; the
+            // server-side filter mirrors the same schedule-tuple + path-
+            // proximity rules this loop used to run inline. Replacing the
+            // route-GeoJSON-plus-filter (~5-15 MB + millions of distance
+            // ops) with a single SELECT (~50-300 KB blob) is what makes
+            // timetable maps load fast.
+            if (timetable) {
                 try {
-                    const r = await fetch('/api/routes/' + timetable.route_id + '/map-data');
-                    if (r.ok) {
+                    const r = await fetch('/api/timetables/' + timetableId + '/map-features');
+                    if (r.status === 404) {
+                        // Map data hasn't been built yet for this timetable.
+                        // Show the explicit "Generate Map" button so the
+                        // user can opt in to a 2-3 minute build instead of
+                        // us blocking the page load on it.
+                        const gb = document.getElementById('generateMapBtn');
+                        if (gb) gb.style.display = 'inline-block';
+                    } else if (r.ok) {
                         const md = await r.json();
-                        const feats = (md && Array.isArray(md.coordinates)) ? md.coordinates : [];
+                        const feats = (md && Array.isArray(md.features)) ? md.features : [];
                         const TRACK_FEATURE_STYLE = {
                             platform_track: { color: '#ff7f00', weight: 5, opacity: 0.85 },
                             siding_track:   { color: '#9467bd', weight: 4, opacity: 0.7  },
                             line_track:     { color: '#17becf', weight: 4, opacity: 0.7  },
                             running_track:  { color: '#1f77b4', weight: 4, opacity: 0.7  },
                         };
-                        // Build two indexes from the schedule:
-                        //  - usedStructures: tuple set for matching features that
-                        //    carry (location, structure, structure_number) props
-                        //    (platform_track / siding_track / line_track /
-                        //    running_track / platform points).
-                        //  - usedNames: composite-name set for matching features
-                        //    that carry only `name` (track_markers — Platform
-                        //    pins, etc.). The extractor composes their `name`
-                        //    field as "Location Structure StructureNumber"
-                        //    (e.g. "Lake Platform 1"), which is the same shape
-                        //    we get by joining the schedule fields with spaces.
-                        const usedStructures = new Set();
-                        const usedNames = new Set();
-                        (entries || []).forEach(function(e) {
-                            const loc = (e.location || '').trim();
-                            const st = (e.structure || '').trim();
-                            const num = (e.structure_number || '').trim();
-                            if (!loc || !num) return;
-                            usedStructures.add(loc + '|' + st + '|' + num);
-                            usedNames.add([loc, st, num].filter(Boolean).join(' '));
-                        });
-                        function structureMatchesSchedule(p) {
-                            // Two property shapes exist in the route GeoJSON:
-                            //
-                            //  (a) Tuple form: separate `location`, `structure`,
-                            //      `structure_number` fields (used by the
-                            //      legacy platform Point features and by some
-                            //      schedule-imports). Match against the
-                            //      tuple set.
-                            //
-                            //  (b) Composed form: `location` already contains
-                            //      the full composed name (e.g.
-                            //      "Boston South Station Track 08") with
-                            //      `structure`/`structure_number` empty. The
-                            //      cooked-map track-feature LineStrings ship
-                            //      this shape. Match against usedNames.
-                            //
-                            // Either match is enough — they're alternative
-                            // representations of the same fact.
-                            const loc = (p.location || '').trim();
-                            const st = (p.structure || '').trim();
-                            const num = (p.structure_number || '').trim();
-                            if (loc && num && usedStructures.has(loc + '|' + st + '|' + num)) return true;
-                            if (loc && usedNames.has(loc)) return true;
-                            return false;
-                        }
-                        function lineNearPath(geom) {
-                            const lines = (geom.type === 'MultiLineString') ? geom.coordinates : [geom.coordinates];
-                            for (let i = 0; i < lines.length; i++) {
-                                const line = lines[i];
-                                for (let j = 0; j < line.length; j++) {
-                                    const c = line[j];
-                                    if (minDistanceToPathSegments(c[1], c[0], pathLatLngs) <= SERVICE_MARKER_PROX_M) return true;
-                                }
-                            }
-                            return false;
-                        }
                         feats.forEach(function(feat) {
                             const geom = feat.geometry;
                             if (!geom) return;
@@ -655,15 +640,6 @@
                             if ((geom.type === 'LineString' || geom.type === 'MultiLineString') && p.feature_type) {
                                 const group = serviceLayerGroups[p.feature_type];
                                 if (!group) return;
-                                // Track features (platform/siding/line/running):
-                                // prefer schedule-tuple match; fall back to
-                                // path-proximity when the schedule's naming
-                                // doesn't agree with the GeoJSON's. Strict-only
-                                // filtering hid Platform Tracks entirely on
-                                // services whose schedule entries lacked the
-                                // location/structure/number fields the matcher
-                                // expects.
-                                if (!structureMatchesSchedule(p) && !lineNearPath(geom)) return;
                                 const layer = L.geoJSON(feat, {
                                     style: TRACK_FEATURE_STYLE[p.feature_type] || { color: '#0066ff', weight: 3, opacity: 0.8 }
                                 });
@@ -681,19 +657,7 @@
                             if (!Array.isArray(c) || c.length < 2) return;
                             const flng = c[0], flat = c[1];
 
-                            // Car stop signs / track markers / collectables —
-                            // dispatched by feature_kind before falling through
-                            // to platform/signal/switch heuristics.
                             if (p.feature_kind === 'car_stop_sign') {
-                                // Schedule-strict: keep only signs whose joined
-                                // platform_name appears in this service's
-                                // schedule. The extractor stamps platform_name
-                                // on each car_stop_sign feature by joining to
-                                // the route's Platform track_markers via shared
-                                // ribbon_guid — same composition usedNames is
-                                // built from ("Location Structure Number").
-                                const csName = (p.platform_name || '').trim();
-                                if (!csName || !usedNames.has(csName)) return;
                                 const cm = L.circleMarker([flat, flng], {
                                     radius: 3, color: '#ffffff', weight: 1, fillColor: '#3f6fd9', fillOpacity: 1
                                 });
@@ -710,15 +674,11 @@
                                 return;
                             }
                             if (p.feature_kind === 'track_marker') {
-                                // Only Platform marker pins (matches the viewer's whitelist).
+                                // Only Platform marker pins (matches the
+                                // viewer's whitelist). The server-side
+                                // filter already drops non-Platform kinds
+                                // but the extra guard is cheap.
                                 if (p.marker_type !== 'Platform') return;
-                                // Schedule-strict: keep only markers whose name
-                                // appears in this service's schedule. The
-                                // extractor composes track_marker.name as
-                                // "Location Structure StructureNumber" — the
-                                // same composition usedNames is built from.
-                                const tmName = (p.name || '').trim();
-                                if (!tmName || !usedNames.has(tmName)) return;
                                 const iconHtml = '<div style="width:10px;height:10px;background:#2ca02c;border:1px solid #003a00;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(255,255,255,0.6)"></div>';
                                 const tm = L.marker([flat, flng], {
                                     icon: L.divIcon({ html: iconHtml, className: '', iconSize: [12, 12], iconAnchor: [6, 6] })
@@ -733,7 +693,6 @@
                                 return;
                             }
                             if (p.feature_kind === 'collectable') {
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > COLLECTABLE_PROX_M) return;
                                 const colMk = L.marker([flat, flng], {
                                     icon: L.divIcon({
                                         className: 'collectable-pin',
@@ -749,13 +708,6 @@
                             let group = 'platforms', fill = '#ff7f00', radius = 4;
                             if (p.signal_id) { group = 'signals'; fill = '#ffd700'; radius = 3; }
                             else if (p.jct_guid != null) { group = 'switches'; fill = '#cc8400'; }
-                            if (group === 'platforms') {
-                                if (!structureMatchesSchedule(p)) return;
-                            } else if (group === 'signals') {
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > SIGNAL_PROX_M) return;
-                            } else {
-                                if (minDistanceToPathSegments(flat, flng, pathLatLngs) > SERVICE_MARKER_PROX_M) return;
-                            }
                             const m = L.circleMarker([flat, flng], {
                                 radius: radius, color: '#ffffff', weight: 1.5,
                                 fillColor: fill, fillOpacity: 1

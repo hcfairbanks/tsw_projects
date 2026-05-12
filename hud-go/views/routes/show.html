@@ -41,8 +41,8 @@
         label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         input[type="text"], select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px; }
         input[type="text"]:focus, select:focus { outline: none; border-color: var(--accent-color); }
-        .add-train-section { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
-        .add-train-section .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
+        .add-formation-section { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+        .add-formation-section .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
         .or-divider { color: var(--text-muted); padding: 0 10px; align-self: center; }
         .typeahead-wrapper { position: relative; }
         .typeahead-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-primary); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
@@ -128,30 +128,30 @@
     </div>
 
     <div class="card edit-only" style="display:none;">
-        <h2 data-i18n="routes.addTrainToRoute">Add Train to Route</h2>
-        <div class="add-train-section">
+        <h2 data-i18n="routes.addFormationToRoute">Add Formation to Route</h2>
+        <div class="add-formation-section">
             <div class="form-group">
-                <label for="trainSearch" data-i18n="routes.addExistingTrain">Add Existing Train:</label>
+                <label for="formationSearch" data-i18n="routes.addExistingFormation">Add Existing Formation:</label>
                 <div class="typeahead-wrapper">
-                    <input type="text" id="trainSearch" placeholder="Type to search trains..." autocomplete="off" data-i18n-placeholder="trains.searchPlaceholder">
-                    <input type="hidden" id="selectedTrainId">
-                    <div class="typeahead-dropdown" id="trainDropdown"></div>
+                    <input type="text" id="formationSearch" placeholder="Type to search formations..." autocomplete="off" data-i18n-placeholder="formations.searchPlaceholder">
+                    <input type="hidden" id="selectedFormationId">
+                    <div class="typeahead-dropdown" id="formationDropdown"></div>
                 </div>
             </div>
-            <button class="btn-primary" onclick="addExistingTrain()" data-i18n="common.add">Add</button>
+            <button class="btn-primary" onclick="addExistingFormation()" data-i18n="common.add">Add</button>
             <span class="or-divider" data-i18n="common.or">OR</span>
             <div class="form-group">
-                <label for="newTrainName" data-i18n="routes.createNewTrain">Create New Train:</label>
-                <input type="text" id="newTrainName" placeholder="e.g., BR Class 185 Unit 101" data-i18n-placeholder="trains.trainNamePlaceholder">
+                <label for="newFormationName" data-i18n="routes.createNewFormation">Create New Formation:</label>
+                <input type="text" id="newFormationName" placeholder="e.g., BR Class 185 Unit 101" data-i18n-placeholder="formations.formationNamePlaceholder">
             </div>
-            <button class="btn-primary" onclick="createAndAddTrain()" data-i18n="routes.createAndAdd">Create & Add</button>
+            <button class="btn-primary" onclick="createAndAddFormation()" data-i18n="routes.createAndAdd">Create & Add</button>
         </div>
     </div>
 
     <div class="card edit-only" style="display:none;">
         <h2 data-i18n="routes.sections">Sections</h2>
         <p style="color: var(--text-muted); margin-bottom: 15px;" data-i18n="routes.sectionsDesc">Sections are sub-categories within a route (e.g. different timetable groups). Timetables can optionally belong to a section.</p>
-        <div class="add-train-section">
+        <div class="add-formation-section">
             <div class="form-group">
                 <label for="newSectionName" data-i18n="routes.addSection">Add Section:</label>
                 <input type="text" id="newSectionName" placeholder="e.g., Boston - Providence HSP-46 Timetable" onkeydown="if(event.key==='Enter') addSection()">
@@ -169,12 +169,12 @@
     </div>
 
     <div class="card edit-only" style="display:none;">
-        <h2 data-i18n="routes.fillCoordinates">Fill Coordinates</h2>
-        <p style="color: var(--text-muted); margin-bottom: 15px;" data-i18n="routes.fillCoordinatesDesc">Fill missing lat/lng coordinates by aggregating all known coordinates across this route's timetables (manual and automatic entries are used as sources).</p>
+        <h2 data-i18n="routes.buildTimetableMaps">Build Timetable Maps</h2>
+        <p style="color: var(--text-muted); margin-bottom: 15px;" data-i18n="routes.buildTimetableMapsDesc">Pre-build the per-timetable filtered map data for every timetable on this route that doesn't already have one. Each timetable map takes ~2-3 minutes to build, so a full route can take hours. Progress is shown live below; you can leave the page and return to check status.</p>
         <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 15px;">
-            <button class="btn-primary" id="fillCoordsBtn" onclick="fillCoordinates()" data-i18n="routes.fillCoordinates">Fill Coordinates</button>
+            <button class="btn-primary" id="buildMapsBtn" onclick="buildTimetableMaps()" data-i18n="routes.buildTimetableMaps">Build Timetable Maps</button>
         </div>
-        <div id="fillCoordsOutput" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: monospace; font-size: 12px; color: var(--text-secondary);"></div>
+        <div id="buildMapsOutput" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; color: var(--text-secondary);"></div>
     </div>
 
     <div class="card map-card" id="mapCard">
@@ -253,9 +253,9 @@
     </div>
 
     <div class="card">
-        <h2 data-i18n="routes.trainsOnRoute">Trains on this Route</h2>
-        <div id="trainsList">
-            <p class="empty-message" data-i18n="common.loading">Loading trains...</p>
+        <h2 data-i18n="routes.formationsOnRoute">Formations on this Route</h2>
+        <div id="formationsList">
+            <p class="empty-message" data-i18n="common.loading">Loading formations...</p>
         </div>
     </div>
 
@@ -273,15 +273,15 @@
         let devMode = false;
         let allCountries = [];
         let countryActiveIndex = -1;
-        let allTrains = [];
-        let routeTrains = [];
-        let availableTrains = [];
+        let allFormations = [];
+        let routeFormations = [];
+        let availableFormations = [];
         let activeIndex = -1;
 
         // Typeahead elements
-        const trainSearch = document.getElementById('trainSearch');
-        const trainDropdown = document.getElementById('trainDropdown');
-        const selectedTrainId = document.getElementById('selectedTrainId');
+        const formationSearch = document.getElementById('formationSearch');
+        const formationDropdown = document.getElementById('formationDropdown');
+        const selectedFormationId = document.getElementById('selectedFormationId');
 
         async function loadRoute() {
             try {
@@ -574,91 +574,91 @@
             }
         }
 
-        // routeTrains is now an array of class groups:
+        // routeFormations is now an array of class groups:
         //   { id, name, livery_id, length_m, car_count, formations: [{id, name}, ...] }
-        // Legacy trains without a class_id come back as a singleton group with id=null.
-        async function loadRouteTrains() {
+        // Legacy formations without a class_id come back as a singleton group with id=null.
+        async function loadRouteFormations() {
             try {
                 const response = await fetch('/api/routes/' + routeId + '/train-classes');
-                routeTrains = await response.json();
-                renderTrains(routeTrains);
+                routeFormations = await response.json();
+                renderFormations(routeFormations);
             } catch (error) {
-                console.error('Error loading trains:', error);
-                document.getElementById('trainsList').innerHTML = '<p class="empty-message">Error loading trains</p>';
+                console.error('Error loading formations:', error);
+                document.getElementById('formationsList').innerHTML = '<p class="empty-message">Error loading formations</p>';
             }
         }
 
-        async function loadAllTrains() {
+        async function loadAllFormations() {
             try {
-                const response = await fetch('/api/trains');
-                allTrains = await response.json();
-                updateAvailableTrains();
+                const response = await fetch('/api/formations');
+                allFormations = await response.json();
+                updateAvailableFormations();
             } catch (error) {
-                console.error('Error loading all trains:', error);
+                console.error('Error loading all formations:', error);
             }
         }
 
-        function updateAvailableTrains() {
-            // routeTrains is now class groups; flatten to formation IDs to know
-            // which trains are already linked to this route.
-            const routeTrainIds = [];
-            routeTrains.forEach(function(g) {
-                (g.formations || []).forEach(function(f) { routeTrainIds.push(f.id); });
+        function updateAvailableFormations() {
+            // routeFormations is now class groups; flatten to formation IDs to know
+            // which formations are already linked to this route.
+            const routeFormationIds = [];
+            routeFormations.forEach(function(g) {
+                (g.formations || []).forEach(function(f) { routeFormationIds.push(f.id); });
             });
-            availableTrains = allTrains.filter(function(t) { return routeTrainIds.indexOf(t.id) === -1; });
+            availableFormations = allFormations.filter(function(t) { return routeFormationIds.indexOf(t.id) === -1; });
             // Clear the search input
-            trainSearch.value = '';
-            selectedTrainId.value = '';
-            trainDropdown.classList.remove('show');
+            formationSearch.value = '';
+            selectedFormationId.value = '';
+            formationDropdown.classList.remove('show');
         }
 
-        function filterTrains(query) {
-            if (!query) return availableTrains.slice(0, 10);
+        function filterFormations(query) {
+            if (!query) return availableFormations.slice(0, 10);
             const lowerQuery = query.toLowerCase();
-            return availableTrains.filter(function(t) {
+            return availableFormations.filter(function(t) {
                 return t.name.toLowerCase().includes(lowerQuery);
             }).slice(0, 10);
         }
 
-        function renderDropdown(trains) {
-            if (trains.length === 0) {
-                trainDropdown.innerHTML = '<div class="typeahead-empty">No trains found</div>';
+        function renderDropdown(formations) {
+            if (formations.length === 0) {
+                formationDropdown.innerHTML = '<div class="typeahead-empty">No formations found</div>';
             } else {
-                trainDropdown.innerHTML = trains.map(function(train, index) {
-                    return '<div class="typeahead-item' + (index === activeIndex ? ' active' : '') + '" data-id="' + train.id + '" data-name="' + escapeHtml(train.name) + '">' + escapeHtml(train.name) + '</div>';
+                formationDropdown.innerHTML = formations.map(function(formation, index) {
+                    return '<div class="typeahead-item' + (index === activeIndex ? ' active' : '') + '" data-id="' + formation.id + '" data-name="' + escapeHtml(formation.name) + '">' + escapeHtml(formation.name) + '</div>';
                 }).join('');
 
-                trainDropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
+                formationDropdown.querySelectorAll('.typeahead-item').forEach(function(item) {
                     item.addEventListener('click', function() {
-                        selectTrain(item.dataset.id, item.dataset.name);
+                        selectFormation(item.dataset.id, item.dataset.name);
                     });
                 });
             }
-            trainDropdown.classList.add('show');
+            formationDropdown.classList.add('show');
         }
 
-        function selectTrain(id, name) {
-            trainSearch.value = name;
-            selectedTrainId.value = id;
-            trainDropdown.classList.remove('show');
+        function selectFormation(id, name) {
+            formationSearch.value = name;
+            selectedFormationId.value = id;
+            formationDropdown.classList.remove('show');
             activeIndex = -1;
         }
 
         // Typeahead event handlers
-        trainSearch.addEventListener('input', function() {
-            selectedTrainId.value = '';
+        formationSearch.addEventListener('input', function() {
+            selectedFormationId.value = '';
             activeIndex = -1;
-            const filtered = filterTrains(trainSearch.value.trim());
+            const filtered = filterFormations(formationSearch.value.trim());
             renderDropdown(filtered);
         });
 
-        trainSearch.addEventListener('focus', function() {
-            const filtered = filterTrains(trainSearch.value.trim());
+        formationSearch.addEventListener('focus', function() {
+            const filtered = filterFormations(formationSearch.value.trim());
             renderDropdown(filtered);
         });
 
-        trainSearch.addEventListener('keydown', function(e) {
-            const items = trainDropdown.querySelectorAll('.typeahead-item');
+        formationSearch.addEventListener('keydown', function(e) {
+            const items = formationDropdown.querySelectorAll('.typeahead-item');
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 activeIndex = Math.min(activeIndex + 1, items.length - 1);
@@ -670,12 +670,12 @@
             } else if (e.key === 'Enter') {
                 e.preventDefault();
                 if (activeIndex >= 0 && items[activeIndex]) {
-                    selectTrain(items[activeIndex].dataset.id, items[activeIndex].dataset.name);
-                } else if (selectedTrainId.value) {
-                    addExistingTrain();
+                    selectFormation(items[activeIndex].dataset.id, items[activeIndex].dataset.name);
+                } else if (selectedFormationId.value) {
+                    addExistingFormation();
                 }
             } else if (e.key === 'Escape') {
-                trainDropdown.classList.remove('show');
+                formationDropdown.classList.remove('show');
                 activeIndex = -1;
             }
         });
@@ -694,9 +694,9 @@
         // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             var wrapper = e.target.closest('.typeahead-wrapper, .inline-typeahead-wrapper');
-            // Close train dropdown if click is outside its wrapper
-            if (!wrapper || !wrapper.contains(trainSearch)) {
-                trainDropdown.classList.remove('show');
+            // Close formation dropdown if click is outside its wrapper
+            if (!wrapper || !wrapper.contains(formationSearch)) {
+                formationDropdown.classList.remove('show');
                 activeIndex = -1;
             }
             // Close country dropdown if click is outside its wrapper
@@ -708,25 +708,25 @@
             }
         });
 
-        function renderTrains(groups) {
-            const container = document.getElementById('trainsList');
+        function renderFormations(groups) {
+            const container = document.getElementById('formationsList');
 
-            var noTrainsMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('routes.noTrainsOnRoute') : 'No trains assigned to this route yet.';
-            var trainHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.train') : 'Train';
-            var formationsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('trains.formations') : 'Formations';
+            var noFormationsMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('routes.noFormationsOnRoute') : 'No formations assigned to this route yet.';
+            var formationHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('formations.formation') : 'Formation';
+            var formationsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('formations.formationsLabel') : 'Formations';
             var actionsHeader = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.actions') : 'Actions';
             var viewBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.view') : 'View';
             var removeBtn = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.remove') : 'Remove';
 
             if (!groups || groups.length === 0) {
-                container.innerHTML = '<p class="empty-message">' + noTrainsMsg + '</p>';
+                container.innerHTML = '<p class="empty-message">' + noFormationsMsg + '</p>';
                 return;
             }
 
             // Formations column + Remove button are dev-mode-only — end
             // users only need to see the class name. Edit mode keeps the
             // View button (drill-into class) regardless of dev mode.
-            let html = '<table><thead><tr><th>' + trainHeader + '</th>';
+            let html = '<table><thead><tr><th>' + formationHeader + '</th>';
             if (devMode) html += '<th>' + formationsHeader + '</th>';
             if (isEditMode) html += '<th class="actions">' + actionsHeader + '</th>';
             html += '</tr></thead><tbody>';
@@ -734,22 +734,22 @@
                 var formations = g.formations || [];
                 // When the class has a real id, link primary text to the class
                 // page; otherwise fall back to the single formation (legacy
-                // trains without a class_id).
+                // formations without a class_id).
                 var primaryHref;
                 if (g.id) {
                     primaryHref = '/train-classes/' + g.id + '?from_route=' + routeId;
                 } else if (formations.length === 1) {
-                    primaryHref = '/trains/' + formations[0].id + '?from_route=' + routeId;
+                    primaryHref = '/formations/' + formations[0].id + '?from_route=' + routeId;
                 } else {
                     primaryHref = '#';
                 }
                 var rowKey = g.id ? ('class-' + g.id) : ('legacy-' + (formations[0] ? formations[0].id : '0'));
-                html += '<tr id="train-row-' + rowKey + '">';
+                html += '<tr id="formation-row-' + rowKey + '">';
                 html += '<td><a href="' + primaryHref + '">' + escapeHtml(g.name) + '</a></td>';
                 if (devMode) {
-                    // Formation chips — each links to the physical train.
+                    // Formation chips — each links to the physical formation.
                     var chips = formations.map(function(f) {
-                        return '<a href="/trains/' + f.id + '?from_route=' + routeId + '" style="display:inline-block;margin-right:8px;color:var(--accent-color);text-decoration:none;font-size:13px;">' + escapeHtml(f.name) + '</a>';
+                        return '<a href="/formations/' + f.id + '?from_route=' + routeId + '" style="display:inline-block;margin-right:8px;color:var(--accent-color);text-decoration:none;font-size:13px;">' + escapeHtml(f.name) + '</a>';
                     }).join('');
                     html += '<td>' + (chips || '<span style="color:var(--text-muted);">-</span>') + '</td>';
                 }
@@ -758,11 +758,11 @@
                     if (g.id) {
                         html += '<button class="btn-primary" onclick="showClass(' + g.id + ')">' + viewBtn + '</button>';
                     } else if (formations.length === 1) {
-                        html += '<button class="btn-primary" onclick="showTrain(' + formations[0].id + ')">' + viewBtn + '</button>';
+                        html += '<button class="btn-primary" onclick="showFormation(' + formations[0].id + ')">' + viewBtn + '</button>';
                     }
                     if (devMode) {
                         var ids = formations.map(function(f) { return f.id; }).join(',');
-                        html += '<button class="btn-danger" onclick="removeTrainGroup([' + ids + '])">' + removeBtn + '</button>';
+                        html += '<button class="btn-danger" onclick="removeFormationGroup([' + ids + '])">' + removeBtn + '</button>';
                     }
                     html += '</td>';
                 }
@@ -772,60 +772,60 @@
             container.innerHTML = html;
         }
 
-        function showTrain(trainId) {
-            window.location.href = '/trains/' + trainId + '?from_route=' + routeId;
+        function showFormation(formationId) {
+            window.location.href = '/formations/' + formationId + '?from_route=' + routeId;
         }
 
         function showClass(classId) {
             window.location.href = '/train-classes/' + classId + '?from_route=' + routeId;
         }
 
-        async function removeTrainGroup(ids) {
+        async function removeFormationGroup(ids) {
             if (!ids || !ids.length) return;
-            if (!confirm('Remove this train from the route?')) return;
+            if (!confirm('Remove this formation from the route?')) return;
             try {
                 for (var i = 0; i < ids.length; i++) {
-                    await fetch('/api/routes/' + routeId + '/trains/' + ids[i], { method: 'DELETE' });
+                    await fetch('/api/routes/' + routeId + '/formations/' + ids[i], { method: 'DELETE' });
                 }
-                await loadRouteTrains();
-                updateAvailableTrains();
+                await loadRouteFormations();
+                updateAvailableFormations();
             } catch (error) {
-                console.error('Error removing trains:', error);
-                alert('Error removing train from route');
+                console.error('Error removing formations:', error);
+                alert('Error removing formation from route');
             }
         }
 
-        async function addExistingTrain() {
-            var trainId = selectedTrainId.value;
-            if (!trainId) {
-                alert('Please select a train from the list');
+        async function addExistingFormation() {
+            var formationId = selectedFormationId.value;
+            if (!formationId) {
+                alert('Please select a formation from the list');
                 return;
             }
 
             try {
-                await fetch('/api/routes/' + routeId + '/trains', {
+                await fetch('/api/routes/' + routeId + '/formations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ train_id: parseInt(trainId) })
+                    body: JSON.stringify({ formation_id: parseInt(formationId) })
                 });
-                await loadRouteTrains();
-                updateAvailableTrains();
+                await loadRouteFormations();
+                updateAvailableFormations();
             } catch (error) {
-                console.error('Error adding train:', error);
-                alert('Error adding train to route');
+                console.error('Error adding formation:', error);
+                alert('Error adding formation to route');
             }
         }
 
-        async function createAndAddTrain() {
-            var name = document.getElementById('newTrainName').value.trim();
+        async function createAndAddFormation() {
+            var name = document.getElementById('newFormationName').value.trim();
             if (!name) {
-                alert('Please enter a train name');
+                alert('Please enter a formation name');
                 return;
             }
 
             try {
-                // Create the new train
-                var createResponse = await fetch('/api/trains', {
+                // Create the new formation
+                var createResponse = await fetch('/api/formations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: name })
@@ -833,39 +833,39 @@
 
                 if (!createResponse.ok) {
                     var error = await createResponse.json();
-                    throw new Error(error.error || 'Failed to create train');
+                    throw new Error(error.error || 'Failed to create formation');
                 }
 
-                var newTrain = await createResponse.json();
+                var newFormation = await createResponse.json();
 
                 // Add to this route
-                await fetch('/api/routes/' + routeId + '/trains', {
+                await fetch('/api/routes/' + routeId + '/formations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ train_id: newTrain.id })
+                    body: JSON.stringify({ formation_id: newFormation.id })
                 });
 
-                document.getElementById('newTrainName').value = '';
-                await loadAllTrains();
-                await loadRouteTrains();
+                document.getElementById('newFormationName').value = '';
+                await loadAllFormations();
+                await loadRouteFormations();
             } catch (error) {
-                console.error('Error creating train:', error);
+                console.error('Error creating formation:', error);
                 alert('Error: ' + error.message);
             }
         }
 
-        async function removeTrain(trainId) {
-            if (!confirm('Remove this train from the route?')) return;
+        async function removeFormation(formationId) {
+            if (!confirm('Remove this formation from the route?')) return;
 
             try {
-                await fetch('/api/routes/' + routeId + '/trains/' + trainId, {
+                await fetch('/api/routes/' + routeId + '/formations/' + formationId, {
                     method: 'DELETE'
                 });
-                await loadRouteTrains();
-                updateAvailableTrains();
+                await loadRouteFormations();
+                updateAvailableFormations();
             } catch (error) {
-                console.error('Error removing train:', error);
-                alert('Error removing train from route');
+                console.error('Error removing formation:', error);
+                alert('Error removing formation from route');
             }
         }
 
@@ -911,9 +911,9 @@
             return 'Collectable';
         }
 
-        // Allow Enter key to create new train
-        document.getElementById('newTrainName').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') createAndAddTrain();
+        // Allow Enter key to create new formation
+        document.getElementById('newFormationName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') createAndAddFormation();
         });
 
         // Theme and color scheme initialization
@@ -979,41 +979,94 @@
             window.location.href = '/api/routes/' + routeId + '/timetables/export';
         }
 
-        // Fill coordinates options no longer needed - script aggregates all timetables automatically
+        // ---------- Build Timetable Maps ----------
 
-        async function fillCoordinates() {
-            var btn = document.getElementById('fillCoordsBtn');
-            var output = document.getElementById('fillCoordsOutput');
-
-            btn.disabled = true;
-            btn.textContent = 'Running...';
+        async function buildTimetableMaps() {
+            var btn = document.getElementById('buildMapsBtn');
+            var output = document.getElementById('buildMapsOutput');
             output.style.display = 'block';
-            output.textContent = 'Running fill_coordinates script...\n';
+            output.textContent = '';
 
-            try {
-                var body = { routeId: routeId };
-
-                var response = await fetch('/api/routes/fill-coordinates', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-                var result = await response.json();
-
-                if (result.success) {
-                    output.textContent = result.output || 'Completed successfully.';
-                } else {
-                    output.textContent = 'Error: ' + (result.error || 'Unknown error') + '\n\n' + (result.stdout || '') + '\n' + (result.stderr || '');
-                }
-            } catch (error) {
-                output.textContent = 'Error: ' + error.message;
+            // Confirm before kicking off — the user shouldn't trigger an
+            // hours-long job by accident.
+            if (!confirm('This will build map data for every timetable on this route that doesn\'t already have one. Each timetable takes ~2-3 minutes. A full route can take hours. Start?')) {
+                output.style.display = 'none';
+                return;
             }
 
-            btn.disabled = false;
-            btn.textContent = 'Fill Coordinates';
+            btn.disabled = true;
+            btn.textContent = 'Building…';
 
-            // Refresh the map after fill coordinates completes
-            initRouteMap();
+            try {
+                var startRes = await fetch('/api/routes/' + routeId + '/build-timetable-maps', { method: 'POST' });
+                if (!startRes.ok) {
+                    output.textContent = 'Failed to start build: ' + await startRes.text();
+                    btn.disabled = false;
+                    btn.textContent = 'Build Timetable Maps';
+                    return;
+                }
+                var initial = await startRes.json();
+                if (initial.total === 0) {
+                    output.textContent = 'Nothing to build — every timetable on this route already has a map.';
+                    btn.disabled = false;
+                    btn.textContent = 'Build Timetable Maps';
+                    return;
+                }
+                pollBuildMapsStatus(output, btn);
+            } catch (e) {
+                output.textContent = 'Error: ' + e.message;
+                btn.disabled = false;
+                btn.textContent = 'Build Timetable Maps';
+            }
+        }
+
+        async function pollBuildMapsStatus(output, btn) {
+            var poll = async function() {
+                try {
+                    var res = await fetch('/api/routes/' + routeId + '/build-timetable-maps');
+                    if (!res.ok) {
+                        output.textContent += '\n[poll error] ' + await res.text();
+                        return;
+                    }
+                    var s = await res.json();
+                    var elapsedSec = Math.max(1, (Date.now() - new Date(s.startedAt).getTime()) / 1000);
+                    var perTtSec = s.done > 0 ? (elapsedSec / s.done) : 0;
+                    var remainingSec = s.done > 0 ? Math.round(perTtSec * (s.total - s.done)) : 0;
+                    var lines = [
+                        s.done + ' of ' + s.total + ' completed',
+                        'elapsed: ' + formatDuration(Math.round(elapsedSec)),
+                    ];
+                    if (s.done > 0) {
+                        lines.push('per timetable: ~' + perTtSec.toFixed(1) + ' sec');
+                        lines.push('estimated remaining: ' + formatDuration(remainingSec));
+                    }
+                    if (s.current) lines.push('current: ' + s.current);
+                    if (s.err) lines.push('ERROR: ' + s.err);
+                    output.textContent = lines.join('\n');
+
+                    if (s.completedAt) {
+                        output.textContent += '\n\nDone in ' + formatDuration(Math.round((new Date(s.completedAt).getTime() - new Date(s.startedAt).getTime()) / 1000)) + '.';
+                        btn.disabled = false;
+                        btn.textContent = 'Build Timetable Maps';
+                        return;
+                    }
+                    setTimeout(poll, 1500);
+                } catch (e) {
+                    output.textContent += '\n[poll error] ' + e.message;
+                    setTimeout(poll, 5000);
+                }
+            };
+            poll();
+        }
+
+        function formatDuration(sec) {
+            if (sec < 60) return sec + 's';
+            var m = Math.floor(sec / 60);
+            var s = sec % 60;
+            if (m < 60) return m + 'm ' + s + 's';
+            var h = Math.floor(m / 60);
+            m = m % 60;
+            return h + 'h ' + m + 'm ' + s + 's';
         }
 
     </script>
@@ -1441,56 +1494,56 @@
                 html += '<input type="text" id="section-edit-' + s.id + '" value="' + escapeHtml(s.name) + '" style="display:none; width: 100%;" onkeydown="if(event.key===\'Enter\') saveSection(' + s.id + ')">';
                 html += '</td>';
                 html += '<td class="actions">';
-                html += '<button class="btn-secondary" onclick="toggleSectionTrains(' + s.id + ')" style="padding: 5px 10px; font-size: 12px;">Trains</button>';
+                html += '<button class="btn-secondary" onclick="toggleSectionFormations(' + s.id + ')" style="padding: 5px 10px; font-size: 12px;">Formations</button>';
                 html += '<button class="btn-primary" id="section-edit-btn-' + s.id + '" onclick="editSection(' + s.id + ')" style="padding: 5px 10px; font-size: 12px;">Edit</button>';
                 html += '<button class="btn-primary" id="section-save-btn-' + s.id + '" onclick="saveSection(' + s.id + ')" style="display:none; padding: 5px 10px; font-size: 12px;">Save</button>';
                 html += '<button class="btn-secondary" id="section-cancel-btn-' + s.id + '" onclick="cancelEditSection(' + s.id + ')" style="display:none; padding: 5px 10px; font-size: 12px;">Cancel</button>';
                 html += '<button class="btn-danger" onclick="deleteSection(' + s.id + ', \'' + escapeHtml(s.name).replace(/'/g, "\\'") + '\')" style="padding: 5px 10px; font-size: 12px;">Delete</button>';
                 html += '</td></tr>';
-                // Collapsible section trains panel
-                html += '<tr id="section-trains-row-' + s.id + '" style="display:none;">';
+                // Collapsible section formations panel
+                html += '<tr id="section-formations-row-' + s.id + '" style="display:none;">';
                 html += '<td colspan="3" style="padding: 10px 20px; background: var(--bg-primary);">';
                 html += '<div style="margin-bottom: 8px; display: flex; gap: 8px; align-items: center;">';
-                html += '<strong>Trains for "' + escapeHtml(s.name) + '":</strong>';
-                html += '<select id="section-train-select-' + s.id + '" style="flex: 1; max-width: 300px;"><option value="">-- Select a train --</option></select>';
-                html += '<button class="btn-primary" onclick="addSectionTrain(' + s.id + ')" style="padding: 5px 10px; font-size: 12px;">Add</button>';
+                html += '<strong>Formations for "' + escapeHtml(s.name) + '":</strong>';
+                html += '<select id="section-formation-select-' + s.id + '" style="flex: 1; max-width: 300px;"><option value="">-- Select a formation --</option></select>';
+                html += '<button class="btn-primary" onclick="addSectionFormation(' + s.id + ')" style="padding: 5px 10px; font-size: 12px;">Add</button>';
                 html += '</div>';
-                html += '<div id="section-trains-list-' + s.id + '"><p class="empty-message">Loading...</p></div>';
+                html += '<div id="section-formations-list-' + s.id + '"><p class="empty-message">Loading...</p></div>';
                 html += '</td></tr>';
             });
             html += '</tbody></table>';
             container.innerHTML = html;
         }
 
-        function toggleSectionTrains(sectionId) {
-            var row = document.getElementById('section-trains-row-' + sectionId);
+        function toggleSectionFormations(sectionId) {
+            var row = document.getElementById('section-formations-row-' + sectionId);
             if (row.style.display === 'none') {
                 row.style.display = '';
-                loadSectionTrains(sectionId);
+                loadSectionFormations(sectionId);
             } else {
                 row.style.display = 'none';
             }
         }
 
-        async function loadSectionTrains(sectionId) {
+        async function loadSectionFormations(sectionId) {
             try {
-                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/trains');
-                var trains = await response.json();
-                renderSectionTrains(sectionId, trains);
-                populateSectionTrainSelect(sectionId, trains);
+                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/formations');
+                var formations = await response.json();
+                renderSectionFormations(sectionId, formations);
+                populateSectionFormationSelect(sectionId, formations);
             } catch (error) {
-                console.error('Error loading section trains:', error);
-                document.getElementById('section-trains-list-' + sectionId).innerHTML = '<p class="empty-message">Error loading trains</p>';
+                console.error('Error loading section formations:', error);
+                document.getElementById('section-formations-list-' + sectionId).innerHTML = '<p class="empty-message">Error loading formations</p>';
             }
         }
 
-        function populateSectionTrainSelect(sectionId, sectionTrains) {
-            var select = document.getElementById('section-train-select-' + sectionId);
-            select.innerHTML = '<option value="">-- Select a train --</option>';
-            // Show only route trains not already on this section
-            var sectionTrainIds = sectionTrains.map(function(t) { return t.id; });
-            routeTrains.forEach(function(t) {
-                if (sectionTrainIds.indexOf(t.id) === -1) {
+        function populateSectionFormationSelect(sectionId, sectionFormations) {
+            var select = document.getElementById('section-formation-select-' + sectionId);
+            select.innerHTML = '<option value="">-- Select a formation --</option>';
+            // Show only route formations not already on this section
+            var sectionFormationIds = sectionFormations.map(function(t) { return t.id; });
+            routeFormations.forEach(function(t) {
+                if (sectionFormationIds.indexOf(t.id) === -1) {
                     var opt = document.createElement('option');
                     opt.value = t.id;
                     opt.textContent = t.name;
@@ -1499,58 +1552,58 @@
             });
         }
 
-        function renderSectionTrains(sectionId, trains) {
-            var container = document.getElementById('section-trains-list-' + sectionId);
-            if (trains.length === 0) {
-                container.innerHTML = '<p class="empty-message">No trains assigned to this section. Will use route trains.</p>';
+        function renderSectionFormations(sectionId, formations) {
+            var container = document.getElementById('section-formations-list-' + sectionId);
+            if (formations.length === 0) {
+                container.innerHTML = '<p class="empty-message">No formations assigned to this section. Will use route formations.</p>';
                 return;
             }
             var html = '<table style="margin: 0;"><tbody>';
-            trains.forEach(function(t) {
+            formations.forEach(function(t) {
                 html += '<tr><td>' + escapeHtml(t.name) + '</td>';
-                html += '<td class="actions"><button class="btn-danger" onclick="removeSectionTrain(' + sectionId + ', ' + t.id + ')" style="padding: 3px 8px; font-size: 11px;">Remove</button></td></tr>';
+                html += '<td class="actions"><button class="btn-danger" onclick="removeSectionFormation(' + sectionId + ', ' + t.id + ')" style="padding: 3px 8px; font-size: 11px;">Remove</button></td></tr>';
             });
             html += '</tbody></table>';
             container.innerHTML = html;
         }
 
-        async function addSectionTrain(sectionId) {
-            var select = document.getElementById('section-train-select-' + sectionId);
-            var trainId = select.value;
-            if (!trainId) { alert('Please select a train'); return; }
+        async function addSectionFormation(sectionId) {
+            var select = document.getElementById('section-formation-select-' + sectionId);
+            var formationId = select.value;
+            if (!formationId) { alert('Please select a formation'); return; }
             try {
-                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/trains', {
+                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/formations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ train_id: parseInt(trainId) })
+                    body: JSON.stringify({ formation_id: parseInt(formationId) })
                 });
                 if (!response.ok) {
                     var result = await response.json();
-                    alert(result.error || 'Failed to add train to section');
+                    alert(result.error || 'Failed to add formation to section');
                     return;
                 }
-                loadSectionTrains(sectionId);
+                loadSectionFormations(sectionId);
             } catch (error) {
-                console.error('Error adding section train:', error);
-                alert('Error adding train to section');
+                console.error('Error adding section formation:', error);
+                alert('Error adding formation to section');
             }
         }
 
-        async function removeSectionTrain(sectionId, trainId) {
-            if (!confirm('Remove this train from the section?')) return;
+        async function removeSectionFormation(sectionId, formationId) {
+            if (!confirm('Remove this formation from the section?')) return;
             try {
-                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/trains/' + trainId, {
+                var response = await fetch('/api/routes/' + routeId + '/sections/' + sectionId + '/formations/' + formationId, {
                     method: 'DELETE'
                 });
                 if (!response.ok) {
                     var result = await response.json();
-                    alert(result.error || 'Failed to remove train');
+                    alert(result.error || 'Failed to remove formation');
                     return;
                 }
-                loadSectionTrains(sectionId);
+                loadSectionFormations(sectionId);
             } catch (error) {
-                console.error('Error removing section train:', error);
-                alert('Error removing train from section');
+                console.error('Error removing section formation:', error);
+                alert('Error removing formation from section');
             }
         }
 
@@ -1649,9 +1702,9 @@
             loadCountries().then(function() {
                 loadRoute();
             });
-            // Wait for dev-mode flag before rendering trains so the
+            // Wait for dev-mode flag before rendering formations so the
             // Formations column + Remove button gate correctly.
-            checkDevMode().then(function() { loadAllTrains().then(loadRouteTrains); });
+            checkDevMode().then(function() { loadAllFormations().then(loadRouteFormations); });
             if (isEditMode) loadSections();
             checkDevMode().then(function() {
                 // The "Timetables on this Route" panel is now rendered by the

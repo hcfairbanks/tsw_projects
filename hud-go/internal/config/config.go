@@ -34,6 +34,14 @@ type Config struct {
 	ExtractorOutputDir  string `json:"extractorOutputDir"`  // where per-route zips land (required)
 	ExtractorTempDir    string `json:"extractorTempDir"`    // temp dir for tile unpacks; empty = system temp
 	ExtractorAutoImport bool   `json:"extractorAutoImport"` // after each route extracts, wipe existing DB row + import the new zip
+	// ExtractorBuildTimetableMaps controls whether the importer pre-builds
+	// the per-timetable filtered map-features blob during import. The
+	// per-timetable filter runs O(features × line_verts × path_verts) so on
+	// big DLCs (GWE, Boston Sprinter) it dominates the import time —
+	// 30+ sec per timetable × thousands of timetables = hours. Default off
+	// so imports stay fast; the user kicks off building lazily from
+	// /routes/{id}/edit, /timetables/{id}, or HUD load.
+	ExtractorBuildTimetableMaps bool `json:"extractorBuildTimetableMaps"`
 }
 
 var (

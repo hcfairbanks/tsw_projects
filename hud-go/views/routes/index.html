@@ -633,8 +633,8 @@
                 if (result.country.name) {
                     html += t('routes.countryLabel', 'Country:') + ' ' + escapeHtml(result.country.name) + (result.country.created ? ' (created)' : ' (existing)') + '<br>';
                 }
-                if (result.trainsCreated.length > 0) {
-                    html += t('routes.trainsCreated', 'Trains created:') + ' ' + result.trainsCreated.map(escapeHtml).join(', ') + '<br>';
+                if (result.formationsCreated.length > 0) {
+                    html += t('routes.formationsCreated', 'Formations created:') + ' ' + result.formationsCreated.map(escapeHtml).join(', ') + '<br>';
                 }
                 html += t('routes.timetablesImported', 'Timetables imported:') + ' ' + result.timetablesImported;
                 if (result.timetablesSkipped > 0) {

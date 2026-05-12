@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"math"
 	"os"
 	"path/filepath"
@@ -248,7 +249,7 @@ func lookupRVDClass(rvdMap map[string]*uasset.RVD, assetPath string) string {
 	return ""
 }
 
-// buildTrains returns the service's `trains` array: one entry per drivable
+// buildFormations returns the service's `trains` array: one entry per drivable
 // class the player can pick, ordered alphabetically. The entry whose class
 // matches the formation's actual lead RVD FriendlyName is marked IsDefault
 // and carries the full per-vehicle consist (including VehicleID GUIDs) so the
@@ -257,8 +258,8 @@ func lookupRVDClass(rvdMap map[string]*uasset.RVD, assetPath string) string {
 // empty Consists array — their alternative lead has no resolvable GUID from
 // the pak, but the non-lead VehicleIDs of the default consist are still
 // sufficient for identification.
-func buildTrains(ctx *ttContext, svc *uasset.Service) []TrainClassEntry {
-	out := []TrainClassEntry{}
+func buildFormations(ctx *ttContext, svc *uasset.Service) []FormationClassEntry {
+	out := []FormationClassEntry{}
 	formation := strings.TrimSpace(svc.Formation)
 	if formation == "" || formation == "None" {
 		return out
@@ -293,6 +294,22 @@ func buildTrains(ctx *ttContext, svc *uasset.Service) []TrainClassEntry {
 			cv.FriendlyName = rvd.FriendlyName
 			cv.LiveryID = rvd.LiveryID
 			cv.VehicleCategory = rvd.VehicleCategory
+			cv.IsElectric = rvd.IsElectric
+			cv.MaxSpeedKph = rvd.MaxSpeedKph
+			cv.MaxPowerKw = rvd.MaxPowerKw
+			cv.ManufacturerName = rvd.ManufacturerName
+			cv.EngineDescription = rvd.EngineDescription
+			cv.TypeDescription = rvd.TypeDescription
+			cv.ThumbnailAssetRef = rvd.ThumbnailAssetRef
+			if len(rvd.Electrification) > 0 {
+				cv.Electrification = make([]ElectrificationSpec, len(rvd.Electrification))
+				for j, e := range rvd.Electrification {
+					cv.Electrification[j] = ElectrificationSpec{
+						Current: e.Current, PickupSide: e.PickupSide,
+						VoltageV: e.VoltageV, FrequencyHz: e.FrequencyHz,
+					}
+				}
+			}
 		} else if cls, ok := ctx.rvIDToClass[v.RailVehicleID]; ok {
 			cv.RailVehicleClass = cls
 		}
@@ -360,7 +377,7 @@ func buildTrains(ctx *ttContext, svc *uasset.Service) []TrainClassEntry {
 	sortStrings(names)
 
 	for _, n := range names {
-		entry := TrainClassEntry{Class: n, Consists: []Consist{}}
+		entry := FormationClassEntry{Class: n, Consists: []Consist{}}
 		if n == defaultClass {
 			entry.IsDefault = true
 			entry.Consists = []Consist{defaultConsist}
@@ -370,7 +387,7 @@ func buildTrains(ctx *ttContext, svc *uasset.Service) []TrainClassEntry {
 	// If we never resolved a class (no RVD coverage), emit one unnamed entry
 	// so the consist + GUIDs are still surfaced for HUD matching.
 	if len(out) == 0 {
-		out = append(out, TrainClassEntry{
+		out = append(out, FormationClassEntry{
 			Class:     "",
 			IsDefault: true,
 			Consists:  []Consist{defaultConsist},
@@ -562,7 +579,7 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 	} else if tt.SectionName != "" {
 		ps.SectionNames = []string{tt.SectionName}
 	}
-	ps.Trains = buildTrains(ctx, svc)
+	ps.Formations = buildFormations(ctx, svc)
 	if f := strings.TrimSpace(svc.Formation); f != "" && f != "None" {
 		ps.FormationName = f
 	}
@@ -591,7 +608,7 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 			seen[f] = struct{}{}
 			extras = append(extras, AdditionalFormation{
 				FormationName: f,
-				Trains:        buildTrains(ctx, p.svc),
+				Formations:    buildFormations(ctx, p.svc),
 			})
 		}
 		if len(extras) > 0 {
@@ -1049,7 +1066,170 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 		}
 		count++
 	}
+
+	// Train class thumbnails — one PNG per unique (FriendlyName, ThumbnailAssetRef)
+	// across this route's services. Lives in the zip at
+	// `images/train_classes/<sanitised>.png`. The importer extracts these
+	// alongside the per-service JSONs, so receivers without TSW6 paks still
+	// get class images on their /train-classes page.
+	if err := addClassThumbnailsToZip(zw, run.pairs); err != nil {
+		// Non-fatal: a missing texture .uasset shouldn't fail the extract.
+		fmt.Fprintf(os.Stderr, "[zip] WARNING: thumbnail pack: %v\n", err)
+	}
+
 	return count, zw.Close()
+}
+
+// addClassThumbnailsToZip walks the route's services for unique class
+// (FriendlyName, ThumbnailAssetRef) pairs, locates each texture .uasset
+// in the timetable's ExtractDir, and writes the rendered PNG into the
+// zip at `images/train_classes/<sanitised>.png`. Skips classes whose
+// thumbnail can't be resolved (missing ref, asset not found, decode
+// error) — the receiver's UI handles 404 with a placeholder.
+//
+// Intentionally permissive: a partial set of thumbnails is better than
+// failing the whole zip over one bad texture.
+func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
+	type thumbKey struct {
+		friendlyName string
+		assetRef     string
+	}
+	// Index .uasset basenames across every ExtractDir we see so a
+	// thumbnail rendered from one timetable's pak can be reused.
+	indexed := map[string]string{} // basename-stem → on-disk path
+	indexedDirs := map[string]bool{}
+	indexDir := func(dir string) {
+		if dir == "" || indexedDirs[dir] {
+			return
+		}
+		indexedDirs[dir] = true
+		_ = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+			if err != nil || d.IsDir() {
+				return nil
+			}
+			if !strings.HasSuffix(path, ".uasset") {
+				return nil
+			}
+			stem := strings.TrimSuffix(filepath.Base(path), ".uasset")
+			if _, ok := indexed[stem]; !ok {
+				indexed[stem] = path
+			}
+			return nil
+		})
+	}
+
+	seenClass := map[string]bool{}
+	seenTT := map[*uasset.Timetable]bool{}
+	for _, pair := range pairs {
+		if pair.tt == nil {
+			continue
+		}
+		indexDir(pair.tt.ExtractDir)
+		if seenTT[pair.tt] {
+			continue
+		}
+		seenTT[pair.tt] = true
+		// Walk every formation's vehicles in this timetable for
+		// thumbnail refs. RVDByPath resolves each vehicle's GUID to the
+		// *uasset.RVD with FriendlyName + ThumbnailAssetRef.
+		for _, f := range pair.tt.Formations {
+			for _, v := range f.Vehicles {
+				rvd := pair.tt.RVDByPath[lookupRVDByID(pair.tt, v.RailVehicleID)]
+				if rvd == nil || rvd.FriendlyName == "" || rvd.ThumbnailAssetRef == "" {
+					continue
+				}
+				if seenClass[rvd.FriendlyName] {
+					continue
+				}
+				seenClass[rvd.FriendlyName] = true
+				stem := stemFromAssetRef(rvd.ThumbnailAssetRef)
+				assetPath, ok := indexed[stem]
+				if !ok {
+					continue
+				}
+				zipName := "images/train_classes/" + sanitiseClassFilename(rvd.FriendlyName) + ".png"
+				if err := writeThumbnailToZip(zw, zipName, assetPath); err != nil {
+					fmt.Fprintf(os.Stderr, "[zip] thumbnail %s: %v\n", rvd.FriendlyName, err)
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// lookupRVDByID resolves a vehicle GUID to an RVD asset path via the
+// timetable's CompiledRVMap, normalising the GUID to canonical form
+// when the literal lookup misses.
+func lookupRVDByID(tt *uasset.Timetable, vehicleID string) string {
+	if tt == nil || vehicleID == "" {
+		return ""
+	}
+	if p, ok := tt.CompiledRVMap[vehicleID]; ok {
+		return p
+	}
+	return tt.CompiledRVMap[uasset.NormalizeGUID(vehicleID)]
+}
+
+// stemFromAssetRef extracts the .uasset stem from a SoftObjectProperty
+// ref string like "/IOW_BR_Class483/Data/.../TSW_483Loco_DLC_Thumbnail.TSW_483Loco_DLC_Thumbnail".
+// Returns the asset name part (after last '/' and before any '.AssetName').
+func stemFromAssetRef(ref string) string {
+	if i := strings.LastIndex(ref, "."); i >= 0 {
+		ref = ref[:i]
+	}
+	if i := strings.LastIndex(ref, "/"); i >= 0 {
+		return ref[i+1:]
+	}
+	return ref
+}
+
+// sanitiseClassFilename mirrors pak.SanitiseThumbnailName / catalog
+// .ThumbnailURLPath so receivers can predict the path without checking
+// disk. Same rules: keep [A-Za-z0-9-], turn space/underscore into '_',
+// drop the rest.
+func sanitiseClassFilename(name string) string {
+	var b strings.Builder
+	for _, r := range name {
+		switch {
+		case r >= 'a' && r <= 'z', r >= 'A' && r <= 'Z', r >= '0' && r <= '9', r == '-':
+			b.WriteRune(r)
+		case r == ' ' || r == '_':
+			b.WriteByte('_')
+		}
+	}
+	if b.Len() == 0 {
+		return "unknown"
+	}
+	return b.String()
+}
+
+// writeThumbnailToZip renders one .uasset texture to PNG bytes and
+// writes them as a zip entry. Uses a temp file because
+// ExtractTexture2DPNG writes to disk and we need to read it back into
+// the zip writer; cleaned up before return.
+func writeThumbnailToZip(zw *zip.Writer, zipName, assetPath string) error {
+	tmpDir := os.TempDir()
+	tmpFile, err := os.CreateTemp(tmpDir, "thumb-*.png")
+	if err != nil {
+		return err
+	}
+	tmpPath := tmpFile.Name()
+	tmpFile.Close()
+	defer os.Remove(tmpPath)
+	if _, err := uasset.ExtractTexture2DPNG(assetPath, tmpPath); err != nil {
+		return err
+	}
+	data, err := os.ReadFile(tmpPath)
+	if err != nil {
+		return err
+	}
+	hdr := &zip.FileHeader{Name: zipName, Method: zip.Deflate, Modified: time.Now()}
+	w, err := zw.CreateHeader(hdr)
+	if err != nil {
+		return err
+	}
+	_, err = w.Write(data)
+	return err
 }
 
 // addRailsToZip appends the per-route rail files to an open zip writer:

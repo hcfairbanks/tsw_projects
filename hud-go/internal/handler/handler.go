@@ -13,7 +13,7 @@ import (
 type Handlers struct {
 	Country         *CountryHandler
 	Route           *RouteHandler
-	Train           *TrainHandler
+	Formation       *FormationHandler
 	Timetable       *TimetableHandler
 	Entry           *EntryHandler
 	Location        *LocationHandler
@@ -103,11 +103,11 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 
 	// Build the TimetableHandler first so Extractor can hold the same
 	// instance (shares the importer's logic without a 400-line duplication).
-	tt := &TimetableHandler{db: db}
+	tt := &TimetableHandler{db: db, mapBuildJobs: map[int]*mapBuildJob{}}
 	return &Handlers{
 		Country:         &CountryHandler{db: db},
 		Route:           &RouteHandler{db: db},
-		Train:           &TrainHandler{db: db},
+		Formation:       &FormationHandler{db: db},
 		Timetable:       tt,
 		Entry:           &EntryHandler{db: db},
 		Location:        &LocationHandler{db: db},
@@ -118,7 +118,7 @@ func New(db *sql.DB, tswClient *tsw.Client) *Handlers {
 		HistWeather:     &HistoricalWeatherHandler{client: tswClient, httpClient: &http.Client{Timeout: 10 * time.Second}},
 		Config:          &ConfigHandler{db: db},
 		Stream:          &StreamHandler{db: db, GetData: getData},
-		HUD:             &HUDHandler{db: db},
+		HUD:             &HUDHandler{db: db, tt: tt},
 		Recording:       rec,
 		Processing:      &ProcessingHandler{db: db},
 		MapData:         &MapDataHandler{db: db},

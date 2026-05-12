@@ -33,15 +33,38 @@ type TimetableRow struct {
 // ConsistVehicle describes one car slot in a consist. VehicleID is the GUID
 // the game reports via the live API (CurrentFormation[i].VehicleID) so the
 // HUD can match a running formation back to a service record.
+//
+// The IsElectric / MaxSpeedKph / MaxPowerKw / Manufacturer / *Description /
+// ThumbnailAssetRef / Electrification fields mirror the RVD asset and
+// drive the per-class aggregates the Train Classes search page filters on.
+// Empty on vehicles whose RVD didn't supply them (drivable=false coach
+// cars, etc).
 type ConsistVehicle struct {
-	VehicleID        string  `json:"vehicle_id"`
-	RailVehicleClass string  `json:"rail_vehicle_class,omitempty"` // e.g. "HSP46"
-	FriendlyName     string  `json:"friendly_name,omitempty"`      // e.g. "Rotem CTC-5 MBTA"
-	LiveryID         string  `json:"livery_id,omitempty"`
-	VehicleCategory  string  `json:"vehicle_category,omitempty"` // Locomotive / PassengerCabCar / etc.
-	LengthM          float64 `json:"length_m"`
-	IsLead           bool    `json:"is_lead,omitempty"`
-	IsFlipped        bool    `json:"is_flipped,omitempty"`
+	VehicleID         string                `json:"vehicle_id"`
+	RailVehicleClass  string                `json:"rail_vehicle_class,omitempty"` // e.g. "HSP46"
+	FriendlyName      string                `json:"friendly_name,omitempty"`      // e.g. "Rotem CTC-5 MBTA"
+	LiveryID          string                `json:"livery_id,omitempty"`
+	VehicleCategory   string                `json:"vehicle_category,omitempty"` // Locomotive / PassengerCabCar / etc.
+	LengthM           float64               `json:"length_m"`
+	IsLead            bool                  `json:"is_lead,omitempty"`
+	IsFlipped         bool                  `json:"is_flipped,omitempty"`
+	IsElectric        bool                  `json:"is_electric,omitempty"`
+	MaxSpeedKph       float32               `json:"max_speed_kph,omitempty"`
+	MaxPowerKw        float32               `json:"max_power_kw,omitempty"`
+	ManufacturerName  string                `json:"manufacturer_name,omitempty"`
+	EngineDescription string                `json:"engine_description,omitempty"`
+	TypeDescription   string                `json:"type_description,omitempty"`
+	ThumbnailAssetRef string                `json:"thumbnail_asset_ref,omitempty"`
+	Electrification   []ElectrificationSpec `json:"electrification,omitempty"`
+}
+
+// ElectrificationSpec mirrors uasset.ElectrificationSpec so the package JSON
+// surface doesn't need to import the parser types. Same wire format.
+type ElectrificationSpec struct {
+	Current     string `json:"current,omitempty"`     // "OverheadWires", "ThirdRail", "FourthRail"…
+	PickupSide  string `json:"pickup_side,omitempty"`
+	VoltageV    int32  `json:"voltage_v,omitempty"`
+	FrequencyHz int32  `json:"frequency_hz,omitempty"` // 0 == DC
 }
 
 // Consist groups an ordered list of ConsistVehicles with totals.
@@ -51,33 +74,35 @@ type Consist struct {
 	Vehicles []ConsistVehicle `json:"vehicles"`
 }
 
-// TrainClassEntry is one drivable class the player can pick for this service.
+// FormationClassEntry is one drivable class the player can pick for this
+// service (was: TrainClassEntry; renamed 2026-05-10 with the trains→formations
+// schema rename).
 // `IsDefault` marks the class that matches the formation's actual lead RVD —
 // its `Consists` array contains the full per-vehicle detail (including GUIDs).
 // Alternative (substitutable) classes have no resolvable GUIDs, so their
 // `Consists` array is empty; the HUD can still match the non-lead vehicle IDs
 // from the default consist to identify the running service.
-type TrainClassEntry struct {
+type FormationClassEntry struct {
 	Class     string    `json:"class"`
 	IsDefault bool      `json:"is_default,omitempty"`
 	Consists  []Consist `json:"consists"`
 }
 
-// AdditionalFormation carries the formation_name + trains[] payload from a
-// non-canonical timetable binary that shares this service. When the same
+// AdditionalFormation carries the formation_name + formations[] payload from
+// a non-canonical timetable binary that shares this service. When the same
 // service is declared in multiple .uasset binaries on the same route (e.g.
 // "Boston - Providence Timetable" + "Boston - Providence HSP-46 Timetable"),
 // we collapse them into one per-service JSON to avoid the importer's
 // (service_name, route_id) dedup silently dropping the second one. The
 // canonical pair drives the top-level fields; every other pair's formation
-// data lands here so the importer can still link each train via the
-// timetable_trains junction.
+// data lands here so the importer can still link each formation via the
+// timetable_formations junction.
 //
 // Empty / omitted in the common case where a service only appears in one
 // binary.
 type AdditionalFormation struct {
-	FormationName string            `json:"formation_name,omitempty"`
-	Trains        []TrainClassEntry `json:"trains,omitempty"`
+	FormationName string                `json:"formation_name,omitempty"`
+	Formations    []FormationClassEntry `json:"formations,omitempty"`
 }
 
 // PackageService is the shareable per-service JSON schema used by the import format.
@@ -119,18 +144,18 @@ type PackageService struct {
 	StartTime string `json:"startTime"`
 	Duration  string `json:"duration"`
 
-	// --- train / consist ---
+	// --- formation / consist ---
 	// Ordered array of drivable classes the player can pick for this service.
 	// The default class (IsDefault=true) carries the full per-vehicle consist
 	// including VehicleID GUIDs for HUD matching against the live API.
-	Trains              []TrainClassEntry `json:"trains"`
-	ConductorCompatible bool              `json:"conductorCompatible"`
+	Formations          []FormationClassEntry `json:"formations"`
+	ConductorCompatible bool                  `json:"conductorCompatible"`
 	// FormationName is the in-pak formation identifier this service runs on
 	// (e.g. "Class483_006" or "NB_0535"). HUD's upload pipeline can use this
-	// to deterministically link a service to a previously-uploaded train
+	// to deterministically link a service to a previously-uploaded formation
 	// row, falling back to vehicle-GUID-set matching when names disagree.
 	FormationName string `json:"formation_name,omitempty"`
-	// AdditionalFormations carries the train data from sibling timetable
+	// AdditionalFormations carries the formation data from sibling timetable
 	// binaries that declare this same service (typically a route-specific
 	// timetable like "Boston-Providence HSP-46 Timetable" alongside the
 	// generic one). Empty when the service appears in only one binary —

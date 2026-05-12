@@ -601,7 +601,15 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 		// is on disk and can be uploaded manually.
 		if config.Get().ExtractorAutoImport {
 			h.broadcast(h.snapshotEvent("log", rt.codename, "[auto-import] starting…"))
-			if err := h.autoImportZip(rt.displayName, zip); err != nil {
+			// Per-timetable progress callback — fanned out to the same SSE
+			// log as the [auto-import] start/done lines so users see "27
+			// of 4000" tick up instead of staring at silence between
+			// "starting…" and "done" for 5+ minutes on big DLCs.
+			codename := rt.codename
+			progress := func(done, total int, label string) {
+				h.broadcast(h.snapshotEvent("log", codename, fmt.Sprintf("[auto-import] %d/%d  %s", done, total, label)))
+			}
+			if err := h.autoImportZip(rt.displayName, zip, progress); err != nil {
 				h.broadcast(h.snapshotEvent("log", rt.codename, "[auto-import] failed: "+err.Error()))
 			} else {
 				h.broadcast(h.snapshotEvent("log", rt.codename, "[auto-import] done"))
@@ -776,7 +784,7 @@ func (h *ExtractorHandler) snapshotEvent(typ, route, msg string) extractorEvent 
 // ("Isle of Wight") because that's what the importer now stores after
 // the recent flip; fall back to a whitespace-stripped compare so older
 // codename rows ("IsleOfWight") still get caught and removed.
-func (h *ExtractorHandler) autoImportZip(routeName, zipPath string) error {
+func (h *ExtractorHandler) autoImportZip(routeName, zipPath string, progress ImportProgressFunc) error {
 	if h.tt == nil || h.db == nil {
 		return fmt.Errorf("auto-import not configured (tt or db nil)")
 	}
@@ -812,7 +820,7 @@ func (h *ExtractorHandler) autoImportZip(routeName, zipPath string) error {
 		}
 		log.Printf("[extractor] auto-import: wiped existing route id=%d name=%q", id, names[i])
 	}
-	deleteOrphanTrains(h.db)
+	deleteOrphanFormations(h.db)
 
 	// 2. Read the zip and POST it to the existing import handler via an
 	//    in-process httptest recorder. Same handler a normal user upload
@@ -823,6 +831,9 @@ func (h *ExtractorHandler) autoImportZip(routeName, zipPath string) error {
 	}
 	req := httptest.NewRequest(http.MethodPost, "/api/routes/import-zip", bytes.NewReader(data))
 	req.Header.Set("Content-Type", "application/zip")
+	if progress != nil {
+		req = req.WithContext(WithImportProgress(req.Context(), progress))
+	}
 	rr := httptest.NewRecorder()
 	h.tt.ImportRouteZip(rr, req)
 	if rr.Code >= 400 {
@@ -937,10 +948,16 @@ func (h *ExtractorHandler) runCatalogScan(tswPath string, force bool) (catalog.S
 	if scratch == "" {
 		scratch = os.TempDir()
 	}
+	// <appDir>/images/train_classes/ is the on-disk path the static
+	// route handler maps to /images/train_classes/. Rendering thumbnails
+	// directly into that dir during the scan means the Train Classes UI
+	// can serve them with no extra plumbing.
+	thumbsDir := filepath.Join(config.AppDir(), "images", "train_classes")
 	tools := catalog.Tools{
 		RepakPath:     cfg.RepakPath,
 		UAssetGUIPath: cfg.UAssetGUIPath,
 		ScratchDir:    scratch,
+		ThumbnailsDir: thumbsDir,
 		// Pipe per-pak progress into the same SSE stream the
 		// extractor's job log uses, so /extractor's live log shows
 		// what the rescan is chewing on. The UI handles
