@@ -38,14 +38,16 @@ import (
 	"strings"
 	"time"
 
+	"hud-go/internal/devtools"
 	"hud-go/internal/geo"
 	"hud-go/internal/pak"
 	"hud-go/internal/pak/uasset"
 )
 
+var repakBin = devtools.MustFindBin("repak")
+
 const (
-	tswPath  = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
-	repakBin = `C:\Users\hcfai\Desktop\applications_2\hud-go\repak.exe`
+	tswPath = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
 	// TSW world tiles are 1km × 1km. Each tile's origin in world (cm) is
 	// (X * 100000, Y * 100000) where X,Y come from the filename TS_xN_yM.
 	tileSizeCm = 100000.0

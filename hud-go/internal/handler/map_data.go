@@ -261,7 +261,7 @@ func (h *MapDataHandler) SaveProcessed(w http.ResponseWriter, r *http.Request) {
 
 	// Derive raw filename from processed filename
 	rawFilename := strings.Replace(body.Filename, "processed_", "raw_data_", 1)
-	rawFilePath := filepath.Join(config.AppDir(), "recording_data", rawFilename)
+	rawFilePath := filepath.Join(config.ResourcesDir(), "recording_data", rawFilename)
 
 	// Read raw file
 	rawData, err := os.ReadFile(rawFilePath)
@@ -825,7 +825,7 @@ func (h *MapDataHandler) Remake(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ensure output folder exists
-	exportDir := filepath.Join(config.AppDir(), "Remake JSON from DB")
+	exportDir := filepath.Join(config.ResourcesDir(), "Remake JSON from DB")
 	os.MkdirAll(exportDir, 0755)
 
 	// Create filename with timestamp

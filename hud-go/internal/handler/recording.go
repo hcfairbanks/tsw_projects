@@ -96,7 +96,7 @@ type RecordingHandler struct {
 
 // recordingDataDir returns the path to the recording_data directory.
 func recordingDataDir() string {
-	return filepath.Join(config.AppDir(), "recording_data")
+	return filepath.Join(config.ResourcesDir(), "recording_data")
 }
 
 // ensureRecordingDir creates the recording_data directory if it doesn't exist.

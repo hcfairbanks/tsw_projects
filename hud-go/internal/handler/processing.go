@@ -19,7 +19,7 @@ type ProcessingHandler struct {
 
 // processedRoutesDir returns the path to the processed_routes directory.
 func processedRoutesDir() string {
-	return filepath.Join(config.AppDir(), "processed_routes")
+	return filepath.Join(config.ResourcesDir(), "processed_routes")
 }
 
 // Process is a stub - processing is not available in the Go version yet.

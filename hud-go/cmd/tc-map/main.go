@@ -26,17 +26,21 @@ import (
 	"strings"
 	"time"
 
+	"hud-go/internal/devtools"
 	"hud-go/internal/geo"
 	"hud-go/internal/output"
 	"hud-go/internal/pak"
 	"hud-go/internal/pak/uasset"
 )
 
+var (
+	repakBin  = devtools.MustFindBin("repak")
+	uassetBin = devtools.MustFindBin("UAssetGUI")
+)
+
 const (
-	tswPath   = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
-	repakBin  = `C:\Users\hcfai\Desktop\applications_2\hud-go\repak.exe`
-	uassetBin = `C:\Users\hcfai\Desktop\applications_2\hud-go\UAssetGUI.exe`
-	target    = "TrainingCentre"
+	tswPath = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
+	target  = "TrainingCentre"
 )
 
 func main() {

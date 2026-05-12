@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"hud-go/internal/config"
@@ -27,7 +28,10 @@ import (
 //   - foreign_keys=1 — same as the explicit PRAGMA we used to run
 //     after Open; folded in here so it applies to every pool connection.
 func Open() (*sql.DB, error) {
-	dbPath := filepath.Join(config.AppDir(), "tsw_hud.db")
+	if err := os.MkdirAll(config.DBDir(), 0o755); err != nil {
+		return nil, fmt.Errorf("create db dir: %w", err)
+	}
+	dbPath := filepath.Join(config.DBDir(), "tsw_hud.db")
 	uri := dbPath + "?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=foreign_keys(1)"
 	db, err := sql.Open("sqlite", uri)
 	if err != nil {

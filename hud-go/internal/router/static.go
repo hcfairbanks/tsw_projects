@@ -99,10 +99,10 @@ func registerStaticRoutes(r *chi.Mux) {
 
 	// Images: try user-uploaded images from appDir first, fall back to embedded
 	r.Handle("/images/*", http.StripPrefix("/images/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Check appDir/images/ for user-uploaded images first
-		appDirPath := filepath.Join(config.AppDir(), "images", r.URL.Path)
-		if _, err := os.Stat(appDirPath); err == nil {
-			http.ServeFile(w, r, appDirPath)
+		// Check resources/images/ for user-uploaded images first
+		resourcesPath := filepath.Join(config.ResourcesDir(), "images", r.URL.Path)
+		if _, err := os.Stat(resourcesPath); err == nil {
+			http.ServeFile(w, r, resourcesPath)
 			return
 		}
 

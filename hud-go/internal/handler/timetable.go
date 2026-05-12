@@ -2172,7 +2172,7 @@ func progressFromContext(ctx context.Context) ImportProgressFunc {
 // Existing files are overwritten so a re-import picks up updated
 // textures.
 func extractClassThumbnailsFromZip(zr *zip.Reader) {
-	outDir := filepath.Join(config.AppDir(), "images", "train_classes")
+	outDir := filepath.Join(config.ResourcesDir(), "images", "train_classes")
 	for _, f := range zr.File {
 		if f.FileInfo().IsDir() {
 			continue

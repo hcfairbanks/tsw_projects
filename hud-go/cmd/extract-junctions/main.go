@@ -34,14 +34,16 @@ import (
 	"strings"
 	"time"
 
+	"hud-go/internal/devtools"
 	"hud-go/internal/pak"
 	"hud-go/internal/pak/uasset"
 )
 
 const (
-	tswPath  = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
-	repakBin = `C:\Users\hcfai\Desktop\applications_2\hud-go\repak.exe`
+	tswPath = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
 )
+
+var repakBin = devtools.MustFindBin("repak")
 
 type junctionJSON struct {
 	Node          string `json:"node"`

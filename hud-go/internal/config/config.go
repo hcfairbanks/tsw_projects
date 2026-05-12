@@ -77,9 +77,30 @@ func AppDir() string {
 	return filepath.Dir(exe)
 }
 
-// Load reads configuration.json from next to the executable.
+// ResourcesDir returns the runtime resources directory next to the exe
+// (AppDir()/resources). All non-source runtime data lives under here:
+// configuration.json, the SQLite DB, user-uploaded images, recording
+// captures, the bundled tools (repak.exe, UAssetGUI.exe), and tesseract.
+// Keeping these under one folder means the user's hud-go directory only
+// shows tsw-hud-new.exe + resources/ at the top level — no ambiguity
+// about what to double-click.
+func ResourcesDir() string {
+	return filepath.Join(AppDir(), "resources")
+}
+
+// DBDir returns the directory where SQLite databases live
+// (resources/db). The main app DB plus any backup files are kept here so
+// they don't litter the root.
+func DBDir() string {
+	return filepath.Join(ResourcesDir(), "db")
+}
+
+// Load reads configuration.json from resources/.
 func Load() (*Config, error) {
-	cfgPath = filepath.Join(AppDir(), "configuration.json")
+	cfgPath = filepath.Join(ResourcesDir(), "configuration.json")
+	// Best-effort: ensure resources/ exists so the first-run Save below
+	// doesn't fail with "directory does not exist".
+	_ = os.MkdirAll(ResourcesDir(), 0o755)
 
 	cfg := defaults()
 

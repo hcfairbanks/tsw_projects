@@ -25,12 +25,11 @@ import (
 	"strings"
 	"time"
 
+	"hud-go/internal/devtools"
 	"hud-go/internal/pak/uasset"
 )
 
-const (
-	repakBin = `C:\Users\hcfai\Desktop\applications_2\hud-go\repak.exe`
-)
+var repakBin = devtools.MustFindBin("repak")
 
 func main() {
 	pakPath := flag.String("pak", "", "path to the route's cooked .pak (will be unpacked to a temp dir)")

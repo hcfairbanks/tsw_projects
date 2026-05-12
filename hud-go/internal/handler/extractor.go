@@ -952,7 +952,7 @@ func (h *ExtractorHandler) runCatalogScan(tswPath string, force bool) (catalog.S
 	// route handler maps to /images/train_classes/. Rendering thumbnails
 	// directly into that dir during the scan means the Train Classes UI
 	// can serve them with no extra plumbing.
-	thumbsDir := filepath.Join(config.AppDir(), "images", "train_classes")
+	thumbsDir := filepath.Join(config.ResourcesDir(), "images", "train_classes")
 	tools := catalog.Tools{
 		RepakPath:     cfg.RepakPath,
 		UAssetGUIPath: cfg.UAssetGUIPath,

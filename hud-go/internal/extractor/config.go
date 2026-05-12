@@ -122,8 +122,12 @@ func exeDir() string {
 }
 
 func findUAssetGUI() (string, error) {
-	// 1. Bundled next to the binary
+	// 1. Bundled under resources/ (preferred layout)
 	if d := exeDir(); d != "" {
+		if p := filepath.Join(d, "resources", "UAssetGUI.exe"); fileExists(p) {
+			return p, nil
+		}
+		// Legacy fallback: directly next to the exe.
 		if p := filepath.Join(d, "UAssetGUI.exe"); fileExists(p) {
 			return p, nil
 		}
@@ -150,8 +154,12 @@ func findUAssetGUI() (string, error) {
 }
 
 func findRepak() (string, error) {
-	// 1. Bundled next to the binary
+	// 1. Bundled under resources/ (preferred layout)
 	if d := exeDir(); d != "" {
+		if p := filepath.Join(d, "resources", "repak.exe"); fileExists(p) {
+			return p, nil
+		}
+		// Legacy fallback: directly next to the exe.
 		if p := filepath.Join(d, "repak.exe"); fileExists(p) {
 			return p, nil
 		}
@@ -164,8 +172,12 @@ func findRepak() (string, error) {
 }
 
 func findUnrealPak(tswRoot string) (string, error) {
-	// 1. Bundled next to the binary
+	// 1. Bundled under resources/UnrealPakTool (preferred layout)
 	if d := exeDir(); d != "" {
+		if p := filepath.Join(d, "resources", "UnrealPakTool", "UnrealPakTool", "UnrealPak.exe"); fileExists(p) {
+			return p, nil
+		}
+		// Legacy fallback: directly under exeDir.
 		if p := filepath.Join(d, "UnrealPakTool", "UnrealPakTool", "UnrealPak.exe"); fileExists(p) {
 			return p, nil
 		}

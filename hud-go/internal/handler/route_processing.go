@@ -21,7 +21,7 @@ func (h *RouteProcessingHandler) ProcessLatest(w http.ResponseWriter, r *http.Re
 }
 
 func (h *RouteProcessingHandler) List(w http.ResponseWriter, r *http.Request) {
-	dir := filepath.Join(config.AppDir(), "processed_routes")
+	dir := filepath.Join(config.ResourcesDir(), "processed_routes")
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		util.JSON(w, 200, map[string]any{"files": []any{}})
@@ -51,7 +51,7 @@ func (h *RouteProcessingHandler) GetFile(w http.ResponseWriter, r *http.Request)
 	}
 	// Sanitize
 	filename = filepath.Base(filename)
-	filePath := filepath.Join(config.AppDir(), "processed_routes", filename)
+	filePath := filepath.Join(config.ResourcesDir(), "processed_routes", filename)
 
 	data, err := os.ReadFile(filePath)
 	if err != nil {

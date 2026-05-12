@@ -26,14 +26,18 @@ import (
 	"strings"
 	"time"
 
+	"hud-go/internal/devtools"
 	"hud-go/internal/geo"
 	"hud-go/internal/pak"
 )
 
+var (
+	repakBin  = devtools.MustFindBin("repak")
+	uassetBin = devtools.MustFindBin("UAssetGUI")
+)
+
 const (
 	tswPath    = `D:\SteamLibrary\steamapps\common\Train Sim World 6`
-	repakBin   = `C:\Users\hcfai\Desktop\applications_2\hud-go\repak.exe`
-	uassetBin  = `C:\Users\hcfai\Desktop\applications_2\hud-go\UAssetGUI.exe`
 	target     = "TrainingCentre"
 	tileSizeCm = 100_000.0 // 1 km tile in UE cm
 	// Hermite samples per spline segment — 32 keeps even tight S-curves smooth.
