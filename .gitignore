@@ -1,6 +1,4 @@
-hud-go/tsw_hud_backup.db
-hud-go/tsw_hud.db
-hud-go/dist/tsw_hud.db
+hud-go/resources/db/*.db
 tsw_api_reader/node_modules/
 
 hud/
