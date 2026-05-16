@@ -84,8 +84,13 @@ func FilterRouteFeaturesForTimetable(
 ) []map[string]any {
 	usedStructuresFull, usedStructuresLoose, usedNames := buildScheduleIndexes(entries)
 
+	// Spatial index over the path vertices. Replaces the per-feature
+	// linear scan of pathCoords inside the proximity helpers; turns the
+	// hot loop from O(features × verts) into O(features × ~9 cells of
+	// ~handful of verts each). Bbox lives on the index too so we don't
+	// re-scan the path to build it.
+	pathIdx := buildPathIndex(pathCoords)
 	hasPath := len(pathCoords) > 0
-	pathBBox := pathBoundingBox(pathCoords)
 	// The widest threshold in play — anything with a bbox outside this
 	// inflated box can't possibly satisfy any proximity check, so the
 	// pre-cull is safe at this radius.
@@ -95,7 +100,7 @@ func FilterRouteFeaturesForTimetable(
 	for _, feat := range routeFeatures {
 		if keep := keepFeature(
 			feat, usedStructuresFull, usedStructuresLoose, usedNames,
-			pathCoords, pathBBox, cullM, hasPath, opts,
+			pathIdx, cullM, hasPath, opts,
 		); keep {
 			out = append(out, feat)
 		}
@@ -108,8 +113,7 @@ func FilterRouteFeaturesForTimetable(
 func keepFeature(
 	feat map[string]any,
 	usedStructuresFull, usedStructuresLoose, usedNames map[string]struct{},
-	pathCoords []ServiceCoord,
-	pathBBox bbox,
+	pathIdx *pathIndex,
 	cullM float64,
 	hasPath bool,
 	opts FilterOptions,
@@ -142,10 +146,10 @@ func keepFeature(
 			return false
 		}
 		featBB, ok := lineBBox(geom)
-		if !ok || !featBB.intersectsInflated(pathBBox, cullM) {
+		if !ok || !featBB.intersectsInflated(pathIdx.bbox, cullM) {
 			return false
 		}
-		return lineNearPath(geom, pathCoords, opts.MarkerProxM)
+		return lineNearPath(geom, pathIdx, opts.MarkerProxM)
 	}
 
 	if gtype != "Point" {
@@ -179,10 +183,10 @@ func keepFeature(
 			return false
 		}
 		featBB := pointBBox(flat, flng)
-		if !featBB.intersectsInflated(pathBBox, opts.CollectableProxM) {
+		if !featBB.intersectsInflated(pathIdx.bbox, opts.CollectableProxM) {
 			return false
 		}
-		return minDistanceToPathSegmentsM(flat, flng, pathCoords) <= opts.CollectableProxM
+		return minDistanceToPathSegmentsM(flat, flng, pathIdx) <= opts.CollectableProxM
 	}
 
 	// Legacy / typeless point branch — same dispatch the JS does.
@@ -193,20 +197,20 @@ func keepFeature(
 			return false
 		}
 		featBB := pointBBox(flat, flng)
-		if !featBB.intersectsInflated(pathBBox, opts.SignalProxM) {
+		if !featBB.intersectsInflated(pathIdx.bbox, opts.SignalProxM) {
 			return false
 		}
-		return minDistanceToPathSegmentsM(flat, flng, pathCoords) <= opts.SignalProxM
+		return minDistanceToPathSegmentsM(flat, flng, pathIdx) <= opts.SignalProxM
 	case props["jct_guid"] != nil:
 		// Switches: nearest-vertex proximity.
 		if !hasPath {
 			return false
 		}
 		featBB := pointBBox(flat, flng)
-		if !featBB.intersectsInflated(pathBBox, opts.MarkerProxM) {
+		if !featBB.intersectsInflated(pathIdx.bbox, opts.MarkerProxM) {
 			return false
 		}
-		return minDistanceToPathM(flat, flng, pathCoords) <= opts.MarkerProxM
+		return minDistanceToPathM(flat, flng, pathIdx) <= opts.MarkerProxM
 	default:
 		// Legacy platform Point. Strict schedule match, no proximity.
 		return structureMatchesSchedule(props, usedStructuresFull, usedStructuresLoose)
@@ -369,23 +373,23 @@ func extendBboxFromPts(b *bbox, pts []any) {
 // lineNearPath scans every vertex of the LineString/MultiLineString and
 // returns true on the first one within `proxM` segment-distance of the
 // path. Same iteration order as the JS so behaviour matches exactly.
-func lineNearPath(geom map[string]any, pathCoords []ServiceCoord, proxM float64) bool {
+func lineNearPath(geom map[string]any, pathIdx *pathIndex, proxM float64) bool {
 	gtype, _ := geom["type"].(string)
 	if gtype == "MultiLineString" {
 		lines, _ := geom["coordinates"].([]any)
 		for _, ln := range lines {
 			pts, _ := ln.([]any)
-			if scanPtsNearPath(pts, pathCoords, proxM) {
+			if scanPtsNearPath(pts, pathIdx, proxM) {
 				return true
 			}
 		}
 		return false
 	}
 	pts, _ := geom["coordinates"].([]any)
-	return scanPtsNearPath(pts, pathCoords, proxM)
+	return scanPtsNearPath(pts, pathIdx, proxM)
 }
 
-func scanPtsNearPath(pts []any, pathCoords []ServiceCoord, proxM float64) bool {
+func scanPtsNearPath(pts []any, pathIdx *pathIndex, proxM float64) bool {
 	for _, p := range pts {
 		c, _ := p.([]any)
 		if len(c) < 2 {
@@ -393,69 +397,169 @@ func scanPtsNearPath(pts []any, pathCoords []ServiceCoord, proxM float64) bool {
 		}
 		lng, _ := c[0].(float64)
 		lat, _ := c[1].(float64)
-		if minDistanceToPathM(lat, lng, pathCoords) <= proxM {
+		if minDistanceToPathM(lat, lng, pathIdx) <= proxM {
 			return true
 		}
 	}
 	return false
 }
 
-// minDistanceToPathM returns the shortest distance (metres) from a point
-// to any vertex of the path. Mirrors the JS `minDistanceToPath`.
-func minDistanceToPathM(lat, lng float64, pathCoords []ServiceCoord) float64 {
+// minDistanceToPathM returns the shortest distance (metres) from a query
+// point to any vertex of the path. Uses the grid index to skip vertices
+// outside the query's 9-cell neighborhood. Since the cell is sized larger
+// than the max proximity threshold (cellDeg > prox / 111000), any vertex
+// within proxM must be in the neighborhood — so the index is exact for
+// the consumer's threshold-based test.
+func minDistanceToPathM(lat, lng float64, pathIdx *pathIndex) float64 {
+	if pathIdx == nil || len(pathIdx.coords) == 0 {
+		return math.Inf(1)
+	}
 	best := math.Inf(1)
-	for _, c := range pathCoords {
+	pathIdx.forEachNearbyVert(lat, lng, func(i int) bool {
+		c := pathIdx.coords[i]
 		d := equirectMeters(lat, lng, c.Latitude, c.Longitude)
 		if d < best {
 			best = d
 			if best < 1 {
-				return best
+				return false // stop
 			}
 		}
-	}
+		return true
+	})
 	return best
 }
 
 // minDistanceToPathSegmentsM returns the shortest distance (metres) from a
-// point to any segment of the path. Mirrors the JS
-// `minDistanceToPathSegments` — used for signals where the segment-level
-// metric matters (a point can sit between two vertices).
-func minDistanceToPathSegmentsM(lat, lng float64, pathCoords []ServiceCoord) float64 {
-	if len(pathCoords) == 0 {
+// point to any segment of the path. The grid index gives us nearby
+// vertices; for each we check the two adjacent segments (i-1,i) and
+// (i,i+1), deduped. Works as long as path segments don't exceed cellDeg
+// in length (TSW paths sample every ~10–50 m; cellDeg ≈ 70–110 m).
+func minDistanceToPathSegmentsM(lat, lng float64, pathIdx *pathIndex) float64 {
+	if pathIdx == nil || len(pathIdx.coords) == 0 {
 		return math.Inf(1)
 	}
-	if len(pathCoords) == 1 {
-		return equirectMeters(lat, lng, pathCoords[0].Latitude, pathCoords[0].Longitude)
+	coords := pathIdx.coords
+	if len(coords) == 1 {
+		return equirectMeters(lat, lng, coords[0].Latitude, coords[0].Longitude)
 	}
 	best := math.Inf(1)
-	for i := 0; i+1 < len(pathCoords); i++ {
-		a, b := pathCoords[i], pathCoords[i+1]
-		// Project the point onto segment AB in lat/lng-space (the same
-		// approximation the JS uses). Good enough at our scales.
-		ax, ay := a.Longitude, a.Latitude
-		bx, by := b.Longitude, b.Latitude
-		dx, dy := bx-ax, by-ay
-		len2 := dx*dx + dy*dy
-		fx, fy := ax, ay
-		if len2 > 0 {
-			t := ((lng-ax)*dx + (lat-ay)*dy) / len2
-			if t < 0 {
-				t = 0
-			} else if t > 1 {
-				t = 1
+	// Tiny dedup so we don't reproject the same segment twice when both
+	// endpoints land in the neighborhood. Set is bounded by the cell-9
+	// neighborhood size × 2, so a slice scan is faster than a map for
+	// our scales.
+	var seen [32]int
+	seenN := 0
+	pathIdx.forEachNearbyVert(lat, lng, func(i int) bool {
+		for _, segStart := range [2]int{i - 1, i} {
+			if segStart < 0 || segStart+1 >= len(coords) {
+				continue
 			}
-			fx = ax + t*dx
-			fy = ay + t*dy
+			dup := false
+			for k := 0; k < seenN; k++ {
+				if seen[k] == segStart {
+					dup = true
+					break
+				}
+			}
+			if dup {
+				continue
+			}
+			if seenN < len(seen) {
+				seen[seenN] = segStart
+				seenN++
+			}
+			a, b := coords[segStart], coords[segStart+1]
+			ax, ay := a.Longitude, a.Latitude
+			bx, by := b.Longitude, b.Latitude
+			dx, dy := bx-ax, by-ay
+			len2 := dx*dx + dy*dy
+			fx, fy := ax, ay
+			if len2 > 0 {
+				t := ((lng-ax)*dx + (lat-ay)*dy) / len2
+				if t < 0 {
+					t = 0
+				} else if t > 1 {
+					t = 1
+				}
+				fx = ax + t*dx
+				fy = ay + t*dy
+			}
+			d := equirectMeters(lat, lng, fy, fx)
+			if d < best {
+				best = d
+				if best < 0.3 {
+					return false // stop
+				}
+			}
 		}
-		d := equirectMeters(lat, lng, fy, fx)
-		if d < best {
-			best = d
-			if best < 0.3 {
-				return best
+		return true
+	})
+	return best
+}
+
+// pathIndex is a degree-space grid hash over path vertices. Built once
+// per filter run by buildPathIndex; queried per feature so proximity
+// checks see ~9 cells of ~handful of verts each instead of the whole
+// path. Holds the bbox too (single linear scan during build).
+//
+// Cell size is fixed at pathIndexCellDeg, chosen to exceed every
+// proximity threshold the consumer uses (max ~50 m collectables) — at
+// temperate latitudes 0.001° is ~70–110 m, so the 9-cell neighborhood
+// guarantees any vertex within max-prox of the query is reached.
+type pathIndex struct {
+	coords  []ServiceCoord
+	cells   map[int64][]int32
+	cellDeg float64
+	bbox    bbox
+}
+
+const pathIndexCellDeg = 0.001
+
+// packPathCell encodes (cellX, cellY) into a single int64 key for the
+// cells map. Each axis fits comfortably in 32 bits at TSW route scales
+// (a full Earth grid at 0.001° is ~360k × ~180k cells).
+func packPathCell(x, y int) int64 {
+	return int64(int32(x))<<32 | int64(uint32(int32(y)))
+}
+
+func buildPathIndex(coords []ServiceCoord) *pathIndex {
+	p := &pathIndex{
+		coords:  coords,
+		cellDeg: pathIndexCellDeg,
+	}
+	if len(coords) == 0 {
+		return p
+	}
+	p.cells = make(map[int64][]int32, len(coords))
+	for i, c := range coords {
+		p.bbox.extend(c.Latitude, c.Longitude)
+		cx := int(math.Floor(c.Longitude / p.cellDeg))
+		cy := int(math.Floor(c.Latitude / p.cellDeg))
+		k := packPathCell(cx, cy)
+		p.cells[k] = append(p.cells[k], int32(i))
+	}
+	return p
+}
+
+// forEachNearbyVert invokes fn for each path vertex in the 9-cell
+// neighborhood around (lat, lng). Stops when fn returns false (lets
+// callers early-exit on a hit-good-enough best distance).
+func (p *pathIndex) forEachNearbyVert(lat, lng float64, fn func(int) bool) {
+	if p == nil || len(p.cells) == 0 {
+		return
+	}
+	cx := int(math.Floor(lng / p.cellDeg))
+	cy := int(math.Floor(lat / p.cellDeg))
+	for dx := -1; dx <= 1; dx++ {
+		for dy := -1; dy <= 1; dy++ {
+			ids := p.cells[packPathCell(cx+dx, cy+dy)]
+			for _, i := range ids {
+				if !fn(int(i)) {
+					return
+				}
 			}
 		}
 	}
-	return best
 }
 
 // equirectMeters is the equirectangular distance approximation used

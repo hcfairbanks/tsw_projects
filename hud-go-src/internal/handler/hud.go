@@ -327,9 +327,19 @@ func (h *HUDHandler) GetTimetableItems(w http.ResponseWriter, r *http.Request) {
 		timetable = []any{}
 	}
 
+	// Pass through the imported formation's car_count so the HUD can pick
+	// car_stop_signs by consist length without a second round-trip. When
+	// a live TSW subscription for consist length lands, the /stream
+	// payload's vehicleCount overrides this client-side.
+	vehicleCount := h.currentRoute["vehicleCount"]
+	if vehicleCount == nil {
+		vehicleCount = float64(0)
+	}
+
 	util.Success(w, map[string]any{
 		"items":        timetable,
 		"currentIndex": h.timetableIndex,
+		"vehicleCount": vehicleCount,
 	})
 }
 

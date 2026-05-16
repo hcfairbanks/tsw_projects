@@ -77,6 +77,22 @@ func AppDir() string {
 	return filepath.Dir(exe)
 }
 
+// ResolveAppPath turns a config-supplied path into an absolute one.
+// Empty input stays empty. Absolute paths are returned untouched. Relative
+// paths are resolved against AppDir() so they work regardless of the
+// process's cwd — the extractor settings (extractorOutputDir,
+// extractorTempDir) live as relative paths in configuration.json so the
+// hud-go folder is portable.
+func ResolveAppPath(p string) string {
+	if p == "" {
+		return ""
+	}
+	if filepath.IsAbs(p) {
+		return p
+	}
+	return filepath.Join(AppDir(), p)
+}
+
 // ResourcesDir returns the runtime resources directory next to the exe
 // (AppDir()/resources). All non-source runtime data lives under here:
 // configuration.json, the SQLite DB, user-uploaded images, recording

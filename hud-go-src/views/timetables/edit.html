@@ -1337,36 +1337,37 @@
         let stopMarkers = [];
         let pathCoordinates = [];
 
-        // Triggered by the "Build Map Features" button when the per-timetable
-        // feature blob is missing (404 from /map-features). Synchronous build
-        // (~30s on big DLCs) — disable the button + show progress text so the
-        // user knows it's working. On success, re-init the map to pick up
-        // the freshly-built layers.
+        // Builds the per-timetable map-features blob. Called automatically
+        // by initRouteMap on 404, or manually if the auto-build failed
+        // and the user clicks the (then-visible) "Build Map Features"
+        // button to retry. Server-side build is synchronous (5-30 s on
+        // most DLCs); we surface a status string + re-init the map when
+        // done so the freshly-built layers render in place.
+        let mapBuildInFlight = false;
         async function buildMapFeaturesForThisTimetable() {
+            if (mapBuildInFlight) return;
+            mapBuildInFlight = true;
             const btn = document.getElementById('buildFeaturesBtn');
             const status = document.getElementById('buildFeaturesStatus');
-            btn.disabled = true;
-            const originalLabel = btn.textContent;
-            btn.textContent = 'Building…';
-            status.textContent = 'building (~30s)…';
+            if (btn) btn.style.display = 'none';
+            if (status) status.textContent = 'Building map data…';
             try {
                 const r = await fetch('/api/timetables/' + timetableId + '/build-map-features', { method: 'POST' });
                 if (!r.ok) {
-                    status.textContent = 'failed: ' + await r.text();
-                    btn.disabled = false;
-                    btn.textContent = originalLabel;
+                    if (status) status.textContent = 'failed: ' + await r.text();
+                    if (btn) btn.style.display = ''; // expose for manual retry
+                    mapBuildInFlight = false;
                     return;
                 }
-                status.textContent = 'built — refreshing map';
-                btn.style.display = 'none';
+                if (status) status.textContent = '';
+                mapBuildInFlight = false;
                 // Re-init the map: pulls the freshly-written features blob
                 // and redraws all layer groups in one shot.
                 await initRouteMap();
-                status.textContent = '';
             } catch (e) {
-                status.textContent = 'error: ' + e.message;
-                btn.disabled = false;
-                btn.textContent = originalLabel;
+                if (status) status.textContent = 'error: ' + e.message;
+                if (btn) btn.style.display = '';
+                mapBuildInFlight = false;
             }
         }
 
@@ -1610,11 +1611,13 @@
                     // canonical filter rules.
                     const r = await fetch('/api/timetables/' + timetableId + '/map-features');
                     if (r.status === 404) {
-                        // No pre-built features yet — surface the "Build Map
-                        // Features" button so the user can populate them on
-                        // demand without leaving the page.
-                        const btn = document.getElementById('buildFeaturesBtn');
-                        if (btn) btn.style.display = '';
+                        // No pre-built features — kick off the build
+                        // automatically so layers appear without a manual
+                        // click. Same behaviour as the show page; the
+                        // button stays around as a manual retry option
+                        // when the build fails.
+                        buildMapFeaturesForThisTimetable();
+                        return; // initRouteMap re-fires when the build completes
                     } else if (r.ok) {
                         const md = await r.json();
                         const feats = (md && Array.isArray(md.features)) ? md.features : [];

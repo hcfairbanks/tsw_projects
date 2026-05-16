@@ -945,7 +945,7 @@
         "trackingMapQrLabel": "Scan to open Tracking Map"
     },
     "weather": {
-        "title": "Weather Control",
+        "title": "Weather",
         "currentWeather": "Current Weather",
         "setWeather": "Set Weather",
         "temperature": "Temperature",

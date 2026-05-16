@@ -594,8 +594,49 @@
     <script src="/js/leaflet-extras.js"></script>
     <script src="/js/service-map.js"></script>
     <script>
-        // Initialize the map
-        const map = L.map('map').setView([52.0, -1.5], 6);
+        // Initialize the map. preferCanvas: true — matches every other
+        // map surface (route show, timetable show/edit, HUD overlays);
+        // SVG path-per-feature rendering chokes on big DLCs' thousands
+        // of track segments + signals + switches.
+        const map = L.map('map', { preferCanvas: true }).setView([52.0, -1.5], 6);
+
+        // Live consist length the picker uses; sourced from the route-
+        // data response (initial) and from /stream vehicleCount (live
+        // updates once the TSW subscription for CurrentFormation.
+        // FormationLength is reporting).
+        var currentVehicleCount = 0;
+
+        // Rewrite each timetable entry's lat/lng with the car_stop_sign
+        // matching the current consist length. Same picker as the HUDs:
+        // exact-count match first, generic max=0 second, otherwise the
+        // server's resolved coord stands. Called before stops are drawn
+        // and again whenever vehicleCount changes.
+        function applyDynamicStopCoords(entries) {
+            if (!entries || !entries.length) return;
+            entries.forEach(function (item) {
+                var signs = item.car_stop_signs;
+                if (!signs || !signs.length) return;
+                var pick = null;
+                for (var i = 0; i < signs.length; i++) {
+                    if (signs[i].max_rail_vehicles === currentVehicleCount) {
+                        pick = signs[i];
+                        break;
+                    }
+                }
+                if (!pick) {
+                    for (var i = 0; i < signs.length; i++) {
+                        if (signs[i].max_rail_vehicles === 0) {
+                            pick = signs[i];
+                            break;
+                        }
+                    }
+                }
+                if (pick) {
+                    item.latitude = pick.latitude;
+                    item.longitude = pick.longitude;
+                }
+            });
+        }
 
         // Basemap switcher (Map / Satellite / Topo) shared with the route page.
         LeafletExtras.attachBasemapControls(map);
@@ -666,15 +707,20 @@
             }
         }
 
-        let activeGameStream = null;
+        // "Load From Game" piggybacks on the page's main eventSource (the
+        // one opened further down for the live position stream). When the
+        // user clicks the button we register a per-message callback that
+        // watches for currentServiceName and fires the timetable-detect
+        // flow; when it's null we don't do anything. Previously this
+        // opened a second EventSource('/stream'), doubling the SSE
+        // fan-out during detection — same anti-pattern we fixed on the
+        // HUD pages.
+        let loadFromGameCallback = null;
 
         function cancelLoadFromGame() {
             const btn = document.getElementById('loadFromGameBtn');
             const statusEl = document.getElementById('loadFromGameStatus');
-            if (activeGameStream) {
-                activeGameStream.close();
-                activeGameStream = null;
-            }
+            loadFromGameCallback = null;
             btn.textContent = 'Load From Game';
             btn.classList.remove('following');
             statusEl.style.display = 'none';
@@ -686,7 +732,7 @@
             const statusEl = document.getElementById('loadFromGameStatus');
 
             // If already running, cancel
-            if (activeGameStream) {
+            if (loadFromGameCallback) {
                 cancelLoadFromGame();
                 return;
             }
@@ -697,13 +743,11 @@
             statusEl.style.color = '#666';
             statusEl.textContent = 'Connecting to TSW...';
 
-            const gameStream = new EventSource('/stream');
-            activeGameStream = gameStream;
             let attempts = 0;
             const maxAttempts = 300;
 
             function resetBtn(errorMsg) {
-                activeGameStream = null;
+                loadFromGameCallback = null;
                 btn.classList.remove('following');
                 if (errorMsg) {
                     statusEl.style.color = '#ff0000';
@@ -712,20 +756,12 @@
                 btn.textContent = 'Load From Game';
             }
 
-            gameStream.onmessage = function(event) {
-                if (activeGameStream !== gameStream) return;
+            loadFromGameCallback = function(data) {
                 attempts++;
-                let data;
-                try {
-                    data = JSON.parse(event.data);
-                } catch (e) {
-                    return;
-                }
 
                 if (data.waiting) {
                     statusEl.textContent = 'Waiting for TSW connection... (' + attempts + ')';
                     if (attempts > maxAttempts) {
-                        gameStream.close();
                         resetBtn('Could not connect to TSW. Make sure the game is running.');
                     }
                     return;
@@ -737,14 +773,17 @@
                 if (!serviceName) {
                     statusEl.textContent = 'Connected - waiting for service... (' + attempts + ')';
                     if (attempts > maxAttempts) {
-                        gameStream.close();
                         resetBtn('No service detected. Start a service in TSW.');
                     }
                     return;
                 }
 
                 statusEl.textContent = 'Service: ' + serviceName + ' - detecting timetable...';
-                gameStream.close();
+                // Service detected — unregister this callback so we
+                // don't fire the load flow on every subsequent stream
+                // tick. The main eventSource keeps running for the
+                // live position layer.
+                loadFromGameCallback = null;
 
                 let detectUrl = '/api/timetables/detect?current_service_name=' + encodeURIComponent(serviceName);
                 if (position && position.latitude && position.longitude) {
@@ -789,7 +828,6 @@
 
                                     statusEl.style.color = '#00cc66';
                                     statusEl.textContent = 'Loaded!';
-                                    activeGameStream = null;
                                     btn.classList.remove('following');
                                     btn.textContent = 'Load From Game';
                                 })
@@ -803,11 +841,6 @@
                     .catch(function(err) {
                         resetBtn('Error: ' + err.message);
                     });
-            };
-
-            gameStream.onerror = function() {
-                gameStream.close();
-                resetBtn('Connection error. Is the server running?');
             };
         }
 
@@ -1634,6 +1667,14 @@
                 opacity: 0.6
             });
 
+            // Rewrite each entry's lat/lng to the car_stop_sign matching
+            // the imported consist length, mirroring the HUD's
+            // applyDynamicStopCoords. The server populates car_stop_signs[]
+            // + vehicleCount on each entry; we pick the exact-count sign
+            // first, generic max=0 second, leave the rest alone.
+            currentVehicleCount = Number(data.vehicleCount) || 0;
+            applyDynamicStopCoords(data.timetable);
+
             // Build stop markers without adding them to the map yet.
             const stopMarkerLayers = [];
             if (data.timetable && data.timetable.length > 0) {
@@ -1775,6 +1816,20 @@
 
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
+
+            // Pump any registered short-lived consumers off the same
+            // stream (Load From Game flow). Previously each spun up its
+            // own EventSource('/stream') — wasteful while polling.
+            if (loadFromGameCallback) loadFromGameCallback(data);
+
+            // Pick up live consist length so future timetable loads use
+            // the right car_stop_sign. Doesn't re-position already-drawn
+            // markers — that'd require finding each L.circleMarker and
+            // calling setLatLng; out of scope here. Refresh the map to
+            // re-pick if the consist changes mid-session.
+            if (typeof data.vehicleCount === 'number') {
+                currentVehicleCount = data.vehicleCount;
+            }
 
             // Update speed and direction
             if (data.speed !== undefined) {

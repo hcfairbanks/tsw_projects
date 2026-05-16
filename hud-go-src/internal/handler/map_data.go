@@ -464,14 +464,69 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 	// Get entries and build timetable array
 	timetableArray := buildTimetableArrayFromEntries(h.db, timetableID)
 
+	// Attach ALL car_stop_signs for each entry's platform so the HUD can
+	// pick dynamically (e.g. when the player's consist changes mid-run).
+	// Default coords in timetableArray still reflect the import-time
+	// resolver's pick — this is just extra data for live overrides.
+	if routeID != nil {
+		signsByEntry := map[int][]map[string]any{}
+		signRows, err := h.db.Query(`
+			SELECT te.id, css.max_rail_vehicles, css.latitude, css.longitude
+			FROM timetable_entries te
+			JOIN locations l ON l.id = te.location_id
+			JOIN car_stop_signs css
+			  ON css.route_id = ?
+			 AND css.platform_name = TRIM(l.name || ' ' ||
+			     COALESCE(te.structure, '') || ' ' ||
+			     COALESCE(te.structure_number, ''))
+			WHERE te.timetable_id = ?
+			ORDER BY te.id, css.max_rail_vehicles`,
+			*routeID, timetableID)
+		if err == nil {
+			defer signRows.Close()
+			for signRows.Next() {
+				var eid, maxV int
+				var lat, lng float64
+				if err := signRows.Scan(&eid, &maxV, &lat, &lng); err == nil {
+					signsByEntry[eid] = append(signsByEntry[eid], map[string]any{
+						"max_rail_vehicles": maxV,
+						"latitude":          lat,
+						"longitude":         lng,
+					})
+				}
+			}
+		}
+		for _, item := range timetableArray {
+			if id, ok := item["id"].(int); ok {
+				if signs, ok := signsByEntry[id]; ok {
+					item["car_stop_signs"] = signs
+				}
+			}
+		}
+	}
+
+	// vehicleCount sourced from the timetable's formation. Static for
+	// now; once a live TSW subscription for consist length lands, the
+	// /stream payload's vehicleCount overrides this client-side.
+	var vehicleCount sql.NullInt64
+	h.db.QueryRow(`
+		SELECT f.car_count FROM formations f
+		JOIN timetables t ON t.formation_id = f.id
+		WHERE t.id = ?`, timetableID).Scan(&vehicleCount)
+	vc := int64(0)
+	if vehicleCount.Valid {
+		vc = vehicleCount.Int64
+	}
+
 	util.JSON(w, http.StatusOK, map[string]any{
-		"routeName":   serviceName,
-		"routeId":     routeID,
-		"timetableId": timetableID,
-		"totalPoints": len(coordinates),
-		"coordinates": coordinates,
-		"markers":     markers,
-		"timetable":   timetableArray,
+		"routeName":    serviceName,
+		"routeId":      routeID,
+		"timetableId":  timetableID,
+		"totalPoints":  len(coordinates),
+		"coordinates":  coordinates,
+		"markers":      markers,
+		"timetable":    timetableArray,
+		"vehicleCount": vc,
 	})
 }
 

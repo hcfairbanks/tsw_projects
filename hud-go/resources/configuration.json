@@ -18,8 +18,8 @@
   "enableSubscriptions": true,
   "colorScheme": "default",
   "extractorTswPath": "D:/SteamLibrary/steamapps/common/Train Sim World 6",
-  "extractorOutputDir": "C:/Users/hcfai/Desktop/routes_data/new",
-  "extractorTempDir": "C:/Users/hcfai/Desktop/routes_data/temp",
+  "extractorOutputDir": "routes_data/new",
+  "extractorTempDir": "routes_data/temp",
   "extractorAutoImport": false,
   "extractorBuildTimetableMaps": false
 }

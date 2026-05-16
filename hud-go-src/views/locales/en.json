@@ -959,7 +959,7 @@
         "trackingMapQrLabel": "Scan to open Tracking Map"
     },
     "weather": {
-        "title": "Weather Control",
+        "title": "Weather",
         "currentWeather": "Current Weather",
         "setWeather": "Set Weather",
         "temperature": "Temperature",
@@ -1234,7 +1234,7 @@
         "extractedSelected": "Extract ({count})",
         "stopRequested": "⏸ stop requested by user",
         "stopError": "stop error",
-        "autoImport": "Auto Update / Import:",
-        "autoImportDesc": "Wipe + re-import each route into the DB after extraction"
+        "autoImport": "Import Data:",
+        "autoImportDesc": "Remove the existing route and rebuild"
     }
 }

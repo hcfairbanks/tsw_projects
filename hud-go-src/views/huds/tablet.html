@@ -2264,6 +2264,14 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             var temp = data.weather ? data.weather.Temperature : null;
             draw(Math.round(data.speed), data.limit, data.isSlipping, data.powerHandle, data.incline, data.nextSpeedLimit, data.distanceToNextSpeedLimit, data.trainBreak, data.trainBrakeActive, data.locomotiveBrakeHandle, data.locomotiveBrakeActive, data.electricDynamicBrake, data.electricBrakeActive, data.isTractionLocked, data.localTime, data.timetableTime, data.timetableLabel, data.distanceToStation, data.reverser, data.doorFrontLeft, data.doorFrontRight, data.distanceUnits, currentPlayerPosition, temp, data.temperatureUnits, lastDistanceToSignal, lastSignalAspectClass);
 
+            // Live consist length from TSW — when it changes, re-pick the
+            // per-stop car_stop_sign so distance-to-stop matches the
+            // actual stop point for the current consist length.
+            if (typeof data.vehicleCount === 'number' && data.vehicleCount !== currentVehicleCount) {
+                currentVehicleCount = data.vehicleCount;
+                applyDynamicStopCoords();
+            }
+
             // Mirror the player position onto the map overlay's train marker.
             // Previously a second EventSource('/stream') was opened just for
             // this — wasteful (double the bandwidth + server-side broadcast
@@ -2812,6 +2820,40 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
         // Timetable Station Selector (Canvas-based)
         // =============================================
 
+        // Latest known vehicle count for the player's consist; used by
+        // applyDynamicStopCoords to pick the matching car_stop_sign per
+        // platform. Initially sourced from /api/timetable-items (imported
+        // formation's car_count); /stream's vehicleCount overrides when a
+        // live TSW subscription for consist length is wired.
+        var currentVehicleCount = 0;
+
+        function applyDynamicStopCoords() {
+            if (!cachedTimetableItems || !cachedTimetableItems.length) return;
+            cachedTimetableItems.forEach(function (item) {
+                var signs = item.car_stop_signs;
+                if (!signs || !signs.length) return;
+                var pick = null;
+                for (var i = 0; i < signs.length; i++) {
+                    if (signs[i].max_rail_vehicles === currentVehicleCount) {
+                        pick = signs[i];
+                        break;
+                    }
+                }
+                if (!pick) {
+                    for (var i = 0; i < signs.length; i++) {
+                        if (signs[i].max_rail_vehicles === 0) {
+                            pick = signs[i];
+                            break;
+                        }
+                    }
+                }
+                if (pick) {
+                    item.latitude = pick.latitude;
+                    item.longitude = pick.longitude;
+                }
+            });
+        }
+
         // Load timetable items once (called on page load and after timetable selection)
         async function loadTimetableItems() {
             try {
@@ -2821,6 +2863,8 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                 if (data.items && data.items.length > 0) {
                     // Cache items for canvas drawing
                     cachedTimetableItems = data.items;
+                    currentVehicleCount = Number(data.vehicleCount) || 0;
+                    applyDynamicStopCoords();
 
                     // currentIndex is the "arrived at" index, so target is currentIndex + 1
                     const targetIndex = Math.max(0, data.currentIndex + 1);

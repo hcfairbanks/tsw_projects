@@ -3726,8 +3726,15 @@ func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID,
 		cars = int(carCount.Int64)
 	}
 
-	// One correlated subquery per row. The CASE in ORDER BY picks the
-	// per-bound extreme; LIMIT 1 collapses to a single FK.
+	// One correlated subquery per row. Specificity wins first — a sign
+	// whose max_rail_vehicles matches this train's car_count beats every
+	// max=0 fallback regardless of where they sit longitudinally — and
+	// direction is only the tiebreaker among equally-specific signs. The
+	// older "direction first" ORDER BY meant that for a 6-car southbound
+	// train at Boston Back Bay Track 1, the lowest-latitude `max=0` sign
+	// (id=17 at the platform's west end) outranked the actual 6-car
+	// stop point (id=75, ~80 m east). The HUD then reported the player as
+	// 80+ m off their first stop.
 	_, err := h.db.Exec(`
 		UPDATE timetable_entries
 		SET car_stop_sign_id = (
@@ -3739,15 +3746,20 @@ func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID,
 			      COALESCE(timetable_entries.structure_number, ''))
 			  AND (css.max_rail_vehicles = ? OR css.max_rail_vehicles = 0)
 			ORDER BY
+			  -- (1) Prefer car-class-specific signs over the maxCars=0
+			  --     fallback. 0 = match this train's car_count exactly,
+			  --     1 = generic max=0 sign.
+			  CASE WHEN css.max_rail_vehicles = 0 THEN 1 ELSE 0 END,
+			  -- (2) Within equally-specific signs, pick the directional
+			  --     extreme — northbound trains stop at the north end of
+			  --     the platform, etc.
 			  CASE ?
 				WHEN 'northbound' THEN -css.latitude
 				WHEN 'southbound' THEN  css.latitude
 				WHEN 'eastbound'  THEN -css.longitude
 				WHEN 'westbound'  THEN  css.longitude
 				ELSE 0
-			  END,
-			  -- Prefer car-class-specific signs over the maxCars=0 fallback.
-			  CASE WHEN css.max_rail_vehicles = 0 THEN 1 ELSE 0 END
+			  END
 			LIMIT 1
 		)
 		WHERE timetable_entries.timetable_id = ?

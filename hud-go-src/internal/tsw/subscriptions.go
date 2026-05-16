@@ -30,6 +30,11 @@ var subscriptionEndpoints = []string{
 	"/subscription/CurrentDrivableActor.Function.HUD_GetIsTractionLocked?Subscription=1",
 	"/subscription/CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue?Subscription=1",
 	"/subscription/CurrentFormation/1/Door_PassengerDoor_BL.Function.GetCurrentOutputValue?Subscription=1",
+	// CurrentFormation.FormationLength returns the player's live consist
+	// length as {Values: {FormationLength: N}}. Feeds the HUD's
+	// applyDynamicStopCoords so distance-to-stop tracks the actual stop
+	// point for the current consist (after uncouples / formation swaps).
+	"/subscription/CurrentFormation.FormationLength?Subscription=1",
 	"/subscription/CurrentDrivableActor/PassengerDoor_FR.Function.GetCurrentInputValue?Subscription=1",
 	"/subscription/CurrentDrivableActor/PassengerDoor_FL.Function.GetCurrentInputValue?Subscription=1",
 	"/subscription/WeatherManager.Data?Subscription=1",

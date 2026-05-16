@@ -422,34 +422,42 @@
             return best;
         }
 
-        // Generate the timetable's map features blob on demand. Called by
-        // the inline "Generate Map" button that appears when the map
-        // features for this timetable haven't been built yet (404 from
-        // /api/timetables/{id}/map-features). Synchronous on the server —
-        // can take 30 sec to a few minutes; the button is replaced with a
-        // status spinner while in flight.
-        async function generateTimetableMap() {
-            if (!confirm('Generating the map data for this timetable can take 2-3 minutes. Continue?')) return;
+        // Single shared "build map features" implementation. Triggered
+        // automatically on 404 by initRouteMap, or manually via the
+        // (now hidden by default) "Generate Map" button. Synchronous on
+        // the server — 5-30 sec on most DLCs; the page surfaces a status
+        // message while in flight and re-fires initRouteMap when done so
+        // the freshly-built layers render in place.
+        let mapBuildInFlight = false;
+        async function autoBuildTimetableMap() {
+            if (mapBuildInFlight) return;
+            mapBuildInFlight = true;
             const btn = document.getElementById('generateMapBtn');
             const status = document.getElementById('generateMapStatus');
-            if (btn) btn.disabled = true;
-            if (status) status.textContent = 'Building map data… (2-3 min)';
+            if (btn) btn.style.display = 'none';
+            if (status) status.textContent = 'Building map data…';
             try {
                 const res = await fetch('/api/timetables/' + timetableId + '/build-map-features', { method: 'POST' });
                 if (!res.ok) {
                     if (status) status.textContent = 'Build failed: ' + await res.text();
-                    if (btn) btn.disabled = false;
+                    mapBuildInFlight = false;
                     return;
                 }
-                if (status) status.textContent = 'Done.';
-                if (btn) btn.style.display = 'none';
+                if (status) status.textContent = '';
+                mapBuildInFlight = false;
                 // Re-render the map now that features exist.
                 initRouteMap();
-                setTimeout(function() { if (status) status.textContent = ''; }, 3000);
             } catch (e) {
                 if (status) status.textContent = 'Error: ' + e.message;
-                if (btn) btn.disabled = false;
+                mapBuildInFlight = false;
             }
+        }
+
+        // Legacy button handler — kept for the case where the auto-build
+        // failed and the user wants to retry manually. Calls the same
+        // path under the hood.
+        function generateTimetableMap() {
+            autoBuildTimetableMap();
         }
 
         function toggleRouteMap() {
@@ -608,12 +616,13 @@
                 try {
                     const r = await fetch('/api/timetables/' + timetableId + '/map-features');
                     if (r.status === 404) {
-                        // Map data hasn't been built yet for this timetable.
-                        // Show the explicit "Generate Map" button so the
-                        // user can opt in to a 2-3 minute build instead of
-                        // us blocking the page load on it.
-                        const gb = document.getElementById('generateMapBtn');
-                        if (gb) gb.style.display = 'inline-block';
+                        // Map data hasn't been built yet — kick off the
+                        // build automatically so users see layers without
+                        // clicking a button. Behaviour matches the edit
+                        // page; both surface a status string while the
+                        // server-side build runs (5-30s on most DLCs).
+                        autoBuildTimetableMap();
+                        return; // initRouteMap re-fires when the build completes
                     } else if (r.ok) {
                         const md = await r.json();
                         const feats = (md && Array.isArray(md.features)) ? md.features : [];

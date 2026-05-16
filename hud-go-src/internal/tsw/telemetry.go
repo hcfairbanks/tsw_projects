@@ -222,6 +222,15 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 			if v, ok := values["ReturnValue"].(float64); ok {
 				data["doorFrontLeft"] = v > 0
 			}
+		case "CurrentFormation.FormationLength":
+			// Player's live consist length. Streamed as data.vehicleCount;
+			// the HUD's applyDynamicStopCoords re-picks the car_stop_sign
+			// per stop on change so distance-to-stop matches the actual
+			// in-game stop point for the current consist.
+			if v, ok := values["FormationLength"].(float64); ok {
+				data["vehicleCount"] = int(v)
+			}
+
 		case "CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue":
 			if v, ok := values["ReturnValue"].(float64); ok {
 				if data["doorFrontRight"] == nil {

@@ -35,3 +35,7 @@ bot/run_report.txt
 
 # Unpacked TSW6 pak content (tens of GB; reproducible from the install)
 map_files/
+
+# Extractor output + scratch dirs (per-route export zips and pak unpack temp).
+# Live next to the exe so the hud-go folder is portable; not part of source.
+hud-go/routes_data/

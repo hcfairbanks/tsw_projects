@@ -141,7 +141,7 @@ type extractorEvent struct {
 func (h *ExtractorHandler) ListRoutes(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Get()
 	tswPath := strings.TrimSpace(cfg.ExtractorTswPath)
-	outDir := strings.TrimSpace(cfg.ExtractorOutputDir)
+	outDir := config.ResolveAppPath(strings.TrimSpace(cfg.ExtractorOutputDir))
 	if tswPath == "" {
 		util.Error(w, http.StatusBadRequest, "extractorTswPath setting is empty")
 		return
@@ -217,7 +217,7 @@ func (h *ExtractorHandler) snapshotStatus() map[string]any {
 func (h *ExtractorHandler) Start(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Get()
 	tswPath := strings.TrimSpace(cfg.ExtractorTswPath)
-	outDir := strings.TrimSpace(cfg.ExtractorOutputDir)
+	outDir := config.ResolveAppPath(strings.TrimSpace(cfg.ExtractorOutputDir))
 	if tswPath == "" {
 		util.Error(w, http.StatusBadRequest, "extractorTswPath setting is empty")
 		return
@@ -262,7 +262,7 @@ func (h *ExtractorHandler) Start(w http.ResponseWriter, r *http.Request) {
 	}
 	h.stateMu.Unlock()
 
-	go h.runJob(ctx, tswPath, outDir, cfg.ExtractorTempDir, selected, skipExisting)
+	go h.runJob(ctx, tswPath, outDir, config.ResolveAppPath(cfg.ExtractorTempDir), selected, skipExisting)
 
 	// Surface the resolved route list (codename + display name) so the UI
 	// can tell the user which child paks were auto-pulled in via the
@@ -396,7 +396,7 @@ func (h *ExtractorHandler) DeleteZip(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cfg := config.Get()
-	outDir := strings.TrimSpace(cfg.ExtractorOutputDir)
+	outDir := config.ResolveAppPath(strings.TrimSpace(cfg.ExtractorOutputDir))
 	if outDir == "" {
 		util.Error(w, http.StatusBadRequest, "extractorOutputDir setting is empty")
 		return
@@ -944,7 +944,7 @@ func (h *ExtractorHandler) runCatalogScan(tswPath string, force bool) (catalog.S
 	if err := cfg.AutoDetect(); err != nil {
 		return catalog.ScanResult{}, fmt.Errorf("auto-detect tools: %w", err)
 	}
-	scratch := strings.TrimSpace(config.Get().ExtractorTempDir)
+	scratch := config.ResolveAppPath(strings.TrimSpace(config.Get().ExtractorTempDir))
 	if scratch == "" {
 		scratch = os.TempDir()
 	}

@@ -27,7 +27,7 @@
         .progress-summary { margin-left: auto; font-size: 14px; color: var(--text-muted); }
         .progress-summary strong { color: var(--accent-color); }
 
-        .settings-row { display: grid; grid-template-columns: 160px 1fr auto; gap: 12px; align-items: center; margin-bottom: 8px; }
+        .settings-row { display: grid; grid-template-columns: 220px 1fr auto; gap: 12px; align-items: center; margin-bottom: 8px; }
         .settings-row label { font-weight: bold; }
         .settings-row input { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 13px; }
 
@@ -100,13 +100,13 @@
     </style>
 </head>
 <body>
-    <nav id="main-nav"></nav>
-
     <h1 data-i18n="extractor.title">TSW6 Extractor</h1>
 
-    <!-- Settings (collapsed by default) -->
+    <nav id="main-nav"></nav>
+
+    <!-- Settings (open by default) -->
     <div class="card">
-        <details>
+        <details open>
             <summary data-i18n="extractor.settings">Settings</summary>
             <div style="margin-top: 12px;">
                 <div class="settings-row">
@@ -129,10 +129,10 @@
                      timetables / coords / markers / car-stop signs) and runs
                      the same import logic /api/routes/import-zip uses. -->
                 <div class="settings-row">
-                    <label for="cfgAutoImport" data-i18n="extractor.autoImport">Auto Update / Import:</label>
+                    <label for="cfgAutoImport" data-i18n="extractor.autoImport">Import Data:</label>
                     <label style="justify-self:start;">
                         <input id="cfgAutoImport" type="checkbox" onchange="saveCfgBoolField('extractorAutoImport', 'cfgAutoImport')">
-                        <span data-i18n="extractor.autoImportDesc">Wipe + re-import each route into the DB after extraction</span>
+                        <span data-i18n="extractor.autoImportDesc">Remove the existing route and rebuild</span>
                     </label>
                     <span></span>
                 </div>
@@ -140,7 +140,7 @@
                     <label for="cfgBuildTimetableMaps" data-i18n="extractor.buildTimetableMaps">Build Timetable Maps:</label>
                     <label style="justify-self:start;">
                         <input id="cfgBuildTimetableMaps" type="checkbox" onchange="saveCfgBoolField('extractorBuildTimetableMaps', 'cfgBuildTimetableMaps')">
-                        <span data-i18n="extractor.buildTimetableMapsDesc">Pre-build per-timetable map data during import. SLOW on big DLCs (~30 sec per timetable). Off by default; build on demand from the route or timetable pages instead.</span>
+                        <span data-i18n="extractor.buildTimetableMapsDesc">Building timetable maps during export creates large files and is very slow.</span>
                     </label>
                     <span></span>
                 </div>
