@@ -53,6 +53,14 @@ func (h *SubscriptionHandler) GetData(w http.ResponseWriter, r *http.Request) {
 // when EnableSubscriptions was off at boot and toggled on later.
 func (h *SubscriptionHandler) Reset(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Get()
+	// Honour --no-subscriptions / enableSubscriptions=false in the config.
+	// Without this guard, any UI auto-call (start page bootstrap, HUD
+	// connect, etc.) restarts the polling loop even when the user asked
+	// for it off at boot.
+	if !cfg.EnableSubscriptions {
+		util.Error(w, http.StatusServiceUnavailable, "subscriptions disabled (enableSubscriptions=false in config, or --no-subscriptions flag)")
+		return
+	}
 	if key := tsw.ReloadAPIKey(h.client, cfg); key == "" {
 		util.Error(w, http.StatusServiceUnavailable, "no API key available — start TSW6 once so it generates CommAPIKey.txt, or set apiKey in /settings")
 		return
@@ -79,6 +87,10 @@ func (h *SubscriptionHandler) Delete(w http.ResponseWriter, r *http.Request) {
 // loop-start reasoning as Reset.
 func (h *SubscriptionHandler) Create(w http.ResponseWriter, r *http.Request) {
 	cfg := config.Get()
+	if !cfg.EnableSubscriptions {
+		util.Error(w, http.StatusServiceUnavailable, "subscriptions disabled (enableSubscriptions=false in config, or --no-subscriptions flag)")
+		return
+	}
 	if key := tsw.ReloadAPIKey(h.client, cfg); key == "" {
 		util.Error(w, http.StatusServiceUnavailable, "no API key available — start TSW6 once so it generates CommAPIKey.txt, or set apiKey in /settings")
 		return

@@ -970,7 +970,26 @@ func (h *ExtractorHandler) runCatalogScan(tswPath string, force bool) (catalog.S
 			})
 		},
 	}
-	return catalog.ScanCatalog(h.db, tswPath, tools, force)
+	res, err := catalog.ScanCatalog(h.db, tswPath, tools, force)
+	if err != nil {
+		// Surface the failure as a styled log line too so the live log
+		// reflects what the HTTP response also reports.
+		h.broadcast(extractorEvent{
+			Type:      "catalog_log",
+			Message:   "— Scan FAILED: " + err.Error() + " —",
+			Timestamp: time.Now().Unix(),
+		})
+		return res, err
+	}
+	// Distinct event type so the frontend can render this in green and
+	// distinguish "scan finished" from regular per-pak progress lines.
+	h.broadcast(extractorEvent{
+		Type: "catalog_done",
+		Message: fmt.Sprintf("— Scan Finished — %d added, %d updated, %d unchanged, %d removed",
+			res.Added, res.Updated, res.Skipped, res.Removed),
+		Timestamp: time.Now().Unix(),
+	})
+	return res, nil
 }
 
 // Rescan rebuilds the pak_catalog table from scratch — empties it

@@ -993,7 +993,7 @@ function drawStationSelector(options, timetableItems, selectedIdx, playerPositio
         // read as "VIA Location" instead of "Unknown [VIA]".
         var displayName;
         if (item.isPassThrough && !item.location) {
-            displayName = 'VIA Location';
+            displayName = 'As Indicated';
         } else {
             displayName = item.location || 'Unknown';
             if (item.isPassThrough) {
@@ -1070,7 +1070,7 @@ function drawTimetableBox(options, timetableTime, timetableLabel, distanceToStat
         displayArrival = selectedStation.arrival || '--:--:--';
         displayDeparture = selectedStation.departure || '--:--:--';
         if (selectedStation.isPassThrough && !selectedStation.location) {
-            displayLabel = 'VIA Location';
+            displayLabel = 'As Indicated';
         } else {
             displayLabel = selectedStation.location || '';
             if (selectedStation.isPassThrough) {

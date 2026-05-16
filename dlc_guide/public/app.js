@@ -358,6 +358,7 @@ async function fetchDlc() {
         <td class="td-actions" style="white-space:nowrap">
           ${cartBtn(d)}
           <button class="pill pill-amber btn-related" data-id="${d.id}" title="Show related DLCs">+</button>
+          ${ownedBtn(d)}
         </td>
       </tr>
       <tr class="related-row hidden" id="related-${d.id}">
@@ -385,6 +386,7 @@ async function fetchDlc() {
     toggleRelated(b.dataset.id, b);
   });
   wireCartButtons();
+  wireOwnedButtons();
 
   const total = Math.ceil(data.total / data.limit);
   const pag = document.getElementById('dlc-pagination');
@@ -1831,9 +1833,11 @@ function cartBtn(dlc) {
 
 function ownedBtn(dlc) {
   const owned = !!dlc.owned;
-  return `<button class="btn-cart ${owned ? 'in-cart' : ''}" data-owned-id="${dlc.id}"
-    title="${owned ? 'Mark as not owned' : 'Mark as owned'}"
-    onclick="event.stopPropagation()" style="${owned ? 'border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.1)' : ''}">${owned ? '\u2713' : '+'}</button>`;
+  const ownedStyle = 'border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.1)';
+  const addStyle   = 'border-color:var(--success);color:var(--success);background:rgba(34,197,94,0.08)';
+  return `<button class="btn-cart" data-owned-id="${dlc.id}"
+    title="${owned ? 'Remove from library' : 'Add to library'}"
+    onclick="event.stopPropagation()" style="${owned ? ownedStyle : addStyle}">${owned ? '\u2713' : '+'}</button>`;
 }
 
 function wireCartButtons() {
@@ -1856,9 +1860,8 @@ function wireOwnedButtons() {
     btn.onclick = async e => {
       e.stopPropagation();
       const id = btn.dataset.ownedId;
-      const owned = btn.classList.contains('in-cart');
+      const owned = btn.textContent.trim() === '✓';
       await PUT(`/dlc/${id}/owned`, { owned: !owned });
-      // Re-render the current page to reflect changes
       route(location.pathname);
     };
   });

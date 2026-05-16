@@ -45,6 +45,13 @@ type Options struct {
 	CountryCode           string
 	CrossPakReferenceName string
 
+	// TrainClasses is the canonical list of every RVD shipped in this
+	// route's pak set, one entry per `rail_vehicle_class`. Embedded at
+	// the top of the FeatureCollection so the importer doesn't have to
+	// derive class identity from per-service vehicle data. Nil/empty =
+	// omitted from output.
+	TrainClasses []output.RouteTrainClass
+
 	// Logger receives printf-style progress lines. nil = silent.
 	Logger func(format string, args ...any)
 }
@@ -306,6 +313,9 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 	}
 	if opts.CountryCode != "" {
 		doc["country_code"] = opts.CountryCode
+	}
+	if len(opts.TrainClasses) > 0 {
+		doc["train_classes"] = opts.TrainClasses
 	}
 
 	enc := json.NewEncoder(w)

@@ -122,11 +122,12 @@ func (h *TimetableHandler) getTimetableByID(id int) (*timetableRow, error) {
 }
 
 type formationInfo struct {
-	ID        int     `json:"id"`
-	Name      string  `json:"name"`                  // canonical formation_name (e.g. "Class483_006")
-	ClassName *string `json:"class_name,omitempty"`  // display name (e.g. "Isle Of Wight Class 483")
+	ID        int      `json:"id"`
+	Name      string   `json:"name"`                  // canonical formation_name (e.g. "Class483_006")
+	ClassID   *int     `json:"class_id,omitempty"`    // train_classes row id (null for legacy/orphan formations)
+	ClassName *string  `json:"class_name,omitempty"`  // display name (e.g. "Isle Of Wight Class 483")
 	LengthM   *float64 `json:"length_m,omitempty"`
-	CarCount  *int    `json:"car_count,omitempty"`
+	CarCount  *int     `json:"car_count,omitempty"`
 }
 
 type sectionInfo struct {
@@ -136,7 +137,7 @@ type sectionInfo struct {
 
 func (h *TimetableHandler) getFormationsForTimetable(timetableID int) ([]formationInfo, error) {
 	rows, err := h.db.Query(`
-		SELECT t.id, t.name, t.class_name, t.length_m, t.car_count FROM formations t
+		SELECT t.id, t.name, t.class_id, t.class_name, t.length_m, t.car_count FROM formations t
 		INNER JOIN timetable_formations tt ON t.id = tt.formation_id
 		WHERE tt.timetable_id = ? ORDER BY t.name`, timetableID)
 	if err != nil {
@@ -146,7 +147,7 @@ func (h *TimetableHandler) getFormationsForTimetable(timetableID int) ([]formati
 	var out []formationInfo
 	for rows.Next() {
 		var ti formationInfo
-		if err := rows.Scan(&ti.ID, &ti.Name, &ti.ClassName, &ti.LengthM, &ti.CarCount); err != nil {
+		if err := rows.Scan(&ti.ID, &ti.Name, &ti.ClassID, &ti.ClassName, &ti.LengthM, &ti.CarCount); err != nil {
 			return nil, err
 		}
 		out = append(out, ti)
@@ -232,18 +233,36 @@ func (h *TimetableHandler) getEntriesForTimetable(timetableID int) ([]entryRow, 
 	return out, nil
 }
 
-// resolveActionID looks up an action by name and returns its ID, or nil.
+// resolveActionID looks up an action by name, creating the row if it
+// doesn't exist. Self-healing — earlier behaviour returned nil on miss
+// which silently broke entry.action_id linkage when the seed migration
+// hadn't run yet (or when the pak introduced a new action verb). The
+// trade-off is that a typo in a per-service JSON now creates a junk
+// action row; UI downstream filters on the canonical set so the only
+// visible cost is a stray timetable_actions row.
 func (h *TimetableHandler) resolveActionID(action string) *int {
 	action = strings.ToUpper(strings.TrimSpace(action))
 	if action == "" {
 		return nil
 	}
 	var id int
-	err := h.db.QueryRow("SELECT id FROM timetable_actions WHERE name = ?", action).Scan(&id)
+	if err := h.db.QueryRow("SELECT id FROM timetable_actions WHERE name = ?", action).Scan(&id); err == nil {
+		return &id
+	}
+	res, err := h.db.Exec("INSERT OR IGNORE INTO timetable_actions (name) VALUES (?)", action)
 	if err != nil {
 		return nil
 	}
-	return &id
+	if id64, _ := res.LastInsertId(); id64 > 0 {
+		i := int(id64)
+		return &i
+	}
+	// INSERT OR IGNORE returned 0 rows (race with a concurrent insert).
+	// Re-query.
+	if err := h.db.QueryRow("SELECT id FROM timetable_actions WHERE name = ?", action).Scan(&id); err == nil {
+		return &id
+	}
+	return nil
 }
 
 // findOrCreateLocation looks up a location by route_id + name, creating it if necessary.
@@ -529,6 +548,29 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 		params = append(params, sourceFilter)
 	}
 
+	// Push the stops filter into SQL so it constrains both COUNT and LIMIT.
+	// Doing it in Go after pagination silently shrinks each page and reports
+	// a bogus total (the unfiltered row count).
+	stopsMin := -1
+	stopsMax := -1
+	if stopsMinStr != "" {
+		stopsMin, _ = strconv.Atoi(stopsMinStr)
+	}
+	if stopsMaxStr != "" {
+		stopsMax, _ = strconv.Atoi(stopsMaxStr)
+	}
+	if stopsMin >= 0 || stopsMax >= 0 {
+		joins = append(joins, "LEFT JOIN (SELECT te.timetable_id, COUNT(*) AS stop_count FROM timetable_entries te JOIN timetable_actions ta ON ta.id = te.action_id WHERE UPPER(ta.name) IN ('WAIT FOR SERVICE', 'STOP AT LOCATION') GROUP BY te.timetable_id) stops_agg ON stops_agg.timetable_id = t.id")
+		if stopsMin >= 0 {
+			conditions = append(conditions, "COALESCE(stops_agg.stop_count, 0) >= ?")
+			params = append(params, stopsMin)
+		}
+		if stopsMax >= 0 {
+			conditions = append(conditions, "COALESCE(stops_agg.stop_count, 0) <= ?")
+			params = append(params, stopsMax)
+		}
+	}
+
 	joinClause := ""
 	if len(joins) > 0 {
 		joinClause = " " + strings.Join(joins, " ")
@@ -543,8 +585,55 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 	var total int
 	h.db.QueryRow(countSQL, params...).Scan(&total)
 
+	// Build ORDER BY from user-supplied sort_by / sort_dir, falling back
+	// to the legacy newest-first order. The map is the only thing the SQL
+	// builder trusts — clients can pass anything, but only these strings
+	// reach the query string.
+	sortableCols := map[string]string{
+		"service_name":         "t.service_name",
+		"start_time":           "t.start_time",
+		"duration":             "t.duration",
+		"conductor_compatible": "t.conductor_compatible",
+		"created_at":           "t.created_at",
+		"service_type":         "t.service_type",
+		"source":               "t.source",
+		"playable":             "t.playable",
+		"id":                   "t.id",
+		// Joined columns — we'll add the join below if these are picked
+		// and the WHERE clauses haven't already added it.
+		"route_name":   "rsort.name",
+		"section_name": "ssort.name",
+	}
+	sortBy := q.Get("sort_by")
+	sortCol, ok := sortableCols[sortBy]
+	if !ok {
+		sortCol = "t.id"
+	}
+	sortDir := strings.ToUpper(q.Get("sort_dir"))
+	if sortDir != "ASC" {
+		sortDir = "DESC"
+	}
+	// Inject the JOINs for the cross-table sort keys. Aliased separately
+	// from the filter-side joins (which only attach when the matching
+	// filter is set) so the two never collide.
+	if sortBy == "route_name" {
+		joins = append(joins, "LEFT JOIN routes rsort ON rsort.id = t.route_id")
+	}
+	if sortBy == "section_name" {
+		joins = append(joins, "LEFT JOIN timetable_sections ssort_link ON ssort_link.timetable_id = t.id LEFT JOIN sections ssort ON ssort.id = ssort_link.section_id")
+	}
+	// Re-derive joinClause now that we may have added sort joins.
+	joinClause = ""
+	if len(joins) > 0 {
+		joinClause = " " + strings.Join(joins, " ")
+	}
+	// Stable order: secondary key on id so pages stay deterministic when
+	// the primary sort has many equal values (e.g. lots of services with
+	// the same start_time).
+	orderBy := " ORDER BY " + sortCol + " " + sortDir + ", t.id DESC"
+
 	// Data
-	dataSQL := "SELECT DISTINCT t.id, t.service_name, t.route_id, t.formation_id, t.service_type, t.contributor, t.coordinates_contributor, t.created_at, t.start_time, t.duration, t.service_images, t.section_id, t.conductor_compatible, t.bound, t.service, t.current_service_name, t.source, t.playable " + fromClause + joinClause + whereClause + " ORDER BY t.id DESC LIMIT ? OFFSET ?"
+	dataSQL := "SELECT DISTINCT t.id, t.service_name, t.route_id, t.formation_id, t.service_type, t.contributor, t.coordinates_contributor, t.created_at, t.start_time, t.duration, t.service_images, t.section_id, t.conductor_compatible, t.bound, t.service, t.current_service_name, t.source, t.playable " + fromClause + joinClause + whereClause + orderBy + " LIMIT ? OFFSET ?"
 	dataParams := append(params, limit, offset)
 	dataRows, err := h.db.Query(dataSQL, dataParams...)
 	if err != nil {
@@ -563,29 +652,12 @@ func (h *TimetableHandler) GetPaginated(w http.ResponseWriter, r *http.Request) 
 		timetables = append(timetables, t)
 	}
 
-	// Apply stops filter if needed
-	stopsMin := -1
-	stopsMax := -1
-	if stopsMinStr != "" {
-		stopsMin, _ = strconv.Atoi(stopsMinStr)
-	}
-	if stopsMaxStr != "" {
-		stopsMax, _ = strconv.Atoi(stopsMaxStr)
-	}
-
 	result := make([]map[string]any, 0)
 	for _, t := range timetables {
 		m := timetableToMap(&t)
 		if err := h.enrichTimetable(m); err != nil {
 			util.Error(w, 500, err.Error())
 			return
-		}
-		ec := m["entry_count"].(int)
-		if stopsMin >= 0 && ec < stopsMin {
-			continue
-		}
-		if stopsMax >= 0 && ec > stopsMax {
-			continue
 		}
 		result = append(result, m)
 	}
@@ -2207,6 +2279,159 @@ func extractClassThumbnailsFromZip(zr *zip.Reader) {
 	}
 }
 
+// ingestRouteTrainClasses reads every `route_*.json` in the zip, pulls
+// the top-level `train_classes[]` array (written by the extractor at
+// cookedmap.CollectTrainClasses) and upserts each entry into the
+// `train_classes` table keyed by `rail_vehicle_class`. Electrification
+// specs are replaced wholesale on each import — the RVD's
+// ElectrificationRequirements list is the canonical truth.
+//
+// Best-effort: a missing section, malformed JSON, or DB error on one
+// route file doesn't stop the rest of the import. Errors are logged.
+func (h *TimetableHandler) ingestRouteTrainClasses(zr *zip.Reader) {
+	type elecSpec struct {
+		Current     string `json:"current"`
+		PickupSide  string `json:"pickup_side"`
+		VoltageV    int    `json:"voltage_v"`
+		FrequencyHz int    `json:"frequency_hz"`
+	}
+	type tc struct {
+		RailVehicleClass  string     `json:"rail_vehicle_class"`
+		FriendlyName      string     `json:"friendly_name"`
+		LiveryID          string     `json:"livery_id"`
+		VehicleCategory   string     `json:"vehicle_category"`
+		Drivable          bool       `json:"drivable"`
+		LengthM           *float64   `json:"length_m"`
+		IsElectric        *bool      `json:"is_electric"`
+		MaxSpeedKph       *float64   `json:"max_speed_kph"`
+		MaxPowerKw        *float64   `json:"max_power_kw"`
+		PoweredAxleCount  *int       `json:"powered_axle_count"`
+		ManufacturerName  string     `json:"manufacturer_name"`
+		EngineDescription string     `json:"engine_description"`
+		TypeDescription   string     `json:"type_description"`
+		ThumbnailRel      string     `json:"thumbnail_rel"`
+		Electrification   []elecSpec `json:"electrification"`
+	}
+
+	for _, f := range zr.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
+		base := filepath.Base(f.Name)
+		if !strings.HasPrefix(base, "route_") || !strings.HasSuffix(strings.ToLower(base), ".json") {
+			continue
+		}
+		rc, err := f.Open()
+		if err != nil {
+			log.Printf("[import] open route file %s: %v", f.Name, err)
+			continue
+		}
+		data, err := io.ReadAll(rc)
+		rc.Close()
+		if err != nil {
+			log.Printf("[import] read route file %s: %v", f.Name, err)
+			continue
+		}
+		var rf struct {
+			TrainClasses []tc `json:"train_classes"`
+		}
+		if err := json.Unmarshal(data, &rf); err != nil {
+			// Not a fatal parse error — the file might be a legacy
+			// FeatureCollection with no train_classes section, or have a
+			// shape that the rest of Pass 1 handles separately.
+			continue
+		}
+		for _, c := range rf.TrainClasses {
+			if c.RailVehicleClass == "" {
+				continue
+			}
+			// Path served by the static handler. Pre-set even when no
+			// PNG accompanies the import; UI handles 404 gracefully.
+			thumbURL := ""
+			if c.ThumbnailRel != "" {
+				// thumbnail_rel is "images/train_classes/<file>.png" inside
+				// the zip; the file was extracted to the same relative
+				// path under resources/, served as /images/...
+				thumbURL = "/" + c.ThumbnailRel
+			}
+			drivable := 0
+			if c.Drivable {
+				drivable = 1
+			}
+			var isElec any
+			if c.IsElectric != nil {
+				if *c.IsElectric {
+					isElec = 1
+				} else {
+					isElec = 0
+				}
+			}
+			var maxSpd, maxPwr, lenM any
+			if c.MaxSpeedKph != nil {
+				maxSpd = *c.MaxSpeedKph
+			}
+			if c.MaxPowerKw != nil {
+				maxPwr = *c.MaxPowerKw
+			}
+			if c.LengthM != nil {
+				lenM = *c.LengthM
+			}
+			var paxle any
+			if c.PoweredAxleCount != nil {
+				paxle = *c.PoweredAxleCount
+			}
+			// Upsert keyed by rail_vehicle_class. ON CONFLICT updates every
+			// field — the latest export wins (matches the catalog scan's
+			// "rescan replaces" semantics).
+			_, err := h.db.Exec(`
+				INSERT INTO train_classes
+					(rail_vehicle_class, name, livery_id, vehicle_category, is_drivable,
+					 typical_length_m, is_electric, max_speed_kph, max_power_kw, powered_axle_count,
+					 manufacturer_name, engine_description, type_description, thumbnail_path)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+				ON CONFLICT(rail_vehicle_class) DO UPDATE SET
+					name               = excluded.name,
+					livery_id          = excluded.livery_id,
+					vehicle_category   = excluded.vehicle_category,
+					is_drivable        = excluded.is_drivable,
+					typical_length_m   = COALESCE(excluded.typical_length_m, typical_length_m),
+					is_electric        = COALESCE(excluded.is_electric, is_electric),
+					max_speed_kph      = COALESCE(excluded.max_speed_kph, max_speed_kph),
+					max_power_kw       = COALESCE(excluded.max_power_kw, max_power_kw),
+					powered_axle_count = COALESCE(excluded.powered_axle_count, powered_axle_count),
+					manufacturer_name  = COALESCE(NULLIF(excluded.manufacturer_name, ''), manufacturer_name),
+					engine_description = COALESCE(NULLIF(excluded.engine_description, ''), engine_description),
+					type_description   = COALESCE(NULLIF(excluded.type_description, ''), type_description),
+					thumbnail_path     = COALESCE(NULLIF(excluded.thumbnail_path, ''), thumbnail_path)
+			`,
+				c.RailVehicleClass, nilIfEmpty(c.FriendlyName), nilIfEmpty(c.LiveryID),
+				nilIfEmpty(c.VehicleCategory), drivable,
+				lenM, isElec, maxSpd, maxPwr, paxle,
+				nilIfEmpty(c.ManufacturerName), nilIfEmpty(c.EngineDescription),
+				nilIfEmpty(c.TypeDescription), nilIfEmpty(thumbURL))
+			if err != nil {
+				log.Printf("[import] upsert train_class %s: %v", c.RailVehicleClass, err)
+				continue
+			}
+			// Look up the (possibly just-inserted) class id for the
+			// electrification rebuild.
+			var classID int
+			if err := h.db.QueryRow(`SELECT id FROM train_classes WHERE rail_vehicle_class = ?`, c.RailVehicleClass).Scan(&classID); err != nil {
+				continue
+			}
+			// Replace the electrification list wholesale. Cheap — typically
+			// 0–4 rows per class.
+			h.db.Exec(`DELETE FROM train_class_electrification WHERE train_class_id = ?`, classID)
+			for _, e := range c.Electrification {
+				h.db.Exec(`INSERT OR IGNORE INTO train_class_electrification
+					(train_class_id, current, pickup_side, voltage_v, frequency_hz)
+					VALUES (?, ?, ?, ?, ?)`,
+					classID, nilIfEmpty(e.Current), nilIfEmpty(e.PickupSide), e.VoltageV, e.FrequencyHz)
+			}
+		}
+	}
+}
+
 func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -2227,6 +2452,11 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 	// <appDir>/images/train_classes/ to match the static-file route
 	// in router/static.go that serves /images/.
 	extractClassThumbnailsFromZip(zr)
+
+	// Ingest the route file's train_classes[] section into the
+	// `train_classes` table. Independent from the rest of the import —
+	// runs even if no per-service JSONs are processed successfully.
+	h.ingestRouteTrainClasses(zr)
 
 	progress := progressFromContext(r.Context())
 	// Pre-count per-service JSONs so the progress callback can show

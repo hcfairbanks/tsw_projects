@@ -511,7 +511,7 @@
         "addSection": "Add Section:",
         "noSection": "No Section",
         "export": "Export",
-        "exportAllZip": "Export All Timetables (ZIP)",
+        "exportAllZip": "Export Route",
         "devTools": "Development Tools",
         "devToolsDesc": "These tools are only visible in development mode.",
         "deleteAllTimetables": "Delete All Timetables for this Route",

@@ -141,14 +141,17 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 	var conditions []string
 	var args []any
 
+	// Table-qualified column names — the data query may LEFT JOIN
+	// countries when sort_by=country_name, at which point both tables
+	// have a `name` column and unqualified references become ambiguous.
 	if search != "" {
-		conditions = append(conditions, "name LIKE ?")
+		conditions = append(conditions, "routes.name LIKE ?")
 		args = append(args, "%"+search+"%")
 	}
 	if countryIDStr != "" {
 		cid, err := strconv.Atoi(countryIDStr)
 		if err == nil {
-			conditions = append(conditions, "country_id = ?")
+			conditions = append(conditions, "routes.country_id = ?")
 			args = append(args, cid)
 		}
 	}
@@ -166,10 +169,36 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Sortable columns. The map is the only sort vocabulary the SQL
+	// builder accepts; anything else falls back to the legacy id-desc
+	// order so a bad query string can't inject column names.
+	sortableCols := map[string]string{
+		"name":         "routes.name",
+		"id":           "routes.id",
+		"tsw_version":  "routes.tsw_version",
+		"country_name": "countries.name",
+	}
+	sortBy := q.Get("sort_by")
+	sortCol, ok := sortableCols[sortBy]
+	if !ok {
+		sortCol = "routes.id"
+	}
+	sortDir := strings.ToUpper(q.Get("sort_dir"))
+	if sortDir != "ASC" {
+		sortDir = "DESC"
+	}
+	// Sort by country requires a join to countries — added only when the
+	// sort needs it to keep the default-path cost identical.
+	joinClause := ""
+	if sortBy == "country_name" {
+		joinClause = " LEFT JOIN countries ON countries.id = routes.country_id"
+	}
+	orderBy := " ORDER BY " + sortCol + " " + sortDir + ", routes.id DESC"
+
 	// Data
 	offset := (page - 1) * limit
 	dataArgs := append(append([]any{}, args...), limit, offset)
-	dataQuery := "SELECT * FROM routes" + where + " ORDER BY id DESC LIMIT ? OFFSET ?"
+	dataQuery := "SELECT routes.* FROM routes" + joinClause + where + orderBy + " LIMIT ? OFFSET ?"
 	rows, err := h.db.Query(dataQuery, dataArgs...)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())

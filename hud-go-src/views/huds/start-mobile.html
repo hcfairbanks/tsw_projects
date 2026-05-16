@@ -147,6 +147,25 @@
             el.className = 'status-text' + (type ? ' ' + type : '');
         }
 
+        // Warm the per-timetable map-features cache + the desktop's main
+        // /route-data payload so the HUD's first render hits prewarmed
+        // responses. All three calls are best-effort: any failure here
+        // just means the HUD falls back to its own (slower) cold path.
+        function prefetchTimetableData(timetableId) {
+            // 1) Synchronous build — populates timetable_map_features so
+            //    ServiceMap.attach can read the pre-filtered blob in one
+            //    SELECT instead of running the cold filter against the
+            //    route's full GeoJSON. This is the big one for big DLCs.
+            var build = fetch('/api/timetables/' + timetableId + '/build-map-features', {
+                method: 'POST'
+            }).catch(function () { /* ignore — desktop falls back */ });
+            // 2) Warm the HTTP cache for /api/map/route-data/{id} — the
+            //    desktop's primary map fetch. Cheap (single tt + entries
+            //    SELECT) but every saved RTT helps.
+            var routeData = fetch('/api/map/route-data/' + timetableId).catch(function () {});
+            return Promise.all([build, routeData]);
+        }
+
         function setBtnState(state) {
             var btn = document.getElementById('startBtn');
             btn.className = '';
@@ -233,12 +252,19 @@
                             setBtnState('success');
                             document.getElementById('serviceName').textContent = serviceName;
                             document.getElementById('routeName').textContent = result.route_name || result.service_name;
-                            setStatus('Timetable found! Loading HUD...', 'success');
-
-                            // Redirect to the appropriate HUD with timetable auto-load
-                            setTimeout(function() {
-                                window.location.href = '/' + hudType + '?timetable=' + result.timetable_id;
-                            }, 1000);
+                            // Warm the per-timetable map-features cache before
+                            // redirecting. The build endpoint is synchronous
+                            // (~5-30s on big DLCs); waiting here means /desktop
+                            // can serve the prebuilt blob from a single SELECT
+                            // instead of falling back to the slow per-feature
+                            // proximity filter against the route's full GeoJSON.
+                            setStatus('Building map data…', 'success');
+                            prefetchTimetableData(result.timetable_id).finally(function() {
+                                setStatus('Loading HUD…', 'success');
+                                setTimeout(function() {
+                                    window.location.href = '/' + hudType + '?timetable=' + result.timetable_id;
+                                }, 200);
+                            });
                         } else {
                             setStatus('No timetable found for service "' + serviceName + '"', 'error');
                             setBtnState('error');

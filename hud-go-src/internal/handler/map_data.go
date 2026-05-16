@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -427,27 +426,17 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Get coordinates
+	// Get coordinates verbatim from the DB. The importer is responsible
+	// for any normalization (anchor adjustments, dedup, Chatham scrub);
+	// the request path is a single SELECT plus an Unmarshal — no
+	// per-request filtering, no slicing, no anchoring. This honours the
+	// "pre-compute once, serve verbatim" rule that timetable_coordinates
+	// was designed for.
 	coordinates := make([]any, 0)
 	var coordJSON *string
 	err = h.db.QueryRow("SELECT coordinates FROM timetable_coordinates WHERE timetable_id = ?", timetableID).Scan(&coordJSON)
 	if err == nil && coordJSON != nil {
 		json.Unmarshal([]byte(*coordJSON), &coordinates)
-	}
-
-	// Filter out stale Chatham position
-	filteredCoords := make([]any, 0, len(coordinates))
-	for _, c := range coordinates {
-		if cm, ok := c.(map[string]any); ok {
-			lat, _ := cm["latitude"].(float64)
-			lng, _ := cm["longitude"].(float64)
-			if lat == 51.380108707397724 && lng == 0.5219243867730494 {
-				continue
-			}
-			filteredCoords = append(filteredCoords, c)
-		} else {
-			filteredCoords = append(filteredCoords, c)
-		}
 	}
 
 	// Get markers
@@ -475,93 +464,17 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 	// Get entries and build timetable array
 	timetableArray := buildTimetableArrayFromEntries(h.db, timetableID)
 
-	// Trim path coords to start at the first scheduled stop and end at the
-	// last. GO VIA LOCATION entries are routing-only — the polyline shouldn't
-	// extend past actual stops at either end. Done server-side so every
-	// consumer (/map, /desktop, /tablet, the upload-route round-trip) is
-	// consistent without each having to repeat the logic.
-	filteredCoords = trimCoordsToStops(filteredCoords, timetableArray)
-
 	util.JSON(w, http.StatusOK, map[string]any{
 		"routeName":   serviceName,
 		"routeId":     routeID,
 		"timetableId": timetableID,
-		"totalPoints": len(filteredCoords),
-		"coordinates": filteredCoords,
+		"totalPoints": len(coordinates),
+		"coordinates": coordinates,
 		"markers":     markers,
 		"timetable":   timetableArray,
 	})
 }
 
-// trimCoordsToStops slices `coords` so the polyline starts at the first
-// scheduled stop and ends at the last. Stops are entries with action
-// `STOP AT LOCATION` or `WAIT FOR SERVICE`; `GO VIA LOCATION` entries don't
-// bound the polyline. The trimmed endpoints are replaced with the stop
-// markers' actual lat/lngs so the line visibly reaches the marker (the
-// rail-builder polyline can land 1-20 m off from the in-game marker).
-// No-op when there are no stops, fewer than two coords, or trimming would
-// leave fewer than two coords (single-coord paths don't render).
-func trimCoordsToStops(coords []any, entries []map[string]any) []any {
-	if len(coords) < 2 || len(entries) == 0 {
-		return coords
-	}
-	type stopRef struct{ lat, lng float64 }
-	var stops []stopRef
-	for _, e := range entries {
-		action, _ := e["action"].(string)
-		if action != "STOP AT LOCATION" && action != "WAIT FOR SERVICE" {
-			continue
-		}
-		lat, latOK := e["latitude"].(float64)
-		lng, lngOK := e["longitude"].(float64)
-		if !latOK || !lngOK || (lat == 0 && lng == 0) {
-			continue
-		}
-		stops = append(stops, stopRef{lat, lng})
-	}
-	if len(stops) == 0 {
-		return coords
-	}
-	nearestIdx := func(la, ln float64) int {
-		best, bestD := 0, math.Inf(1)
-		for i, c := range coords {
-			cm, ok := c.(map[string]any)
-			if !ok {
-				continue
-			}
-			clat, _ := cm["latitude"].(float64)
-			clng, _ := cm["longitude"].(float64)
-			dLat := (clat - la) * math.Pi / 180
-			dLng := (clng - ln) * math.Pi / 180
-			m := (la + clat) * 0.5 * math.Pi / 180
-			x := dLng * math.Cos(m)
-			d := dLat*dLat + x*x
-			if d < bestD {
-				bestD = d
-				best = i
-			}
-		}
-		return best
-	}
-	first, last := stops[0], stops[len(stops)-1]
-	s := nearestIdx(first.lat, first.lng)
-	e := nearestIdx(last.lat, last.lng)
-	lo, hi := s, e
-	if lo > hi {
-		lo, hi = hi, lo
-	}
-	if hi-lo+1 < 2 {
-		return coords
-	}
-	sliced := make([]any, hi-lo+1)
-	copy(sliced, coords[lo:hi+1])
-	// Anchor the endpoints at the actual stop markers so the polyline
-	// visibly reaches them (instead of ending at the nearest existing path
-	// vertex, which can be a few metres off in either direction).
-	sliced[0] = map[string]any{"latitude": first.lat, "longitude": first.lng}
-	sliced[len(sliced)-1] = map[string]any{"latitude": last.lat, "longitude": last.lng}
-	return sliced
-}
 
 // buildTimetableArrayFromEntries builds a timetable array from DB entries.
 //

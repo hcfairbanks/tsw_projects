@@ -133,17 +133,6 @@
 
     <nav id="main-nav"></nav>
 
-    <div class="card dev-only" style="display: none;">
-        <h2 data-i18n="timetables.importTimetable">Import Timetable</h2>
-        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-icon">&#128194;</div>
-            <div class="upload-text" data-i18n="timetables.dragDropJson">Click to select or drag and drop a JSON file</div>
-            <div class="upload-hint" data-i18n="timetables.acceptsJson">Accepts exported timetable JSON files</div>
-            <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
-        </div>
-        <div id="uploadStatus" class="upload-status"></div>
-    </div>
-
     <!-- Filter card + paginated results table — rendered by the shared
          TimetableSearch module (also used on /routes/<id>). The .card
          wrapper matches the route page's "Timetables on this Route" panel
@@ -156,117 +145,8 @@
     <script src="/js/timetable-search.js"></script>
     <script>
         // The filter card + paginated results are owned by TimetableSearch
-        // (see /js/timetable-search.js, also used by /routes/<id>). This
-        // page only adds the JSON-import flow on top.
+        // (see /js/timetable-search.js, also used by /routes/<id>).
         let devMode = false;
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // File upload handling
-        function handleFileSelect(event) {
-            var file = event.target.files[0];
-            if (file) {
-                uploadFile(file);
-            }
-        }
-
-        async function uploadFile(file) {
-            var statusDiv = document.getElementById('uploadStatus');
-            statusDiv.className = 'upload-status loading';
-            statusDiv.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.importingTimetable') : 'Importing timetable...';
-
-            try {
-                var content = await readFileAsText(file);
-                var jsonData;
-
-                try {
-                    jsonData = JSON.parse(content);
-                } catch (parseError) {
-                    throw new Error('Invalid JSON file');
-                }
-
-                // Validate required field - support both old (routeName) and new (serviceName) formats
-                if (!jsonData.serviceName && !jsonData.routeName) {
-                    throw new Error('Invalid timetable format: missing serviceName or routeName');
-                }
-
-                // Import the timetable
-                var response = await fetch('/api/timetables/import', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: content
-                });
-
-                if (!response.ok) {
-                    var errorData = await response.json();
-                    throw new Error(errorData.error || 'Import failed');
-                }
-
-                var result = await response.json();
-
-                statusDiv.className = 'upload-status success';
-                statusDiv.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.importedRedirecting') : 'Imported successfully! Redirecting...';
-
-                // Redirect to the editor after import so the user can tweak.
-                setTimeout(function() {
-                    window.location.href = '/timetables/' + result.id + '/edit';
-                }, 1000);
-
-            } catch (error) {
-                statusDiv.className = 'upload-status error';
-                statusDiv.textContent = ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.error') : 'Error') + ': ' + error.message;
-                // Reset file input
-                document.getElementById('fileInput').value = '';
-            }
-        }
-
-        function readFileAsText(file) {
-            return new Promise(function(resolve, reject) {
-                var reader = new FileReader();
-                reader.onload = function(e) { resolve(e.target.result); };
-                reader.onerror = function() { reject(new Error('Failed to read file')); };
-                reader.readAsText(file);
-            });
-        }
-
-        // Drag and drop handling
-        var uploadArea = document.getElementById('uploadArea');
-
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.remove('dragover');
-
-            var files = e.dataTransfer.files;
-            if (files.length > 0) {
-                var file = files[0];
-                if (file.name.endsWith('.json')) {
-                    uploadFile(file);
-                } else {
-                    var statusDiv = document.getElementById('uploadStatus');
-                    statusDiv.className = 'upload-status error';
-                    statusDiv.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('timetables.errorSelectJsonFile') : 'Error: Please select a JSON file';
-                }
-            }
-        });
-
 
         // Theme and color scheme initialization
         (function() {

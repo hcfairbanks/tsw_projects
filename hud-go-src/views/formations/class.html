@@ -50,10 +50,22 @@
     </div>
 
     <div class="card">
-        <h2 data-i18n="formations.formationsInClass">Formations</h2>
-        <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;" data-i18n="formations.formationsHint">Each row below is a physical formation belonging to this class.</p>
-        <div id="formationsList">
-            <p class="empty-message">Loading...</p>
+        <h2 style="cursor: pointer; user-select: none;" onclick="toggleFormations()"><span id="formationsToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9654;</span><span data-i18n="formations.formationsInClass">Formations</span></h2>
+        <div id="formationsContainer" style="display: none;">
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;" data-i18n="formations.formationsHint">Each row below is a physical formation belonging to this class.</p>
+            <div id="formationsList">
+                <p class="empty-message">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="cursor: pointer; user-select: none;" onclick="toggleRoutes()"><span id="routesToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9654;</span><span>Routes</span></h2>
+        <div id="routesContainer" style="display: none;">
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;">Routes with at least one playable timetable for this class.</p>
+            <div id="routesList">
+                <p class="empty-message">Loading...</p>
+            </div>
         </div>
     </div>
 
@@ -79,6 +91,62 @@
             }
         }
 
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/train-classes/' + classId + '/routes');
+                if (!response.ok) {
+                    document.getElementById('routesList').innerHTML = '<p class="empty-message">No routes found.</p>';
+                    return;
+                }
+                const routes = await response.json();
+                renderRoutes(routes || []);
+            } catch (error) {
+                console.error('Error loading routes:', error);
+                document.getElementById('routesList').innerHTML = '<p class="empty-message">Error loading routes.</p>';
+            }
+        }
+
+        function renderRoutes(routes) {
+            var container = document.getElementById('routesList');
+            if (!routes.length) {
+                container.innerHTML = '<p class="empty-message">No playable routes for this class.</p>';
+                return;
+            }
+            var html = '<table><thead><tr><th>Route</th><th>Country</th></tr></thead><tbody>';
+            routes.forEach(function(r) {
+                html += '<tr>';
+                html += '<td><a href="/routes/' + r.id + '">' + escapeHtml(r.name) + '</a></td>';
+                html += '<td>' + escapeHtml(r.country_name || '-') + '</td>';
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function toggleFormations() {
+            var container = document.getElementById('formationsContainer');
+            var icon = document.getElementById('formationsToggleIcon');
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                icon.innerHTML = '&#9660;';
+            } else {
+                container.style.display = 'none';
+                icon.innerHTML = '&#9654;';
+            }
+        }
+
+        function toggleRoutes() {
+            var container = document.getElementById('routesContainer');
+            var icon = document.getElementById('routesToggleIcon');
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                icon.innerHTML = '&#9660;';
+            } else {
+                container.style.display = 'none';
+                icon.innerHTML = '&#9654;';
+            }
+        }
+
         function renderClass(c, elec) {
             document.getElementById('pageTitle').textContent = c.name || 'Train Class';
             document.title = (c.name || 'Train Class') + ' - TSW HUD Project';
@@ -86,8 +154,6 @@
             var idLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.id') : 'ID';
             var nameLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('common.name') : 'Name';
             var liveryLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('formations.livery') : 'Livery';
-            var lengthLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('formations.typicalLength') : 'Typical Length';
-            var carCountLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('formations.typicalCarCount') : 'Typical Car Count';
             var categoryLabel = 'Category';
             var manufacturerLabel = 'Manufacturer';
             var engineLabel = 'Engine';
@@ -100,8 +166,12 @@
                 ? '<div class="class-hero-img" style="background-image: url(\'' + escapeHtml(c.thumbnail_path) + '\');"></div>'
                 : '<div class="class-hero-img">no image</div>';
             var pills = [];
-            if (c.is_electric === true) pills.push('<span class="pill electric">Electric</span>');
-            else if (c.is_electric === false) pills.push('<span class="pill diesel">Non-electric</span>');
+            if (c.type_description) {
+                var pillClass = c.is_electric === true ? 'pill electric'
+                              : c.is_electric === false ? 'pill diesel'
+                              : 'pill';
+                pills.push('<span class="' + pillClass + '">' + escapeHtml(c.type_description) + '</span>');
+            }
             if (c.max_speed_kph) pills.push('<span class="pill">' + Math.round(c.max_speed_kph) + ' kph max</span>');
             if (c.max_power_kw) pills.push('<span class="pill">' + Math.round(c.max_power_kw) + ' kW</span>');
             if (c.vehicle_category) pills.push('<span class="pill">' + escapeHtml(c.vehicle_category.replace(/([A-Z])/g, ' $1').trim()) + '</span>');
@@ -123,8 +193,7 @@
             if (c.manufacturer_name) html += row(manufacturerLabel, c.manufacturer_name);
             if (c.max_speed_kph) html += row(maxSpeedLabel, Math.round(c.max_speed_kph) + ' kph');
             if (c.max_power_kw) html += row(maxPowerLabel, Math.round(c.max_power_kw) + ' kW');
-            if (c.typical_length_m != null) html += row(lengthLabel, c.typical_length_m.toFixed(1) + ' m');
-            if (c.typical_car_count != null) html += row(carCountLabel, c.typical_car_count);
+            if (c.vehicle_length_m != null) html += row('Length', c.vehicle_length_m.toFixed(1) + ' m');
 
             // Electrification list (only meaningful on electric classes).
             if (elec && elec.length > 0) {
@@ -207,10 +276,12 @@
             i18n.init().then(function() {
                 renderBackLink();
                 loadClass();
+                loadRoutes();
             });
         } else {
             renderBackLink();
             loadClass();
+            loadRoutes();
         }
     </script>
     <script src="/js/navbar.js"></script>

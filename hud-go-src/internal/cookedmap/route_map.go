@@ -36,6 +36,22 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable
 		displayName = output.RouteDisplayName(tt.Route)
 	}
 
+	// Collect train classes from EVERY pak this route is composed of.
+	// allTTs may include sibling-pak timetables (e.g. Boston Sprinter
+	// spans BostonProvidence + BostonProvidenceGameplayPack + BPEAcela);
+	// each carries its own ExtractDir whose RVD_*.uasset files contribute
+	// to the route's canonical class set.
+	seen := map[string]bool{tt.ExtractDir: true}
+	workdirs := []string{tt.ExtractDir}
+	for _, t := range allTTs {
+		if t == nil || t.ExtractDir == "" || seen[t.ExtractDir] {
+			continue
+		}
+		seen[t.ExtractDir] = true
+		workdirs = append(workdirs, t.ExtractDir)
+	}
+	trainClasses := CollectTrainClasses(workdirs)
+
 	stats, err := Build(Options{
 		Workdir:               tt.ExtractDir,
 		RouteName:             tt.Route,
@@ -45,6 +61,7 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable
 		Country:               output.CountryNameFromCode(tt.CountryCode),
 		CountryCode:           output.CountryISOFromCode(tt.CountryCode),
 		CrossPakReferenceName: tt.CrossPakReferenceName,
+		TrainClasses:          trainClasses,
 	}, w)
 	if err != nil {
 		return err

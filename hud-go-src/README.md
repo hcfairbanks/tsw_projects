@@ -23,3 +23,15 @@ go build -o tsw-hud.exe .
  # Run without Subscriptions
  # Used when scrapping data with the bot
  .\tsw-hud.exe --no-subscriptions  
+
+ ---------------
+ # 1. Stop the running server (Windows won't overwrite a running .exe)
+Stop-Process -Name tsw-hud-new -Force
+
+# 2. Build from the source directory into the runtime directory
+cd hud-go-src
+go build -o ..\hud-go\tsw-hud-new.exe .
+
+# 3. Start the new binary
+cd ..\hud-go
+.\tsw-hud-new.exe

@@ -1108,7 +1108,7 @@ function drawStationSelector(options, timetableItems, selectedIdx, playerPositio
         // Render as "VIA Location" instead so the list reads cleanly.
         var displayName;
         if (item.isPassThrough && !item.location) {
-            displayName = 'VIA Location';
+            displayName = 'As Indicated';
         } else {
             displayName = item.location || 'Unknown';
             if (item.isPassThrough) {
@@ -1238,7 +1238,7 @@ function drawTimetableBox(options, timetableTime, timetableLabel, distanceToStat
         // Match the station-list label rule: pass-through rows with no
         // `location` read as "VIA Location" instead of " [VIA]".
         if (selectedStation.isPassThrough && !selectedStation.location) {
-            displayLabel = 'VIA Location';
+            displayLabel = 'As Indicated';
         } else {
             displayLabel = selectedStation.location || '';
             if (selectedStation.isPassThrough) {
@@ -2223,6 +2223,22 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             }
             var temp = data.weather ? data.weather.Temperature : null;
             draw(Math.round(data.speed), data.limit, data.isSlipping, data.powerHandle, data.incline, data.nextSpeedLimit, data.distanceToNextSpeedLimit, data.trainBreak, data.trainBrakeActive, data.locomotiveBrakeHandle, data.locomotiveBrakeActive, data.electricDynamicBrake, data.electricBrakeActive, data.isTractionLocked, data.localTime, data.timetableTime, data.timetableLabel, data.distanceToStation, data.reverser, data.doorFrontLeft, data.doorFrontRight, data.distanceUnits, currentPlayerPosition, temp, data.temperatureUnits, lastDistanceToSignal, lastSignalAspectClass);
+
+            // Mirror the player position onto the map overlay's train marker.
+            // Previously a second EventSource('/stream') was opened just for
+            // this — wasteful (double the bandwidth + server-side broadcast
+            // fan-out). Reuse the one we already have.
+            if (overlayMap && data.playerPosition && data.playerPosition.latitude && data.playerPosition.longitude) {
+                const lat = data.playerPosition.latitude;
+                const lng = data.playerPosition.longitude;
+                if (overlayTrainMarker) {
+                    overlayTrainMarker.setLatLng([lat, lng]);
+                } else if (overlayTrainIcon) {
+                    overlayTrainMarker = L.marker([lat, lng], { icon: overlayTrainIcon })
+                        .bindPopup('<strong>Your Train</strong>')
+                        .addTo(overlayMap);
+                }
+            }
         };
 
         eventSource.onerror = () => {
@@ -2263,7 +2279,13 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
 
             // Initialize map if not already done
             if (!overlayMap) {
-                overlayMap = L.map('overlayMap').setView([51.5, -0.1], 13);
+                // preferCanvas: true — Leaflet renders vector layers to a
+                // single <canvas> instead of one <path> per feature in SVG.
+                // Big DLCs ship thousands of platform/siding/line/running
+                // track segments + signals + switches; the SVG path explosion
+                // dominates first-paint time. Canvas matches what the route
+                // show page and timetable edit page already use.
+                overlayMap = L.map('overlayMap', { preferCanvas: true }).setView([51.5, -0.1], 13);
 
                 // Basemap switcher (Map / Satellite / Topo) shared with the
                 // route page — replaces the old single-button satellite toggle.
@@ -2398,6 +2420,13 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             if (overlayServiceMapHandle && overlayServiceMapHandle.destroy) overlayServiceMapHandle.destroy();
             const entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
             overlayServiceMapHandle = await ServiceMap.attach(overlayMap, {
+                // Pass timetableId so ServiceMap hits the pre-built
+                // /api/timetables/{id}/map-features blob (single SELECT)
+                // instead of falling back to /api/routes/{id}/map-data
+                // and running the cold proximity filter client-side. The
+                // /find-timetable prefetch builds the row before we arrive,
+                // so the fetch is effectively a cache hit.
+                timetableId: (data && data.timetableId) ? data.timetableId : undefined,
                 routeId: resolvedRouteId,
                 barContainer: bar,
                 pathLatLngs: pathLatLngs,
@@ -2411,34 +2440,11 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
             overlayLastAttachedRouteId = resolvedRouteId;
         }
 
-        function startMapPositionUpdates() {
-            if (overlayEventSource) {
-                overlayEventSource.close();
-            }
-
-            overlayEventSource = new EventSource('/stream');
-
-            overlayEventSource.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-
-                if (data.playerPosition && data.playerPosition.latitude && data.playerPosition.longitude) {
-                    const lat = data.playerPosition.latitude;
-                    const lng = data.playerPosition.longitude;
-
-                    if (overlayTrainMarker) {
-                        overlayTrainMarker.setLatLng([lat, lng]);
-                    } else {
-                        overlayTrainMarker = L.marker([lat, lng], { icon: overlayTrainIcon })
-                            .bindPopup('<strong>Your Train</strong>')
-                            .addTo(overlayMap);
-                    }
-                }
-            };
-
-            overlayEventSource.onerror = function() {
-                console.log('Map overlay stream connection lost');
-            };
-        }
+        // Map overlay position updates piggyback on the page-level
+        // eventSource (see onmessage above). This used to open a second
+        // EventSource('/stream'), which doubled the SSE fan-out for no
+        // reason — both consumers want data.playerPosition.
+        function startMapPositionUpdates() { /* no-op */ }
 
         // Close map overlay on Escape key
         document.addEventListener('keydown', function(e) {

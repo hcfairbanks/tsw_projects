@@ -1080,22 +1080,23 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 	return count, zw.Close()
 }
 
-// addClassThumbnailsToZip walks the route's services for unique class
-// (FriendlyName, ThumbnailAssetRef) pairs, locates each texture .uasset
-// in the timetable's ExtractDir, and writes the rendered PNG into the
-// zip at `images/train_classes/<sanitised>.png`. Skips classes whose
-// thumbnail can't be resolved (missing ref, asset not found, decode
-// error) — the receiver's UI handles 404 with a placeholder.
+// addClassThumbnailsToZip walks every workdir in the route's pak set,
+// parses each RVD_*.uasset, and writes its rendered thumbnail PNG into
+// the zip at `images/train_classes/<sanitised rail_vehicle_class>.png`.
+// The filename matches what `route_<X>.json`'s train_classes[].thumbnail_rel
+// advertises, so the importer can pair each class row with its image
+// without any pak-side knowledge.
+//
+// Dedup key is `rail_vehicle_class` — same canonical identity used
+// throughout the train-class data flow. RVDs without a resolvable
+// thumbnail asset are skipped silently; the receiver UI handles 404.
 //
 // Intentionally permissive: a partial set of thumbnails is better than
 // failing the whole zip over one bad texture.
 func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
-	type thumbKey struct {
-		friendlyName string
-		assetRef     string
-	}
 	// Index .uasset basenames across every ExtractDir we see so a
-	// thumbnail rendered from one timetable's pak can be reused.
+	// thumbnail texture rendered from one pak can be located even when
+	// its referencing RVD lives elsewhere (rare but possible).
 	indexed := map[string]string{} // basename-stem → on-disk path
 	indexedDirs := map[string]bool{}
 	indexDir := func(dir string) {
@@ -1118,56 +1119,53 @@ func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
 		})
 	}
 
-	seenClass := map[string]bool{}
-	seenTT := map[*uasset.Timetable]bool{}
+	// Collect unique workdirs across every timetable in the route.
+	workdirs := []string{}
+	seenWD := map[string]bool{}
 	for _, pair := range pairs {
-		if pair.tt == nil {
+		if pair.tt == nil || pair.tt.ExtractDir == "" || seenWD[pair.tt.ExtractDir] {
 			continue
 		}
-		indexDir(pair.tt.ExtractDir)
-		if seenTT[pair.tt] {
-			continue
-		}
-		seenTT[pair.tt] = true
-		// Walk every formation's vehicles in this timetable for
-		// thumbnail refs. RVDByPath resolves each vehicle's GUID to the
-		// *uasset.RVD with FriendlyName + ThumbnailAssetRef.
-		for _, f := range pair.tt.Formations {
-			for _, v := range f.Vehicles {
-				rvd := pair.tt.RVDByPath[lookupRVDByID(pair.tt, v.RailVehicleID)]
-				if rvd == nil || rvd.FriendlyName == "" || rvd.ThumbnailAssetRef == "" {
-					continue
-				}
-				if seenClass[rvd.FriendlyName] {
-					continue
-				}
-				seenClass[rvd.FriendlyName] = true
-				stem := stemFromAssetRef(rvd.ThumbnailAssetRef)
-				assetPath, ok := indexed[stem]
-				if !ok {
-					continue
-				}
-				zipName := "images/train_classes/" + sanitiseClassFilename(rvd.FriendlyName) + ".png"
-				if err := writeThumbnailToZip(zw, zipName, assetPath); err != nil {
-					fmt.Fprintf(os.Stderr, "[zip] thumbnail %s: %v\n", rvd.FriendlyName, err)
-				}
+		seenWD[pair.tt.ExtractDir] = true
+		workdirs = append(workdirs, pair.tt.ExtractDir)
+	}
+	for _, wd := range workdirs {
+		indexDir(wd)
+	}
+
+	// Walk every RVD_*.uasset across the workdirs. Pack one thumbnail
+	// per unique rail_vehicle_class — matches CollectTrainClasses' dedup.
+	seenClass := map[string]bool{}
+	for _, wd := range workdirs {
+		_ = filepath.WalkDir(wd, func(path string, d fs.DirEntry, err error) error {
+			if err != nil || d.IsDir() {
+				return nil
 			}
-		}
+			base := d.Name()
+			if !strings.HasPrefix(base, "RVD_") || !strings.HasSuffix(strings.ToLower(base), ".uasset") {
+				return nil
+			}
+			rvd, perr := uasset.ParseCookedRVD(path)
+			if perr != nil || rvd == nil || rvd.RailVehicleClass == "" || rvd.ThumbnailAssetRef == "" {
+				return nil
+			}
+			if seenClass[rvd.RailVehicleClass] {
+				return nil
+			}
+			seenClass[rvd.RailVehicleClass] = true
+			stem := stemFromAssetRef(rvd.ThumbnailAssetRef)
+			assetPath, ok := indexed[stem]
+			if !ok {
+				return nil
+			}
+			zipName := "images/train_classes/" + sanitiseClassFilename(rvd.RailVehicleClass) + ".png"
+			if werr := writeThumbnailToZip(zw, zipName, assetPath); werr != nil {
+				fmt.Fprintf(os.Stderr, "[zip] thumbnail %s: %v\n", rvd.RailVehicleClass, werr)
+			}
+			return nil
+		})
 	}
 	return nil
-}
-
-// lookupRVDByID resolves a vehicle GUID to an RVD asset path via the
-// timetable's CompiledRVMap, normalising the GUID to canonical form
-// when the literal lookup misses.
-func lookupRVDByID(tt *uasset.Timetable, vehicleID string) string {
-	if tt == nil || vehicleID == "" {
-		return ""
-	}
-	if p, ok := tt.CompiledRVMap[vehicleID]; ok {
-		return p
-	}
-	return tt.CompiledRVMap[uasset.NormalizeGUID(vehicleID)]
 }
 
 // stemFromAssetRef extracts the .uasset stem from a SoftObjectProperty

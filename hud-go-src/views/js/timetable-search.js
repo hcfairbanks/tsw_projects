@@ -119,9 +119,12 @@
         + '      <option value="" data-i18n="common.all">All</option>'
         + '      <option value="__none__" data-i18n="timetables.noSection">No Section</option>'
         + '    </select>'
-        + '    <label data-i18n="formations.title">Formation:</label>'
+        // Filter label is "Train Class" — end users think in terms of
+        // classes, not the formation/consist entity name. The form labels on
+        // /timetables/create still say "Formations" — that page is dev-focused.
+        + '    <label class="tts-train-label">Train Class:</label>'
         + '    <div class="typeahead-container">'
-        + '      <input type="text" id="tts_formationInput" data-i18n-placeholder="common.search" placeholder="Type to search formations..." autocomplete="off">'
+        + '      <input type="text" id="tts_formationInput" placeholder="Type to search train classes..." autocomplete="off">'
         + '      <div id="tts_formationDropdown" class="typeahead-dropdown"></div>'
         + '      <input type="hidden" id="tts_formationFilter" value="">'
         + '    </div>'
@@ -228,8 +231,10 @@
             currentPage: 1,
             currentLimit: 15,
             devMode: false,
-            sortColumn: 'service_name',
-            sortDirection: 'asc'
+            // Empty default = server's legacy "newest first" (id DESC).
+            // Set by the th-click handler when the user picks a column.
+            sortColumn: '',
+            sortDirection: 'ASC'
         };
 
         container.innerHTML = SHELL_HTML;
@@ -679,31 +684,22 @@
             dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">…</div>';
         }
         formationSearcher.schedule(function (myToken) {
-            // Server-side search via /api/formations. Locked-route pages already
-            // route through /api/routes/<id>/formations in loadData (so the cache
-            // is correct for the static page-load), but the typeahead
-            // re-queries the global formation list with the search term so the
-            // user can find formations beyond what's already cached.
-            var params = new URLSearchParams({ limit: TYPEAHEAD_LIMIT });
-            if (filter) params.set('search', filter);
-            var endpoint = (state.lockRoute && state.opts.routeId)
-                ? '/api/routes/' + state.opts.routeId + '/formations'
-                : '/api/formations';
-            fetch(endpoint + '?' + params.toString())
+            // Server-side class search via /api/train-classes. Earlier this
+            // hit /api/formations with limit=25 and grouped client-side,
+            // which capped results to whatever classes happened to be in the
+            // first 25 formations alphabetically — useless. The classes
+            // endpoint does a LIKE on tc.name directly and also scopes to a
+            // route via ?route_id= for locked-route pages.
+            var params = new URLSearchParams();
+            if (filter) params.set('q', filter);
+            if (state.lockRoute && state.opts.routeId) params.set('route_id', state.opts.routeId);
+            fetch('/api/train-classes?' + params.toString())
                 .then(function (r) { return r.json(); })
                 .then(function (result) {
                     if (!formationSearcher.isCurrent(myToken)) return;
-                    var formations = Array.isArray(result) ? result : (result && result.data) || [];
-                    // Locked-route endpoint doesn't yet honour ?search — so
-                    // filter client-side as a safety net.
-                    if (filter) {
-                        var lower = filter.toLowerCase();
-                        formations = formations.filter(function (t) {
-                            return ((t.name || '').toLowerCase().indexOf(lower) !== -1)
-                                || ((t.class_name || '').toLowerCase().indexOf(lower) !== -1);
-                        });
-                    }
-                    renderFormationDropdown(container, dropdown, formations);
+                    var classes = Array.isArray(result) ? result : (result && result.data) || [];
+                    if (classes.length > TYPEAHEAD_LIMIT) classes = classes.slice(0, TYPEAHEAD_LIMIT);
+                    renderClassDropdown(container, dropdown, classes);
                 })
                 .catch(function () {
                     if (!formationSearcher.isCurrent(myToken)) return;
@@ -712,65 +708,20 @@
         });
     }
 
-    function renderFormationDropdown(container, dropdown, formations) {
-        // Group by class so the user sees one entry per class (e.g. "Isle
-        // Of Wight Class 483") even when multiple formations share it.
-        // Picking the entry filters timetables for ALL formations in that
-        // class via the backend's class_id query param. Formations without a
-        // class_id surface as a single formation entry (their own row).
-        var classBuckets = {};            // class_id → { class_name, formationIds[], formationNames[] }
-        var formationOnly = [];           // legacy formations with no class_id
-        formations.forEach(function (formation) {
-            if (formation.class_id) {
-                var key = formation.class_id;
-                if (!classBuckets[key]) {
-                    classBuckets[key] = {
-                        class_id: formation.class_id,
-                        class_name: formation.class_name || formation.name,
-                        formationIds: [],
-                        formationNames: []
-                    };
-                }
-                classBuckets[key].formationIds.push(formation.id);
-                if (formation.name && formation.name !== classBuckets[key].class_name) {
-                    classBuckets[key].formationNames.push(formation.name);
-                }
-            } else {
-                formationOnly.push(formation);
-            }
-        });
-        var entries = [];
-        Object.keys(classBuckets).forEach(function (k) { entries.push({ kind: 'class', data: classBuckets[k] }); });
-        formationOnly.forEach(function (t) { entries.push({ kind: 'formation', data: t }); });
-        entries.sort(function (a, b) {
-            var an = a.kind === 'class' ? a.data.class_name : a.data.name;
-            var bn = b.kind === 'class' ? b.data.class_name : b.data.name;
-            return (an || '').localeCompare(bn || '');
-        });
-
-        if (entries.length === 0) {
-            dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + tt('timetables.noFormationsFound', 'No formations found') + '</div>';
+    function renderClassDropdown(container, dropdown, classes) {
+        if (classes.length === 0) {
+            dropdown.innerHTML = '<div class="typeahead-item" style="color: var(--text-muted);">' + tt('timetables.noTrainClassesFound', 'No train classes found') + '</div>';
         } else {
-            dropdown.innerHTML = entries.map(function (e) {
-                if (e.kind === 'class') {
-                    var c = e.data;
-                    var sub = c.formationNames.length > 0
-                        ? c.formationNames.join(', ')
-                        : '';
-                    return '<div class="typeahead-item" data-kind="class" data-id="' + c.class_id + '" data-label="' + escapeHtml(c.class_name) + '">'
-                        + '<div class="item-name">' + escapeHtml(c.class_name) + '</div>'
-                        + (sub ? '<div class="item-sub">' + escapeHtml(sub) + '</div>' : '')
-                        + '</div>';
-                }
-                var t = e.data;
-                return '<div class="typeahead-item" data-kind="formation" data-id="' + t.id + '" data-label="' + escapeHtml(t.name) + '">'
-                    + '<div class="item-name">' + escapeHtml(t.name) + '</div></div>';
+            dropdown.innerHTML = classes.map(function (c) {
+                return '<div class="typeahead-item" data-kind="class" data-id="' + c.id + '" data-label="' + escapeHtml(c.name) + '">'
+                    + '<div class="item-name">' + escapeHtml(c.name) + '</div>'
+                    + '</div>';
             }).join('');
             dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(function (item) {
                 item.addEventListener('click', function () {
                     container.querySelector('#tts_formationInput').value = this.dataset.label;
                     // Encode the kind alongside the id so fetchAndRender
-                    // knows which API param to set.
+                    // knows which API param to set (class_id vs formation_id).
                     container.querySelector('#tts_formationFilter').value = this.dataset.kind + ':' + this.dataset.id;
                     dropdown.style.display = 'none';
                 });
@@ -878,6 +829,11 @@
         if (serviceTypeFilter) params.set('service_type', serviceTypeFilter);
         if (playableFilter && state.devMode) params.set('playable', playableFilter);
         if (sourceFilter) params.set('source', sourceFilter);
+        // Sort. Server whitelists the column name — anything not in its
+        // map falls back to id-desc, so an unknown value here is a no-op
+        // rather than an error.
+        if (state.sortColumn) params.set('sort_by', state.sortColumn);
+        if (state.sortDirection) params.set('sort_dir', state.sortDirection);
 
         try {
             var response = await fetch('/api/timetables/paginated?' + params);
@@ -900,36 +856,86 @@
             // hide it when the active route has no sections (default true
             // until the section fetch tells us otherwise).
             var showSection = state.hasSections !== false;
+            // headerCell builds a sortable `<th>` when sortKey is set; the
+            // rendered cell shows the current sort direction as an arrow.
+            // The Formations and Stops columns are computed across joined
+            // rows (so SQL sort isn't straightforward) and don't get
+            // sort keys here.
+            function headerCell(label, i18nKey, sortKey, cls) {
+                var classes = [];
+                if (cls) classes.push(cls);
+                var arrow = '';
+                if (sortKey) {
+                    classes.push('sortable');
+                    if (state.sortColumn === sortKey) {
+                        classes.push('active');
+                        arrow = ' <span class="sort-arrow">' + (state.sortDirection === 'ASC' ? '▲' : '▼') + '</span>';
+                    } else {
+                        arrow = ' <span class="sort-arrow">↕</span>';
+                    }
+                }
+                var attrs = '';
+                if (classes.length) attrs += ' class="' + classes.join(' ') + '"';
+                if (sortKey) attrs += ' data-sort-col="' + sortKey + '"';
+                if (i18nKey) attrs += ' data-i18n="' + i18nKey + '"';
+                return '<th' + attrs + '>' + label + arrow + '</th>';
+            }
             var html = '<table><thead><tr>';
-            html += '<th data-i18n="timetables.serviceName">Service Name</th>';
+            html += headerCell('Service Name', 'timetables.serviceName', 'service_name');
             // Hide Route column when the page is already scoped to one route.
-            if (!state.lockRoute) html += '<th data-i18n="timetables.route">Route</th>';
-            if (showSection) html += '<th data-i18n="timetables.section">Section</th>';
-            html += '<th data-i18n="timetables.formations">Formations</th>';
-            html += '<th class="tts-c" data-i18n="timetables.startTime">Start Time</th>';
-            html += '<th class="tts-c" data-i18n="timetables.duration">Duration</th>';
-            html += '<th class="tts-c" data-i18n="timetables.stops">Stops</th>';
-            if (devMode) html += '<th data-i18n="timetables.coordSource">Coord Source</th>';
-            html += '<th class="tts-c" data-i18n="timetables.conductor">Conductor</th>';
+            if (!state.lockRoute) html += headerCell('Route', 'timetables.route', 'route_name');
+            if (showSection) html += headerCell('Section', 'timetables.section', 'section_name');
+            // Column heading is "Trains" (not "Formations") per UX: end
+            // users think in terms of trains, not the formation/consist
+            // entity name. The form labels on /timetables/create still
+            // say "Formations" — that page is dev-focused. The column
+            // header reads "Train Class" and the cells link to the
+            // train-classes page, matching the filter above.
+            html += headerCell('Train Class', null, null);
+            html += headerCell('Start Time', 'timetables.startTime', 'start_time', 'tts-c');
+            html += headerCell('Duration', 'timetables.duration', 'duration', 'tts-c');
+            html += headerCell('Stops', 'timetables.stops', null, 'tts-c');
+            html += headerCell('Conductor', 'timetables.conductor', 'conductor_compatible', 'tts-c');
             if (devMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
             html += '</tr></thead><tbody>';
             timetables.forEach(function (t) {
                 var route = state.allRoutes.find(function (r) { return r.id == t.route_id; });
                 var formationDisplay = '-';
-                // Show the user-facing class name when available (e.g. "Isle
-                // Of Wight Class 483") rather than the formation name (e.g.
-                // "Class483_006"). Falls back to formation when class is
-                // unset.
+                // Class-only column: dedupe by class_id when the API returns
+                // it, otherwise fall back to class_name as the dedupe key.
+                // Formations with no class at all are skipped — the user sees
+                // "-" rather than a misleading formation name.
                 if (t.formations && t.formations.length > 0) {
-                    formationDisplay = t.formations.map(function (formation) {
-                        var label = formation.class_name || formation.name;
-                        return '<a href="/formations/' + formation.id + '">' + escapeHtml(label) + '</a>';
-                    }).join(', ');
+                    var seenClass = {};
+                    var parts = [];
+                    t.formations.forEach(function (formation) {
+                        var classId = formation.class_id;
+                        var className = formation.class_name;
+                        if (classId) {
+                            var keyId = 'id:' + classId;
+                            if (seenClass[keyId]) return;
+                            seenClass[keyId] = true;
+                            var label = className || formation.name;
+                            parts.push('<a href="/train-classes/' + classId + '">' + escapeHtml(label) + '</a>');
+                        } else if (className) {
+                            var keyName = 'name:' + className;
+                            if (seenClass[keyName]) return;
+                            seenClass[keyName] = true;
+                            parts.push(escapeHtml(className));
+                        }
+                        // else: orphan formation with no class data — skip.
+                    });
+                    formationDisplay = parts.length > 0 ? parts.join(', ') : '-';
                 } else if (t.formation_id) {
                     var formation = state.allFormations.find(function (tr) { return tr.id == t.formation_id; });
                     if (formation) {
-                        var label = formation.class_name || formation.name;
-                        formationDisplay = '<a href="/formations/' + formation.id + '">' + escapeHtml(label) + '</a>';
+                        if (formation.class_id) {
+                            var label = formation.class_name || formation.name;
+                            formationDisplay = '<a href="/train-classes/' + formation.class_id + '">' + escapeHtml(label) + '</a>';
+                        } else if (formation.class_name) {
+                            formationDisplay = escapeHtml(formation.class_name);
+                        }
+                        // else: orphan — leave as '-'.
                     }
                 }
 
@@ -943,12 +949,6 @@
                 html += '<td class="tts-c">' + escapeHtml(t.start_time || '-') + '</td>';
                 html += '<td class="tts-c">' + escapeHtml(t.duration || '-') + '</td>';
                 html += '<td class="tts-c">' + (t.entry_count || 0) + '</td>';
-                if (devMode) {
-                    var csLabel = t.coordinates_coord_source
-                        ? tt('timetables.' + t.coordinates_coord_source, t.coordinates_coord_source.charAt(0).toUpperCase() + t.coordinates_coord_source.slice(1))
-                        : tt('timetables.none', 'None');
-                    html += '<td>' + escapeHtml(csLabel) + '</td>';
-                }
                 html += '<td class="tts-c">' + (t.conductor_compatible ? tt('common.yes', 'Yes') : tt('common.no', 'No')) + '</td>';
                 if (devMode) {
                     html += '<td class="actions">';
@@ -961,6 +961,24 @@
             });
             html += '</tbody></table>';
             listEl.innerHTML = html;
+
+            // Wire sortable header clicks. First click on a fresh column
+            // sets ASC; click again to flip to DESC; click another column
+            // to switch sort key and reset to ASC.
+            listEl.querySelectorAll('th.sortable').forEach(function (th) {
+                th.addEventListener('click', function () {
+                    var col = th.getAttribute('data-sort-col');
+                    if (!col) return;
+                    if (state.sortColumn === col) {
+                        state.sortDirection = state.sortDirection === 'ASC' ? 'DESC' : 'ASC';
+                    } else {
+                        state.sortColumn = col;
+                        state.sortDirection = 'ASC';
+                    }
+                    state.currentPage = 1;
+                    fetchAndRender(container, state, 1);
+                });
+            });
 
             // Wire dev-mode action buttons.
             listEl.querySelectorAll('[data-tts-show]').forEach(function (b) {
@@ -1003,7 +1021,9 @@
 
         var html = '<button class="btn-secondary" data-tts-page="1" ' + (state.currentPage === 1 ? 'disabled' : '') + '>&laquo;</button>';
         html += '<button class="btn-secondary" data-tts-page="' + (state.currentPage - 1) + '" ' + (state.currentPage === 1 ? 'disabled' : '') + '>&lsaquo;</button>';
-        html += '<span class="pagination-info">' + state.currentPage + ' ' + ofText + ' ' + totalPages + ' (' + total + ' total)</span>';
+        var rangeStart = (state.currentPage - 1) * state.currentLimit + 1;
+        var rangeEnd = Math.min(state.currentPage * state.currentLimit, total);
+        html += '<span class="pagination-info">' + rangeStart + ' - ' + rangeEnd + ' ' + ofText + ' ' + total + ' total</span>';
         html += '<button class="btn-secondary" data-tts-page="' + (state.currentPage + 1) + '" ' + (state.currentPage === totalPages ? 'disabled' : '') + '>&rsaquo;</button>';
         html += '<button class="btn-secondary" data-tts-page="' + totalPages + '" ' + (state.currentPage === totalPages ? 'disabled' : '') + '>&raquo;</button>';
         html += '<div class="per-page"><label>&nbsp;</label><select data-tts-limit>';

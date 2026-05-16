@@ -215,6 +215,60 @@ var migrations = []string{
 		created_at TEXT DEFAULT CURRENT_TIMESTAMP
 	)`,
 
+	// ---------------------------------------------------------------------
+	// Seed data: countries + weather_presets.
+	//
+	// Countries cover every locale TSW6 routes ship in (ISO 3166-1 alpha-2
+	// codes — matches the catalog scan's country_code field and the
+	// importer's country lookup). The importer auto-creates missing
+	// countries during route ingest, but seeding the canonical list up
+	// front means a wipe-and-restart restores the same set without
+	// re-importing, and downstream code can rely on `code` being
+	// populated. INSERT OR IGNORE keeps re-running safe.
+	//
+	// The UPDATE rewrites a legacy `name='USA'` row (auto-created by older
+	// imports before this seed existed) to the canonical 'United States'.
+	// No-op once already renamed.
+	// ---------------------------------------------------------------------
+	`UPDATE countries SET name = 'United States' WHERE code = 'US' AND name = 'USA'`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Austria', 'AT')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Canada', 'CA')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Czech Republic', 'CZ')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('France', 'FR')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Germany', 'DE')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Italy', 'IT')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Netherlands', 'NL')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('Switzerland', 'CH')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('United Kingdom', 'GB')`,
+	`INSERT OR IGNORE INTO countries (name, code) VALUES ('United States', 'US')`,
+
+	// Weather presets — three baseline scenarios the user can extend
+	// from /weather. INSERT OR IGNORE preserves any presets the user has
+	// renamed or tuned (only re-adds them when missing).
+	`INSERT OR IGNORE INTO weather_presets
+		(name, temperature, cloudiness, precipitation, wetness, ground_snow, piled_snow, fog_density)
+		VALUES ('Sunny Day', 25.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0)`,
+	`INSERT OR IGNORE INTO weather_presets
+		(name, temperature, cloudiness, precipitation, wetness, ground_snow, piled_snow, fog_density)
+		VALUES ('Rainy Day', 12.0, 0.9, 0.8, 0.7, 0.0, 0.0, 0.3)`,
+	`INSERT OR IGNORE INTO weather_presets
+		(name, temperature, cloudiness, precipitation, wetness, ground_snow, piled_snow, fog_density)
+		VALUES ('Snowy Day', -5.0, 0.8, 0.7, 0.3, 0.8, 0.6, 0.2)`,
+
+	// timetable_actions seed — TSW6's canonical action verbs. Without these
+	// rows, every imported entry's action_id is NULL (resolveActionID
+	// fails silently) which breaks the /timetables Stops column count
+	// and downstream HUD action rendering. INSERT OR IGNORE keeps re-runs
+	// safe; the importer also self-heals via INSERT-OR-LOOKUP.
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('WAIT FOR SERVICE')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('WAIT')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('STOP AT LOCATION')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('LOAD PASSENGERS')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('UNLOAD PASSENGERS')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('GO VIA LOCATION')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('UNCOUPLE VEHICLES')`,
+	`INSERT OR IGNORE INTO timetable_actions (name) VALUES ('COUPLE TO FORMATION')`,
+
 	// timetable_coordinates
 	`CREATE TABLE IF NOT EXISTS timetable_coordinates (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -625,6 +679,35 @@ var migrations = []string{
 		ON train_classes(is_electric)`,
 	`CREATE INDEX IF NOT EXISTS idx_train_classes_vehicle_category
 		ON train_classes(vehicle_category)`,
+
+	// rail_vehicle_class is the canonical identity key (stable across AI
+	// and player formations in TSW's per-service JSONs). Populated by the
+	// importer from route_*.json's train_classes[] section, which sources
+	// it from the pak's RVD assets. NULL on legacy rows that predate this
+	// column; the importer ON CONFLICT clause keys off this so an index is
+	// required to make the upsert work.
+	`ALTER TABLE train_classes ADD COLUMN rail_vehicle_class TEXT`,
+	// Full (non-partial) UNIQUE index. SQLite treats NULLs as distinct
+	// in UNIQUE indexes, so legacy rows with NULL rail_vehicle_class
+	// don't collide. A partial index (WHERE rail_vehicle_class IS NOT
+	// NULL) wouldn't satisfy the upsert's ON CONFLICT(rail_vehicle_class)
+	// clause — SQLite requires a non-partial constraint there.
+	//
+	// DROP first to replace any existing partial-index version of the
+	// same name on DBs created by earlier builds of this migration.
+	`DROP INDEX IF EXISTS uq_train_classes_rail_vehicle_class`,
+	`CREATE UNIQUE INDEX IF NOT EXISTS uq_train_classes_rail_vehicle_class
+		ON train_classes(rail_vehicle_class)`,
+	// is_drivable rolls up the per-vehicle pak_rvds.drivable flag — the
+	// /train-classes UI filters non-drivable classes (wagons / coaches)
+	// off the default view.
+	`ALTER TABLE train_classes ADD COLUMN is_drivable INTEGER NOT NULL DEFAULT 0`,
+	// powered_axle_count mirrors uasset.RVD.PoweredAxleCount — number of
+	// driven axles on the class's drivable variant. Rolled into the class
+	// row because TSW propulsion calculations consult it; consumers
+	// (route-info pages, future physics widgets) read from train_classes
+	// rather than walking pak_rvds.
+	`ALTER TABLE train_classes ADD COLUMN powered_axle_count INTEGER`,
 
 	// One-to-many electrification compatibility table. Each row is one
 	// (current, pickup, voltage, frequency) entry from an RVD's

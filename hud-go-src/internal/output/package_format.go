@@ -105,6 +105,34 @@ type AdditionalFormation struct {
 	Formations    []FormationClassEntry `json:"formations,omitempty"`
 }
 
+// RouteTrainClass is one entry in `route_<X>.json`'s top-level
+// `train_classes` array — the canonical list of every RVD shipped in the
+// route's pak set (drivable or not). Importers create one
+// `train_classes` DB row per entry, keyed by `RailVehicleClass` (stable
+// across AI / player formations, unlike `FriendlyName` which TSW labels
+// inconsistently).
+//
+// Thumbnail bytes ride in the zip at `images/train_classes/<file>.png`;
+// `ThumbnailRel` is the path-inside-zip the importer extracts to its
+// own static directory. Empty when no thumbnail asset is resolvable.
+type RouteTrainClass struct {
+	RailVehicleClass  string                `json:"rail_vehicle_class"`        // identity, e.g. "CTC-3"
+	FriendlyName      string                `json:"friendly_name,omitempty"`   // display name, e.g. "CTC-3 MBTA"
+	LiveryID          string                `json:"livery_id,omitempty"`
+	VehicleCategory   string                `json:"vehicle_category,omitempty"`
+	Drivable          bool                  `json:"drivable"`
+	LengthM           *float32              `json:"length_m,omitempty"`        // approximate_length_m from RVD (already in metres)
+	IsElectric        *bool                 `json:"is_electric,omitempty"`
+	MaxSpeedKph       *float32              `json:"max_speed_kph,omitempty"`
+	MaxPowerKw        *float32              `json:"max_power_kw,omitempty"`
+	PoweredAxleCount  *uint32               `json:"powered_axle_count,omitempty"`
+	ManufacturerName  string                `json:"manufacturer_name,omitempty"`
+	EngineDescription string                `json:"engine_description,omitempty"`
+	TypeDescription   string                `json:"type_description,omitempty"`
+	ThumbnailRel      string                `json:"thumbnail_rel,omitempty"`   // path-inside-zip, e.g. "images/train_classes/CTC-3.png"
+	Electrification   []ElectrificationSpec `json:"electrification,omitempty"`
+}
+
 // PackageService is the shareable per-service JSON schema used by the import format.
 // Field ordering: identity + metadata up top, bulk arrays (csvData / timetable /
 // coordinates / markers) at the bottom for easier inspection.

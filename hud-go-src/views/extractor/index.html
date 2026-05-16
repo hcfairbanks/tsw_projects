@@ -308,7 +308,7 @@
                 if (!r.ok) {
                     const txt = await r.text();
                     elBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">' +
-                        'Cannot list routes: ' + escapeHTML(txt) + '<br><br>Check the Settings panel above.</td></tr>';
+                        'Press "Scan" to get a full list of your DLC Routes</td></tr>';
                     return;
                 }
                 const data = await r.json();
@@ -816,6 +816,12 @@
                     // verbatim; route map isn't touched (events have no
                     // ev.route, so the per-row branch above is skipped).
                     appendLog(ev.message || '');
+                } else if (ev.type === 'catalog_done') {
+                    // Final summary line for a scan. Rendered green so it's
+                    // visually obvious the scan has finished. Refresh the
+                    // route list so the page reflects new paks immediately.
+                    appendLog(ev.message || '— Scan Finished —', 'ok');
+                    setTimeout(loadRoutes, 100);
                 }
             };
             es.onerror = () => { /* EventSource auto-reconnects; nothing to do. */ };

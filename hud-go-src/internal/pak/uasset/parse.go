@@ -1174,9 +1174,19 @@ func buildSchedule(instrs []instruction) []ScheduleItem {
 			if structType != "" {
 				loc = station
 			}
+			details := dest
+			// TSW renders an unspecified destination on a GO VIA LOCATION
+			// row as "As Indicated" in-game (the asset's Name field is the
+			// "None" sentinel — see parseRouteLocationName). Mirror that
+			// behaviour so the importer / HUD has a useful details string
+			// instead of an empty cell. Location stays empty so the HUD's
+			// "VIA Location" label still fires for these passthroughs.
+			if details == "" && action == "GO VIA LOCATION" {
+				details = "As Indicated"
+			}
 			items = append(items, ScheduleItem{
 				Action:          action,
-				Details:         dest,
+				Details:         details,
 				Location:        loc,
 				SortOrder:       len(items),
 				Structure:       structType,

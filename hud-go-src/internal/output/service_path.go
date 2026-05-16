@@ -98,32 +98,13 @@ func BuildServicePath(svc *uasset.Service, ribbons map[string]*uasset.Ribbon, sw
 		return nil
 	}
 
-	// Find the first and last scheduled-stop waypoints. Defaults span the
-	// full waypoint list so a service composed entirely of GO VIA LOCATION
-	// routing hints (no real stops) still renders end-to-end.
-	firstStopIdx, lastStopIdx := 0, len(wps)-1
-	firstSet := false
-	for i, w := range wps {
-		if w.isStop {
-			if !firstSet {
-				firstStopIdx = i
-				firstSet = true
-			}
-			lastStopIdx = i
-		}
-	}
-
 	adj := buildNodeAdjacency(ribbons, switches)
 	out := []ServiceCoord{}
-	// Track where each waypoint lands in `out` so we can slice the polyline
-	// to first-stop → last-stop after the full path is built.
-	wpOutIdx := make([]int, len(wps))
 	// Seed with the first waypoint's position. Look it up from the rails
 	// vertex array (so the seed is on a rail vertex too) when available;
 	// fall back to analytical position only when the ribbon isn't in the
 	// rails map (which then also gets a Break on the next waypoint).
 	out = append(out, waypointSeed(wps[0].ribbon, wps[0].fraction, vertices, anchor))
-	wpOutIdx[0] = len(out) - 1
 
 	for i := 1; i < len(wps); i++ {
 		prev, cur := wps[i-1], wps[i]
@@ -134,28 +115,18 @@ func BuildServicePath(svc *uasset.Service, ribbons map[string]*uasset.Ribbon, sw
 			seg = seg[1:]
 		}
 		out = append(out, seg...)
-		wpOutIdx[i] = len(out) - 1
 	}
 
-	// Trim the polyline to start at the first stop and end at the last stop.
-	// Routing-only GO VIA LOCATION hints have already shaped Dijkstra's chain
-	// above; we just don't render the tails outside the stop range.
-	start := wpOutIdx[firstStopIdx]
-	end := wpOutIdx[lastStopIdx] + 1
-	if start < 0 {
-		start = 0
-	}
-	if end > len(out) {
-		end = len(out)
-	}
-	if start < end {
-		out = out[start:end]
-		// A Break on the new first coord would render as a leading gap from
-		// nowhere — clear it when trimming has actually happened.
-		if start > 0 && len(out) > 0 {
-			out[0].Break = false
-		}
-	}
+	// Return the full waypoint-to-waypoint polyline. We used to trim it to
+	// "first STOP AT LOCATION → last STOP AT LOCATION" on the theory that
+	// GO VIA LOCATION waypoints outside the stop range were depot
+	// positioning the player shouldn't see. That broke yard switchers like
+	// CSX Y120 Framingham → Worcester, whose schedule is one WAIT FOR
+	// SERVICE plus one GO VIA LOCATION (the destination): firstStop and
+	// lastStop were both index 0, the trim sliced the polyline to that
+	// single point, and the HUD got a 1-point "path". Per the rule
+	// "the primary path is the one thing that must always be drawn", the
+	// full polyline now ships unmodified.
 	return out
 }
 

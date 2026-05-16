@@ -159,6 +159,11 @@ type trainClass struct {
 	TypeDescription   *string  `json:"type_description,omitempty"`
 	VehicleCategory   *string  `json:"vehicle_category,omitempty"`
 	ThumbnailPath     *string  `json:"thumbnail_path,omitempty"`
+	// VehicleLengthM is the length of the archetype vehicle (locomotive,
+	// coach, or MU car) from pak_rvds.approximate_length_m — distinct from
+	// TypicalLengthM which is the full consist length rolled up from
+	// formations.length_m. Populated only by GetClassByID.
+	VehicleLengthM    *float64 `json:"vehicle_length_m,omitempty"`
 }
 
 // classElec is one electrification spec rolled up to a class.
@@ -211,6 +216,18 @@ func (h *FormationHandler) GetClassByID(w http.ResponseWriter, r *http.Request) 
 		util.Error(w, 500, err.Error())
 		return
 	}
+	// Per-vehicle length from pak_rvds. Prefer the drivable RVD so a class
+	// that includes coaches doesn't report a coach's length when there's a
+	// real loco in the same friendly_name group.
+	var vehLen sql.NullFloat64
+	_ = h.db.QueryRow(`
+		SELECT approximate_length_m FROM pak_rvds
+		WHERE friendly_name = ? AND approximate_length_m IS NOT NULL
+		ORDER BY drivable DESC LIMIT 1`, c.Name).Scan(&vehLen)
+	if vehLen.Valid {
+		v := vehLen.Float64
+		c.VehicleLengthM = &v
+	}
 	// Electrification specs for this class.
 	elecRows, _ := h.db.Query(
 		`SELECT current, pickup_side, voltage_v, frequency_hz
@@ -257,6 +274,47 @@ func (h *FormationHandler) GetClassByID(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
+// GetClassRoutes returns the routes this class is playable on — i.e. routes
+// with at least one playable=1 timetable whose formation belongs to this
+// class. Country name is included so the UI can group/badge by country.
+func (h *FormationHandler) GetClassRoutes(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		util.Error(w, 400, "invalid id")
+		return
+	}
+	rows, err := h.db.Query(`
+		SELECT DISTINCT r.id, r.name, c.name AS country_name
+		FROM routes r
+		LEFT JOIN countries c ON c.id = r.country_id
+		JOIN timetables t ON t.route_id = r.id
+		JOIN timetable_formations tf ON tf.timetable_id = t.id
+		JOIN formations f ON f.id = tf.formation_id
+		WHERE f.class_id = ? AND t.playable = 1
+		ORDER BY r.name`, id)
+	if err != nil {
+		util.Error(w, 500, err.Error())
+		return
+	}
+	defer rows.Close()
+	type routeRow struct {
+		ID          int     `json:"id"`
+		Name        string  `json:"name"`
+		CountryName *string `json:"country_name,omitempty"`
+	}
+	out := []routeRow{}
+	for rows.Next() {
+		var r routeRow
+		if err := rows.Scan(&r.ID, &r.Name, &r.CountryName); err != nil {
+			util.Error(w, 500, err.Error())
+			return
+		}
+		out = append(out, r)
+	}
+	util.JSON(w, 200, out)
+}
+
 // ListClasses returns the full set of train classes with optional filters
 // applied. Powers the /train-classes search page.
 //
@@ -267,10 +325,13 @@ func (h *FormationHandler) GetClassByID(w http.ResponseWriter, r *http.Request) 
 //	              this route (via formations.class_id ← route_formations)
 //	country_id    only classes whose routes' country matches
 //	propulsion    "electric" or "non-electric"
+//	type          exact match on type_description (e.g. "Electric Locomotive")
 //	voltage_v     only classes whose electrification list contains this
 //	              voltage (in volts; matches any frequency)
-//
-// Sorted by name. No paging — total class count is bounded (~100s).
+//	page, limit   pagination (1-indexed). When either is set the response
+//	              is wrapped as {data, pagination:{total,page,limit,totalPages}};
+//	              without them the response is a bare JSON array (typeahead
+//	              callers in timetable-search.js handle both shapes).
 func (h *FormationHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	var (
@@ -291,6 +352,10 @@ func (h *FormationHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 	}
 	if v := strings.TrimSpace(q.Get("category")); v != "" {
 		conditions = append(conditions, "tc.vehicle_category = ?")
+		args = append(args, v)
+	}
+	if v := strings.TrimSpace(q.Get("type")); v != "" {
+		conditions = append(conditions, "tc.type_description = ?")
 		args = append(args, v)
 	}
 	if v := strings.TrimSpace(q.Get("voltage_v")); v != "" {
@@ -323,6 +388,19 @@ func (h *FormationHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Hide classes the UI considers non-trainlike: no type_description (Type
+	// column empty — usually a dummy / unidentified RVD), freight wagons
+	// (vehicle_category = 'FreightWagon' — rolling stock pulled by a real
+	// loco, not a class users would filter timetables by), and any class
+	// flagged non-drivable in its RVD (bIsDrivable=false — passenger
+	// coaches, dead-headed cars).
+	conditions = append(conditions,
+		"tc.type_description IS NOT NULL",
+		"TRIM(tc.type_description) <> ''",
+		"(tc.vehicle_category IS NULL OR tc.vehicle_category <> 'FreightWagon')",
+		"tc.is_drivable = 1",
+	)
+
 	where := ""
 	if len(conditions) > 0 {
 		where = " WHERE " + strings.Join(conditions, " AND ")
@@ -331,7 +409,35 @@ func (h *FormationHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 	if len(joins) > 0 {
 		joinClause = " " + strings.Join(joins, " ")
 	}
-	rows, err := h.db.Query("SELECT "+trainClassSelectCols+" FROM train_classes tc"+joinClause+where+" ORDER BY tc.name", args...)
+
+	pageStr := strings.TrimSpace(q.Get("page"))
+	limitStr := strings.TrimSpace(q.Get("limit"))
+	paginated := pageStr != "" || limitStr != ""
+
+	page, _ := strconv.Atoi(pageStr)
+	if page < 1 {
+		page = 1
+	}
+	limit, _ := strconv.Atoi(limitStr)
+	if limit < 1 {
+		limit = 24
+	}
+
+	var total int
+	if paginated {
+		if err := h.db.QueryRow("SELECT COUNT(*) FROM train_classes tc"+joinClause+where, args...).Scan(&total); err != nil {
+			util.Error(w, 500, err.Error())
+			return
+		}
+	}
+
+	sql := "SELECT " + trainClassSelectCols + " FROM train_classes tc" + joinClause + where + " ORDER BY tc.name"
+	pageArgs := args
+	if paginated {
+		sql += " LIMIT ? OFFSET ?"
+		pageArgs = append(append([]any{}, args...), limit, (page-1)*limit)
+	}
+	rows, err := h.db.Query(sql, pageArgs...)
 	if err != nil {
 		util.Error(w, 500, err.Error())
 		return
@@ -345,6 +451,20 @@ func (h *FormationHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		out = append(out, c)
+	}
+
+	if paginated {
+		totalPages := (total + limit - 1) / limit
+		util.JSON(w, 200, map[string]any{
+			"data": out,
+			"pagination": map[string]any{
+				"total":      total,
+				"page":       page,
+				"limit":      limit,
+				"totalPages": totalPages,
+			},
+		})
+		return
 	}
 	util.JSON(w, 200, out)
 }
@@ -515,6 +635,30 @@ func pakSanitisedName(name string) string {
 		return "unknown"
 	}
 	return b.String()
+}
+
+// ListClassTypes returns the distinct type_description values present on
+// train_classes (e.g. "Electric Locomotive", "Diesel Shunter", "Electric
+// Multiple Unit"), sorted. Populates the Type filter dropdown on
+// /train-classes.
+func (h *FormationHandler) ListClassTypes(w http.ResponseWriter, r *http.Request) {
+	rows, err := h.db.Query(`SELECT DISTINCT type_description FROM train_classes
+		WHERE type_description IS NOT NULL AND TRIM(type_description) != ''
+		  AND (vehicle_category IS NULL OR vehicle_category != 'FreightWagon')
+		ORDER BY type_description`)
+	if err != nil {
+		util.Error(w, 500, err.Error())
+		return
+	}
+	defer rows.Close()
+	var out []string
+	for rows.Next() {
+		var v string
+		if err := rows.Scan(&v); err == nil {
+			out = append(out, v)
+		}
+	}
+	util.JSON(w, 200, out)
 }
 
 // ListClassCategories returns the distinct vehicle_category values

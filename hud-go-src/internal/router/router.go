@@ -72,8 +72,10 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Get("/api/train-classes", h.Formation.ListClasses)
 	r.Get("/api/train-classes/voltages", h.Formation.ListClassVoltages)
 	r.Get("/api/train-classes/categories", h.Formation.ListClassCategories)
+	r.Get("/api/train-classes/types", h.Formation.ListClassTypes)
 	r.Post("/api/train-classes/refresh-metadata", h.Formation.RefreshClassMetadata)
 	r.Get("/api/train-classes/{id}", h.Formation.GetClassByID)
+	r.Get("/api/train-classes/{id}/routes", h.Formation.GetClassRoutes)
 	r.Get("/api/routes/{id}/train-classes", h.Route.GetTrainClasses)
 
 	// Timetables

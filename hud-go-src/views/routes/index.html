@@ -61,6 +61,10 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
         th { background: var(--bg-tertiary); color: var(--accent-color); }
+        th.sortable { cursor: pointer; user-select: none; }
+        th.sortable:hover { background: var(--bg-secondary); }
+        th.sortable .sort-arrow { margin-left: 4px; font-size: 10px; color: var(--text-muted); }
+        th.sortable.active .sort-arrow { color: var(--accent-color); }
         tr:hover { background: var(--bg-primary); }
         .actions { white-space: nowrap; }
         .actions button { padding: 5px 10px; font-size: 12px; }
@@ -438,6 +442,11 @@
             }
         }
 
+        // Sort state — empty default = server's legacy id-DESC. The
+        // th-click handler in renderRoutes populates these and re-fetches.
+        let sortColumn = '';
+        let sortDirection = 'ASC';
+
         async function loadRoutes(page, limit, search, countryId) {
             page = page || 1; limit = limit || 15; search = search || ''; countryId = countryId || '';
             currentPage = page; currentLimit = limit; currentSearch = search; currentCountryId = countryId;
@@ -445,6 +454,8 @@
                 const params = new URLSearchParams({ page, limit });
                 if (search) params.set('search', search);
                 if (countryId) params.set('country_id', countryId);
+                if (sortColumn) params.set('sort_by', sortColumn);
+                if (sortDirection) params.set('sort_dir', sortDirection);
                 const response = await fetch(API_URL + '/paginated?' + params);
                 const result = await response.json();
                 renderRoutes(result.data);
@@ -458,7 +469,32 @@
         function renderRoutes(routes) {
             const container = document.getElementById('routesList');
             if (routes.length === 0) { container.innerHTML = '<p class="empty-message" data-i18n="routes.noRoutes">No routes found.</p>'; return; }
-            let html = '<table><thead><tr><th data-i18n="common.name">Name</th><th data-i18n="routes.country">Country</th>';
+
+            // headerCell: clickable when sortKey set, with an arrow showing
+            // current state. Server whitelists the column names.
+            function headerCell(label, i18nKey, sortKey, cls) {
+                let classes = [];
+                if (cls) classes.push(cls);
+                let arrow = '';
+                if (sortKey) {
+                    classes.push('sortable');
+                    if (sortColumn === sortKey) {
+                        classes.push('active');
+                        arrow = ' <span class="sort-arrow">' + (sortDirection === 'ASC' ? '▲' : '▼') + '</span>';
+                    } else {
+                        arrow = ' <span class="sort-arrow">↕</span>';
+                    }
+                }
+                let attrs = '';
+                if (classes.length) attrs += ' class="' + classes.join(' ') + '"';
+                if (sortKey) attrs += ' data-sort-col="' + sortKey + '"';
+                if (i18nKey) attrs += ' data-i18n="' + i18nKey + '"';
+                return '<th' + attrs + '>' + label + arrow + '</th>';
+            }
+
+            let html = '<table><thead><tr>';
+            html += headerCell('Name',    'common.name',    'name');
+            html += headerCell('Country', 'routes.country', 'country_name');
             if (devMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
             html += '</tr></thead><tbody>';
             routes.forEach(function(r) {
@@ -478,6 +514,23 @@
             });
             html += '</tbody></table>';
             container.innerHTML = html;
+
+            // Wire sortable header clicks. Same toggle behaviour as the
+            // timetables page: clicking the active column flips direction;
+            // clicking a different column switches and resets to ASC.
+            container.querySelectorAll('th.sortable').forEach(function (th) {
+                th.addEventListener('click', function () {
+                    var col = th.getAttribute('data-sort-col');
+                    if (!col) return;
+                    if (sortColumn === col) {
+                        sortDirection = sortDirection === 'ASC' ? 'DESC' : 'ASC';
+                    } else {
+                        sortColumn = col;
+                        sortDirection = 'ASC';
+                    }
+                    loadRoutes(1, currentLimit, currentSearch, currentCountryId);
+                });
+            });
             if (typeof i18n !== 'undefined') i18n.translatePage();
         }
 
