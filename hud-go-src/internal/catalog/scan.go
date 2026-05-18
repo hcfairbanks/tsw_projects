@@ -157,6 +157,17 @@ func ScanCatalog(db *sql.DB, tswPath string, tools Tools, force bool) (ScanResul
 		}
 		res.Removed++
 	}
+
+	// Reconcile train_classes against the freshly-populated pak_rvds.
+	// Inserts/links/backfills every class found across every pak — even
+	// the standalone train DLCs that don't ship a parent route. Removes
+	// the need for users to click the "Rebuild Train Classes from RVDs"
+	// dev button after a scan: the full class set appears immediately.
+	tcRes := ReconcileTrainClasses(db)
+	if tools.Logger != nil && (tcRes.Linked+tcRes.Inserted+tcRes.Backfilled) > 0 {
+		tools.Logger("[catalog] reconciled train_classes: linked=%d inserted=%d backfilled=%d thumbs_fixed=%d",
+			tcRes.Linked, tcRes.Inserted, tcRes.Backfilled, tcRes.ThumbsFixed)
+	}
 	return res, nil
 }
 

@@ -442,11 +442,12 @@
         </div>
     </div>
 
-    <!-- Routes (incomplete) -->
+    <!-- Game Assets (incomplete) — routes + their nested addons up top,
+         standalone Train DLCs at the bottom. -->
     <div class="card">
         <details id="routesPanel" open>
             <summary>
-                <span data-i18n="extractor.routes">Routes</span>
+                <span data-i18n="extractor.gameAssets">Game Assets</span>
                 <!-- Scan/Rescan sits right next to the label so it's the
                      first action a user sees on a cold-start page (when
                      the toolbar's Run/Stop don't apply yet). stopPropagation
@@ -469,6 +470,7 @@
                 <span id="progressSummary" style="display:none;"></span>
             </summary>
             <div style="max-height: 540px; overflow-y: auto; margin-top: 10px;">
+                <h3 style="margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="extractor.sectionRoutes">Routes</h3>
                 <table id="routesTable">
                     <thead>
                         <tr>
@@ -484,6 +486,25 @@
                         <tr><td colspan="4" style="text-align:center; color: var(--text-muted); padding: 30px;" data-i18n="common.loading">Loading…</td></tr>
                     </tbody>
                 </table>
+
+                <!-- Train DLCs section: standalone train packs (no parent
+                     route). Hidden until the API returns at least one. -->
+                <div id="trainDlcsSection" style="display:none; margin-top: 24px;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="extractor.sectionTrainDlcs">Train DLCs</h3>
+                    <table id="trainDlcsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 38px; text-align:center;">
+                                    <input type="checkbox" id="selectAllTrains" title="Select all" data-i18n-title="extractor.selectAll">
+                                </th>
+                                <th style="width: 70%;" data-i18n="extractor.colTrainDlc">Train DLC</th>
+                                <th style="width: 12%;" data-i18n="extractor.colSize">Size</th>
+                                <th style="width: 18%;" data-i18n="extractor.colActions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainDlcsBody"></tbody>
+                    </table>
+                </div>
             </div>
         </details>
     </div>
@@ -553,6 +574,9 @@
         const elSelectSummary  = document.getElementById('selectionSummary');
         const elRoutesCount    = document.getElementById('routesCount');
         const elCompletedCount = document.getElementById('completedCount');
+        const elTrainDlcsSection = document.getElementById('trainDlcsSection');
+        const elTrainDlcsBody    = document.getElementById('trainDlcsBody');
+        const elSelectAllTrains  = document.getElementById('selectAllTrains');
 
         // ---------- initial load ----------
         async function loadConfig() {
@@ -716,6 +740,22 @@
                         status:      it.zip_exists ? 'done' : 'not_yet',
                         completed:   !!it.completed,
                         children:    it.children || [],
+                        kind:        'route',
+                    });
+                }
+                // Standalone Train DLCs — paks without parent route linkage.
+                // Share the same selection/extraction wiring as routes; they
+                // just render into the separate Train DLCs table.
+                for (const it of (data.train_dlcs || [])) {
+                    routes.set(it.name, {
+                        displayName: it.display_name || it.name,
+                        country:     it.country || '',
+                        zipExists:   it.zip_exists,
+                        zipBytes:    it.zip_bytes,
+                        status:      it.zip_exists ? 'done' : 'not_yet',
+                        completed:   !!it.completed,
+                        children:    [],
+                        kind:        'train_dlc',
                     });
                 }
                 renderRoutes();
@@ -726,14 +766,32 @@
         }
 
         function renderRoutes() {
-            const incomplete = [];
+            const routesIncomplete = [];
+            const trainDlcsIncomplete = [];
             const completed  = [];
             for (const [name, r] of routes) {
-                if (r.completed) completed.push([name, r]); else incomplete.push([name, r]);
+                if (r.completed) {
+                    completed.push([name, r]);
+                } else if (r.kind === 'train_dlc') {
+                    trainDlcsIncomplete.push([name, r]);
+                } else {
+                    routesIncomplete.push([name, r]);
+                }
             }
-            renderRouteList(elBody, incomplete, false);
+            renderRouteList(elBody, routesIncomplete, false);
             renderRouteList(elCompletedBody, completed, true);
-            elRoutesCount.textContent    = incomplete.length ? '(' + incomplete.length + ')' : '';
+            // Train DLCs table: hide the whole section when there's
+            // nothing to show, otherwise render with the same row
+            // template / selection wiring as the Routes table.
+            if (trainDlcsIncomplete.length > 0) {
+                elTrainDlcsSection.style.display = 'block';
+                renderRouteList(elTrainDlcsBody, trainDlcsIncomplete, false);
+            } else {
+                elTrainDlcsSection.style.display = 'none';
+                if (elTrainDlcsBody) elTrainDlcsBody.innerHTML = '';
+            }
+            const totalIncomplete = routesIncomplete.length + trainDlcsIncomplete.length;
+            elRoutesCount.textContent    = totalIncomplete ? '(' + totalIncomplete + ')' : '';
             elCompletedCount.textContent = completed.length  ? '(' + completed.length  + ')' : '';
             updateSelectionSummary();
             updateRescanLabel();
@@ -918,15 +976,28 @@
                 : '';
         }
 
-        // Toggle every visible row to match the header checkbox.
+        // Toggle every visible ROUTE row to match the header checkbox.
+        // Train DLCs have their own select-all so the two sections can
+        // be selected/extracted independently.
         elSelectAll.addEventListener('change', () => {
-            if (elSelectAll.checked) {
-                for (const name of routes.keys()) selected.add(name);
-            } else {
-                selected.clear();
+            for (const [name, r] of routes) {
+                if (r.completed || r.kind === 'train_dlc') continue;
+                if (elSelectAll.checked) selected.add(name);
+                else                     selected.delete(name);
             }
             renderRoutes();
         });
+
+        if (elSelectAllTrains) {
+            elSelectAllTrains.addEventListener('change', () => {
+                for (const [name, r] of routes) {
+                    if (r.completed || r.kind !== 'train_dlc') continue;
+                    if (elSelectAllTrains.checked) selected.add(name);
+                    else                           selected.delete(name);
+                }
+                renderRoutes();
+            });
+        }
 
         function pillFor(status) {
             const pill = (cls, key, fb) => '<span class="status-pill ' + cls + '">' + escapeHTML(t('extractor.' + key, fb)) + '</span>';

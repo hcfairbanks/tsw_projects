@@ -2440,7 +2440,7 @@ func (h *TimetableHandler) ingestRouteTrainClasses(zr *zip.Reader) {
 	// the canonical/main-livery variant (deprioritising TTC) so the
 	// page shows the in-game image users expect, every import, without
 	// needing manual Rebuild Train Classes.
-	FixTrainClassThumbnails(h.db)
+	catalog.FixTrainClassThumbnails(h.db)
 }
 
 func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request) {

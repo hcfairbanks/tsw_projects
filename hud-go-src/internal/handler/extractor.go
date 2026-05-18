@@ -156,7 +156,7 @@ func (h *ExtractorHandler) ListRoutes(w http.ResponseWriter, r *http.Request) {
 	// populate the catalog. An empty catalog returns an empty tree;
 	// the UI shows "Scan" instead of "Rescan" on the toolbar button.
 
-	tree := catalog.BuildTree(paks)
+	tree, orphans := catalog.BuildTreeWithOrphans(paks)
 	completed := h.loadCompletedRoutes()
 
 	// Stamp parent rows with zip-presence + completed flag.
@@ -172,15 +172,29 @@ func (h *ExtractorHandler) ListRoutes(w http.ResponseWriter, r *http.Request) {
 				parent.ZipMTime = st.ModTime().Unix()
 			}
 		}
-		// Addon children carry country codes; expand the same way for
-		// display consistency. They don't get zip / completed stamps.
 		for _, child := range parent.Children {
 			child.Country = output.CountryNameFromCode(child.Country)
+		}
+	}
+	// Same zip-presence + completed stamps for orphan train DLCs so
+	// the UI can show their extraction status alongside the routes.
+	for _, t := range orphans {
+		t.Country = output.CountryNameFromCode(t.Country)
+		t.Completed = completed[t.Codename]
+		if outDir != "" {
+			zipName := strings.ReplaceAll(t.DisplayName, " ", "_") + ".zip"
+			zipPath := filepath.Join(outDir, zipName)
+			if st, err := os.Stat(zipPath); err == nil && !st.IsDir() {
+				t.ZipExists = true
+				t.ZipBytes = st.Size()
+				t.ZipMTime = st.ModTime().Unix()
+			}
 		}
 	}
 
 	util.JSON(w, http.StatusOK, map[string]any{
 		"items":      tree,
+		"train_dlcs": orphans,
 		"output_dir": outDir,
 	})
 }
@@ -1333,293 +1347,27 @@ func (h *ExtractorHandler) NukeDB(w http.ResponseWriter, r *http.Request) {
 	util.JSON(w, http.StatusOK, out)
 }
 
-// RebuildTrainClassesFromRVDs reconciles the train_classes table with the
-// canonical pak_rvds data. Three actions:
-//
-//  1. Link "ghost" train_classes rows (created during per-route imports
-//     with rail_vehicle_class=NULL) to their pak_rvds rail_vehicle_class
-//     by matching train_classes.name against pak_rvds.friendly_name.
-//  2. Insert new train_classes rows for every pak_rvds rail_vehicle_class
-//     not yet present.
-//  3. Backfill canonical attributes (is_drivable, is_electric,
-//     vehicle_category, type_description, etc.) from pak_rvds onto
-//     train_classes rows so the listing filters work correctly. Per-route
-//     imports often leave is_drivable=0 even for clearly drivable
-//     locomotives because the schedule data doesn't carry that flag —
-//     pak_rvds (parsed from the actual RVD uasset) has the truth.
+// RebuildTrainClassesFromRVDs is the dev-tools button that re-runs the
+// catalog → train_classes reconciliation. The same work runs at the end
+// of every catalog scan (catalog.ReconcileTrainClasses), so this button
+// is now a drift-recovery tool — useful after a partial re-extract or
+// manual DB edit leaves train_classes stale relative to pak_rvds.
 //
 // POST /api/extractor/rebuild-train-classes
-//
-// Returns {success, linked, inserted, backfilled} for the dev-tools button.
 func (h *ExtractorHandler) RebuildTrainClassesFromRVDs(w http.ResponseWriter, r *http.Request) {
-	// Step 1: link ghost rows by name. Only links rows whose target rvc
-	// isn't ALREADY taken by another train_classes row — train_classes
-	// has a UNIQUE index on rail_vehicle_class, so without this guard
-	// the UPDATE aborts with a constraint failure the first time it
-	// encounters a duplicate-name ghost (e.g. 'BR 442 Talent 2 DB'
-	// wanting the same rvc as the existing 'BR442 Talent 2 DB' row).
-	// Ghosts whose target rvc is taken are left alone and surface in
-	// the duplicates_skipped count for the followup dedupe pass.
-	linkRes, err := h.db.Exec(`
-		UPDATE train_classes
-		SET rail_vehicle_class = (
-		  SELECT MAX(pv.rail_vehicle_class) FROM pak_rvds pv
-		  WHERE pv.friendly_name = train_classes.name
-		    AND pv.rail_vehicle_class IS NOT NULL
-		    AND pv.rail_vehicle_class != ''
-		)
-		WHERE (train_classes.rail_vehicle_class IS NULL OR train_classes.rail_vehicle_class = '')
-		  AND train_classes.name IN (
-		    SELECT DISTINCT friendly_name FROM pak_rvds
-		    WHERE friendly_name IS NOT NULL AND friendly_name != ''
-		  )
-		  AND (
-		    SELECT MAX(pv.rail_vehicle_class) FROM pak_rvds pv
-		    WHERE pv.friendly_name = train_classes.name
-		      AND pv.rail_vehicle_class IS NOT NULL
-		      AND pv.rail_vehicle_class != ''
-		  ) NOT IN (
-		    SELECT rail_vehicle_class FROM train_classes
-		    WHERE rail_vehicle_class IS NOT NULL AND rail_vehicle_class != ''
-		  )
-	`)
-	linked := int64(0)
-	if err == nil {
-		linked, _ = linkRes.RowsAffected()
-	} else {
-		log.Printf("[rebuild-train-classes] link: %v", err)
-	}
-
-	// Count ghost rows we DIDN'T link because their target rvc was
-	// already in use by another row (= they're duplicates of an
-	// existing canonical row). Reported so the UI can prompt a dedupe.
-	var duplicatesSkipped int64
-	h.db.QueryRow(`
-		SELECT COUNT(*) FROM train_classes tc
-		WHERE (tc.rail_vehicle_class IS NULL OR tc.rail_vehicle_class = '')
-		  AND tc.name IN (
-		    SELECT DISTINCT friendly_name FROM pak_rvds
-		    WHERE friendly_name IS NOT NULL AND friendly_name != ''
-		  )
-		  AND (
-		    SELECT MAX(pv.rail_vehicle_class) FROM pak_rvds pv
-		    WHERE pv.friendly_name = tc.name
-		      AND pv.rail_vehicle_class IS NOT NULL
-		      AND pv.rail_vehicle_class != ''
-		  ) IN (
-		    SELECT rail_vehicle_class FROM train_classes
-		    WHERE rail_vehicle_class IS NOT NULL AND rail_vehicle_class != ''
-		  )
-	`).Scan(&duplicatesSkipped)
-
-	// Step 2: insert pak_rvds rail_vehicle_class values not yet in
-	// train_classes. Use MAX(friendly_name) and the snapshot fields from
-	// pak_rvds so the new rows start with realistic data.
-	insRes, err := h.db.Exec(`
-		INSERT INTO train_classes
-		    (name, rail_vehicle_class, livery_id, typical_length_m,
-		     is_electric, max_speed_kph, max_power_kw, powered_axle_count,
-		     manufacturer_name, engine_description, type_description,
-		     vehicle_category, is_drivable, thumbnail_path)
-		SELECT
-		    MAX(friendly_name)            AS name,
-		    rail_vehicle_class            AS rvc,
-		    MAX(livery_id)                AS livery_id,
-		    MAX(approximate_length_m)     AS typ_len,
-		    MAX(is_electric)              AS is_electric,
-		    MAX(max_speed_kph)            AS max_speed,
-		    MAX(max_power_kw)             AS max_power,
-		    MAX(powered_axle_count)       AS pax,
-		    MAX(manufacturer_name)        AS mfr,
-		    MAX(engine_description)       AS eng,
-		    MAX(type_description)         AS typ,
-		    MAX(vehicle_category)         AS cat,
-		    MAX(drivable)                 AS drv,
-		    '/images/train_classes/' || REPLACE(REPLACE(rail_vehicle_class, '/', '_'), ' ', '_') || '.png'
-		                                 AS thumb
-		FROM pak_rvds
-		WHERE rail_vehicle_class IS NOT NULL
-		  AND rail_vehicle_class != ''
-		  AND rail_vehicle_class NOT IN (
-		    SELECT rail_vehicle_class FROM train_classes
-		    WHERE rail_vehicle_class IS NOT NULL AND rail_vehicle_class != ''
-		  )
-		GROUP BY rail_vehicle_class
-	`)
-	inserted := int64(0)
-	if err == nil {
-		inserted, _ = insRes.RowsAffected()
-	} else {
-		log.Printf("[rebuild-train-classes] insert: %v", err)
-	}
-
-	// Step 3: backfill snapshot fields onto train_classes that have a
-	// rail_vehicle_class link. Uses MAX/COALESCE so existing values are
-	// preserved when pak_rvds doesn't have a better one, and the most
-	// complete value wins when multiple RVDs share the rvc.
-	bfRes, err := h.db.Exec(`
-		UPDATE train_classes
-		SET is_drivable = COALESCE(
-		      (SELECT MAX(drivable) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      is_drivable),
-		    is_electric = COALESCE(
-		      (SELECT MAX(is_electric) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      is_electric),
-		    vehicle_category = COALESCE(
-		      (SELECT MAX(vehicle_category) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      vehicle_category),
-		    type_description = COALESCE(
-		      (SELECT MAX(type_description) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      type_description),
-		    manufacturer_name = COALESCE(
-		      (SELECT MAX(manufacturer_name) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      manufacturer_name),
-		    engine_description = COALESCE(
-		      (SELECT MAX(engine_description) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      engine_description),
-		    max_speed_kph = COALESCE(
-		      (SELECT MAX(max_speed_kph) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      max_speed_kph),
-		    max_power_kw = COALESCE(
-		      (SELECT MAX(max_power_kw) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      max_power_kw),
-		    powered_axle_count = COALESCE(
-		      (SELECT MAX(powered_axle_count) FROM pak_rvds WHERE rail_vehicle_class = train_classes.rail_vehicle_class),
-		      powered_axle_count)
-		WHERE rail_vehicle_class IS NOT NULL AND rail_vehicle_class != ''
-	`)
-	backfilled := int64(0)
-	if err == nil {
-		backfilled, _ = bfRes.RowsAffected()
-	} else {
-		log.Printf("[rebuild-train-classes] backfill: %v", err)
-	}
-
-	// Step 4: fix train_classes.thumbnail_path to point at a PNG that
-	// actually exists on disk. The renderer at scanner-time writes the
-	// file with SanitiseThumbnailName(rvd.FriendlyName), BUT different
-	// DLC vendors put different values into FriendlyName vs the rvc the
-	// importer sees later — examples observed in the wild:
-	//   - MTA/LIRR DLCs: FriendlyName="M3A" → file M3A.png,
-	//                    train_class.name="M3A MTA"
-	//   - Sand Patch:    FriendlyName="AC4400CW YN2" → file AC4400CW_YN2.png,
-	//                    rail_vehicle_class="AC4400CW"
-	// So neither name nor rvc alone is the canonical stem. Probe all
-	// three candidates (name, rvc, friendly_name-from-pak_rvds) and
-	// pick whichever matches an on-disk file. Leave the path alone if
-	// none match (subsequent thumbnail re-extract pass can fill in).
-	thumbsFixed := FixTrainClassThumbnails(h.db)
-
-	// Summary counts to report.
+	res := catalog.ReconcileTrainClasses(h.db)
 	var totalClasses, totalLinked int64
 	h.db.QueryRow(`SELECT COUNT(*) FROM train_classes`).Scan(&totalClasses)
 	h.db.QueryRow(`SELECT COUNT(*) FROM train_classes WHERE rail_vehicle_class IS NOT NULL AND rail_vehicle_class != ''`).Scan(&totalLinked)
-
 	util.JSON(w, http.StatusOK, map[string]any{
 		"success":             true,
-		"linked":              linked,
-		"inserted":            inserted,
-		"backfilled":          backfilled,
-		"thumbs_fixed":        thumbsFixed,
-		"duplicates_skipped":  duplicatesSkipped,
+		"linked":              res.Linked,
+		"inserted":            res.Inserted,
+		"backfilled":          res.Backfilled,
+		"thumbs_fixed":        res.ThumbsFixed,
+		"duplicates_skipped":  res.DuplicatesSkipped,
 		"total_train_classes": totalClasses,
 		"total_with_rvc":      totalLinked,
 	})
 }
 
-// FixTrainClassThumbnails reconciles every train_classes.thumbnail_path
-// with what's actually on disk under <appDir>/images/train_classes/.
-// For each class it builds an ordered candidate-stem list:
-//
-//  1. Every distinct FriendlyName from pak_rvds with the same
-//     rail_vehicle_class, ordered to prefer non-TTC liveries. Multiple
-//     RVDs commonly share an rvc (Spirit of Steam's "LMS Stanier 8F"
-//     and Training Centre's "Stanier 8F TTC" both have rvc="Stanier
-//     8F"); the canonical/main livery's PNG is the one users actually
-//     want to see, not the gray tutorial render.
-//  2. The rvc itself (catches MTA/LIRR-style DLCs where FriendlyName
-//     is "M3A" but the row's name is "M3A MTA").
-//  3. The current row name (last-ditch — covers ghost rows whose rvc
-//     never got linked).
-//
-// Each candidate is sanitised via pak.SanitiseThumbnailName and probed
-// against the on-disk thumbnails dir. The first PNG that actually
-// exists wins. Returns the count of rows that got a new thumbnail_path.
-//
-// Idempotent and safe to call after every auto-import — does not write
-// when no candidate matches an existing PNG.
-func FixTrainClassThumbnails(db *sql.DB) int {
-	thumbsDir := filepath.Join(config.ResourcesDir(), "images", "train_classes")
-	tcRows, err := db.Query(`SELECT id, name, rail_vehicle_class FROM train_classes`)
-	if err != nil {
-		log.Printf("[train-classes] FixTrainClassThumbnails query: %v", err)
-		return 0
-	}
-	defer tcRows.Close()
-	fixed := 0
-	for tcRows.Next() {
-		var id int
-		var nm, rvc sql.NullString
-		if err := tcRows.Scan(&id, &nm, &rvc); err != nil {
-			continue
-		}
-		var friendlies []string
-		if rvc.Valid && rvc.String != "" {
-			// Order candidates by pak-source rather than by FriendlyName
-			// or livery_id. The Training Centre pak is the one base-game
-			// pak we know ships training/placeholder renders rather than
-			// canonical marketing thumbnails — same rule that justifies
-			// the hardcoded TrainingCentre origin in extractor.findRoute
-			// Origin. Catches every TC variant including those with
-			// empty livery_id (the "Stanier 8F" RVD from TC has livery
-			// '' but is still the gray tutorial render). For every other
-			// pak we treat its variant as equally canonical and just
-			// fall back to alphabetical for stable ordering.
-			//
-			// Future tutorial-only DLCs (if any ship) can be added to
-			// the pak_catalog-side filter; today TrainingCentre is the
-			// only one.
-			fnRows, ferr := db.Query(`
-				SELECT pv.friendly_name
-				FROM pak_rvds pv
-				LEFT JOIN pak_catalog pc ON pc.pak_path = pv.pak_path
-				WHERE pv.rail_vehicle_class = ?
-				  AND pv.friendly_name IS NOT NULL AND pv.friendly_name != ''
-				ORDER BY CASE WHEN pc.codename = 'TrainingCentre' THEN 1 ELSE 0 END,
-				         pv.friendly_name`, rvc.String)
-			if ferr == nil {
-				seen := map[string]bool{}
-				for fnRows.Next() {
-					var f sql.NullString
-					if fnRows.Scan(&f) == nil && f.Valid && f.String != "" && !seen[f.String] {
-						seen[f.String] = true
-						friendlies = append(friendlies, f.String)
-					}
-				}
-				fnRows.Close()
-			}
-		}
-		candidates := []string{}
-		for _, f := range friendlies {
-			candidates = append(candidates, pak.SanitiseThumbnailName(f))
-		}
-		if rvc.Valid && rvc.String != "" {
-			candidates = append(candidates, pak.SanitiseThumbnailName(rvc.String))
-		}
-		if nm.Valid && nm.String != "" {
-			candidates = append(candidates, pak.SanitiseThumbnailName(nm.String))
-		}
-		for _, stem := range candidates {
-			if stem == "" {
-				continue
-			}
-			if _, statErr := os.Stat(filepath.Join(thumbsDir, stem+".png")); statErr == nil {
-				db.Exec(`UPDATE train_classes SET thumbnail_path=? WHERE id=?`,
-					"/images/train_classes/"+stem+".png", id)
-				fixed++
-				break
-			}
-		}
-	}
-	return fixed
-}

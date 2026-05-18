@@ -44,7 +44,28 @@ type TreeNode struct {
 // Each parent is sorted by DisplayName; children under each parent are
 // also DisplayName-sorted. Stable so the UI order doesn't jitter
 // across requests.
+//
+// Use BuildTreeWithOrphans if the caller also needs the standalone
+// Train DLCs (HasRouteDef=false paks whose refs don't match any
+// installed parent) — those are otherwise dropped here.
 func BuildTree(paks []*Pak) []*TreeNode {
+	routes, _ := BuildTreeWithOrphans(paks)
+	return routes
+}
+
+// BuildTreeWithOrphans is BuildTree plus a second slice of orphan
+// addons — paks with HasRouteDef=false whose CrossPakRefs don't match
+// any installed parent. These are standalone Train DLCs: rolling stock
+// the user has installed without owning the route they were marketed
+// for. The /extractor UI renders them as their own section so the user
+// can extract their train data without an associated route.
+//
+// `routes` is the same tree BuildTree returns (parent routes with
+// nested addon children).
+// `orphans` is the flat list of leftover paks, deduped + DisplayName
+// sorted. Each orphan's Kind is "train_dlc" so the UI can style/route
+// it separately from regular addons.
+func BuildTreeWithOrphans(paks []*Pak) (routes, orphans []*TreeNode) {
 	parentByRef := make(map[string]*TreeNode, len(paks))
 	var top []*TreeNode
 
@@ -65,6 +86,9 @@ func BuildTree(paks []*Pak) []*TreeNode {
 		}
 	}
 
+	// Track which addon paks got attached to at least one parent.
+	// Anything left over after this loop is an orphan train DLC.
+	attached := make(map[string]struct{}, len(paks))
 	for _, p := range paks {
 		if p.HasRouteDef {
 			continue
@@ -72,7 +96,6 @@ func BuildTree(paks []*Pak) []*TreeNode {
 		for _, ref := range p.CrossPakRefs {
 			parent, ok := parentByRef[ref]
 			if !ok {
-				// Addon references a parent the user doesn't own — skip.
 				continue
 			}
 			child := &TreeNode{
@@ -83,16 +106,31 @@ func BuildTree(paks []*Pak) []*TreeNode {
 				Kind:        "addon",
 			}
 			parent.Children = append(parent.Children, child)
+			attached[p.PakPath] = struct{}{}
 		}
+	}
+
+	// Pick up the orphans (addons that didn't end up under any parent).
+	for _, p := range paks {
+		if p.HasRouteDef {
+			continue
+		}
+		if _, ok := attached[p.PakPath]; ok {
+			continue
+		}
+		orphans = append(orphans, &TreeNode{
+			PakPath:     p.PakPath,
+			Codename:    p.Codename,
+			DisplayName: displayLabel(p),
+			Country:     p.CountryCode,
+			Kind:        "train_dlc",
+		})
 	}
 
 	sort.SliceStable(top, func(i, j int) bool {
 		return top[i].DisplayName < top[j].DisplayName
 	})
 	for _, parent := range top {
-		// Dedup children: a single addon can list the same parent ref
-		// twice (once per timetable) — collapse to one entry per addon
-		// pak under each parent.
 		seen := make(map[string]struct{}, len(parent.Children))
 		uniq := parent.Children[:0]
 		for _, c := range parent.Children {
@@ -107,7 +145,10 @@ func BuildTree(paks []*Pak) []*TreeNode {
 			return parent.Children[i].DisplayName < parent.Children[j].DisplayName
 		})
 	}
-	return top
+	sort.SliceStable(orphans, func(i, j int) bool {
+		return orphans[i].DisplayName < orphans[j].DisplayName
+	})
+	return top, orphans
 }
 
 // displayLabel falls back to the codename when no canonical name is
