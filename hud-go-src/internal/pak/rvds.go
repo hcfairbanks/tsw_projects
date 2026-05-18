@@ -13,6 +13,31 @@ import (
 	"hud-go/internal/pak/uasset"
 )
 
+// IsRVDAsset returns true for a basename (no directory) that names a
+// RailVehicleDefinition asset. TSW DLCs use two competing conventions:
+//
+//   - prefix form: RVD_<X>.uasset   (Boston Sprinter, LIRR, MBTA, most
+//                                     EU DLCs)
+//   - suffix form: <X>_RVD.uasset   (Horseshoe Curve ES44AC, Sand Patch
+//                                     Grade AC4400CW + freight units,
+//                                     Spirit of Steam Jubilee, TSW2
+//                                     Paddington Reading Class 166s,
+//                                     WCML South, ECML, Sherman Hill —
+//                                     19 RVDs total across 8 paks the
+//                                     prefix-only matcher silently
+//                                     missed before this guard).
+//
+// Centralised so every callsite that walks for RVDs (catalog scan,
+// per-route extractor, package writer, cookedmap train-classes scan)
+// agrees on which files count.
+func IsRVDAsset(base string) bool {
+	if !strings.HasSuffix(strings.ToLower(base), ".uasset") {
+		return false
+	}
+	return strings.HasPrefix(base, "RVD_") ||
+		strings.HasSuffix(base, "_RVD.uasset")
+}
+
 // PakRVDs extracts every `RVD_*.uasset` from a pak, runs the in-process
 // parser on each, and returns the parsed slice with each RVD's
 // `AssetPath` set to the canonical reference key the timetable's
@@ -66,23 +91,42 @@ func PakRVDsWithThumbnails(pakPath, repakPath, scratchDir, thumbsOutDir string) 
 	for sc.Scan() {
 		line := strings.TrimSpace(sc.Text())
 		base := filepath.Base(line)
-		if strings.HasPrefix(base, "RVD_") && strings.HasSuffix(base, ".uasset") {
+		// RVD assets ship with two competing naming conventions across DLCs:
+		//   - prefix form: RVD_<X>.uasset   (Boston Sprinter, LIRR, MBTA, etc.)
+		//   - suffix form: <X>_RVD.uasset   (Horseshoe Curve ES44AC,
+		//                                    Sand Patch Grade AC4400CW,
+		//                                    SpiritOfSteam Jubilee, Padd-
+		//                                    ington Reading Class 166, etc.)
+		// Matching only the prefix form (the old behaviour) silently
+		// missed 19 RVDs across 8 paks — verified by counting both
+		// forms across the install. The .uexp sidecar is appended either
+		// way so the in-process parser still reads exports.
+		if IsRVDAsset(base) {
 			entries = append(entries, line)
-			// Also pick up the matching .uexp — both files are needed
-			// for the in-process parser to read the asset's exports.
 			entries = append(entries, strings.TrimSuffix(line, ".uasset")+".uexp")
 			continue
 		}
 		// When the caller requested thumbnail rendering, also unpack any
-		// .uasset under "FrontEnd" / "FrontEndAssets" directories — these
-		// host the per-class thumbnail textures referenced by each RVD's
-		// ThumbnailTexture SoftObjectProperty. TSW's path conventions
-		// vary across DLC vendors (some use "FrontEndAssets", others
-		// "FrontEnd"); both patterns are picked up here.
-		if thumbsOutDir != "" && strings.HasSuffix(line, ".uasset") &&
-			(strings.Contains(line, "/FrontEndAssets/") || strings.Contains(line, "/FrontEnd/")) {
-			entries = append(entries, line)
-			entries = append(entries, strings.TrimSuffix(line, ".uasset")+".uexp")
+		// .uasset under one of the dirs DLCs use to host per-class
+		// thumbnail textures referenced by each RVD's ThumbnailTexture
+		// SoftObjectProperty. Three conventions in the wild:
+		//   - "FrontendAssets"  — most US / UK DLCs (BR Class09, NS ES44AC)
+		//   - "FrontEnd"        — many German DLCs (BR111 DB)
+		//   - "Data/RVD"        — French TGV DLCs, Flying Scotsman
+		// Plus a filename-based catch for textures named Icon/Thumb/
+		// Thumbnail anywhere in the pak — covers any future DLC that
+		// invents another directory layout.
+		if thumbsOutDir != "" && strings.HasSuffix(line, ".uasset") {
+			isThumbDir := strings.Contains(line, "/FrontendAssets/") ||
+				strings.Contains(line, "/FrontEnd/") ||
+				strings.Contains(line, "/Data/RVD/")
+			lowerBase := strings.ToLower(base)
+			isThumbName := strings.Contains(lowerBase, "icon") ||
+				strings.Contains(lowerBase, "thumb")
+			if isThumbDir || isThumbName {
+				entries = append(entries, line)
+				entries = append(entries, strings.TrimSuffix(line, ".uasset")+".uexp")
+			}
 		}
 	}
 	if err := sc.Err(); err != nil {
@@ -129,7 +173,7 @@ func PakRVDsWithThumbnails(pakPath, repakPath, scratchDir, thumbsOutDir string) 
 			return nil
 		}
 		base := filepath.Base(path)
-		if !strings.HasPrefix(base, "RVD_") || !strings.HasSuffix(base, ".uasset") {
+		if !IsRVDAsset(base) {
 			return nil
 		}
 		rvd, err := uasset.ParseCookedRVD(path)
@@ -158,14 +202,29 @@ func renderRVDThumbnails(scratchRoot, outDir string, rvds []*uasset.RVD) error {
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
 		return err
 	}
-	// Index every .uasset under the scratch tree by its filename stem so
-	// we can look up each RVD's ThumbnailTexture cheaply.
-	index := map[string]string{}
+	// Index every .uasset under the scratch tree by its CANONICAL path
+	// (matching the format an RVD's ThumbnailAssetRef uses: leading
+	// "/<pakMount>/<RelativePath>", no "/Content/", no ".uasset"
+	// suffix). Indexing by basename alone collides when a pak ships
+	// two textures with the same filename in different folders — TTC
+	// pak's Class 323 has TTC_Class323_Thumbnail.uasset in BOTH
+	// Content/Data/RVD/ AND Content/Data/LiveryEditor/, with different
+	// images. Whichever WalkDir visits last would overwrite the index
+	// entry, giving a non-deterministic and often-wrong pick. The ref
+	// path always disambiguates because it carries the full folder.
+	// Basename is still kept as a fallback in case any pak's ref points
+	// at a stripped path or a relocated asset.
+	indexByCanonical := map[string]string{}
+	indexByBase := map[string]string{}
 	_ = filepath.WalkDir(scratchRoot, func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() || !strings.HasSuffix(path, ".uasset") {
 			return nil
 		}
-		index[strings.TrimSuffix(filepath.Base(path), ".uasset")] = path
+		indexByCanonical[CanonicalRVDPath(path)] = path
+		base := strings.TrimSuffix(filepath.Base(path), ".uasset")
+		if _, ok := indexByBase[base]; !ok {
+			indexByBase[base] = path
+		}
 		return nil
 	})
 	seen := map[string]bool{}
@@ -177,11 +236,16 @@ func renderRVDThumbnails(scratchRoot, outDir string, rvds []*uasset.RVD) error {
 		if i := strings.LastIndex(ref, "."); i >= 0 {
 			ref = ref[:i]
 		}
-		stem := ref
-		if i := strings.LastIndex(stem, "/"); i >= 0 {
-			stem = stem[i+1:]
+		// Try the full canonical lookup first; only fall back to
+		// basename when the ref doesn't map to a known disk path.
+		assetPath, ok := indexByCanonical[ref]
+		if !ok {
+			stem := ref
+			if i := strings.LastIndex(stem, "/"); i >= 0 {
+				stem = stem[i+1:]
+			}
+			assetPath, ok = indexByBase[stem]
 		}
-		assetPath, ok := index[stem]
 		if !ok {
 			continue
 		}

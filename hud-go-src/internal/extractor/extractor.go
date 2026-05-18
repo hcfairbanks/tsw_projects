@@ -272,6 +272,19 @@ func (e *Extractor) Extract() ([]*uasset.Timetable, error) {
 				if routeDef != nil {
 					tt.RouteDisplayName = routeDef.DisplayName
 					tt.CountryCode = routeDef.CountryCode
+					// Two distinct CPRs:
+					//   - RouteCrossPakReferenceName: the route's OWN
+					//     mount, from the RouteDefinition asset. Goes
+					//     into route_*.json so the importer matches the
+					//     correct existing route_id.
+					//   - CrossPakReferenceName: stays as parsed from
+					//     the per-asset NameMap. Goes into each per-
+					//     service JSON so services referencing a
+					//     DIFFERENT parent route (TC tutorials that
+					//     simulate Boston/etc.) get assigned to that
+					//     parent route at import time, not to whichever
+					//     pak the asset happens to live in.
+					tt.RouteCrossPakReferenceName = routeDef.CrossPakReferenceName
 				}
 				// Prefer the catalog's pre-resolved display name when
 				// supplied — it's the same string the route-list UI
@@ -418,7 +431,7 @@ func (e *Extractor) scanRVDs(root, routeName string) map[string]*uasset.RVD {
 			return nil
 		}
 		name := filepath.Base(path)
-		if strings.HasPrefix(name, "RVD_") && strings.HasSuffix(name, ".uasset") {
+		if pak.IsRVDAsset(name) {
 			rvdPaths = append(rvdPaths, path)
 		}
 		return nil

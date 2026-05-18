@@ -470,6 +470,25 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 	// resolver's pick — this is just extra data for live overrides.
 	if routeID != nil {
 		signsByEntry := map[int][]map[string]any{}
+		// Pull the timetable's bound first so we can order the signs the
+		// same way resolveCarStopSignsForTimetable does at import time.
+		// Many platforms have TWO signs for the same max_rail_vehicles
+		// (one per direction of travel) — e.g. Route 128 Track 1 has a
+		// max=8 sign at each end of the platform. Without direction in the
+		// ORDER BY, the client's "first max=N wins" picker grabs the
+		// wrong one of the two and the HUD reports distance to the entry
+		// of the platform instead of the actual stop point.
+		var bound string
+		h.db.QueryRow(`SELECT COALESCE(LOWER(TRIM(bound)),'') FROM timetables WHERE id=?`, timetableID).Scan(&bound)
+		// Train's car_count drives the snug-fit ranking — exact-match sign
+		// beats next-larger-than-fit beats max=0 generic fallback. 0 if no
+		// formation linked (degenerate; ranking collapses to max=0-last).
+		var carCount int
+		h.db.QueryRow(`
+			SELECT COALESCE(f.car_count, 0)
+			FROM timetables t
+			LEFT JOIN formations f ON f.id = t.formation_id
+			WHERE t.id = ?`, timetableID).Scan(&carCount)
 		signRows, err := h.db.Query(`
 			SELECT te.id, css.max_rail_vehicles, css.latitude, css.longitude
 			FROM timetable_entries te
@@ -480,8 +499,29 @@ func (h *MapDataHandler) GetRouteDataFromDb(w http.ResponseWriter, r *http.Reque
 			     COALESCE(te.structure, '') || ' ' ||
 			     COALESCE(te.structure_number, ''))
 			WHERE te.timetable_id = ?
-			ORDER BY te.id, css.max_rail_vehicles`,
-			*routeID, timetableID)
+			ORDER BY te.id,
+			         -- (1) Snug-fit ranking. max_rail_vehicles semantics:
+			         -- "this sign serves trains up to N vehicles" — so for
+			         -- an N-car train any sign with max>=N fits, prefer the
+			         -- snuggest. max=0 is the generic any-train fallback,
+			         -- last resort. Signs smaller than the train still rank
+			         -- after max=0 (would hang the train off the platform).
+			         CASE
+			           WHEN css.max_rail_vehicles = ?         THEN 0
+			           WHEN css.max_rail_vehicles > ?         THEN css.max_rail_vehicles - ?
+			           WHEN css.max_rail_vehicles = 0         THEN 99999
+			           ELSE 99999 + (? - css.max_rail_vehicles)
+			         END,
+			         -- (2) Direction tiebreaker — matches
+			         --     resolveCarStopSignsForTimetable.
+			         CASE ?
+			           WHEN 'northbound' THEN -css.latitude
+			           WHEN 'southbound' THEN  css.latitude
+			           WHEN 'eastbound'  THEN -css.longitude
+			           WHEN 'westbound'  THEN  css.longitude
+			           ELSE 0
+			         END`,
+			*routeID, timetableID, carCount, carCount, carCount, carCount, bound)
 		if err == nil {
 			defer signRows.Close()
 			for signRows.Next() {

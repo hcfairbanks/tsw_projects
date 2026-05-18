@@ -2430,6 +2430,17 @@ func (h *TimetableHandler) ingestRouteTrainClasses(zr *zip.Reader) {
 			}
 		}
 	}
+
+	// Reconcile every train_class's thumbnail_path with what's actually
+	// on disk. The catalog scan + zip writer both render PNGs keyed on
+	// FriendlyName, but when multiple RVDs share an rail_vehicle_class
+	// (TTC's "Stanier 8F TTC" and SoS's "LMS Stanier 8F" both have
+	// rvc="Stanier 8F"), the upsert order above arbitrarily picks one
+	// FriendlyName as the row's thumbnail_path. The disk-probe picks
+	// the canonical/main-livery variant (deprioritising TTC) so the
+	// page shows the in-game image users expect, every import, without
+	// needing manual Rebuild Train Classes.
+	FixTrainClassThumbnails(h.db)
 }
 
 func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request) {
@@ -2540,29 +2551,49 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			return &rid
 		}
 		// (4) create.
-		// routes.country_id is NOT NULL with FK to countries(id). If
-		// Pass 1 didn't resolve a country (zip has no country fields
-		// AND no codename override), there's nothing safe to insert
-		// — bail and the per-entry timetable will get route_id=NULL
-		// instead of a phantom route linked to a non-existent country.
-		if countryID == nil {
-			// Last-ditch: try the codename override on the ref name
-			// itself (Training Centre's ref happens to equal its
-			// codename, so this catches that case).
-			if override := output.CountryOverrideForCodename(ref); override != "" {
-				var cid int
-				if err := h.db.QueryRow("SELECT id FROM countries WHERE code = ?", override).Scan(&cid); err == nil {
-					countryID = &cid
-				}
+		// Before falling back to the codename-split display name and the
+		// parent pak's country, consult pak_catalog. It already carries
+		// the canonical DisplayName + CountryCode for every scanned pak,
+		// keyed by the same cross_pak_reference_name we have here. Using
+		// it lets routes created via cross-pak-ref (e.g. when Mannheim's
+		// scenarios reference EustonMiltonKeynes) come out with the right
+		// name and country, instead of "Euston Milton Keynes" / DE.
+		canonicalDisplay := displayName
+		canonicalCountryCode := ""
+		var ownerHasRouteDef int
+		_ = h.db.QueryRow(`
+			SELECT COALESCE(NULLIF(display_name,''), ''),
+			       COALESCE(NULLIF(country_code,''), ''),
+			       has_route_definition
+			FROM pak_catalog
+			WHERE cross_pak_reference_name = ?
+			LIMIT 1`, ref).Scan(&canonicalDisplay, &canonicalCountryCode, &ownerHasRouteDef)
+		if canonicalDisplay == "" {
+			canonicalDisplay = displayName
+		}
+		// Resolve country from the catalog hit if pak_catalog has one;
+		// otherwise fall back to the parent pak's countryID (existing
+		// behaviour); last-ditch is the codename override.
+		var cid int
+		if canonicalCountryCode != "" {
+			if h.db.QueryRow("SELECT id FROM countries WHERE code = ?", canonicalCountryCode).Scan(&cid) == nil {
+				// found
 			}
 		}
-		if countryID == nil {
+		if cid == 0 && countryID != nil {
+			cid = *countryID
+		}
+		if cid == 0 {
+			if override := output.CountryOverrideForCodename(ref); override != "" {
+				_ = h.db.QueryRow("SELECT id FROM countries WHERE code = ?", override).Scan(&cid)
+			}
+		}
+		if cid == 0 {
 			errs = append(errs, importError{File: "(cross_pak_reference_name=" + ref + ")", Error: "cannot create parent route: no country resolved (re-extract or set the country override for this codename)"})
 			routeIDByCrossPakRef[ref] = nil
 			return nil
 		}
-		cid := *countryID
-		res, err := h.db.Exec("INSERT INTO routes (name, country_id, tsw_version, cross_pak_reference_name) VALUES (?, ?, 6, ?)", displayName, cid, ref)
+		res, err := h.db.Exec("INSERT INTO routes (name, country_id, tsw_version, cross_pak_reference_name) VALUES (?, ?, 6, ?)", canonicalDisplay, cid, ref)
 		if err != nil {
 			errs = append(errs, importError{File: "(cross_pak_reference_name=" + ref + ")", Error: "create parent route: " + err.Error()})
 			routeIDByCrossPakRef[ref] = nil
@@ -2571,11 +2602,8 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 		id64, _ := res.LastInsertId()
 		rid = int(id64)
 		routeIDByCrossPakRef[ref] = &rid
-		// Surface the first auto-created route in the response so the
-		// user knows what was created. Subsequent autocreations are
-		// silent — the UI will list them under timetablesImported.
 		if routeName == "" {
-			routeName = displayName
+			routeName = canonicalDisplay
 			routeCreated = true
 		}
 		return &rid
@@ -2727,6 +2755,37 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			// the same key short-circuit the SQL lookup.
 			rid := *routeID
 			routeIDByCrossPakRef[crossPakRef] = &rid
+		}
+
+		// Promote the row to the canonical name + country when a fresher
+		// import has them. Routes auto-created from a cross-pak ref
+		// (during some OTHER pak's import) carry the codename-split name
+		// ("Euston Milton Keynes") and the parent pak's country (DE for a
+		// WCML-South ref encountered during a Mannheim import). When the
+		// actual owning pak imports later with a real DisplayName +
+		// CountryCode, adopt them.
+		//
+		// Heuristic for "fresher": the codename-split is exactly what
+		// output.RouteDisplayName(ref) produces, so if the stored name
+		// equals that derived value AND the new name is different, the
+		// new one is canonical. Same logic for country_code — only
+		// overwrite if the new value is set.
+		if matched && routeID != nil {
+			codenameSplit := ""
+			if crossPakRef != "" {
+				codenameSplit = output.RouteDisplayName(crossPakRef)
+			}
+			var existingName string
+			var existingCC sql.NullString
+			h.db.QueryRow(`SELECT r.name, c.code FROM routes r LEFT JOIN countries c ON c.id = r.country_id WHERE r.id = ?`, *routeID).Scan(&existingName, &existingCC)
+			if rn != "" && rn != existingName && (existingName == codenameSplit || existingName == crossPakRef) {
+				h.db.Exec(`UPDATE routes SET name = ? WHERE id = ?`, rn, *routeID)
+			}
+			// Country override: only if zip carries a real country_code
+			// AND the existing country differs.
+			if ccode != "" && (!existingCC.Valid || existingCC.String != ccode) && countryID != nil {
+				h.db.Exec(`UPDATE routes SET country_id = ? WHERE id = ?`, *countryID, *routeID)
+			}
 		}
 
 		// Replace route_coordinates with the rails GeoJSON FeatureCollection
@@ -2935,6 +2994,27 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 				h.db.Exec("UPDATE timetables SET route_id = ? WHERE id = ? AND route_id IS NULL", *entryRouteID, existingID)
 			}
 			h.mergeServiceLinkagesIntoExisting(existingID, entryRouteID, entry, &errs, f.Name, formationIDByName, seenFormations, &formationsCreated)
+
+			// Also merge coordinates if the existing row doesn't have any.
+			// Without this, re-imports of the same service silently drop
+			// the per-service polyline that the new zip contains —
+			// observed catastrophically on WCML where 1929 of 2020
+			// service-JSONs (96%) hit this dedupe path and lost their
+			// coords. Conservative: only insert if existing row has no
+			// coords; never overwrite an existing valid polyline.
+			if coords, ok := entry["coordinates"].([]any); ok && len(coords) > 0 {
+				var existingCoordCount int
+				h.db.QueryRow("SELECT COUNT(*) FROM timetable_coordinates WHERE timetable_id = ?", existingID).Scan(&existingCoordCount)
+				if existingCoordCount == 0 {
+					coordSource := "backend"
+					if cs, ok := entry["coordinates_source"].(string); ok && cs != "" {
+						coordSource = cs
+					}
+					coordJSON, _ := json.Marshal(coords)
+					h.db.Exec("INSERT INTO timetable_coordinates (timetable_id, coordinates, coord_source) VALUES (?, ?, ?)", existingID, string(coordJSON), coordSource)
+				}
+			}
+
 			ttSkipped++
 			if progress != nil {
 				label := serviceName + " (merged)"
@@ -3744,13 +3824,25 @@ func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID,
 			  AND css.platform_name = TRIM(l.name || ' ' ||
 			      COALESCE(timetable_entries.structure, '') || ' ' ||
 			      COALESCE(timetable_entries.structure_number, ''))
-			  AND (css.max_rail_vehicles = ? OR css.max_rail_vehicles = 0)
+			  -- max_rail_vehicles semantics: "this sign serves trains UP TO
+			  -- N vehicles". So a 6-car train can stop at max=6, 7, 8, …
+			  -- (prefer the snuggest fit), AND the generic max=0 sign is
+			  -- always a valid last-resort fallback. Excluding signs
+			  -- whose max is SMALLER than the train (TSW would hang the
+			  -- train off the platform end on those) keeps the picker
+			  -- realistic; if nothing else exists we still get max=0.
+			  AND (css.max_rail_vehicles = 0 OR css.max_rail_vehicles >= ?)
 			ORDER BY
-			  -- (1) Prefer car-class-specific signs over the maxCars=0
-			  --     fallback. 0 = match this train's car_count exactly,
-			  --     1 = generic max=0 sign.
-			  CASE WHEN css.max_rail_vehicles = 0 THEN 1 ELSE 0 END,
-			  -- (2) Within equally-specific signs, pick the directional
+			  -- (1) Snug-fit ranking:
+			  --     exact match  → 0       (best)
+			  --     larger sign  → max - car_count (smaller excess is better)
+			  --     max=0        → 99999   (last resort)
+			  CASE
+			    WHEN css.max_rail_vehicles = ?           THEN 0
+			    WHEN css.max_rail_vehicles = 0           THEN 99999
+			    ELSE css.max_rail_vehicles - ?
+			  END,
+			  -- (2) Within equally-fitting signs, pick the directional
 			  --     extreme — northbound trains stop at the north end of
 			  --     the platform, etc.
 			  CASE ?
@@ -3764,7 +3856,7 @@ func (h *TimetableHandler) resolveCarStopSignsForTimetable(timetableID, routeID,
 		)
 		WHERE timetable_entries.timetable_id = ?
 		  AND timetable_entries.location_id IS NOT NULL
-	`, routeID, cars, bound, timetableID)
+	`, routeID, cars, cars, cars, bound, timetableID)
 	if err != nil {
 		log.Printf("[car-stop-sign-resolve] tt=%d: %v", timetableID, err)
 	}

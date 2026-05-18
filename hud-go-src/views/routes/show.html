@@ -168,16 +168,6 @@
         <button class="btn-primary" onclick="exportAllTimetables()" data-i18n="routes.exportAllZip">Export Route</button>
     </div>
 
-    <div class="card">
-        <h2 data-i18n="routes.buildTimetableMaps">Build Timetable Maps</h2>
-        <p style="color: var(--text-muted); margin-bottom: 15px;" data-i18n="routes.buildTimetableMapsDesc">Pre-build the per-timetable filtered map data for every timetable on this route that doesn't already have one. Each timetable map takes ~2-3 minutes to build, so a full route can take hours. Progress is shown live below; you can leave the page and return to check status.</p>
-        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-bottom: 15px;">
-            <button class="btn-primary" id="buildMapsBtn" onclick="buildTimetableMaps()" data-i18n="routes.buildTimetableMaps">Build Timetable Maps</button>
-            <span id="buildMapsSummary" style="font-size: 13px; color: var(--text-muted);"></span>
-        </div>
-        <div id="buildMapsOutput" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; height: 280px; overflow-y: auto; font-family: monospace; font-size: 12px; color: var(--text-secondary); white-space: pre-wrap;"></div>
-    </div>
-
     <div class="card map-card" id="mapCard">
         <h2 style="cursor: pointer; user-select: none;" onclick="toggleRouteMap()"><span id="mapToggleIcon" style="font-size: 14px; margin-right: 6px;">&#9660;</span><span id="mapTitle">Route Map</span></h2>
         <div id="routeMapContainer">
@@ -251,6 +241,11 @@
         <p style="color: var(--text-muted); margin-bottom: 15px;" data-i18n="routes.devToolsDesc">These tools are only visible in development mode.</p>
         <button class="btn-danger" onclick="deleteAllTimetables()" data-i18n="routes.deleteAllTimetables">Delete All Timetables for this Route</button>
         <button class="btn-danger" onclick="clearRouteData()" style="margin-left: 10px;" data-i18n="routes.clearRouteData">Clear Route Map Data</button>
+        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 15px;">
+            <button class="btn-primary" id="buildMapsBtn" onclick="buildTimetableMaps()" data-i18n="routes.buildTimetableMaps">Build Timetable Maps</button>
+            <span id="buildMapsSummary" style="font-size: 13px; color: var(--text-muted);"></span>
+        </div>
+        <div id="buildMapsOutput" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; height: 280px; overflow-y: auto; font-family: monospace; font-size: 12px; color: var(--text-secondary); white-space: pre-wrap; margin-top: 10px;"></div>
     </div>
 
     <div class="card">

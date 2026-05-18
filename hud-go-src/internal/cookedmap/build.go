@@ -342,9 +342,48 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 }
 
 // AutoFindOrigin scans the workdir's persistent-map .uexp files for a
-// CentralLatitude/Longitude pair. Useful for the CLI; server callers
-// already have origin from the route definition.
+// CentralLatitude/Longitude pair. Used by the CLI and as the fallback
+// when the server-side extractor.findRouteOrigin couldn't resolve via
+// its hardcoded table or per-codename rules.
+//
+// Mirrors extractor.findRouteOrigin's version-dispatched layout
+// strategies (Strategy 2 + 3 — there's no codename in scope here, so
+// Strategy 1's hardcoded table doesn't apply):
+//
+//  1. TSW6 modern: Content/Map/<X>Map.uexp
+//  2. TSW2 / legacy: Content/<RouteName>Map/<X>Map.uexp
+//
+// Files under any "Tiles" subdir, and any folder ending in "Map" that
+// lives deeper than Content/ (Audio/.../LCDMap/, Collectables/.../RouteMap/,
+// View/.../Heightmap/), are rejected. Their .uexp bytes can spuriously
+// pass the lat/lng plausibility filter and return Pacific-ocean coords.
 func AutoFindOrigin(workdir string) (lat, lng float64, ok bool) {
+	// Strategy 1 (modern): parent is exactly "Map".
+	if la, ln, found := scanWorkdirForOrigin(workdir, func(parts []string) bool {
+		if len(parts) < 3 {
+			return false
+		}
+		return strings.EqualFold(parts[len(parts)-3], "Content") &&
+			strings.EqualFold(parts[len(parts)-2], "Map")
+	}); found {
+		return la, ln, true
+	}
+	// Strategy 2 (legacy): parent ends in "Map" but isn't "Map".
+	if la, ln, found := scanWorkdirForOrigin(workdir, func(parts []string) bool {
+		if len(parts) < 3 {
+			return false
+		}
+		parent := strings.ToLower(parts[len(parts)-2])
+		return strings.EqualFold(parts[len(parts)-3], "Content") &&
+			parent != "map" &&
+			strings.HasSuffix(parent, "map")
+	}); found {
+		return la, ln, true
+	}
+	return 0, 0, false
+}
+
+func scanWorkdirForOrigin(workdir string, match func(parts []string) bool) (lat, lng float64, ok bool) {
 	_ = filepath.WalkDir(workdir, func(p string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() || ok {
 			return nil
@@ -353,7 +392,12 @@ func AutoFindOrigin(workdir string) (lat, lng float64, ok bool) {
 			return nil
 		}
 		parts := strings.Split(filepath.ToSlash(p), "/")
-		if len(parts) < 2 || !strings.EqualFold(parts[len(parts)-2], "Map") {
+		for _, pp := range parts {
+			if strings.EqualFold(pp, "Tiles") {
+				return nil
+			}
+		}
+		if !match(parts) {
 			return nil
 		}
 		la, ln, err := geo.ExtractOriginFromUExp(p)

@@ -336,6 +336,40 @@ func (h *HUDHandler) GetTimetableItems(w http.ResponseWriter, r *http.Request) {
 		vehicleCount = float64(0)
 	}
 
+	// The FIRST WAIT FOR SERVICE row describes "you are AT the spawn
+	// platform, waiting to depart". The car_stop_sign coords land at
+	// the head-of-train STOPPING position, which is one train-length
+	// forward of where the train actually spawns. The extractor's
+	// per-service path correctly starts at the spawn — so the first
+	// vertex of `coordinates[]` IS the spawn position. Use that.
+	//
+	// Only the FIRST WAIT FOR SERVICE qualifies as "spawn" — services
+	// with mid-route train moves can have additional WAIT FOR SERVICE
+	// rows at intermediate points; those still need their own
+	// car_stop_sign-resolved coords, not the spawn vertex.
+	if items, ok := timetable.([]any); ok && len(items) > 0 {
+		coordsRaw, _ := h.currentRoute["coordinates"]
+		if coordsList, ok := coordsRaw.([]any); ok && len(coordsList) > 0 {
+			if first, ok := coordsList[0].(map[string]any); ok {
+				lat, latOk := first["latitude"].(float64)
+				lng, lngOk := first["longitude"].(float64)
+				if latOk && lngOk {
+					for _, it := range items {
+						entry, ok := it.(map[string]any)
+						if !ok {
+							continue
+						}
+						if action, _ := entry["action"].(string); action == "WAIT FOR SERVICE" {
+							entry["latitude"] = lat
+							entry["longitude"] = lng
+							break // only the first WAIT FOR SERVICE row
+						}
+					}
+				}
+			}
+		}
+	}
+
 	util.Success(w, map[string]any{
 		"items":        timetable,
 		"currentIndex": h.timetableIndex,

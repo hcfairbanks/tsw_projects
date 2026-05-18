@@ -155,6 +155,16 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Delete("/api/extractor/zip/{route}", h.Extractor.DeleteZip)
 	r.Post("/api/extractor/completed/{route}", h.Extractor.MarkCompleted)
 	r.Delete("/api/extractor/completed/{route}", h.Extractor.UnmarkCompleted)
+	// Dev-mode "Nuke DB": wipe every user table except the three seed
+	// tables (countries, weather_presets, timetable_actions). Front-end
+	// gates the button on developmentMode; the endpoint itself is open
+	// so it must only be invoked behind an explicit user click + confirm.
+	r.Post("/api/extractor/nuke-db", h.Extractor.NukeDB)
+	// Dev-mode "Rebuild Train Classes from RVDs": reconciles train_classes
+	// against the canonical pak_rvds data — links ghost rows by friendly
+	// name, inserts missing rail_vehicle_class values, backfills snapshot
+	// fields (is_drivable etc.) from RVDs.
+	r.Post("/api/extractor/rebuild-train-classes", h.Extractor.RebuildTrainClassesFromRVDs)
 
 
 	// Stream / HUD

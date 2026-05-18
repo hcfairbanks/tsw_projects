@@ -113,7 +113,27 @@ type Timetable struct {
 	// load the right level), so this is reliable even for cargo / scenario
 	// DLC timetables that don't ship route metadata themselves. Empty if
 	// no such entry is found.
+	//
+	// This is the PER-ASSET reference — each timetable .uasset can point
+	// at a different parent route. Training Centre's tutorial assets, for
+	// example, reference whichever route they're simulating (Boston
+	// Sprinter, etc.) rather than TC itself. Used by the importer to
+	// assign each service/formation to its actual home route.
+	//
+	// The ROUTE-LEVEL CPR (the value used for the route_*.json file) is
+	// `RouteCrossPakReferenceName` below — that's the pak's OWN mount
+	// path, pulled from the RouteDefinition asset, and never reflects a
+	// per-asset cross-pak reference.
 	CrossPakReferenceName string `json:"cross_pak_reference_name,omitempty"`
+
+	// RouteCrossPakReferenceName is the OWNING pak's mount path, from
+	// the route's <X>RouteDefinition.uasset. Distinct from
+	// CrossPakReferenceName (which is per-asset): every timetable on a
+	// given route shares the same RouteCrossPakReferenceName, regardless
+	// of what other paks the individual timetables reference. The
+	// route_*.json writer uses this so per-service refs don't leak into
+	// the route-level metadata (the bug Fix A addressed).
+	RouteCrossPakReferenceName string `json:"-"`
 	// RouteDisplayName is the canonical user-facing route name pulled from
 	// the parent pak's <X>RouteDefinition.uasset (DisplayName.
 	// CultureInvariantString). e.g. "WCML South - London Euston to Milton
@@ -193,6 +213,14 @@ type Timetable struct {
 	// the temp dir has already been deleted by the time the timetable is
 	// observed.
 	ExtractDir string `json:"-"`
+	// ServiceTrackData is the per-service breadcrumb path pulled from the
+	// RouteTimetableDataTrack uassets that ship next to the timetable
+	// (Master + per-operator DataTracks unioned). Keyed by Service.Name.
+	// When a key is present the per-service path-builder uses
+	// BuildServicePathFromTrackData (which traces the ribbon network exactly
+	// as the game does) instead of the proximity-based BuildServicePath.
+	// Empty when the route has no DataTrack uassets or none could be parsed.
+	ServiceTrackData map[string]ServiceTrackData `json:"-"`
 }
 
 // ---- Entry point ------------------------------------------------------------
@@ -419,8 +447,13 @@ type tagInfo struct {
 	ptype      string
 	structType string
 	innerType  string
-	size       int
-	boolVal    byte
+	// MapProperty only: key + value type FNames. Stored separately so the
+	// existing innerType usage (ArrayProperty / Set / Byte / Enum) stays
+	// untouched.
+	mapKeyType   string
+	mapValueType string
+	size         int
+	boolVal      byte
 }
 
 // readTag reads one FPropertyTag header. Returns (tag, ok) where ok==false
@@ -450,8 +483,8 @@ func (r *reader) readTag() (tagInfo, bool) {
 	case "ArrayProperty":
 		t.innerType = r.fname()
 	case "MapProperty":
-		r.fname()
-		r.fname()
+		t.mapKeyType = r.fname()
+		t.mapValueType = r.fname()
 	case "SetProperty":
 		t.innerType = r.fname()
 	}

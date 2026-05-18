@@ -616,19 +616,20 @@
             entries.forEach(function (item) {
                 var signs = item.car_stop_signs;
                 if (!signs || !signs.length) return;
+                // Snug-fit picker — exact match > next-larger > max=0 generic.
+                // See desktop.html for the rationale.
                 var pick = null;
+                var bestScore = Infinity;
                 for (var i = 0; i < signs.length; i++) {
-                    if (signs[i].max_rail_vehicles === currentVehicleCount) {
+                    var max = signs[i].max_rail_vehicles;
+                    var score;
+                    if (max === currentVehicleCount) score = 0;
+                    else if (max > currentVehicleCount) score = max - currentVehicleCount;
+                    else if (max === 0)                 score = 99999;
+                    else                                score = 99999 + (currentVehicleCount - max);
+                    if (score < bestScore) {
+                        bestScore = score;
                         pick = signs[i];
-                        break;
-                    }
-                }
-                if (!pick) {
-                    for (var i = 0; i < signs.length; i++) {
-                        if (signs[i].max_rail_vehicles === 0) {
-                            pick = signs[i];
-                            break;
-                        }
                     }
                 }
                 if (pick) {

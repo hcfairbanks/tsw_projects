@@ -3,7 +3,6 @@ package cookedmap
 import (
 	"io/fs"
 	"path/filepath"
-	"strings"
 
 	"hud-go/internal/output"
 	"hud-go/internal/pak"
@@ -38,7 +37,7 @@ func CollectTrainClasses(workdirs []string) []output.RouteTrainClass {
 				return nil
 			}
 			base := d.Name()
-			if !strings.HasPrefix(base, "RVD_") || !strings.HasSuffix(strings.ToLower(base), ".uasset") {
+			if !pak.IsRVDAsset(base) {
 				return nil
 			}
 			rvd, err := uasset.ParseCookedRVD(p)
@@ -95,8 +94,17 @@ func rvdToRouteTrainClass(r *uasset.RVD) output.RouteTrainClass {
 	// Pre-set the relative path the zip packer will use for this class's
 	// thumbnail. Caller is responsible for actually writing the PNG into
 	// the zip at this path (see addClassThumbnailsToZip).
+	//
+	// Keyed on FriendlyName, not RailVehicleClass — rvc stems collide
+	// across paks (TTC's Class323 vs another DLC's Class323 both
+	// produce "Class323.png"); FriendlyName ("Class 323 TTC" vs
+	// "Class 323") is the differentiator the catalog scan already uses.
 	if r.ThumbnailAssetRef != "" {
-		tc.ThumbnailRel = "images/train_classes/" + pak.SanitiseThumbnailName(r.RailVehicleClass) + ".png"
+		fname := r.FriendlyName
+		if fname == "" {
+			fname = r.RailVehicleClass
+		}
+		tc.ThumbnailRel = "images/train_classes/" + pak.SanitiseThumbnailName(fname) + ".png"
 	}
 	if len(r.Electrification) > 0 {
 		tc.Electrification = make([]output.ElectrificationSpec, len(r.Electrification))

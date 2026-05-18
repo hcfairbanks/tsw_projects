@@ -52,6 +52,31 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable
 	}
 	trainClasses := CollectTrainClasses(workdirs)
 
+	// Per-service pre-baked path data from the route's RouteTimetableDataTrack
+	// uassets. When present, the per-service path-builder uses these exact
+	// (ribbon, fraction) breadcrumbs instead of routing schedule stops
+	// through the proximity-weighted ribbon graph — which silently mispicks
+	// at parallel-ribbon stretches. Propagated to every timetable on this
+	// route via the same fan-out as RibbonVertices below.
+	dataTracks := CollectDataTracks(workdirs)
+	if dataTracks != nil {
+		tt.ServiceTrackData = dataTracks
+		for _, t := range allTTs {
+			if t != nil {
+				t.ServiceTrackData = dataTracks
+			}
+		}
+	}
+
+	// route_*.json carries the ROUTE-LEVEL CPR (this pak's own mount,
+	// from RouteDefinition). Per-asset CPRs travel in each per-service
+	// JSON instead. Fall back to the per-asset CPR only if the
+	// RouteDefinition didn't supply one (cargo DLCs without their own
+	// RouteDefinition asset).
+	routeCPR := tt.RouteCrossPakReferenceName
+	if routeCPR == "" {
+		routeCPR = tt.CrossPakReferenceName
+	}
 	stats, err := Build(Options{
 		Workdir:               tt.ExtractDir,
 		RouteName:             tt.Route,
@@ -60,7 +85,7 @@ func WriteRouteMap(w io.Writer, tt *uasset.Timetable, allTTs []*uasset.Timetable
 		DisplayName:           displayName,
 		Country:               output.CountryNameFromCode(tt.CountryCode),
 		CountryCode:           output.CountryISOFromCode(tt.CountryCode),
-		CrossPakReferenceName: tt.CrossPakReferenceName,
+		CrossPakReferenceName: routeCPR,
 		TrainClasses:          trainClasses,
 	}, w)
 	if err != nil {

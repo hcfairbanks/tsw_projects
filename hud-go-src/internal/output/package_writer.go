@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"hud-go/internal/geo"
+	"hud-go/internal/pak"
 	"hud-go/internal/pak/uasset"
 )
 
@@ -640,7 +641,19 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 		}
 		if len(ribs) > 0 {
 			anchor := geo.NewRouteAnchor(tt.OriginLat, tt.OriginLng)
-			coords := BuildServicePath(svc, ribs, tt.Switches, tt.RibbonVertices, anchor)
+			// Prefer the pre-baked DataTrack path when available — the
+			// game's own per-service (ribbon, fraction) breadcrumb list
+			// from the RouteTimetableDataTrack uasset. Falls back to the
+			// proximity-based walker for routes without DataTracks
+			// (legacy DLCs) or services not represented in the map
+			// (rare; deadhead / portal services).
+			var coords []ServiceCoord
+			if std, ok := tt.ServiceTrackData[svc.Name]; ok && len(std.TrackData) > 0 {
+				coords = BuildServicePathFromTrackData(std.TrackData, ribs, tt.Switches, tt.RibbonVertices, anchor)
+			}
+			if len(coords) == 0 {
+				coords = BuildServicePath(svc, ribs, tt.Switches, tt.RibbonVertices, anchor)
+			}
 			if len(coords) > 0 {
 				ps.Coordinates = coords
 				ps.TotalPoints = len(coords)
@@ -1094,10 +1107,22 @@ func writeOneZip(zipPath string, run routeRun, ctxByTT map[*uasset.Timetable]*tt
 // Intentionally permissive: a partial set of thumbnails is better than
 // failing the whole zip over one bad texture.
 func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
-	// Index .uasset basenames across every ExtractDir we see so a
-	// thumbnail texture rendered from one pak can be located even when
-	// its referencing RVD lives elsewhere (rare but possible).
-	indexed := map[string]string{} // basename-stem → on-disk path
+	// Index .uasset paths across every ExtractDir we see. Keep TWO maps:
+	//
+	//   indexedCanonical — keyed on the pak's canonical asset path
+	//     (matches the format an RVD's ThumbnailAssetRef uses, e.g.
+	//     "/TTC_Class323/Data/RVD/TTC_Class323_Thumbnail"). This is the
+	//     authoritative lookup — when a pak ships two textures with the
+	//     same basename in different folders (TTC's Class 323 has
+	//     TTC_Class323_Thumbnail.uasset in both Data/RVD/ AND
+	//     Data/LiveryEditor/ with different images), only this index
+	//     disambiguates them.
+	//   indexedByBase — keyed on basename stem alone, used only as a
+	//     fallback for RVDs whose ThumbnailAssetRef points to a path
+	//     that didn't get indexed canonically (older paks with relocated
+	//     assets).
+	indexedCanonical := map[string]string{}
+	indexedByBase := map[string]string{}
 	indexedDirs := map[string]bool{}
 	indexDir := func(dir string) {
 		if dir == "" || indexedDirs[dir] {
@@ -1111,9 +1136,10 @@ func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
 			if !strings.HasSuffix(path, ".uasset") {
 				return nil
 			}
+			indexedCanonical[pak.CanonicalRVDPath(path)] = path
 			stem := strings.TrimSuffix(filepath.Base(path), ".uasset")
-			if _, ok := indexed[stem]; !ok {
-				indexed[stem] = path
+			if _, ok := indexedByBase[stem]; !ok {
+				indexedByBase[stem] = path
 			}
 			return nil
 		})
@@ -1142,7 +1168,7 @@ func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
 				return nil
 			}
 			base := d.Name()
-			if !strings.HasPrefix(base, "RVD_") || !strings.HasSuffix(strings.ToLower(base), ".uasset") {
+			if !pak.IsRVDAsset(base) {
 				return nil
 			}
 			rvd, perr := uasset.ParseCookedRVD(path)
@@ -1153,12 +1179,32 @@ func addClassThumbnailsToZip(zw *zip.Writer, pairs []routePair) error {
 				return nil
 			}
 			seenClass[rvd.RailVehicleClass] = true
-			stem := stemFromAssetRef(rvd.ThumbnailAssetRef)
-			assetPath, ok := indexed[stem]
+			// Canonical-path lookup first; basename fallback for legacy
+			// refs whose canonical form doesn't match what's on disk.
+			ref := rvd.ThumbnailAssetRef
+			if i := strings.LastIndex(ref, "."); i >= 0 {
+				ref = ref[:i]
+			}
+			assetPath, ok := indexedCanonical[ref]
+			if !ok {
+				stem := stemFromAssetRef(rvd.ThumbnailAssetRef)
+				assetPath, ok = indexedByBase[stem]
+			}
 			if !ok {
 				return nil
 			}
-			zipName := "images/train_classes/" + sanitiseClassFilename(rvd.RailVehicleClass) + ".png"
+			// Filename keyed on FriendlyName, not RailVehicleClass — two
+			// paks regularly ship distinct trains with the same rvc stem
+			// (TTC's Class323 vs another DLC's Class323), and rvc-keyed
+			// filenames collide. FriendlyName differentiates ("Class 323
+			// TTC" vs "Class 323"). Matches what the catalog scan's
+			// renderRVDThumbnails uses, so the disk file the catalog
+			// writes is the same one the importer extracts here.
+			fname := rvd.FriendlyName
+			if fname == "" {
+				fname = rvd.RailVehicleClass
+			}
+			zipName := "images/train_classes/" + sanitiseClassFilename(fname) + ".png"
 			if werr := writeThumbnailToZip(zw, zipName, assetPath); werr != nil {
 				fmt.Fprintf(os.Stderr, "[zip] thumbnail %s: %v\n", rvd.RailVehicleClass, werr)
 			}
@@ -1396,7 +1442,12 @@ func hmOnly(s string) string {
 }
 
 // computeDuration returns "HH:MM" from the first scheduled time to the last.
-// Returns "00:00" if it can't compute.
+// Returns "00:00" only when the service genuinely has no schedule data.
+//
+// Handles the midnight-wrap case: a service starting 09:53 with its last
+// schedule entry at 00:00 is a 14h07 trip ending after midnight, not a
+// 0-duration trip. We assume the schedule never spans more than one
+// calendar day; if end < start, treat end as the next day.
 func computeDuration(svc *uasset.Service) string {
 	start := parseHMS(hmOnly(svc.StartTime))
 	end := -1
@@ -1408,8 +1459,11 @@ func computeDuration(svc *uasset.Service) string {
 			end = t
 		}
 	}
-	if start < 0 || end < 0 || end < start {
+	if start < 0 || end < 0 {
 		return "00:00"
+	}
+	if end < start {
+		end += 24 * 3600
 	}
 	diff := end - start
 	h := diff / 3600

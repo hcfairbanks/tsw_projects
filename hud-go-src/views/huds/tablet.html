@@ -355,6 +355,33 @@
             background: #333;
         }
 
+        /* "Follow Formation" toggle — sits to the LEFT of the close button.
+           Mirrors /map's Follow Train button. When active (.following) the
+           overlay map re-centres on the train marker every stream tick. */
+        .map-overlay .follow-formation-btn {
+            position: absolute;
+            top: 15px;
+            right: 70px;
+            z-index: 3001;
+            height: 44px;
+            padding: 0 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .map-overlay .follow-formation-btn:hover { background: #333; }
+        .map-overlay .follow-formation-btn.following {
+            background: #007a3d;
+        }
+        .map-overlay .follow-formation-btn.following:hover {
+            background: #00a050;
+        }
+
         /* Push the Leaflet basemap switcher (and any other top-right controls)
            down below the close button so they don't overlap. */
         .map-overlay .leaflet-top.leaflet-right {
@@ -1754,6 +1781,7 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
 
     <!-- Map Overlay -->
     <div id="mapOverlay" class="map-overlay">
+        <button id="overlayFollowFormationBtn" class="follow-formation-btn" onclick="toggleOverlayFollowFormation()" title="Center the map on the formation and keep it centered as the train moves">Follow Formation</button>
         <button class="close-btn" onclick="hideMapOverlay()">&times;</button>
         <div id="overlayMap"></div>
         <!-- Layer toggle bar — bottom-left of the map overlay. Same shape
@@ -2286,6 +2314,9 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
                         .bindPopup('<strong>Your Train</strong>')
                         .addTo(overlayMap);
                 }
+                if (overlayIsFollowingFormation) {
+                    overlayMap.setView([lat, lng], overlayMap.getZoom());
+                }
             }
         };
 
@@ -2320,6 +2351,28 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
         var overlayMarkerLayers = [];
         var overlayEventSource = null;
         var overlayTrainIcon = null;
+        // "Follow Formation" toggle state — when true, the stream handler
+        // re-centres overlayMap on the train marker every tick. Mirrors the
+        // /map page's Follow Train button.
+        var overlayIsFollowingFormation = false;
+
+        function toggleOverlayFollowFormation() {
+            var btn = document.getElementById('overlayFollowFormationBtn');
+            overlayIsFollowingFormation = !overlayIsFollowingFormation;
+            if (overlayIsFollowingFormation) {
+                btn.classList.add('following');
+                btn.textContent = 'Follow';
+                btn.title = 'Click to stop following the formation';
+                if (overlayMap && overlayTrainMarker) {
+                    var p = overlayTrainMarker.getLatLng();
+                    overlayMap.setView([p.lat, p.lng], overlayMap.getZoom());
+                }
+            } else {
+                btn.classList.remove('following');
+                btn.textContent = 'Follow Formation';
+                btn.title = 'Center the map on the formation and keep it centered as the train moves';
+            }
+        }
 
         function showMapOverlay() {
             document.getElementById('mapOverlay').classList.add('active');
@@ -2829,22 +2882,31 @@ function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLim
 
         function applyDynamicStopCoords() {
             if (!cachedTimetableItems || !cachedTimetableItems.length) return;
+            // Only the FIRST WAIT FOR SERVICE is the spawn (server set
+            // its coords to path[0]); later WAIT FOR SERVICE rows are
+            // mid-route train moves and need the normal sign pick.
+            var seenFirstWaitForService = false;
             cachedTimetableItems.forEach(function (item) {
+                if (item.action === 'WAIT FOR SERVICE' && !seenFirstWaitForService) {
+                    seenFirstWaitForService = true;
+                    return;
+                }
                 var signs = item.car_stop_signs;
                 if (!signs || !signs.length) return;
+                // Snug-fit picker — exact match > next-larger > max=0 generic.
+                // See desktop.html for the rationale.
                 var pick = null;
+                var bestScore = Infinity;
                 for (var i = 0; i < signs.length; i++) {
-                    if (signs[i].max_rail_vehicles === currentVehicleCount) {
+                    var max = signs[i].max_rail_vehicles;
+                    var score;
+                    if (max === currentVehicleCount) score = 0;
+                    else if (max > currentVehicleCount) score = max - currentVehicleCount;
+                    else if (max === 0)                 score = 99999;
+                    else                                score = 99999 + (currentVehicleCount - max);
+                    if (score < bestScore) {
+                        bestScore = score;
                         pick = signs[i];
-                        break;
-                    }
-                }
-                if (!pick) {
-                    for (var i = 0; i < signs.length; i++) {
-                        if (signs[i].max_rail_vehicles === 0) {
-                            pick = signs[i];
-                            break;
-                        }
                     }
                 }
                 if (pick) {

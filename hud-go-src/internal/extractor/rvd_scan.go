@@ -107,7 +107,7 @@ func (e *Extractor) scanOnePakRVDs(pakPath, workRoot string) (map[string]*uasset
 			return nil
 		}
 		name := filepath.Base(path)
-		if !strings.HasPrefix(name, "RVD_") || !strings.HasSuffix(name, ".uasset") {
+		if !pak.IsRVDAsset(name) {
 			return nil
 		}
 		rvd, err := uasset.ParseCookedRVD(path)
@@ -144,10 +144,15 @@ func (e *Extractor) repakListRVDs(pakPath string) ([]string, error) {
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		base := filepath.Base(line)
-		if !strings.HasPrefix(base, "RVD_") {
+		// Accept both RVD_<X> (prefix) and <X>_RVD (suffix) naming
+		// conventions; see pak.IsRVDAsset for full rationale. Here we
+		// additionally accept the matching .uexp / .ubulk sidecars
+		// regardless of suffix form so repak unpacks the full RVD body.
+		if !(strings.HasSuffix(base, ".uasset") || strings.HasSuffix(base, ".uexp") || strings.HasSuffix(base, ".ubulk")) {
 			continue
 		}
-		if !(strings.HasSuffix(base, ".uasset") || strings.HasSuffix(base, ".uexp") || strings.HasSuffix(base, ".ubulk")) {
+		stem := strings.TrimSuffix(strings.TrimSuffix(strings.TrimSuffix(base, ".uasset"), ".uexp"), ".ubulk")
+		if !(strings.HasPrefix(stem, "RVD_") || strings.HasSuffix(stem, "_RVD")) {
 			continue
 		}
 		rvds = append(rvds, line)

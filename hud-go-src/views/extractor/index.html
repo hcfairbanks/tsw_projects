@@ -97,9 +97,284 @@
         summary > #btnRescan { font-size: 12px; padding: 6px 12px; margin: 0; }
         details:not([open]) .summary-toolbar,
         details:not([open]) > summary > #btnRescan { display: none; }
+    /* Nuke DB button — lives inside the Development Tools card.
+       Hazard caution-stripe border around a deep-red core. */
+    .nuke-db-btn {
+        display: inline-block;
+        padding: 12px 22px;
+        background:
+            radial-gradient(ellipse at center, #d80000 0%, #800000 100%);
+        color: #fff;
+        border: 5px solid transparent;
+        /* Yellow + black 45° caution stripes around the border. */
+        border-image: repeating-linear-gradient(45deg,
+            #f5d800 0 14px, #000 14px 28px) 5;
+        border-radius: 0;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 17px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        /* Glow halo so it looks live and dangerous. */
+        box-shadow:
+            0 0 0 2px #000,
+            0 0 18px rgba(255, 0, 0, 0.7);
+        text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 6px #ff0;
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .nuke-db-btn:hover {
+        background:
+            radial-gradient(ellipse at center, #ff1a1a 0%, #a00000 100%);
+        box-shadow:
+            0 0 0 2px #000,
+            0 0 28px rgba(255, 40, 0, 0.95);
+        transform: scale(1.04);
+    }
+    .nuke-db-btn:active { transform: scale(0.97); }
+
+    /* Custom Nuke DB confirmation modal — same hazard aesthetic as the
+       button. Native confirm() / prompt() can't be styled and they
+       clip text on small browser windows; this lays out everything
+       inline so the entire warning is visible without scrolling. */
+    .nuke-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .nuke-modal-overlay.active { display: flex; }
+    .nuke-modal {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 28px 32px;
+        border: 8px solid transparent;
+        border-image: repeating-linear-gradient(45deg,
+            #f5d800 0 18px, #000 18px 36px) 8;
+        box-shadow:
+            0 0 0 3px #000,
+            0 0 32px rgba(255, 30, 0, 0.85);
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .nuke-modal h2 {
+        margin: 0 0 14px 0;
+        padding: 0;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 28px;
+        font-weight: 900;
+        color: #ff2020;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 0 0 8px rgba(255, 220, 0, 0.6);
+        border-bottom: 2px solid var(--btn-danger-bg);
+        padding-bottom: 12px;
+    }
+    .nuke-modal p { margin: 10px 0; }
+    .nuke-modal .kept-list {
+        background: var(--bg-tertiary);
+        border-left: 4px solid #0a7;
+        padding: 8px 14px;
+        margin: 12px 0;
+        font-family: monospace;
+        font-size: 13px;
+    }
+    .nuke-modal .wiped-warning {
+        background: rgba(184, 0, 0, 0.18);
+        border-left: 4px solid var(--btn-danger-bg);
+        padding: 10px 14px;
+        margin: 12px 0;
+    }
+    .nuke-modal label.confirm-label {
+        display: block;
+        margin-top: 18px;
+        font-weight: bold;
+    }
+    .nuke-modal input.confirm-input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 2px solid #000;
+        background: #fff;
+        color: #000;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 18px;
+        letter-spacing: 4px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+    .nuke-modal .actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+    .nuke-modal .actions button {
+        padding: 10px 22px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+    }
+    .nuke-modal .actions .cancel-btn {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+    }
+    .nuke-modal .actions .confirm-btn {
+        background: #6a0000;
+        color: #fff;
+        border: 1px solid #000;
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+    .nuke-modal .actions .confirm-btn.armed {
+        background: linear-gradient(180deg, #ff2020 0%, #a00000 100%);
+        opacity: 1;
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(255, 30, 0, 0.7);
+    }
+
+    /* Nuclear explosion overlay — plays once after the user confirms
+       the wipe, then fades out and triggers the page reload. Pure CSS,
+       no external assets. Sequence: blinding white flash → expanding
+       orange/red fireball → mushroom-cloud kanji rises → fade out. */
+    .nuke-boom-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 30000;
+        display: none;
+        pointer-events: none;
+        overflow: hidden;
+        background: #000;
+    }
+    .nuke-boom-overlay.active { display: block; }
+    .boom-flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+        animation: boom-flash-anim 3.2s ease-out forwards;
+    }
+    @keyframes boom-flash-anim {
+        0%   { opacity: 0; }
+        2%   { opacity: 1; }
+        15%  { opacity: 1; }
+        35%  { opacity: 0.35; }
+        100% { opacity: 0; }
+    }
+    .boom-fireball {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        margin: -20px 0 0 -20px;
+        border-radius: 50%;
+        background: radial-gradient(circle,
+            #fff 0%, #ffe680 25%, #ff9900 45%, #cc2200 75%, #330000 100%);
+        box-shadow: 0 0 80px 40px rgba(255, 140, 0, 0.85);
+        transform: scale(0);
+        animation: boom-fire-anim 3.2s cubic-bezier(.2, .7, .3, 1) forwards;
+    }
+    @keyframes boom-fire-anim {
+        0%   { transform: scale(0); opacity: 1; }
+        15%  { transform: scale(20); opacity: 1; }
+        50%  { transform: scale(45); opacity: 0.7; }
+        100% { transform: scale(70); opacity: 0; }
+    }
+    .boom-cloud {
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, 0) scale(0.4);
+        font-size: 180px;
+        line-height: 1;
+        color: #fff;
+        text-shadow:
+            0 0 40px #ffaa00,
+            0 0 80px #ff4400,
+            0 0 120px #ff0000;
+        opacity: 0;
+        animation: boom-cloud-anim 3.2s ease-out forwards;
+    }
+    @keyframes boom-cloud-anim {
+        0%   { opacity: 0; transform: translate(-50%, 60%) scale(0.2); }
+        25%  { opacity: 1; transform: translate(-50%, 0%)  scale(1.0); }
+        70%  { opacity: 1; transform: translate(-50%, -25%) scale(1.4); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+    }
+    .boom-text {
+        position: absolute;
+        top: 22%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 64px;
+        font-weight: 900;
+        color: #ff4040;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        text-shadow:
+            3px 3px 0 #000,
+            -3px -3px 0 #000,
+            0 0 24px rgba(255, 80, 0, 0.85);
+        opacity: 0;
+        animation: boom-text-anim 3.2s ease-out forwards;
+    }
+    @keyframes boom-text-anim {
+        0%   { opacity: 0; transform: scale(0.6); }
+        20%  { opacity: 1; transform: scale(1.0); }
+        85%  { opacity: 1; transform: scale(1.0); }
+        100% { opacity: 0; transform: scale(1.1); }
+    }
     </style>
 </head>
 <body>
+    <!-- Nuclear explosion overlay — plays right after the user confirms
+         the wipe, before the page reloads. Pure CSS animation. -->
+    <div id="nukeBoomOverlay" class="nuke-boom-overlay">
+        <div class="boom-flash"></div>
+        <div class="boom-fireball"></div>
+        <div class="boom-cloud">&#9762;</div>
+        <div class="boom-text">DB Obliterated</div>
+    </div>
+
+    <!-- Nuke DB confirmation modal — opened from the dev-tools card. -->
+    <div id="nukeModalOverlay" class="nuke-modal-overlay" onclick="if(event.target===this)closeNukeModal()">
+        <div class="nuke-modal" role="dialog" aria-modal="true" aria-labelledby="nukeModalTitle">
+            <h2 id="nukeModalTitle">&#9762; Nuke DB</h2>
+            <p>This wipes <strong>every user table</strong> except the three seed tables:</p>
+            <div class="kept-list">
+                countries<br>
+                weather_presets<br>
+                timetable_actions
+            </div>
+            <div class="wiped-warning">
+                <strong>What disappears:</strong> all imported routes, timetables, formations,
+                train classes, car stop signs, paths, the pak catalog, etc. Re-extraction
+                is required afterwards.
+            </div>
+            <label class="confirm-label" for="nukeConfirmInput">Type <code>NUKE IT !!!</code> to confirm:</label>
+            <input id="nukeConfirmInput" class="confirm-input" type="text" autocomplete="off"
+                   spellcheck="false" placeholder="NUKE IT !!!"
+                   oninput="updateNukeArmState()" onkeydown="if(event.key==='Enter')runNukeIfArmed()">
+            <div class="actions">
+                <button class="cancel-btn" type="button" onclick="closeNukeModal()">Cancel</button>
+                <button id="nukeConfirmBtn" class="confirm-btn" type="button" onclick="runNukeIfArmed()">NUKE IT</button>
+            </div>
+        </div>
+    </div>
+
     <h1 data-i18n="extractor.title">TSW6 Extractor</h1>
 
     <nav id="main-nav"></nav>
@@ -136,16 +411,35 @@
                     </label>
                     <span></span>
                 </div>
-                <div class="settings-row">
-                    <label for="cfgBuildTimetableMaps" data-i18n="extractor.buildTimetableMaps">Build Timetable Maps:</label>
-                    <label style="justify-self:start;">
-                        <input id="cfgBuildTimetableMaps" type="checkbox" onchange="saveCfgBoolField('extractorBuildTimetableMaps', 'cfgBuildTimetableMaps')">
-                        <span data-i18n="extractor.buildTimetableMapsDesc">Building timetable maps during export creates large files and is very slow.</span>
-                    </label>
-                    <span></span>
-                </div>
             </div>
         </details>
+    </div>
+
+    <!-- Development Tools (dev-mode only). Mirrors the dev-tools card
+         on /routes/{id}: red border, danger-coloured heading, hidden
+         until loadConfig() sees developmentMode=true. Holds the
+         "Build Timetable Maps" power-user knob and the Nuke DB button. -->
+    <div class="card" id="devToolsCard" style="display: none; border-color: var(--btn-danger-bg);">
+        <h2 style="color: var(--btn-danger-bg); margin-top: 0;">Development Tools</h2>
+        <p style="color: var(--text-muted); margin-bottom: 15px;">These tools are only visible in development mode.</p>
+        <div class="settings-row">
+            <label for="cfgBuildTimetableMaps" data-i18n="extractor.buildTimetableMaps">Build Timetable Maps:</label>
+            <label style="justify-self: start;">
+                <input id="cfgBuildTimetableMaps" type="checkbox" onchange="saveCfgBoolField('extractorBuildTimetableMaps', 'cfgBuildTimetableMaps')">
+                <span data-i18n="extractor.buildTimetableMapsDesc">Building timetable maps during export creates large files and is very slow.</span>
+            </label>
+            <span></span>
+        </div>
+        <div style="margin-top: 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <button id="nukeDbBtn" class="nuke-db-btn" onclick="nukeDB()"
+                    title="Wipe all DB tables except countries / weather_presets / timetable_actions">
+                &#9762; Nuke DB
+            </button>
+            <button class="btn-secondary" onclick="rebuildTrainClasses()"
+                    title="Reconcile train_classes table against canonical pak_rvds data: link ghost rows by name, insert missing rail_vehicle_class values, backfill is_drivable / vehicle_category / etc. from RVDs.">
+                Rebuild Train Classes from RVDs
+            </button>
+        </div>
     </div>
 
     <!-- Routes (incomplete) -->
@@ -271,6 +565,11 @@
                 document.getElementById('cfgTempDir').value      = cfg.extractorTempDir    || '';
                 document.getElementById('cfgAutoImport').checked = !!cfg.extractorAutoImport;
                 document.getElementById('cfgBuildTimetableMaps').checked = !!cfg.extractorBuildTimetableMaps;
+                // Development Tools card (holds Build Timetable Maps +
+                // Nuke DB) — only shown in development mode.
+                if (cfg.developmentMode) {
+                    document.getElementById('devToolsCard').style.display = '';
+                }
             } catch (e) { console.error('config load:', e); }
         }
 
@@ -300,6 +599,94 @@
                 if (!r.ok) throw new Error('save failed: ' + r.status);
                 appendLog('cfg ' + key + ' saved', 'ok');
             } catch (e) { alert('Save failed: ' + e.message); }
+        }
+
+        // Dev-mode-only DB wipe. Two-step confirmation via the custom
+        // modal: open the dialog, user must type NUKE before the
+        // confirm button arms. Native confirm()/prompt() can't be
+        // styled and they clip text on small windows.
+        function nukeDB() {
+            var input = document.getElementById('nukeConfirmInput');
+            input.value = '';
+            updateNukeArmState();
+            document.getElementById('nukeModalOverlay').classList.add('active');
+            // Defer focus so the click that opened the modal doesn't
+            // immediately blur back to the trigger button.
+            setTimeout(function () { input.focus(); }, 50);
+        }
+        function closeNukeModal() {
+            document.getElementById('nukeModalOverlay').classList.remove('active');
+        }
+        function updateNukeArmState() {
+            var typed = document.getElementById('nukeConfirmInput').value.trim().toUpperCase();
+            var btn = document.getElementById('nukeConfirmBtn');
+            if (typed === 'NUKE IT !!!') btn.classList.add('armed');
+            else                          btn.classList.remove('armed');
+        }
+        async function runNukeIfArmed() {
+            if (!document.getElementById('nukeConfirmBtn').classList.contains('armed')) return;
+            closeNukeModal();
+            // Fire the explosion overlay immediately so the user gets
+            // visual feedback while the network call runs in parallel.
+            // The 3.2 s animation matches keyframe durations in CSS.
+            var boom = document.getElementById('nukeBoomOverlay');
+            boom.classList.add('active');
+            try {
+                const r = await fetch('/api/extractor/nuke-db', { method: 'POST' });
+                const data = await r.json();
+                if (data.success) {
+                    var tables = Object.keys(data.wiped || {}).length;
+                    var rows = Object.values(data.wiped || {})
+                        .reduce(function (a, b) { return a + b; }, 0);
+                    // Wait for the explosion animation to finish before
+                    // showing the summary + reloading. setTimeout instead
+                    // of animationend so we don't block on the longest
+                    // sub-animation alone.
+                    setTimeout(function () {
+                        alert("DB nuked.\n\nWiped " + rows + " rows across "
+                            + tables + " tables.\nKept: " + (data.kept || []).join(', '));
+                        location.reload();
+                    }, 3200);
+                } else {
+                    boom.classList.remove('active');
+                    alert("Nuke encountered errors:\n\n"
+                        + ((data.errors || []).join('\n') || 'unknown'));
+                }
+            } catch (e) {
+                boom.classList.remove('active');
+                alert("Nuke request failed: " + e.message);
+            }
+        }
+        // ESC closes the modal.
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape'
+                && document.getElementById('nukeModalOverlay').classList.contains('active')) {
+                closeNukeModal();
+            }
+        });
+
+        // Dev-tools: rebuild train_classes from pak_rvds. Non-destructive.
+        async function rebuildTrainClasses() {
+            try {
+                const r = await fetch('/api/extractor/rebuild-train-classes', { method: 'POST' });
+                const d = await r.json();
+                if (!d.success) {
+                    alert("Rebuild failed: " + (d.error || JSON.stringify(d)));
+                    return;
+                }
+                alert("Train Classes rebuilt.\n\n"
+                    + "Ghost rows linked:       " + d.linked + "\n"
+                    + "New rows inserted:       " + d.inserted + "\n"
+                    + "Rows backfilled:         " + d.backfilled + "\n"
+                    + "Duplicates left as-is:   " + (d.duplicates_skipped || 0) + "\n"
+                    + "Total train_classes:     " + d.total_train_classes + " ("
+                    + d.total_with_rvc + " with rail_vehicle_class)\n\n"
+                    + "Duplicates are ghost rows whose target rvc is already taken "
+                    + "by another row (formatting / livery variants of the same train). "
+                    + "They stay hidden by the listing filter.");
+            } catch (e) {
+                alert("Rebuild request failed: " + e.message);
+            }
         }
 
         async function loadRoutes() {

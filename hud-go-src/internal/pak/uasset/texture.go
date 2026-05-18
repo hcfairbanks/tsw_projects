@@ -6,8 +6,11 @@
 // gives us a ground-truth basemap directly — no NetworkRibbon walker, no
 // chaining, no clothoid integration required.
 //
-// Supports PF_DXT1 (BC1) and PF_B8G8R8A8 (uncompressed BGRA). The low-res
-// route preview tile uses DXT1; the high-res map uses BGRA8.
+// Supports PF_DXT1 (BC1), PF_DXT5 (BC3), and PF_B8G8R8A8 (uncompressed
+// BGRA). The low-res route preview tile uses DXT1; the high-res map uses
+// BGRA8. Train class thumbnails on newer DLCs (BR 111 DB, etc.) ship as
+// DXT5 — BC1 color + BC4 alpha — which is why DXT5 support is required
+// alongside the route-map decoders.
 package uasset
 
 import (
@@ -124,8 +127,8 @@ func ExtractTexture2DPNG(uassetPath, outPath string) (*Texture2DInfo, error) {
 	if pixFmtName == "None" {
 		return nil, fmt.Errorf("no platform data (first PixelFormatName is None)")
 	}
-	if pixFmtName != "PF_DXT1" && pixFmtName != "PF_B8G8R8A8" {
-		return nil, fmt.Errorf("unsupported pixel format %q (only PF_DXT1 and PF_B8G8R8A8 implemented)", pixFmtName)
+	if pixFmtName != "PF_DXT1" && pixFmtName != "PF_DXT5" && pixFmtName != "PF_B8G8R8A8" {
+		return nil, fmt.Errorf("unsupported pixel format %q (only PF_DXT1, PF_DXT5, PF_B8G8R8A8 implemented)", pixFmtName)
 	}
 	_ = pr.i64() // SkipOffset — we always read this PlatformData, never skip
 	sizeX := int(pr.i32())
@@ -211,6 +214,17 @@ func ExtractTexture2DPNG(uassetPath, outPath string) (*Texture2DInfo, error) {
 				len(topMip), expected, sizeX, sizeY, wBlocks, hBlocks)
 		}
 		rgba = decodeDXT1(topMip, sizeX, sizeY)
+	case "PF_DXT5":
+		// DXT5 (BC3) is 16 bytes per 4×4 block: 8 bytes BC4-style alpha block
+		// followed by 8 bytes BC1 color block (always 4-color mode).
+		wBlocks := (sizeX + 3) / 4
+		hBlocks := (sizeY + 3) / 4
+		expected := wBlocks * hBlocks * 16
+		if len(topMip) != expected {
+			return nil, fmt.Errorf("mip 0 byte count %d != expected DXT5 size %d (%dx%d → %dx%d blocks)",
+				len(topMip), expected, sizeX, sizeY, wBlocks, hBlocks)
+		}
+		rgba = decodeDXT5(topMip, sizeX, sizeY)
 	default:
 		return nil, fmt.Errorf("unreachable: format %q passed gate but no decoder", pixFmtName)
 	}
@@ -282,6 +296,83 @@ func decodeDXT1(src []byte, w, h int) []byte {
 					dst[di+1] = palG[idx]
 					dst[di+2] = palB[idx]
 					dst[di+3] = 255
+				}
+			}
+		}
+	}
+	return dst
+}
+
+// decodeDXT5 expands BC3-compressed bytes into RGBA8. Each 16-byte block
+// holds an 8-byte alpha sub-block (BC4-style: two 8-bit endpoints + 16
+// × 3-bit indices into an 8-entry alpha palette) followed by an 8-byte
+// colour sub-block (BC1, always in the 4-colour interpolation mode).
+// Texels outside the actual SizeX/SizeY are dropped.
+func decodeDXT5(src []byte, w, h int) []byte {
+	dst := make([]byte, w*h*4)
+	wBlocks := (w + 3) / 4
+	hBlocks := (h + 3) / 4
+	for by := 0; by < hBlocks; by++ {
+		for bx := 0; bx < wBlocks; bx++ {
+			off := (by*wBlocks + bx) * 16
+			// Alpha endpoints + 48-bit index stream.
+			a0 := src[off+0]
+			a1 := src[off+1]
+			aBits := uint64(src[off+2]) |
+				uint64(src[off+3])<<8 |
+				uint64(src[off+4])<<16 |
+				uint64(src[off+5])<<24 |
+				uint64(src[off+6])<<32 |
+				uint64(src[off+7])<<40
+			var aPal [8]uint8
+			aPal[0] = a0
+			aPal[1] = a1
+			if a0 > a1 {
+				// 6 interpolated alpha values.
+				for i := 1; i <= 6; i++ {
+					aPal[i+1] = uint8(((7-i)*int(a0) + i*int(a1)) / 7)
+				}
+			} else {
+				// 4 interpolated + transparent + opaque.
+				for i := 1; i <= 4; i++ {
+					aPal[i+1] = uint8(((5-i)*int(a0) + i*int(a1)) / 5)
+				}
+				aPal[6] = 0
+				aPal[7] = 255
+			}
+			// Colour sub-block: BC1 in 4-colour mode (interpolated 1/3 and
+			// 2/3 mixes regardless of c0/c1 ordering).
+			c0 := binary.LittleEndian.Uint16(src[off+8:])
+			c1 := binary.LittleEndian.Uint16(src[off+10:])
+			bits := binary.LittleEndian.Uint32(src[off+12:])
+			r0, g0, b0 := unpack565(c0)
+			r1, g1, b1 := unpack565(c1)
+			var palR, palG, palB [4]uint8
+			palR[0], palG[0], palB[0] = r0, g0, b0
+			palR[1], palG[1], palB[1] = r1, g1, b1
+			palR[2] = uint8((2*int(r0) + int(r1)) / 3)
+			palG[2] = uint8((2*int(g0) + int(g1)) / 3)
+			palB[2] = uint8((2*int(b0) + int(b1)) / 3)
+			palR[3] = uint8((int(r0) + 2*int(r1)) / 3)
+			palG[3] = uint8((int(g0) + 2*int(g1)) / 3)
+			palB[3] = uint8((int(b0) + 2*int(b1)) / 3)
+			for py := 0; py < 4; py++ {
+				yy := by*4 + py
+				if yy >= h {
+					break
+				}
+				for px := 0; px < 4; px++ {
+					xx := bx*4 + px
+					if xx >= w {
+						continue
+					}
+					cIdx := (bits >> uint((py*4+px)*2)) & 0x3
+					aIdx := (aBits >> uint((py*4+px)*3)) & 0x7
+					di := (yy*w + xx) * 4
+					dst[di+0] = palR[cIdx]
+					dst[di+1] = palG[cIdx]
+					dst[di+2] = palB[cIdx]
+					dst[di+3] = aPal[aIdx]
 				}
 			}
 		}

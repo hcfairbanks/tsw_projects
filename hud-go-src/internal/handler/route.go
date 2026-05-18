@@ -801,11 +801,29 @@ func (h *RouteHandler) GetSectionFormations(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	// Derive the section→formations set from the data we already have:
+	// any formation reachable through a timetable that's in this section
+	// counts as "in" this section, even when the manually-maintained
+	// section_formations table is empty. That table only ever gets written
+	// by the "Add formation to section" UI on the route page; it's never
+	// populated by the importer, so without this derivation a fresh import
+	// shows every section empty even though every formation is reachable.
+	// Manual rows in section_formations are still honoured (the UNION
+	// makes them additive — useful for power users who want to attach a
+	// formation to a section it doesn't actually run on yet).
 	rows, err := h.db.Query(`
-		SELECT t.* FROM formations t
-		INNER JOIN section_formations st ON t.id = st.formation_id
-		WHERE st.section_id = ?
-		ORDER BY t.name`, sectionID)
+		SELECT DISTINCT t.* FROM formations t
+		WHERE t.id IN (
+		  SELECT tf.formation_id
+		  FROM timetable_formations tf
+		  JOIN timetable_sections ts ON ts.timetable_id = tf.timetable_id
+		  WHERE ts.section_id = ?
+		  UNION
+		  SELECT sf.formation_id
+		  FROM section_formations sf
+		  WHERE sf.section_id = ?
+		)
+		ORDER BY t.name`, sectionID, sectionID)
 	if err != nil {
 		util.Error(w, http.StatusInternalServerError, err.Error())
 		return

@@ -159,6 +159,8 @@ func dumpOneProperty(w io.Writer, r *reader, t tagInfo, depth, arrayMax int) {
 		fmt.Fprintf(w, "%s}\n", indent)
 	case "ArrayProperty":
 		dumpArrayProperty(w, r, t, depth, arrayMax)
+	case "MapProperty":
+		dumpMapProperty(w, r, t, depth, arrayMax)
 	default:
 		fmt.Fprintf(w, "%s%s : %s (skipped, size=%d)\n", indent, t.name, t.ptype, t.size)
 	}
@@ -251,6 +253,88 @@ func dumpArrayProperty(w io.Writer, r *reader, t tagInfo, depth, arrayMax int) {
 		}
 	}
 	fmt.Fprintf(w, "%s}\n", indent)
+}
+
+// dumpMapProperty walks a TMap<K,V> body.
+//
+// UE serialised layout after the tag header:
+//
+//	4 bytes : NumKeysToRemove (int32) — usually 0
+//	4 bytes : NumEntries     (int32)
+//	for each entry: KEY-bytes immediately followed by VALUE-bytes
+//
+// KEY and VALUE are *not* tagged; their encoding is determined by the
+// key/value FName types captured in the tag header (t.mapKeyType,
+// t.mapValueType). For unknown types we fall back to "skip the body" so
+// we never mis-decode by guessing.
+func dumpMapProperty(w io.Writer, r *reader, t tagInfo, depth, arrayMax int) {
+	indent := strings.Repeat("  ", depth)
+	startP := r.p
+	endP := r.p + t.size
+	r.skip(4) // NumKeysToRemove
+	count := int(r.i32())
+	if count == 0 {
+		fmt.Fprintf(w, "%s%s : Map<%s,%s>[] (empty)\n",
+			indent, t.name, t.mapKeyType, t.mapValueType)
+		return
+	}
+	fmt.Fprintf(w, "%s%s : Map<%s,%s>[%d] {\n",
+		indent, t.name, t.mapKeyType, t.mapValueType, count)
+	defer fmt.Fprintf(w, "%s}\n", indent)
+	for i := 0; i < count && r.p < endP; i++ {
+		if i >= arrayMax {
+			fmt.Fprintf(w, "%s  ... +%d more entries (bytes %d..%d remaining)\n",
+				indent, count-arrayMax, r.p, endP)
+			return
+		}
+		// KEY
+		keyStr, keyOk := dumpMapKVOneSide(w, r, t.mapKeyType)
+		if !keyOk {
+			fmt.Fprintf(w, "%s  [%d] (unknown key type %q — bailing out at byte %d of %d)\n",
+				indent, i, t.mapKeyType, r.p-startP, t.size)
+			return
+		}
+		fmt.Fprintf(w, "%s  [%d] key=%s\n", indent, i, keyStr)
+		// VALUE
+		switch t.mapValueType {
+		case "StructProperty":
+			// Map struct values are written as a tagless property stream
+			// terminated by None. Bound by the remaining map body so a
+			// runaway can't read past the map.
+			fmt.Fprintf(w, "%s    value: (struct stream)\n", indent)
+			dumpPropertyStream(w, r, depth+3, arrayMax, endP-r.p)
+		default:
+			valStr, valOk := dumpMapKVOneSide(w, r, t.mapValueType)
+			if !valOk {
+				fmt.Fprintf(w, "%s    value: (unknown value type %q — bailing out)\n",
+					indent, t.mapValueType)
+				return
+			}
+			fmt.Fprintf(w, "%s    value=%s\n", indent, valStr)
+		}
+	}
+}
+
+// dumpMapKVOneSide decodes one side (key or value) of a map entry whose type
+// is encoded by FName (NameProperty, IntProperty, StrProperty, ...). Returns
+// the string form of the value plus ok=false if the type isn't handled.
+func dumpMapKVOneSide(w io.Writer, r *reader, typ string) (string, bool) {
+	switch typ {
+	case "NameProperty":
+		return fmt.Sprintf("%q", r.fname()), true
+	case "StrProperty":
+		return fmt.Sprintf("%q", r.fstr()), true
+	case "IntProperty":
+		return fmt.Sprintf("%d", r.i32()), true
+	case "Int64Property":
+		return fmt.Sprintf("%d", r.i64()), true
+	case "FloatProperty":
+		return fmt.Sprintf("%f", r.f32()), true
+	case "ObjectProperty", "SoftObjectProperty":
+		// FPackageIndex — 4 bytes. Print raw.
+		return fmt.Sprintf("idx=%d", r.i32()), true
+	}
+	return "", false
 }
 
 // dumpAtomicOrStream — tiny shim for "is this an atomic struct or a property
