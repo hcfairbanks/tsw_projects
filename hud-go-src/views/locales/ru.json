@@ -1163,5 +1163,20 @@
         "editLocation": "Редактировать локацию",
         "confirmDelete": "Вы уверены, что хотите удалить эту локацию?",
         "addLocation": "Добавить локацию"
+    },
+    "extractor": {
+        "gameAssets": "Игровой контент",
+        "sectionRoutes": "Маршруты",
+        "sectionOtherContent": "Прочий контент",
+        "colOtherContent": "Контент",
+        "selectAllContent": "Весь контент",
+        "completedContent": "Завершённый контент",
+        "loadMyDLCs": "Загрузить мои DLC",
+        "loadMyDLCsDesc": "Сканирует вашу установку TSW6, извлекает все маршруты и DLC поездов и импортирует их в базу данных за один шаг.",
+        "loadAllScanning": "Сканирование каталога установки…",
+        "loadAllExtracting": "Извлечение и импорт всего контента…",
+        "loadAllRunning": "Задание выполняется — смотрите живой журнал.",
+        "loadAllNothing": "Извлекать нечего — все паки уже завершены.",
+        "loadAllFailed": "Ошибка: "
     }
 }

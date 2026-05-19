@@ -1163,5 +1163,20 @@
         "editLocation": "Modifier le lieu",
         "confirmDelete": "Etes-vous sur de vouloir supprimer ce lieu ?",
         "addLocation": "Ajouter un lieu"
+    },
+    "extractor": {
+        "gameAssets": "Contenu du jeu",
+        "sectionRoutes": "Lignes",
+        "sectionOtherContent": "Autre contenu",
+        "colOtherContent": "Contenu",
+        "selectAllContent": "Tout le contenu",
+        "completedContent": "Contenu terminé",
+        "loadMyDLCs": "Charger mes DLC",
+        "loadMyDLCsDesc": "Analyse votre installation TSW6, extrait toutes les lignes et DLC de trains, puis les importe dans la base de données en une seule étape.",
+        "loadAllScanning": "Analyse du répertoire d'installation…",
+        "loadAllExtracting": "Extraction et importation de tout le contenu…",
+        "loadAllRunning": "Tâche en cours — consultez le journal en direct.",
+        "loadAllNothing": "Rien à extraire — tous les paks déjà terminés.",
+        "loadAllFailed": "Échec : "
     }
 }

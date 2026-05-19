@@ -244,6 +244,12 @@ func (h *ExtractorHandler) Start(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Routes       []string `json:"routes"`
 		SkipExisting *bool    `json:"skip_existing"`
+		// AutoImport, when set, overrides the global ExtractorAutoImport
+		// config setting for this run. nil = honour the user's setting;
+		// non-nil = force on or off. The "Load my DLCs" flow uses this
+		// to guarantee auto-import regardless of how the user has the
+		// settings checkbox.
+		AutoImport *bool `json:"auto_import"`
 	}
 	// Body is optional; ignore decode errors on empty body.
 	_ = json.NewDecoder(r.Body).Decode(&body)
@@ -276,7 +282,7 @@ func (h *ExtractorHandler) Start(w http.ResponseWriter, r *http.Request) {
 	}
 	h.stateMu.Unlock()
 
-	go h.runJob(ctx, tswPath, outDir, config.ResolveAppPath(cfg.ExtractorTempDir), selected, skipExisting)
+	go h.runJob(ctx, tswPath, outDir, config.ResolveAppPath(cfg.ExtractorTempDir), selected, skipExisting, body.AutoImport)
 
 	// Surface the resolved route list (codename + display name) so the UI
 	// can tell the user which child paks were auto-pulled in via the
@@ -478,7 +484,7 @@ func (h *ExtractorHandler) Stream(w http.ResponseWriter, r *http.Request) {
 // ---------- internal job runner ----------
 
 func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir string,
-	routes []routeListEntry, skipExisting bool) {
+	routes []routeListEntry, skipExisting bool, autoImportOverride *bool) {
 	defer func() {
 		h.stateMu.Lock()
 		h.state.status = extStatusIdle
@@ -613,7 +619,23 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 		// / markers / car_stop_signs / track_markers) and re-import the
 		// freshly-written zip. Failures here don't fail the route — the zip
 		// is on disk and can be uploaded manually.
-		if config.Get().ExtractorAutoImport {
+		// Auto-import: honour the per-request override (Load My DLCs
+		// flow forces ON) if supplied; otherwise the user's setting.
+		autoImport := config.Get().ExtractorAutoImport
+		if autoImportOverride != nil {
+			autoImport = *autoImportOverride
+		}
+		// Skip auto-import when runSingleRoute completed successfully
+		// but produced no zip on disk (e.g. an orphan "content pack"
+		// with zero RVDs and no timetables — UI/audio-only paks).
+		// Otherwise autoImportZip errors with "file not found" and the
+		// failure spams the live log even though there was nothing to
+		// import in the first place.
+		if autoImport {
+			if st, statErr := os.Stat(zip); statErr != nil || st.Size() == 0 {
+				h.broadcast(h.snapshotEvent("log", rt.codename, "[auto-import] skipped — no zip emitted (empty pak)"))
+				continue
+			}
 			h.broadcast(h.snapshotEvent("log", rt.codename, "[auto-import] starting…"))
 			// Per-timetable progress callback — fanned out to the same SSE
 			// log as the [auto-import] start/done lines so users see "27
@@ -642,6 +664,27 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 		}
 	}
 
+	// Post-extraction reconciliation: re-run the train_classes
+	// reconciliation against the now-fully-populated pak_rvds so any
+	// classes that got wiped during per-route auto-imports (via
+	// deleteOrphanFormations) come back from the catalog. Covers both
+	// the "Load my DLCs" flow and any "Extract All Content + Extract"
+	// click — without this the only train_classes that survive a full
+	// run are those bound to a route's formations, which drops every
+	// orphan train DLC's classes (USContentPack, EuropeanContentPack,
+	// etc.) and leaves the user with ~45 visible instead of the full
+	// catalog set. ReconcileTrainClasses is idempotent + cheap (~ms),
+	// so it's safe to call after every extraction job regardless of
+	// how many paks were selected.
+	if h.db != nil && ctx.Err() == nil {
+		tc := catalog.ReconcileTrainClasses(h.db)
+		if (tc.Linked + tc.Inserted + tc.Backfilled) > 0 {
+			h.broadcast(h.snapshotEvent("log", "",
+				fmt.Sprintf("[reconcile] train_classes: linked=%d inserted=%d backfilled=%d thumbs_fixed=%d",
+					tc.Linked, tc.Inserted, tc.Backfilled, tc.ThumbsFixed)))
+		}
+	}
+
 	if ctx.Err() != nil {
 		h.broadcast(h.snapshotEvent("stopped", "", ""))
 	} else {
@@ -666,6 +709,32 @@ func (h *ExtractorHandler) runJob(ctx context.Context, tswPath, outDir, tempDir 
 // of subprocess invocations (repak/UAssetGUI). Best-effort Stop is
 // adequate for the use case (per-route runs are minutes, not hours).
 func (h *ExtractorHandler) runSingleRoute(ctx context.Context, tswPath, tempDir, route, packDisplayName, outZip string, overlayPaks []string) (int, error) {
+	// Train-DLC dispatch: orphan paks (no parent route linkage) don't
+	// ship timetables, so the full extract path returns no-op. Instead
+	// produce a lightweight zip with just the pak's train_classes data
+	// (read from pak_rvds) + the on-disk thumbnails (rendered by the
+	// catalog scan). The same importer that handles route zips picks
+	// these up via the `train_dlc_*.json` filename prefix.
+	if h.db != nil {
+		var pakPath sql.NullString
+		var hasRouteDef int
+		_ = h.db.QueryRow(`SELECT pak_path, has_route_definition FROM pak_catalog WHERE codename = ?`, route).Scan(&pakPath, &hasRouteDef)
+		if pakPath.Valid && hasRouteDef == 0 {
+			rvds, err := catalog.LoadPakRVDs(h.db, pakPath.String)
+			if err != nil {
+				return -1, fmt.Errorf("load pak_rvds for %s: %w", route, err)
+			}
+			if len(rvds) == 0 {
+				return 0, nil
+			}
+			thumbsDir := filepath.Join(config.ResourcesDir(), "images", "train_classes")
+			if _, err := output.WriteTrainDLCZip(outZip, route, rvds, thumbsDir); err != nil {
+				return -1, fmt.Errorf("write train_dlc zip: %w", err)
+			}
+			return 0, nil
+		}
+	}
+
 	cfg := extractor.Config{
 		TSWPath:         tswPath,
 		RouteFilter:     route,
@@ -1102,7 +1171,11 @@ func (h *ExtractorHandler) resolveTargetRoutes(tswPath string, requested []strin
 	if err != nil {
 		return nil, err
 	}
-	all = h.filterRoutesOnly(all)
+	// Use the looser filter so true orphan train DLCs (RVDs but no
+	// timetables) survive into runSingleRoute, where Phase 4's
+	// WriteTrainDLCZip path handles them. The Routes section in the UI
+	// still uses the strict filter via filterRoutesOnly elsewhere.
+	all = h.filterExtractableContent(all)
 	if len(requested) == 0 {
 		return all, nil
 	}
@@ -1180,7 +1253,13 @@ func (h *ExtractorHandler) resolveOverlayPaks(rt routeListEntry) []string {
 
 // filterRoutesOnly drops paks that don't ship any timetable / scenario
 // assets (UI, audio, menu paks). Wagon packs and cargo DLCs without
-// their own map tiles are kept — they have services to extract.
+// their own map tiles are kept when they DO ship timetables — they have
+// services to extract.
+//
+// Strict semantic: this is the "route-shape only" filter. Code paths
+// that also want to surface pure train DLCs (RVDs but no timetables)
+// should use filterExtractableContent instead.
+//
 // Memoised per pakPath; first call may take ~30 s for ~36 paks.
 //
 // If repak isn't available for any reason, we fall through and return the
@@ -1197,6 +1276,54 @@ func (h *ExtractorHandler) filterRoutesOnly(in []routeListEntry) []routeListEntr
 		}
 	}
 	return out
+}
+
+// filterExtractableContent is the looser companion to filterRoutesOnly.
+// Keeps paks that ship timetables AND paks that ship RVDs (rolling
+// stock). Used by the Extract flow so true orphan train DLCs
+// (USContentPack, EuropeanContentPack — paks that have RVDs but no
+// timetables and no parent-route refs) make it through to
+// runSingleRoute, where the WriteTrainDLCZip path packages just their
+// train_classes data.
+//
+// "Has RVDs" is checked against the pak_rvds catalog (populated by
+// ScanCatalog). For paks that haven't been scanned yet, we fall back to
+// the timetable check alone so a pre-scan invocation still works.
+func (h *ExtractorHandler) filterExtractableContent(in []routeListEntry) []routeListEntry {
+	cfg := extractor.Config{TSWPath: config.Get().ExtractorTswPath}
+	if err := cfg.AutoDetect(); err != nil || cfg.RepakPath == "" {
+		return in
+	}
+	out := make([]routeListEntry, 0, len(in))
+	for _, rt := range in {
+		if h.pakHasTimetable(rt.pakPath, cfg.RepakPath) {
+			out = append(out, rt)
+			continue
+		}
+		if h.pakHasRVDs(rt.pakPath) {
+			out = append(out, rt)
+		}
+	}
+	return out
+}
+
+// pakHasRVDs returns true when pak_rvds has at least one row for this
+// pakPath. Used by filterExtractableContent to surface pure train DLCs
+// (paks with rolling stock but no timetables) for extraction.
+//
+// On DB error we treat the pak as having RVDs — same fail-open posture
+// as pakHasTimetable: hiding a pak silently is worse than including one
+// that ends up producing an empty zip.
+func (h *ExtractorHandler) pakHasRVDs(pakPath string) bool {
+	if h.db == nil {
+		return false
+	}
+	var n int
+	if err := h.db.QueryRow(`SELECT COUNT(*) FROM pak_rvds WHERE pak_path = ?`, pakPath).Scan(&n); err != nil {
+		log.Printf("[extractor] pakHasRVDs(%s): %v", pakPath, err)
+		return true
+	}
+	return n > 0
 }
 
 func (h *ExtractorHandler) pakHasTimetable(pakPath, repakPath string) bool {

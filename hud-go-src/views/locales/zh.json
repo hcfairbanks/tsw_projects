@@ -1163,5 +1163,20 @@
         "editLocation": "编辑地点",
         "confirmDelete": "确定要删除此地点吗？",
         "addLocation": "添加地点"
+    },
+    "extractor": {
+        "gameAssets": "游戏内容",
+        "sectionRoutes": "线路",
+        "sectionOtherContent": "其他内容",
+        "colOtherContent": "内容",
+        "selectAllContent": "所有内容",
+        "completedContent": "已完成内容",
+        "loadMyDLCs": "加载我的 DLC",
+        "loadMyDLCsDesc": "扫描您的 TSW6 安装目录，提取所有线路和列车 DLC，并一次性导入数据库。",
+        "loadAllScanning": "正在扫描安装目录…",
+        "loadAllExtracting": "正在提取并导入所有内容…",
+        "loadAllRunning": "任务运行中 — 请查看实时日志。",
+        "loadAllNothing": "没有要提取的内容 — 所有 pak 均已完成。",
+        "loadAllFailed": "失败: "
     }
 }

@@ -654,6 +654,15 @@ func buildPackageServiceWithCtx(tt *uasset.Timetable, svc *uasset.Service, ctx *
 			if len(coords) == 0 {
 				coords = BuildServicePath(svc, ribs, tt.Switches, tt.RibbonVertices, anchor)
 			}
+			// Decimate to ~5 m sampling before serialising. The path
+			// builders emit sub-metre points (ribbon vertex density);
+			// renderers can't show that much detail. Saves ~5× on the
+			// per-service coords blob — drops the DB's timetable_
+			// coordinates table from ~25 GB to ~3.4 GB with the Height
+			// field also stripped. Always keeps the first/last point
+			// and any Break point so polyline discontinuities still
+			// render correctly.
+			coords = DecimateCoordsMeters(coords, 5.0)
 			if len(coords) > 0 {
 				ps.Coordinates = coords
 				ps.TotalPoints = len(coords)

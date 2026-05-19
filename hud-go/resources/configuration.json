@@ -15,7 +15,7 @@
   "minPointsForStop": 0,
   "autoStopTimeoutSeconds": 0,
   "saveFrequency": 0,
-  "enableSubscriptions": false,
+  "enableSubscriptions": true,
   "colorScheme": "default",
   "extractorTswPath": "D:/SteamLibrary/steamapps/common/Train Sim World 6",
   "extractorOutputDir": "routes_data/new",

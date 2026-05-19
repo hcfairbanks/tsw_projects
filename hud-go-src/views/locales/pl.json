@@ -1163,5 +1163,20 @@
         "editLocation": "Edytuj lokalizacje",
         "confirmDelete": "Czy na pewno chcesz usunac te lokalizacje?",
         "addLocation": "Dodaj lokalizacje"
+    },
+    "extractor": {
+        "gameAssets": "Zawartość gry",
+        "sectionRoutes": "Trasy",
+        "sectionOtherContent": "Inne treści",
+        "colOtherContent": "Treść",
+        "selectAllContent": "Cała zawartość",
+        "completedContent": "Ukończona zawartość",
+        "loadMyDLCs": "Załaduj moje DLC",
+        "loadMyDLCsDesc": "Skanuje instalację TSW6, wyodrębnia wszystkie trasy i DLC pociągów oraz importuje je do bazy danych w jednym kroku.",
+        "loadAllScanning": "Skanowanie katalogu instalacyjnego…",
+        "loadAllExtracting": "Wyodrębnianie i importowanie całej zawartości…",
+        "loadAllRunning": "Zadanie w toku — obserwuj dziennik na żywo.",
+        "loadAllNothing": "Nic do wyodrębnienia — wszystkie paki już ukończone.",
+        "loadAllFailed": "Niepowodzenie: "
     }
 }

@@ -1164,5 +1164,20 @@
         "editLocation": "Edit Location",
         "confirmDelete": "Are you sure you want to delete this location?",
         "addLocation": "Add Location"
+    },
+    "extractor": {
+        "gameAssets": "Game Assets",
+        "sectionRoutes": "Routes",
+        "sectionOtherContent": "Other Content",
+        "colOtherContent": "Content",
+        "selectAllContent": "All content",
+        "completedContent": "Completed Content",
+        "loadMyDLCs": "Load my DLCs",
+        "loadMyDLCsDesc": "Scans your TSW6 install, extracts every route + train DLC, and imports them into the database in one step.",
+        "loadAllScanning": "Scanning install folder…",
+        "loadAllExtracting": "Extracting + importing all content…",
+        "loadAllRunning": "Job running — watch the live log.",
+        "loadAllNothing": "Nothing to extract — every pak already completed.",
+        "loadAllFailed": "Failed: "
     }
 }

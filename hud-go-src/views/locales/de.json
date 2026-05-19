@@ -1163,5 +1163,20 @@
         "editLocation": "Standort bearbeiten",
         "confirmDelete": "Sind Sie sicher, dass Sie diesen Standort löschen möchten?",
         "addLocation": "Standort hinzufügen"
+    },
+    "extractor": {
+        "gameAssets": "Spielinhalte",
+        "sectionRoutes": "Strecken",
+        "sectionOtherContent": "Andere Inhalte",
+        "colOtherContent": "Inhalt",
+        "selectAllContent": "Alle Inhalte",
+        "completedContent": "Abgeschlossene Inhalte",
+        "loadMyDLCs": "Meine DLCs laden",
+        "loadMyDLCsDesc": "Scannt deine TSW6-Installation, extrahiert jede Strecke und jedes Zug-DLC und importiert sie in einem Schritt in die Datenbank.",
+        "loadAllScanning": "Installationsverzeichnis wird gescannt…",
+        "loadAllExtracting": "Alle Inhalte werden extrahiert und importiert…",
+        "loadAllRunning": "Auftrag läuft — beobachte das Live-Log.",
+        "loadAllNothing": "Nichts zu extrahieren — alle Paks bereits abgeschlossen.",
+        "loadAllFailed": "Fehlgeschlagen: "
     }
 }

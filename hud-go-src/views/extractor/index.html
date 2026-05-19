@@ -379,37 +379,38 @@
 
     <nav id="main-nav"></nav>
 
+    <!-- One-click first-time setup: Scan + Extract All + Auto-Import.
+         Most prominent CTA on the page so a fresh user doesn't have to
+         figure out the multi-step flow on their own. -->
+    <div class="card" style="border: 2px solid var(--primary-color, #0066ff); padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <button id="btnLoadAllDLCs" class="btn-primary" style="font-size: 16px; padding: 12px 24px; font-weight: 600;">
+                <span data-i18n="extractor.loadMyDLCs">Load my DLCs</span>
+            </button>
+            <span style="color: var(--text-muted); font-size: 13px; flex: 1; min-width: 240px;" data-i18n="extractor.loadMyDLCsDesc">Scans your TSW6 install, extracts every route + train DLC, and imports them into the database in one step.</span>
+            <span id="loadAllStatus" style="font-size: 13px; color: var(--text-muted);"></span>
+        </div>
+    </div>
+
     <!-- Settings (open by default) -->
     <div class="card">
         <details open>
             <summary data-i18n="extractor.settings">Settings</summary>
             <div style="margin-top: 12px;">
                 <div class="settings-row">
-                    <label for="cfgTswPath" data-i18n="extractor.tswInstallDir">TSW install dir:</label>
+                    <label for="cfgTswPath" data-i18n="extractor.tswInstallDir">TSW install folder:</label>
                     <input id="cfgTswPath" type="text" placeholder="e.g. D:/SteamLibrary/steamapps/common/Train Sim World 6" data-i18n-placeholder="extractor.tswInstallDirPlaceholder">
                     <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorTswPath', 'cfgTswPath')" data-i18n="common.save">Save</button>
                 </div>
                 <div class="settings-row">
-                    <label for="cfgOutputDir" data-i18n="extractor.outputDir">Output dir:</label>
+                    <label for="cfgOutputDir" data-i18n="extractor.outputDir">Output folder:</label>
                     <input id="cfgOutputDir" type="text" placeholder="e.g. C:/Users/&lt;you&gt;/Desktop/new_data" data-i18n-placeholder="extractor.outputDirPlaceholder">
                     <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorOutputDir', 'cfgOutputDir')" data-i18n="common.save">Save</button>
                 </div>
                 <div class="settings-row">
-                    <label for="cfgTempDir" data-i18n="extractor.tempDir">Temp dir:</label>
+                    <label for="cfgTempDir" data-i18n="extractor.tempDir">Temp folder:</label>
                     <input id="cfgTempDir" type="text" placeholder="(empty = system temp)" data-i18n-placeholder="extractor.tempDirPlaceholder">
                     <button class="btn-secondary btn-tiny" onclick="saveCfgField('extractorTempDir', 'cfgTempDir')" data-i18n="common.save">Save</button>
-                </div>
-                <!-- Auto Update / Import: after each per-route extract, the
-                     server wipes the existing DB row for that route (cascades
-                     timetables / coords / markers / car-stop signs) and runs
-                     the same import logic /api/routes/import-zip uses. -->
-                <div class="settings-row">
-                    <label for="cfgAutoImport" data-i18n="extractor.autoImport">Import Data:</label>
-                    <label style="justify-self:start;">
-                        <input id="cfgAutoImport" type="checkbox" onchange="saveCfgBoolField('extractorAutoImport', 'cfgAutoImport')">
-                        <span data-i18n="extractor.autoImportDesc">Remove the existing route and rebuild</span>
-                    </label>
-                    <span></span>
                 </div>
             </div>
         </details>
@@ -430,6 +431,21 @@
             </label>
             <span></span>
         </div>
+        <!-- Auto Update / Import: after each per-route extract, the
+             server wipes the existing DB row for that route (cascades
+             timetables / coords / markers / car-stop signs) and runs
+             the same import logic /api/routes/import-zip uses. Moved
+             here from Settings since "Load my DLCs" already forces it
+             ON when triggered, and toggling it manually is a power-user
+             knob most users shouldn't see. -->
+        <div class="settings-row">
+            <label for="cfgAutoImport" data-i18n="extractor.autoImport">Import Data:</label>
+            <label style="justify-self:start;">
+                <input id="cfgAutoImport" type="checkbox" onchange="saveCfgBoolField('extractorAutoImport', 'cfgAutoImport')">
+                <span data-i18n="extractor.autoImportDesc">Remove the existing route and rebuild</span>
+            </label>
+            <span></span>
+        </div>
         <div style="margin-top: 18px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
             <button id="nukeDbBtn" class="nuke-db-btn" onclick="nukeDB()"
                     title="Wipe all DB tables except countries / weather_presets / timetable_actions">
@@ -445,14 +461,14 @@
     <!-- Game Assets (incomplete) — routes + their nested addons up top,
          standalone Train DLCs at the bottom. -->
     <div class="card">
-        <details id="routesPanel" open>
+        <details id="routesPanel">
             <summary>
                 <span data-i18n="extractor.gameAssets">Game Assets</span>
                 <!-- Scan/Rescan sits right next to the label so it's the
                      first action a user sees on a cold-start page (when
                      the toolbar's Run/Stop don't apply yet). stopPropagation
                      here too so clicking it doesn't toggle <details>. -->
-                <button id="btnRescan" class="btn-secondary" onclick="event.stopPropagation();" title="Scan the TSW install dir for routes + addons. Reads route names, country, and cross-pak relationships from the pak data." style="margin-left: 8px;"><span id="btnRescanLabel">⟳ Scan</span></button>
+                <button id="btnRescan" class="btn-secondary" onclick="event.stopPropagation();" title="Scan the TSW install folder for routes + addons. Reads route names, country, and cross-pak relationships from the pak data." style="margin-left: 8px;"><span id="btnRescanLabel">⟳ Scan</span></button>
                 <span id="routesCount" style="font-size:13px; color:var(--text-muted); font-weight: normal;"></span>
                 <!-- Toolbar (Run / Stop). click stopPropagation prevents toggling
                      <details> when buttons are clicked. CSS hides this whole span
@@ -470,6 +486,14 @@
                 <span id="progressSummary" style="display:none;"></span>
             </summary>
             <div style="max-height: 540px; overflow-y: auto; margin-top: 10px;">
+                <!-- All-content master checkbox: toggles every row in
+                     both subsections at once. Useful for "extract
+                     everything" workflows. -->
+                <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 12px; cursor:pointer; font-size: 13px;">
+                    <input type="checkbox" id="selectAllContent" style="width: 16px; height: 16px;">
+                    <span data-i18n="extractor.selectAllContent" style="font-weight: 600;">All content</span>
+                </label>
+
                 <h3 style="margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="extractor.sectionRoutes">Routes</h3>
                 <table id="routesTable">
                     <thead>
@@ -487,22 +511,23 @@
                     </tbody>
                 </table>
 
-                <!-- Train DLCs section: standalone train packs (no parent
-                     route). Hidden until the API returns at least one. -->
-                <div id="trainDlcsSection" style="display:none; margin-top: 24px;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="extractor.sectionTrainDlcs">Train DLCs</h3>
-                    <table id="trainDlcsTable">
+                <!-- Other Content section: standalone paks without a parent
+                     route (train DLCs, livery packs, etc.). Hidden until
+                     the API returns at least one. -->
+                <div id="otherContentSection" style="display:none; margin-top: 24px;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="extractor.sectionOtherContent">Other Content</h3>
+                    <table id="otherContentTable">
                         <thead>
                             <tr>
                                 <th style="width: 38px; text-align:center;">
-                                    <input type="checkbox" id="selectAllTrains" title="Select all" data-i18n-title="extractor.selectAll">
+                                    <input type="checkbox" id="selectAllOther" title="Select all" data-i18n-title="extractor.selectAll">
                                 </th>
-                                <th style="width: 70%;" data-i18n="extractor.colTrainDlc">Train DLC</th>
+                                <th style="width: 70%;" data-i18n="extractor.colOtherContent">Content</th>
                                 <th style="width: 12%;" data-i18n="extractor.colSize">Size</th>
                                 <th style="width: 18%;" data-i18n="extractor.colActions">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="trainDlcsBody"></tbody>
+                        <tbody id="otherContentBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -513,7 +538,7 @@
     <div class="card">
         <details id="completedPanel">
             <summary>
-                <span data-i18n="extractor.completedRoutes">Completed Routes</span>
+                <span data-i18n="extractor.completedContent">Completed Content</span>
                 <span id="completedCount" style="font-size:13px; color:var(--text-muted); font-weight: normal;"></span>
             </summary>
             <div style="max-height: 540px; overflow-y: auto; margin-top: 10px;">
@@ -574,9 +599,10 @@
         const elSelectSummary  = document.getElementById('selectionSummary');
         const elRoutesCount    = document.getElementById('routesCount');
         const elCompletedCount = document.getElementById('completedCount');
-        const elTrainDlcsSection = document.getElementById('trainDlcsSection');
-        const elTrainDlcsBody    = document.getElementById('trainDlcsBody');
-        const elSelectAllTrains  = document.getElementById('selectAllTrains');
+        const elOtherSection     = document.getElementById('otherContentSection');
+        const elOtherBody        = document.getElementById('otherContentBody');
+        const elSelectAllOther   = document.getElementById('selectAllOther');
+        const elSelectAllContent = document.getElementById('selectAllContent');
 
         // ---------- initial load ----------
         async function loadConfig() {
@@ -591,8 +617,18 @@
                 document.getElementById('cfgBuildTimetableMaps').checked = !!cfg.extractorBuildTimetableMaps;
                 // Development Tools card (holds Build Timetable Maps +
                 // Nuke DB) — only shown in development mode.
+                //
+                // Also auto-open the Game Assets + Completed Content
+                // panels for dev users (so the data they care about is
+                // always visible). Regular users get them collapsed by
+                // default — the "Load my DLCs" button at the top is the
+                // primary entry point.
                 if (cfg.developmentMode) {
                     document.getElementById('devToolsCard').style.display = '';
+                    const ga = document.getElementById('routesPanel');
+                    const cc = document.getElementById('completedPanel');
+                    if (ga) ga.open = true;
+                    if (cc) cc.open = true;
                 }
             } catch (e) { console.error('config load:', e); }
         }
@@ -780,15 +816,14 @@
             }
             renderRouteList(elBody, routesIncomplete, false);
             renderRouteList(elCompletedBody, completed, true);
-            // Train DLCs table: hide the whole section when there's
-            // nothing to show, otherwise render with the same row
-            // template / selection wiring as the Routes table.
+            // Other Content table: hide when empty, otherwise use the
+            // same row template / selection wiring as Routes.
             if (trainDlcsIncomplete.length > 0) {
-                elTrainDlcsSection.style.display = 'block';
-                renderRouteList(elTrainDlcsBody, trainDlcsIncomplete, false);
+                elOtherSection.style.display = 'block';
+                renderRouteList(elOtherBody, trainDlcsIncomplete, false);
             } else {
-                elTrainDlcsSection.style.display = 'none';
-                if (elTrainDlcsBody) elTrainDlcsBody.innerHTML = '';
+                elOtherSection.style.display = 'none';
+                if (elOtherBody) elOtherBody.innerHTML = '';
             }
             const totalIncomplete = routesIncomplete.length + trainDlcsIncomplete.length;
             elRoutesCount.textContent    = totalIncomplete ? '(' + totalIncomplete + ')' : '';
@@ -954,17 +989,28 @@
         function updateSelectionSummary() {
             const n = selected.size;
             const total = routes.size;
-            // Header select-all reflects all/some/none state of the visible rows.
-            if (n === 0) {
-                elSelectAll.checked       = false;
-                elSelectAll.indeterminate = false;
-            } else if (n === total) {
-                elSelectAll.checked       = true;
-                elSelectAll.indeterminate = false;
-            } else {
-                elSelectAll.checked       = false;
-                elSelectAll.indeterminate = true;
+            // Per-section checkbox states need separate tallies — a user
+            // can select all Routes but no Other Content, etc.
+            let routesTotal = 0, routesSel = 0, otherTotal = 0, otherSel = 0;
+            for (const [name, r] of routes) {
+                if (r.completed) continue;
+                if (r.kind === 'train_dlc') {
+                    otherTotal++;
+                    if (selected.has(name)) otherSel++;
+                } else {
+                    routesTotal++;
+                    if (selected.has(name)) routesSel++;
+                }
             }
+            const setState = (box, sel, tot) => {
+                if (!box) return;
+                if (sel === 0)            { box.checked = false; box.indeterminate = false; }
+                else if (sel === tot)     { box.checked = true;  box.indeterminate = false; }
+                else                      { box.checked = false; box.indeterminate = true;  }
+            };
+            setState(elSelectAll,         routesSel, routesTotal);
+            setState(elSelectAllOther,    otherSel,  otherTotal);
+            setState(elSelectAllContent,  routesSel + otherSel, routesTotal + otherTotal);
             // Run button label reflects what'll happen on click.
             // Run button label reflects what'll happen on click. Renamed
             // from "Run all" to "Extracted" per UI feedback.
@@ -977,8 +1023,8 @@
         }
 
         // Toggle every visible ROUTE row to match the header checkbox.
-        // Train DLCs have their own select-all so the two sections can
-        // be selected/extracted independently.
+        // Other Content has its own select-all; the top-level
+        // "All content" checkbox toggles both at once.
         elSelectAll.addEventListener('change', () => {
             for (const [name, r] of routes) {
                 if (r.completed || r.kind === 'train_dlc') continue;
@@ -988,12 +1034,26 @@
             renderRoutes();
         });
 
-        if (elSelectAllTrains) {
-            elSelectAllTrains.addEventListener('change', () => {
+        if (elSelectAllOther) {
+            elSelectAllOther.addEventListener('change', () => {
                 for (const [name, r] of routes) {
                     if (r.completed || r.kind !== 'train_dlc') continue;
-                    if (elSelectAllTrains.checked) selected.add(name);
-                    else                           selected.delete(name);
+                    if (elSelectAllOther.checked) selected.add(name);
+                    else                          selected.delete(name);
+                }
+                renderRoutes();
+            });
+        }
+
+        // "All content" master — toggles every incomplete row regardless
+        // of section. Indeterminate state shown when only some are
+        // selected.
+        if (elSelectAllContent) {
+            elSelectAllContent.addEventListener('change', () => {
+                for (const [name, r] of routes) {
+                    if (r.completed) continue;
+                    if (elSelectAllContent.checked) selected.add(name);
+                    else                            selected.delete(name);
                 }
                 renderRoutes();
             });
@@ -1083,6 +1143,68 @@
             e.preventDefault();
             rescanCatalog();
         });
+
+        // "Load my DLCs" — one-button first-time-setup flow.
+        // 1. Rescan the catalog so pak_rvds + train_classes are up to date.
+        // 2. Pull the resolved Game Assets list (routes + Other Content).
+        // 3. Kick the Extract job with auto_import forced ON, regardless
+        //    of the user's settings toggle.
+        // Progress is surfaced via the existing SSE stream + selectionSummary;
+        // we just sequence the three API calls and report status next to
+        // the button.
+        const elBtnLoadAll = document.getElementById('btnLoadAllDLCs');
+        const elLoadAllStatus = document.getElementById('loadAllStatus');
+        if (elBtnLoadAll) {
+            elBtnLoadAll.addEventListener('click', loadAllDLCs);
+        }
+
+        async function loadAllDLCs() {
+            elBtnLoadAll.disabled = true;
+            elLoadAllStatus.textContent = t('extractor.loadAllScanning', 'Scanning install folder…');
+            try {
+                await rescanCatalog();
+                elLoadAllStatus.textContent = t('extractor.loadAllExtracting', 'Extracting + importing all content…');
+                // routes Map is populated by rescanCatalog → loadRoutes().
+                // Collect every codename so the server treats this as
+                // "extract all" rather than the empty-array shortcut.
+                const codenames = [];
+                for (const [name, r] of routes) {
+                    if (r.completed) continue;
+                    codenames.push(name);
+                }
+                if (codenames.length === 0) {
+                    elLoadAllStatus.textContent = t('extractor.loadAllNothing', 'Nothing to extract — every pak already completed.');
+                    return;
+                }
+                // Load my DLCs is a "give me a complete fresh build" flow:
+                // skip_existing=false so every pak gets re-extracted even
+                // if its zip is already on disk, and auto_import=true so
+                // every resulting zip gets wiped-and-re-imported. Slower
+                // than a normal Extract All click but produces a clean,
+                // up-to-date DB without any partial-run skips.
+                const r = await fetch('/api/extractor/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        routes: codenames,
+                        skip_existing: false,
+                        auto_import: true,
+                    }),
+                });
+                const data = await r.json();
+                if (!r.ok) {
+                    throw new Error(data.error || ('HTTP ' + r.status));
+                }
+                elLoadAllStatus.textContent = t('extractor.loadAllRunning', 'Job running — watch the live log.').replace('{n}', data.total_routes);
+                appendLog('Load my DLCs: extracting + importing ' + data.total_routes + ' paks…', 'ok');
+            } catch (e) {
+                console.error('[extractor] Load my DLCs failed', e);
+                elLoadAllStatus.textContent = t('extractor.loadAllFailed', 'Failed: ') + e.message;
+                appendLog('Load my DLCs failed: ' + e.message, 'err');
+            } finally {
+                elBtnLoadAll.disabled = false;
+            }
+        }
 
         // rescanCatalog re-walks the TSW install dir, refreshing the
         // pak_catalog table. Defaults to ?force=1 because the user-

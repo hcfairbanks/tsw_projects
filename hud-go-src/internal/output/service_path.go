@@ -21,8 +21,57 @@ import (
 type ServiceCoord struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
-	Height    float64 `json:"height,omitempty"`
-	Break     bool    `json:"break,omitempty"`
+	// Height is preserved in memory (path builders set it from ribbon
+	// data) but NOT serialised — nothing in the HUD / map renderers
+	// reads it, and dropping the `"height":` key trims ~33% off the
+	// per-service JSON blob in route zips and the DB's
+	// timetable_coordinates table.
+	Height float64 `json:"-"`
+	Break  bool    `json:"break,omitempty"`
+}
+
+// DecimateCoordsMeters returns coords with intermediate points dropped
+// when they sit within `minDistM` metres of the previously-kept point.
+// The first and last points always survive; any `Break=true` point
+// always survives so polyline discontinuities aren't smoothed over.
+//
+// Used at extract time to ship a ~5 m resolution polyline instead of
+// the path builder's natural sub-metre sampling. Renderers (Leaflet
+// + HUDs) zoom levels show 1px ≈ 5+ m so sub-metre points are visually
+// indistinguishable; storage shrinks ~5×.
+func DecimateCoordsMeters(coords []ServiceCoord, minDistM float64) []ServiceCoord {
+	if len(coords) < 3 || minDistM <= 0 {
+		return coords
+	}
+	out := make([]ServiceCoord, 0, len(coords))
+	out = append(out, coords[0])
+	last := coords[0]
+	for i := 1; i < len(coords)-1; i++ {
+		c := coords[i]
+		if c.Break {
+			out = append(out, c)
+			last = c
+			continue
+		}
+		if coordDistanceMeters(last, c) >= minDistM {
+			out = append(out, c)
+			last = c
+		}
+	}
+	out = append(out, coords[len(coords)-1])
+	return out
+}
+
+// coordDistanceMeters: equirectangular approximation (sub-cm accuracy
+// at the few-km scales between consecutive sub-metre samples). Cheap
+// and good enough — decimation only needs "near enough to drop".
+func coordDistanceMeters(a, b ServiceCoord) float64 {
+	const R = 6371000.0
+	dLat := (b.Latitude - a.Latitude) * math.Pi / 180
+	dLng := (b.Longitude - a.Longitude) * math.Pi / 180
+	meanLat := (a.Latitude + b.Latitude) * 0.5 * math.Pi / 180
+	x := dLng * math.Cos(meanLat)
+	return math.Sqrt(dLat*dLat+x*x) * R
 }
 
 // BuildServicePath resolves the train's actual physical path along the rail

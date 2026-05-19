@@ -1163,5 +1163,20 @@
         "editLocation": "場所を編集",
         "confirmDelete": "この場所を削除してもよろしいですか？",
         "addLocation": "場所を追加"
+    },
+    "extractor": {
+        "gameAssets": "ゲームアセット",
+        "sectionRoutes": "路線",
+        "sectionOtherContent": "その他のコンテンツ",
+        "colOtherContent": "コンテンツ",
+        "selectAllContent": "すべてのコンテンツ",
+        "completedContent": "完了したコンテンツ",
+        "loadMyDLCs": "DLCを読み込む",
+        "loadMyDLCsDesc": "TSW6のインストールをスキャンし、全路線と列車DLCを抽出してデータベースに一括インポートします。",
+        "loadAllScanning": "インストールディレクトリをスキャン中…",
+        "loadAllExtracting": "全コンテンツを抽出・インポート中…",
+        "loadAllRunning": "ジョブ実行中 — ライブログをご覧ください。",
+        "loadAllNothing": "抽出するものがありません — すべてのpakが完了済みです。",
+        "loadAllFailed": "失敗: "
     }
 }

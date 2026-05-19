@@ -185,6 +185,94 @@ func LoadAllRVDs(db *sql.DB) (map[string]*uasset.RVD, error) {
 	return out, rows.Err()
 }
 
+// LoadPakRVDs returns just the RVDs belonging to one pak, as a slice
+// (no asset_path keying — train-DLC export doesn't need lookup, just
+// iteration). Same field rehydration as LoadAllRVDs.
+//
+// Returns an empty slice (not nil) when the pak has no RVDs catalogued
+// so callers can range over the result unconditionally.
+func LoadPakRVDs(db *sql.DB, pakPath string) ([]*uasset.RVD, error) {
+	rows, err := db.Query(`SELECT asset_path, rail_vehicle_class, friendly_name, livery_id,
+		vehicle_category, approximate_length_m, drivable, substitutable_unit,
+		has_guard_controls, service_types, regions,
+		is_electric, max_speed_kph, max_power_kw, powered_axle_count,
+		manufacturer_name, engine_description, type_description,
+		thumbnail_asset_ref, electrification_json
+		FROM pak_rvds WHERE pak_path = ?`, pakPath)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := make([]*uasset.RVD, 0, 16)
+	for rows.Next() {
+		var (
+			r            uasset.RVD
+			class        sql.NullString
+			friendly     sql.NullString
+			livery       sql.NullString
+			category     sql.NullString
+			lengthM      sql.NullFloat64
+			drivable     int
+			subUnit      int
+			hasGuard     int
+			serviceTypes sql.NullInt64
+			regionsJSON  sql.NullString
+			isElectric   sql.NullInt64
+			maxSpeed     sql.NullFloat64
+			maxPower     sql.NullFloat64
+			axleCount    sql.NullInt64
+			manufacturer sql.NullString
+			engineDesc   sql.NullString
+			typeDesc     sql.NullString
+			thumbRef     sql.NullString
+			elecJSON     sql.NullString
+		)
+		if err := rows.Scan(&r.AssetPath, &class, &friendly, &livery, &category,
+			&lengthM, &drivable, &subUnit, &hasGuard, &serviceTypes, &regionsJSON,
+			&isElectric, &maxSpeed, &maxPower, &axleCount,
+			&manufacturer, &engineDesc, &typeDesc, &thumbRef, &elecJSON); err != nil {
+			return nil, err
+		}
+		r.RailVehicleClass = class.String
+		r.FriendlyName = friendly.String
+		r.LiveryID = livery.String
+		r.VehicleCategory = category.String
+		if lengthM.Valid {
+			r.ApproximateLenM = float32(lengthM.Float64)
+		}
+		r.Drivable = drivable != 0
+		r.SubstitutableUnit = subUnit != 0
+		r.HasGuardControls = hasGuard != 0
+		if serviceTypes.Valid {
+			r.ServiceTypes = int(serviceTypes.Int64)
+		}
+		if regionsJSON.Valid && regionsJSON.String != "" {
+			_ = json.Unmarshal([]byte(regionsJSON.String), &r.Regions)
+		}
+		if isElectric.Valid {
+			r.IsElectric = isElectric.Int64 != 0
+		}
+		if maxSpeed.Valid {
+			r.MaxSpeedKph = float32(maxSpeed.Float64)
+		}
+		if maxPower.Valid {
+			r.MaxPowerKw = float32(maxPower.Float64)
+		}
+		if axleCount.Valid {
+			r.PoweredAxleCount = uint32(axleCount.Int64)
+		}
+		r.ManufacturerName = manufacturer.String
+		r.EngineDescription = engineDesc.String
+		r.TypeDescription = typeDesc.String
+		r.ThumbnailAssetRef = thumbRef.String
+		if elecJSON.Valid && elecJSON.String != "" {
+			_ = json.Unmarshal([]byte(elecJSON.String), &r.Electrification)
+		}
+		out = append(out, &r)
+	}
+	return out, rows.Err()
+}
+
 func boolToInt(b bool) int {
 	if b {
 		return 1

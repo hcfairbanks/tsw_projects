@@ -779,36 +779,134 @@ func (h *TimetableHandler) Detect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Try to find timetable by current_service_name
-	row := h.db.QueryRow(`
-		SELECT t.id, t.service_name, t.current_service_name, t.route_id, r.name
+	// Optional player position — used to disambiguate when multiple
+	// timetables share the same in-game current_service_name. TSW reuses
+	// headcodes like "1S37" across totally different routes (e.g. the
+	// WCML "1S37 London Euston → Glasgow" and the XC "1S37 Plymouth →
+	// Edinburgh"). When the HUD provides lat/lng, rank candidates by
+	// distance from the player to each timetable's first stored
+	// coordinate and pick the closest — that's the route the player is
+	// physically on. Falls back to the legacy LIMIT 1 behaviour when no
+	// position is supplied or only one candidate exists.
+	var playerLat, playerLng float64
+	hasPos := false
+	if s := q.Get("lat"); s != "" {
+		if v, err := strconv.ParseFloat(s, 64); err == nil {
+			playerLat = v
+			if s2 := q.Get("lng"); s2 != "" {
+				if v2, err := strconv.ParseFloat(s2, 64); err == nil {
+					playerLng = v2
+					hasPos = true
+				}
+			}
+		}
+	}
+
+	rows, err := h.db.Query(`
+		SELECT t.id, t.service_name, t.current_service_name, t.route_id, r.name,
+		       SUBSTR(tc.coordinates, 1, 200) AS first_coord_prefix
 		FROM timetables t
 		LEFT JOIN routes r ON r.id = t.route_id
-		WHERE t.current_service_name = ?
-		LIMIT 1`, currentServiceName)
-
-	var id int
-	var sName string
-	var csName *string
-	var routeID *int
-	var routeName *string
-	err := row.Scan(&id, &sName, &csName, &routeID, &routeName)
-	if err == sql.ErrNoRows {
-		util.JSON(w, 200, map[string]any{"found": false, "current_service_name": currentServiceName})
-		return
-	}
+		LEFT JOIN timetable_coordinates tc ON tc.timetable_id = t.id
+		WHERE t.current_service_name = ?`, currentServiceName)
 	if err != nil {
 		util.Error(w, 500, err.Error())
 		return
 	}
-	util.JSON(w, 200, map[string]any{
+	defer rows.Close()
+
+	type candidate struct {
+		id         int
+		serviceN   string
+		curServN   sql.NullString
+		routeID    sql.NullInt64
+		routeName  sql.NullString
+		dist       float64 // metres from player; +Inf when no position or no coord
+	}
+	cands := []candidate{}
+	for rows.Next() {
+		var c candidate
+		var prefix sql.NullString
+		if err := rows.Scan(&c.id, &c.serviceN, &c.curServN, &c.routeID, &c.routeName, &prefix); err != nil {
+			continue
+		}
+		c.dist = math.Inf(1)
+		if hasPos && prefix.Valid && prefix.String != "" {
+			lat, lng, ok := parseFirstCoord(prefix.String)
+			if ok {
+				c.dist = haversineMeters(playerLat, playerLng, lat, lng)
+			}
+		}
+		cands = append(cands, c)
+	}
+	if len(cands) == 0 {
+		util.JSON(w, 200, map[string]any{"found": false, "current_service_name": currentServiceName})
+		return
+	}
+	// Pick the closest candidate. When no position was provided, dist
+	// is +Inf for every candidate so the first one (insertion order =
+	// ROWID order) wins — same behaviour as the old LIMIT 1.
+	best := cands[0]
+	for _, c := range cands[1:] {
+		if c.dist < best.dist {
+			best = c
+		}
+	}
+
+	out := map[string]any{
 		"found":                true,
-		"timetable_id":         id,
-		"service_name":         sName,
-		"current_service_name": csName,
-		"route_name":           routeName,
-		"route_id":             routeID,
-	})
+		"timetable_id":         best.id,
+		"service_name":         best.serviceN,
+		"current_service_name": best.curServN.String,
+		"route_id":             best.routeID.Int64,
+		"route_name":           best.routeName.String,
+		"candidate_count":      len(cands),
+	}
+	if hasPos && !math.IsInf(best.dist, 1) {
+		out["match_distance_m"] = int(math.Round(best.dist))
+	}
+	util.JSON(w, 200, out)
+}
+
+// parseFirstCoord pulls (lat, lng) out of the front of a
+// timetable_coordinates JSON blob like `[{"latitude":42.35,"longitude":-71.05},…`.
+// Used by Detect's distance-ranker to avoid parsing a 500KB blob just to
+// read the first point. Returns (0,0,false) on any parse failure.
+func parseFirstCoord(prefix string) (lat, lng float64, ok bool) {
+	// Find first object's lat/lng. The blob always starts with
+	// `[{"latitude":<num>,"longitude":<num>}` — a small JSON head we
+	// can pull out with a single Unmarshal of the first object.
+	end := strings.Index(prefix, "}")
+	if end < 0 {
+		return 0, 0, false
+	}
+	head := prefix[1:end+1] // strip leading '['
+	var rec struct {
+		Latitude  float64 `json:"latitude"`
+		Longitude float64 `json:"longitude"`
+	}
+	if err := json.Unmarshal([]byte(head), &rec); err != nil {
+		return 0, 0, false
+	}
+	if rec.Latitude == 0 && rec.Longitude == 0 {
+		return 0, 0, false
+	}
+	return rec.Latitude, rec.Longitude, true
+}
+
+// haversineMeters returns great-circle distance in metres between two
+// lat/lng points. We use this only for ranking candidates against each
+// other so the choice of haversine vs equirectangular doesn't matter,
+// but haversine is the cheap-and-correct default.
+func haversineMeters(lat1, lng1, lat2, lng2 float64) float64 {
+	const R = 6371000.0
+	toRad := func(d float64) float64 { return d * math.Pi / 180 }
+	dLat := toRad(lat2 - lat1)
+	dLng := toRad(lng2 - lng1)
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
+		math.Cos(toRad(lat1))*math.Cos(toRad(lat2))*math.Sin(dLng/2)*math.Sin(dLng/2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+	return R * c
 }
 
 func (h *TimetableHandler) GetServicesByFormation(w http.ResponseWriter, r *http.Request) {
@@ -2318,18 +2416,27 @@ func (h *TimetableHandler) ingestRouteTrainClasses(zr *zip.Reader) {
 			continue
 		}
 		base := filepath.Base(f.Name)
-		if !strings.HasPrefix(base, "route_") || !strings.HasSuffix(strings.ToLower(base), ".json") {
+		lower := strings.ToLower(base)
+		// Accept both shapes:
+		//   route_<X>.json  — emitted by route extractions, carries full
+		//                     route metadata + per-route train_classes[]
+		//   train_dlc_<X>.json — emitted by standalone train-DLC extractions
+		//                        (Phase 4 of the Game Assets refactor). Same
+		//                        train_classes[] shape, no route metadata.
+		isRouteFile := strings.HasPrefix(base, "route_") && strings.HasSuffix(lower, ".json")
+		isTrainDLCFile := strings.HasPrefix(base, "train_dlc_") && strings.HasSuffix(lower, ".json")
+		if !isRouteFile && !isTrainDLCFile {
 			continue
 		}
 		rc, err := f.Open()
 		if err != nil {
-			log.Printf("[import] open route file %s: %v", f.Name, err)
+			log.Printf("[import] open class-source file %s: %v", f.Name, err)
 			continue
 		}
 		data, err := io.ReadAll(rc)
 		rc.Close()
 		if err != nil {
-			log.Printf("[import] read route file %s: %v", f.Name, err)
+			log.Printf("[import] read class-source file %s: %v", f.Name, err)
 			continue
 		}
 		var rf struct {
