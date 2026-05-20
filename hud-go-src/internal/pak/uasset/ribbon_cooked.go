@@ -46,6 +46,12 @@ type CookedRibbon struct {
 	Length          float64
 	Radius          float64 // 0 for straight or clothoid; >0 for curved arcs
 	HasRadius       bool
+	// TrackRule is the human-readable name of the FObjectImport referenced
+	// by this ribbon's `TrackRule` ObjectProperty (e.g.
+	// "BostonProvidenceTrackRule" vs "BostonProvidenceSubwayTrackRule").
+	// "" when the ribbon ships no TrackRule reference. Resolved from the
+	// .uasset ImportMap by ParseCookedRibbonsFromUmap.
+	TrackRule       string
 }
 
 // ParseCookedRibbonsFromUmap walks one .umap, returns one CookedRibbon per
@@ -104,10 +110,12 @@ func ParseCookedRibbonsFromUmap(uassetPath, tileName string) ([]CookedRibbon, er
 			RibbonName: e.ObjectName,
 		}
 		var curveIdx int32
+		var trackRuleIdx int32
 		var wlX, wlY float64
 		var hasWL, hasCSP bool
 		var cspX, cspY, cspZ float64
-		walkRibbonCookedFields(pr, &rb, &curveIdx, &wlX, &wlY, &hasWL, &cspX, &cspY, &cspZ, &hasCSP)
+		walkRibbonCookedFields(pr, &rb, &curveIdx, &trackRuleIdx, &wlX, &wlY, &hasWL, &cspX, &cspY, &cspZ, &hasCSP)
+		rb.TrackRule = u.ResolveFPackageIndex(trackRuleIdx)
 		if c, ok := curves[curveIdx]; ok {
 			rb.CurveClass = c.class
 			rb.TangentX, rb.TangentY = c.tx, c.ty
@@ -168,9 +176,10 @@ func walkCurveGeometry(r *reader, sx, sy, tx, ty, length, radius *float64, hasRa
 }
 
 // walkRibbonCookedFields reads a NetworkRibbon's property stream and pulls
-// the GUIDs, the Curve FPackageIndex, WorldLocation (IntVector or FVector2D),
-// and CachedStartPosition (FarVector — 2 doubles + 1 float).
-func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
+// the GUIDs, the Curve FPackageIndex, the TrackRule FPackageIndex, the
+// WorldLocation (IntVector or FVector2D), and CachedStartPosition (FarVector
+// — 2 doubles + 1 float).
+func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx, trackRuleIdx *int32,
 	wlX, wlY *float64, hasWL *bool,
 	cspX, cspY, cspZ *float64, hasCSP *bool) {
 	for r.remaining() > 8 {
@@ -197,6 +206,8 @@ func walkRibbonCookedFields(r *reader, rb *CookedRibbon, curveIdx *int32,
 			rb.EndNodeGUID = NormalizeGUID(fmtGUID(raw))
 		case t.name == "Curve" && t.ptype == "ObjectProperty":
 			*curveIdx = r.i32()
+		case t.name == "TrackRule" && t.ptype == "ObjectProperty":
+			*trackRuleIdx = r.i32()
 		case t.name == "WorldLocation" && t.ptype == "StructProperty":
 			// Tagged sub-struct: walk inner property stream for X / Y.
 			// IntVector serialises X, Y, Z each as IntProperty; FVector as

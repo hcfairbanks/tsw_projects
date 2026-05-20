@@ -29,9 +29,45 @@ const uassetMagic uint32 = 0x9E2A83C1
 type Umap struct {
 	Names   []string      // NameMap (FName lookup table)
 	Exports []ExportEntry // ExportMap
+	Imports []ImportEntry // ImportMap (per-FObjectImport ClassName + ObjectName)
 
 	uexp       []byte // body of the .uexp file (truncated to drop trailing magic)
 	headerSize int    // size of the .uasset file (== summary's TotalHeaderSize)
+}
+
+// ImportEntry is the subset of FObjectImport we expose so an ObjectProperty
+// referencing an external asset (e.g. NetworkRibbon.TrackRule pointing at
+// `/BostonProvidence/.../BostonProvidenceTrackRule`) can be resolved to a
+// human-readable asset name without parsing the full UE import graph.
+//
+// ObjectName is the asset's name (e.g. "BostonProvidenceTrackRule"). For an
+// FPackageIndex value `idx` that is < 0, the import index is `-idx - 1`.
+type ImportEntry struct {
+	ClassName  string
+	ObjectName string
+}
+
+// ResolveFPackageIndex turns a UE FPackageIndex into a label:
+//
+//   - 0          → ""
+//   - positive   → the local export's ObjectName at (idx-1)
+//   - negative   → the import's ObjectName at (-idx-1), or "" if out of range
+//
+// Exported (capital R) so external tools can resolve refs without going
+// through the private dumper path.
+func (u *Umap) ResolveFPackageIndex(idx int32) string {
+	switch {
+	case idx == 0:
+		return ""
+	case idx > 0 && int(idx) <= len(u.Exports):
+		return u.Exports[idx-1].ObjectName
+	case idx < 0:
+		i := int(-idx - 1)
+		if i >= 0 && i < len(u.Imports) {
+			return u.Imports[i].ObjectName
+		}
+	}
+	return ""
 }
 
 // ExportEntry is the subset of FObjectExport we need to seek to a property
@@ -99,8 +135,8 @@ func ReadUmap(uassetPath string) (*Umap, error) {
 	r.skip(4) // GatherableTextDataOffset
 	exportCount := int(r.i32())
 	exportOffset := int(r.i32())
-	// We don't need anything past here — fields like ImportOffset, DependsOffset,
-	// etc. are not consulted because we only read a known subset of exports.
+	importCount := int(r.i32())
+	importOffset := int(r.i32())
 
 	// --- NameMap ---
 	r.seek(nameOffset)
@@ -137,9 +173,38 @@ func ReadUmap(uassetPath string) (*Umap, error) {
 		exports[i] = e
 	}
 
+	// --- ImportMap ---
+	// UE 4.27 FObjectImport layout (stock — no PackageName, no bImportOptional):
+	//   ClassPackage  : FName (8 bytes — int32 NameIndex + int32 Number)
+	//   ClassName     : FName (8 bytes)
+	//   OuterIndex    : int32 (FPackageIndex)
+	//   ObjectName    : FName (8 bytes)
+	// Total = 28 bytes per import. Earlier code assumed 40 because TSW6's UE
+	// fork was misremembered as carrying PackageName + bImportOptional — it
+	// does not. With the wrong stride the parser drifts after the first
+	// record (visible as `?-N` garbage in subsequent records), which made
+	// the FPackageIndex resolver in the cooked ribbon walker return random
+	// import names. We only need ClassName + ObjectName.
+	var imports []ImportEntry
+	if importCount > 0 {
+		r.seek(importOffset)
+		imports = make([]ImportEntry, importCount)
+		for i := range imports {
+			r.skip(8) // ClassPackage
+			className := r.fname()
+			r.skip(4) // OuterIndex
+			objectName := r.fname()
+			imports[i] = ImportEntry{
+				ClassName:  className,
+				ObjectName: objectName,
+			}
+		}
+	}
+
 	return &Umap{
 		Names:      names,
 		Exports:    exports,
+		Imports:    imports,
 		uexp:       uexpData,
 		headerSize: totalHeaderSize,
 	}, nil
