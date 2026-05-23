@@ -294,13 +294,31 @@
     </div>
 
     <div class="card">
-        <h2 data-i18n="apiSubscriptions.subscriptionEndpoints">Subscription Endpoints</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;" data-i18n="apiSubscriptions.subscriptionEndpointsDesc">
-            The following endpoints are subscribed when active:
+        <h2 data-i18n="apiSubscriptions.apiCalls">TSW API Calls</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;" data-i18n="apiSubscriptions.apiCallsDesc">
+            The CommAPI paths the app subscribes to, organised into sections. Toggle calls on/off, add your own calls and sections, or create a new named section. Built-in sections ("Core", "German Safety") are specially parsed; calls you add to your own sections are streamed to HUDs under their key. Stored in <code>resources/api_calls.json</code>. Click "Save &amp; Reapply" to apply (or changes apply on the next TSW reconnect).
         </p>
-        <div class="subscription-list" id="subscriptionList" data-i18n="common.loading">
-            Loading...
+
+        <div style="display:flex; gap:8px; margin:10px 0 4px; flex-wrap:wrap;">
+            <input type="text" id="newSectionName" placeholder="New section name e.g. My Loco" style="flex:1 1 240px; padding:8px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary);">
+            <button class="btn btn-primary" type="button" onclick="addSection()" data-i18n="apiSubscriptions.apiCallsAddSection">Create section</button>
         </div>
+
+        <div id="apiCallsSections">Loading...</div>
+
+        <div style="border-top: 1px solid var(--border-color); margin-top: 16px; padding-top: 16px;">
+            <h3 style="margin-top:0;" data-i18n="apiSubscriptions.apiCallsTestTool">Test a path against the live game</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <input type="text" id="testPath" placeholder="e.g. CurrentDrivableActor/LZB_Service.Property.bIsActivated" style="flex:1 1 360px; padding:8px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary);">
+                <button class="btn btn-primary" type="button" onclick="testApiCallPath()" data-i18n="apiSubscriptions.apiCallsTest">Test path</button>
+            </div>
+            <div class="data-preview" id="apiCallTestResult" style="display:none;"></div>
+        </div>
+
+        <div class="actions-container">
+            <button class="btn btn-warning" type="button" onclick="saveAndReapplyApiCalls()" data-i18n="apiSubscriptions.apiCallsSave">Save &amp; Reapply</button>
+        </div>
+        <div id="apiCallsMessage" class="status-message"></div>
     </div>
 
     <script>
@@ -341,39 +359,156 @@
             })
             .catch(err => console.error('Failed to load config:', err));
 
-        // Subscription endpoints list
-        const subscriptionEndpoints = [
-            '/subscription/TimeOfDay.Data?Subscription=1',
-            '/subscription/DriverAid.Data?Subscription=1',
-            '/subscription/DriverAid.PlayerInfo?Subscription=1',
-            '/subscription/DriverAid.TrackData?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetSpeed?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetDirection?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetPowerHandle?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetIsSlipping?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_1?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_2?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetAcceleration?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetSpeedControlTarget?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetMaxPermittedSpeed?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetTractiveEffort?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetElectricBrakeHandle?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetLocomotiveBrakeHandle?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetTrainBrakeHandle?Subscription=1',
-            '/subscription/CurrentDrivableActor.Function.HUD_GetIsTractionLocked?Subscription=1',
-            '/subscription/CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue?Subscription=1',
-            '/subscription/CurrentFormation/1/Door_PassengerDoor_BL.Function.GetCurrentOutputValue?Subscription=1',
-            '/subscription/WeatherManager.Data?Subscription=1'
-        ];
+        // ---- TSW API Calls management (sectioned api_calls.json) ----
+        // State mirrors api_calls.json: { sections: [ {name, builtin, calls:[{path,key,label,enabled}]} ] }.
+        var apiSections = [];
 
-        // Display subscription list
-        function displaySubscriptionList() {
-            const list = document.getElementById('subscriptionList');
-            list.innerHTML = subscriptionEndpoints.map(endpoint => `
-                <div class="subscription-item">
-                    <span class="subscription-path">${endpoint}</span>
-                </div>
-            `).join('');
+        function escHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        async function loadApiCalls() {
+            try {
+                const res = await fetch('/api/api-calls');
+                const f = await res.json();
+                apiSections = (f && Array.isArray(f.sections)) ? f.sections : [];
+                renderApiCalls();
+            } catch (err) {
+                document.getElementById('apiCallsSections').textContent = 'Failed to load API calls: ' + err.message;
+            }
+        }
+
+        // Render each section as a block: header (name + built-in badge or
+        // rename/delete for user sections), the calls (toggle each; delete +
+        // an inline add-call form for user sections).
+        function renderApiCalls() {
+            const container = document.getElementById('apiCallsSections');
+            if (!apiSections.length) { container.textContent = 'No sections configured.'; return; }
+            let html = '';
+            apiSections.forEach(function (sec, si) {
+                html += '<div style="margin:16px 0 4px; display:flex; align-items:center; gap:10px;">' +
+                    '<span style="font-weight:700; color:var(--accent-color); font-size:15px;">' + escHtml(sec.name) + '</span>' +
+                    (sec.builtin
+                        ? '<span style="color:var(--text-muted); font-size:12px;">built-in</span>'
+                        : '<button class="btn btn-primary" type="button" style="padding:4px 10px; font-size:12px;" onclick="renameSection(' + si + ')">Rename</button>' +
+                          '<button class="btn btn-danger" type="button" style="padding:4px 10px; font-size:12px;" onclick="deleteSection(' + si + ')">Delete section</button>') +
+                    '</div>';
+
+                (sec.calls || []).forEach(function (c, ci) {
+                    html += '<div class="subscription-item" style="align-items:center; gap:12px;">' +
+                        '<input type="checkbox" ' + (c.enabled ? 'checked' : '') + ' onchange="toggleApiCall(' + si + ',' + ci + ', this.checked)" style="flex:0 0 auto; width:18px; height:18px; cursor:pointer;">' +
+                        '<span class="subscription-path" style="flex:1 1 auto;">' +
+                        (c.label ? '<strong style="font-family:\'Segoe UI\',sans-serif;">' + escHtml(c.label) + '</strong>' + (c.key ? ' → ' + escHtml(c.key) : '') + '<br>' : '') +
+                        escHtml(c.path) + '</span>' +
+                        (sec.builtin ? ''
+                                     : '<button class="btn btn-danger subscription-status" type="button" style="padding:6px 12px;" onclick="deleteApiCall(' + si + ',' + ci + ')">Delete</button>') +
+                        '</div>';
+                });
+
+                if (!sec.builtin) {
+                    html += '<div style="display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:6px; margin:6px 0 4px;">' +
+                        '<input type="text" id="addPath_' + si + '" placeholder="path" style="padding:7px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary);">' +
+                        '<input type="text" id="addKey_' + si + '" placeholder="stream key" style="padding:7px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary);">' +
+                        '<input type="text" id="addLabel_' + si + '" placeholder="label (optional)" style="padding:7px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary);">' +
+                        '<button class="btn btn-success" type="button" style="padding:6px 12px;" onclick="addCallToSection(' + si + ')">Add</button>' +
+                        '</div>';
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleApiCall(si, ci, enabled) {
+            if (apiSections[si] && apiSections[si].calls[ci]) apiSections[si].calls[ci].enabled = enabled;
+        }
+
+        function deleteApiCall(si, ci) {
+            apiSections[si].calls.splice(ci, 1);
+            renderApiCalls();
+        }
+
+        function addCallToSection(si) {
+            const path = document.getElementById('addPath_' + si).value.trim();
+            const key = document.getElementById('addKey_' + si).value.trim();
+            const label = document.getElementById('addLabel_' + si).value.trim();
+            if (!path || !key) { showMessage('apiCallsMessage', 'A call needs both a path and a stream key', 'error'); return; }
+            const exists = apiSections.some(function (s) { return (s.calls || []).some(function (c) { return c.path === path; }); });
+            if (exists) { showMessage('apiCallsMessage', 'That path is already in the catalog', 'error'); return; }
+            apiSections[si].calls.push({ path: path, key: key, label: label, enabled: true });
+            renderApiCalls();
+            showMessage('apiCallsMessage', 'Added — click "Save & Reapply" to activate', 'success');
+        }
+
+        function addSection() {
+            const name = document.getElementById('newSectionName').value.trim();
+            if (!name) { showMessage('apiCallsMessage', 'Enter a section name', 'error'); return; }
+            if (apiSections.some(function (s) { return s.name.toLowerCase() === name.toLowerCase(); })) {
+                showMessage('apiCallsMessage', 'A section with that name already exists', 'error'); return;
+            }
+            apiSections.push({ name: name, builtin: false, calls: [] });
+            document.getElementById('newSectionName').value = '';
+            renderApiCalls();
+            showMessage('apiCallsMessage', 'Section created — add calls, then Save & Reapply', 'success');
+        }
+
+        function renameSection(si) {
+            const name = prompt('Rename section', apiSections[si].name);
+            if (!name) return;
+            const trimmed = name.trim();
+            if (!trimmed) return;
+            if (apiSections.some(function (s, i) { return i !== si && s.name.toLowerCase() === trimmed.toLowerCase(); })) {
+                showMessage('apiCallsMessage', 'A section with that name already exists', 'error'); return;
+            }
+            apiSections[si].name = trimmed;
+            renderApiCalls();
+        }
+
+        function deleteSection(si) {
+            if (!confirm('Delete section "' + apiSections[si].name + '" and all its calls?')) return;
+            apiSections.splice(si, 1);
+            renderApiCalls();
+        }
+
+        // Validate a path against the live TSW API.
+        async function testApiCallPath() {
+            const path = document.getElementById('testPath').value.trim();
+            const out = document.getElementById('apiCallTestResult');
+            if (!path) { showMessage('apiCallsMessage', 'Enter a path to test', 'error'); return; }
+            out.style.display = 'block';
+            out.textContent = 'Testing ' + path + ' …';
+            try {
+                const res = await fetch('/api/subscription/test-path?path=' + encodeURIComponent(path));
+                out.textContent = JSON.stringify(await res.json(), null, 2);
+            } catch (err) {
+                out.textContent = 'Error: ' + err.message;
+            }
+        }
+
+        // Persist the whole catalog (PUT /api/api-calls), then reapply live.
+        async function saveAndReapplyApiCalls() {
+            try {
+                await fetch('/api/api-calls', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sections: apiSections })
+                });
+            } catch (err) {
+                showMessage('apiCallsMessage', 'Failed to save: ' + err.message, 'error');
+                return;
+            }
+            try {
+                const res = await fetch('/api/subscription/reset', { method: 'POST' });
+                const body = await res.json();
+                if (body && body.success) {
+                    showMessage('apiCallsMessage', 'Saved and reapplied subscriptions', 'success');
+                } else {
+                    showMessage('apiCallsMessage', 'Saved. Reapply skipped (' + ((body && body.error) || 'TSW not connected') + ') — will apply on next reconnect.', 'warning');
+                }
+            } catch (err) {
+                showMessage('apiCallsMessage', 'Saved. Could not reapply now — will apply on next TSW reconnect.', 'warning');
+            }
+            refreshStatus();
         }
 
         // Refresh status
@@ -536,7 +671,7 @@
         }
 
         // Initialize
-        displaySubscriptionList();
+        loadApiCalls();
     </script>
     <script src="/js/navbar.js"></script>
     <script src="/js/i18n.js"></script>

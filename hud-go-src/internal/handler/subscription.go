@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"hud-go/internal/config"
 	"hud-go/internal/tsw"
@@ -73,6 +75,32 @@ func (h *SubscriptionHandler) Reset(w http.ResponseWriter, r *http.Request) {
 	// Idempotent: no-op if the loop is already running.
 	tsw.EnsureConnectionLoop(h.client, cfg, nil)
 	util.Success(w, map[string]any{"success": true})
+}
+
+// TestPath proxies a single read-only GET to the TSW CommAPI so the settings
+// UI can validate a custom subscription path (and inspect its Values shape)
+// before saving it. Reloads the key first since TSW6 rotates CommAPIKey.txt.
+func (h *SubscriptionHandler) TestPath(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimSpace(r.URL.Query().Get("path"))
+	if path == "" {
+		util.Error(w, http.StatusBadRequest, "missing path query parameter")
+		return
+	}
+	if key := tsw.ReloadAPIKey(h.client, config.Get()); key == "" {
+		util.Error(w, http.StatusServiceUnavailable, "no API key available — start TSW6 so it generates CommAPIKey.txt")
+		return
+	}
+	raw, err := h.client.Do("GET", "/get/"+path, "")
+	if err != nil {
+		util.Error(w, http.StatusBadGateway, err.Error())
+		return
+	}
+	var parsed any
+	if jsonErr := json.Unmarshal(raw, &parsed); jsonErr != nil {
+		util.Success(w, map[string]any{"raw": string(raw)})
+		return
+	}
+	util.Success(w, parsed)
 }
 
 // Delete removes all subscriptions. Reload the key first so the DELETE

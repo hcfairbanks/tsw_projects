@@ -750,6 +750,17 @@
         <h2 data-i18n="settings.mapLayers">Map Layers</h2>
         <p style="color: var(--text-muted); font-size: 13px; margin-top: 0;" data-i18n="settings.mapLayersDesc">Pick which categories show on the desktop / tablet HUD maps. The HUD has limited screen space, so the in-map toggle bar is hidden there — these checkboxes are the source of truth for those two pages.</p>
 
+        <div class="setting-row">
+            <div class="setting-info">
+                <div class="setting-label" data-i18n="settings.drivableFilter">Drivable Rail filter on route maps</div>
+                <div class="setting-description" data-i18n="settings.drivableFilterDesc">When on, route maps offer a "Drivable Rail only" toggle that hides scenery track (subway / Underground / heritage / default-rule). When off, all rails show as one layer with no toggle. The TrackRule data is always stored — this only controls the visual.</div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="drivableFilterToggle" onchange="toggleDrivableFilter(this.checked)">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
         <div id="mapLayersList"></div>
     </div>
 
@@ -1217,6 +1228,22 @@
         function toggleSubscriptions(checked) {
             saveSetting('enableSubscriptions', checked);
         }
+
+        // Drivable Rail filter — a pure UI preference (per-browser), read by
+        // the route map page. Default ON. Mirrors the other localStorage
+        // settings on this page (units / color scheme / theme).
+        var DRIVABLE_FILTER_LS_KEY = 'huddev.routeMap.drivableFilter';
+        function toggleDrivableFilter(checked) {
+            try { localStorage.setItem(DRIVABLE_FILTER_LS_KEY, checked ? 'true' : 'false'); } catch (_) {}
+        }
+        function initDrivableFilterToggle() {
+            var box = document.getElementById('drivableFilterToggle');
+            if (!box) return;
+            var v = null;
+            try { v = localStorage.getItem(DRIVABLE_FILTER_LS_KEY); } catch (_) {}
+            box.checked = v === null ? true : v === 'true'; // default ON
+        }
+        initDrivableFilterToggle();
 
         function showStatus(message, type) {
             const el = document.getElementById('statusMessage');

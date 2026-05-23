@@ -11,6 +11,7 @@
         { href: '/routes', label: 'Routes', i18n: 'nav.routes' },
         { href: '/weather', label: 'Weather', i18n: 'nav.weather' },
         { href: '/map', label: 'Tracking Map', i18n: 'nav.map' },
+        { href: '/custom-huds', label: 'Custom HUDs', i18n: 'nav.customHuds' },
         { href: '/settings', label: 'Settings', i18n: 'nav.settings' },
         { href: '/countries', label: 'Countries', i18n: 'nav.countries', devOnly: true },
         { href: '/locations', label: 'Locations', i18n: 'nav.locations', devOnly: true },

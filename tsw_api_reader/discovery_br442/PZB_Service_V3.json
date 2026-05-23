@@ -1,0 +1,318 @@
+﻿{
+    "Result":  "Success",
+    "NodePath":  "CurrentDrivableActor/PZB_Service_V3",
+    "NodeName":  "PZB_Service_V3",
+    "Nodes":  [
+
+              ],
+    "Endpoints":  [
+                      {
+                          "Name":  "Property.ProgramMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ActiveReverserEngaged",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isReverserEngaged",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isStartup",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.influenceCode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ActiveMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.SavedMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_OverspeedMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_OverspeedReduced",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.OverspeedAllowance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ActiveInfluence",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_RestrictionSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_StartupSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isOverridePressed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isAcknowledgePressed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isReleasePressed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_InfluenceMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_OverrideSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_RestrictionStop",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.IsMoving",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Handle_IsMoving_Speed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._RequiresAcknowledge",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ActivationSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._restrictionID",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsLZB_Active",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsPZB_Active",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsSuppressed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsGNT_Active",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DebugModeState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Debug_StartupProgramActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.RestrictionTimerStarted",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CorrectUseScore",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._IsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._InEmergency",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._IsPowerModified",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property._PowerOutput",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bReplicates",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bAutoActivate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsEditorOnly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.SafetySystemIsUsedCorrectly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetRestrictionMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetIsLZBActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetEmergency",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetOverspeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetActiveState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetDataStruct",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetProgramMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_Restriction_ActivateSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_Influence_MaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_InfluenceState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_ActiveMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_InfluenceCode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Get_Speed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetPowerInfluence",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsPowerModified",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetPowerOutput",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.InEmergency",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsComponentTickEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsBeingDestroyed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetComponentTickInterval",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetRestrictionMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetIsLZBActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetOverspeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetEmergency",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetActiveState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetProgramMode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.PZB_GetDataStruct",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.SafetySystemIsUsedCorrectly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectName",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectClass",
+                          "Writable":  false
+                      }
+                  ]
+}

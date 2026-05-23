@@ -1,0 +1,514 @@
+﻿{
+    "Result":  "Success",
+    "NodePath":  "CurrentDrivableActor/LZB_Service",
+    "NodeName":  "LZB_Service",
+    "Nodes":  [
+
+              ],
+    "Endpoints":  [
+                      {
+                          "Name":  "Property.LocoMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ZeroSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.SpeedChangeTolerance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.FormationMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DriverEnteredMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MaxDistanceToQuery",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MaxDistanceToEnde",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DistanceChangeTolerance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.EndeAcknowledgeTime",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.TrackRestrictionQuery",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsIsolated",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsActivated",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsOverspeedBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsEmergencyBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.FaultCode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsOverrideRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsReleaseRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsAcknowledgeRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsStopSignalPassed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.currentVelocity_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.EndeState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.E40_State",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.V40_State",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.currentSpeedLimit_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.maxPermisibleSpeed_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.expectedTargetSpeed_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.monitoringSpeed_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.targetSpeedDistance_m",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.distanceToEnd_M",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.OverspeedState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DistanceToNextSignalM",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DisplayMessages",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bPrintToScreen",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bPrintToLog",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.expectedDecelerationRate (ms/2)",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CurrentBrakeRateValues",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsPermittedSpeedExpected",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsTargetSpeedActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.OverspeedSpeed_ms",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bISTransmitFailure",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Enforcement",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ExitSignalDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ExitSignalSpeedMs",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bSpawnedOnLZB",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MaxMonitoringDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.OverrideEntryTriggerRequirement",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.ULightState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.BlueColour",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.AusfallGeschwinidigkeit",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.AusfallGeschwinidigkeitBase",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.RedColour",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.YellowColour",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.TMFCurveTime",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bWasTransmitFailure",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.FailureTime",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.FailureTimeRange",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.SupportsTransmissionFailure",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bShowLZBDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.WindStrength",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.PZB Mode",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CorrectUseScore",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.UseCustomBrakeRate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CustomBrakeRate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.expectedDecelerationRatePenalty(ms/2)",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CustomPenaltyBrakeRate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.UseCustomMonitoringDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.OverrideFormationMaxSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.BrakePercentage",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bReplicates",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bAutoActivate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsEditorOnly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.SafetySystemIsUsedCorrectly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsBrakeDemandState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetShowLZBDistanceBare",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetMonitoringSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetTargetSpeedDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetExpectedTargetSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetMaxPermissibleSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetCurrentSpeedLimit",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsEmergencyBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsOverspeedBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetFault",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsIsolated",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetMaxWeatherSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetWasTransmitFailure",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetUlightState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsThereASignalWeCouldEndeAt",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetExpectedSpeedFromQuery",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.CanResetIsOverrideRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.CanResetIsAcknowledgeRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.CanResetIsReleaseRequired",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.CanSetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetFault",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsIsolated",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsTargetSpeedZero",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetIsRailVehicleAboveZeroSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetCurrentRailVehicleVelocity",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetLZB_Restriction",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsComponentTickEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsBeingDestroyed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetComponentTickInterval",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsBrakeDemandState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetShowLZBDistanceBare",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetTargetSpeedDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetMonitoringSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetExpectedTargetSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetMaxPermissibleSpeed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetCurrentSpeedLimit",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsEmergencyBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsOverspeedBraking",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetFault",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsReady",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsIsolated",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.LZB_GetIsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.SafetySystemIsUsedCorrectly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectName",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectClass",
+                          "Writable":  false
+                      }
+                  ]
+}

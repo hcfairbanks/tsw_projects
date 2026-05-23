@@ -167,6 +167,11 @@
         + '      <option value="Scenario" data-i18n="timetables.sourceScenario">Scenario</option>'
         + '      <option value="Training" data-i18n="timetables.sourceTraining">Training</option>'
         + '    </select>'
+        + '    <label data-i18n="timetables.bestData">Best Data:</label>'
+        + '    <select id="tts_bestDataFilter" style="min-width: 90px; width: auto;">'
+        + '      <option value="" data-i18n="routes.bestDataAll">All data</option>'
+        + '      <option value="1" data-i18n="routes.bestDataOnly">★ Best Data only</option>'
+        + '    </select>'
         + '    <label class="tts-coord-wrap" data-i18n="timetables.coordSource">Coord Source:</label>'
         + '    <select class="tts-coord-wrap" id="tts_coordSourceFilter" style="min-width: 110px; width: auto;">'
         + '      <option value="" data-i18n="common.all">All</option>'
@@ -316,6 +321,9 @@
             populateSourceFilter(container);
             applyPresets(container, state);
             wireButtons(container, state);
+            // Restore the last search for this context (presets above win for
+            // any locked/explicit route/country/formation).
+            restoreSearch(container, state);
             fetchAndRender(container, state, 1);
         } catch (err) {
             console.error('TimetableSearch.loadData:', err);
@@ -423,7 +431,7 @@
     // results table can drop the Section column when there's nothing to
     // show. When `state` is provided and the table has already rendered,
     // a re-render is triggered after the async fetch lands.
-    function updateSectionFilter(container, state, routeId) {
+    function updateSectionFilter(container, state, routeId, desiredSection) {
         var select = container.querySelector('#tts_sectionFilter');
         select.innerHTML = '<option value="" data-i18n="common.all">All</option><option value="__none__" data-i18n="timetables.noSection">No Section</option>';
         if (typeof i18n !== 'undefined' && i18n.translate) i18n.translate(select);
@@ -440,6 +448,8 @@
                 opt.textContent = s.name;
                 select.appendChild(opt);
             });
+            // Restore a previously-selected section now that options exist.
+            if (desiredSection) select.value = desiredSection;
             var hasSections = sections.length > 0;
             setSectionFilterVisible(container, hasSections);
             if (state && state.hasSections !== hasSections) {
@@ -751,7 +761,7 @@
         container.querySelector('#tts_formationInput').value = '';
         container.querySelector('#tts_formationFilter').value = '';
         updateSectionFilter(container, state, state.lockRoute && state.opts.routeId ? state.opts.routeId : null);
-        ['tts_startTimeMin','tts_startTimeMax','tts_durationMin','tts_durationMax','tts_stopsMin','tts_stopsMax','tts_conductorFilter','tts_coordSourceFilter','tts_serviceTypeFilter','tts_playableFilter','tts_sourceFilter']
+        ['tts_startTimeMin','tts_startTimeMax','tts_durationMin','tts_durationMax','tts_stopsMin','tts_stopsMax','tts_conductorFilter','tts_coordSourceFilter','tts_serviceTypeFilter','tts_playableFilter','tts_sourceFilter','tts_bestDataFilter']
             .forEach(function (id) { var el = container.querySelector('#' + id); if (el) el.value = ''; });
         ['tts_serviceDropdown','tts_routeDropdown','tts_formationDropdown']
             .forEach(function (id) { var el = container.querySelector('#' + id); if (el) el.style.display = 'none'; });
@@ -763,9 +773,88 @@
         fetchAndRender(container, state, 1);
     }
 
+    // ---- search persistence ----
+    //
+    // Remember the full filter set per context so the page returns exactly
+    // how you left it. Keyed by lock context: a per-route page (/routes/<id>)
+    // remembers its own filters separately from the global /timetables page.
+
+    var PERSIST_IDS = ['tts_serviceInput', 'tts_serviceFilter', 'tts_serviceFilterType',
+        'tts_routeInput', 'tts_routeFilter', 'tts_countryFilter', 'tts_formationInput',
+        'tts_formationFilter', 'tts_sectionFilter', 'tts_startTimeMin', 'tts_startTimeMax',
+        'tts_durationMin', 'tts_durationMax', 'tts_stopsMin', 'tts_stopsMax',
+        'tts_conductorFilter', 'tts_serviceTypeFilter', 'tts_playableFilter',
+        'tts_sourceFilter', 'tts_coordSourceFilter', 'tts_bestDataFilter'];
+
+    function searchStorageKey(state) {
+        return (state.lockRoute && state.opts.routeId)
+            ? 'huddev.tts.search.r' + state.opts.routeId
+            : 'huddev.tts.search';
+    }
+
+    function saveSearch(container, state) {
+        try {
+            var fields = {};
+            PERSIST_IDS.forEach(function (id) {
+                var el = container.querySelector('#' + id);
+                if (el) fields[id] = el.value;
+            });
+            localStorage.setItem(searchStorageKey(state), JSON.stringify({
+                fields: fields, sortCol: state.sortColumn, sortDir: state.sortDirection,
+                limit: state.currentLimit,
+            }));
+        } catch (_) {}
+    }
+
+    function restoreSearch(container, state) {
+        var saved;
+        try { saved = JSON.parse(localStorage.getItem(searchStorageKey(state)) || 'null'); }
+        catch (_) { saved = null; }
+        if (!saved || !saved.fields) return;
+        // Don't clobber an explicitly-locked/preset route or country — those
+        // win over the remembered search. (formationId preset likewise.)
+        var skip = {};
+        if (state.lockRoute || state.opts.routeId || state.opts.countryId) {
+            skip.tts_routeInput = skip.tts_routeFilter = true;
+            skip.tts_countryFilter = true;
+        }
+        if (state.opts.formationId) {
+            skip.tts_formationInput = skip.tts_formationFilter = true;
+        }
+        Object.keys(saved.fields).forEach(function (id) {
+            if (skip[id]) return;
+            if (id === 'tts_sectionFilter') return; // handled after route restore
+            var el = container.querySelector('#' + id);
+            if (el) el.value = saved.fields[id];
+        });
+        // Country display reflects the restored hidden id.
+        if (!skip.tts_countryFilter && saved.fields.tts_countryFilter) {
+            var c = state.allCountries.find(function (x) { return String(x.id) === String(saved.fields.tts_countryFilter); });
+            if (c) {
+                var disp = container.querySelector('#tts_filterCountryDisplay');
+                if (disp) disp.innerHTML = '<span>' + countryCodeToFlag(c.code || '') + escapeHtml(c.name) + '</span>';
+            }
+        }
+        // Route restore drives the section dropdown (async); pass the saved
+        // section so it's selected once the options land.
+        var routeForSections = (state.lockRoute && state.opts.routeId)
+            ? state.opts.routeId
+            : (!skip.tts_routeFilter ? saved.fields.tts_routeFilter : '');
+        if (routeForSections) {
+            updateSectionFilter(container, state, routeForSections, saved.fields.tts_sectionFilter || '');
+        } else if (saved.fields.tts_sectionFilter) {
+            var sel = container.querySelector('#tts_sectionFilter');
+            if (sel) sel.value = saved.fields.tts_sectionFilter;
+        }
+        if (saved.sortCol) state.sortColumn = saved.sortCol;
+        if (saved.sortDir) state.sortDirection = saved.sortDir;
+        if (saved.limit) state.currentLimit = saved.limit;
+    }
+
     // ---- table render ----
 
     async function fetchAndRender(container, state, page) {
+        saveSearch(container, state);
         page = page || state.currentPage;
         state.currentPage = page;
         var listEl = container.querySelector('#tts_timetablesList');
@@ -807,6 +896,7 @@
         var serviceTypeFilter = container.querySelector('#tts_serviceTypeFilter').value;
         var playableFilter = container.querySelector('#tts_playableFilter').value;
         var sourceFilter = container.querySelector('#tts_sourceFilter').value;
+        var bestDataFilter = container.querySelector('#tts_bestDataFilter').value;
 
         if (serviceFilter) params.set('search', serviceFilter);
         else if (serviceInput) params.set('search', serviceInput);
@@ -819,6 +909,9 @@
         // also enforces this for `playable`, but skipping the param
         // here keeps logs clean.)
         if (coordSourceFilter && state.devMode) params.set('coord_source', coordSourceFilter);
+        // "Best Data only" = backend (pak) coordinates. Always available
+        // (not dev-gated). Wins over the dev coord-source knob if both set.
+        if (bestDataFilter === '1') params.set('coord_source', 'backend');
         if (conductorFilter) params.set('conductor', conductorFilter);
         if (startTimeMin) params.set('start_time_min', startTimeMin);
         if (startTimeMax) params.set('start_time_max', startTimeMax);
@@ -896,6 +989,7 @@
             html += headerCell('Duration', 'timetables.duration', 'duration', 'tts-c');
             html += headerCell('Stops', 'timetables.stops', null, 'tts-c');
             html += headerCell('Conductor', 'timetables.conductor', 'conductor_compatible', 'tts-c');
+            html += headerCell('Best Data', 'timetables.bestData', null, 'tts-c');
             if (devMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
             html += '</tr></thead><tbody>';
             timetables.forEach(function (t) {
@@ -950,6 +1044,10 @@
                 html += '<td class="tts-c">' + escapeHtml(t.duration || '-') + '</td>';
                 html += '<td class="tts-c">' + (t.entry_count || 0) + '</td>';
                 html += '<td class="tts-c">' + (t.conductor_compatible ? tt('common.yes', 'Yes') : tt('common.no', 'No')) + '</td>';
+                // Best Data star — set when coordinates came from the pak
+                // backend (t.best_data, derived server-side from coord_source).
+                var bd = (t.best_data === true || t.best_data === 1);
+                html += '<td class="tts-c" title="' + (bd ? 'Extraction-grade coordinates (backend)' : 'Not backend coordinates') + '">' + (bd ? '<span style="color:#ffc107;font-size:16px;">★</span>' : '<span style="color:var(--text-muted);">—</span>') + '</td>';
                 if (devMode) {
                     html += '<td class="actions">';
                     html += '<button class="btn-primary" data-tts-show="' + t.id + '" data-i18n="common.show">Show</button>';

@@ -5,50 +5,32 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"hud-go/internal/config"
 )
 
-// subscriptionEndpoints lists all TSW CommAPI subscription paths to register.
-// These must match exactly what the Node.js version uses.
-var subscriptionEndpoints = []string{
-	"/subscription/TimeOfDay.Data?Subscription=1",
-	"/subscription/DriverAid.Data?Subscription=1",
-	"/subscription/DriverAid.PlayerInfo?Subscription=1",
-	"/subscription/DriverAid.TrackData?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetSpeed?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetDirection?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetPowerHandle?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetIsSlipping?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_1?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetBrakeGauge_2?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetAcceleration?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetSpeedControlTarget?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetMaxPermittedSpeed?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetTractiveEffort?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetElectricBrakeHandle?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetLocomotiveBrakeHandle?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetTrainBrakeHandle?Subscription=1",
-	"/subscription/CurrentDrivableActor.Function.HUD_GetIsTractionLocked?Subscription=1",
-	"/subscription/CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue?Subscription=1",
-	"/subscription/CurrentFormation/1/Door_PassengerDoor_BL.Function.GetCurrentOutputValue?Subscription=1",
-	// CurrentFormation.FormationLength returns the player's live consist
-	// length as {Values: {FormationLength: N}}. Feeds the HUD's
-	// applyDynamicStopCoords so distance-to-stop tracks the actual stop
-	// point for the current consist (after uncouples / formation swaps).
-	"/subscription/CurrentFormation.FormationLength?Subscription=1",
-	"/subscription/CurrentDrivableActor/PassengerDoor_FR.Function.GetCurrentInputValue?Subscription=1",
-	"/subscription/CurrentDrivableActor/PassengerDoor_FL.Function.GetCurrentInputValue?Subscription=1",
-	"/subscription/WeatherManager.Data?Subscription=1",
+// subscriptionEndpoints returns the TSW CommAPI subscription URLs to register,
+// built from the enabled entries in config.ApiCalls. The list is config-driven
+// so users can toggle builtins and add custom calls (see config/apicalls.go);
+// the builtin defaults reproduce the set the app has always subscribed to.
+func subscriptionEndpoints() []string {
+	paths := config.EnabledSubscriptionPaths()
+	urls := make([]string, 0, len(paths))
+	for _, p := range paths {
+		urls = append(urls, "/subscription/"+p+"?Subscription=1")
+	}
+	return urls
 }
 
-// SubscriptionCount returns the number of subscription endpoints.
+// SubscriptionCount returns the number of enabled subscription endpoints.
 func SubscriptionCount() int {
-	return len(subscriptionEndpoints)
+	return len(config.EnabledSubscriptionPaths())
 }
 
 // CreateSubscriptions POSTs each subscription endpoint to register them with TSW.
 func CreateSubscriptions(client *Client) error {
 	log.Println("[TSW] Creating subscriptions...")
-	for _, endpoint := range subscriptionEndpoints {
+	for _, endpoint := range subscriptionEndpoints() {
 		_, err := client.Do("POST", endpoint, "")
 		if err != nil {
 			log.Printf("[TSW] Failed to create subscription %s: %v", endpoint, err)

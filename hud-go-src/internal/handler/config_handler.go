@@ -82,6 +82,26 @@ func (h *ConfigHandler) GetCurrentKey(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetApiCalls returns the sectioned TSW API call catalog (api_calls.json).
+func (h *ConfigHandler) GetApiCalls(w http.ResponseWriter, r *http.Request) {
+	util.JSON(w, 200, config.GetApiCalls())
+}
+
+// UpdateApiCalls replaces the entire api_calls.json with the posted sections.
+// The GUI sends the full catalog (builtin + user sections) on every save.
+func (h *ConfigHandler) UpdateApiCalls(w http.ResponseWriter, r *http.Request) {
+	var f config.ApiCallsFile
+	if err := json.NewDecoder(r.Body).Decode(&f); err != nil {
+		util.Error(w, 400, "invalid JSON: "+err.Error())
+		return
+	}
+	if err := config.SaveApiCalls(&f); err != nil {
+		util.Error(w, 500, err.Error())
+		return
+	}
+	util.JSON(w, 200, map[string]any{"success": true, "apiCalls": config.GetApiCalls()})
+}
+
 func (h *ConfigHandler) GetServerURLs(w http.ResponseWriter, r *http.Request) {
 	ip := util.GetInternalIP()
 	util.JSON(w, 200, map[string]string{

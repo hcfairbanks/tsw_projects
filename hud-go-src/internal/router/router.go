@@ -145,6 +145,14 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 	r.Get("/api/config/current-key", h.Config.GetCurrentKey)
 	r.Get("/api/config/server-urls", h.Config.GetServerURLs)
 
+	// TSW API call catalog (sectioned, stored in resources/api_calls.json).
+	r.Get("/api/api-calls", h.Config.GetApiCalls)
+	r.Put("/api/api-calls", h.Config.UpdateApiCalls)
+
+	// Custom HUDs (standalone HTML pages dropped into resources/custom_huds).
+	// listCustomHUDs lives in static.go alongside the file-serving route.
+	r.Get("/api/custom-huds", listCustomHUDs)
+
 	// Extractor (in-app per-route pak extractor — see /extractor page)
 	r.Get("/api/extractor/routes", h.Extractor.ListRoutes)
 	r.Get("/api/extractor/status", h.Extractor.Status)
@@ -212,6 +220,7 @@ func New(db *sql.DB, tswClient *tsw.Client) *chi.Mux {
 
 	// Subscriptions
 	r.Get("/api/subscription/status", h.Subscription.GetStatus)
+	r.Get("/api/subscription/test-path", h.Subscription.TestPath)
 	r.Get("/api/subscription/data", h.Subscription.GetData)
 	r.Post("/api/subscription/reset", h.Subscription.Reset)
 	r.Post("/api/subscription/delete", h.Subscription.Delete)

@@ -24,6 +24,17 @@ type ribbonEnd struct {
 
 func round7(v float64) float64 { return math.Round(v*1e7) / 1e7 }
 
+// anyNonEmpty reports whether any string in s is non-empty. Used to decide
+// whether the rails feature carries usable TrackRule data worth emitting.
+func anyNonEmpty(s []string) bool {
+	for _, v := range s {
+		if v != "" {
+			return true
+		}
+	}
+	return false
+}
+
 func isCurvedArc(r *uasset.CookedRibbon) bool {
 	return r.CurveClass == "NetworkCurveCircularArc" && r.HasRadius && r.Radius != 0 &&
 		!math.IsInf(r.Radius, 0) && !math.IsNaN(r.Radius)
@@ -33,13 +44,17 @@ func isCurvedArc(r *uasset.CookedRibbon) bool {
 // endpoints are resolved through the topology graph (next ribbon's start
 // point) so the spline lands on the network rather than overshooting.
 //
-// Returns the multi-line array (each sub-line one ribbon, in caller-order)
-// AND a per-ribbon-GUID map of the SAME vertex arrays so the per-service
-// path-builder can slice from them. Map keys are normalised ribbon GUIDs.
+// Returns the multi-line array (each sub-line one ribbon, in caller-order),
+// a per-ribbon-GUID map of the SAME vertex arrays so the per-service
+// path-builder can slice from them (keys are normalised ribbon GUIDs), AND
+// a slice of TrackRule asset names parallel to the multi-line array (one per
+// emitted sub-line — e.g. "BostonProvidenceTrackRule" vs
+// "BostonProvidenceSubwayTrackRule"; "" when the ribbon shipped no rule).
+// The route map uses the rule names to offer a "Drivable Rail only" filter.
 // Ribbons that fail the geometry checks (zero length / zero tangent) are
-// absent from both outputs, so a missing key means "no rail geometry for
+// absent from all outputs, so a missing key means "no rail geometry for
 // this ribbon" and the path-builder must treat it as a break.
-func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) ([][][2]float64, map[string][][2]float64) {
+func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) ([][][2]float64, map[string][][2]float64, []string) {
 	type endRef struct {
 		ribIdx  int
 		atStart bool
@@ -127,6 +142,7 @@ func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) (
 		}
 	}
 	var out [][][2]float64
+	var rules []string
 	perRibbon := make(map[string][][2]float64, len(ribbons))
 	for i := range ribbons {
 		r := &ribbons[i]
@@ -136,10 +152,11 @@ func buildRailsFeature(ribbons []uasset.CookedRibbon, anchor *geo.RouteAnchor) (
 		coords := sampleRibbon(r, ends[i], anchor)
 		if len(coords) >= 2 {
 			out = append(out, coords)
+			rules = append(rules, r.TrackRule)
 			perRibbon[uasset.NormalizeGUID(r.RibbonGUID)] = coords
 		}
 	}
-	return out, perRibbon
+	return out, perRibbon, rules
 }
 
 func sampleRibbon(r *uasset.CookedRibbon, e ribbonEnd, anchor *geo.RouteAnchor) [][2]float64 {

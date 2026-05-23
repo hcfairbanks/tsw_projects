@@ -65,6 +65,10 @@ func defaults() Config {
 		SaveFrequency:          1,
 		EnableSubscriptions:    true,
 		ColorScheme:            "default",
+		// ApiCalls intentionally left empty here — it's populated via
+		// mergeApiCallDefaults in Load (both the fresh-config and
+		// existing-file paths), so a config file missing apiCalls gets the
+		// builtins written to disk rather than only held in memory.
 	}
 }
 
@@ -124,10 +128,22 @@ func Load() (*Config, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			current = &cfg
-			return current, Save()
+			if saveErr := Save(); saveErr != nil {
+				return nil, saveErr
+			}
+			// Fresh install: seed api_calls.json from builtin defaults.
+			loadApiCalls(nil)
+			return current, nil
 		}
 		return nil, err
 	}
+
+	// Extract any legacy flat apiCalls (pre-split configs stored them inside
+	// configuration.json) for one-time migration into api_calls.json.
+	var probe struct {
+		ApiCalls []legacyApiCall `json:"apiCalls"`
+	}
+	_ = json.Unmarshal(data, &probe)
 
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err
@@ -136,6 +152,15 @@ func Load() (*Config, error) {
 	mu.Lock()
 	current = &cfg
 	mu.Unlock()
+
+	// If the file still carried the legacy apiCalls block, rewrite it without
+	// that key (the Config struct no longer has the field, so Save drops it).
+	if len(probe.ApiCalls) > 0 {
+		_ = Save()
+	}
+
+	// Load (and if needed migrate/seed) the separate api_calls.json.
+	loadApiCalls(probe.ApiCalls)
 
 	return current, nil
 }

@@ -137,6 +137,7 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 	}
 	search := q.Get("search")
 	countryIDStr := q.Get("country_id")
+	bestData := q.Get("best_data") // "1" = only Best Data, "0" = only non-best, "" = all
 
 	var conditions []string
 	var args []any
@@ -154,6 +155,11 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 			conditions = append(conditions, "routes.country_id = ?")
 			args = append(args, cid)
 		}
+	}
+	if bestData == "1" {
+		conditions = append(conditions, "routes.best_data = 1")
+	} else if bestData == "0" {
+		conditions = append(conditions, "routes.best_data = 0")
 	}
 
 	where := ""
@@ -177,12 +183,10 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 		"id":           "routes.id",
 		"tsw_version":  "routes.tsw_version",
 		"country_name": "countries.name",
+		"best_data":    "routes.best_data",
 	}
 	sortBy := q.Get("sort_by")
 	sortCol, ok := sortableCols[sortBy]
-	if !ok {
-		sortCol = "routes.id"
-	}
 	sortDir := strings.ToUpper(q.Get("sort_dir"))
 	if sortDir != "ASC" {
 		sortDir = "DESC"
@@ -193,7 +197,15 @@ func (h *RouteHandler) GetPaginated(w http.ResponseWriter, r *http.Request) {
 	if sortBy == "country_name" {
 		joinClause = " LEFT JOIN countries ON countries.id = routes.country_id"
 	}
-	orderBy := " ORDER BY " + sortCol + " " + sortDir + ", routes.id DESC"
+	// Default ordering (no/invalid sort_by): Best Data routes first, then
+	// alphabetical. When the user picks a column, that column leads and we
+	// tiebreak by best_data then name so the secondary order is still sensible.
+	var orderBy string
+	if !ok {
+		orderBy = " ORDER BY routes.best_data DESC, routes.name ASC"
+	} else {
+		orderBy = " ORDER BY " + sortCol + " " + sortDir + ", routes.best_data DESC, routes.name ASC"
+	}
 
 	// Data
 	offset := (page - 1) * limit

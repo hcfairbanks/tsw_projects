@@ -1,5 +1,5 @@
 {
-  "developmentMode": true,
+  "developmentMode": false,
   "apiKey": "",
   "theme": "dark",
   "language": "en",
@@ -17,7 +17,7 @@
   "saveFrequency": 0,
   "enableSubscriptions": true,
   "colorScheme": "default",
-  "extractorTswPath": "D:/SteamLibrary/steamapps/common/Train Sim World 6",
+  "extractorTswPath": "C:/Program Files (x86)/Steam/steamapps/common/Train Sim World 6",
   "extractorOutputDir": "routes_data/new",
   "extractorTempDir": "routes_data/temp",
   "extractorAutoImport": true,

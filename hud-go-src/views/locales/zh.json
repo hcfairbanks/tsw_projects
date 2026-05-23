@@ -542,6 +542,7 @@
         "layers": {
             "title": "图层：",
             "rails": "轨道",
+            "drivableRailOnly": "仅可驾驶轨道",
             "platformTracks": "站台轨道",
             "sidingTracks": "侧线",
             "lineTracks": "线路",

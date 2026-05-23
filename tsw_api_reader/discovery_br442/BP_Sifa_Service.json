@@ -1,0 +1,318 @@
+﻿{
+    "Result":  "Success",
+    "NodePath":  "CurrentDrivableActor/BP_Sifa_Service",
+    "NodeName":  "BP_Sifa_Service",
+    "Nodes":  [
+
+              ],
+    "Endpoints":  [
+                      {
+                          "Name":  "Property.SifaType",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.HasSplitVisualAuditorWarning",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DurationBeforeWarning",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.WarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.WarningStateVisual",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.WarningStateAuditory",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CurrentRandomTimeSelected",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DurationBetweenVisualAndAuditoryTrgger",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DurationBeforeEmergency",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.Simulation_Axle_1_1_TotalDistanceTravelled_M",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DistanceBeforeWarning",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DistanceBetweenWarningStates",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DistanceBindingHandle",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.IgnoreDeadmansBrakeEnforcment",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bEnabledState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsCutIn",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bActiveState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bPedalIsPressed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.HasPedalDepressActivationDelay",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.PedalEmergencyDelay",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.inPenaltyBrakeApplication",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.DoesPedalClearPenaltyBrake",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.HasMinimumSpeedRequirements",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MinimumSpeedMet",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.MinimumSpeedThreshold",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.SpeedThresholdBindingHandle",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.isDebugState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.CorrectUseScore",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bReplicates",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bAutoActivate",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Property.bIsEditorOnly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetWarningIndicatorConditions",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Debug_GetCurrentDistance",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceVisualWarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceAudioWarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForcePenaltyState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceReset",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Debug_GetSifaDistances",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Debug_GetSplit",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Debug_GetSifaTimings",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.Debug_GetSifaType",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningVisualState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningAudioState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetAllWarningStatesMet",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetWarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.SafetySystemIsUsedCorrectly",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetWarningIndicator",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_GetPedalDelay",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_GetPedalSettings",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_GetPedalState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceReset",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForcePenaltyState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceAudioWarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevicesDebug_ForceVisualWarningState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsMinimumSpeedMet",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningVisualState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningAudioState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsWarningActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_ResetFromControls",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_Acknowledge",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetPenaltyBrakeState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsCutIn",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.WarningDevices_GetIsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetDebugState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetWarningIndicatorConditions",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetPedalPressedState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetMinimumSpeedMet",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetPenaltyBrakeEnforcementState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetActiveState",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsComponentTickEnabled",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsBeingDestroyed",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.IsActive",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "Function.GetComponentTickInterval",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectName",
+                          "Writable":  false
+                      },
+                      {
+                          "Name":  "ObjectClass",
+                          "Writable":  false
+                      }
+                  ]
+}

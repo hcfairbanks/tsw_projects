@@ -542,6 +542,7 @@
         "layers": {
             "title": "Strati:",
             "rails": "Binari",
+            "drivableRailOnly": "Solo binari percorribili",
             "platformTracks": "Binari banchina",
             "sidingTracks": "Binari di raccordo",
             "lineTracks": "Linee",

@@ -542,6 +542,7 @@
         "layers": {
             "title": "Ebenen:",
             "rails": "Schienen",
+            "drivableRailOnly": "Nur befahrbare Gleise",
             "platformTracks": "Bahnsteiggleise",
             "sidingTracks": "Abstellgleise",
             "lineTracks": "Liniengleise",

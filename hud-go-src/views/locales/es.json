@@ -542,6 +542,7 @@
         "layers": {
             "title": "Capas:",
             "rails": "Vías",
+            "drivableRailOnly": "Solo vía conducible",
             "platformTracks": "Vías de andén",
             "sidingTracks": "Vías de apartadero",
             "lineTracks": "Líneas",

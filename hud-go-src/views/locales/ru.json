@@ -542,6 +542,7 @@
         "layers": {
             "title": "Слои:",
             "rails": "Рельсы",
+            "drivableRailOnly": "Только проезжие пути",
             "platformTracks": "Платформенные пути",
             "sidingTracks": "Тупиковые пути",
             "lineTracks": "Линии",

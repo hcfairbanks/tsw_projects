@@ -320,6 +320,12 @@ func (h *TimetableHandler) enrichTimetable(t map[string]any) error {
 	t["coordinate_count"] = coordCount
 	t["coordinates_complete"] = coordCount > 0
 	t["coordinates_coord_source"] = coordSource
+	// best_data: a timetable is extraction-grade when its coordinates came
+	// from the backend pak builder (coord_source='backend'), vs 'manual'
+	// (user-edited) or 'automatic' (in-game recording). Drives the "Best
+	// Data" star + filter on the index pages. (The coord_source=backend
+	// query param already filters the list server-side.)
+	t["best_data"] = coordSource != nil && *coordSource == "backend"
 
 	if len(sections) > 0 {
 		names := make([]string, len(sections))
@@ -2893,6 +2899,19 @@ func (h *TimetableHandler) ImportRouteZip(w http.ResponseWriter, r *http.Request
 			if ccode != "" && (!existingCC.Valid || existingCC.String != ccode) && countryID != nil {
 				h.db.Exec(`UPDATE routes SET country_id = ? WHERE id = ?`, *countryID, *routeID)
 			}
+		}
+
+		// best_data: the route JSON carries `best_data: true` when the pak
+		// extractor produced it (cookedmap.Build stamps it). Reflect the
+		// export's value onto the route row so the index can flag/filter
+		// extraction-grade routes. Covers both auto-import and a teammate
+		// importing a shared export zip. Absent/false → leave at 0.
+		if routeID != nil {
+			bestData := 0
+			if v, ok := rf["best_data"].(bool); ok && v {
+				bestData = 1
+			}
+			h.db.Exec("UPDATE routes SET best_data = ? WHERE id = ?", bestData, *routeID)
 		}
 
 		// Replace route_coordinates with the rails GeoJSON FeatureCollection

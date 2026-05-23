@@ -48,6 +48,12 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 		"timetableLabel":           nil,
 	}
 
+	// Raw passthrough: every call outside the "Core" section is forwarded to
+	// the frontend untouched, under its key. Core paths are parsed by the
+	// switch below into named fields (legacy HUD contract). This is the
+	// standard German Safety and all future sections follow.
+	passthroughKeys := config.PassthroughKeyByPath()
+
 	entries, ok := raw["Entries"].([]any)
 	if !ok {
 		// Log once to help debug
@@ -66,6 +72,15 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 		if !ok {
 			continue
 		}
+		path, _ := entry["Path"].(string)
+
+		// Raw passthrough first: forward the whole entry untouched (incl.
+		// NodeValid + Values), valid or not, so the HUD can interpret it
+		// itself. Applies to every non-Core call.
+		if key, ok := passthroughKeys[path]; ok {
+			data[key] = entry
+		}
+
 		valid, _ := entry["NodeValid"].(bool)
 		if !valid {
 			continue
@@ -74,7 +89,6 @@ func ParseTelemetry(raw map[string]any) map[string]any {
 		if !ok || values == nil {
 			continue
 		}
-		path, _ := entry["Path"].(string)
 
 		switch path {
 		case "DriverAid.PlayerInfo":

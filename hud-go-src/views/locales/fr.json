@@ -542,6 +542,7 @@
         "layers": {
             "title": "Couches :",
             "rails": "Rails",
+            "drivableRailOnly": "Voie conduisible uniquement",
             "platformTracks": "Voies de quai",
             "sidingTracks": "Voies de garage",
             "lineTracks": "Voies",

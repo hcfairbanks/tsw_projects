@@ -542,6 +542,7 @@
         "layers": {
             "title": "Warstwy:",
             "rails": "Tory",
+            "drivableRailOnly": "Tylko przejezdne tory",
             "platformTracks": "Tory peronowe",
             "sidingTracks": "Bocznice",
             "lineTracks": "Linie",

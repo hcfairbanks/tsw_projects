@@ -1165,23 +1165,26 @@
                 await rescanCatalog();
                 elLoadAllStatus.textContent = t('extractor.loadAllExtracting', 'Extracting + importing all content…');
                 // routes Map is populated by rescanCatalog → loadRoutes().
-                // Collect every codename so the server treats this as
-                // "extract all" rather than the empty-array shortcut.
+                // Collect EVERY codename found in the install — "Load my DLCs"
+                // deliberately IGNORES the completed marking (unlike the normal
+                // Extract flow). The user's intent: re-process every pak found
+                // and, per route, delete-and-replace its existing DB data with
+                // a fresh build. The per-route wipe is handled server-side by
+                // autoImportZip (auto_import=true) as each route finishes.
                 const codenames = [];
-                for (const [name, r] of routes) {
-                    if (r.completed) continue;
+                for (const [name] of routes) {
                     codenames.push(name);
                 }
                 if (codenames.length === 0) {
-                    elLoadAllStatus.textContent = t('extractor.loadAllNothing', 'Nothing to extract — every pak already completed.');
+                    elLoadAllStatus.textContent = t('extractor.loadAllNothing', 'Nothing to extract — no DLCs found in the install folder.');
                     return;
                 }
                 // Load my DLCs is a "give me a complete fresh build" flow:
                 // skip_existing=false so every pak gets re-extracted even
                 // if its zip is already on disk, and auto_import=true so
-                // every resulting zip gets wiped-and-re-imported. Slower
-                // than a normal Extract All click but produces a clean,
-                // up-to-date DB without any partial-run skips.
+                // every resulting zip gets wiped-and-re-imported per route.
+                // Slower than a normal Extract All click but produces a clean,
+                // up-to-date DB regardless of completed/partial-run state.
                 const r = await fetch('/api/extractor/start', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

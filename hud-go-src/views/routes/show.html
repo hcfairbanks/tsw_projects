@@ -180,6 +180,11 @@
                         <span style="display:inline-block;width:28px;height:4px;background:#0066ff;border-radius:2px"></span>
                         <span data-i18n="routes.layers.rails">Rails</span>
                     </label>
+                    <label id="drivableRailOnlyLabel" title="Hide non-drivable scenery track (subway / Underground / heritage / default-rule ribbons). Needs a route extracted with TrackRule data." style="display: none; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="drivableRailOnly" style="width: 16px; height: 16px;">
+                        <span style="display:inline-block;width:28px;height:4px;background:linear-gradient(90deg,#0066ff 0 65%,#cc4455 65% 100%);border-radius:2px"></span>
+                        <span data-i18n="routes.layers.drivableRailOnly">Drivable Rail only</span>
+                    </label>
                     <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
                         <input type="checkbox" data-layer="platform_track" checked style="width: 16px; height: 16px;">
                         <span style="display:inline-block;width:28px;height:6px;background:#ff7f00;border-radius:2px"></span>
@@ -1210,10 +1215,46 @@
             }
             return { color: '#0066ff', weight: 2, opacity: 0.9 };
         }
+        // Non-drivable / scenery rails — drawn muted + dashed so the
+        // "Drivable Rail only" filter reads clearly.
+        function styleSceneryRail() {
+            return { color: '#cc4455', weight: 2, opacity: 0.65, dashArray: '4 3' };
+        }
+        // Classify a TrackRule asset name as drivable (the route's own mainline
+        // rule) vs scenery. Scenery rules follow DTG's consistent naming:
+        // *SubwayTrackRule / *LUTrackRule / *UndergroundTrackRule /
+        // *HeritageTrackRule / *Tram* / *Metro*, plus DefaultTrackRule and the
+        // empty/no-rule case. Everything else is the playable mainline. Done
+        // client-side so the rule can be tuned without re-extracting.
+        function isDrivableRule(rule) {
+            if (!rule) return false;
+            if (/^Default/i.test(rule)) return false;
+            if (/(Subway|LU|Underground|Heritage|Tram|Metro)TrackRule/i.test(rule)) return false;
+            return true;
+        }
         // Layer keys match the data-layer attributes in #routeLayerBar.
-        var ROUTE_LAYER_KEYS = ['rails','platform_track','siding_track','line_track','running_track','platforms','signals','switches','car_stop_signs','platform_markers','collectables'];
+        // 'rails_scenery' has no checkbox of its own — it's the non-drivable
+        // half of the rails, governed by the "Rails" master + the
+        // "Drivable Rail only" modifier (see syncSceneryVisibility()).
+        var ROUTE_LAYER_KEYS = ['rails','rails_scenery','platform_track','siding_track','line_track','running_track','platforms','signals','switches','car_stop_signs','platform_markers','collectables'];
+        // Set true during render when the rails feature carries a `track_rule`
+        // array — i.e. the route was extracted with TrackRule data. Drives
+        // whether the "Drivable Rail only" control shows.
+        var hasTrackRuleData = false;
         var routeLayerGroups = {};
         var ROUTE_LAYER_LS_KEY = 'huddev.routeMap.layers';
+        // User setting (Settings page): when off, the route map ignores the
+        // stored `track_rule` data entirely — rails render as one layer with
+        // no drivable/scenery split and no "Drivable Rail only" toggle (the
+        // pre-filter visual). Default ON. The data stays stored regardless;
+        // this only controls whether the renderer uses it.
+        var DRIVABLE_FILTER_LS_KEY = 'huddev.routeMap.drivableFilter';
+        function drivableFilterEnabled() {
+            try {
+                var v = localStorage.getItem(DRIVABLE_FILTER_LS_KEY);
+                return v === null ? true : v === 'true';
+            } catch (_) { return true; }
+        }
 
         function loadLayerPrefs() {
             try {
@@ -1226,7 +1267,22 @@
             try { localStorage.setItem(ROUTE_LAYER_LS_KEY, JSON.stringify(prefs)); } catch (_) {}
         }
 
+        // Show the non-drivable rails ('rails_scenery') only when the Rails
+        // master is on AND "Drivable Rail only" is off. Called whenever either
+        // toggle changes, and once after the initial render.
+        function syncSceneryVisibility() {
+            var grp = routeLayerGroups['rails_scenery'];
+            if (!grp) return;
+            var railsBox = document.querySelector('#routeLayerBar input[data-layer="rails"]');
+            var drivBox = document.getElementById('drivableRailOnly');
+            var railsOn = railsBox ? railsBox.checked : true;
+            var drivableOnly = drivBox ? drivBox.checked : false;
+            if (railsOn && !drivableOnly) grp.addTo(routeMap);
+            else routeMap.removeLayer(grp);
+        }
+
         function renderGeoJSONFeatures(features) {
+            hasTrackRuleData = false;
             // Tear down any existing layer groups.
             ROUTE_LAYER_KEYS.forEach(function(k) {
                 if (routeLayerGroups[k]) { routeMap.removeLayer(routeLayerGroups[k]); }
@@ -1342,9 +1398,34 @@
                     });
                 } else {
                     // Base rails (MultiLineString without feature_type) → 'rails' group.
-                    var rl = L.geoJSON(feat, { style: styleRailFeature });
-                    routeLayerGroups['rails'].addLayer(rl);
-                    try { allBounds.extend(rl.getBounds()); } catch (_) {}
+                    // If the feature carries a parallel `track_rule` string array
+                    // (one per sub-line), split it: drivable mainline rules into
+                    // 'rails' (blue), scenery rules into 'rails_scenery' (muted
+                    // red) so "Drivable Rail only" can hide the scenery half. No
+                    // array (pre-fix extract) → everything to 'rails' as before.
+                    var rules = p.track_rule;
+                    if (drivableFilterEnabled() && Array.isArray(rules) && t === 'MultiLineString') {
+                        hasTrackRuleData = true;
+                        var lines = feat.geometry.coordinates || [];
+                        var drivLines = [], scenLines = [];
+                        lines.forEach(function(ln, i) {
+                            (isDrivableRule(rules[i]) ? drivLines : scenLines).push(ln);
+                        });
+                        if (drivLines.length) {
+                            var dl = L.geoJSON({ type: 'Feature', properties: {}, geometry: { type: 'MultiLineString', coordinates: drivLines } }, { style: styleRailFeature });
+                            routeLayerGroups['rails'].addLayer(dl);
+                            try { allBounds.extend(dl.getBounds()); } catch (_) {}
+                        }
+                        if (scenLines.length) {
+                            var sl = L.geoJSON({ type: 'Feature', properties: {}, geometry: { type: 'MultiLineString', coordinates: scenLines } }, { style: styleSceneryRail });
+                            routeLayerGroups['rails_scenery'].addLayer(sl);
+                            try { allBounds.extend(sl.getBounds()); } catch (_) {}
+                        }
+                    } else {
+                        var rl = L.geoJSON(feat, { style: styleRailFeature });
+                        routeLayerGroups['rails'].addLayer(rl);
+                        try { allBounds.extend(rl.getBounds()); } catch (_) {}
+                    }
                 }
             });
 
@@ -1352,13 +1433,33 @@
             try { if (allBounds.isValid()) routeMap.fitBounds(allBounds, { padding: [30, 30] }); } catch (_) {}
 
             // Apply persisted visibility, fall back to all-on if no prefs.
+            // 'rails_scenery' is excluded here — no checkbox of its own; it's
+            // governed by syncSceneryVisibility() (Rails master + Drivable
+            // Rail only modifier).
             var prefs = loadLayerPrefs() || {};
             ROUTE_LAYER_KEYS.forEach(function(k) {
+                if (k === 'rails_scenery') return;
                 var visible = prefs[k] === undefined ? true : !!prefs[k];
                 var box = document.querySelector('#routeLayerBar input[data-layer="' + k + '"]');
                 if (box) box.checked = visible;
                 if (visible && routeLayerGroups[k]) routeLayerGroups[k].addTo(routeMap);
             });
+
+            // "Drivable Rail only" modifier: only meaningful when the rails
+            // feature carried TrackRule data (route extracted with it).
+            // Otherwise hide the control so it never looks like a no-op.
+            var drivLabel = document.getElementById('drivableRailOnlyLabel');
+            var drivBox = document.getElementById('drivableRailOnly');
+            if (drivLabel && drivBox) {
+                if (hasTrackRuleData) {
+                    drivLabel.style.display = 'inline-flex';
+                    drivBox.checked = !!prefs.drivableRailOnly;
+                } else {
+                    drivLabel.style.display = 'none';
+                    drivBox.checked = false;
+                }
+            }
+            syncSceneryVisibility();
 
             // Wire change handlers (idempotent — safe to re-run on reload).
             var bar = document.getElementById('routeLayerBar');
@@ -1373,8 +1474,18 @@
                     var prefs2 = loadLayerPrefs() || {};
                     prefs2[k] = box.checked;
                     saveLayerPrefs(prefs2);
+                    // The Rails master also governs the scenery half.
+                    if (k === 'rails') syncSceneryVisibility();
                 };
             });
+            if (drivBox) {
+                drivBox.onchange = function() {
+                    syncSceneryVisibility();
+                    var prefs3 = loadLayerPrefs() || {};
+                    prefs3.drivableRailOnly = drivBox.checked;
+                    saveLayerPrefs(prefs3);
+                };
+            }
 
             window._routeGeoJSONLayer = { remove: function() {
                 ROUTE_LAYER_KEYS.forEach(function(k) {

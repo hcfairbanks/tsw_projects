@@ -542,6 +542,7 @@
         "layers": {
             "title": "レイヤー：",
             "rails": "線路",
+            "drivableRailOnly": "運転可能な線路のみ",
             "platformTracks": "プラットフォーム線路",
             "sidingTracks": "側線",
             "lineTracks": "ライン",

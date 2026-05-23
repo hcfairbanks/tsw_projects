@@ -181,6 +181,11 @@
                 <div class="country-dropdown" id="filterCountryDropdown"></div>
                 <input type="hidden" id="countryFilter">
             </div>
+            <select id="bestDataFilter" onchange="applyBestDataFilter()" style="padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); font-size: 14px;">
+                <option value="" data-i18n="routes.bestDataAll">All data</option>
+                <option value="1" data-i18n="routes.bestDataOnly">★ Best Data only</option>
+                <option value="0" data-i18n="routes.bestDataNot">Non-best only</option>
+            </select>
             <button class="btn-secondary" onclick="clearSearch()" data-i18n="common.clear">Clear</button>
         </div>
         <div id="routesList"><p class="empty-message" data-i18n="common.loading">Loading routes...</p></div>
@@ -190,7 +195,25 @@
         function t(key, fb) { return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fb; }
 
         const API_URL = '/api/routes';
-        let currentPage = 1, currentLimit = 15, currentSearch = '', currentCountryId = '';
+        let currentPage = 1, currentLimit = 15, currentSearch = '', currentCountryId = '', currentBestData = '';
+        // Persisted search state — restored on every visit so the page comes
+        // back exactly how you left it (search text, country, Best Data
+        // filter, page size). NOTE: sort is intentionally NOT persisted — the
+        // page must always *land* on the default order (Best Data first, then
+        // alphabetical). Clicking a header still sorts within the session.
+        const ROUTES_SEARCH_LS = 'huddev.routes.search';
+        function saveRoutesSearch() {
+            try {
+                localStorage.setItem(ROUTES_SEARCH_LS, JSON.stringify({
+                    search: currentSearch, country: currentCountryId, best: currentBestData,
+                    limit: currentLimit,
+                }));
+            } catch (_) {}
+        }
+        function loadRoutesSearch() {
+            try { return JSON.parse(localStorage.getItem(ROUTES_SEARCH_LS) || 'null') || {}; }
+            catch (_) { return {}; }
+        }
         let allCountries = [];
         let allRoutesForSearch = [];
         let highlightedIndex = { route: -1, country: -1 };
@@ -447,13 +470,16 @@
         let sortColumn = '';
         let sortDirection = 'ASC';
 
-        async function loadRoutes(page, limit, search, countryId) {
+        async function loadRoutes(page, limit, search, countryId, bestData) {
             page = page || 1; limit = limit || 15; search = search || ''; countryId = countryId || '';
-            currentPage = page; currentLimit = limit; currentSearch = search; currentCountryId = countryId;
+            if (bestData === undefined) bestData = currentBestData; // preserve filter across calls that don't pass it
+            currentPage = page; currentLimit = limit; currentSearch = search; currentCountryId = countryId; currentBestData = bestData;
+            saveRoutesSearch();
             try {
                 const params = new URLSearchParams({ page, limit });
                 if (search) params.set('search', search);
                 if (countryId) params.set('country_id', countryId);
+                if (bestData !== '') params.set('best_data', bestData);
                 if (sortColumn) params.set('sort_by', sortColumn);
                 if (sortDirection) params.set('sort_dir', sortDirection);
                 const response = await fetch(API_URL + '/paginated?' + params);
@@ -495,6 +521,7 @@
             let html = '<table><thead><tr>';
             html += headerCell('Name',    'common.name',    'name');
             html += headerCell('Country', 'routes.country', 'country_name');
+            html += headerCell('Best Data', 'routes.bestData', 'best_data');
             if (devMode) html += '<th class="actions" data-i18n="common.actions">Actions</th>';
             html += '</tr></thead><tbody>';
             routes.forEach(function(r) {
@@ -505,6 +532,10 @@
                 html += '<tr><td><a href="/routes/' + r.id + '">' + escapeHtml(r.name) + '</a></td>';
                 var countryFlag = country ? countryCodeToFlag(country.code) : '';
                 html += '<td>' + (country ? '<a href="/countries/' + country.id + '">' + countryFlag + escapeHtml(countryName) + '</a>' : escapeHtml(countryName)) + '</td>';
+                // Best Data star — set when the route was produced by the pak
+                // extractor (routes.best_data=1).
+                var bd = (r.best_data === 1 || r.best_data === true);
+                html += '<td style="text-align:center;" title="' + (bd ? 'Extractor-produced (best data)' : 'Not from the extractor') + '">' + (bd ? '<span style="color:#ffc107;font-size:16px;">★</span>' : '<span style="color:var(--text-muted);">—</span>') + '</td>';
                 if (devMode) {
                     html += '<td class="actions"><button class="btn-primary" onclick="showRoute(' + r.id + ')" data-i18n="common.show">Show</button>';
                     html += '<button class="btn-secondary" onclick="window.location.href=\'/routes/' + r.id + '/edit\'" data-i18n="common.edit">Edit</button>';
@@ -560,9 +591,16 @@
             document.getElementById('routeSearchInput').value = '';
             setCountryDisplay('filter', '');
             document.getElementById('routeSearchDropdown').style.display = 'none';
+            var bdSel = document.getElementById('bestDataFilter');
+            if (bdSel) bdSel.value = '';
             currentSearch = '';
             currentCountryId = '';
-            loadRoutes(1, currentLimit, '', '');
+            loadRoutes(1, currentLimit, '', '', '');
+        }
+
+        function applyBestDataFilter() {
+            var v = document.getElementById('bestDataFilter').value;
+            loadRoutes(1, currentLimit, currentSearch, currentCountryId, v);
         }
 
         function escapeHtml(text) { var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
@@ -733,13 +771,32 @@
                         el.style.display = '';
                     });
                 }
-                loadCountries().then(loadRoutes);
+                loadCountries().then(restoreSearchAndLoad);
                 loadAllRoutesForSearch();
             }).catch(function() {
-                loadCountries().then(loadRoutes);
+                loadCountries().then(restoreSearchAndLoad);
                 loadAllRoutesForSearch();
             });
         });
+
+        // Restore the last search (text / country / Best Data / sort / page
+        // size) from localStorage, reflect it in the UI, then load.
+        function restoreSearchAndLoad() {
+            var s = loadRoutesSearch();
+            // Sort is deliberately not restored — always land on the default
+            // (Best Data first, then alphabetical). sortColumn stays '' so
+            // loadRoutes sends no sort_by and the server applies that default.
+            var limit = s.limit || currentLimit;
+            var search = s.search || '';
+            var country = s.country || '';
+            var best = s.best || '';
+            // Reflect into the UI controls.
+            var si = document.getElementById('routeSearchInput'); if (si) si.value = search;
+            setCountryDisplay('filter', country);
+            var cf = document.getElementById('countryFilter'); if (cf) cf.value = country;
+            var bd = document.getElementById('bestDataFilter'); if (bd) bd.value = best;
+            loadRoutes(1, limit, search, country, best);
+        }
     </script>
 </body>
 </html>

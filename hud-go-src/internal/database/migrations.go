@@ -728,6 +728,14 @@ var migrations = []string{
 		ON train_class_electrification(train_class_id)`,
 	`CREATE INDEX IF NOT EXISTS idx_train_class_electrification_voltage
 		ON train_class_electrification(voltage_v)`,
+
+	// best_data flags routes produced by the pak extractor (the highest-
+	// fidelity source). Set by the IMPORT path from the route JSON's
+	// `best_data` field (which the extractor stamps), so both auto-import
+	// and a teammate importing a shared export zip mark the route. The
+	// routes index surfaces it as a "Best Data" star + filter. No backfill —
+	// re-extracting a route is what sets it.
+	`ALTER TABLE routes ADD COLUMN best_data INTEGER NOT NULL DEFAULT 0`,
 }
 
 // One-shot data backfills run exactly once per database. Tracked via

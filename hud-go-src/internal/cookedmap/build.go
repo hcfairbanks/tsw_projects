@@ -219,16 +219,31 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 	// builder can slice from these exact vertices instead of re-sampling
 	// (which would diverge on clothoid ribbons).
 	anchor := geo.NewRouteAnchor(originLat, originLng)
-	rails, perRibbonVerts := buildRailsFeature(allRibbons, anchor)
+	rails, perRibbonVerts, trackRules := buildRailsFeature(allRibbons, anchor)
 	tt.RibbonVertices = perRibbonVerts
+	railsProps := map[string]any{
+		"route":         opts.RouteName,
+		"ribbon_count":  len(allRibbons),
+		"geometry_mode": "arc",
+	}
+	// Per-sub-line TrackRule asset name (parallel to `coordinates`), plus a
+	// {rule: count} summary. The route map classifies these into drivable
+	// (the route's mainline rule) vs scenery (*Subway*/*LU*/*Underground*/
+	// *Heritage*/Default…) for the "Drivable Rail only" filter. Emitted only
+	// when at least one ribbon carries a rule — older paks / pre-fix extracts
+	// have none, and the UI then treats every ribbon as drivable.
+	if anyNonEmpty(trackRules) {
+		ruleCounts := map[string]int{}
+		for _, r := range trackRules {
+			ruleCounts[r]++
+		}
+		railsProps["track_rule"] = trackRules
+		railsProps["track_rule_counts"] = ruleCounts
+	}
 	railsFeat := map[string]any{
-		"type": "Feature",
-		"properties": map[string]any{
-			"route":         opts.RouteName,
-			"ribbon_count":  len(allRibbons),
-			"geometry_mode": "arc",
-		},
-		"geometry": map[string]any{"type": "MultiLineString", "coordinates": rails},
+		"type":       "Feature",
+		"properties": railsProps,
+		"geometry":   map[string]any{"type": "MultiLineString", "coordinates": rails},
 	}
 
 	// Per-feature Point layers — re-use the existing GeoJSON writers.
@@ -303,6 +318,12 @@ func Build(opts Options, w io.Writer) (Stats, error) {
 		"route":      opts.RouteName,
 		"origin_lat": originLat,
 		"origin_lng": originLng,
+		// best_data marks this route as extractor-produced (highest-fidelity
+		// source). Only cookedmap.Build writes route_<X>.json, so its mere
+		// presence already implies extraction — but we stamp it explicitly so
+		// the import path can set routes.best_data without inferring it, and
+		// so the flag survives export → share → re-import.
+		"best_data":  true,
 		"features":   allFeatures,
 	}
 	if opts.CrossPakReferenceName != "" {
