@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Map - TSW HUD Project</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        @keyframes recording-glow {
+            0%, 100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 3px #ff0000);
+            }
+            50% {
+                opacity: 0.6;
+                filter: drop-shadow(0 0 8px #ff0000) drop-shadow(0 0 12px #ff0000);
+            }
+        }
+
+        .recording-indicator {
+            color: #ff0000;
+            display: inline-block;
+            animation: recording-glow 1.5s ease-in-out infinite;
+        }
+
+        .recording-indicator.paused {
+            color: #ffaa00;
+            animation: none;
+        }
+
+        .recording-indicator.stopped {
+            color: #999;
+            animation: none;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 320px;
+            max-width: 350px;
+            overflow-y: auto;
+        }
+
+        .info-panel h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 10px;
+        }
+
+        .info-group {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .info-group h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .timetable-dropdown {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 8px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .timetable-dropdown:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+
+        .typeahead-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .typeahead-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 8px;
+            background: white;
+            color: #333;
+        }
+
+        .typeahead-input:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+
+        .typeahead-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1001;
+        }
+
+        .typeahead-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .typeahead-item:last-child {
+            border-bottom: none;
+        }
+
+        .typeahead-item:hover,
+        .typeahead-item.highlighted {
+            background: #f0f0f0;
+        }
+
+        .typeahead-item .route-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .typeahead-item .country-name {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .legend {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend h3 {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .legend-line {
+            width: 20px;
+            height: 4px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .follow-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .follow-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .follow-btn.following {
+            background: #dc2626;
+        }
+
+        .follow-btn.following:hover {
+            background: #b91c1c;
+        }
+
+        .nav-link {
+            display: inline-block;
+            color: #0066ff;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .position-display {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #333;
+        }
+
+        /* Custom Modal Styles */
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 100px;
+        }
+
+        .custom-modal-overlay.show {
+            display: flex;
+        }
+
+        .custom-modal {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            min-width: 350px;
+            max-width: 500px;
+            max-height: calc(100vh - 150px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .custom-modal-header {
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .custom-modal-header.error {
+            background: #dc3545;
+        }
+
+        .custom-modal-body {
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .custom-modal-footer {
+            padding: 15px 20px;
+            text-align: right;
+            border-top: 1px solid #eee;
+        }
+
+        .custom-modal-footer button {
+            padding: 10px 25px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Modal for Save Results -->
+    <div id="saveResultModal" class="custom-modal-overlay">
+        <div class="custom-modal">
+            <div class="custom-modal-header" id="modalHeader">Recording Saved</div>
+            <div class="custom-modal-body" id="modalBody"></div>
+            <div class="custom-modal-footer">
+                <button class="btn-primary" onclick="closeSaveModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <a href="/" class="nav-link" data-i18n="record.backToHome">Back to Home</a>
+        <h2><span class="recording-indicator stopped" id="recordingIndicator">●</span> <span id="recordingText">Not Recording</span></h2>
+
+        <div class="info-item" style="margin-bottom: 15px;">
+            <span class="info-label" data-i18n="record.coordinates">Coordinates:</span>
+            <span class="info-value" id="coordCount">0</span>
+        </div>
+
+        <div class="info-group">
+            <div id="timetableSelector" style="margin-bottom: 10px;">
+                <label class="info-label" data-i18n="record.selectRoute">Select Route:</label>
+                <div class="typeahead-container">
+                    <input type="text" class="typeahead-input" id="routeInput" placeholder="Type to search routes..." autocomplete="off" data-i18n-placeholder="record.typeToSearchRoutes">
+                    <div id="routeDropdown" class="typeahead-dropdown"></div>
+                    <input type="hidden" id="routeSelect" value="">
+                </div>
+                <label class="info-label" style="margin-top: 8px;" data-i18n="record.selectFormation">Select Formation:</label>
+                <select class="timetable-dropdown" id="formationSelect" disabled>
+                    <option value="" data-i18n="record.selectRouteFirst">-- Select a route first --</option>
+                </select>
+                <label class="info-label" style="margin-top: 8px;" data-i18n="record.selectTimetable">Select Timetable:</label>
+                <div class="typeahead-container">
+                    <input type="text" class="typeahead-input" id="timetableInput" placeholder="Select a formation first" autocomplete="off" disabled data-i18n-placeholder="record.selectFormationFirst">
+                    <div id="timetableDropdown" class="typeahead-dropdown"></div>
+                    <input type="hidden" id="timetableSelect" value="">
+                </div>
+            </div>
+            <div style="margin-top: 8px; margin-bottom: 4px;">
+                <label style="display: flex; align-items: center; cursor: pointer; font-size: 13px;">
+                    <input type="checkbox" id="newRecordingCheckbox" onchange="handleNewRecordingToggle()" style="margin-right: 6px;">
+                    <span>New Recording</span>
+                </label>
+                <div id="newRecordingInfo" style="font-size: 11px; color: #888; display: none; margin-top: 2px;">
+                    Existing coordinates will be ignored
+                </div>
+            </div>
+            <div class="controls-row">
+                <button class="btn-success" id="mainBtn" onclick="handleMainButton()" data-i18n="common.start">Start</button>
+                <button class="btn-danger" id="stopBtn" onclick="stopRecording()" data-i18n="common.save">Save</button>
+                <button class="btn-secondary" id="resetBtn" onclick="resetRecording()" data-i18n="common.reset">Reset</button>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <h3 data-i18n="record.recordingMode">Recording Mode</h3>
+            <div style="display: flex; gap: 15px; margin-bottom: 5px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="recordMode" value="manual" onchange="handleModeChange(this.value)" style="margin-right: 5px;">
+                    <span data-i18n="record.manualMode">Manual</span>
+                </label>
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="recordMode" value="automatic" checked onchange="handleModeChange(this.value)" style="margin-right: 5px;">
+                    <span data-i18n="record.automaticMode">Automatic</span>
+                </label>
+            </div>
+            <div id="autoModeInfo" style="font-size: 11px; color: #666;" data-i18n="record.automaticDesc">
+                Auto-stops after 4 min of no movement
+            </div>
+        </div>
+
+        <div class="info-group">
+            <h3 data-i18n="record.currentPosition">Current Position</h3>
+            <div class="info-item">
+                <span class="info-label" data-i18n="record.latitude">Latitude:</span>
+                <span class="info-value position-display" id="currentLat">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label" data-i18n="record.longitude">Longitude:</span>
+                <span class="info-value position-display" id="currentLng">-</span>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <h3 data-i18n="record.saveStationPosition">Save Station Position</h3>
+            <label class="info-label" data-i18n="record.selectStation">Select Station:</label>
+            <select class="timetable-dropdown" id="stationDropdown">
+                <option value="" data-i18n="record.startRecordingFirst">-- Start recording first --</option>
+            </select>
+            <div class="controls-row">
+                <button class="btn-success" id="saveBtn" onclick="saveToTimetable()" disabled data-i18n="record.savePosition">Save Position</button>
+            </div>
+        </div>
+
+        <div class="dev-tools" style="background: rgba(255, 0, 0, 0.15); border: 2px solid rgba(255, 0, 0, 0.4); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+            <h3 style="color: #cc0000; margin: 0 0 10px 0; font-size: 14px;" data-i18n="record.developmentTools">Development Tools</h3>
+
+            <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 0, 0, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleLoadFile()">
+                    <label style="font-size: 12px; color: #aaa; font-weight: 600; cursor: pointer;" data-i18n="record.loadRecordingFile">Load Recording File</label>
+                    <span id="loadFileToggle" style="font-size: 12px; color: #aaa;">▼</span>
+                </div>
+                <div id="loadFileContent" style="margin-top: 10px;">
+                    <select class="timetable-dropdown" id="recordingFileSelect">
+                        <option value="" data-i18n="record.loading">-- Loading... --</option>
+                    </select>
+                    <div class="controls-row">
+                        <button class="btn-warning" id="loadFileBtn" onclick="loadSelectedFile()" data-i18n="record.loadFile">Load File</button>
+                        <input type="file" id="browseFileInput" accept=".json" style="display: none;" onchange="handleFileBrowse(event)">
+                        <button class="btn-secondary" onclick="document.getElementById('browseFileInput').click()" data-i18n="record.browse">Browse...</button>
+                    </div>
+                    <div id="loadFileStatus" style="margin-top: 8px; font-size: 12px; color: #aaa;"></div>
+                </div>
+            </div>
+
+            <div id="devClocksSection" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 0, 0, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleDevClocks()">
+                    <label style="font-size: 12px; color: #aaa; font-weight: 600; cursor: pointer;">Clocks</label>
+                    <span id="devClocksToggle" style="font-size: 12px; color: #aaa;">▼</span>
+                </div>
+                <div id="devClocksContent" style="margin-top: 10px;">
+                    <div style="text-align: center; margin-bottom: 8px;">
+                        <span style="font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">Stops:</span>
+                        <span id="devStopCount" style="font-family: 'Courier New', monospace; font-size: 14px; color: #000; margin-left: 4px;">0</span>
+                    </div>
+                    <div style="display: flex; gap: 12px; justify-content: space-between;">
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 10px; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">In-Game Time</div>
+                            <div id="devGameClock" style="font-family: 'Courier New', monospace; font-size: 22px; color: #00cc66; background: #1a1a1a; padding: 6px 10px; border-radius: 4px; border: 1px solid #333; letter-spacing: 2px;">--:--:--</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 10px; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Stopped</div>
+                            <div id="devStopwatch" style="font-family: 'Courier New', monospace; font-size: 22px; color: #ffaa00; background: #1a1a1a; padding: 6px 10px; border-radius: 4px; border: 1px solid #333; letter-spacing: 2px;">00:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleCoordinatesPicker()">
+                    <label style="font-size: 12px; color: #aaa; font-weight: 600; cursor: pointer;" data-i18n="record.coordinatesPicker">Coordinates Picker</label>
+                    <span id="coordsToggle" style="font-size: 12px; color: #aaa;">▼</span>
+                </div>
+                <div id="coordsPickerContent" style="margin-top: 10px;">
+                    <div style="font-size: 11px; color: #888; margin-bottom: 8px;" data-i18n="record.clickToCapture">Click on map to capture coordinates</div>
+                    <div id="pickedCoords" style="font-family: 'Courier New', monospace; font-size: 12px; color: #333; background: #f8f9fa; padding: 8px; border-radius: 4px; min-height: 40px; white-space: pre-wrap;" data-i18n="record.noCoordinatesSelected">No coordinates selected</div>
+                    <div class="controls-row">
+                        <button class="btn-primary" onclick="copyPickedCoords(event)" data-i18n="common.copy">Copy</button>
+                        <button class="btn-secondary" onclick="clearPickedCoords()" data-i18n="common.reset">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3 data-i18n="record.mapLegend">Map Legend</h3>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #0066ff;"></div>
+                <span data-i18n="record.routePath">Route Path</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffa500;"></div>
+                <span data-i18n="record.currentTrainPosition">Current Train Position</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00cc66;"></div>
+                <span data-i18n="record.savedStation">Saved Station</span>
+            </div>
+            <button class="follow-btn" id="followBtn" onclick="toggleFollowTrain()" data-i18n="record.followTrain">Follow Train</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([52.0, -0.5], 10);
+
+        // Add tile layers
+        const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        });
+        const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri',
+            maxZoom: 19
+        });
+        osm.addTo(map);
+        L.control.layers({ 'Geographic': osm, 'Satellite': satellite }).addTo(map);
+
+        // State
+        let pathCoordinates = [];
+        let pathPolyline = null;
+        let trainMarker = null;
+        let stationMarkers = new Map();
+        let isFollowingTrain = false;
+        let firstPosition = true;
+        let currentTimetableId = null;
+        let nextStationIndex = null; // Used to advance dropdown after save
+        let recordingMode = 'automatic'; // 'manual' or 'automatic'
+        let pendingRawFileDelete = null; // Raw file to delete after DB save (normal mode)
+        let isNewRecording = false; // When true, ignore existing lat/lng data
+
+        // Stopwatch state - tracks time since train stopped moving
+        let lastMovingPosition = null;   // Last GPS position when train was confirmed moving
+        let stoppedSince = null;          // Timestamp when train was detected as stopped
+        let stopwatchInterval = null;     // Interval for updating the stopwatch display
+        let stopCount = 0;               // Number of times the train has stopped
+        let movingReadings = 0;          // Consecutive "moving" readings for debounce
+        let stoppedReadings = 0;         // Consecutive "stopped" readings for debounce
+        let pendingStop = false;         // Waiting to confirm a stop
+        const GPS_NOISE_THRESHOLD = 0.000005; // ~0.5m - positions closer than this are considered noise
+        const SPEED_THRESHOLD = 2;        // Speed below this (in display units) = stopped
+        const MOVING_DEBOUNCE = 10;       // Require 10 consecutive moving readings (~1s) to confirm movement
+        const STOPPED_DEBOUNCE = 20;      // Require 20 consecutive stopped readings (~2s) to confirm a stop
+
+        // Create custom train icon
+        const trainIcon = L.divIcon({
+            className: 'train-icon',
+            html: '<div style="background: #ffa500; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255,165,0,0.8), 0 2px 6px rgba(0,0,0,0.3);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        // Store all timetables for filtering
+        let allTimetables = [];
+        let filteredTimetables = [];
+        let allRoutesWithTimetables = [];
+        let routeHighlightedIndex = -1;
+        let timetableHighlightedIndex = -1;
+
+        // Load routes that have timetables for selector
+        async function loadRoutesWithTimetables() {
+            try {
+                // Load all timetables first
+                const timetablesResponse = await fetch('/api/timetables');
+                allTimetables = await timetablesResponse.json();
+
+                // Get unique route IDs that have timetables
+                const routeIdsWithTimetables = [...new Set(allTimetables.map(t => t.route_id))];
+
+                if (routeIdsWithTimetables.length === 0) {
+                    document.getElementById('routeInput').placeholder = 'No routes with timetables';
+                    return;
+                }
+
+                // Load all routes
+                const routesResponse = await fetch('/api/routes');
+                const allRoutes = await routesResponse.json();
+
+                // Filter to only routes that have timetables
+                allRoutesWithTimetables = allRoutes.filter(r => routeIdsWithTimetables.includes(r.id));
+
+                // Setup the typeahead
+                setupRouteTypeahead();
+                console.log('Routes with timetables loaded:', allRoutesWithTimetables.length);
+            } catch (err) {
+                console.error('Failed to load routes:', err);
+            }
+        }
+
+        // Setup typeahead for route input
+        function setupRouteTypeahead() {
+            const input = document.getElementById('routeInput');
+            const dropdown = document.getElementById('routeDropdown');
+            const hiddenSelect = document.getElementById('routeSelect');
+
+            // Show dropdown on focus
+            input.addEventListener('focus', function() {
+                showRouteDropdown(this.value);
+            });
+
+            // Filter on input
+            input.addEventListener('input', function() {
+                routeHighlightedIndex = -1;
+                hiddenSelect.value = '';
+                showRouteDropdown(this.value);
+            });
+
+            // Keyboard navigation
+            input.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item[data-id]');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    routeHighlightedIndex = Math.min(routeHighlightedIndex + 1, items.length - 1);
+                    updateRouteHighlight(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    routeHighlightedIndex = Math.max(routeHighlightedIndex - 1, 0);
+                    updateRouteHighlight(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (routeHighlightedIndex >= 0 && items[routeHighlightedIndex]) {
+                        items[routeHighlightedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Hide dropdown on click outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.typeahead-container')) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function updateRouteHighlight(items) {
+            items.forEach((item, idx) => {
+                item.classList.toggle('highlighted', idx === routeHighlightedIndex);
+            });
+            if (routeHighlightedIndex >= 0 && items[routeHighlightedIndex]) {
+                items[routeHighlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showRouteDropdown(filter) {
+            const dropdown = document.getElementById('routeDropdown');
+            const filterLower = (filter || '').toLowerCase();
+
+            const filtered = allRoutesWithTimetables.filter(route =>
+                route.name.toLowerCase().includes(filterLower)
+            );
+
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: #999;">No routes found</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(route => `
+                    <div class="typeahead-item" data-id="${route.id}" data-name="${route.name}">
+                        <div class="route-name">${route.name}</div>
+                    </div>
+                `).join('');
+
+                // Add click handlers
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const name = this.dataset.name;
+                        document.getElementById('routeInput').value = name;
+                        document.getElementById('routeSelect').value = id;
+                        dropdown.style.display = 'none';
+                        loadFormationsForRoute(id);
+                        document.getElementById('mainBtn').textContent = 'Start';
+                    });
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        // Load formations for selected route directly (filtered to only those with timetables)
+        async function loadFormationsForRoute(routeId) {
+            const formationSelect = document.getElementById('formationSelect');
+            // Reset formation and timetable dropdowns
+            formationSelect.innerHTML = '<option value="">' + i18n.t('record.loading') + '</option>';
+            formationSelect.disabled = true;
+            document.getElementById('timetableInput').value = '';
+            document.getElementById('timetableInput').placeholder = i18n.t('record.selectFormationFirst');
+            document.getElementById('timetableInput').disabled = true;
+            document.getElementById('timetableSelect').value = '';
+            filteredTimetables = [];
+
+            if (!routeId) {
+                formationSelect.innerHTML = '<option value="">' + i18n.t('record.selectRouteFirst') + '</option>';
+                return;
+            }
+
+            try {
+                // Get timetables for this route
+                const timetablesForRoute = allTimetables.filter(t => t.route_id == routeId);
+
+                // Get all formation IDs that have timetables for this route
+                const formationIdsWithTimetables = [...new Set(timetablesForRoute.flatMap(t => t.formation_ids || (t.formation_id ? [t.formation_id] : [])))];
+
+                // Load formations directly for this route
+                const response = await fetch('/api/routes/' + routeId + '/formations-with-coordinates');
+                const formations = await response.json();
+
+                // Filter to formations that have timetables
+                const formationsWithTimetables = formations.filter(t => formationIdsWithTimetables.includes(t.id));
+
+                if (formationsWithTimetables.length === 0) {
+                    formationSelect.innerHTML = '<option value="">' + i18n.t('record.noFormationsWithTimetables') + '</option>';
+                    return;
+                }
+
+                formationSelect.innerHTML = '<option value="">' + i18n.t('record.selectFormation') + '</option>';
+                formationsWithTimetables.forEach(t => {
+                    const option = document.createElement('option');
+                    option.value = t.id;
+                    option.textContent = t.name;
+                    formationSelect.appendChild(option);
+                });
+                formationSelect.disabled = false;
+            } catch (err) {
+                console.error('Failed to load formations:', err);
+                formationSelect.innerHTML = '<option value="">' + i18n.t('record.errorLoadingFormations') + '</option>';
+            }
+        }
+
+        // Load timetables for selected route and formation
+        function loadTimetablesForRouteAndFormation(routeId, formationId) {
+            const timetableInput = document.getElementById('timetableInput');
+            const timetableHidden = document.getElementById('timetableSelect');
+
+            if (!routeId || !formationId) {
+                filteredTimetables = [];
+                timetableInput.value = '';
+                timetableInput.placeholder = i18n.t('record.selectFormationFirst');
+                timetableInput.disabled = true;
+                timetableHidden.value = '';
+                return;
+            }
+
+            // Filter timetables for this route that have this formation
+            // Timetables now have formation_ids array (or legacy formation_id)
+            filteredTimetables = allTimetables.filter(t => {
+                if (t.route_id != routeId) return false;
+                // Check if formation is in formation_ids array or matches legacy formation_id
+                if (t.formation_ids && Array.isArray(t.formation_ids)) {
+                    return t.formation_ids.includes(parseInt(formationId));
+                }
+                return t.formation_id == formationId;
+            });
+
+            if (filteredTimetables.length === 0) {
+                timetableInput.value = '';
+                timetableInput.placeholder = i18n.t('record.noTimetablesFound');
+                timetableInput.disabled = true;
+                timetableHidden.value = '';
+                return;
+            }
+
+            timetableInput.value = '';
+            timetableInput.placeholder = i18n.t('record.typeToSearchTimetables') || 'Type to search timetables...';
+            timetableInput.disabled = false;
+            timetableHidden.value = '';
+            setupTimetableTypeahead();
+        }
+
+        function getTimetableDisplayName(t) {
+            return t.service ? `${t.service}: ${t.service_name}` : t.service_name;
+        }
+
+        function setupTimetableTypeahead() {
+            const input = document.getElementById('timetableInput');
+            const dropdown = document.getElementById('timetableDropdown');
+            const hidden = document.getElementById('timetableSelect');
+
+            // Remove old listeners by cloning
+            const newInput = input.cloneNode(true);
+            input.parentNode.replaceChild(newInput, input);
+
+            newInput.addEventListener('focus', function() {
+                showTimetableDropdown(this.value);
+            });
+
+            newInput.addEventListener('input', function() {
+                timetableHighlightedIndex = -1;
+                hidden.value = '';
+                showTimetableDropdown(this.value);
+            });
+
+            newInput.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item[data-id]');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    timetableHighlightedIndex = Math.min(timetableHighlightedIndex + 1, items.length - 1);
+                    updateTimetableHighlight(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    timetableHighlightedIndex = Math.max(timetableHighlightedIndex - 1, 0);
+                    updateTimetableHighlight(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (timetableHighlightedIndex >= 0 && items[timetableHighlightedIndex]) {
+                        items[timetableHighlightedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function updateTimetableHighlight(items) {
+            items.forEach((item, idx) => {
+                item.classList.toggle('highlighted', idx === timetableHighlightedIndex);
+            });
+            if (timetableHighlightedIndex >= 0 && items[timetableHighlightedIndex]) {
+                items[timetableHighlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showTimetableDropdown(filter) {
+            const dropdown = document.getElementById('timetableDropdown');
+            const filterLower = (filter || '').toLowerCase();
+
+            const filtered = filteredTimetables.filter(t => {
+                const name = getTimetableDisplayName(t).toLowerCase();
+                return name.includes(filterLower);
+            });
+
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: #999;">No timetables found</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(t => `
+                    <div class="typeahead-item" data-id="${t.id}" data-name="${getTimetableDisplayName(t).replace(/"/g, '&quot;')}">
+                        <div class="route-name">${getTimetableDisplayName(t)}</div>
+                    </div>
+                `).join('');
+
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const name = this.dataset.name;
+                        document.getElementById('timetableInput').value = name;
+                        document.getElementById('timetableSelect').value = id;
+                        dropdown.style.display = 'none';
+                        // Trigger the timetable selection logic
+                        onTimetableSelected(id);
+                    });
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        // Event listeners for cascading dropdowns
+        // Note: Route selection is handled by typeahead click handlers in showRouteDropdown()
+
+        document.getElementById('formationSelect').addEventListener('change', function() {
+            const routeId = document.getElementById('routeSelect').value;
+            const formationId = this.value;
+            loadTimetablesForRouteAndFormation(routeId, formationId);
+            document.getElementById('mainBtn').textContent = 'Start';
+        });
+
+
+        // Load route data (called at init and after saves to sync with backend state)
+        async function loadRouteData() {
+            try {
+                const response = await fetch('/api/recording/route-data');
+                const data = await response.json();
+
+                // Load existing path from backend (only at init or after resume)
+                if (data.coordinates && data.coordinates.length > 0) {
+                    pathCoordinates = data.coordinates.map(c => [c.latitude, c.longitude]);
+                    document.getElementById('coordCount').textContent = pathCoordinates.length;
+
+                    if (pathPolyline) {
+                        pathPolyline.setLatLngs(pathCoordinates);
+                    } else {
+                        pathPolyline = L.polyline(pathCoordinates, {
+                            color: '#0066ff',
+                            weight: 4,
+                            opacity: 0.7
+                        }).addTo(map);
+                    }
+
+                    // Center on last known position
+                    if (firstPosition && pathCoordinates.length > 0) {
+                        const last = pathCoordinates[pathCoordinates.length - 1];
+                        map.setView(last, 15);
+                        firstPosition = false;
+                    }
+                }
+
+                // Populate station dropdown and add saved station markers
+                if (data.timetable && data.timetable.length > 0) {
+                    // Select next unsaved station on initial load
+                    populateStationDropdown(data.timetable, true);
+
+                    // Add markers for stations with saved coordinates
+                    data.timetable.forEach((entry, index) => {
+                        if (entry.latitude && entry.longitude) {
+                            addStationMarker(index, entry.latitude, entry.longitude, entry.location);
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load route data:', err);
+            }
+        }
+
+        // Populate station dropdown - preserves current selection or selects next unsaved
+        function populateStationDropdown(timetable, selectNextUnsaved = false) {
+            const dropdown = document.getElementById('stationDropdown');
+            const currentValue = dropdown.value; // Preserve current selection
+
+            dropdown.innerHTML = '';
+            let firstUnsavedIndex = null;
+
+            timetable.forEach((entry, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                const hasCoords = entry.latitude && entry.longitude;
+                const isPassThrough = entry.isPassThrough;
+
+                // Build display text with appropriate indicators
+                let displayText = `${index + 1}. ${entry.location}`;
+                if (isPassThrough) {
+                    displayText += ' [VIA]';  // Indicate pass-through entry
+                }
+                if (hasCoords) {
+                    displayText += ' [SAVED]';
+                }
+                option.textContent = displayText;
+
+                // Style pass-through entries differently
+                if (isPassThrough) {
+                    option.style.fontStyle = 'italic';
+                    option.style.color = '#666';
+                }
+
+                dropdown.appendChild(option);
+
+                // Track the first unsaved station (skip pass-through entries for auto-select)
+                if (firstUnsavedIndex === null && !hasCoords && !isPassThrough) {
+                    firstUnsavedIndex = index;
+                }
+            });
+
+            // If we need to advance to next station after a save
+            if (nextStationIndex !== null && nextStationIndex < timetable.length) {
+                dropdown.value = nextStationIndex;
+                nextStationIndex = null; // Reset the flag
+            }
+            // If explicitly selecting next unsaved (e.g., on initial load)
+            else if (selectNextUnsaved && firstUnsavedIndex !== null) {
+                dropdown.value = firstUnsavedIndex;
+            }
+            // Otherwise restore previous selection if it was valid
+            else if (currentValue !== '' && currentValue !== null && parseInt(currentValue) < timetable.length) {
+                dropdown.value = currentValue;
+            }
+            // Default: select the first unsaved if no previous selection
+            else if (firstUnsavedIndex !== null) {
+                dropdown.value = firstUnsavedIndex;
+            }
+            // Fallback: select the first entry if nothing else applies
+            else if (timetable.length > 0) {
+                dropdown.value = 0;
+            }
+        }
+
+        // Add station marker to map
+        function addStationMarker(index, lat, lng, destination) {
+            if (stationMarkers.has(index)) {
+                map.removeLayer(stationMarkers.get(index));
+            }
+
+            const stationIcon = L.divIcon({
+                className: 'station-marker',
+                html: '<div style="background-color: #00cc66; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            const marker = L.marker([lat, lng], { icon: stationIcon })
+                .bindPopup(`<strong>${index + 1}. ${destination}</strong><br>Lat: ${lat}<br>Lng: ${lng}`)
+                .addTo(map);
+
+            stationMarkers.set(index, marker);
+        }
+
+        // Handle recording mode change (manual/automatic)
+        async function handleModeChange(mode) {
+            recordingMode = mode;
+
+            // Update UI
+            const infoDiv = document.getElementById('autoModeInfo');
+            const clocksSection = document.getElementById('devClocksSection');
+            if (mode === 'automatic') {
+                infoDiv.style.display = 'block';
+                if (clocksSection) clocksSection.style.display = '';
+            } else {
+                infoDiv.style.display = 'none';
+                if (clocksSection) clocksSection.style.display = 'none';
+            }
+
+            // Send mode change to backend
+            try {
+                const response = await fetch('/api/recording/mode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: mode })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    console.log(`Recording mode set to: ${mode}`);
+                } else {
+                    console.error('Failed to set recording mode:', result.error);
+                }
+            } catch (err) {
+                console.error('Error setting recording mode:', err);
+            }
+        }
+
+        // Load current recording mode from backend (defaults to automatic if not set)
+        async function loadRecordingMode() {
+            try {
+                const response = await fetch('/api/recording/mode');
+                const result = await response.json();
+                // Always default to automatic if mode is not explicitly set
+                recordingMode = result.mode || 'automatic';
+
+                // Update radio buttons
+                const radioButtons = document.querySelectorAll('input[name="recordMode"]');
+                radioButtons.forEach(radio => {
+                    radio.checked = (radio.value === recordingMode);
+                });
+
+                // Update info div and clocks section
+                const infoDiv = document.getElementById('autoModeInfo');
+                infoDiv.style.display = recordingMode === 'automatic' ? 'block' : 'none';
+                const clocksSection = document.getElementById('devClocksSection');
+                if (clocksSection) clocksSection.style.display = recordingMode === 'automatic' ? '' : 'none';
+            } catch (err) {
+                console.error('Error loading recording mode:', err);
+                // On error, keep the default (automatic)
+            }
+        }
+
+        // Main button handler - handles Start, Resume, and Pause states
+        // Button states:
+        // - "Start": No recording, no incomplete file - starts fresh recording
+        // - "Resume": No recording, but incomplete file exists - resumes from file
+        // - "Pause": Recording is active - pauses the recording
+        // - "Resume": Recording is paused - resumes the paused recording
+        async function handleMainButton() {
+            const mainBtn = document.getElementById('mainBtn');
+            const btnText = mainBtn.textContent;
+
+            console.log(`Main button clicked: "${btnText}", state: ${currentRecordingState}`);
+
+            // If recording is active (button shows "Pause"), pause the recording
+            if (currentRecordingState === 'recording') {
+                try {
+                    const response = await fetch('/api/recording/pause', { method: 'POST' });
+                    const result = await response.json();
+                    if (!result.success) {
+                        alert('Failed to pause: ' + result.error);
+                    }
+                    // Stream will update the UI
+                } catch (err) {
+                    alert('Error pausing: ' + err.message);
+                }
+                return;
+            }
+
+            // If recording is paused, resume it
+            if (currentRecordingState === 'paused') {
+                try {
+                    const response = await fetch('/api/recording/resume', { method: 'POST' });
+                    const result = await response.json();
+                    if (!result.success) {
+                        alert('Failed to resume: ' + result.error);
+                    }
+                    // Stream will update the UI
+                } catch (err) {
+                    alert('Error resuming: ' + err.message);
+                }
+                return;
+            }
+
+            // Otherwise, we're starting or resuming from file (state is 'stopped')
+            const timetableId = document.getElementById('timetableSelect').value;
+            if (!timetableId) {
+                alert('Please select a timetable first');
+                return;
+            }
+
+            const isResumeFromFile = btnText === 'Resume';
+
+            try {
+                const response = await fetch(`/api/recording/start/${timetableId}`, { method: 'POST' });
+                const result = await response.json();
+                if (result.success) {
+                    if (isResumeFromFile) {
+                        // Resuming from file - show popup and DON'T clear existing data
+                        alert(`Recording resumed!\n\nExisting data: ${result.coordinateCount} coordinates, ${result.markerCount} markers\n\nNew coordinates will be added to the recording.`);
+                    } else {
+                        // Fresh start - clear local display
+                        pathCoordinates = [];
+                        if (pathPolyline) {
+                            map.removeLayer(pathPolyline);
+                            pathPolyline = null;
+                        }
+                        // Clear station markers
+                        stationMarkers.forEach(m => map.removeLayer(m));
+                        stationMarkers.clear();
+                    }
+                    // Reset auto-stop flag for new recording
+                    autoStopProcessed = false;
+                    // Stream will update the rest
+
+                    // Refresh recording files dropdown
+                    await loadRecordingFiles();
+                } else {
+                    alert('Failed to start recording: ' + result.error);
+                }
+            } catch (err) {
+                alert('Error starting recording: ' + err.message);
+            }
+        }
+
+        // Track current recording state for button logic
+        // 'stopped' = not recording (can start fresh or resume from file)
+        // 'recording' = actively recording (can pause)
+        // 'paused' = recording paused (can resume)
+        let currentRecordingState = 'stopped';
+        let autoStopProcessed = false;  // Prevent multiple auto-stop triggers
+        let isSaving = false;  // Prevent multiple save calls
+
+        // Custom modal functions
+        function showSaveModal(title, message, isError = false) {
+            const modal = document.getElementById('saveResultModal');
+            const header = document.getElementById('modalHeader');
+            const body = document.getElementById('modalBody');
+
+            header.textContent = title;
+            header.className = 'custom-modal-header' + (isError ? ' error' : '');
+            body.textContent = message;
+            modal.classList.add('show');
+        }
+
+        function closeSaveModal() {
+            document.getElementById('saveResultModal').classList.remove('show');
+        }
+
+        // Stop recording, process file, and save to database
+        // All processing is done in the backend with a single API call
+        async function stopRecording() {
+            // Prevent multiple simultaneous save calls
+            if (isSaving) {
+                console.log('Save already in progress, ignoring duplicate call');
+                return;
+            }
+            isSaving = true;
+
+            const stopBtn = document.getElementById('stopBtn');
+            stopBtn.disabled = true;
+            stopBtn.textContent = 'Saving...';
+
+            try {
+                // Single API call - backend handles everything:
+                // 1. Read raw file from recording_data
+                // 2. Process in memory (stop detection, path simplification, etc.)
+                // 3. Copy raw file to saved_raw_data (dev mode only)
+                // 4. Save to database (coordinates, markers, timetable entries)
+                // 5. Delete raw file from recording_data
+                // 6. Export to processed_routes (dev mode only)
+                const response = await fetch('/api/recording/stop', { method: 'POST' });
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to save recording');
+                }
+
+                console.log('Recording saved:', result);
+
+                // Build message with save results
+                let msg = `Service: ${result.serviceName}\n\n` +
+                    `Coordinates: ${result.stats.processedCoordinates}\n` +
+                    `Markers: ${result.stats.processedMarkers}\n` +
+                    `Timetable entries updated: ${result.stats.entriesSavedToDb}`;
+
+                if (result.stats.detectedStops > 0) {
+                    msg += `\nAuto-detected stops: ${result.stats.detectedStops}`;
+                }
+
+                if (result.developmentMode && result.files) {
+                    msg += `\n\nDev mode files:`;
+                    if (result.files.rawFile) {
+                        msg += `\n  Raw: saved_raw_data/${result.files.rawFile}`;
+                    }
+                    if (result.files.processedFile) {
+                        msg += `\n  Processed: processed_routes/${result.files.processedFile}`;
+                    }
+                }
+
+                if (result.warnings && result.warnings.length > 0) {
+                    msg += `\n\nWarnings:\n${result.warnings.join('\n')}`;
+                }
+
+                showSaveModal('Recording Saved', msg);
+
+                // Refresh recording files dropdown
+                await loadRecordingFiles();
+
+            } catch (err) {
+                console.error('Error saving recording:', err);
+                showSaveModal('Error', err.message, true);
+            } finally {
+                stopBtn.textContent = 'Save';
+                stopBtn.disabled = false;
+                autoStopProcessed = false;  // Reset for next recording
+                isSaving = false;  // Reset saving flag
+            }
+        }
+
+        // Reset recording - clears all state for testing
+        async function resetRecording() {
+            if (!confirm('Reset all recording state? This will clear coordinates, markers, and saved positions.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/recording/reset', { method: 'POST' });
+                const result = await response.json();
+                if (result.success) {
+                    // Clear local state
+                    pathCoordinates = [];
+                    if (pathPolyline) {
+                        map.removeLayer(pathPolyline);
+                        pathPolyline = null;
+                    }
+                    // Clear station markers
+                    stationMarkers.forEach(m => map.removeLayer(m));
+                    stationMarkers.clear();
+                    // Reset UI
+                    currentTimetableId = null;
+                    currentRecordingState = 'stopped';
+                    document.getElementById('coordCount').textContent = '0';
+                    document.getElementById('stationDropdown').innerHTML = '<option value="">' + i18n.t('record.startRecordingFirst') + '</option>';
+                    // Reset route typeahead input
+                    document.getElementById('routeInput').value = '';
+                    document.getElementById('routeDropdown').style.display = 'none';
+                    // Reset all cascading dropdowns
+                    document.getElementById('routeSelect').value = '';
+                    document.getElementById('formationSelect').innerHTML = '<option value="">' + i18n.t('record.selectRouteFirst') + '</option>';
+                    document.getElementById('formationSelect').disabled = true;
+                    document.getElementById('timetableInput').value = '';
+                    document.getElementById('timetableInput').placeholder = i18n.t('record.selectFormationFirst');
+                    document.getElementById('timetableInput').disabled = true;
+                    document.getElementById('timetableSelect').value = '';
+                    filteredTimetables = [];
+                    // Reset main button - disabled until timetable is selected
+                    const mainBtn = document.getElementById('mainBtn');
+                    mainBtn.textContent = 'Start';
+                    mainBtn.className = 'btn-success';
+                    mainBtn.disabled = true;
+                    // Reset dev tools status
+                    const statusEl = document.getElementById('loadFileStatus');
+                    if (statusEl) {
+                        statusEl.textContent = '';
+                    }
+                    // Update UI state
+                    updateUIFromRecording({ isRecording: false, isPaused: false });
+                    // Refresh recording files dropdown
+                    await loadRecordingFiles();
+                    // Clear URL parameter and redirect to clean /record page
+                    if (window.location.search) {
+                        window.history.replaceState({}, document.title, '/record');
+                    }
+                    console.log('Recording state reset');
+                } else {
+                    alert('Failed to reset: ' + result.error);
+                }
+            } catch (err) {
+                alert('Error resetting: ' + err.message);
+            }
+        }
+
+        // Save current position to timetable
+        async function saveToTimetable() {
+            const index = parseInt(document.getElementById('stationDropdown').value);
+            const latEl = document.getElementById('currentLat');
+            const lngEl = document.getElementById('currentLng');
+
+            // Use full precision values stored in dataset, not truncated display text
+            const lat = latEl.dataset.fullValue;
+            const lng = lngEl.dataset.fullValue;
+
+            if (!lat || !lng || latEl.textContent === '-') {
+                alert('No current position available');
+                return;
+            }
+
+            try {
+                const ds = latEl.dataset;
+                const payload = {
+                    index: index,
+                    latitude: parseFloat(lat),
+                    longitude: parseFloat(lng)
+                };
+                if (ds.tileX !== undefined && ds.tileY !== undefined) {
+                    payload.x = parseInt(ds.tileX, 10);
+                    payload.y = parseInt(ds.tileY, 10);
+                }
+                const response = await fetch('/api/recording/save-timetable-coords', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    // Set flag to advance to next station
+                    const dropdown = document.getElementById('stationDropdown');
+                    if (index + 1 < dropdown.options.length) {
+                        nextStationIndex = index + 1;
+                    }
+                    // Stream will update the timetable with saved coords
+                } else {
+                    alert('Failed to save: ' + result.error);
+                }
+            } catch (err) {
+                alert('Error saving: ' + err.message);
+            }
+        }
+
+        // Toggle follow train
+        function toggleFollowTrain() {
+            const btn = document.getElementById('followBtn');
+            isFollowingTrain = !isFollowingTrain;
+
+            if (isFollowingTrain) {
+                btn.textContent = 'Stop Following';
+                btn.classList.add('following');
+                if (trainMarker) {
+                    const pos = trainMarker.getLatLng();
+                    map.setView([pos.lat, pos.lng], map.getZoom());
+                }
+            } else {
+                btn.textContent = 'Follow Train';
+                btn.classList.remove('following');
+            }
+        }
+
+        // SSE stream connection
+        let eventSource = null;
+
+        function connectToStream() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            console.log('Connecting to telemetry stream...');
+            eventSource = new EventSource('/stream');
+
+            eventSource.onopen = () => {
+                console.log('SSE connection established');
+            };
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    handleStreamData(data);
+                } catch (err) {
+                    console.error('Failed to parse stream data:', err);
+                }
+            };
+
+            eventSource.onerror = (err) => {
+                console.error('SSE connection error:', err);
+                // Reconnect after 2 seconds
+                setTimeout(connectToStream, 2000);
+            };
+        }
+
+        // Handle incoming stream data
+        function handleStreamData(data) {
+            // Update current position display
+            if (data.playerPosition) {
+                const lat = data.playerPosition.latitude;
+                const lng = data.playerPosition.longitude;
+
+                // Validate coordinates - skip if they're invalid (0,0 or not real numbers)
+                // Also filter out TSW cached/stale position when game not active
+                const isStalePosition = lat === 51.380108707397724 && lng === 0.5219243867730494;
+                const isValidCoord = typeof lat === 'number' && typeof lng === 'number' &&
+                                     !isNaN(lat) && !isNaN(lng) &&
+                                     (lat !== 0 || lng !== 0) &&
+                                     !isStalePosition &&
+                                     lat >= -90 && lat <= 90 &&
+                                     lng >= -180 && lng <= 180;
+
+                if (isValidCoord) {
+                    // Store full precision for saving, display truncated
+                    document.getElementById('currentLat').textContent = lat.toFixed(6);
+                    document.getElementById('currentLng').textContent = lng.toFixed(6);
+                    document.getElementById('currentLat').dataset.fullValue = lat;
+                    document.getElementById('currentLng').dataset.fullValue = lng;
+
+                    // Capture current tile x/y (from DriverAid.PlayerInfo.currentTile) for saving
+                    const latDs = document.getElementById('currentLat').dataset;
+                    if (data.currentTile && typeof data.currentTile.x === 'number' && typeof data.currentTile.y === 'number') {
+                        latDs.tileX = data.currentTile.x;
+                        latDs.tileY = data.currentTile.y;
+                    } else {
+                        delete latDs.tileX;
+                        delete latDs.tileY;
+                    }
+
+                    // Update train marker
+                    if (trainMarker) {
+                        trainMarker.setLatLng([lat, lng]);
+                    } else {
+                        trainMarker = L.marker([lat, lng], { icon: trainIcon })
+                            .bindPopup('Current Position')
+                            .addTo(map);
+                    }
+
+                    // Add to path display if recording (for visual feedback)
+                    // The backend is the source of truth, we just add points for smooth display
+                    if (currentTimetableId && data.recording && data.recording.isRecording && !data.recording.isPaused) {
+                        const newPoint = [lat, lng];
+                        pathCoordinates.push(newPoint);
+
+                        if (pathPolyline) {
+                            pathPolyline.addLatLng(newPoint);
+                        } else {
+                            pathPolyline = L.polyline(pathCoordinates, {
+                                color: '#0066ff',
+                                weight: 4,
+                                opacity: 0.7
+                            }).addTo(map);
+                        }
+                    }
+
+                    // Center on first position or follow train
+                    if (firstPosition) {
+                        map.setView([lat, lng], 15);
+                        firstPosition = false;
+                    } else if (isFollowingTrain) {
+                        map.setView([lat, lng], map.getZoom());
+                    }
+                } else {
+                    // Reset display when coordinates are invalid (game not running)
+                    document.getElementById('currentLat').textContent = '-';
+                    document.getElementById('currentLng').textContent = '-';
+                    document.getElementById('currentLat').dataset.fullValue = '';
+                    document.getElementById('currentLng').dataset.fullValue = '';
+                    delete document.getElementById('currentLat').dataset.tileX;
+                    delete document.getElementById('currentLat').dataset.tileY;
+
+                    // Remove train marker if it exists
+                    if (trainMarker) {
+                        map.removeLayer(trainMarker);
+                        trainMarker = null;
+                    }
+                }
+            }
+
+            // Update recording state from stream
+            if (data.recording) {
+                currentTimetableId = data.recording.timetableId;
+                document.getElementById('coordCount').textContent = data.recording.coordinateCount || 0;
+
+                // Check for auto-stop trigger (only process once)
+                if (data.recording.autoStopped && !autoStopProcessed) {
+                    autoStopProcessed = true;  // Prevent multiple triggers
+                    console.log('Auto-stop triggered by backend');
+                    // Trigger the save sequence (the stopRecording alert will show the results)
+                    stopRecording();
+                    return;
+                }
+
+                // Update UI state
+                updateUIFromRecording(data.recording);
+
+                // Update timetable dropdown and station markers
+                if (data.recording.timetable && data.recording.timetable.length > 0) {
+                    // On first stream update, select the first unsaved station
+                    const isFirstPopulate = document.getElementById('stationDropdown').options.length === 0;
+                    populateStationDropdown(data.recording.timetable, isFirstPopulate);
+
+                    // Add markers for stations with saved coordinates
+                    data.recording.timetable.forEach((entry, index) => {
+                        if (entry.latitude && entry.longitude) {
+                            addStationMarker(index, entry.latitude, entry.longitude, entry.location);
+                        }
+                    });
+                }
+            } else if (currentTimetableId) {
+                // Recording stopped - clear state
+                currentTimetableId = null;
+                updateUIFromRecording({ isRecording: false, isPaused: false });
+            }
+
+            // Update in-game time clock
+            if (data.localTime) {
+                const gameClockEl = document.getElementById('devGameClock');
+                if (gameClockEl) {
+                    try {
+                        // localTime is ISO8601 e.g. "2024-01-15T14:30:00"
+                        // Extract time directly from the string to avoid timezone conversion
+                        const timePart = data.localTime.split('T')[1];
+                        if (timePart) {
+                            gameClockEl.textContent = timePart.split('.')[0].substring(0, 8);
+                        }
+                    } catch (e) {
+                        gameClockEl.textContent = '--:--:--';
+                    }
+                }
+            }
+
+            // Update stopped-train stopwatch
+            updateStopwatch(data);
+        }
+
+        // Determine if train is moving and manage stopwatch
+        function updateStopwatch(data) {
+            const speed = typeof data.speed === 'number' ? data.speed : 0;
+            const hasValidPosition = data.playerPosition &&
+                typeof data.playerPosition.latitude === 'number' &&
+                typeof data.playerPosition.longitude === 'number' &&
+                (data.playerPosition.latitude !== 0 || data.playerPosition.longitude !== 0);
+
+            // No valid data - don't update
+            if (!hasValidPosition) return;
+
+            const lat = data.playerPosition.latitude;
+            const lng = data.playerPosition.longitude;
+
+            // Use speed as primary indicator, GPS distance as secondary
+            let isMoving = speed >= SPEED_THRESHOLD;
+
+            // If speed says stopped, also check GPS drift to filter noise
+            if (!isMoving && lastMovingPosition) {
+                const dLat = Math.abs(lat - lastMovingPosition.lat);
+                const dLng = Math.abs(lng - lastMovingPosition.lng);
+                // If GPS jumped significantly beyond noise, train is actually moving
+                if (dLat > GPS_NOISE_THRESHOLD || dLng > GPS_NOISE_THRESHOLD) {
+                    isMoving = true;
+                }
+            }
+
+            if (isMoving) {
+                movingReadings++;
+                stoppedReadings = 0;
+                pendingStop = false;
+                // Only confirm movement after sustained readings to filter noise
+                if (stoppedSince !== null && movingReadings >= MOVING_DEBOUNCE) {
+                    stoppedSince = null;
+                    clearStopwatchInterval();
+                    updateStopwatchDisplay(0);
+                    lastMovingPosition = { lat, lng };
+                } else if (stoppedSince === null) {
+                    lastMovingPosition = { lat, lng };
+                }
+            } else {
+                // Train appears stopped - require sustained stopped readings before counting
+                movingReadings = 0;
+                stoppedReadings++;
+                if (stoppedSince === null && stoppedReadings >= STOPPED_DEBOUNCE) {
+                    stoppedSince = Date.now();
+                    stopCount++;
+                    const countEl = document.getElementById('devStopCount');
+                    if (countEl) countEl.textContent = stopCount;
+                    startStopwatchInterval();
+                }
+                if (!lastMovingPosition) {
+                    lastMovingPosition = { lat, lng };
+                }
+            }
+        }
+
+        function startStopwatchInterval() {
+            clearStopwatchInterval();
+            stopwatchInterval = setInterval(() => {
+                if (stoppedSince !== null) {
+                    const elapsed = Math.floor((Date.now() - stoppedSince) / 1000);
+                    updateStopwatchDisplay(elapsed);
+                }
+            }, 200);
+        }
+
+        function clearStopwatchInterval() {
+            if (stopwatchInterval) {
+                clearInterval(stopwatchInterval);
+                stopwatchInterval = null;
+            }
+        }
+
+        function updateStopwatchDisplay(totalSeconds) {
+            const el = document.getElementById('devStopwatch');
+            if (!el) return;
+
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            if (minutes >= 60) {
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                el.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            } else {
+                el.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            // Color coding: green when just stopped, yellow after 30s, red after 2min
+            if (totalSeconds === 0) {
+                el.style.color = '#ffaa00';
+            } else if (totalSeconds < 30) {
+                el.style.color = '#ffaa00';
+            } else if (totalSeconds < 120) {
+                el.style.color = '#ff6600';
+            } else {
+                el.style.color = '#ff0000';
+            }
+        }
+
+        // Update UI based on recording state from stream
+        function updateUIFromRecording(recording) {
+            const indicator = document.getElementById('recordingIndicator');
+            const text = document.getElementById('recordingText');
+            const mainBtn = document.getElementById('mainBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const saveBtn = document.getElementById('saveBtn');
+
+            if (recording.isRecording && !recording.isPaused) {
+                // Recording is active
+                currentRecordingState = 'recording';
+                indicator.className = 'recording-indicator';
+                text.textContent = 'Recording';
+                mainBtn.textContent = 'Pause';
+                mainBtn.className = 'btn-warning';
+                mainBtn.disabled = false;
+                stopBtn.disabled = false;
+                if (saveBtn) saveBtn.disabled = false;
+            } else if (recording.isPaused) {
+                // Recording is paused
+                currentRecordingState = 'paused';
+                indicator.className = 'recording-indicator paused';
+                text.textContent = 'Paused';
+                mainBtn.textContent = 'Resume';
+                mainBtn.className = 'btn-success';
+                mainBtn.disabled = false;
+                stopBtn.disabled = false;
+                if (saveBtn) saveBtn.disabled = false;
+            } else {
+                // Not recording - check if there's an incomplete file to resume
+                currentRecordingState = 'stopped';
+                indicator.className = 'recording-indicator stopped';
+                text.textContent = 'Not Recording';
+                // Button text (Start vs Resume) is set by checkForExistingRecording
+                // Keep current text if it's already "Resume", otherwise default to "Start"
+                if (mainBtn.textContent !== 'Resume') {
+                    mainBtn.textContent = 'Start';
+                }
+                mainBtn.className = 'btn-success';
+                mainBtn.disabled = false;
+                stopBtn.disabled = true;
+                if (saveBtn) saveBtn.disabled = true;
+            }
+        }
+
+        // Load config and hide dev tools if needed
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                if (!config.developmentMode) {
+                    const devTools = document.querySelector('.dev-tools');
+                    if (devTools) {
+                        devTools.style.display = 'none';
+                    }
+                    // Adjust panel to be shorter and further from top when not in dev mode
+                    const infoPanel = document.querySelector('.info-panel');
+                    if (infoPanel) {
+                        infoPanel.style.top = '80px';
+                        infoPanel.style.bottom = 'auto';
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load config:', err);
+            }
+        }
+
+        // Load recording files list for the dev tools dropdown
+        async function loadRecordingFiles() {
+            const select = document.getElementById('recordingFileSelect');
+            select.innerHTML = '<option value="">' + i18n.t('record.loading') + '</option>';
+
+            try {
+                const response = await fetch('/api/recording/list');
+                const files = await response.json();
+
+                select.innerHTML = '<option value="">' + i18n.t('record.selectFile') + '</option>';
+                files.forEach(f => {
+                    const option = document.createElement('option');
+                    option.value = f.filename;
+                    option.textContent = `${f.routeName} (${f.coordinateCount} pts) - ${f.filename}`;
+                    select.appendChild(option);
+                });
+
+                if (files.length === 0) {
+                    select.innerHTML = '<option value="">' + i18n.t('record.noRecordingFiles') + '</option>';
+                }
+            } catch (err) {
+                console.error('Failed to load recording files:', err);
+                select.innerHTML = '<option value="">' + i18n.t('record.errorLoading') + '</option>';
+            }
+        }
+
+        // Load selected file from dropdown
+        async function loadSelectedFile() {
+            const select = document.getElementById('recordingFileSelect');
+            const filename = select.value;
+            const statusEl = document.getElementById('loadFileStatus');
+
+            if (!filename) {
+                statusEl.textContent = 'Please select a file first';
+                statusEl.style.color = '#e94560';
+                return;
+            }
+
+            await loadRecordingFileByName(filename);
+        }
+
+        // Handle file browse input
+        async function handleFileBrowse(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('loadFileStatus');
+            statusEl.textContent = 'Reading file...';
+            statusEl.style.color = '#aaa';
+
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+
+                if (!data.timetableId) {
+                    statusEl.textContent = 'Error: File does not contain timetableId';
+                    statusEl.style.color = '#e94560';
+                    return;
+                }
+
+                // Upload the file to the server first, then load it
+                // For now, we'll use the file directly if it matches an existing file
+                // or show an error
+                statusEl.textContent = `File: ${file.name} (timetable ${data.timetableId})`;
+                statusEl.style.color = '#28a745';
+
+                // Check if this file exists on server
+                const response = await fetch(`/api/recording/file?file=${encodeURIComponent(file.name)}`);
+                if (response.ok) {
+                    await loadRecordingFileByName(file.name);
+                } else {
+                    statusEl.innerHTML = `<span style="color: #ffc107;">File not on server.</span> Copy to recording_data folder first.`;
+                }
+            } catch (err) {
+                statusEl.textContent = 'Error: ' + err.message;
+                statusEl.style.color = '#e94560';
+            }
+
+            // Reset file input
+            event.target.value = '';
+        }
+
+        // Load a recording file by name
+        async function loadRecordingFileByName(filename) {
+            const statusEl = document.getElementById('loadFileStatus');
+            statusEl.textContent = i18n.t('common.loading');
+            statusEl.style.color = '#aaa';
+
+            try {
+                const response = await fetch(`/api/recording/load-file?file=${encodeURIComponent(filename)}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusEl.innerHTML = `<span style="color: #28a745;">Loaded!</span> ${result.coordinateCount} coords, ${result.markerCount} markers`;
+
+                    // Update the cascading dropdowns to match the timetable
+                    await selectTimetableById(result.timetableId);
+
+                    // Update UI to show paused state (enables Save button)
+                    updateUIFromRecording({ isRecording: true, isPaused: true });
+
+                    // Load the route data to display on map
+                    await loadRouteData();
+
+                    // Refresh recording files dropdown
+                    await loadRecordingFiles();
+                } else {
+                    statusEl.textContent = 'Error: ' + result.error;
+                    statusEl.style.color = '#e94560';
+                }
+            } catch (err) {
+                statusEl.textContent = 'Error: ' + err.message;
+                statusEl.style.color = '#e94560';
+            }
+        }
+
+        // Check for existing recording when timetable is selected
+        async function checkForExistingRecording(timetableId) {
+            if (!timetableId) return;
+
+            try {
+                const response = await fetch(`/api/recording/check-existing/${timetableId}`);
+                const result = await response.json();
+
+                const mainBtn = document.getElementById('mainBtn');
+
+                if (result.exists) {
+                    mainBtn.textContent = 'Resume';
+                    console.log(`Found existing recording: ${result.filename} with ${result.coordinateCount} coordinates`);
+                } else {
+                    mainBtn.textContent = 'Start';
+                }
+            } catch (err) {
+                console.error('Error checking for existing recording:', err);
+            }
+        }
+
+        // Handle timetable selection from typeahead
+        async function onTimetableSelected(timetableId) {
+            if (timetableId) {
+                checkForExistingRecording(timetableId);
+                // Load timetable data from database and display station markers
+                await loadTimetableFromDb(timetableId);
+            } else {
+                document.getElementById('mainBtn').textContent = 'Start';
+                // Clear station markers
+                stationMarkers.forEach(m => map.removeLayer(m));
+                stationMarkers.clear();
+            }
+        }
+
+        // Close timetable dropdown on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#timetableInput') && !e.target.closest('#timetableDropdown')) {
+                const dropdown = document.getElementById('timetableDropdown');
+                if (dropdown) dropdown.style.display = 'none';
+            }
+        });
+
+        // Load timetable entries from database and display station markers
+        async function loadTimetableFromDb(timetableId) {
+            try {
+                const response = await fetch(`/api/map/route-data/${timetableId}`);
+                const data = await response.json();
+
+                console.log('Timetable data from DB:', data.timetable);
+
+                // Clear existing station markers
+                stationMarkers.forEach(m => map.removeLayer(m));
+                stationMarkers.clear();
+
+                // Populate station dropdown and add markers
+                if (data.timetable && data.timetable.length > 0) {
+                    if (isNewRecording) {
+                        // New recording mode: strip lat/lng so stations don't show as [SAVED]
+                        const cleanedTimetable = data.timetable.map(entry => ({
+                            ...entry,
+                            latitude: null,
+                            longitude: null
+                        }));
+                        populateStationDropdown(cleanedTimetable, false);
+                    } else {
+                        populateStationDropdown(data.timetable, true);
+
+                        // Add markers for stations with coordinates
+                        data.timetable.forEach((entry, index) => {
+                            if (entry.latitude && entry.longitude) {
+                                addStationMarker(index, entry.latitude, entry.longitude, entry.location);
+                            }
+                        });
+                    }
+
+                    // Load coordinates if available (skip in new recording mode)
+                    if (!isNewRecording && data.coordinates && data.coordinates.length > 0) {
+                        pathCoordinates = data.coordinates.map(c => [c.latitude, c.longitude]);
+                        document.getElementById('coordCount').textContent = pathCoordinates.length;
+
+                        if (pathPolyline) {
+                            pathPolyline.setLatLngs(pathCoordinates);
+                        } else {
+                            pathPolyline = L.polyline(pathCoordinates, {
+                                color: '#0066ff',
+                                weight: 4,
+                                opacity: 0.7
+                            }).addTo(map);
+                        }
+
+                        // Center on first coordinate
+                        if (pathCoordinates.length > 0) {
+                            map.setView(pathCoordinates[0], 12);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading timetable from DB:', err);
+            }
+        }
+
+        // Helper to select route/formation/timetable by timetable ID
+        async function selectTimetableById(timetableId) {
+            // Find the timetable in our cached list
+            const timetable = allTimetables.find(t => t.id == timetableId);
+            if (!timetable) return false;
+
+            // Set route dropdown and trigger formation load
+            const routeSelect = document.getElementById('routeSelect');
+            const routeInput = document.getElementById('routeInput');
+            routeSelect.value = timetable.route_id;
+
+            // Find and set the route name in the visible input
+            const route = allRoutesWithTimetables.find(r => r.id == timetable.route_id);
+            if (route) {
+                routeInput.value = route.name;
+            }
+
+            await loadFormationsForRoute(timetable.route_id);
+
+            // Get the first formation from timetable (formation_ids array or legacy formation_id)
+            const formationId = timetable.formation_ids && timetable.formation_ids.length > 0
+                ? timetable.formation_ids[0]
+                : timetable.formation_id;
+
+            if (formationId) {
+                // Set formation dropdown and trigger timetable load
+                const formationSelect = document.getElementById('formationSelect');
+                formationSelect.value = formationId;
+                loadTimetablesForRouteAndFormation(timetable.route_id, formationId);
+
+                // Set timetable typeahead
+                document.getElementById('timetableSelect').value = timetableId;
+                const selectedTimetable = allTimetables.find(t => t.id == timetableId);
+                if (selectedTimetable) {
+                    document.getElementById('timetableInput').value = getTimetableDisplayName(selectedTimetable);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        // Check for any existing recording file and auto-load it
+        async function checkAndLoadExistingRecording() {
+            try {
+                const response = await fetch('/api/recording/check-any-existing');
+                const result = await response.json();
+
+                if (result.exists && result.filename) {
+                    console.log(`Found existing recording: ${result.filename}`);
+                    console.log(`  Route: ${result.routeName}, Coords: ${result.coordinateCount}, Markers: ${result.markerCount}`);
+
+                    // Auto-load the file
+                    const loadResponse = await fetch(`/api/recording/load-file?file=${encodeURIComponent(result.filename)}`, {
+                        method: 'POST'
+                    });
+                    const loadResult = await loadResponse.json();
+
+                    if (loadResult.success) {
+                        // Update the cascading dropdowns to match the timetable
+                        await selectTimetableById(loadResult.timetableId);
+
+                        // Update UI to show paused state (enables Save button)
+                        updateUIFromRecording({ isRecording: true, isPaused: true });
+
+                        // Update dev tools status
+                        const statusEl = document.getElementById('loadFileStatus');
+                        if (statusEl) {
+                            statusEl.innerHTML = `<span style="color: #28a745;">Auto-loaded:</span> ${result.filename}`;
+                        }
+
+                        console.log(`Auto-loaded recording: ${loadResult.coordinateCount} coords, ${loadResult.markerCount} markers`);
+                        return true;
+                    }
+                }
+                return false;
+            } catch (err) {
+                console.error('Error checking for existing recording:', err);
+                return false;
+            }
+        }
+
+        // Handle New Recording checkbox toggle
+        function handleNewRecordingToggle() {
+            isNewRecording = document.getElementById('newRecordingCheckbox').checked;
+            document.getElementById('newRecordingInfo').style.display = isNewRecording ? 'block' : 'none';
+
+            // If toggling on, clear existing path and station markers
+            if (isNewRecording) {
+                pathCoordinates = [];
+                document.getElementById('coordCount').textContent = '0';
+                if (pathPolyline) {
+                    map.removeLayer(pathPolyline);
+                    pathPolyline = null;
+                }
+                stationMarkers.forEach(m => map.removeLayer(m));
+                stationMarkers.clear();
+            }
+
+            // Re-load current timetable with new setting
+            const timetableId = document.getElementById('timetableSelect').value;
+            if (timetableId) {
+                loadTimetableFromDb(timetableId);
+            }
+        }
+
+        // Coordinates picker state
+        let pickedLat = null;
+        let pickedLng = null;
+        let coordsPickerMarker = null;
+
+        // Toggle load file section visibility
+        function toggleLoadFile() {
+            const content = document.getElementById('loadFileContent');
+            const toggle = document.getElementById('loadFileToggle');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
+
+        // Toggle dev clocks visibility
+        function toggleDevClocks() {
+            const content = document.getElementById('devClocksContent');
+            const toggle = document.getElementById('devClocksToggle');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
+
+        // Toggle coordinates picker visibility
+        function toggleCoordinatesPicker() {
+            const content = document.getElementById('coordsPickerContent');
+            const toggle = document.getElementById('coordsToggle');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
+
+        // Map click handler for coordinates picker
+        function setupCoordinatesPicker() {
+            map.on('click', function(e) {
+                pickedLat = e.latlng.lat;
+                pickedLng = e.latlng.lng;
+                updatePickedCoords();
+
+                // Add or move marker
+                if (coordsPickerMarker) {
+                    coordsPickerMarker.setLatLng(e.latlng);
+                } else {
+                    const pickerIcon = L.divIcon({
+                        className: 'picker-marker',
+                        html: '<div style="background: #ff00ff; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 8px rgba(255,0,255,0.6);"></div>',
+                        iconSize: [14, 14],
+                        iconAnchor: [7, 7]
+                    });
+                    coordsPickerMarker = L.marker(e.latlng, { icon: pickerIcon }).addTo(map);
+                    // Click on marker to remove it
+                    coordsPickerMarker.on('click', function(ev) {
+                        L.DomEvent.stopPropagation(ev);
+                        clearPickedCoords();
+                    });
+                }
+            });
+        }
+
+        // Update picked coordinates display
+        function updatePickedCoords() {
+            const display = document.getElementById('pickedCoords');
+            if (pickedLat !== null && pickedLng !== null) {
+                display.textContent = `Latitude: ${pickedLat}\nLongitude: ${pickedLng}`;
+            } else {
+                display.textContent = 'No coordinates selected';
+            }
+        }
+
+        // Copy picked coordinates in JSON format
+        function copyPickedCoords(e) {
+            if (pickedLat === null || pickedLng === null) {
+                alert('No coordinates to copy. Click on the map first.');
+                return;
+            }
+            const text = `"longitude": ${pickedLng},\n"latitude": ${pickedLat},`;
+            const btn = e ? e.target : document.querySelector('#coordsPickerContent .btn-primary');
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = originalText; }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback - still show success if text was likely copied
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = originalText; }, 1500);
+            });
+        }
+
+        // Clear picked coordinates
+        function clearPickedCoords() {
+            pickedLat = null;
+            pickedLng = null;
+            updatePickedCoords();
+            if (coordsPickerMarker) {
+                map.removeLayer(coordsPickerMarker);
+                coordsPickerMarker = null;
+            }
+        }
+
+        // Initialize
+        async function initialize() {
+            await loadRoutesWithTimetables();
+
+            // Setup modal overlay click to close
+            document.getElementById('saveResultModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSaveModal();
+                }
+            });
+
+            // Setup coordinates picker click handler
+            setupCoordinatesPicker();
+
+            // Check for any existing recording file and auto-load it
+            const hasExisting = await checkAndLoadExistingRecording();
+
+            // Load existing recording data if any (for path display)
+            await loadRouteData();
+
+            // Load recording files for dev tools
+            await loadRecordingFiles();
+
+            // Load config to hide dev tools if needed
+            await loadConfig();
+
+            // Load recording mode setting
+            await loadRecordingMode();
+
+            // Check URL parameters for pre-selected timetable
+            const urlParams = new URLSearchParams(window.location.search);
+            const timetableIdParam = urlParams.get('timetable_id');
+            const routeId = urlParams.get('route_id');
+            const formationId = urlParams.get('formation_id');
+
+            // If we have a timetable_id param, select it directly
+            if (timetableIdParam) {
+                console.log(`Record map opened with timetable_id=${timetableIdParam}`);
+                const selected = await selectTimetableById(parseInt(timetableIdParam));
+                if (selected) {
+                    // Load the timetable data for the map
+                    await loadTimetableFromDb(timetableIdParam);
+                }
+            } else if (routeId || formationId) {
+                // If we have route/formation params, try to find a matching timetable
+                console.log(`Record map opened with route_id=${routeId}, formation_id=${formationId}`);
+            }
+
+            // Connect to stream - all state updates come from here
+            connectToStream();
+        }
+
+        // initialize() called after i18n.init() below
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+        i18n.init().then(function() {
+            initialize();
+        });
+    </script>
+</body>
+</html>

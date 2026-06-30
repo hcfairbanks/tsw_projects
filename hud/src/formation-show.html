@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Formation</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .crumbs a { color: var(--accent); }
+
+    .header-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin: 4px 0 14px 0; }
+    .header-row h1 { margin: 0; }
+    .header-row .actions { display: flex; gap: 8px; }
+    .header-row .actions button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .header-row .actions button:hover { border-color: var(--accent); }
+
+    .top-wrap { display: grid; grid-template-columns: minmax(280px, 460px) 1fr; gap: 16px; max-width: 1200px; }
+    .top-wrap.no-class { grid-template-columns: 1fr; }
+    .thumb {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      aspect-ratio: 522 / 208;
+      background-position: center; background-size: cover; background-repeat: no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.85rem;
+    }
+
+    .panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; max-width: 1200px; }
+    .panel h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; display:flex; align-items:baseline; gap:8px; }
+    .panel h2 .count { color: var(--muted); font-weight: 500; font-size: 0.85rem; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; gap: 8px 18px; font-size: 0.9rem; align-items: center; }
+    .kv .k { color: var(--muted); }
+    .kv .v { color: var(--text); }
+    .kv .v code { background: var(--bg3); padding: 1px 6px; border-radius: 3px; font-size: 0.85rem; }
+    .kv .v.muted { color: var(--muted); font-style: italic; }
+
+    table.list { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    table.list thead th { background: var(--bg3); padding: 7px 10px; text-align: left; font-size: 0.7rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table.list tbody td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    table.list tbody tr:hover { background: rgba(120,170,255,0.06); }
+    table.list a { color: var(--accent); text-decoration: none; }
+    table.list a:hover { text-decoration: underline; }
+    code.id { background: var(--bg3); padding: 1px 6px; border-radius: 3px; font-size: 0.78rem; }
+    .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--bg3); color: var(--muted); font-size: 0.72rem; margin-left: 4px; }
+    .pill.lead { background: rgba(95,211,122,0.18); color: var(--good); }
+    .pill.flip { background: rgba(255,178,77,0.18); color: var(--warn); }
+    .err { color: var(--bad); margin: 12px 0; }
+    .empty { color: var(--muted); padding: 12px 4px; font-style: italic; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="crumbs"><a href="dev.html?sub=formations" data-i18n="shell.formations.crumbFormations">← Formations</a></div>
+      <div class="header-row">
+        <h1 id="title" data-i18n="common.loading">Loading…</h1>
+        <div class="actions"><button id="back" data-i18n="common.back">Back</button></div>
+      </div>
+      <div id="err" class="err" style="display:none;"></div>
+      <div id="panels"></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('dev');
+
+    const { invoke } = window.__TAURI__.core;
+    const id = Number(new URLSearchParams(location.search).get('id') || 0);
+
+    document.getElementById('back').addEventListener('click', () =>
+      history.length > 1 ? history.back() : (location.href = 'dev.html?sub=formations'));
+
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const fmt = (v) => (v === null || v === undefined || v === '')
+      ? '<span class="v muted">—</span>' : esc(v);
+    const fmtNum = (v, suffix) => (v === null || v === undefined || v === '')
+      ? '<span class="v muted">—</span>'
+      : Math.round(Number(v) * 10) / 10 + (suffix ? ' ' + suffix : '');
+
+    async function loadThumb(path) {
+      if (!path) return '';
+      try {
+        const urls = await invoke('train_class_thumbnails', { paths: [path] });
+        return (urls && urls[0]) || '';
+      } catch { return ''; }
+    }
+
+    async function load() {
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      if (!id) { err.textContent = t('shell.formations.noIdInUrl', 'no id in URL'); err.style.display = ''; return; }
+      try {
+        const d = await invoke('formation_detail', { id });
+        const f = d.formation || {};
+        const cls = d.train_class || null;
+
+        const title = f.name || t('shell.formations.unnamedFormation', '(unnamed formation)');
+        document.getElementById('title').textContent = title;
+        document.title = 'TSW HUD · ' + title;
+
+        let thumbHtml = '';
+        if (cls && cls.thumbnail_path) {
+          const url = await loadThumb(cls.thumbnail_path);
+          thumbHtml = url
+            ? `<div class="thumb" style="background-image: url('${url}');"></div>`
+            : `<div class="thumb">${esc(t('shell.formations.noThumbnail', 'no thumbnail'))}</div>`;
+        } else if (cls) {
+          thumbHtml = `<div class="thumb">${esc(t('shell.formations.noThumbnail', 'no thumbnail'))}</div>`;
+        }
+
+        // Consist: ordered cars.
+        const vehiclesRows = (d.vehicles || []).map((v) => {
+          const tags = [];
+          if (v.is_lead)    tags.push('<span class="pill lead">LEAD</span>');
+          if (v.is_flipped) tags.push('<span class="pill flip">FLIPPED</span>');
+          return `<tr>
+            <td>${v.position}</td>
+            <td>${fmt(v.friendly_name || v.class_name) || '<span class="v muted">—</span>'}</td>
+            <td>${v.vehicle_category ? fmt(v.vehicle_category) : '<span class="v muted">—</span>'}</td>
+            <td>${v.livery_id ? '<code class="id">' + esc(v.livery_id) + '</code>' : '<span class="v muted">—</span>'}</td>
+            <td>${fmtNum(v.length_m, 'm')}</td>
+            <td><code class="id">${esc(v.vehicle_id)}</code> ${tags.join(' ')}</td>
+          </tr>`;
+        }).join('');
+
+        const unnamed = t('shell.formations.unnamed', '(unnamed)');
+        const routesRows = (d.routes || []).map((r) => `<tr>
+          <td><a href="route-show.html?id=${r.id}">${esc(r.name || unnamed)}</a></td>
+          <td>${r.country_code ? '<code class="id">' + esc(r.country_code) + '</code> ' : ''}${esc(r.country) || '<span class="v muted">—</span>'}</td>
+        </tr>`).join('');
+
+        const ttRows = (d.timetables || []).map((tt) => `<tr>
+          <td><a href="timetable-show.html?id=${tt.id}">${esc(tt.service_name || unnamed)}</a></td>
+          <td>${fmt(tt.current_service_name)}</td>
+          <td>${tt.route_id ? '<a href="route-show.html?id=' + tt.route_id + '">' + esc(tt.route) + '</a>' : '<span class="v muted">—</span>'}</td>
+        </tr>`).join('');
+
+        const ttCount = d.timetable_total || (d.timetables ? d.timetables.length : 0);
+        const ttCapNote = (d.timetables && d.timetables.length < ttCount)
+          ? ` ${t('shell.formations.showingFirst', '(showing first {n})').replace('{n}', d.timetables.length)}` : '';
+
+        const identityPanel = `<div class="panel" style="margin: 0;">
+          <h2>${esc(t('shell.formations.identity', 'Identity'))}</h2>
+          <div class="kv">
+            <div class="k">${esc(t('formations.name', 'Name'))}</div>      <div class="v">${fmt(f.name)}</div>
+            <div class="k">${esc(t('shell.formations.trainClass', 'Train class'))}</div><div class="v">${
+              cls ? '<a href="train-class-show.html?id=' + cls.id + '">' + esc(cls.name) + '</a>'
+                  + (cls.manufacturer_name ? ' <span class="pill">' + esc(cls.manufacturer_name) + '</span>' : '')
+                  : '<span class="v muted">—</span>'
+            }</div>
+            <div class="k">${esc(t('formations.livery', 'Livery'))}</div>    <div class="v">${f.livery_id ? '<code>' + esc(f.livery_id) + '</code>' : '<span class="v muted">—</span>'}</div>
+            <div class="k">${esc(t('formations.length', 'Length'))}</div>    <div class="v">${fmtNum(f.length_m, 'm')}</div>
+            <div class="k">${esc(t('shell.formations.carCount', 'Car count'))}</div> <div class="v">${f.car_count != null ? esc(f.car_count) : '<span class="v muted">—</span>'}</div>
+            <div class="k">${esc(t('shell.formations.dbId', 'DB id'))}</div>     <div class="v"><code>${f.id}</code></div>
+          </div>
+        </div>`;
+
+        document.getElementById('panels').innerHTML = `
+          <div class="top-wrap ${cls ? '' : 'no-class'}">
+            ${cls ? thumbHtml : ''}
+            ${identityPanel}
+          </div>
+
+          <div class="panel">
+            <h2>${esc(t('formations.consist', 'Consist'))} <span class="count">${(d.vehicles || []).length} ${esc((d.vehicles || []).length === 1 ? t('shell.formations.carSingular', 'car') : t('shell.formations.carPlural', 'cars'))}</span></h2>
+            ${(d.vehicles && d.vehicles.length) ? `
+              <table class="list">
+                <thead><tr>
+                  <th>${esc(t('formations.position', '#'))}</th><th>${esc(t('shell.formations.colVehicle', 'Vehicle'))}</th><th>${esc(t('formations.category', 'Category'))}</th><th>${esc(t('formations.livery', 'Livery'))}</th>
+                  <th>${esc(t('formations.length', 'Length'))}</th><th>${esc(t('common.id', 'ID'))}</th>
+                </tr></thead>
+                <tbody>${vehiclesRows}</tbody>
+              </table>` : `<div class="empty">${esc(t('shell.formations.noConsist', 'no consist captured for this formation'))}</div>`}
+          </div>
+
+          <div class="panel">
+            <h2>${esc(t('nav.routes', 'Routes'))} <span class="count">${(d.routes || []).length}</span></h2>
+            ${(d.routes && d.routes.length) ? `
+              <table class="list">
+                <thead><tr><th>${esc(t('shell.formations.colRoute', 'Route'))}</th><th>${esc(t('routes.country', 'Country'))}</th></tr></thead>
+                <tbody>${routesRows}</tbody>
+              </table>` : `<div class="empty">${esc(t('shell.formations.noRoutesLink', 'not linked to any route via route_formations'))}</div>`}
+          </div>
+
+          <div class="panel">
+            <h2>${esc(t('nav.timetables', 'Timetables'))} <span class="count">${ttCount}${ttCapNote}</span></h2>
+            ${(d.timetables && d.timetables.length) ? `
+              <table class="list">
+                <thead><tr><th>${esc(t('timetables.service', 'Service'))}</th><th>${esc(t('shell.formations.colCurrentService', 'Current service'))}</th><th>${esc(t('shell.formations.colRoute', 'Route'))}</th></tr></thead>
+                <tbody>${ttRows}</tbody>
+              </table>` : `<div class="empty">${esc(t('shell.formations.noTimetablesRef', 'no timetables reference this formation'))}</div>`}
+          </div>
+        `;
+      } catch (e) {
+        err.textContent = t('shell.formations.loadFailed', 'load failed: ') + e;
+        err.style.display = '';
+        document.getElementById('title').textContent = t('shell.formations.errorTitle', '(error)');
+      }
+    }
+
+    initPageI18n(() => load());
+  </script>
+</body>
+</html>

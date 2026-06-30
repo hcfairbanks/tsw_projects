@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Train Classes</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 14px; }
+    .filters label { color: var(--muted); font-size: 0.78rem; }
+    .filters input[type="text"], .filters select {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 8px; font-size: 0.85rem;
+    }
+    .filters input:focus, .filters select:focus { outline: none; border-color: var(--accent); }
+    .filters .actions { margin-left: auto; display: flex; gap: 6px; }
+    .filters button {
+      background: var(--bg2); color: var(--text); border: 1px solid var(--border);
+      border-radius: 5px; padding: 5px 14px; font-size: 0.82rem; cursor: pointer;
+    }
+    .filters button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+    .filters button:hover { border-color: var(--accent); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .tile {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; transition: border-color 0.12s, transform 0.12s;
+    }
+    .tile a { display: block; color: inherit; text-decoration: none; }
+    .tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .tile-img {
+      width: 100%; aspect-ratio: 522 / 208;
+      background: var(--bg3) center / cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.78rem;
+    }
+    .tile-body { padding: 12px 14px; }
+    .tile-name { font-weight: 700; font-size: 0.98rem; color: var(--text); margin-bottom: 4px; line-height: 1.25; }
+    .tile-mfg  { color: var(--muted); font-size: 0.78rem; margin-bottom: 6px; }
+    .tile-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+    .pill {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: var(--bg3); color: var(--text);
+      font-size: 0.72rem; letter-spacing: 0.2px;
+    }
+    .pill.electric { background: rgba(40,120,230,0.18); color: #5aa0ff; }
+    .pill.diesel   { background: rgba(200,80,0,0.18);   color: #ffaa66; }
+    .pill.notdriv  { background: rgba(255,255,255,0.05); color: var(--muted); }
+
+    .footer-bar { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 0.85rem; color: var(--muted); }
+    .footer-bar .spacer { flex: 1; }
+    .footer-bar button {
+      background: var(--bg2); color: var(--text); border: 1px solid var(--border);
+      border-radius: 5px; padding: 4px 10px; cursor: pointer;
+    }
+    .footer-bar button:disabled { opacity: 0.4; cursor: default; }
+    .footer-bar button:hover { border-color: var(--accent); }
+
+    .err { color: var(--bad); font-size: 0.85rem; margin: 8px 0; }
+    .body { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="flex:none;" data-i18n="shell.trainClasses.heading">Train Classes</h1>
+
+      <div class="filters">
+        <label data-i18n="shell.trainClasses.searchLabel">Search:</label>
+        <input type="text" id="f-search" data-i18n-placeholder="shell.trainClasses.searchPlaceholder" placeholder="name / manufacturer" style="width: 240px;">
+        <label data-i18n="shell.trainClasses.powerLabel">Power:</label>
+        <select id="f-electric">
+          <option value="" data-i18n="common.all">All</option>
+          <option value="yes" data-i18n="shell.trainClasses.electric">Electric</option>
+          <option value="no" data-i18n="shell.trainClasses.dieselOther">Diesel / other</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="f-showall">
+          <span data-i18n="shell.trainClasses.showAll">Show all classes (incl. AI-only, freight, unknown)</span>
+        </label>
+        <span class="actions">
+          <button id="f-clear" data-i18n="common.clear">Clear</button>
+          <button id="f-go" class="primary" data-i18n="common.search">Search</button>
+        </span>
+      </div>
+
+      <div class="err" id="err" style="display:none;"></div>
+
+      <div id="grid" class="grid"></div>
+
+      <div class="footer-bar">
+        <button id="prev" data-i18n="shell.trainClasses.prev">◀ Prev</button>
+        <span id="pageinfo">Page 1 / 1 · 0 classes</span>
+        <button id="next" data-i18n="shell.trainClasses.next">Next ▶</button>
+        <span class="spacer"></span>
+        <span class="muted" data-i18n="shell.trainClasses.perPage">24 / page</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('train-classes');
+
+    const { invoke } = window.__TAURI__.core;
+    const PAGE_SIZE = 24;
+    const STATE = { filter: { search: '', electric: '', showAll: false }, page: 0, total: 0, rows: [] };
+
+    // WebView2 silently drops cross-scheme fetches from the shell page, so we
+    // ship thumbnail bytes via a single batched IPC and use data: URLs.
+    async function fetchThumbs(paths) {
+      try { return await invoke('train_class_thumbnails', { paths }); }
+      catch (e) { console.error('thumbnails failed', e); return paths.map(() => ''); }
+    }
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function tile(c, idx) {
+      const power = c.is_electric
+        ? `<span class="pill electric">${esc(t('shell.trainClasses.electric', 'Electric'))}</span>`
+        : `<span class="pill diesel">${esc(t('shell.trainClasses.diesel', 'Diesel'))}</span>`;
+      const driv = c.is_drivable ? '' : `<span class="pill notdriv">${esc(t('shell.trainClasses.aiOnly', 'AI only'))}</span>`;
+      const speed = c.max_speed_kph > 0 ? `<span class="pill">${Math.round(c.max_speed_kph)} km/h</span>` : '';
+      const cars  = c.typical_car_count ? `<span class="pill">${c.typical_car_count} ${esc(t('shell.trainClasses.cars', 'cars'))}</span>` : '';
+      const type  = c.type_description ? `<span class="pill">${esc(c.type_description)}</span>` : '';
+
+      return `<div class="tile">
+        <a href="train-class-show.html?id=${c.id}">
+          <div class="tile-img" data-thumb-idx="${idx}">${c.thumbnail_path ? '' : esc(t('shell.trainClasses.noThumbnail', 'no thumbnail'))}</div>
+          <div class="tile-body">
+            <div class="tile-name">${esc(c.name || t('shell.trainClasses.unnamed', '(unnamed)'))}</div>
+            <div class="tile-mfg">${esc(c.manufacturer_name || '—')}</div>
+            <div class="tile-meta">${power} ${driv} ${speed} ${cars} ${type}</div>
+          </div>
+        </a>
+      </div>`;
+    }
+
+    async function renderRows() {
+      const g = document.getElementById('grid');
+      if (!STATE.rows.length) {
+        g.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;">${esc(t('shell.trainClasses.noMatch', 'no classes match'))}</div>`;
+        return;
+      }
+      g.innerHTML = STATE.rows.map((c, i) => tile(c, i)).join('');
+      const urls = await fetchThumbs(STATE.rows.map((c) => c.thumbnail_path || ''));
+      urls.forEach((url, i) => {
+        if (!url) return;
+        const el = g.querySelector(`[data-thumb-idx="${i}"]`);
+        if (el) { el.style.backgroundImage = `url('${url}')`; el.textContent = ''; }
+      });
+    }
+
+    function updateFooter() {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      const word = STATE.total === 1
+        ? t('shell.trainClasses.classSingular', 'class')
+        : t('shell.trainClasses.classPlural', 'classes');
+      document.getElementById('pageinfo').textContent =
+        `${t('shell.trainClasses.page', 'Page')} ${STATE.page + 1} / ${pages} · ${STATE.total} ${word}`;
+      document.getElementById('prev').disabled = STATE.page <= 0;
+      document.getElementById('next').disabled = STATE.page + 1 >= pages;
+    }
+
+    async function search() {
+      const err = document.getElementById('err'); err.style.display = 'none';
+      document.getElementById('grid').innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;">${esc(t('shell.trainClasses.searching', 'searching…'))}</div>`;
+      try {
+        const r = await invoke('train_classes_list', {
+          search: STATE.filter.search,
+          electric: STATE.filter.electric,
+          showAll: STATE.filter.showAll,
+          page: STATE.page,
+          perPage: PAGE_SIZE,
+        });
+        STATE.rows = r.rows || [];
+        STATE.total = r.total || 0;
+        renderRows();
+        updateFooter();
+      } catch (e) { err.textContent = t('shell.trainClasses.failed', 'failed: ') + e; err.style.display = ''; }
+    }
+
+    function readFilters() {
+      STATE.filter.search   = document.getElementById('f-search').value || '';
+      STATE.filter.electric = document.getElementById('f-electric').value || '';
+      STATE.filter.showAll  = document.getElementById('f-showall').checked;
+    }
+    document.getElementById('f-search').addEventListener('keydown', (e) => { if (e.key === 'Enter') { readFilters(); STATE.page = 0; search(); }});
+    document.getElementById('f-go').addEventListener('click', () => { readFilters(); STATE.page = 0; search(); });
+    document.getElementById('f-clear').addEventListener('click', () => {
+      document.getElementById('f-search').value = '';
+      document.getElementById('f-electric').value = '';
+      document.getElementById('f-showall').checked = false;
+      STATE.filter = { search: '', electric: '', showAll: false }; STATE.page = 0; search();
+    });
+    document.getElementById('f-electric').addEventListener('change', () => { readFilters(); STATE.page = 0; search(); });
+    document.getElementById('f-showall').addEventListener('change', () => { readFilters(); STATE.page = 0; search(); });
+
+    document.getElementById('prev').addEventListener('click', () => { if (STATE.page > 0) { STATE.page--; search(); } });
+    document.getElementById('next').addEventListener('click', () => {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      if (STATE.page + 1 < pages) { STATE.page++; search(); }
+    });
+
+    // Await the locale + translate static markup, then run the initial search.
+    // On language change, re-run the search so the JS-built tile pills, empty
+    // states, and pager text pick up the new locale too.
+    initPageI18n(() => search());
+  </script>
+</body>
+</html>

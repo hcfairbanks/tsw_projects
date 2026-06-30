@@ -1,0 +1,230 @@
+{
+  "sections": [
+    {
+      "name": "Core",
+      "builtin": true,
+      "calls": [
+        {
+          "path": "TimeOfDay.Data",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "DriverAid.Data",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "DriverAid.PlayerInfo",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "DriverAid.TrackData",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetSpeed",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetDirection",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetPowerHandle",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetIsSlipping",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetBrakeGauge_1",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetBrakeGauge_2",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetAcceleration",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetSpeedControlTarget",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetMaxPermittedSpeed",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetTractiveEffort",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetElectricBrakeHandle",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetLocomotiveBrakeHandle",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetTrainBrakeHandle",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor.Function.HUD_GetIsTractionLocked",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentFormation/1/Door_PassengerDoor_BR.Function.GetCurrentOutputValue",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentFormation/1/Door_PassengerDoor_BL.Function.GetCurrentOutputValue",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentFormation.FormationLength",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PassengerDoor_FR.Function.GetCurrentInputValue",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PassengerDoor_FL.Function.GetCurrentInputValue",
+          "key": "",
+          "label": "",
+          "enabled": true
+        },
+        {
+          "path": "WeatherManager.Data",
+          "key": "",
+          "label": "",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "German Safety",
+      "builtin": true,
+      "calls": [
+        {
+          "path": "CurrentDrivableActor.Function.IS_GetTargetSpeedMS",
+          "key": "afb",
+          "label": "AFB set speed",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PZB_Service_V3.Property.bIsPZB_Active",
+          "key": "pzbActive",
+          "label": "PZB active",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PZB_Service_V3.Property._InEmergency",
+          "key": "pzbEmergency",
+          "label": "PZB emergency brake",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PZB_Service_V3.Property._RequiresAcknowledge",
+          "key": "pzbAcknowledge",
+          "label": "PZB acknowledge required",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PZB_Service_V3.Property.ActiveMode",
+          "key": "pzbMode",
+          "label": "PZB monitoring mode",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/PZB_Service_V3.Function.Get_InfluenceState",
+          "key": "pzbInfluence",
+          "label": "PZB magnet influence (1000/500/2000 Hz)",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/BP_Sifa_Service.Property.WarningState",
+          "key": "sifaWarning",
+          "label": "SIFA vigilance warning",
+          "enabled": true
+        },
+        {
+          "path": "CurrentDrivableActor/BP_Sifa_Service.Property.inPenaltyBrakeApplication",
+          "key": "sifaPenalty",
+          "label": "SIFA penalty brake",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Passenger Load (test)",
+      "builtin": false,
+      "calls": [
+        { "path": "CurrentFormation/1/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax1", "label": "Coach 1 pax", "enabled": true },
+        { "path": "CurrentFormation/2/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax2", "label": "Coach 2 pax", "enabled": true },
+        { "path": "CurrentFormation/3/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax3", "label": "Coach 3 pax", "enabled": true },
+        { "path": "CurrentFormation/4/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax4", "label": "Coach 4 pax", "enabled": true },
+        { "path": "CurrentFormation/5/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax5", "label": "Coach 5 pax", "enabled": true },
+        { "path": "CurrentFormation/6/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax6", "label": "Coach 6 pax", "enabled": true },
+        { "path": "CurrentFormation/7/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax7", "label": "Coach 7 pax", "enabled": true },
+        { "path": "CurrentFormation/8/PassengerCargoModel.Function.GetNumberOfUnits", "key": "pax8", "label": "Coach 8 pax", "enabled": true },
+        { "path": "CurrentFormation/1/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap1", "label": "Coach 1 capacity", "enabled": true },
+        { "path": "CurrentFormation/2/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap2", "label": "Coach 2 capacity", "enabled": true },
+        { "path": "CurrentFormation/3/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap3", "label": "Coach 3 capacity", "enabled": true },
+        { "path": "CurrentFormation/4/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap4", "label": "Coach 4 capacity", "enabled": true },
+        { "path": "CurrentFormation/5/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap5", "label": "Coach 5 capacity", "enabled": true },
+        { "path": "CurrentFormation/6/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap6", "label": "Coach 6 capacity", "enabled": true },
+        { "path": "CurrentFormation/7/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap7", "label": "Coach 7 capacity", "enabled": true },
+        { "path": "CurrentFormation/8/PassengerCargoModel.Function.GetMaxCapacityInUnits", "key": "cap8", "label": "Coach 8 capacity", "enabled": true }
+      ]
+    }
+  ]
+}

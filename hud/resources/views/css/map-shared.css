@@ -1,0 +1,417 @@
+/* Shared styles for map pages */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Info Panel */
+.info-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    min-width: 320px;
+    max-width: 350px;
+}
+
+.info-panel h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 2px solid #0066ff;
+    padding-bottom: 10px;
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-connected {
+    background-color: #00cc66;
+    box-shadow: 0 0 6px #00cc66;
+}
+
+.status-disconnected {
+    background-color: #ff0000;
+    box-shadow: 0 0 6px #ff0000;
+}
+
+.status-lost {
+    background-color: #ffaa00;
+    box-shadow: 0 0 6px #ffaa00;
+}
+
+/* Recording Indicator */
+@keyframes recording-glow {
+    0%, 100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 3px #ff0000);
+    }
+    50% {
+        opacity: 0.6;
+        filter: drop-shadow(0 0 8px #ff0000) drop-shadow(0 0 12px #ff0000);
+    }
+}
+
+.recording-indicator {
+    color: #ff0000;
+    display: inline-block;
+    animation: recording-glow 1.5s ease-in-out infinite;
+}
+
+.recording-indicator.paused {
+    color: #ffaa00;
+    animation: none;
+}
+
+.recording-indicator.stopped {
+    color: #666;
+    animation: none;
+}
+
+/* Info Groups */
+.info-group {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.info-group h3 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+    font-size: 13px;
+}
+
+.info-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Timetable Display */
+.timetable-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.game-time {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    opacity: 0.9;
+    font-family: 'Courier New', monospace;
+}
+
+.timetable-time {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: 'Courier New', monospace;
+}
+
+.timetable-label {
+    font-size: 14px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.distance-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0066ff;
+    margin-top: 10px;
+}
+
+/* Legend */
+.legend {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.legend h3 {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 12px;
+}
+
+.legend-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.legend-line {
+    width: 20px;
+    height: 4px;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+/* Buttons */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.btn-primary {
+    background: #0066ff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0052cc;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+}
+
+.btn-success {
+    background: #28a745;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.follow-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.follow-btn:hover {
+    background: #1d4ed8;
+}
+
+.follow-btn.following {
+    background: #dc2626;
+}
+
+.follow-btn.following:hover {
+    background: #b91c1c;
+}
+
+/* Route Selector */
+.route-selector {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.route-selector h3 {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.route-selector select,
+.timetable-dropdown {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    background: white;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.route-selector select:focus,
+.timetable-dropdown:focus {
+    outline: none;
+    border-color: #0066ff;
+}
+
+.route-selector button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.route-selector button:hover {
+    background: #0052cc;
+}
+
+.route-selector button:active {
+    background: #003d99;
+}
+
+.route-selector button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.route-selector .status-message {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #666;
+}
+
+.route-selector .status-message.success {
+    color: #00cc66;
+}
+
+.route-selector .status-message.error {
+    color: #ff0000;
+}
+
+/* Development Tools */
+.dev-tools {
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.dev-tools h3 {
+    color: #cc0000;
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+/* Navigation */
+.nav-link {
+    display: inline-block;
+    color: #0066ff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Controls */
+.controls-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+/* Position Display */
+.position-display {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+}
+
+/* Browse Button */
+.browse-btn {
+    background: #28a745 !important;
+    margin-top: 5px;
+}
+
+.browse-btn:hover {
+    background: #218838 !important;
+}
+
+#fileInput {
+    display: none;
+}

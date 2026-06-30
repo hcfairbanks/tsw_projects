@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Routes</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 12px; }
+    .filters label { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.3px; }
+    .filters input[type="text"],
+    .filters select {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 8px; font-size: 0.82rem;
+    }
+    .filters input:focus, .filters select:focus { outline: none; border-color: var(--accent); }
+    .filters .actions { margin-left: auto; display: flex; gap: 6px; }
+    .filters button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 14px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    }
+    .filters button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+    .filters button:hover { border-color: var(--accent); }
+
+    .results-wrap { flex: 1; overflow: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--bg2); }
+    table.results { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    table.results thead th {
+      position: sticky; top: 0; background: var(--bg3); color: var(--text);
+      text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+      font-size: 0.7rem; letter-spacing: 0.6px; text-transform: uppercase;
+      cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    table.results thead th.sortable:hover { color: var(--accent); }
+    table.results thead th.sort-asc::after  { content: ' \25B2'; opacity: 0.8; font-size: 0.7em; }
+    table.results thead th.sort-desc::after { content: ' \25BC'; opacity: 0.8; font-size: 0.7em; }
+    table.results tbody td {
+      padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text); vertical-align: middle; white-space: nowrap;
+    }
+    table.results tbody tr:nth-child(even) { background: rgba(255,255,255,0.025); }
+    table.results tbody tr:hover { background: rgba(120,170,255,0.08); }
+    table.results a { color: var(--accent); text-decoration: none; }
+    table.results a:hover { text-decoration: underline; }
+    .num { font-variant-numeric: tabular-nums; }
+    .country-cell { display: flex; align-items: center; gap: 7px; }
+    .flag-img {
+      width: 20px; height: 14px; object-fit: cover; flex: none;
+      border-radius: 2px; border: 1px solid rgba(0,0,0,0.25);
+      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.06);
+    }
+    .flag-code {
+      display: inline-block;
+      background: var(--bg3); color: var(--text);
+      padding: 1px 6px; border-radius: 3px;
+      font-family: ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.4px;
+      margin-right: 6px;
+    }
+    .best-yes { color: var(--good); font-weight: 700; }
+    .best-no  { color: var(--muted); }
+
+    .footer-bar { display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 0.85rem; color: var(--muted); }
+    .footer-bar .spacer { flex: 1; }
+    .footer-bar button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 4px 10px; cursor: pointer;
+    }
+    .footer-bar button:hover { border-color: var(--accent); }
+    .footer-bar button:disabled { opacity: 0.4; cursor: default; }
+
+    .err { color: var(--bad); font-size: 0.85rem; margin: 8px 0; }
+    .body { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="flex: none;" data-i18n="routes.title">Routes</h1>
+
+      <div class="filters" id="filters"></div>
+
+      <div class="err" id="err" style="display:none;"></div>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead><tr id="head"></tr></thead>
+          <tbody id="body"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;" data-i18n="common.loading">loading…</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="footer-bar">
+        <button id="prev" data-i18n="shell.routes.prev">◀ Prev</button>
+        <span id="pageinfo">Page 1 / 1 · 0 results</span>
+        <button id="next" data-i18n="shell.routes.next">Next ▶</button>
+        <span class="spacer"></span>
+        <span class="muted" data-i18n="shell.routes.perPage">25 / page</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import { makeColumnsResizable } from './shared/colresize.js';
+    import { showBusy } from './shared/busy.js';
+    renderNav('routes');
+
+    const { invoke } = window.__TAURI__.core;
+    const PAGE_SIZE = 25;
+
+    // label is an i18n key resolved at render time (see buildHead).
+    const COLS = [
+      { key: 'name',         label: 'shell.routes.colRoute', fb: 'Route',     sort: 'name'         },
+      { key: 'country',      label: 'routes.country',        fb: 'Country',   sort: 'country_name' },
+      { key: 'tsw_version',  label: 'shell.routes.colTsw',   fb: 'TSW',       sort: 'tsw_version', cls: 'num' },
+      { key: 'best_data',    label: 'routes.bestData',       fb: 'Best data', sort: 'best_data'    },
+      { key: 'id',           label: 'common.id',             fb: 'ID',        sort: 'id',          cls: 'num col-dev-hide' },
+    ];
+
+    const STATE = {
+      filter: { search: '', country_id: '', best_data: '', show_non_routes: false, sort_by: '', sort_dir: 'DESC' },
+      page: 0, total: 0, rows: [],
+      countries: [],
+    };
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function buildFilters() {
+      const c = STATE.countries;
+      const opts = [`<option value="">${esc(t('routes.allCountries', 'All countries'))}</option>`].concat(
+        c.map(([id, name, code]) => `<option value="${id}">${esc(name)}${code ? ' (' + esc(code) + ')' : ''}</option>`));
+      const f = document.getElementById('filters');
+      f.innerHTML = `
+        <label>${esc(t('routes.routeLabel', 'Route:'))}</label>
+        <input type="text" id="f-search" placeholder="${esc(t('shell.routes.searchNamePlaceholder', 'name'))}" style="width:200px;">
+        <label>${esc(t('routes.countryLabel', 'Country:'))}</label>
+        <select id="f-country">${opts.join('')}</select>
+        <label>${esc(t('routes.bestData', 'Best data:'))}</label>
+        <select id="f-best">
+          <option value="">${esc(t('common.all', 'All'))}</option>
+          <option value="1">${esc(t('common.yes', 'Yes'))}</option>
+          <option value="0">${esc(t('common.no', 'No'))}</option>
+        </select>
+        <label class="cbx" style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">
+          <input type="checkbox" id="f-nonroute" style="margin:0;">
+          ${esc(t('shell.routes.showNonRouteDlcs', "Non-route DLC's"))}
+        </label>
+        <span class="actions">
+          <button id="f-import" class="dev-only" title="${esc(t('shell.routes.importTitle', 'Import an entire route from a shared export zip'))}">${esc(t('shell.routes.import', 'Import'))}</button>
+          <button id="f-clear">${esc(t('common.clear', 'Clear'))}</button>
+          <button id="f-go" class="primary">${esc(t('common.search', 'Search'))}</button>
+        </span>
+      `;
+      // Search-as-you-type, parity with hud-go's routes index: every
+      // keystroke kicks a debounced backend query (150 ms idle). Enter
+      // and the explicit Search button still work for users who prefer
+      // them, but no one has to wait on either to see filtered rows.
+      let searchTimer = null;
+      const debouncedSearch = () => {
+        if (searchTimer) clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => applyFilters(true), 150);
+      };
+      document.getElementById('f-search').addEventListener('input',  debouncedSearch);
+      document.getElementById('f-search').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { if (searchTimer) { clearTimeout(searchTimer); searchTimer = null; } applyFilters(true); }
+      });
+      document.getElementById('f-go').addEventListener('click', () => applyFilters(true));
+      document.getElementById('f-clear').addEventListener('click', clearFilters);
+      document.getElementById('f-import').addEventListener('click', importRoute);
+      ['f-country','f-best','f-nonroute'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', () => applyFilters(true));
+      });
+    }
+
+    function buildHead() {
+      const head = document.getElementById('head');
+      head.innerHTML = COLS.map((c) => {
+        const sortable = !!c.sort;
+        const active = sortable && STATE.filter.sort_by === c.sort;
+        const cls = (sortable ? 'sortable' : '') +
+          (active ? (STATE.filter.sort_dir === 'ASC' ? ' sort-asc' : ' sort-desc') : '') +
+          (c.cls ? ' ' + c.cls : '');
+        return `<th class="${cls.trim()}" data-sort="${c.sort || ''}">${esc(t(c.label, c.fb))}</th>`;
+      }).join('');
+      head.querySelectorAll('th[data-sort]').forEach((th) => {
+        const s = th.getAttribute('data-sort');
+        if (!s) return;
+        th.addEventListener('click', () => {
+          if (STATE.filter.sort_by === s) {
+            STATE.filter.sort_dir = STATE.filter.sort_dir === 'ASC' ? 'DESC' : 'ASC';
+          } else {
+            STATE.filter.sort_by = s;
+            STATE.filter.sort_dir = 'ASC';
+          }
+          STATE.page = 0;
+          search();
+        });
+      });
+      makeColumnsResizable(head.closest('table'), 'routes');
+    }
+
+    function renderRows() {
+      const body = document.getElementById('body');
+      if (!STATE.rows.length) {
+        body.innerHTML = `<tr><td colspan="${COLS.length}" style="text-align:center;color:var(--muted);padding:24px;">${esc(t('shell.routes.noRowsMatch', 'no rows match'))}</td></tr>`;
+        return;
+      }
+      body.innerHTML = STATE.rows.map((r) => {
+        const id = r.id; // already a string from RouteRow
+        const cc = (r.country_code || '').toLowerCase();
+        const flag = /^[a-z]{2}$/.test(cc)
+          ? `<img class="flag-img" src="flags/${cc}.png" alt="${esc(r.country_code)}" title="${esc(r.country_code)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-code',textContent:'${esc(r.country_code)}'}))">`
+          : (r.country_code ? `<span class="flag-code">${esc(r.country_code)}</span>` : '');
+        const best = r.best_data
+          ? `<span class="best-yes">●</span> ${esc(t('common.yes', 'Yes'))}`
+          : `<span class="best-no">○ ${esc(t('common.no', 'No'))}</span>`;
+        return `<tr>
+          <td><a href="route-show.html?id=${esc(id)}">${esc(r.name || t('shell.routes.unnamed', '(unnamed)'))}</a></td>
+          <td class="country-cell">${flag}${esc(r.country_name || '')}</td>
+          <td class="num">${r.tsw_version ? 'TSW ' + esc(r.tsw_version) : ''}</td>
+          <td>${best}</td>
+          <td class="num col-dev-hide"><code>${esc(id)}</code></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function updateFooter() {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      const tmpl = t('shell.routes.pageInfo', 'Page {page} / {pages} · {total} results');
+      document.getElementById('pageinfo').textContent = tmpl
+        .replace('{page}', STATE.page + 1)
+        .replace('{pages}', pages)
+        .replace('{total}', STATE.total);
+      document.getElementById('prev').disabled = STATE.page <= 0;
+      document.getElementById('next').disabled = STATE.page + 1 >= pages;
+    }
+
+    function readFiltersFromUI() {
+      const v = (id) => document.getElementById(id).value || '';
+      STATE.filter.search     = v('f-search');
+      STATE.filter.country_id = v('f-country');
+      STATE.filter.best_data  = v('f-best');
+      STATE.filter.show_non_routes = document.getElementById('f-nonroute').checked;
+    }
+
+    function applyFilters(resetPage) {
+      readFiltersFromUI();
+      if (resetPage) STATE.page = 0;
+      search();
+    }
+
+    function clearFilters() {
+      STATE.filter = { search: '', country_id: '', best_data: '', show_non_routes: false, sort_by: '', sort_dir: 'DESC' };
+      ['f-search','f-country','f-best'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const nr = document.getElementById('f-nonroute');
+      if (nr) nr.checked = false;
+      STATE.page = 0;
+      search();
+    }
+
+    // Track the in-flight search so stale responses (older keystrokes finishing
+    // after newer ones) don't overwrite the current results. Mirrors what
+    // hud-go's loadRoutes() naturally avoids via its single-request cadence.
+    let searchSeq = 0;
+    // Persist the current search so navigating into a route and back (or
+    // returning via the Routes tab) restores the same filters + page.
+    const SEARCH_KEY = 'routesSearchState';
+    function saveSearchState() {
+      try { sessionStorage.setItem(SEARCH_KEY, JSON.stringify({ filter: STATE.filter, page: STATE.page })); } catch (e) {}
+    }
+    function restoreSearchState() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem(SEARCH_KEY) || 'null');
+        if (s && s.filter) { STATE.filter = { ...STATE.filter, ...s.filter }; STATE.page = s.page || 0; return true; }
+      } catch (e) {}
+      return false;
+    }
+
+    async function search() {
+      const mySeq = ++searchSeq;
+      saveSearchState();
+      const errEl = document.getElementById('err');
+      errEl.style.display = 'none';
+      try {
+        const r = await invoke('route_search', { filter: STATE.filter, page: STATE.page, perPage: PAGE_SIZE });
+        if (mySeq !== searchSeq) return; // a newer query has already finished
+        STATE.rows = r.rows || [];
+        STATE.total = r.total || 0;
+        buildHead();
+        renderRows();
+        updateFooter();
+      } catch (e) {
+        if (mySeq !== searchSeq) return;
+        errEl.textContent = t('shell.routes.searchFailed', 'search failed: ') + (e && e.toString());
+        errEl.style.display = '';
+      }
+    }
+
+    // Import an entire route from a shared export zip. Dev-only. Pick the file
+    // first (no spinner), then cover the import with a busy overlay (spinning
+    // ring + elapsed timer). On success we reload the list so the new /
+    // replaced route appears. The zip's own route file decides which route is
+    // created or replaced (by name / cross-pak ref).
+    async function importRoute() {
+      const btn = document.getElementById('f-import');
+      const orig = btn.textContent;
+      const errEl = document.getElementById('err');
+      errEl.style.display = 'none';
+      let path;
+      try {
+        path = await invoke('pick_route_zip');
+      } catch (e) {
+        errEl.textContent = t('shell.routes.importFailedMsg', 'Import failed: ') + (e && e.toString());
+        errEl.style.display = '';
+        return;
+      }
+      if (!path) return; // cancelled
+      btn.disabled = true;
+      const busy = showBusy(t('shell.routes.importing', 'Importing route…'));
+      try {
+        await invoke('import_route_zip', { path });
+        btn.textContent = t('shell.routes.imported', 'Imported ✓');
+        await search(); // refresh the list with the new/replaced route
+      } catch (e) {
+        btn.textContent = t('shell.routes.importFailed', 'Import failed');
+        errEl.textContent = t('shell.routes.importFailedMsg', 'Import failed: ') + (e && e.toString());
+        errEl.style.display = '';
+      } finally {
+        busy.close();
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = orig; }, 2500);
+      }
+    }
+
+    document.getElementById('prev').addEventListener('click', () => { if (STATE.page > 0) { STATE.page--; search(); } });
+    document.getElementById('next').addEventListener('click', () => {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      if (STATE.page + 1 < pages) { STATE.page++; search(); }
+    });
+
+    // (Re)build the filter chrome and restore the current filter values into it,
+    // so a language change re-translates labels without losing the user's input.
+    function renderChrome() {
+      buildFilters();
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      set('f-search', STATE.filter.search);
+      set('f-country', STATE.filter.country_id);
+      set('f-best', STATE.filter.best_data);
+      const nr = document.getElementById('f-nonroute');
+      if (nr) nr.checked = !!STATE.filter.show_non_routes;
+      buildHead();
+      updateFooter();
+    }
+
+    let started = false;
+    (async function init() {
+      try {
+        const opts = await invoke('timetable_filter_options'); // reuses the same dropdown bundle
+        STATE.countries = opts.countries || [];
+      } catch (e) {
+        STATE.countries = [];
+      }
+      restoreSearchState(); // bring back the prior filters/page (e.g. after Back)
+      // Translate static markup, build the dynamic chrome, and re-translate +
+      // rebuild it on every language change (initial call runs render() once).
+      await initPageI18n(() => {
+        renderChrome();
+        if (!started) { started = true; search(); }
+        else { renderRows(); } // re-translate already-loaded rows (Yes/No, unnamed)
+      });
+    })();
+  </script>
+</body>
+</html>

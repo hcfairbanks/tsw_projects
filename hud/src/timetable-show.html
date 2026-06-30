@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Timetable</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #ttmap { height: 460px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+    .ttbar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .ttbar .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; padding: 3px 8px;
+      border-radius: 12px; border: 1px solid var(--border); cursor: pointer; user-select: none; background: var(--bg2); }
+    .ttbar .chip .sw { width: 9px; height: 9px; border-radius: 50%; }
+    .ttbar .chip.off { opacity: 0.42; }
+    .leaflet-container { font: inherit; background: var(--bg3); }
+  </style>
+  <style>
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .crumbs a { color: var(--accent); }
+
+    .header-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap; margin: 4px 0 14px 0;
+    }
+    .header-row h1 { margin: 0; }
+    .header-row .actions { display: flex; gap: 8px; }
+    .header-row .actions button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .header-row .actions button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+    .header-row .actions button:hover { border-color: var(--accent); }
+
+    .panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      max-width: 1100px;
+    }
+    .panel h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+
+    .kv { display: grid; grid-template-columns: 180px 1fr; gap: 8px 18px; font-size: 0.9rem; }
+    .kv .k { color: var(--muted); }
+    .kv .v { color: var(--text); white-space: pre-wrap; word-break: break-word; }
+    .kv .v code { background: var(--bg3); padding: 1px 6px; border-radius: 3px; }
+    .kv .v a { color: var(--accent); }
+    .kv .v .pill {
+      display: inline-block; padding: 2px 9px; border-radius: 999px;
+      font-size: 0.74rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600;
+    }
+    .pill.good { background: rgba(95, 211, 122, 0.18); color: var(--good); }
+    .pill.warn { background: rgba(255, 178, 77, 0.18); color: var(--warn); }
+    .pill.bad  { background: rgba(255, 90, 82, 0.18);  color: var(--bad);  }
+    .pill.idle { background: rgba(255, 255, 255, 0.07); color: var(--muted); }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tags .tag {
+      background: var(--bg3); color: var(--text);
+      padding: 3px 10px; border-radius: 4px; font-size: 0.82rem;
+    }
+
+    table.entries {
+      width: 100%; border-collapse: collapse; font-size: 0.84rem;
+    }
+    table.entries thead th {
+      text-align: left; padding: 7px 10px;
+      background: var(--bg3); color: var(--text);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem; letter-spacing: 0.5px; text-transform: uppercase;
+      position: sticky; top: 0;
+    }
+    table.entries tbody td {
+      padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.05);
+      vertical-align: top; white-space: nowrap;
+    }
+    table.entries tbody tr:hover { background: rgba(120,170,255,0.06); }
+    table.entries .num { font-variant-numeric: tabular-nums; color: var(--text); }
+    table.entries .muted { color: var(--muted); }
+    table.entries .act { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.4px; }
+    table.entries .act.wait { color: var(--warn); }
+    table.entries .act.via  { color: var(--accent); }
+
+    .err { color: var(--bad); margin: 12px 0; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="crumbs"><a href="timetables.html" data-i18n="timetables.backToTimetables">← Timetables</a></div>
+
+      <div class="header-row">
+        <h1 id="title" data-i18n="common.loading">Loading…</h1>
+        <div class="actions">
+          <button id="back" data-i18n="common.back">Back</button>
+          <button id="editBtn" class="primary" data-i18n="common.edit">Edit</button>
+        </div>
+      </div>
+
+      <div id="err" class="err" style="display:none;"></div>
+
+      <!-- Service map (rebuilt once; outside #panels so re-renders don't wipe Leaflet). -->
+      <div id="mapPanel" class="panel" style="display:none;">
+        <h2>Map</h2>
+        <div id="ttmap"></div>
+        <div id="ttbar" class="ttbar"></div>
+      </div>
+
+      <div id="panels"></div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { whenReady } from './shared/dev.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('timetables');
+
+    const { invoke } = window.__TAURI__.core;
+    const id = Number(new URLSearchParams(location.search).get('id') || 0);
+
+    document.getElementById('back').addEventListener('click', () => history.length > 1 ? history.back() : (location.href = 'timetables.html'));
+    document.getElementById('editBtn').addEventListener('click', () => {
+      location.href = 'timetable-edit.html?id=' + id;
+    });
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function fmt(v) {
+      if (v === null || v === undefined || v === '') return '<span class="muted">—</span>';
+      return esc(v);
+    }
+
+    function pill(value, kind) {
+      return `<span class="pill ${kind}">${esc(value)}</span>`;
+    }
+
+    function actionClass(action) {
+      const a = (action || '').toUpperCase();
+      if (a.includes('WAIT')) return 'wait';
+      if (a.startsWith('PASS')) return 'via';
+      return '';
+    }
+
+    function renderHeader(d) {
+      const tt = d.timetable || {};
+      const route = d.route || {};
+      const country = d.country || {};
+      const sn = tt.service_name || tt.service || tt.current_service_name || t('shell.timetables.untitled', '(untitled)');
+      document.getElementById('title').textContent = sn;
+      document.title = 'TSW HUD · ' + sn;
+
+      const playable = tt.playable === 1 || tt.playable === true;
+      const conductor = tt.conductor_compatible === 1 || tt.conductor_compatible === true;
+      const playPill = playable
+        ? pill(t('shell.timetables.playable', 'playable'), 'good')
+        : pill(t('shell.timetables.notPlayable', 'not playable'), 'idle');
+      const condPill = conductor
+        ? pill(t('shell.timetables.conductor', 'conductor'), 'good')
+        : pill(t('shell.timetables.driverOnly', 'driver only'), 'idle');
+
+      const routeLink = route.id
+        ? `<a href="route-show.html?id=${route.id}">${esc(route.name || t('shell.timetables.unnamed', '(unnamed)'))}</a>`
+        : '<span class="muted">—</span>';
+
+      const countryLine = country.id
+        ? `<code>${esc(country.code || '??')}</code>&nbsp; ${esc(country.name)}`
+        : '<span class="muted">—</span>';
+
+      return `
+        <div class="panel">
+          <h2>${esc(t('timetables.service', 'Service'))}</h2>
+          <div class="kv">
+            <div class="k">${esc(t('timetables.service', 'Service'))}</div>          <div class="v">${fmt(tt.service)}</div>
+            <div class="k">${esc(t('timetables.serviceName', 'Service name'))}</div>     <div class="v">${fmt(tt.service_name)}</div>
+            <div class="k">${esc(t('shell.timetables.currentService', 'Current service'))}</div>  <div class="v">${fmt(tt.current_service_name)}</div>
+            <div class="k">${esc(t('timetables.serviceType', 'Service type'))}</div>     <div class="v">${fmt(tt.service_type)}</div>
+            <div class="k">${esc(t('timetables.source', 'Source'))}</div>           <div class="v">${fmt(tt.source)}</div>
+            <div class="k">${esc(t('shell.timetables.bound', 'Bound'))}</div>            <div class="v">${fmt(tt.bound)}</div>
+            <div class="k">${esc(t('timetables.startTime', 'Start time'))}</div>       <div class="v num">${fmt(tt.start_time)}</div>
+            <div class="k">${esc(t('timetables.duration', 'Duration'))}</div>         <div class="v num">${fmt(tt.duration)}</div>
+            <div class="k">${esc(t('common.status', 'Status'))}</div>           <div class="v">${playPill} &nbsp; ${condPill}</div>
+            <div class="k">${esc(t('timetables.route', 'Route'))}</div>            <div class="v">${routeLink}</div>
+            <div class="k">${esc(t('shell.timetables.country', 'Country'))}</div>          <div class="v">${countryLine}</div>
+            <div class="k">${esc(t('shell.timetables.databaseId', 'Database id'))}</div>      <div class="v dev-only"><code>${tt.id}</code></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRelated(d) {
+      const formations = d.formations || [];
+      const sections = d.sections || [];
+      if (!formations.length && !sections.length) return '';
+      return `
+        <div class="panel">
+          <h2>${esc(t('shell.timetables.related', 'Related'))}</h2>
+          <div class="kv">
+            <div class="k">${esc(t('timetables.formations', 'Formations'))}</div>
+            <div class="v">${
+              formations.length
+                ? '<div class="tags">' + formations.map((f) =>
+                    `<span class="tag">${esc(f.name)}${f.class_name ? ' <span class="muted">· ' + esc(f.class_name) + '</span>' : ''}</span>`
+                  ).join('') + '</div>'
+                : '<span class="muted">—</span>'
+            }</div>
+            <div class="k">${esc(t('shell.timetables.sections', 'Sections'))}</div>
+            <div class="v">${
+              sections.length
+                ? '<div class="tags">' + sections.map((s) =>
+                    `<span class="tag">${esc(s.name)}</span>`
+                  ).join('') + '</div>'
+                : '<span class="muted">—</span>'
+            }</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEntries(d) {
+      const es = d.entries || [];
+      if (!es.length) return `<div class="panel"><h2>${esc(t('shell.timetables.entries', 'Entries'))}</h2><p class="muted" style="margin:0;">${esc(t('shell.timetables.noEntriesShort', 'no entries'))}</p></div>`;
+      return `
+        <div class="panel">
+          <h2>${esc(t('shell.timetables.entries', 'Entries'))} · ${es.length}</h2>
+          <div style="overflow:auto; max-height: 540px;">
+            <table class="entries">
+              <thead>
+                <tr>
+                  <th style="width:34px;">#</th>
+                  <th style="width:80px;">time1</th>
+                  <th style="width:80px;">time2</th>
+                  <th>${esc(t('timetables.location', 'Location'))}</th>
+                  <th>${esc(t('timetables.action', 'Action'))}</th>
+                  <th class="dev-only">${esc(t('timetables.lat', 'Lat'))}</th>
+                  <th class="dev-only">${esc(t('timetables.lng', 'Lng'))}</th>
+                  <th class="dev-only">${esc(t('timetables.coordSource', 'Coord src'))}</th>
+                </tr>
+              </thead>
+              <tbody>${es.map((e, i) => {
+                const aCls = actionClass(e.action);
+                return `<tr>
+                  <td class="muted num">${i + 1}</td>
+                  <td class="num">${fmt(e.time1)}</td>
+                  <td class="num">${fmt(e.time2)}</td>
+                  <td>${fmt(e.location)}</td>
+                  <td class="act ${aCls}">${fmt(e.action)}</td>
+                  <td class="dev-only num muted">${fmt(e.latitude)}</td>
+                  <td class="dev-only num muted">${fmt(e.longitude)}</td>
+                  <td class="dev-only muted">${fmt(e.coord_source)}</td>
+                </tr>`;
+              }).join('')}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---- Service map (Leaflet) — same path + filtered features as the overlay ----
+    const CAT = { Route:'#0066ff', Stops:'#00cc66', Platforms:'#5fd37a', Signals:'#ff5a52',
+      Switches:'#ffb24d', Tracks:'#5f6772', 'Car stops':'#4fc3f7', Collectables:'#b388ff' };
+    const MAP_ORDER = ['Route','Stops','Platforms','Signals','Switches','Tracks','Car stops','Collectables'];
+    let tmap = null;
+    const LAYERS = {};
+    const lyEnabled = JSON.parse(localStorage.getItem('ttShowLayers') || 'null') || {};
+    function lyOn(n) { return (n in lyEnabled) ? lyEnabled[n]
+      : (n === 'Route' || n === 'Stops' || n === 'Platforms' || n === 'Tracks' || n === 'Car stops'); }
+    function toLL(c) {
+      if (Array.isArray(c)) return (c.length >= 2 && c[0] != null && c[1] != null) ? [c[1], c[0]] : null;
+      if (c && c.latitude != null && c.longitude != null) return [c.latitude, c.longitude];
+      return null;
+    }
+    function segLL(seg) { return (seg || []).map(toLL).filter(Boolean); }
+    function applyLayer(n) {
+      const ly = LAYERS[n]; if (!ly || !tmap) return;
+      if (lyOn(n)) { if (!tmap.hasLayer(ly)) tmap.addLayer(ly); }
+      else if (tmap.hasLayer(ly)) tmap.removeLayer(ly);
+    }
+    function rebuildBar() {
+      const bar = document.getElementById('ttbar');
+      bar.innerHTML = MAP_ORDER.filter((n) => LAYERS[n]).map((n) =>
+        `<span class="chip ${lyOn(n) ? '' : 'off'}" data-n="${n}"><span class="sw" style="background:${CAT[n]}"></span>${n}</span>`
+      ).join('');
+      bar.querySelectorAll('.chip').forEach((el) => el.addEventListener('click', () => {
+        const n = el.getAttribute('data-n');
+        lyEnabled[n] = !lyOn(n);
+        localStorage.setItem('ttShowLayers', JSON.stringify(lyEnabled));
+        applyLayer(n); rebuildBar();
+      }));
+    }
+    async function initMap(d) {
+      if (tmap || typeof L === 'undefined') return; // build once; skip if Leaflet didn't load
+      const path = await invoke('get_route_coordinates', { id });
+      const latlngs = segLL(path);
+      if (!latlngs.length) return; // no service path (e.g. imported route) → leave map hidden
+      document.getElementById('mapPanel').style.display = '';
+      tmap = L.map('ttmap', { preferCanvas: true, attributionControl: false });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        { subdomains: 'abcd', maxZoom: 19 }).addTo(tmap);
+      LAYERS.Route = L.polyline(latlngs, { color: CAT.Route, weight: 4, opacity: 0.7 });
+      try {
+        const fm = await invoke('get_timetable_markers', { timetableId: id });
+        const sg = L.layerGroup();
+        (fm.stops || []).forEach((s, i) => {
+          if (s.latitude == null || s.longitude == null) return;
+          L.circleMarker([s.latitude, s.longitude], { radius: 6, fillColor: CAT.Stops, color: '#fff', weight: 2, fillOpacity: 0.9 })
+            .bindPopup(`<b>#${i + 1} ${esc(s.name || 'Stop')}</b>`).addTo(sg);
+        });
+        if (sg.getLayers().length) LAYERS.Stops = sg;
+        const ptLayer = (arr, cat, radius) => {
+          const lg = L.layerGroup();
+          (arr || []).forEach((p) => {
+            if (p.latitude == null || p.longitude == null) return;
+            const mk = L.circleMarker([p.latitude, p.longitude], { radius, color: '#0b0e14', weight: 1, fillColor: CAT[cat], fillOpacity: 0.9 });
+            if (p.name) mk.bindPopup(`<b>${esc(p.name)}</b><br><small>${esc(cat)}</small>`);
+            lg.addLayer(mk);
+          });
+          if (lg.getLayers().length) LAYERS[cat] = lg;
+        };
+        ptLayer(fm.markers, 'Platforms', 4); ptLayer(fm.carStops, 'Car stops', 3);
+        ptLayer(fm.signals, 'Signals', 3); ptLayer(fm.switches, 'Switches', 3);
+        ptLayer(fm.collectables, 'Collectables', 4);
+      } catch (e) { /* features optional */ }
+      try {
+        const rid = d && d.route && d.route.id;
+        if (rid) {
+          const rm = await invoke('get_route_map_data', { routeId: rid });
+          const segs = (rm && Array.isArray(rm.coordinates)) ? rm.coordinates : [];
+          const tg = L.layerGroup();
+          segs.forEach((seg) => { const ll = segLL(seg); if (ll.length > 1) L.polyline(ll, { color: CAT.Tracks, weight: 1.5, opacity: 0.6 }).addTo(tg); });
+          if (tg.getLayers().length) LAYERS.Tracks = tg;
+        }
+      } catch (e) { /* rails optional */ }
+      for (const n in LAYERS) applyLayer(n);
+      rebuildBar();
+      tmap.fitBounds(LAYERS.Route.getBounds(), { padding: [20, 20] });
+      setTimeout(() => tmap.invalidateSize(), 60);
+    }
+
+    async function load() {
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      if (!id) { err.textContent = t('shell.timetables.noIdInUrl', 'no id in URL'); err.style.display = ''; return; }
+      try {
+        const d = await invoke('timetable_detail', { id });
+        lastDetail = d;
+        document.getElementById('panels').innerHTML =
+          renderHeader(d) + renderRelated(d) + renderEntries(d);
+        initMap(d);
+      } catch (e) {
+        err.textContent = t('shell.timetables.loadFailed', 'load failed: ') + (e && e.toString());
+        err.style.display = '';
+        document.getElementById('title').textContent = t('shell.timetables.errorParen', '(error)');
+      }
+    }
+
+    // Cache the last loaded detail so a language change can re-render the
+    // already-built panels without another IPC round-trip.
+    let lastDetail = null;
+    whenReady().then(async () => {
+      await load();
+      // Re-translate static markup + re-render panels on language change.
+      await initPageI18n(() => {
+        if (lastDetail) {
+          document.getElementById('panels').innerHTML =
+            renderHeader(lastDetail) + renderRelated(lastDetail) + renderEntries(lastDetail);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .launch-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      min-height: 60vh;
+      text-align: center;
+    }
+    .launch-btn {
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 22px 40px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #061018;
+      border: 1px solid var(--accent);
+      cursor: pointer;
+      transition: background 0.12s ease, transform 0.12s ease;
+    }
+    .launch-btn:hover { background: #7fd3fa; transform: translateY(-1px); }
+    .launch-btn:active { transform: translateY(1px); }
+    .launch-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    .launch-status { min-height: 1.3em; font-size: 0.9rem; }
+    .launch-status.ok  { color: var(--good); }
+    .launch-status.err { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="launch-wrap">
+        <button class="launch-btn" id="launch">Start your service and then click here</button>
+        <div class="launch-status" id="status"></div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t } from './shared/i18n.js';
+    renderNav('home');
+
+    const { invoke } = window.__TAURI__.core;
+    const btn = document.getElementById('launch');
+    const status = document.getElementById('status');
+
+    // Tracks whether the overlay widgets are currently on screen so the one
+    // button can flip between launching them and closing them all.
+    let widgetsOpen = false;
+
+    function setMode(open) {
+      widgetsOpen = open;
+      btn.textContent = open
+        ? t('shell.closeWidgets', 'Close all widgets')
+        : t('shell.launchHud', 'Start your service and then click here');
+    }
+    // Re-apply the label after a locale change (nav's language picker fires this).
+    document.addEventListener('languageChanged', () => setMode(widgetsOpen));
+    setMode(false);
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        if (!widgetsOpen) {
+          status.textContent = t('shell.start.opening', 'opening overlay…');
+          status.className = 'launch-status';
+          const labels = await invoke('open_collection', { slug: 'default' });
+          const n = (labels && labels.length) || 0;
+          status.textContent = t('shell.start.launched', 'overlay launched — {n} widget(s) on screen').replace('{n}', n);
+          status.className = 'launch-status ok';
+          setMode(true);
+        } else {
+          status.textContent = t('shell.start.closing', 'closing widgets…');
+          status.className = 'launch-status';
+          await invoke('close_collection', { slug: 'default' });
+          status.textContent = t('shell.start.closed', 'all widgets closed');
+          status.className = 'launch-status';
+          setMode(false);
+        }
+      } catch (e) {
+        status.textContent = (widgetsOpen
+          ? t('shell.start.closeFailed', 'close failed: ')
+          : t('shell.start.launchFailed', 'launch failed: ')) + (e && e.toString());
+        status.className = 'launch-status err';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

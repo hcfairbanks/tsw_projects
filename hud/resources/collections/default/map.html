@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* Shrink-wrap the panel so the single auto-sizer measures the real width.
+       position:relative anchors the resize grip to the widget's own corner. */
+    .widget { width: max-content; position: relative; }
+    #map { width: 340px; height: 300px; background: #0b0e14; }
+    .widget.collapsed #map, .widget.collapsed .layerbar, .widget.collapsed .resize-handle { display: none; }
+    .hdr button.on { background: rgba(120,170,255,0.3); color: #fff; }
+
+    /* Follow-train Leaflet control — matches the .leaflet-control-layers
+       button on the right side (white square, 30×30, black icon, default
+       leaflet border). Inverts to dark background + white icon when active. */
+    .follow-ctl a {
+      width: 30px; height: 30px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      color: #222 !important;
+      background: #fff;
+    }
+    .follow-ctl.on a { background: #333; color: #fff !important; }
+    .follow-ctl a svg { display: block; }
+    .map-wrap { position: relative; }
+    .empty-map { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+                 color: var(--muted); font-size: 0.85rem; text-align: center; padding: 16px; z-index: 400;
+                 pointer-events: none; background: #0b0e14; }
+
+    /* Load-from-dropdown panel — visible only when no service is auto-loaded
+       (curId == null AND the auto-detect either has no service name or said
+       "no match"). Sits centered over the map so it's the obvious next step
+       when the empty state appears. */
+    .load-panel {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      z-index: 450; min-width: 280px; max-width: 92%;
+      background: rgba(14, 17, 24, 0.96); color: var(--text);
+      border: 1px solid var(--line); border-radius: 8px;
+      padding: 12px 14px;
+      display: none; flex-direction: column; gap: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+    }
+    .load-panel.show { display: flex; }
+    .load-panel .title {
+      font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 2px;
+    }
+    .load-panel label { font-size: 0.66rem; color: var(--muted); letter-spacing: 0.3px; }
+
+    /* Selects — solid dark bg (not the semi-transparent var(--bg2)) so the
+       OS dropdown panel inherits dark + light-on-dark. Custom caret SVG so
+       the chevron is visible against the dark bg. Mirrors the styling the
+       Weather widget uses. */
+    .load-panel select {
+      background-color: #1d2230;
+      color: var(--text);
+      border: 1px solid var(--line); border-radius: 4px;
+      padding: 4px 22px 4px 8px; font-size: 0.78rem; width: 100%;
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%23e9eefb'/></svg>");
+      background-repeat: no-repeat; background-position: right 6px center;
+      cursor: pointer;
+    }
+    .load-panel select:focus { outline: none; border-color: var(--accent); }
+    .load-panel select:hover { border-color: var(--accent); }
+    .load-panel select:disabled { opacity: 0.55; cursor: default; }
+    .load-panel select option {
+      background: #1d2230; color: var(--text); padding: 6px 8px;
+    }
+    .load-panel select option:checked { background: var(--accent); color: #061018; }
+
+    /* Typeahead — text input + absolutely-positioned dropdown of matches. */
+    .ta { position: relative; }
+    .ta input {
+      width: 100%; background: #1d2230; color: var(--text);
+      border: 1px solid var(--line); border-radius: 4px;
+      padding: 4px 8px; font-size: 0.78rem;
+    }
+    .ta input:focus { outline: none; border-color: var(--accent); }
+    .ta input:disabled { opacity: 0.55; cursor: default; }
+    /* Drop UP (not down) — a downward list would cover the Load buttons.
+       Keep height tight (~5 rows) so it doesn't swallow the whole panel —
+       overflow scrolls. The shadow points up so it still reads as a popout. */
+    .ta-dd {
+      display: none;
+      position: absolute; left: 0; right: 0; bottom: 100%;
+      max-height: 130px; overflow-y: auto;
+      background: #1d2230; color: var(--text);
+      border: 1px solid var(--line); border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      z-index: 1100;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.55);
+    }
+    .ta-dd::-webkit-scrollbar { width: 8px; }
+    .ta-dd::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    .ta-dd::-webkit-scrollbar-track { background: transparent; }
+    .ta-dd.show { display: block; }
+    .ta-dd .opt { padding: 5px 8px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; }
+    .ta-dd .opt:hover, .ta-dd .opt.active { background: var(--accent); color: #061018; }
+    .ta-dd .empty { padding: 8px; font-size: 0.74rem; color: var(--muted); font-style: italic; }
+
+    .load-panel .actions { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .load-panel .actions button {
+      background: var(--accent); color: #061018; border: 0; border-radius: 4px;
+      padding: 5px 10px; font-size: 0.74rem; font-weight: 700; cursor: pointer; flex: 1;
+      min-width: 0;
+    }
+    .load-panel .actions button.ghost {
+      background: var(--bg2); color: var(--text); border: 1px solid var(--line);
+      font-weight: 500; flex: 0 0 auto;
+    }
+    .load-panel .actions button.secondary {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--accent); font-weight: 600;
+    }
+    .load-panel .actions button:disabled { opacity: 0.45; cursor: default; }
+    .load-panel .flash { font-size: 0.7rem; color: var(--muted); min-height: 1em; }
+    .load-panel .flash.err { color: var(--bad); }
+    .load-panel .flash.ok  { color: var(--good); }
+    .leaflet-container { font: inherit; }
+    /* Above Leaflet's control layer (z-index 1000) so the grip is always grabbable. */
+    .resize-handle { position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; z-index: 1100;
+      cursor: nwse-resize; background: linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.6) 62%, transparent 62%); }
+    /* Layer toggle bar across the bottom of the map. */
+    .layerbar { display: flex; flex-wrap: wrap; gap: 5px; padding: 6px 22px 6px 8px;
+                background: rgba(10,13,20,0.9); border-top: 1px solid var(--line); }
+    .chip { font-size: 0.62rem; letter-spacing: 0.3px; padding: 3px 8px; border-radius: 11px; cursor: pointer;
+            background: var(--bg2); color: var(--muted); border: 1px solid transparent; white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 5px; }
+    .chip .sw { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.9; }
+    .chip.on { color: var(--text); background: rgba(120,170,255,0.18); border-color: var(--line); }
+    .chip.off { opacity: 0.55; }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span class="title"><span data-i18n="shell.widget.map">Map</span> · <span data-source>OFFLINE</span></span>
+      <span class="btns">
+        <button id="followBtn" title="Follow train">⌖</button>
+        <button id="refreshBtn" title="Reload route">↻</button>
+        <button data-collapse title="Collapse">—</button>
+        <button data-close title="Close">×</button>
+      </span>
+    </div>
+    <div class="body" style="padding:0">
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div class="empty-map" id="emptyMsg" data-i18n="shell.widget.waitingForService">Waiting for an active service…</div>
+        <div class="load-panel" id="loadPanel">
+          <div class="title" data-i18n="shell.widget.loadTimetableRoute">Load Timetable / Route</div>
+
+          <label for="lpRoute" data-i18n="shell.widget.route">Route</label>
+          <select id="lpRoute"><option value="" data-i18n="shell.widget.selectRoutePlaceholder">— Select a route —</option></select>
+
+          <label for="lpClass" data-i18n="shell.widget.trainClassOptional">Train class (optional)</label>
+          <select id="lpClass" disabled><option value="" data-i18n="shell.widget.allClassesPlaceholder">— All classes —</option></select>
+
+          <label for="lpTtInput" data-i18n="shell.widget.timetable">Timetable</label>
+          <div class="ta">
+            <input type="text" id="lpTtInput" disabled placeholder="Pick a route first…" data-i18n-placeholder="shell.widget.pickRouteFirst" autocomplete="off">
+            <div class="ta-dd" id="lpTtDD"></div>
+          </div>
+
+          <div class="actions">
+            <button id="lpLoad" disabled data-i18n="shell.widget.loadTimetable">Load timetable</button>
+            <button id="lpLoadRoute" class="secondary" disabled data-i18n="shell.widget.loadWholeRoute">Load whole route</button>
+          </div>
+          <div class="actions">
+            <button id="lpClear" class="ghost" title="Resume auto-detect" data-i18n="shell.widget.auto">Auto</button>
+          </div>
+          <div class="flash" id="lpFlash"></div>
+        </div>
+      </div>
+      <div class="layerbar" id="layerbar"></div>
+    </div>
+    <div class="resize-handle" id="resize" title="Drag to resize the widget"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="widget.js"></script>
+  <script>
+    var invoke = window.__TAURI__.core.invoke;
+    var map = L.map('map', { preferCanvas: true, attributionControl: false, zoomControl: false }).setView([52.0, -1.5], 6);
+
+    // Three basemap options (same set hud-rust's served map page uses, via
+    // leaflet-extras.js). Persist the user's pick so the widget reopens with
+    // the same style next time.
+    var BASES = {
+      Map:       L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }),
+      Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
+      Topo:      L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',                                              { subdomains: 'abc',  maxZoom: 17 }),
+    };
+    var savedBase = localStorage.getItem('mapBase') || 'Map';
+    if (!BASES[savedBase]) savedBase = 'Map';
+    BASES[savedBase].addTo(map);
+    L.control.layers(BASES, null, { position: 'topright', collapsed: true }).addTo(map);
+    map.on('baselayerchange', function (e) { localStorage.setItem('mapBase', e.name); });
+
+    L.control.zoom({ position: 'topleft' }).addTo(map); // keep clear of the resize grip (bottom-right)
+
+    var trainIcon = L.divIcon({ className: 'train-icon',
+      html: '<div style="background:#ffa500;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(255,165,0,0.8)"></div>',
+      iconSize: [18, 18], iconAnchor: [9, 9] });
+
+    var curService = null, curId = null, isFollowing = true, firstFix = true, trainMarker = null;
+    // True when the current timetable was resolved WITHOUT a player position.
+    // get_active_timetable can't disambiguate same-named services (e.g.
+    // "PlayerService" across DLCs) without one, so it returns an arbitrary row
+    // — often a different country. We re-detect once a position arrives.
+    var detectedWithoutPos = false;
+    var lastRes = null; // last get_active_timetable result, for the debug box
+    // When the user picks a timetable from the load-panel dropdown, we lock
+    // onto it so the next telemetry tick doesn't trample the choice with the
+    // auto-detected service. `Auto` button clears the override.
+    var manualOverride = null;
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    // ---- layer registry + toggle bar ----------------------------------------
+    var CAT = { Route:'#0066ff', Stops:'#00cc66', Train:'#ffa500',
+      Platforms:'#5fd37a', Sidings:'#c79a5b', Signals:'#ff5a52', Switches:'#ffb24d', Tracks:'#5f6772',
+      'Car stops':'#4fc3f7', Tunnels:'#7a8aa0', Collectables:'#b388ff', Other:'#cccccc' };
+    var ORDER = ['Route','Stops','Train','Platforms','Sidings','Signals','Switches','Tracks','Car stops','Tunnels','Collectables','Other'];
+    var LAYERS = {};          // name -> Leaflet layer/group currently built
+
+    // The extractor stores coordinates as [lng, lat] arrays (timetable paths are
+    // a flat list; route geometry is a list of such segments). Older hud-go data
+    // used {latitude, longitude} objects. Accept both so the map draws either.
+    function toLL(c) {
+      if (Array.isArray(c)) return (c.length >= 2 && c[0] != null && c[1] != null) ? [c[1], c[0]] : null;
+      if (c && c.latitude != null && c.longitude != null) return [c.latitude, c.longitude];
+      return null;
+    }
+    function segToLatLngs(seg) { return (seg || []).map(toLL).filter(Boolean); }
+    var enabled = JSON.parse(localStorage.getItem('mapLayers') || 'null') || {};
+    function isOn(name) { return (name in enabled) ? enabled[name] : (name === 'Route' || name === 'Stops' || name === 'Train' || name === 'Platforms' || name === 'Tracks' || name === 'Car stops'); }
+
+    function applyLayer(name) {
+      var ly = LAYERS[name]; if (!ly) return;
+      if (isOn(name)) { if (!map.hasLayer(ly)) map.addLayer(ly); }
+      else if (map.hasLayer(ly)) map.removeLayer(ly);
+    }
+    function applyAll() { for (var n in LAYERS) applyLayer(n); }
+
+    function rebuildBar() {
+      var bar = document.getElementById('layerbar');
+      bar.innerHTML = ORDER.filter(function (n) { return LAYERS[n]; }).map(function (n) {
+        return '<span class="chip ' + (isOn(n) ? 'on' : 'off') + '" data-n="' + n + '" style="color:' + CAT[n] + '">' +
+               '<span class="sw"></span>' + n + '</span>';
+      }).join('') || '<span style="font-size:0.62rem;color:var(--muted)">' + esc(window.widgetTr('shell.widget.noLayers', 'no layers')) + '</span>';
+      Array.prototype.forEach.call(bar.querySelectorAll('.chip'), function (el) {
+        el.addEventListener('click', function () {
+          var n = el.getAttribute('data-n');
+          enabled[n] = !isOn(n);
+          localStorage.setItem('mapLayers', JSON.stringify(enabled));
+          applyLayer(n); rebuildBar();
+        });
+      });
+      window.widget.sync();
+    }
+
+    // GeoJSON is [lng,lat]; Leaflet wants [lat,lng].
+    function categorize(p, geom) {
+      if (p.feature_kind === 'collectable' || p.feature_type === 'collectable') return 'Collectables';
+      if (p.feature_kind === 'car_stop_sign') return 'Car stops';
+      if (p.signal_id != null || p.signal_type != null) return 'Signals';
+      if (p.jct_guid != null || p.turnout_ribbon != null) return 'Switches';
+      if (p.marker_type === 'Platform' || (p.feature_type || '').indexOf('platform') >= 0) return 'Platforms';
+      if (p.feature_kind === 'track_feature' || geom.type === 'LineString' || (p.feature_type || '').indexOf('track') >= 0) return 'Tracks';
+      return 'Other';
+    }
+    function buildFeatureLayers(feats) {
+      ['Platforms','Signals','Switches','Tracks','Car stops','Collectables','Other'].forEach(function (c) {
+        if (LAYERS[c]) { map.removeLayer(LAYERS[c]); delete LAYERS[c]; }
+      });
+      var groups = {};
+      (feats || []).forEach(function (f) {
+        var geom = f.geometry, p = f.properties || {}; if (!geom) return;
+        var cat = categorize(p, geom), color = CAT[cat];
+        var label = p.display_label || p.platform_name || p.location || p.name || p.signal_id || cat;
+        var layer = null;
+        if (geom.type === 'Point') {
+          layer = L.circleMarker([geom.coordinates[1], geom.coordinates[0]],
+            { radius: 4, color: '#0b0e14', weight: 1, fillColor: color, fillOpacity: 0.9 });
+        } else if (geom.type === 'LineString') {
+          layer = L.polyline(geom.coordinates.map(function (c) { return [c[1], c[0]]; }),
+            { color: color, weight: 3, opacity: 0.7 });
+        }
+        if (!layer) return;
+        layer.bindPopup('<b>' + esc(label) + '</b><br><small>' + esc(cat) + '</small>');
+        (groups[cat] = groups[cat] || L.layerGroup()).addLayer(layer);
+      });
+      for (var c in groups) LAYERS[c] = groups[c];
+    }
+
+    // Follow-train control: visible Leaflet button on the map (top-left,
+    // under the zoom control) plus the existing ⌖ in the header. Both sync.
+    // Preference persists in localStorage so reopens remember the choice.
+    var followBtn = document.getElementById('followBtn');
+    var followCtl = null;
+    function paintFollow() {
+      followBtn.classList.toggle('on', isFollowing);
+      followBtn.textContent = isFollowing ? '⌖' : '◯';
+      if (followContainer) followContainer.classList.toggle('on', isFollowing);
+      if (followCtl) {
+        followCtl.title = isFollowing
+          ? 'Following train — click to stop'
+          : 'Follow train (auto-center)';
+      }
+    }
+    function setFollow(on) {
+      isFollowing = !!on;
+      localStorage.setItem('mapFollow', isFollowing ? '1' : '0');
+      paintFollow();
+      if (isFollowing && trainMarker) map.setView(trainMarker.getLatLng(), map.getZoom());
+    }
+    // Restore last preference (defaults to following on first run).
+    var savedFollow = localStorage.getItem('mapFollow');
+    isFollowing = (savedFollow == null) ? true : (savedFollow === '1');
+
+    // Crosshair / target icon — sized + styled to mirror the layers control
+    // square on the opposite side. currentColor lets the active-state CSS
+    // flip the stroke to white when the icon inverts.
+    var TARGET_SVG =
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none"' +
+      ' stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+      '<circle cx="12" cy="12" r="7"/>' +
+      '<line x1="12" y1="1.5" x2="12" y2="5"/>' +
+      '<line x1="12" y1="19" x2="12" y2="22.5"/>' +
+      '<line x1="1.5" y1="12" x2="5" y2="12"/>' +
+      '<line x1="19" y1="12" x2="22.5" y2="12"/>' +
+      '<circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>' +
+      '</svg>';
+
+    var followContainer = null;
+    var FollowControl = L.Control.extend({
+      // 'topright' stacks the Follow button directly under the layers
+      // (map-style) selector — Leaflet auto-stacks same-position controls
+      // in registration order, and we register layers first.
+      options: { position: 'topright' },
+      onAdd: function () {
+        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control follow-ctl');
+        var a = L.DomUtil.create('a', '', container);
+        a.href = '#';
+        a.setAttribute('role', 'button');
+        a.innerHTML = TARGET_SVG;
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(a, 'click', function (e) {
+          L.DomEvent.preventDefault(e);
+          setFollow(!isFollowing);
+        });
+        followCtl = a;
+        followContainer = container;
+        paintFollow();
+        return container;
+      },
+    });
+    new FollowControl().addTo(map);
+
+    followBtn.addEventListener('click', function () { setFollow(!isFollowing); });
+    paintFollow();
+    document.getElementById('refreshBtn').addEventListener('click', function () { curService = null; firstFix = true; });
+
+    async function loadRoute(id) {
+      var coords = await invoke('get_route_coordinates', { id: id });
+      var latlngs = segToLatLngs(coords);
+      // Clear every per-service layer we rebuild below.
+      ['Route', 'Stops', 'Platforms', 'Signals', 'Switches', 'Tracks', 'Car stops', 'Collectables', 'Sidings', 'Tunnels', 'Other'].forEach(function (n) {
+        if (LAYERS[n]) { map.removeLayer(LAYERS[n]); delete LAYERS[n]; }
+      });
+      if (latlngs.length) LAYERS.Route = L.polyline(latlngs, { color: '#0066ff', weight: 4, opacity: 0.65 });
+
+      // Per-service features, FILTERED to this service's path (matches hud-go):
+      // signals/switches/car-stops/platforms within a few metres of the path,
+      // collectables within 50 m; sidings/tunnels and everything off-route are
+      // dropped. `stops` are the scheduled stops resolved to platform coords.
+      var nStops = 0;
+      try {
+        var fm = await invoke('get_timetable_markers', { timetableId: id });
+
+        var sg = L.layerGroup();
+        (fm.stops || []).forEach(function (s, i) {
+          if (s.latitude == null || s.longitude == null) return;
+          nStops++;
+          L.circleMarker([s.latitude, s.longitude], { radius: 6, fillColor: '#00cc66', color: '#fff', weight: 2, fillOpacity: 0.9 })
+            .bindPopup('<b>#' + (i + 1) + ' ' + esc(s.name || 'Stop') + '</b>').addTo(sg);
+        });
+        if (sg.getLayers().length) LAYERS.Stops = sg;
+
+        function ptLayer(arr, cat, radius) {
+          var lg = L.layerGroup();
+          (arr || []).forEach(function (p) {
+            if (p.latitude == null || p.longitude == null) return;
+            var mk = L.circleMarker([p.latitude, p.longitude],
+              { radius: radius, color: '#0b0e14', weight: 1, fillColor: CAT[cat], fillOpacity: 0.9 });
+            if (p.name) mk.bindPopup('<b>' + esc(p.name) + '</b><br><small>' + esc(cat) + '</small>');
+            lg.addLayer(mk);
+          });
+          if (lg.getLayers().length) LAYERS[cat] = lg;
+        }
+        ptLayer(fm.markers, 'Platforms', 4);
+        ptLayer(fm.carStops, 'Car stops', 3);
+        ptLayer(fm.signals, 'Signals', 3);
+        ptLayer(fm.switches, 'Switches', 3);
+        ptLayer(fm.collectables, 'Collectables', 4);
+      } catch (e) { /* leave overlay layers empty on failure */ }
+
+      // Rails: the route-wide track geometry as a faint background layer.
+      try {
+        var td = await invoke('timetable_detail', { id: id });
+        var routeId = (td && td.timetable && td.timetable.route_id) || null;
+        if (routeId) {
+          var rm = await invoke('get_route_map_data', { routeId: routeId });
+          var segs = (rm && Array.isArray(rm.coordinates)) ? rm.coordinates : [];
+          var tg = L.layerGroup();
+          segs.forEach(function (seg) {
+            var ll = segToLatLngs(seg);
+            if (ll.length > 1) L.polyline(ll, { color: CAT.Tracks, weight: 1.5, opacity: 0.6 }).addTo(tg);
+          });
+          if (tg.getLayers().length) LAYERS.Tracks = tg;
+        }
+      } catch (e) { }
+
+      document.getElementById('emptyMsg').style.display = (latlngs.length || nStops) ? 'none' : '';
+      applyAll(); rebuildBar();
+      if (firstFix && LAYERS.Route) map.fitBounds(LAYERS.Route.getBounds(), { padding: [20, 20] });
+    }
+
+    // ---- Load-from-dropdown panel ---------------------------------------------
+    // Three-stage cascade: Route → optional Train Class → Timetable typeahead.
+    // Also has a "Load whole route" button (no specific timetable — just the
+    // route's polyline from route_coordinates).
+    var loadPanelEl  = document.getElementById('loadPanel');
+    var lpRoute      = document.getElementById('lpRoute');
+    var lpClass      = document.getElementById('lpClass');
+    var lpTtInput    = document.getElementById('lpTtInput');
+    var lpTtDD       = document.getElementById('lpTtDD');
+    var lpLoad       = document.getElementById('lpLoad');
+    var lpLoadRoute  = document.getElementById('lpLoadRoute');
+    var lpClear      = document.getElementById('lpClear');
+    var lpFlash      = document.getElementById('lpFlash');
+
+    var ttItems       = [];     // [{id, label}] for the current Route+Class
+    var selectedTtId  = null;   // currently-picked timetable id
+    var taActive      = -1;     // highlighted typeahead row index
+
+    function setLpFlash(msg, cls) {
+      lpFlash.textContent = msg || '';
+      lpFlash.className = 'flash' + (cls ? ' ' + cls : '');
+    }
+    function showLoadPanel(show) {
+      loadPanelEl.classList.toggle('show', !!show);
+    }
+
+    (async function initLoadPanel() {
+      try {
+        var opts = await invoke('timetable_filter_options');
+        var routes = opts.routes || [];
+        lpRoute.innerHTML = '<option value="">— Select a route —</option>' +
+          routes.map(function (r) { return '<option value="' + r[0] + '">' + esc(r[1]) + '</option>'; }).join('');
+      } catch (e) { setLpFlash('routes load failed: ' + e, 'err'); }
+    })();
+
+    function resetTtTypeahead(placeholder) {
+      ttItems = [];
+      selectedTtId = null;
+      lpTtInput.value = '';
+      lpTtInput.disabled = true;
+      lpTtInput.placeholder = placeholder || window.widgetTr('shell.widget.pickRouteFirst', 'Pick a route first…');
+      lpTtDD.innerHTML = '';
+      lpTtDD.classList.remove('show');
+      lpLoad.disabled = true;
+    }
+
+    async function refreshTimetables() {
+      var rid = Number(lpRoute.value);
+      var cid = Number(lpClass.value) || null;
+      if (!rid) { resetTtTypeahead(); return; }
+      lpTtInput.disabled = true;
+      lpTtInput.placeholder = window.widgetTr('shell.widget.loadingPlaceholder', 'loading…');
+      try {
+        ttItems = await invoke('timetables_for_route', { routeId: rid, classId: cid });
+        ttItems = (ttItems || []).map(function (row) { return { id: row[0], label: row[1] }; });
+        if (!ttItems.length) {
+          resetTtTypeahead('no timetables on this route' + (cid ? ' + class' : ''));
+          return;
+        }
+        lpTtInput.disabled = false;
+        lpTtInput.placeholder = window.widgetTr('shell.widget.typeToFilter', 'Type to filter ') + ttItems.length + window.widgetTr('shell.widget.timetablesSuffix', ' timetables…');
+        selectedTtId = null;
+        lpLoad.disabled = true;
+        // Do NOT auto-open the dropdown — that obscures the Load buttons.
+        // The dropdown opens only when the user focuses or types in the
+        // input, and closes on blur / Esc / selection.
+        lpTtDD.classList.remove('show');
+      } catch (e) {
+        resetTtTypeahead('error');
+        setLpFlash('timetables load failed: ' + e, 'err');
+      }
+    }
+
+    async function refreshClasses() {
+      var rid = Number(lpRoute.value);
+      lpClass.innerHTML = '<option value="">— All classes —</option>';
+      lpClass.disabled = !rid;
+      if (!rid) return;
+      try {
+        var rows = await invoke('classes_for_route', { routeId: rid });
+        if (rows && rows.length) {
+          lpClass.innerHTML = '<option value="">— All classes —</option>' +
+            rows.map(function (r) { return '<option value="' + r[0] + '">' + esc(r[1]) + '</option>'; }).join('');
+        }
+      } catch (e) { /* non-fatal — leave All Classes */ }
+    }
+
+    lpRoute.addEventListener('change', async function () {
+      setLpFlash('');
+      lpLoadRoute.disabled = !Number(lpRoute.value);
+      lpClass.value = '';
+      await refreshClasses();
+      await refreshTimetables();
+    });
+    lpClass.addEventListener('change', function () { refreshTimetables(); });
+
+    function renderTaDD(query) {
+      var q = (query || '').trim().toLowerCase();
+      var matches = q.length
+        ? ttItems.filter(function (it) { return it.label.toLowerCase().indexOf(q) !== -1; })
+        : ttItems.slice(0, 50);
+      if (!matches.length) {
+        lpTtDD.innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.noMatches', 'no matches')) + '</div>';
+        lpTtDD.classList.add('show');
+        taActive = -1;
+        return;
+      }
+      lpTtDD.innerHTML = matches.slice(0, 200).map(function (it, i) {
+        return '<div class="opt" data-id="' + it.id + '" data-i="' + i + '">' + esc(it.label) + '</div>';
+      }).join('');
+      lpTtDD.classList.add('show');
+      taActive = -1;
+      lpTtDD.querySelectorAll('.opt').forEach(function (el) {
+        el.addEventListener('mousedown', function (ev) {
+          // mousedown (not click) so the input doesn't lose focus first and
+          // blur-hide the dropdown before the click fires.
+          ev.preventDefault();
+          selectTt(Number(el.getAttribute('data-id')), el.textContent);
+        });
+      });
+    }
+    function selectTt(id, label) {
+      selectedTtId = id;
+      lpTtInput.value = label;
+      lpTtDD.classList.remove('show');
+      lpLoad.disabled = !id;
+    }
+    lpTtInput.addEventListener('input', function () { renderTaDD(lpTtInput.value); });
+    lpTtInput.addEventListener('focus', function () { if (ttItems.length) renderTaDD(lpTtInput.value); });
+    lpTtInput.addEventListener('blur', function () { setTimeout(function () { lpTtDD.classList.remove('show'); }, 120); });
+    lpTtInput.addEventListener('keydown', function (e) {
+      var opts = lpTtDD.querySelectorAll('.opt');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!opts.length) return;
+        taActive = (taActive + 1) % opts.length;
+        opts.forEach(function (o, i) { o.classList.toggle('active', i === taActive); });
+        opts[taActive].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!opts.length) return;
+        taActive = (taActive <= 0 ? opts.length : taActive) - 1;
+        opts.forEach(function (o, i) { o.classList.toggle('active', i === taActive); });
+        opts[taActive].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        if (taActive >= 0 && opts[taActive]) {
+          selectTt(Number(opts[taActive].getAttribute('data-id')), opts[taActive].textContent);
+        } else if (opts.length === 1) {
+          selectTt(Number(opts[0].getAttribute('data-id')), opts[0].textContent);
+        }
+      } else if (e.key === 'Escape') {
+        lpTtDD.classList.remove('show');
+      }
+    });
+
+    lpLoad.addEventListener('click', async function () {
+      if (!selectedTtId) return;
+      var tid = selectedTtId;
+      lpLoad.disabled = true;
+      setLpFlash('loading timetable…');
+      try {
+        manualOverride = tid;
+        curId = tid;
+        firstFix = true;
+        await loadRoute(tid);
+        showLoadPanel(false);
+        document.querySelector('[data-source]').textContent = 'MANUAL';
+        window.widget.setStatus('live');
+        setLpFlash('loaded', 'ok');
+      } catch (e) {
+        manualOverride = null; curId = null;
+        setLpFlash('load failed: ' + e, 'err');
+      } finally {
+        lpLoad.disabled = !selectedTtId;
+      }
+    });
+
+    // Shared: fetch a route's polyline and draw it as a multi-segment
+    // L.polyline (one SVG element, no jump-lines between disconnected
+    // pieces). Called by both the manual "Load whole route" button and the
+    // auto-detect route-only fallback for Training Centre / custom
+    // scenarios. Returns { segments, points } so the caller can update
+    // its own status, or throws on no-geometry.
+    async function loadWholeRoutePolyline(rid) {
+      var segments = await invoke('route_geometry', { routeId: rid });
+      ['Route', 'Stops', 'Platforms', 'Signals', 'Switches', 'Tracks', 'Car stops', 'Collectables', 'Other'].forEach(function (n) {
+        if (LAYERS[n]) { map.removeLayer(LAYERS[n]); delete LAYERS[n]; }
+      });
+      var multi = (segments || [])
+        .map(segToLatLngs)
+        .filter(function (latlngs) { return latlngs.length >= 2; });
+      if (!multi.length) {
+        throw new Error('no recorded geometry for this route');
+      }
+      var pointCount = multi.reduce(function (acc, ll) { return acc + ll.length; }, 0);
+      LAYERS.Route = L.polyline(multi, { color: '#0066ff', weight: 4, opacity: 0.65 });
+      applyLayer('Route');
+      rebuildBar();
+      map.fitBounds(LAYERS.Route.getBounds(), { padding: [20, 20] });
+      document.getElementById('emptyMsg').style.display = 'none';
+      return { segments: multi.length, points: pointCount };
+    }
+
+    // Load the whole route's polyline only (no timetable's stops or
+    // collectables — they don't make sense at this level). Useful when the
+    // user just wants to see "where does the line go" without picking a
+    // specific service.
+    lpLoadRoute.addEventListener('click', async function () {
+      var rid = Number(lpRoute.value);
+      if (!rid) return;
+      lpLoadRoute.disabled = true;
+      setLpFlash('loading route polyline…');
+      try {
+        var r = await loadWholeRoutePolyline(rid);
+        manualOverride = 'route:' + rid;
+        curId = null;
+        showLoadPanel(false);
+        document.querySelector('[data-source]').textContent = window.widgetTr('shell.widget.routeOnly', 'ROUTE ONLY');
+        setLpFlash('route loaded (' + r.segments + ' segment' + (r.segments === 1 ? '' : 's') + ', ' + r.points + ' points)', 'ok');
+      } catch (e) {
+        setLpFlash((e && e.message) ? e.message : ('route load failed: ' + e), 'err');
+      } finally {
+        lpLoadRoute.disabled = !Number(lpRoute.value);
+      }
+    });
+
+    lpClear.addEventListener('click', function () {
+      // Drop the manual override and let the next telemetry tick re-detect.
+      manualOverride = null;
+      curId = null;
+      curService = null;
+      ['Route', 'Stops', 'Train', 'Platforms', 'Signals', 'Switches', 'Tracks', 'Car stops', 'Collectables', 'Other'].forEach(function (n) {
+        if (LAYERS[n]) { map.removeLayer(LAYERS[n]); delete LAYERS[n]; }
+      });
+      trainMarker = null;
+      rebuildBar();
+      setLpFlash('cleared — waiting for auto-detect', '');
+    });
+
+    async function onTelemetry(d) {
+      if (!d || (!d.connected && !d.loading)) {
+        window.widget.setStatus('offline');
+        document.querySelector('[data-source]').textContent = 'OFFLINE';
+        // Show the panel while OFFLINE only if nothing's loaded — manual
+        // route/timetable loads should remain visible without interruption.
+        showLoadPanel(!curId && !manualOverride);
+        return;
+      }
+      if (d && !d.connected && d.loading) {
+        window.widget.setStatus('loading', d.status);
+        document.querySelector('[data-source]').textContent = 'LOADING';
+        return;
+      }
+      window.widget.setStatus('live');
+      var svc = d.currentServiceName || null;
+      // Auto-detect is suspended while the user has a manual override
+      // active. Clicking the "Auto" button clears it (see lpClear above).
+      var pos0 = d.playerPosition || null;
+      if (!manualOverride && svc && (svc !== curService || (detectedWithoutPos && pos0))) {
+        curService = svc;
+        var pos = pos0;
+        detectedWithoutPos = !pos;
+        try {
+          var res = await invoke('get_active_timetable', { serviceName: svc, lat: pos ? pos.latitude : null, lng: pos ? pos.longitude : null });
+          lastRes = res;
+          if (res && res.found && res.route_only) {
+            // No matching timetable but the player is on a known route —
+            // draw the route polyline. Used for Training Centre tutorials,
+            // custom scenarios, and any service name TSW reports that
+            // doesn't appear in `timetables`.
+            curId = null;
+            document.querySelector('[data-source]').textContent = window.widgetTr('shell.widget.routeOnly', 'ROUTE ONLY');
+            try { await loadWholeRoutePolyline(res.route_id); } catch (e) {}
+          } else if (res && res.found) {
+            curId = res.id;
+            document.querySelector('[data-source]').textContent = 'ROUTE';
+            await loadRoute(res.id);
+          } else {
+            curId = null;
+            document.querySelector('[data-source]').textContent = window.widgetTr('shell.widget.noRoute', 'NO ROUTE');
+            document.getElementById('emptyMsg').style.display = '';
+            document.getElementById('emptyMsg').textContent = window.widgetTr('shell.widget.serviceNotInDatabase', 'Service not in database.');
+          }
+        } catch (e) { document.querySelector('[data-source]').textContent = window.widgetTr('shell.widget.dbErr', 'DB ERR'); }
+      }
+      // Panel visibility: show only when nothing is loaded (no timetable
+      // AND no whole-route override). Manual loads keep the map clear of
+      // the panel even though curId may be null in "Load whole route" mode.
+      showLoadPanel(!curId && !manualOverride);
+      var p = d.playerPosition;
+      if (p && p.latitude != null && p.longitude != null) {
+        var ll = [p.latitude, p.longitude];
+        if (trainMarker) trainMarker.setLatLng(ll);
+        else { trainMarker = L.marker(ll, { icon: trainIcon }); LAYERS.Train = trainMarker; applyLayer('Train'); rebuildBar(); }
+        if (firstFix && !LAYERS.Route) { map.setView(ll, 14); firstFix = false; }
+        else if (firstFix) { firstFix = false; }
+        else if (isFollowing && isOn('Train')) map.setView(ll, map.getZoom());
+      }
+    }
+
+    async function poll() {
+      try { var d = await invoke('get_telemetry'); await onTelemetry(d); } catch (e) { window.widget.setLive(false); }
+      setTimeout(poll, 250);
+    }
+    if ('ResizeObserver' in window) new ResizeObserver(function () { map.invalidateSize(); }).observe(document.getElementById('map'));
+
+    // Keep the layer bar exactly as wide as the map, so the bar's natural
+    // (one-line) width doesn't make the widget box wider than the map — which
+    // left empty space beside the map. The bar's chips just wrap instead.
+    var mapEl = document.getElementById('map');
+    function fitBar() { document.getElementById('layerbar').style.width = mapEl.offsetWidth + 'px'; }
+
+    // Corner drag resizes #map; widget.js's single auto-sizer grows the window.
+    (function () {
+      var rh = document.getElementById('resize');
+      var dragging = false, sx, sy, sw, sh;
+      rh.addEventListener('mousedown', function (e) { dragging = true; sx = e.screenX; sy = e.screenY; sw = mapEl.offsetWidth; sh = mapEl.offsetHeight; map.dragging.disable(); e.preventDefault(); });
+      window.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        mapEl.style.width = Math.max(240, sw + (e.screenX - sx)) + 'px';
+        mapEl.style.height = Math.max(180, sh + (e.screenY - sy)) + 'px';
+        fitBar();
+      });
+      window.addEventListener('mouseup', function () { if (dragging) { dragging = false; map.dragging.enable(); } });
+    })();
+
+    rebuildBar();
+    fitBar();
+    window.addEventListener('load', fitBar);
+    poll();
+  </script>
+</body>
+</html>

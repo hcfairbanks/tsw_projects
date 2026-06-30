@@ -1,0 +1,129 @@
+/* Shared glassy overlay styling for all widgets. */
+:root {
+  --bg:    rgba(14, 17, 24, 0.86);
+  --bg2:   rgba(255, 255, 255, 0.05);
+  --line:  rgba(120, 170, 255, 0.22);
+  --text:  #e9eefb;
+  --muted: #8a93a8;
+  --accent:#4fc3f7;
+  --warn:  #ffb24d;
+  --bad:   #ff5a52;
+  --good:  #5fd37a;
+}
+
+/* Color-blind schemes (widget.js sets data-color-scheme on <html> from config). */
+html[data-color-scheme="deuteranopia"], html[data-color-scheme="protanopia"] {
+  --good: #17a2b8; --bad: #ff7043;
+}
+html[data-color-scheme="tritanopia"] {
+  --accent: #9b59b6; --warn: #e67e22; --bad: #e74c3c;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: transparent;            /* the window is transparent; only .widget paints */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* Padding leaves room for the panel's drop shadow; main.js sizes the window
+   to include this, so it isn't a click-blocking dead-zone of any real size. */
+body { padding: 10px; }
+
+.widget {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+/* Header is the drag handle (whole window moves when you drag it). */
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--bg2);
+  cursor: move;
+  -webkit-app-region: drag;
+}
+.hdr .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--bad); flex: none;
+}
+.hdr .dot.live { background: var(--good); box-shadow: 0 0 8px var(--good); }
+.hdr .dot.loading {
+  background: var(--warn);
+  box-shadow: 0 0 6px var(--warn);
+  animation: widget-loading-pulse 1.2s ease-in-out infinite;
+}
+@keyframes widget-loading-pulse {
+  0%, 100% { opacity: 1.0; transform: scale(1.0); }
+  50%      { opacity: 0.4; transform: scale(0.75); }
+}
+
+/* While the always-on TSW poller is still subscribing, dim the data area
+   and stamp a centred Loading panel on top of it. The panel is appended by
+   widget.js (it carries the live status text + an elapsed counter so a long
+   boot phase looks like progress, not a hang). OFFLINE keeps the original
+   placeholder-dashes look (that's the steady "no game" appearance). */
+.widget.is-loading .body { position: relative; }
+.widget.is-loading .body > *:not(.loading-overlay) { opacity: 0.15; pointer-events: none; }
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  pointer-events: none;
+  background: rgba(14, 17, 24, 0.45);
+}
+.loading-overlay .lbl {
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  color: var(--warn);
+  font-weight: 700;
+}
+.loading-overlay .status {
+  font-size: 0.72rem;
+  color: var(--muted);
+  max-width: 88%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.loading-overlay .elapsed {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  opacity: 0.9;
+}
+.hdr .title {
+  flex: 1; min-width: 0;
+  font-size: 0.74rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.hdr .btns { display: flex; gap: 4px; -webkit-app-region: no-drag; }
+.hdr button {
+  -webkit-app-region: no-drag;
+  width: 22px; height: 22px;
+  border: none; border-radius: 6px;
+  background: var(--bg2); color: var(--muted);
+  font-size: 13px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.hdr button:hover { background: rgba(255, 255, 255, 0.14); color: var(--text); }
+
+.body { padding: 12px; }
+.widget.collapsed .body { display: none; }
+.widget.collapsed .hdr { border-bottom: none; }

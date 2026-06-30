@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reinitialize Subscription</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .widget { width: max-content; }
+    .body { padding: 10px 12px; }
+    .reinit-btn {
+      min-width: 240px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #061018;
+      font: 700 1rem system-ui, sans-serif;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .reinit-btn:hover { background: #7fd3fa; }
+    .reinit-btn:active { transform: translateY(1px); }
+    .reinit-btn:disabled { cursor: default; opacity: 0.95; }
+    /* progress states */
+    .reinit-btn.working { background: var(--warn); border-color: var(--warn); color: #1a1205; }
+    .reinit-btn.ok      { background: var(--good); border-color: var(--good); color: #04210e; }
+    .reinit-btn.err     { background: var(--bad);  border-color: var(--bad);  color: #2a0606; }
+    /* spinner shown while working */
+    .spin {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.35); border-top-color: rgba(0,0,0,0.85);
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    .reinit-btn.working .spin { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="title" data-i18n="shell.widget.reinitTitle">Subscription</span>
+      <span class="btns">
+        <button data-collapse title="Collapse">—</button>
+        <button data-close title="Close">×</button>
+      </span>
+    </div>
+    <div class="body">
+      <button class="reinit-btn" id="reinit">
+        <span class="spin"></span>
+        <span class="lbl" data-i18n="shell.widget.reinitSub">Reinitialize subscription</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    const { invoke } = window.__TAURI__.core;
+    const btn = document.getElementById('reinit');
+    const lbl = btn.querySelector('.lbl');
+    const tr = (k, f) => (window.widgetTr ? window.widgetTr(k, f) : f);
+    let busy = false;
+
+    function setState(cls, key, fallback) {
+      btn.classList.remove('working', 'ok', 'err');
+      if (cls) btn.classList.add(cls);
+      lbl.textContent = tr(key, fallback);
+    }
+    function reset() {
+      busy = false;
+      btn.disabled = false;
+      setState('', 'shell.widget.reinitSub', 'Reinitialize subscription');
+    }
+
+    btn.addEventListener('click', async () => {
+      if (busy) return;
+      busy = true;
+      btn.disabled = true;
+      try {
+        // Delete then recreate as two steps so progress is visible in the button.
+        setState('working', 'shell.widget.reinitDeleting', 'Deleting…');
+        await invoke('subscription_action', { action: 'delete' });
+        setState('working', 'shell.widget.reinitRecreating', 'Recreating…');
+        await invoke('subscription_action', { action: 'create' });
+        setState('ok', 'shell.widget.reinitDone', 'Done ✓');
+        if (window.widget && window.widget.sync) window.widget.sync();
+        setTimeout(reset, 1700);
+      } catch (e) {
+        setState('err', 'shell.widget.reinitFailed', 'Failed');
+        console.error('[reinit]', e);
+        setTimeout(reset, 2300);
+      }
+    });
+  </script>
+</body>
+</html>

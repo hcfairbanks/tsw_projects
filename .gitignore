@@ -1,7 +1,7 @@
 hud-go/resources/db/*.db
 tsw_api_reader/node_modules/
 
-hud/
+
 junk/
 .claude
 
@@ -39,3 +39,17 @@ map_files/
 # Extractor output + scratch dirs (per-route export zips and pak unpack temp).
 # Live next to the exe so the hud-go folder is portable; not part of source.
 hud-go/routes_data/
+
+# hud (Tauri rewrite): build artifacts, the catalog DB, extractor output, and
+# the deployed binary are heavy (~27 GB combined) and fully reproducible from
+# source — keep them out of git (mirrors the hud-go rules above). The
+# hand-authored resources (collections / widgets / views / flags / images /
+# *.json) ARE committed; only the generated/large pieces below are ignored.
+hud/src-tauri/target/
+hud/hud.exe
+hud/route_data/
+hud/extractor_temp/
+hud/resources/db/*.db
+hud/resources/db/*.db-shm
+hud/resources/db/*.db-wal
+hud/resources/db/*.bak*

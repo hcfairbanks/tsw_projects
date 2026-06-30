@@ -1,0 +1,57 @@
+# Default collection — the original three TSW overlay widgets ported from
+# hud-overlay-tauri. Drop additional collection folders alongside this one
+# (resources/collections/<name>/) and they'll show up in the Collections tab
+# automatically. See ../AI_GUIDE.md for the manifest format (coming Stage 3).
+
+name = "TSW Default"
+description = "Speed dashboard, schedule, and tracking map — the original overlay trio."
+author = "default"
+
+[[widgets]]
+id = "dashboard"
+title = "Dashboard"
+path = "dashboard.html"
+# Width is just a first-paint hint — widget.js's syncSize then shrinks the
+# window to fit `.widget { width: max-content }` in dashboard.html. Height
+# is tighter now that the header overlays the body instead of taking its
+# own row.
+default_size = [460, 240]
+default_pos = [40, 40]
+always_on_top = true
+transparent = true
+
+[[widgets]]
+id = "schedule"
+title = "Schedule"
+path = "schedule.html"
+default_size = [440, 480]
+default_pos = [680, 40]
+always_on_top = true
+transparent = true
+
+[[widgets]]
+id = "map"
+title = "Tracking Map"
+path = "map.html"
+default_size = [520, 360]
+default_pos = [40, 440]
+always_on_top = true
+transparent = true
+
+[[widgets]]
+id = "weather"
+title = "Weather"
+path = "weather.html"
+default_size = [320, 480]
+default_pos = [1080, 40]
+always_on_top = true
+transparent = true
+
+[[widgets]]
+id = "reinit"
+title = "Reinitialize Subscription"
+path = "reinit.html"
+default_size = [280, 110]
+default_pos = [40, 820]
+always_on_top = true
+transparent = true

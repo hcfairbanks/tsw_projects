@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Mile Color Changer</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: #0e1118; color: #e9eefb;
+      font-family: system-ui, sans-serif;
+      transition: background-color 0.4s ease;
+    }
+    .wrap {
+      height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 15px; text-align: center;
+    }
+    .hud-card {
+      background: rgba(0, 0, 0, 0.5); padding: 30px; border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); width: 280px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: #ff5a52; margin: 0 auto 15px; }
+    .dot.live { background: #5fd37a; }
+    .distance { font: 800 70px monospace; line-height: 1; }
+    .unit { font-size: 24px; color: #a0aec0; margin-left: .2em; }
+    .service-info { font-size: 16px; color: #cbd5e0; margin-top: 10px; font-weight: 500; }
+    .off { color: #ff5a52; font-weight: 600; font-size: 16px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hud-card">
+      <div class="dot" id="dot"></div>
+      <div class="distance"><span id="distVal">--</span><span class="unit">mi</span></div>
+      <div class="service-info" id="service">—</div>
+      <div class="off" id="off">OFFLINE</div>
+    </div>
+  </div>
+
+  <script>
+    var $ = function (id) { return document.getElementById(id); };
+
+    // Generation of distinct background HSL colors
+    var colors = [];
+    for (var i = 0; i < 360; i += 40) {
+      colors.push('hsl(' + i + ', 50%, 22%)');
+    }
+
+    var lastLat = null, lastLng = null, totalMiles = 0.0, currentService = '';
+
+    function showOffline(msg) {
+      $('dot').classList.remove('live');
+      $('off').textContent = msg || 'OFFLINE';
+      $('distVal').textContent = '--';
+      $('service').textContent = '—';
+      document.body.style.backgroundColor = '#0e1118';
+      lastLat = null; lastLng = null;
+    }
+
+    function calcDistanceMiles(lat1, lon1, lat2, lon2) {
+      var R = 3958.8; 
+      var dLat = (lat2 - lat1) * Math.PI / 180;
+      var dLon = (lon2 - lon1) * Math.PI / 180;
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+    }
+
+    function render(d) {
+      $('dot').classList.add('live');
+      $('off').textContent = '';
+
+      var serviceName = d.currentServiceName || 'Active Run';
+      if (serviceName !== currentService) {
+        currentService = serviceName;
+        totalMiles = 0.0;
+        lastLat = null; lastLng = null;
+      }
+      $('service').textContent = currentService;
+
+      // Track relative movement step-by-step
+      if (d.playerPosition && d.playerPosition.latitude != null && d.playerPosition.longitude != null) {
+        var currentLat = d.playerPosition.latitude;
+        var currentLng = d.playerPosition.longitude;
+
+        if (lastLat !== null && lastLng !== null) {
+          var delta = calcDistanceMiles(lastLat, lastLng, currentLat, currentLng);
+          if (delta < 0.3) { // Ignore map teleports/loading jumps
+            totalMiles += delta;
+          }
+        }
+        lastLat = currentLat;
+        lastLng = currentLng;
+      }
+
+      $('distVal').textContent = totalMiles.toFixed(2);
+      
+      var mileIndex = Math.floor(totalMiles) % colors.length;
+      document.body.style.backgroundColor = colors[mileIndex];
+    }
+
+    var es = new EventSource('/stream');
+    es.onmessage = function (ev) {
+      var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+      if (d.waiting) showOffline(d.message); else render(d);
+    };
+    es.onerror = function () { showOffline('reconnecting…'); };
+  </script>
+</body>
+</html>

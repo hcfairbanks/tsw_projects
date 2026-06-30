@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Train Class</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .crumbs a { color: var(--accent); }
+
+    .header-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin: 4px 0 14px 0; }
+    .header-row h1 { margin: 0; }
+    .header-row .actions { display: flex; gap: 8px; }
+    .header-row .actions button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .header-row .actions button:hover { border-color: var(--accent); }
+
+    .top-wrap { display: grid; grid-template-columns: minmax(280px, 460px) 1fr; gap: 16px; max-width: 1200px; }
+    .thumb {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      aspect-ratio: 522 / 208;
+      background-position: center; background-size: cover; background-repeat: no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.85rem;
+    }
+
+    .panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; max-width: 1200px; }
+    .panel h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; gap: 8px 18px; font-size: 0.9rem; align-items: center; }
+    .kv .k { color: var(--muted); }
+    .kv .v { color: var(--text); }
+    .kv .v code { background: var(--bg3); padding: 1px 6px; border-radius: 3px; }
+    .kv .v.muted { color: var(--muted); font-style: italic; }
+
+    .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.74rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; }
+    .pill.electric { background: rgba(40,120,230,0.18); color: #5aa0ff; }
+    .pill.diesel   { background: rgba(200,80,0,0.18);   color: #ffaa66; }
+    .pill.good { background: rgba(95,211,122,0.18); color: var(--good); }
+    .pill.idle { background: rgba(255,255,255,0.07); color: var(--muted); }
+
+    table.elec { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    table.elec thead th { background: var(--bg3); padding: 7px 10px; text-align: left; font-size: 0.7rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table.elec tbody td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .err { color: var(--bad); margin: 12px 0; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="crumbs"><a href="train-classes.html" data-i18n="shell.trainClasses.backToList">← Train Classes</a></div>
+      <div class="header-row">
+        <h1 id="title" data-i18n="common.loading">Loading…</h1>
+        <div class="actions"><button id="back" data-i18n="common.back">Back</button></div>
+      </div>
+      <div id="err" class="err" style="display:none;"></div>
+      <div id="panels"></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('train-classes');
+
+    const { invoke } = window.__TAURI__.core;
+    const id = Number(new URLSearchParams(location.search).get('id') || 0);
+
+    document.getElementById('back').addEventListener('click', () => history.length > 1 ? history.back() : (location.href = 'train-classes.html'));
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function fmt(v) {
+      if (v === null || v === undefined || v === '') return '<span class="v muted">—</span>';
+      return esc(v);
+    }
+    function fmtNum(v, suffix) {
+      if (v === null || v === undefined || v === '') return '<span class="v muted">—</span>';
+      return Math.round(Number(v) * 10) / 10 + (suffix ? ' ' + suffix : '');
+    }
+
+    async function load() {
+      const err = document.getElementById('err'); err.style.display = 'none';
+      if (!id) { err.textContent = t('shell.trainClasses.noId', 'no id in URL'); err.style.display = ''; return; }
+      try {
+        const d = await invoke('train_class_detail', { id });
+        const c = d.class || {};
+        document.getElementById('title').textContent = c.name || t('shell.trainClasses.unnamed', '(unnamed)');
+        document.title = 'TSW HUD · ' + (c.name || t('shell.trainClasses.classWord', 'class'));
+
+        const power = c.is_electric === 1 || c.is_electric === true
+          ? `<span class="pill electric">${esc(t('shell.trainClasses.electric', 'Electric'))}</span>`
+          : `<span class="pill diesel">${esc(t('shell.trainClasses.dieselOther', 'Diesel / other'))}</span>`;
+        const driv = (c.is_drivable === 1 || c.is_drivable === true)
+          ? `<span class="pill good">${esc(t('shell.trainClasses.drivable', 'Drivable'))}</span>`
+          : `<span class="pill idle">${esc(t('shell.trainClasses.aiOnly', 'AI only'))}</span>`;
+
+        let url = '';
+        if (c.thumbnail_path) {
+          try {
+            const urls = await invoke('train_class_thumbnails', { paths: [c.thumbnail_path] });
+            url = (urls && urls[0]) || '';
+          } catch (e) { console.error('thumb fetch failed', e); }
+        }
+        const thumb = url
+          ? `<div class="thumb" style="background-image: url('${url}');"></div>`
+          : `<div class="thumb">${esc(t('shell.trainClasses.noThumbnail', 'no thumbnail'))}</div>`;
+
+        const elec = (d.electrification || []).map((e) => `<tr>
+          <td>${fmt(e.current)}</td>
+          <td>${e.voltage_v != null ? esc(e.voltage_v) + ' V' : '<span class="muted">—</span>'}</td>
+          <td>${e.frequency_hz != null ? esc(e.frequency_hz) + ' Hz' : '<span class="muted">—</span>'}</td>
+          <td>${fmt(e.pickup_side)}</td>
+        </tr>`).join('');
+
+        document.getElementById('panels').innerHTML = `
+          <div class="top-wrap">
+            ${thumb}
+            <div class="panel" style="margin: 0;">
+              <h2>${esc(t('shell.trainClasses.identity', 'Identity'))}</h2>
+              <div class="kv">
+                <div class="k">${esc(t('shell.trainClasses.name', 'Name'))}</div>           <div class="v">${fmt(c.name)}</div>
+                <div class="k">${esc(t('shell.trainClasses.manufacturer', 'Manufacturer'))}</div>   <div class="v">${fmt(c.manufacturer_name)}</div>
+                <div class="k">${esc(t('shell.trainClasses.type', 'Type'))}</div>           <div class="v">${fmt(c.type_description)}</div>
+                <div class="k">${esc(t('shell.trainClasses.engine', 'Engine'))}</div>         <div class="v">${fmt(c.engine_description)}</div>
+                <div class="k">${esc(t('shell.trainClasses.vehicleCategory', 'Vehicle category'))}</div><div class="v">${fmt(c.vehicle_category)}</div>
+                <div class="k">${esc(t('shell.trainClasses.railVehicleClass', 'Rail-vehicle class'))}</div><div class="v"><code>${esc(c.rail_vehicle_class || '—')}</code></div>
+                <div class="k">${esc(t('shell.trainClasses.livery', 'Livery'))}</div>         <div class="v"><code>${esc(c.livery_id || '—')}</code></div>
+                <div class="k">${esc(t('shell.trainClasses.status', 'Status'))}</div>        <div class="v">${power} &nbsp; ${driv}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>${esc(t('shell.trainClasses.performance', 'Performance'))}</h2>
+            <div class="kv">
+              <div class="k">${esc(t('shell.trainClasses.maxSpeed', 'Max speed'))}</div>          <div class="v">${fmtNum(c.max_speed_kph, 'km/h')}</div>
+              <div class="k">${esc(t('shell.trainClasses.maxPower', 'Max power'))}</div>          <div class="v">${fmtNum(c.max_power_kw, 'kW')}</div>
+              <div class="k">${esc(t('shell.trainClasses.typicalLength', 'Typical length'))}</div>     <div class="v">${fmtNum(c.typical_length_m, 'm')}</div>
+              <div class="k">${esc(t('shell.trainClasses.typicalCarCount', 'Typical car count'))}</div>  <div class="v">${c.typical_car_count != null ? esc(c.typical_car_count) : '<span class="muted">—</span>'}</div>
+              <div class="k">${esc(t('shell.trainClasses.poweredAxles', 'Powered axles'))}</div>      <div class="v">${c.powered_axle_count != null ? esc(c.powered_axle_count) : '<span class="muted">—</span>'}</div>
+              <div class="k">${esc(t('shell.trainClasses.formationsUsingClass', 'Formations using class'))}</div> <div class="v">${esc(d.formation_count || 0)}</div>
+            </div>
+          </div>
+
+          ${(d.electrification && d.electrification.length) ? `
+            <div class="panel">
+              <h2>${esc(t('shell.trainClasses.electrification', 'Electrification'))}</h2>
+              <table class="elec">
+                <thead><tr><th>${esc(t('shell.trainClasses.current', 'Current'))}</th><th>${esc(t('shell.trainClasses.voltage', 'Voltage'))}</th><th>${esc(t('shell.trainClasses.frequency', 'Frequency'))}</th><th>${esc(t('shell.trainClasses.pickupSide', 'Pickup side'))}</th></tr></thead>
+                <tbody>${elec}</tbody>
+              </table>
+            </div>
+          ` : ''}
+
+          <div class="panel">
+            <h2>${esc(t('shell.trainClasses.identifiers', 'Identifiers'))}</h2>
+            <div class="kv">
+              <div class="k">${esc(t('shell.trainClasses.dbId', 'DB id'))}</div>        <div class="v"><code>${c.id}</code></div>
+              <div class="k">${esc(t('shell.trainClasses.created', 'Created'))}</div>      <div class="v">${fmt(c.created_at)}</div>
+              <div class="k">${esc(t('shell.trainClasses.thumbnailPath', 'Thumbnail path'))}</div><div class="v"><code>${esc((c.thumbnail_path || '—').replace(/\//g, '\\'))}</code></div>
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        err.textContent = t('shell.trainClasses.loadFailed', 'load failed: ') + e; err.style.display = '';
+        document.getElementById('title').textContent = t('shell.trainClasses.errorTitle', '(error)');
+      }
+    }
+
+    // Await the locale + translate static markup, then load the detail. Re-run
+    // load() on language change so the JS-built panels pick up the new locale.
+    initPageI18n(() => load());
+  </script>
+</body>
+</html>

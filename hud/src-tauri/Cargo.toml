@@ -1,0 +1,59 @@
+[package]
+name = "hud"
+version = "0.1.0"
+edition = "2021"
+description = "TSW6 companion app. Tauri 2 successor to hud-rust — one process, N webview windows, shared backend state."
+
+[build-dependencies]
+tauri-build = "2"
+
+[dependencies]
+# Tauri stack
+tauri = { version = "2", features = [] }
+
+# Serialization / config
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+url = "2"
+
+# DB (read-write — hud-rust uses this for weather presets + coord overrides)
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+# Background services
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "net", "fs", "time"] }
+tokio-stream = "0.1"
+
+# LAN web HUD server (ported from hud-rust/src/server.rs)
+axum = "0.7"
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+
+# Outbound HTTP (Open-Meteo)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "blocking"] }
+
+# Utility
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+# Per-route extract zip writer — clones hud-go's `output/package_writer.go`
+# so the resulting bundle can be shared / round-tripped through hud-go.
+zip = { version = "2", default-features = false, features = ["deflate"] }
+qrcode = { version = "0.14", default-features = false, features = ["image"] }
+base64 = "0.22"
+# Cross-platform "open this URL/path in the user's default app" — used by
+# the Web HUD card click-through so QR/Desktop tiles open in the real browser
+# instead of an in-app webview popup.
+open = "5"
+# Native "Save As" file dialog (Widgets tab → Download LLM guide). Bare Tauri
+# has no dialog plugin wired up, and rfd is a self-contained native dialog with
+# no capability/JS-binding setup.
+rfd = "0.15"
+tauri-plugin-window-state = "2.4.1"
+
+[profile.dev]
+incremental = true
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Widgets</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .head-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; max-width: 1080px; }
+    .head-row .muted { color: var(--muted); font-size: 0.88rem; }
+    .head-row .actions { margin-left: auto; display: flex; gap: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; max-width: 1080px; }
+    .card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: border-color 0.12s, transform 0.12s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    .card .name-row { display: flex; gap: 6px; align-items: center; }
+    .card .name-row input { flex: 1; font-weight: 600; }
+    .card .filename { color: var(--muted); font-size: 0.75rem; font-family: ui-monospace, monospace; word-break: break-all; }
+    .card .size { color: var(--muted); font-size: 0.72rem; }
+    .card .row { display: flex; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
+
+    button.danger { border-color: var(--bad); color: var(--bad); }
+    button.danger:hover { background: var(--bad); color: #061018; border-color: var(--bad); }
+
+    .flash { font-size: 0.8rem; min-height: 1.1em; }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+
+    .empty {
+      padding: 32px; text-align: center; color: var(--muted);
+      background: var(--bg2); border-radius: 8px; max-width: 1080px;
+    }
+    .empty code { background: var(--bg3); color: var(--text); padding: 2px 8px; border-radius: 4px; }
+
+    #toast { margin: 0 0 12px 0; font-size: 0.85rem; min-height: 1.1em; max-width: 1080px; }
+    #toast.ok  { color: var(--good); }
+    #toast.err { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="margin: 0 0 4px 0;" data-i18n="shell.widgetsHeading">Widgets</h1>
+      <div class="head-row">
+        <span class="muted" data-i18n="shell.widgetsIntro">
+          A library of single-file HTML widgets in
+          <code style="background:var(--bg2);padding:1px 6px;border-radius:3px;">resources/widgets/</code>.
+          Edit a widget's name, or add a new one by uploading an <code style="background:var(--bg2);padding:1px 6px;border-radius:3px;">.html</code> file.
+        </span>
+        <div class="actions">
+          <button id="dl-guide" data-i18n="shell.downloadGuide">Download LLM guide</button>
+          <button id="reload" data-i18n="shell.reload">Reload</button>
+          <button class="primary" id="upload" data-i18n="shell.uploadWidget">Upload widget…</button>
+        </div>
+      </div>
+      <input type="file" id="file" accept=".html,.htm,text/html" hidden>
+
+      <div id="toast"></div>
+      <div id="root"><div class="empty">loading…</div></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('widgets');
+
+    const { invoke } = window.__TAURI__.core;
+    const root = document.getElementById('root');
+    const toast = document.getElementById('toast');
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function fmtSize(n) {
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return Math.round(n / 1024) + ' KB';
+      return (n / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    function setToast(msg, kind) {
+      toast.textContent = msg || '';
+      toast.className = kind || '';
+    }
+
+    function card(w) {
+      return `<div class="card" data-filename="${esc(w.filename)}">
+        <div class="name-row">
+          <input type="text" class="name" value="${esc(w.title)}" placeholder="${esc(t('shell.widgets.namePh', 'widget name'))}">
+        </div>
+        <div class="filename">${esc(w.filename)}</div>
+        <div class="size">${fmtSize(w.size)}</div>
+        <div class="row">
+          <button class="primary" data-act="save">${esc(t('shell.saveName'))}</button>
+          <button class="danger" data-act="delete">${esc(t('shell.delete', 'Delete'))}</button>
+        </div>
+        <div class="flash" data-flash></div>
+      </div>`;
+    }
+
+    function wireCard(el) {
+      const filename = el.dataset.filename;
+      const nameInput = el.querySelector('.name');
+      const flash = el.querySelector('[data-flash]');
+      const original = nameInput.value;
+
+      el.querySelector('[data-act="save"]').addEventListener('click', async () => {
+        const title = nameInput.value.trim();
+        if (!title) { flash.textContent = t('shell.widgets.nameEmpty', 'name cannot be empty'); flash.className = 'flash err'; return; }
+        flash.textContent = t('shell.widgets.saving', 'saving…'); flash.className = 'flash';
+        try {
+          await invoke('widget_set_title', { filename, title });
+          flash.textContent = t('shell.widgets.saved', 'saved'); flash.className = 'flash ok';
+          setTimeout(() => { flash.textContent = ''; }, 1400);
+        } catch (e) {
+          flash.textContent = t('shell.widgets.saveFailed', 'save failed: ') + (e && e.toString()); flash.className = 'flash err';
+        }
+      });
+
+      // Enter key in the name field = save.
+      nameInput.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); el.querySelector('[data-act="save"]').click(); }
+      });
+
+      el.querySelector('[data-act="delete"]').addEventListener('click', async () => {
+        if (!confirm(t('shell.widgets.confirmDelete', 'Delete widget "{name}" ({file})? This can\'t be undone.').replace('{name}', original).replace('{file}', filename))) return;
+        try {
+          await invoke('widget_delete', { filename });
+          setToast(t('shell.widgets.deleted', 'deleted {file}').replace('{file}', filename), 'ok');
+          load();
+        } catch (e) {
+          flash.textContent = t('shell.widgets.deleteFailed', 'delete failed: ') + (e && e.toString()); flash.className = 'flash err';
+        }
+      });
+    }
+
+    async function load() {
+      try {
+        const items = await invoke('widgets_list');
+        if (!items || !items.length) {
+          root.innerHTML = `<div class="empty">${esc(t('shell.noWidgets'))}</div>`;
+          return;
+        }
+        root.innerHTML = '<div class="grid">' + items.map(card).join('') + '</div>';
+        root.querySelectorAll('.card').forEach(wireCard);
+      } catch (e) {
+        root.innerHTML = `<div class="empty" style="color: var(--bad);">${esc(t('shell.widgets.loadFailed', 'load failed: '))}${esc(e)}</div>`;
+      }
+    }
+
+    // ---- single-file upload ----
+    const fileInput = document.getElementById('file');
+    document.getElementById('upload').addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files && fileInput.files[0];
+      // reset right away so re-picking the same file fires `change` again
+      fileInput.value = '';
+      if (!f) return;
+      setToast(t('shell.widgets.reading', 'reading {file}…').replace('{file}', f.name), '');
+      const reader = new FileReader();
+      reader.onerror = () => setToast(t('shell.widgets.couldNotRead', 'could not read file'), 'err');
+      reader.onload = async () => {
+        try {
+          const finalName = await invoke('widget_upload', { filename: f.name, contents: String(reader.result) });
+          setToast(t('shell.widgets.uploadedAs', 'uploaded as {file}').replace('{file}', finalName), 'ok');
+          load();
+        } catch (e) {
+          setToast(t('shell.widgets.uploadFailed', 'upload failed: ') + (e && e.toString()), 'err');
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // ---- downloadable LLM authoring guide ----
+    // No backticks or ${...} inside this template literal; closing script tags in
+    // the example are written <\/script> so the HTML parser doesn't end this
+    // module early (the backslash resolves away in the downloaded text).
+    const GUIDE = `TSW HUD — How to build a widget (guide for an LLM)
+==================================================
+
+GOAL: produce ONE self-contained .html file that shows live Train Sim World data
+as a small overlay panel. A person uploads it on the Widgets tab, adds it to a
+Collection, and loads it; it then runs as its own transparent, borderless,
+always-on-top window floating over the game. You can build a fully working widget
+using ONLY the information in this file.
+
+############################################################
+# GOLDEN RULE — NEVER USE FAKE DATA
+############################################################
+NEVER invent, fake, simulate, randomize, hardcode, or "demo" any value. Every
+number/text shown MUST come from a real invoke('get_telemetry') / IPC response.
+If there is no live data (not connected, field missing, loading), show OFFLINE
+and blank placeholders ("--"/"—") — NEVER a made-up or animated placeholder
+number. A fabricated value looks like a real reading and is dangerous/misleading.
+No Math.random(), no sample/mock objects, no "example" values left in the code.
+
+--------------------------------------------------------------------
+1. THE RUNTIME (what your code runs inside)
+--------------------------------------------------------------------
+- Your file loads in a WebView2 window inside a Tauri app. The global
+  window.__TAURI__ is ALWAYS available. No imports, no bundler, no npm.
+- Call native commands like this:
+      const { invoke } = window.__TAURI__.core;
+      const data = await invoke('command_name', { argName: value });
+  invoke(...) returns a Promise. Every command + its arguments is in section 4.
+- The window is TRANSPARENT and has NO title bar. Whatever your CSS does not
+  paint is see-through to the game, so you MUST draw your own panel background.
+- The window is ALWAYS ON TOP and opens at the size/position the collection sets;
+  you do not control that from inside the widget.
+
+--------------------------------------------------------------------
+2. TWO OPTIONAL HELPER FILES (already next to your widget)
+--------------------------------------------------------------------
+Reference them by bare filename:
+      <link rel="stylesheet" href="common.css">
+      <script src="widget.js"><\/script>
+
+common.css provides CSS variables you can use:
+      --bg #0e1118   --bg2 #161a23   --bg3 #1e2330   --text #e9eefb
+      --muted #8a93a8   --accent #4fc3f7   --good #5fd37a   --bad #ff5a52   --warn #ffb24d
+      --border rgba(255,255,255,0.08)
+
+widget.js (works only if you use the markup shown in section 6) provides:
+      - Drag the window by an element with class "hdr".
+      - Collapse button: any element with attribute  data-collapse
+      - Close button:    any element with attribute  data-close   (closes this window)
+      - Auto-sizing: the OS window shrinks to fit an element with class "widget"
+        styled  width: max-content
+      - window.widget.setStatus(state, text)   state = 'live' | 'loading' | 'offline'
+        It turns a live dot (element class "dot" inside ".hdr") green/amber/red and
+        sets the text of an element with attribute  data-source . Call it each tick.
+
+For a 100% standalone single file, skip these and inline your own CSS + JS.
+
+--------------------------------------------------------------------
+3. THE DATA: invoke('get_telemetry')  — your MAIN source, poll ~4x/sec
+--------------------------------------------------------------------
+      const d = await invoke('get_telemetry');
+
+It ALWAYS returns an object with these three control fields:
+      connected  boolean   true once TSW is actually feeding live data
+      loading    boolean   true during the connect / subscribe handshake
+      status     string    human status text, e.g. "Subscribed to 48 paths"
+
+WHEN connected === true, the SAME object also carries these live fields. They
+appear only while a drivable train is loaded and can vary by loco/DLC, so always
+null-check (if (d.speed != null) ...). Numeric values are ALREADY converted to
+the user's units (see distanceUnits):
+
+      speed                      number   current speed
+      limit                      number   current line speed limit
+      nextSpeedLimit             number   the upcoming speed limit
+      distanceToNextSpeedLimit   number   metres to that next limit
+      distanceToSignal           number   metres to the next signal
+      signalAspectClass          string   signal aspect (aspect/colour name)
+      incline                    number   track gradient
+      direction                  number   travel-direction indicator
+      reverser                   string   reverser position (e.g. "Forward")
+      powerHandle                number   throttle, 0..100
+      trainBreak                 number   train brake, 0..100  (yes, spelled "Break")
+      trainBrakeActive           boolean
+      locomotiveBrakeHandle      number   independent/loco brake
+      locomotiveBrakeActive      boolean
+      electricDynamicBrake       number   dynamic brake, 0..100
+      electricBrakeActive        boolean
+      isSlipping                 boolean  wheel slip
+      isTractionLocked           boolean
+      doorFrontLeft              boolean  door open, left
+      doorFrontRight             boolean  door open, right
+      vehicleCount               number   vehicles in the formation
+      localTime                  string   in-game clock, e.g. "14:32"
+      playerPosition             object   { latitude: number, longitude: number }
+      currentTile                object   { x: number, y: number }
+      currentServiceName         string   active service name  <-- feed to get_active_timetable
+      weather                    object   current weather values
+      cameraMode                 number
+      distanceUnits              string   "imperial" => mph/feet, "" => km/h & metres
+      temperatureUnits           string   "fahrenheit", or "" for celsius
+
+Fields starting with "_" (e.g. _stations, _markers) are internal; ignore them.
+To see exactly what a given loco exposes, run this once in a live service:
+      console.log(await invoke('get_telemetry'))
+
+--------------------------------------------------------------------
+4. ALL OTHER COMMANDS  (each call: await invoke('name', { args }))
+--------------------------------------------------------------------
+TIMETABLE / SCHEDULE
+  get_active_timetable(serviceName, lat, lng)
+      serviceName : string  -> pass d.currentServiceName
+      lat, lng    : number  -> pass d.playerPosition.latitude / .longitude (helps
+                              disambiguate when names repeat; optional)
+      Returns ONE of:
+        { found:true,  id, service_name, route, name }
+        { found:true,  route_only:true, id:0, route_id, route, name, service_name }
+        { found:false, service_name }
+      Use "id" with the next two calls. If route_only, there is no schedule — use
+      get_route_map_data(route_id) for the map line instead.
+
+  get_timetable_entries(id)
+      id : number (from get_active_timetable)
+      Returns an ARRAY of stop rows, in order, each:
+        { arrival, departure, location, latitude, longitude, action, isPassThrough }
+      arrival/departure are time strings (either may be null); location is the
+      station name; action is e.g. "STOP" or a "PASS..." code; isPassThrough is a
+      boolean. Build next-stop / ETA / station-list UIs from this.
+
+  get_route_coordinates(id)
+      id : number (timetable id)
+      Returns the path as parsed JSON: an array of coordinate points in [lng, lat]
+      order. Falls back to the parent route line if the timetable has none.
+
+MAP
+  get_map_features(timetableId)  -> precomputed GeoJSON-style features (rails,
+                                    signals, markers) for that timetable, or null.
+  get_route_map_data(routeId)    -> the whole route's rail network as a GeoJSON
+                                    FeatureCollection (heavier; full-route maps).
+
+SHARED SELECTION (let two widgets talk to each other)
+  get_selected_stop()                -> { name, lat, lng } or null
+  set_selected_stop(name, lat, lng)  -> store it (pass null lat/lng to clear)
+
+WEATHER CONTROL (for a weather widget)
+  weather_presets()              -> array of saved presets
+  weather_apply(values)          -> push explicit weather values to TSW
+  weather_apply_preset(name)     -> apply a saved preset by name
+  weather_live_apply()           -> fetch + apply real-world weather at the player
+  weather_historical_apply(...)  -> apply weather for a past date/time
+
+--------------------------------------------------------------------
+5. THE STANDARD POLLING LOOP (copy this shape)
+--------------------------------------------------------------------
+      const { invoke } = window.__TAURI__.core;
+      function render(d) { /* write d.* fields into the DOM */ }
+      function blank()   { /* reset readouts to placeholders */ }
+      async function tick() {
+        try {
+          const d = await invoke('get_telemetry');
+          if (d && d.connected)    { window.widget.setStatus('live');              render(d); }
+          else if (d && d.loading) { window.widget.setStatus('loading', d.status);  blank(); }
+          else                     { window.widget.setStatus('offline');            blank(); }
+        } catch (e)                { window.widget.setStatus('offline');            blank(); }
+      }
+      setInterval(tick, 250);
+      tick();
+
+--------------------------------------------------------------------
+6. COMPLETE WORKING EXAMPLE (speed + current/next limit) — copy, edit, upload
+--------------------------------------------------------------------
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Speed</title>
+      <link rel="stylesheet" href="common.css">
+      <style>
+        body { margin: 0; background: transparent; }
+        .widget { width: max-content; background: rgba(14,17,24,0.90);
+                  border: 1px solid var(--border); border-radius: 12px;
+                  font-family: system-ui, sans-serif; color: var(--text); }
+        .hdr { display: flex; align-items: center; gap: 8px; padding: 6px 10px;
+               border-bottom: 1px solid var(--border); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); }
+        .dot.live { background: var(--good); }  .dot.loading { background: var(--warn); }
+        .btns { margin-left: auto; }
+        .btns button { background: transparent; border: 0; color: var(--muted);
+                       cursor: pointer; font-size: 14px; }
+        .body { padding: 12px 16px; display: flex; gap: 22px; align-items: baseline; }
+        .lab { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+        .big { font: 700 40px ui-monospace, monospace; }
+        .val { font: 600 20px ui-monospace, monospace; }
+      </style>
+    </head>
+    <body>
+      <div class="widget" id="widget">
+        <div class="hdr">
+          <span class="dot"></span>
+          <span>Speed &middot; <span data-source>OFFLINE</span></span>
+          <span class="btns"><button data-collapse>&minus;</button><button data-close>&times;</button></span>
+        </div>
+        <div class="body">
+          <div><div class="lab">Speed</div><div class="big" id="speed">&mdash;</div></div>
+          <div><div class="lab">Limit</div><div class="val" id="limit">&mdash;</div></div>
+          <div><div class="lab">Next</div><div class="val" id="next">&mdash;</div></div>
+        </div>
+      </div>
+      <script src="widget.js"><\/script>
+      <script>
+        const { invoke } = window.__TAURI__.core;
+        const $ = (id) => document.getElementById(id);
+        function render(d) {
+          $('speed').textContent = d.speed != null ? Math.round(d.speed) : '—';
+          $('limit').textContent = d.limit != null ? Math.round(d.limit) : '—';
+          if (d.nextSpeedLimit != null) {
+            var s = String(Math.round(d.nextSpeedLimit));
+            if (d.distanceToNextSpeedLimit != null) s += ' in ' + Math.round(d.distanceToNextSpeedLimit) + 'm';
+            $('next').textContent = s;
+          } else { $('next').textContent = '—'; }
+        }
+        function blank() { $('speed').textContent = $('limit').textContent = $('next').textContent = '—'; }
+        async function tick() {
+          try {
+            const d = await invoke('get_telemetry');
+            if (d && d.connected)    { window.widget.setStatus('live');              render(d); }
+            else if (d && d.loading) { window.widget.setStatus('loading', d.status);  blank(); }
+            else                     { window.widget.setStatus('offline');            blank(); }
+          } catch (e)                { window.widget.setStatus('offline');            blank(); }
+        }
+        setInterval(tick, 250);
+        tick();
+      <\/script>
+    </body>
+    </html>
+
+--------------------------------------------------------------------
+7. RULES (do not skip)
+--------------------------------------------------------------------
+- NO fake / demo / placeholder-animated data. If not connected, show OFFLINE and
+  blank readouts (a dash). A faked number reads as a broken HUD.
+- Draw a solid or semi-opaque panel background; the window itself is transparent.
+- Always null-check live fields; they exist only when connected and vary by loco.
+- The numbers are pre-converted: if d.distanceUnits === "imperial" they are mph /
+  feet, otherwise km/h / metres. Just label them correctly; do not convert again.
+- Poll with setInterval at 200-500 ms. Data is pulled each call, never pushed.
+- Keep it a single small overlay panel, not a full page.
+
+--------------------------------------------------------------------
+8. INSTALL
+--------------------------------------------------------------------
+1. Save your file (e.g. speed.html). Its <title> becomes the widget's name.
+2. Widgets tab -> Upload widget... -> pick the file.
+3. Collections tab -> New collection (or Edit) -> add a widget row -> choose your
+   widget from the dropdown -> set its starting X / Y -> Save -> Load.`;
+
+    document.getElementById('dl-guide').addEventListener('click', async () => {
+      setToast('', '');
+      try {
+        const saved = await invoke('save_text_file', {
+          defaultName: 'tsw-hud-widget-guide.txt',
+          contents: GUIDE,
+        });
+        if (saved) setToast(t('shell.widgets.savedTo', 'saved to {path}').replace('{path}', saved), 'ok');
+        else setToast(t('shell.widgets.saveCancelled', 'save cancelled'), '');
+      } catch (e) {
+        setToast(t('shell.widgets.guideSaveFailed', 'save failed: ') + (e && e.toString()), 'err');
+      }
+    });
+
+    document.getElementById('reload').addEventListener('click', () => { setToast('', ''); load(); });
+
+    // Await the locale, translate static markup, render the list, and re-render
+    // the list (translated card buttons) whenever the language changes.
+    initPageI18n(() => load());
+  </script>
+</body>
+</html>

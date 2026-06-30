@@ -1,0 +1,179 @@
+HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Color Odometer</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    body { margin: 0; background: transparent; }
+    .widget { 
+      width: max-content; 
+      background: rgba(14, 17, 24, 0.90);
+      border: 1px solid var(--border); 
+      border-radius: 12px;
+      font-family: system-ui, sans-serif; 
+      color: var(--text); 
+    }
+    .hdr { 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border); 
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); }
+    .dot.live { background: var(--good); }  
+    .dot.loading { background: var(--warn); }
+    .btns { margin-left: auto; }
+    .btns button { 
+      background: transparent; 
+      border: 0; 
+      color: var(--muted);
+      cursor: pointer; 
+      font-size: 14px; 
+    }
+    .body { 
+      padding: 12px 16px; 
+      display: flex; 
+      flex-direction: column;
+      gap: 10px; 
+      align-items: center; 
+    }
+    .color-box {
+      width: 120px;
+      height: 60px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: #333;
+      transition: background-color 0.4s ease;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .lab { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .val { font: 600 16px ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span>Color Odometer &middot; <span data-source>OFFLINE</span></span>
+      <span class="btns"><button data-collapse>&minus;</button><button data-close>&times;</button></span>
+    </div>
+    <div class="body">
+      <div class="color-box" id="colorBox"></div>
+      <div class="stats">
+        <div>
+          <div class="lab" id="unitLabel">Progress</div>
+          <div class="val" id="progress">—</div>
+        </div>
+        <div>
+          <div class="lab">Total Shifts</div>
+          <div class="val" id="shifts">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    const { invoke } = window.__TAURI__.core;
+    const $ = (id) => document.getElementById(id);
+
+    // State Variables
+    let lastPos = null;
+    let totalMetersTraveled = 0;
+    let currentMetersInInterval = 0;
+    let shiftCount = 0;
+    let targetDistanceMeters = 1609.34; // Default to 1 Mile in meters
+
+    // Helper: Calculate distance between two GPS coordinates using Haversine formula
+    function getDistanceMeters(lat1, lon1, lat2, lon2) {
+      const R = 6371000; // Earth's radius in meters
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // Helper: Generate a random vibrant color
+    function setRandomColor() {
+      const randomHue = Math.floor(Math.random() * 360);
+      // Using 85% saturation and 55% lightness for visible, vibrant colors
+      $('colorBox').style.backgroundColor = `hsl(${randomHue}, 85%, 55%)`;
+    }
+
+    function render(d) {
+      // 1. Determine local configuration and update labels
+      const isImperial = d.distanceUnits === "imperial";
+      targetDistanceMeters = isImperial ? 1609.34 : 1000.0;
+      $('unitLabel').textContent = isImperial ? "Next Mile" : "Next KM";
+
+      // 2. Track physical position logic
+      if (d.playerPosition && d.playerPosition.latitude != null && d.playerPosition.longitude != null) {
+        const currentPos = d.playerPosition;
+
+        if (lastPos !== null) {
+          const delta = getDistanceMeters(
+            lastPos.latitude, lastPos.longitude,
+            currentPos.latitude, currentPos.longitude
+          );
+
+          // Ignore erratic tiny GPS drifts or teleportation spikes over 300 meters inside 250ms
+          if (delta > 0.01 && delta < 300) {
+            totalMetersTraveled += delta;
+            currentMetersInInterval += delta;
+
+            // Trigger color shift when milestone target is achieved
+            if (currentMetersInInterval >= targetDistanceMeters) {
+              setRandomColor();
+              shiftCount += Math.floor(currentMetersInInterval / targetDistanceMeters);
+              currentMetersInInterval = currentMetersInInterval % targetDistanceMeters;
+            }
+          }
+        }
+        lastPos = currentPos;
+      }
+
+      // 3. Update Visual Displays
+      const unitFactor = isImperial ? 1609.34 : 1000.0;
+      const currentProgress = (currentMetersInInterval / unitFactor);
+      const unitAbbr = isImperial ? "mi" : "km";
+
+      $('progress').textContent = `${currentProgress.toFixed(2)} / 1.00 ${unitAbbr}`;
+      $('shifts').textContent = shiftCount;
+    }
+
+    function blank() {
+      $('progress').textContent = '—';
+      $('shifts').textContent = '—';
+      $('colorBox').style.backgroundColor = '#333';
+      lastPos = null; // Clear position history when disconnected
+    }
+
+    async function tick() {
+      try {
+        const d = await invoke('get_telemetry');
+        if (d && d.connected)    { window.widget.setStatus('live');               render(d); }
+        else if (d && d.loading) { window.widget.setStatus('loading', d.status);  blank(); }
+        else                     { window.widget.setStatus('offline');            blank(); }
+      } catch (e)                { window.widget.setStatus('offline');            blank(); }
+    }
+
+    // Initialize with a default starting color
+    setRandomColor();
+
+    // Standard Polling loop
+    setInterval(tick, 250);
+    tick();
+  </script>
+</body>
+</html>

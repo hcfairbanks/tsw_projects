@@ -1,0 +1,928 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TSW HUD - Experiment</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        #container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #hud-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Fullscreen button */
+        #fullscreenBtn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 12px;
+            background: rgba(50, 50, 50, 0.8);
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* Load overlay styles */
+        .load-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        .load-overlay.active {
+            display: flex;
+        }
+        .load-panel {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: white;
+        }
+        .load-panel h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #fff;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 10px;
+        }
+        .load-panel label {
+            display: block;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+        .load-panel select,
+        .load-panel input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #333;
+            color: white;
+        }
+        .load-panel button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .load-panel button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .load-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+        }
+        .load-panel .status-message {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .load-panel .status-message.success {
+            background: #1b5e20;
+            color: #a5d6a7;
+        }
+        .load-panel .status-message.error {
+            background: #b71c1c;
+            color: #ef9a9a;
+        }
+        .loaded-info {
+            background: #1b5e20;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .loaded-info h3 {
+            color: #a5d6a7;
+            font-size: 12px;
+            margin: 0 0 5px 0;
+        }
+        .loaded-info p {
+            color: white;
+            font-size: 14px;
+            margin: 0;
+            font-weight: 600;
+        }
+        #clearRouteBtn {
+            background: #666 !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <canvas id="hud-canvas"></canvas>
+    </div>
+
+    <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶</button>
+
+    <!-- Load Route Overlay -->
+    <div id="loadOverlay" class="load-overlay">
+        <div class="load-panel" style="position: relative;">
+            <button class="close-btn" onclick="hideLoadOverlay()">&times;</button>
+            <h2>Load Timetable</h2>
+
+            <div id="loadedInfoSection" style="display: none;">
+                <div class="loaded-info">
+                    <h3>Currently Loaded</h3>
+                    <p id="loadedRouteName">-</p>
+                </div>
+            </div>
+
+            <label>Search Route</label>
+            <input type="text" id="routeInput" placeholder="Type to search..." oninput="filterRoutes()">
+
+            <label>Route</label>
+            <select id="routeSelect" onchange="loadTrains()">
+                <option value="">-- Select a route --</option>
+            </select>
+
+            <label>Train</label>
+            <select id="trainSelect" onchange="loadTimetables()" disabled>
+                <option value="">-- Select a train --</option>
+            </select>
+
+            <label>Timetable</label>
+            <select id="timetableSelect" disabled>
+                <option value="">-- Select a timetable --</option>
+            </select>
+
+            <button id="loadRouteBtn" onclick="loadSelectedTimetable()" disabled>Load Timetable</button>
+            <button id="clearRouteBtn" onclick="clearRoute()">Clear Route</button>
+
+            <div id="statusMessage" class="status-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+// Canvas and drawing state
+var canvas, ctx;
+var canvasWidth, canvasHeight;
+var currentData = null;
+var currentPlayerPosition = null;
+var cachedTimetableItems = [];
+var selectedStationIndex = 0;
+
+// Touch state for station selector
+var touchStartY = 0;
+var isTouching = false;
+
+function initCanvas() {
+    canvas = document.getElementById('hud-canvas');
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+}
+
+function resizeCanvas() {
+    // Samsung S23 landscape: ~2340x1080, but we use device pixels
+    var dpr = window.devicePixelRatio || 1;
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
+
+    canvas.width = canvasWidth * dpr;
+    canvas.height = canvasHeight * dpr;
+    canvas.style.width = canvasWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
+
+    ctx.scale(dpr, dpr);
+    draw();
+}
+
+// Haversine formula for distance calculation (in meters)
+function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    var R = 6371000;
+    var phi1 = lat1 * Math.PI / 180;
+    var phi2 = lat2 * Math.PI / 180;
+    var deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    var deltaLambda = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function formatDistance(distanceMeters, distanceUnits) {
+    distanceMeters = distanceMeters / 100; // raw value is in cm
+    var isImperial = distanceUnits === 'imperial';
+    if (isImperial) {
+        var feet = distanceMeters * 3.28084;
+        if (feet > 5280) {
+            return (feet / 5280).toFixed(1) + 'mi';
+        }
+        return Math.round(feet) + 'ft';
+    } else {
+        if (distanceMeters > 3000) {
+            return (distanceMeters / 1000).toFixed(1) + 'km';
+        }
+        return Math.round(distanceMeters) + 'm';
+    }
+}
+
+function draw() {
+    if (!ctx) return;
+
+    var data = currentData || {};
+    var speed = Math.round(data.speed || 0);
+    var speedLimit = data.limit || 0;
+    var nextSpeedLimit = data.nextSpeedLimit;
+    var distanceToNextSpeedLimit = data.distanceToNextSpeedLimit;
+    var distanceUnits = data.distanceUnits || 'metric';
+    var powerHandle = data.powerHandle || 0;
+    var incline = data.incline || 0;
+    var localTime = data.localTime;
+    var doorLeft = data.doorFrontLeft;
+    var doorRight = data.doorFrontRight;
+
+    // Clear canvas
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // Layout calculations - optimized for landscape mobile
+    var centerX = canvasWidth / 2;
+    var centerY = canvasHeight / 2;
+    var scale = Math.min(canvasWidth / 900, canvasHeight / 450);
+
+    // Main speedometer in center
+    var speedoRadius = Math.min(canvasHeight * 0.38, canvasWidth * 0.18);
+    var speedoX = centerX;
+    var speedoY = centerY;
+
+    drawSpeedometer(speedoX, speedoY, speedoRadius, speed, speedLimit);
+
+    // Left panel - Station info
+    var leftPanelX = 15;
+    var leftPanelY = 15;
+    var leftPanelWidth = canvasWidth * 0.28;
+    drawStationPanel(leftPanelX, leftPanelY, leftPanelWidth, distanceUnits);
+
+    // Right panel - Train status
+    var rightPanelX = canvasWidth - canvasWidth * 0.22 - 15;
+    var rightPanelY = 15;
+    var rightPanelWidth = canvasWidth * 0.22;
+    drawStatusPanel(rightPanelX, rightPanelY, rightPanelWidth, powerHandle, incline, doorLeft, doorRight);
+
+    // Bottom center - Time and next speed limit
+    var bottomY = canvasHeight - 80;
+    drawTimeDisplay(centerX, bottomY, localTime);
+
+    // Next speed limit (if applicable)
+    if (distanceToNextSpeedLimit !== undefined && distanceToNextSpeedLimit !== null && distanceToNextSpeedLimit > 1) {
+        drawNextSpeedLimit(centerX, canvasHeight - 140, nextSpeedLimit, distanceToNextSpeedLimit, distanceUnits);
+    }
+
+    // Load button
+    drawLoadButton();
+}
+
+function drawSpeedometer(x, y, radius, speed, limit) {
+    // Background arc
+    ctx.beginPath();
+    ctx.arc(x, y, radius, Math.PI * 0.8, Math.PI * 2.2, false);
+    ctx.lineWidth = radius * 0.15;
+    ctx.strokeStyle = '#333';
+    ctx.stroke();
+
+    // Speed arc (colored based on limit)
+    var speedRatio = Math.min(speed / Math.max(limit, 200), 1);
+    var endAngle = Math.PI * 0.8 + speedRatio * Math.PI * 1.4;
+
+    var arcColor = '#00ff00';
+    if (speed > limit) {
+        arcColor = '#ff0000';
+    } else if (speed > limit * 0.9) {
+        arcColor = '#ffaa00';
+    }
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, Math.PI * 0.8, endAngle, false);
+    ctx.lineWidth = radius * 0.15;
+    ctx.strokeStyle = arcColor;
+    ctx.stroke();
+
+    // Speed text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold ' + (radius * 0.6) + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(speed, x, y - radius * 0.1);
+
+    // Units
+    ctx.font = (radius * 0.2) + 'px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('km/h', x, y + radius * 0.25);
+
+    // Speed limit indicator
+    ctx.font = 'bold ' + (radius * 0.25) + 'px sans-serif';
+    ctx.fillStyle = speed > limit ? '#ff0000' : '#ffff00';
+    ctx.fillText('LIMIT: ' + limit, x, y + radius * 0.55);
+}
+
+function drawStationPanel(x, y, width, distanceUnits) {
+    var panelHeight = canvasHeight - 100;
+
+    // Panel background
+    ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
+    ctx.fillRect(x, y, width, panelHeight);
+    ctx.strokeStyle = '#444';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, panelHeight);
+
+    // Title
+    ctx.fillStyle = '#888';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('NEXT STATION', x + 10, y + 20);
+
+    // Get selected station info
+    var displayLabel = '--';
+    var displayArrival = '--:--';
+    var displayDeparture = '--:--';
+    var displayDistance = null;
+
+    if (cachedTimetableItems && cachedTimetableItems.length > 0 && selectedStationIndex >= 0 && selectedStationIndex < cachedTimetableItems.length) {
+        var station = cachedTimetableItems[selectedStationIndex];
+        displayLabel = station.location || '--';
+        displayArrival = station.arrival || '--:--';
+        displayDeparture = station.departure || '--:--';
+
+        if (currentPlayerPosition && station.latitude && station.longitude) {
+            displayDistance = calculateHaversineDistance(
+                currentPlayerPosition.latitude,
+                currentPlayerPosition.longitude,
+                station.latitude,
+                station.longitude
+            );
+        }
+    }
+
+    // Station name
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 18px sans-serif';
+    var maxNameWidth = width - 20;
+    var truncatedName = displayLabel;
+    while (ctx.measureText(truncatedName).width > maxNameWidth && truncatedName.length > 0) {
+        truncatedName = truncatedName.slice(0, -1);
+    }
+    if (truncatedName !== displayLabel) truncatedName += '...';
+    ctx.fillText(truncatedName, x + 10, y + 45);
+
+    // Times
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('ARR', x + 10, y + 70);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText(displayArrival, x + 10, y + 88);
+
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('DEP', x + width/2, y + 70);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText(displayDeparture, x + width/2, y + 88);
+
+    // Distance
+    if (displayDistance !== null) {
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#aaa';
+        ctx.fillText('DIST', x + 10, y + 115);
+        ctx.fillStyle = '#00ff00';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText(formatDistance(displayDistance, distanceUnits), x + 10, y + 138);
+    }
+
+    // Station list
+    var listY = y + 165;
+    var listHeight = panelHeight - 180;
+    var itemHeight = 32;
+    var visibleItems = Math.floor(listHeight / itemHeight);
+
+    ctx.fillStyle = '#222';
+    ctx.fillRect(x + 5, listY, width - 10, listHeight);
+
+    // Draw station list
+    if (cachedTimetableItems && cachedTimetableItems.length > 0) {
+        var startIdx = Math.max(0, selectedStationIndex - Math.floor(visibleItems / 2));
+        startIdx = Math.min(startIdx, Math.max(0, cachedTimetableItems.length - visibleItems));
+
+        for (var i = 0; i < visibleItems && startIdx + i < cachedTimetableItems.length; i++) {
+            var idx = startIdx + i;
+            var itemY = listY + i * itemHeight;
+            var isSelected = idx === selectedStationIndex;
+
+            if (isSelected) {
+                ctx.fillStyle = 'rgba(0, 100, 255, 0.5)';
+                ctx.fillRect(x + 5, itemY, width - 10, itemHeight - 2);
+            }
+
+            ctx.fillStyle = isSelected ? '#fff' : '#aaa';
+            ctx.font = isSelected ? 'bold 13px sans-serif' : '13px sans-serif';
+            ctx.textAlign = 'left';
+
+            var name = cachedTimetableItems[idx].location || 'Unknown';
+            var maxW = width - 40;
+            while (ctx.measureText(name).width > maxW && name.length > 0) {
+                name = name.slice(0, -1);
+            }
+
+            ctx.fillText((idx + 1) + '. ' + name, x + 10, itemY + itemHeight / 2 + 4);
+        }
+    } else {
+        ctx.fillStyle = '#666';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('No timetable loaded', x + width / 2, listY + listHeight / 2);
+    }
+
+    // Navigation buttons
+    var btnY = y + panelHeight - 35;
+    var btnWidth = (width - 20) / 2 - 5;
+    var btnHeight = 28;
+
+    // Previous button
+    ctx.fillStyle = selectedStationIndex > 0 ? '#444' : '#2a2a2a';
+    ctx.fillRect(x + 5, btnY, btnWidth, btnHeight);
+    ctx.fillStyle = selectedStationIndex > 0 ? '#fff' : '#555';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('◀ PREV', x + 5 + btnWidth / 2, btnY + btnHeight / 2 + 4);
+
+    // Next button
+    ctx.fillStyle = (cachedTimetableItems && selectedStationIndex < cachedTimetableItems.length - 1) ? '#444' : '#2a2a2a';
+    ctx.fillRect(x + width / 2 + 2, btnY, btnWidth, btnHeight);
+    ctx.fillStyle = (cachedTimetableItems && selectedStationIndex < cachedTimetableItems.length - 1) ? '#fff' : '#555';
+    ctx.fillText('NEXT ▶', x + width / 2 + 2 + btnWidth / 2, btnY + btnHeight / 2 + 4);
+
+    // Store bounds for touch handling
+    window.stationPanelBounds = {
+        x: x,
+        y: y,
+        width: width,
+        height: panelHeight,
+        listY: listY,
+        listHeight: listHeight,
+        itemHeight: itemHeight,
+        visibleItems: visibleItems,
+        prevBtnX: x + 5,
+        prevBtnY: btnY,
+        prevBtnW: btnWidth,
+        prevBtnH: btnHeight,
+        nextBtnX: x + width / 2 + 2,
+        nextBtnY: btnY,
+        nextBtnW: btnWidth,
+        nextBtnH: btnHeight
+    };
+}
+
+function drawStatusPanel(x, y, width, powerHandle, incline, doorLeft, doorRight) {
+    var panelHeight = canvasHeight * 0.5;
+
+    // Panel background
+    ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
+    ctx.fillRect(x, y, width, panelHeight);
+    ctx.strokeStyle = '#444';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, panelHeight);
+
+    var itemY = y + 25;
+    var itemSpacing = 55;
+
+    // Power handle
+    ctx.fillStyle = '#888';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('POWER', x + 10, itemY);
+
+    var powerColor = powerHandle > 0 ? '#00ff00' : (powerHandle < 0 ? '#ff6600' : '#666');
+    ctx.fillStyle = powerColor;
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(powerHandle.toFixed(0) + '%', x + 10, itemY + 25);
+
+    // Gradient/incline
+    itemY += itemSpacing;
+    ctx.fillStyle = '#888';
+    ctx.font = '11px sans-serif';
+    ctx.fillText('GRADIENT', x + 10, itemY);
+
+    var gradientColor = incline > 0 ? '#ff6600' : (incline < 0 ? '#00aaff' : '#666');
+    ctx.fillStyle = gradientColor;
+    ctx.font = 'bold 24px sans-serif';
+    var gradientText = incline > 0 ? '+' + incline.toFixed(1) + '%' : incline.toFixed(1) + '%';
+    ctx.fillText(gradientText, x + 10, itemY + 25);
+
+    // Doors
+    itemY += itemSpacing;
+    ctx.fillStyle = '#888';
+    ctx.font = '11px sans-serif';
+    ctx.fillText('DOORS', x + 10, itemY);
+
+    itemY += 15;
+    var doorSize = 20;
+    var doorSpacing = 30;
+
+    // Left door
+    ctx.fillStyle = doorLeft ? '#ff0000' : '#00ff00';
+    ctx.fillRect(x + 10, itemY, doorSize, doorSize);
+    ctx.fillStyle = '#fff';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('L', x + 10 + doorSize / 2, itemY + doorSize / 2 + 3);
+
+    // Right door
+    ctx.fillStyle = doorRight ? '#ff0000' : '#00ff00';
+    ctx.fillRect(x + 10 + doorSpacing, itemY, doorSize, doorSize);
+    ctx.fillStyle = '#fff';
+    ctx.fillText('R', x + 10 + doorSpacing + doorSize / 2, itemY + doorSize / 2 + 3);
+
+    ctx.textAlign = 'left';
+}
+
+function drawTimeDisplay(x, y, localTime) {
+    var displayValue = '--:--:--';
+    if (localTime) {
+        try {
+            displayValue = localTime.split('T')[1].split('.')[0];
+        } catch (e) {}
+    }
+
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(displayValue, x, y);
+}
+
+function drawNextSpeedLimit(x, y, nextLimit, distance, distanceUnits) {
+    ctx.fillStyle = '#ffaa00';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('NEXT: ' + nextLimit, x, y);
+
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('in ' + formatDistance(distance, distanceUnits), x, y + 20);
+}
+
+function drawLoadButton() {
+    var btnWidth = 70;
+    var btnHeight = 35;
+    var btnX = canvasWidth - btnWidth - 15;
+    var btnY = canvasHeight - btnHeight - 15;
+
+    ctx.fillStyle = '#0066ff';
+    ctx.fillRect(btnX, btnY, btnWidth, btnHeight);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('LOAD', btnX + btnWidth / 2, btnY + btnHeight / 2);
+
+    window.loadBtnBounds = { x: btnX, y: btnY, width: btnWidth, height: btnHeight };
+}
+
+// Touch handling
+function handleTouch(e) {
+    e.preventDefault();
+    var touch = e.touches[0] || e.changedTouches[0];
+    var rect = canvas.getBoundingClientRect();
+    var x = touch.clientX - rect.left;
+    var y = touch.clientY - rect.top;
+
+    // Check load button
+    var lb = window.loadBtnBounds;
+    if (lb && x >= lb.x && x <= lb.x + lb.width && y >= lb.y && y <= lb.y + lb.height) {
+        showLoadOverlay();
+        return;
+    }
+
+    // Check station panel interactions
+    var sp = window.stationPanelBounds;
+    if (sp) {
+        // Previous button
+        if (x >= sp.prevBtnX && x <= sp.prevBtnX + sp.prevBtnW &&
+            y >= sp.prevBtnY && y <= sp.prevBtnY + sp.prevBtnH) {
+            if (selectedStationIndex > 0) {
+                selectStation(selectedStationIndex - 1);
+            }
+            return;
+        }
+
+        // Next button
+        if (x >= sp.nextBtnX && x <= sp.nextBtnX + sp.nextBtnW &&
+            y >= sp.nextBtnY && y <= sp.nextBtnY + sp.nextBtnH) {
+            if (cachedTimetableItems && selectedStationIndex < cachedTimetableItems.length - 1) {
+                selectStation(selectedStationIndex + 1);
+            }
+            return;
+        }
+
+        // Station list tap
+        if (x >= sp.x + 5 && x <= sp.x + sp.width - 5 &&
+            y >= sp.listY && y <= sp.listY + sp.listHeight) {
+            var relY = y - sp.listY;
+            var tappedVisibleIdx = Math.floor(relY / sp.itemHeight);
+            var startIdx = Math.max(0, selectedStationIndex - Math.floor(sp.visibleItems / 2));
+            startIdx = Math.min(startIdx, Math.max(0, cachedTimetableItems.length - sp.visibleItems));
+            var tappedIdx = startIdx + tappedVisibleIdx;
+            if (tappedIdx >= 0 && tappedIdx < cachedTimetableItems.length) {
+                selectStation(tappedIdx);
+            }
+            return;
+        }
+    }
+}
+
+async function selectStation(index) {
+    if (index < 0 || !cachedTimetableItems || index >= cachedTimetableItems.length) return;
+
+    selectedStationIndex = index;
+
+    // Update backend
+    try {
+        await fetch('/api/set-timetable-index', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ index: index - 1 })
+        });
+    } catch (err) {
+        console.error('Failed to set timetable index:', err);
+    }
+
+    draw();
+}
+
+// Fullscreen
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log('Fullscreen error:', err);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+// Load overlay functions
+var allRoutes = [];
+
+function showLoadOverlay() {
+    document.getElementById('loadOverlay').classList.add('active');
+    loadRoutes();
+    checkLoadedRoute();
+}
+
+function hideLoadOverlay() {
+    document.getElementById('loadOverlay').classList.remove('active');
+}
+
+async function loadRoutes() {
+    try {
+        const response = await fetch('/api/routes');
+        allRoutes = await response.json();
+        populateRouteSelect(allRoutes);
+    } catch (err) {
+        console.error('Failed to load routes:', err);
+    }
+}
+
+function populateRouteSelect(routes) {
+    var select = document.getElementById('routeSelect');
+    select.innerHTML = '<option value="">-- Select a route --</option>';
+    routes.forEach(function(route) {
+        var option = document.createElement('option');
+        option.value = route.id;
+        option.textContent = route.name;
+        select.appendChild(option);
+    });
+}
+
+function filterRoutes() {
+    var input = document.getElementById('routeInput').value.toLowerCase();
+    var filtered = allRoutes.filter(function(r) {
+        return r.name.toLowerCase().includes(input);
+    });
+    populateRouteSelect(filtered);
+}
+
+async function loadTrains() {
+    var routeId = document.getElementById('routeSelect').value;
+    var trainSelect = document.getElementById('trainSelect');
+    var timetableSelect = document.getElementById('timetableSelect');
+
+    trainSelect.innerHTML = '<option value="">-- Select a train --</option>';
+    trainSelect.disabled = true;
+    timetableSelect.innerHTML = '<option value="">-- Select a timetable --</option>';
+    timetableSelect.disabled = true;
+    document.getElementById('loadRouteBtn').disabled = true;
+
+    if (!routeId) return;
+
+    try {
+        const response = await fetch('/api/routes/' + routeId + '/trains');
+        const trains = await response.json();
+        trains.forEach(function(train) {
+            var option = document.createElement('option');
+            option.value = train.id;
+            option.textContent = train.name;
+            trainSelect.appendChild(option);
+        });
+        trainSelect.disabled = false;
+    } catch (err) {
+        console.error('Failed to load trains:', err);
+    }
+}
+
+async function loadTimetables() {
+    var routeId = document.getElementById('routeSelect').value;
+    var trainId = document.getElementById('trainSelect').value;
+    var timetableSelect = document.getElementById('timetableSelect');
+
+    timetableSelect.innerHTML = '<option value="">-- Select a timetable --</option>';
+    timetableSelect.disabled = true;
+    document.getElementById('loadRouteBtn').disabled = true;
+
+    if (!routeId || !trainId) return;
+
+    try {
+        const response = await fetch('/api/timetables?route_id=' + routeId + '&train_id=' + trainId);
+        const timetables = await response.json();
+        timetables.forEach(function(tt) {
+            var option = document.createElement('option');
+            option.value = tt.id;
+            option.textContent = tt.name;
+            timetableSelect.appendChild(option);
+        });
+        timetableSelect.disabled = false;
+        timetableSelect.onchange = function() {
+            document.getElementById('loadRouteBtn').disabled = !this.value;
+        };
+    } catch (err) {
+        console.error('Failed to load timetables:', err);
+    }
+}
+
+async function loadSelectedTimetable() {
+    var timetableId = document.getElementById('timetableSelect').value;
+    var statusMessage = document.getElementById('statusMessage');
+
+    if (!timetableId) return;
+
+    statusMessage.textContent = 'Loading...';
+    statusMessage.className = 'status-message';
+    statusMessage.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/map/route-data/' + timetableId);
+        const data = await response.json();
+
+        if (!data || !data.routeData) {
+            throw new Error('No route data available for this timetable');
+        }
+
+        await fetch('/api/upload-route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data.routeData)
+        });
+
+        localStorage.setItem('customRouteFilename', data.routeName);
+        updateLoadedState(data.routeName);
+
+        statusMessage.textContent = 'Timetable loaded!';
+        statusMessage.className = 'status-message success';
+
+        await loadTimetableItems();
+
+        setTimeout(hideLoadOverlay, 1000);
+    } catch (err) {
+        statusMessage.textContent = 'Error: ' + err.message;
+        statusMessage.className = 'status-message error';
+    }
+}
+
+async function clearRoute() {
+    try {
+        await fetch('/api/clear-route', { method: 'POST' });
+        localStorage.removeItem('customRouteFilename');
+        document.getElementById('loadedInfoSection').style.display = 'none';
+        cachedTimetableItems = [];
+        selectedStationIndex = 0;
+        draw();
+    } catch (err) {
+        console.error('Failed to clear route:', err);
+    }
+}
+
+function updateLoadedState(routeName) {
+    document.getElementById('loadedRouteName').textContent = routeName;
+    document.getElementById('loadedInfoSection').style.display = 'block';
+}
+
+function checkLoadedRoute() {
+    var routeName = localStorage.getItem('customRouteFilename');
+    if (routeName) {
+        updateLoadedState(routeName);
+    }
+}
+
+async function loadTimetableItems() {
+    try {
+        const response = await fetch('/api/timetable-items');
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+            cachedTimetableItems = data.items;
+            selectedStationIndex = Math.min(Math.max(0, data.currentIndex + 1), cachedTimetableItems.length - 1);
+        } else {
+            cachedTimetableItems = [];
+            selectedStationIndex = 0;
+        }
+        draw();
+    } catch (err) {
+        console.error('Failed to load timetable items:', err);
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    initCanvas();
+
+    canvas.addEventListener('touchstart', handleTouch, { passive: false });
+    canvas.addEventListener('touchend', function(e) { e.preventDefault(); }, { passive: false });
+
+    // SSE connection
+    var eventSource = new EventSource('/stream');
+    eventSource.onmessage = function(event) {
+        currentData = JSON.parse(event.data);
+        if (currentData.playerPosition) {
+            currentPlayerPosition = currentData.playerPosition;
+        }
+        draw();
+    };
+    eventSource.onerror = function() {
+        console.error('SSE connection lost');
+    };
+
+    // Load timetable items on startup
+    loadTimetableItems();
+
+    // Periodic redraw
+    setInterval(draw, 100);
+});
+    </script>
+</body>
+</html>

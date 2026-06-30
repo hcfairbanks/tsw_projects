@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Web HUD</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    /* Server-section CSS (toolbar/pill/start-panel/log/connecting-wrap) lives in
+       shell.css now so the Web HUD and Custom HUDs tabs render it identically. */
+
+    /* --- card grid (5 cards, wrap 3 per row) --- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 220px));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 240px;
+    }
+    .card .icon-slot { height: 82px; display: flex; align-items: center; justify-content: center; }
+    .card .title { font-weight: 700; font-size: 1.05rem; color: var(--text); letter-spacing: 0.2px; }
+    .card .target {
+      width: 130px; height: 130px; border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .card .target:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--accent); }
+    .card .target img { width: 100%; height: 100%; image-rendering: pixelated; border-radius: 4px; }
+    .card .click-target { background: var(--accent); color: #061018; flex-direction: column; gap: 4px; font-weight: 700; }
+    .card .click-target .glyph { font-size: 1.8rem; line-height: 1; }
+    .card .click-target .lbl   { font-size: 0.82rem; letter-spacing: 0.4px; }
+    .card .url { color: var(--muted); font-size: 0.72rem; word-break: break-all; text-align: center; max-width: 100%; }
+
+    /* --- telemetry footer --- */
+    .telemetry { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .telemetry h2 { margin: 0 0 8px 0; font-size: 1rem; }
+    .tele-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .tele-row .status-text { color: var(--muted); font-size: 0.88rem; }
+    .tele-note { color: var(--muted); font-size: 0.8rem; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 data-i18n="shell.webHud.heading">Web HUD</h1>
+      <p class="muted" data-i18n="shell.webHud.intro">
+        Run the in-app web server to host the HUD pages. Scan a card to open it on a phone,
+        or click the Desktop tile to open it on this machine.
+      </p>
+
+      <div id="root"><p class="muted" data-i18n="common.loading">loading…</p></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { ICONS } from './shared/hud-icons.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import { mountServerControls } from './shared/server-controls.js';
+    renderNav('web-hud');
+
+    const { invoke } = window.__TAURI__.core;
+    const root = document.getElementById('root');
+
+    const qrCache = new Map();
+    async function qrFor(url) {
+      if (qrCache.has(url)) return qrCache.get(url);
+      const data = await invoke('qr_png_data_url', { text: url });
+      qrCache.set(url, data);
+      return data;
+    }
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function stateClass(s) {
+      if (s.telemetry_live) return 'live';
+      if (s.status)         return 'warn';
+      return 'idle';
+    }
+    function stateLabel(s) {
+      if (s.telemetry_live) return t('shell.webHud.stateLive', 'Live');
+      if (s.status)         return t('shell.webHud.stateWaiting', 'Waiting');
+      return t('shell.webHud.stateIdle', 'Idle');
+    }
+    function cardsConfig(port, lan) {
+      const net = lan ? `http://${lan}:${port}` : null;
+      const local = `http://127.0.0.1:${port}`;
+      return [
+        { id: 'mobile',  title: t('start.mobile', 'Mobile'),            icon: ICONS.mobile(),  qr:  net  ? `${net}/find-timetable?hud=mobile`  : null, click: null },
+        { id: 'tablet',  title: t('start.tablet', 'Tablet'),            icon: ICONS.tablet(),  qr:  net  ? `${net}/find-timetable?hud=tablet`  : null, click: null },
+        { id: 'desktop', title: t('start.desktop', 'Desktop'),          icon: ICONS.desktop(), qr:  null,                                            click: `${local}/find-timetable?hud=desktop` },
+        { id: 'weather', title: t('start.weather', 'Weather'),          icon: ICONS.weather(), qr:  net  ? `${net}/weather`                    : null, click: null },
+        { id: 'map',     title: t('start.trackingMap', 'Tracking Map'), icon: ICONS.map(),     qr:  net  ? `${net}/map?from=start`             : null, click: null },
+      ];
+    }
+
+    // Content shown below the shared toolbar once the server is up + telemetry
+    // live: the 5 QR/click cards + the telemetry state row.
+    async function renderRunning(content, s) {
+      const cards = cardsConfig(s.port, s.lan_ip);
+      content.innerHTML = `
+        <div class="grid">
+          ${cards.map((c) => `
+            <div class="card" data-id="${c.id}">
+              <div class="icon-slot">${c.icon}</div>
+              <div class="title">${esc(c.title)}</div>
+              <div class="target ${c.click ? 'click-target' : ''}" data-href="${esc(c.qr || c.click)}" title="${esc(c.qr || c.click)}">
+                ${c.click
+                  ? `<span class="glyph">\u{1F5B1}</span><span class="lbl">${esc(t('start.clickHere', 'Click Here'))}</span>`
+                  : `<img alt="${esc(t('shell.webHud.qrAlt', 'QR'))}" data-qr="${esc(c.qr)}">`}
+              </div>
+              <div class="url">${esc(c.qr || c.click)}</div>
+            </div>`).join('')}
+        </div>
+        <section class="telemetry">
+          <h2>${esc(t('shell.webHud.tswTelemetry', 'TSW telemetry'))}</h2>
+          <div class="tele-row">
+            <span>${esc(t('shell.webHud.state', 'State:'))}</span>
+            <span class="pill ${stateClass(s)}">${esc(stateLabel(s))}</span>
+            <span class="status-text">${s.status ? '— ' + esc(s.status) : ''}</span>
+          </div>
+          ${s.subscriptions_enabled ? '' : `<p class="tele-note">${esc(t('shell.webHud.subscriptionsDisabled', 'Subscriptions disabled in Settings — /stream will keep emitting the waiting payload.'))}</p>`}
+        </section>`;
+      content.querySelectorAll('.target').forEach((tEl) => {
+        tEl.addEventListener('click', () => {
+          const url = tEl.dataset.href;
+          if (url) invoke('open_external', { url }).catch((e) => console.warn('[open_external]', e));
+        });
+      });
+      await Promise.all(Array.from(content.querySelectorAll('img[data-qr]')).map(async (img) => {
+        try { img.src = await qrFor(img.dataset.qr); }
+        catch (e) { img.alt = 'QR error: ' + (e && e.toString()); }
+      }));
+    }
+
+    // Patch the telemetry pill in place between polls (no card re-render).
+    function patch(s) {
+      const pill = root.querySelector('.telemetry .pill');
+      const stateText = root.querySelector('.telemetry .status-text');
+      if (pill) { pill.className = 'pill ' + stateClass(s); pill.textContent = stateLabel(s); }
+      if (stateText) stateText.textContent = s.status ? '— ' + s.status : '';
+    }
+
+    const ctrl = mountServerControls(root, { renderRunning, patch });
+    initPageI18n(() => { ctrl.reset(); ctrl.refresh(); });
+  </script>
+</body>
+</html>

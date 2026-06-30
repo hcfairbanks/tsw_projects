@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Route Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .info-panel {
+            position: absolute;
+            /* Pushed down so the Leaflet basemap switcher (top-right, ~110px
+               tall when expanded) sits cleanly above the panel. */
+            top: 130px;
+            right: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 320px;
+            max-width: 350px;
+            transition: all 0.3s ease;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        .info-panel.collapsed {
+            min-width: 0;
+            max-width: none;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            border: 2px solid rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        .info-panel.collapsed .panel-content {
+            display: none;
+        }
+
+        .info-panel.collapsed .panel-toggle-icon {
+            display: block;
+            font-size: 20px;
+            color: #333;
+            line-height: 1;
+        }
+
+        .panel-toggle-icon {
+            display: none;
+        }
+
+        .panel-collapse-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .panel-collapse-btn:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .info-panel h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected {
+            background-color: #00cc66;
+            box-shadow: 0 0 6px #00cc66;
+        }
+
+        .status-disconnected {
+            background-color: #ff0000;
+            box-shadow: 0 0 6px #ff0000;
+        }
+
+        .status-lost {
+            background-color: #ffaa00;
+            box-shadow: 0 0 6px #ffaa00;
+        }
+
+        .info-group {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .info-group h3 {
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .timetable-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .game-time {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timetable-time {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timetable-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .distance-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* Service-map overlay icon styles — used by /js/service-map.js for
+           car stop signs (small blue dot + max-rail-vehicles tooltip),
+           platform markers (green diamond pin), and collectables (lettered
+           badge per actor class). */
+        .carstop-label { background: rgba(225,235,255,0.92); border: 1px solid rgba(40,80,180,0.55); border-radius: 2px; padding: 0 3px; font-size: 9px; color: #1a3a78; white-space: nowrap; }
+        .carstop-label::before { display: none; }
+        .collectable-icon { display: inline-block; width: 14px; height: 14px; line-height: 12px; text-align: center; font-size: 10px; font-weight: 700; font-family: system-ui, sans-serif; color: #000; background: #ffd700; border: 1px solid #000; vertical-align: middle; border-radius: 3px; box-sizing: border-box; }
+        .collectable-pin .collectable-icon { margin: 0; }
+
+        .legend {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend h3 {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .legend-line {
+            width: 20px;
+            height: 4px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .follow-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .follow-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #loadFromGameBtn {
+            background: #28a745;
+            margin-bottom: 10px;
+        }
+
+        #loadFromGameBtn:hover {
+            background: #218838;
+        }
+
+        #loadFromGameBtn:disabled {
+            background: #6c9c7a;
+            cursor: not-allowed;
+        }
+
+        .follow-btn.following {
+            background: #dc2626;
+        }
+
+        .follow-btn.following:hover {
+            background: #b91c1c;
+        }
+
+        .route-selector {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .route-selector h3 {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h3 {
+            margin-bottom: 0;
+        }
+
+        .collapse-icon {
+            font-size: 12px;
+            color: #666;
+            transition: transform 0.2s ease;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .route-selector select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .route-selector button {
+            width: 100%;
+            margin-top: 8px;
+            padding: 8px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .route-selector button:hover {
+            background: #0052cc;
+        }
+
+        .route-selector button:active {
+            background: #003d99;
+        }
+
+        .route-selector button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .route-selector .status-message {
+            margin-top: 5px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .route-selector .status-message.success {
+            color: #00cc66;
+        }
+
+        .route-selector .status-message.error {
+            color: #ff0000;
+        }
+
+        .browse-btn {
+            background: #28a745 !important;
+            margin-top: 5px;
+        }
+
+        .browse-btn:hover {
+            background: #218838 !important;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .typeahead-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .typeahead-item:last-child {
+            border-bottom: none;
+        }
+
+        .typeahead-item:hover,
+        .typeahead-item.highlighted {
+            background: #f0f0f0;
+        }
+
+        .typeahead-item .route-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .typeahead-item .country-name {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .nav-link {
+            display: inline-block;
+            color: #0066ff;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="info-panel" id="infoPanel" onclick="expandPanel(event)">
+        <span class="panel-toggle-icon">&#9776;</span>
+        <div class="panel-content" style="padding-top: 35px;">
+        <button class="panel-collapse-btn" onclick="collapsePanel(event)" title="Collapse panel" data-i18n-title="map.collapsePanel">&times;</button>
+        <a href="/" class="nav-link" id="backToHome" data-i18n="map.backToHome">Back to Home</a>
+        <button class="follow-btn" id="loadFromGameBtn" onclick="loadFromGame()" title="Detect timetable from running game" data-i18n-title="map.detectTimetableTitle" data-i18n="map.loadFromGame" style="margin-bottom: 10px;">Load From Game</button>
+        <div id="loadFromGameStatus" style="font-size: 11px; color: #666; margin-bottom: 10px; display: none;"></div>
+        <h2><span class="status-indicator" id="statusIndicator"></span><span data-i18n="map.tracking">Tracking</span></h2>
+
+        <div class="info-item" style="margin-bottom: 15px; display: none;" id="connectionStatusItem">
+            <span id="connectionStatus" data-i18n="map.lostConnection">Lost Connection</span>
+        </div>
+
+        <div class="route-selector">
+            <div class="section-header" onclick="toggleTimetableSection()">
+                <h3 data-i18n="map.loadTimetable">Load Timetable</h3>
+                <span class="collapse-icon" id="timetableCollapseIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="timetableContent">
+                <label style="font-size: 11px; color: #666;" data-i18n="map.route">Route:</label>
+                <div class="typeahead-container" style="position: relative;">
+                    <input type="text" id="routeInput" placeholder="Type to search routes..." data-i18n-placeholder="routes.searchPlaceholder" autocomplete="off"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;">
+                    <div id="routeDropdown" class="typeahead-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ddd; border-top: none; border-radius: 0 0 4px 4px; z-index: 1001;">
+                    </div>
+                    <input type="hidden" id="routeSelect" value="">
+                </div>
+                <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.train">Train:</label>
+                <select id="formationSelect" onchange="handleFormationChange()" disabled>
+                    <option value="" data-i18n="record.selectRouteFirst">-- Select a route first --</option>
+                </select>
+                <label style="font-size: 11px; color: #666; margin-top: 8px; display: block;" data-i18n="map.timetable">Timetable:</label>
+                <select id="timetableSelect" onchange="handleTimetableChange()" disabled>
+                    <option value="" data-i18n="record.selectTimetable">-- Select a timetable --</option>
+                </select>
+                <button id="loadRouteBtn" onclick="loadSelectedTimetable()" disabled style="margin-top: 10px;" data-i18n="map.loadTimetable">Load Timetable</button>
+                <button id="clearRouteBtn" onclick="clearLoadedRoute()" style="width: 100%; margin-top: 8px; padding: 8px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; display: none;" data-i18n="map.clearLoadedRoute">Clear Loaded Route</button>
+                <div id="routeInfoGroup" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                    <h3 id="routeName" style="font-size: 13px; color: #333; margin: 0;" data-i18n="common.loading">Loading...</h3>
+                    <div class="info-item" style="display: none;">
+                        <span class="info-label" data-i18n="shell.hud.tripDuration">Trip Duration:</span>
+                        <span class="info-value" id="routeDuration">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timetable-display" id="timetableDisplay" style="display: none;">
+            <div class="game-time" id="gameTime">--:--:--</div>
+            <div class="timetable-time" id="timetableTime">--:--</div>
+            <div class="timetable-label" id="timetableLabel" data-i18n="map.nextStop">Next Stop</div>
+            <div class="distance-display" id="distanceDisplay" style="display: none;">
+                <span id="distanceValue">0</span> <span id="distanceUnit">m</span>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <h3 data-i18n="map.trainStatus">Train Status</h3>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.speed">Speed:</span>
+                <span class="info-value"><span id="speed">0</span> km/h</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.direction">Direction:</span>
+                <span class="info-value" id="direction">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label" data-i18n="map.position">Position:</span>
+                <span class="info-value" style="font-size: 11px;">
+                    <div><span data-i18n="shell.hud.lat">Lat:</span> <span id="currentLat">-</span></div>
+                    <div><span data-i18n="shell.hud.lng">Lng:</span> <span id="currentLng">-</span></div>
+                </span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3 data-i18n="map.mapLegend">Map Legend</h3>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #0066ff;"></div>
+                <span data-i18n="map.routePath">Route Path</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00cc66;"></div>
+                <span data-i18n="map.timetableStations">Timetable Stations</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffa500;"></div>
+                <span data-i18n="map.liveTrainPosition">Live Train Position</span>
+            </div>
+            <button class="follow-btn" id="followBtn" onclick="toggleFollowTrain()" title="Click to follow train position" data-i18n-title="map.clickFollowTrain" data-i18n="map.followTrain">Follow Train</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- Service-map layer toggle bar. Lives at bottom-left.
+         Open  : horizontal bar across the bottom (right margin clears the info panel).
+         Closed: just the round button — a small square in the bottom-left corner. -->
+    <div id="serviceLayerWrapper" data-state="open" style="position: fixed; left: 12px; bottom: 12px; z-index: 1100; pointer-events: auto; display: flex; flex-direction: row; align-items: flex-end; gap: 8px;">
+        <button id="serviceLayerToggleBtn" onclick="toggleServiceLayerPanel()" style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 12px; background: rgba(0,0,0,0.85); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+            <span id="serviceLayerToggleArrow">▾</span>
+            <span id="serviceLayerToggleLabel" data-i18n="map.layers">Layers</span>
+        </button>
+        <div id="serviceLayerBar" style="flex: 1 1 auto; min-width: 0;"></div>
+    </div>
+    <style>
+        /* White text against the bar's dark background. */
+        #serviceLayerWrapper, #serviceLayerWrapper * { color: #fff; }
+        /* When open, the wrapper extends to the right so the bar can lay
+           horizontally without colliding with the info panel (350px wide,
+           anchored top-right with 10px margin). */
+        #serviceLayerWrapper[data-state="open"]    { right: 380px; }
+        /* When closed, only the toggle button shows; the bar div shrinks to
+           zero so the wrapper collapses to a single 44px square. */
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerBar { display: none; }
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleLabel { display: none; }
+        #serviceLayerWrapper[data-state="closed"] #serviceLayerToggleBtn { padding: 0; min-width: 44px; width: 44px; }
+        /* Inside the bar, lay items out horizontally so the bar reads as a
+           strip across the bottom. Wraps to multiple rows when twelve toggles
+           don't fit on one line at narrower viewports — same responsive
+           pattern the tablet HUD uses. */
+        #serviceLayerBar [data-svc-layer-bar="1"] {
+            min-height: 44px;
+            display: flex !important;
+            align-items: center !important;
+            padding: 6px 14px !important;
+            margin: 0 !important;
+        }
+        #serviceLayerBar [data-svc-layer-bar="1"] > div {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 8px 14px !important;
+        }
+        #serviceLayerBar [data-svc-layer-bar="1"] strong { display: none; }
+    </style>
+    <script>
+        function toggleServiceLayerPanel() {
+            const wrap = document.getElementById('serviceLayerWrapper');
+            const arrow = document.getElementById('serviceLayerToggleArrow');
+            const next = wrap.getAttribute('data-state') === 'open' ? 'closed' : 'open';
+            wrap.setAttribute('data-state', next);
+            arrow.textContent = next === 'open' ? '▾' : '▴';
+            try { localStorage.setItem('huddev.mapLayerPanel', next); } catch (_) {}
+        }
+        (function () {
+            try {
+                if (localStorage.getItem('huddev.mapLayerPanel') === 'closed') {
+                    document.getElementById('serviceLayerWrapper').setAttribute('data-state', 'closed');
+                    document.getElementById('serviceLayerToggleArrow').textContent = '▴';
+                }
+            } catch (_) { /* ignore */ }
+        })();
+    </script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
+    <script src="/js/service-map.js"></script>
+    <script>
+        // Initialize the map. preferCanvas: true — matches every other
+        // map surface (route show, timetable show/edit, HUD overlays);
+        // SVG path-per-feature rendering chokes on big DLCs' thousands
+        // of track segments + signals + switches.
+        const map = L.map('map', { preferCanvas: true }).setView([52.0, -1.5], 6);
+
+        // Translation helper — i18n.js loads at the bottom of the page, so
+        // early calls fall back to the English literal until it's ready.
+        function tr(key, fallback) {
+            return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
+        }
+
+        // Live consist length the picker uses; sourced from the route-
+        // data response (initial) and from /stream vehicleCount (live
+        // updates once the TSW subscription for CurrentFormation.
+        // FormationLength is reporting).
+        var currentVehicleCount = 0;
+
+        // Rewrite each timetable entry's lat/lng with the car_stop_sign
+        // matching the current consist length. Same picker as the HUDs:
+        // exact-count match first, generic max=0 second, otherwise the
+        // server's resolved coord stands. Called before stops are drawn
+        // and again whenever vehicleCount changes.
+        function applyDynamicStopCoords(entries) {
+            if (!entries || !entries.length) return;
+            entries.forEach(function (item) {
+                var signs = item.car_stop_signs;
+                if (!signs || !signs.length) return;
+                // Snug-fit picker — exact match > next-larger > max=0 generic.
+                // See desktop.html for the rationale.
+                var pick = null;
+                var bestScore = Infinity;
+                for (var i = 0; i < signs.length; i++) {
+                    var max = signs[i].max_rail_vehicles;
+                    var score;
+                    if (max === currentVehicleCount) score = 0;
+                    else if (max > currentVehicleCount) score = max - currentVehicleCount;
+                    else if (max === 0)                 score = 99999;
+                    else                                score = 99999 + (currentVehicleCount - max);
+                    if (score < bestScore) {
+                        bestScore = score;
+                        pick = signs[i];
+                    }
+                }
+                if (pick) {
+                    item.latitude = pick.latitude;
+                    item.longitude = pick.longitude;
+                }
+            });
+        }
+
+        // Basemap switcher (Map / Satellite / Topo) shared with the route page.
+        LeafletExtras.attachBasemapControls(map);
+
+        // Map layers
+        let routePolyline = null;
+        let markerLayers = [];
+        let trainMarker = null;
+        let routeData = null;
+        let firstPosition = true;
+        let isFollowingTrain = false;
+
+        // Direction mapping — keys resolved through i18n at read time so the
+        // displayed value follows the active language.
+        const directionKeyMap = {
+            '-1': 'map.directionReverse',
+            '0': 'map.directionNeutral',
+            '1': 'map.directionForward'
+        };
+        const directionFallback = {
+            '-1': 'Reverse',
+            '0': 'Neutral',
+            '1': 'Forward'
+        };
+
+        function toggleTimetableSection() {
+            const content = document.getElementById('timetableContent');
+            const icon = document.getElementById('timetableCollapseIcon');
+
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+
+            // Save preference to localStorage
+            localStorage.setItem('timetableSectionCollapsed', content.classList.contains('collapsed'));
+        }
+
+        // Restore collapsed state on page load
+        function restoreTimetableSectionState() {
+            const isCollapsed = localStorage.getItem('timetableSectionCollapsed') === 'true';
+            if (isCollapsed) {
+                document.getElementById('timetableContent').classList.add('collapsed');
+                document.getElementById('timetableCollapseIcon').classList.add('collapsed');
+            }
+        }
+
+        function collapsePanel(event) {
+            event.stopPropagation();
+            document.getElementById('infoPanel').classList.add('collapsed');
+            localStorage.setItem('infoPanelCollapsed', 'true');
+        }
+
+        function expandPanel(event) {
+            const panel = document.getElementById('infoPanel');
+            if (panel.classList.contains('collapsed')) {
+                event.stopPropagation();
+                panel.classList.remove('collapsed');
+                localStorage.setItem('infoPanelCollapsed', 'false');
+            }
+        }
+
+        function restorePanelState() {
+            const params = new URLSearchParams(window.location.search);
+            const fromStart = params.get('from') === 'start';
+
+            if (fromStart) {
+                document.getElementById('backToHome').style.display = 'none';
+            }
+
+            const savedState = localStorage.getItem('infoPanelCollapsed');
+            const isCollapsed = savedState !== null ? savedState === 'true' : fromStart;
+
+            if (isCollapsed) {
+                document.getElementById('infoPanel').classList.add('collapsed');
+            }
+        }
+
+        // "Load From Game" piggybacks on the page's main eventSource (the
+        // one opened further down for the live position stream). When the
+        // user clicks the button we register a per-message callback that
+        // watches for currentServiceName and fires the timetable-detect
+        // flow; when it's null we don't do anything. Previously this
+        // opened a second EventSource('/stream'), doubling the SSE
+        // fan-out during detection — same anti-pattern we fixed on the
+        // HUD pages.
+        let loadFromGameCallback = null;
+
+        function cancelLoadFromGame() {
+            const btn = document.getElementById('loadFromGameBtn');
+            const statusEl = document.getElementById('loadFromGameStatus');
+            loadFromGameCallback = null;
+            btn.textContent = tr('map.loadFromGame', 'Load From Game');
+            btn.classList.remove('following');
+            statusEl.style.display = 'none';
+            statusEl.textContent = '';
+        }
+
+        function loadFromGame() {
+            const btn = document.getElementById('loadFromGameBtn');
+            const statusEl = document.getElementById('loadFromGameStatus');
+
+            // If already running, cancel
+            if (loadFromGameCallback) {
+                cancelLoadFromGame();
+                return;
+            }
+
+            btn.textContent = tr('map.cancel', 'Cancel');
+            btn.classList.add('following');
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#666';
+            statusEl.textContent = tr('map.connectingToTsw', 'Connecting to TSW...');
+
+            let attempts = 0;
+            const maxAttempts = 300;
+
+            function resetBtn(errorMsg) {
+                loadFromGameCallback = null;
+                btn.classList.remove('following');
+                if (errorMsg) {
+                    statusEl.style.color = '#ff0000';
+                    statusEl.textContent = errorMsg;
+                }
+                btn.textContent = tr('map.loadFromGame', 'Load From Game');
+            }
+
+            loadFromGameCallback = function(data) {
+                attempts++;
+
+                if (data.waiting) {
+                    statusEl.textContent = tr('map.waitingForTswConnection', 'Waiting for TSW connection...') + ' (' + attempts + ')';
+                    if (attempts > maxAttempts) {
+                        resetBtn(tr('map.couldNotConnectTsw', 'Could not connect to TSW. Make sure the game is running.'));
+                    }
+                    return;
+                }
+
+                const serviceName = data.currentServiceName;
+                const position = data.playerPosition;
+
+                if (!serviceName) {
+                    statusEl.textContent = tr('map.connectedWaitingService', 'Connected - waiting for service...') + ' (' + attempts + ')';
+                    if (attempts > maxAttempts) {
+                        resetBtn(tr('map.noServiceDetected', 'No service detected. Start a service in TSW.'));
+                    }
+                    return;
+                }
+
+                statusEl.textContent = tr('map.serviceLabel', 'Service:') + ' ' + serviceName + ' - ' + tr('map.detectingTimetable', 'detecting timetable...');
+                // Service detected — unregister this callback so we
+                // don't fire the load flow on every subsequent stream
+                // tick. The main eventSource keeps running for the
+                // live position layer.
+                loadFromGameCallback = null;
+
+                let detectUrl = '/api/timetables/detect?current_service_name=' + encodeURIComponent(serviceName);
+                if (position && position.latitude && position.longitude) {
+                    detectUrl += '&lat=' + position.latitude + '&lng=' + position.longitude;
+                }
+
+                fetch(detectUrl)
+                    .then(function(res) { return res.json(); })
+                    .then(function(result) {
+                        if (result.found) {
+                            statusEl.style.color = '#00cc66';
+                            statusEl.textContent = tr('map.found', 'Found:') + ' ' + (result.route_name || result.service_name) + ' - ' + tr('map.loadingEllipsis', 'loading...');
+                            btn.textContent = tr('common.loading', 'Loading...');
+
+                            fetch('/api/map/route-data/' + result.timetable_id)
+                                .then(function(res) { return res.json(); })
+                                .then(function(mapData) {
+                                    if (mapData.error) throw new Error(mapData.error);
+
+                                    return fetch('/api/upload-route', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            filename: 'db_timetable_' + result.timetable_id + '.json',
+                                            routeData: mapData
+                                        })
+                                    }).then(function() { return mapData; });
+                                })
+                                .then(function(mapData) {
+                                    localStorage.setItem('customRoute', JSON.stringify(mapData));
+                                    localStorage.setItem('customRouteFilename', mapData.routeName);
+
+                                    clearRouteDisplay();
+                                    routeData = mapData;
+                                    initializeRoute(mapData);
+
+                                    document.getElementById('clearRouteBtn').style.display = 'block';
+
+                                    if (mapData.timetableId) {
+                                        selectTimetableInDropdowns(mapData.timetableId);
+                                    }
+
+                                    statusEl.style.color = '#00cc66';
+                                    statusEl.textContent = tr('map.loaded', 'Loaded!');
+                                    btn.classList.remove('following');
+                                    btn.textContent = tr('map.loadFromGame', 'Load From Game');
+                                })
+                                .catch(function(err) {
+                                    resetBtn(tr('map.errorLoadingRoute', 'Error loading route:') + ' ' + err.message);
+                                });
+                        } else {
+                            resetBtn(tr('map.noTimetableFoundFor', 'No timetable found for') + ' "' + serviceName + '"');
+                        }
+                    })
+                    .catch(function(err) {
+                        resetBtn(tr('common.error', 'Error') + ': ' + err.message);
+                    });
+            };
+        }
+
+        function toggleFollowTrain() {
+            const followBtn = document.getElementById('followBtn');
+
+            isFollowingTrain = !isFollowingTrain;
+
+            if (isFollowingTrain) {
+                followBtn.textContent = tr('map.stopFollowing', 'Stop Following');
+                followBtn.classList.add('following');
+                followBtn.title = tr('map.clickStopFollowing', 'Click to stop following train position');
+
+                if (trainMarker) {
+                    const pos = trainMarker.getLatLng();
+                    map.setView([pos.lat, pos.lng], map.getZoom());
+                }
+
+                console.log('Started following train');
+            } else {
+                followBtn.textContent = tr('map.followTrain', 'Follow Train');
+                followBtn.classList.remove('following');
+                followBtn.title = tr('map.clickFollowTrain', 'Click to follow train position');
+
+                console.log('Stopped following train');
+            }
+        }
+
+        function parseRouteName(fullName) {
+            const match = fullName.match(/^(.+?)\s+(\d{4})\s+(\d{4})$/);
+            if (!match) {
+                return { name: fullName, duration: null };
+            }
+
+            const routeName = match[1].trim();
+            const durationHHMM = match[3];
+
+            const hours = parseInt(durationHHMM.substring(0, 2), 10);
+            const minutes = parseInt(durationHHMM.substring(2, 4), 10);
+
+            const hourUnit = tr(hours !== 1 ? 'map.hours' : 'map.hour', hours !== 1 ? 'hours' : 'hour');
+            const minuteUnit = tr(minutes !== 1 ? 'map.minutes' : 'map.minute', minutes !== 1 ? 'minutes' : 'minute');
+            let durationStr = '';
+            if (hours > 0 && minutes > 0) {
+                durationStr = `${hours} ${hourUnit} ${minutes} ${minuteUnit}`;
+            } else if (hours > 0) {
+                durationStr = `${hours} ${hourUnit}`;
+            } else {
+                durationStr = `${minutes} ${minuteUnit}`;
+            }
+
+            return { name: routeName, duration: durationStr };
+        }
+
+        // Trim path coords to start at the first scheduled stop and end at
+        // the last. GO VIA LOCATION is routing-only and doesn't bound the
+        // polyline; the trimmed endpoints are anchored at the actual stop
+        // marker lat/lngs so the line visibly reaches them.
+        function trimPathToStops(coords, allEntries) {
+            if (!Array.isArray(coords) || coords.length < 2) return coords;
+            function isStopEntry(e) {
+                if (!e) return false;
+                if (e.action) return e.action === 'STOP AT LOCATION' || e.action === 'WAIT FOR SERVICE';
+                // Fallback for older /api/map/route-data responses without
+                // `action`: anything not flagged as a routing-only pass-through.
+                return !e.isPassThrough;
+            }
+            var stops = (allEntries || []).filter(function(e) {
+                if (!isStopEntry(e)) return false;
+                var lat = parseFloat(e.latitude), lng = parseFloat(e.longitude);
+                return !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
+            });
+            if (stops.length === 0) return coords;
+            function distM(la1, ln1, la2, ln2) {
+                var R = 6371000;
+                var dLat = (la2 - la1) * Math.PI / 180;
+                var dLng = (ln2 - ln1) * Math.PI / 180;
+                var m = (la1 + la2) * 0.5 * Math.PI / 180;
+                var x = dLng * Math.cos(m);
+                return Math.hypot(dLat, x) * R;
+            }
+            function nearestIdx(la, ln) {
+                var best = 0, bestD = Infinity;
+                for (var i = 0; i < coords.length; i++) {
+                    var d = distM(la, ln, coords[i].latitude, coords[i].longitude);
+                    if (d < bestD) { bestD = d; best = i; }
+                }
+                return best;
+            }
+            var first = stops[0], last = stops[stops.length - 1];
+            var fLat = parseFloat(first.latitude), fLng = parseFloat(first.longitude);
+            var lLat = parseFloat(last.latitude), lLng = parseFloat(last.longitude);
+            var s = nearestIdx(fLat, fLng);
+            var e = nearestIdx(lLat, lLng);
+            var lo = Math.min(s, e), hi = Math.max(s, e);
+            if (hi - lo + 1 < 2) return coords;
+            var sliced = coords.slice(lo, hi + 1);
+            sliced[0] = { latitude: fLat, longitude: fLng };
+            sliced[sliced.length - 1] = { latitude: lLat, longitude: lLng };
+            return sliced;
+        }
+
+        // Create custom train icon
+        const trainIcon = L.divIcon({
+            className: 'train-icon',
+            html: '<div style="background: #ffa500; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(255,165,0,0.8), 0 2px 6px rgba(0,0,0,0.3);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        // Clear loaded route from localStorage and server
+        async function clearLoadedRoute() {
+            try {
+                // Clear from server
+                await fetch('/api/clear-route', { method: 'POST' });
+
+                // Clear from localStorage
+                localStorage.removeItem('customRoute');
+                localStorage.removeItem('customRouteFilename');
+
+                // Clear file input (if dev tools exist)
+                const fileInput = document.getElementById('jsonFileInput');
+                if (fileInput) fileInput.value = '';
+
+                // Hide the clear button
+                document.getElementById('clearRouteBtn').style.display = 'none';
+
+                // Strip both URL params so the next reload doesn't re-load
+                // whatever we just cleared.
+                if (typeof syncUrlTimetableParam === 'function') syncUrlTimetableParam(0);
+                if (typeof syncUrlRouteParam === 'function') syncUrlRouteParam(0);
+
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            } catch (err) {
+                console.error('Failed to clear route:', err);
+            }
+        }
+
+        // Handle file selection from native file picker (Dev Tools)
+        function handleFileSelect() {
+            const fileInput = document.getElementById('jsonFileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const statusMessage = document.getElementById('devStatusMessage');
+            statusMessage.textContent = tr('map.loadingFile', 'Loading file...');
+            statusMessage.className = 'status-message';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const routeData = JSON.parse(e.target.result);
+
+                    if (!routeData.coordinates || !routeData.routeName) {
+                        throw new Error(tr('map.invalidRouteFileFormat', 'Invalid route file format'));
+                    }
+
+                    // Send route data to backend
+                    fetch('/api/upload-route', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename: file.name,
+                            routeData: routeData
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            localStorage.setItem('customRoute', e.target.result);
+                            localStorage.setItem('customRouteFilename', file.name);
+
+                            statusMessage.textContent = tr('map.loadedFile', 'Loaded') + ' ' + file.name;
+                            statusMessage.className = 'status-message success';
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        } else {
+                            throw new Error(result.error || tr('map.failedToLoadRouteServer', 'Failed to load route on server'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Failed to send route to server:', err);
+                        statusMessage.textContent = tr('map.serverError', 'Server error:') + ' ' + err.message;
+                        statusMessage.className = 'status-message error';
+                    });
+                } catch (err) {
+                    console.error('Failed to load route:', err);
+                    statusMessage.textContent = tr('map.invalidRouteFile', 'Invalid route file:') + ' ' + err.message;
+                    statusMessage.className = 'status-message error';
+                }
+            };
+
+            reader.onerror = function() {
+                statusMessage.textContent = tr('map.failedToReadFile', 'Failed to read file');
+                statusMessage.className = 'status-message error';
+            };
+
+            reader.readAsText(file);
+        }
+
+        // =============================================
+        // Cascading Selectors: Route → Formation → Timetable
+        // =============================================
+
+        let allRoutes = [];
+        let highlightedIndex = -1;
+
+        // Load routes for typeahead (only routes with timetables that have coordinates)
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes/with-coordinates');
+                allRoutes = await response.json();
+                console.log('Routes with coordinates loaded:', allRoutes.length);
+            } catch (err) {
+                console.error('Failed to load routes:', err);
+            }
+        }
+
+        // Setup typeahead for route input
+        function setupRouteTypeahead() {
+            const input = document.getElementById('routeInput');
+            const dropdown = document.getElementById('routeDropdown');
+            const hiddenSelect = document.getElementById('routeSelect');
+
+            // Show dropdown on focus
+            input.addEventListener('focus', function() {
+                showRouteDropdown(this.value);
+            });
+
+            // Filter on input
+            input.addEventListener('input', function() {
+                highlightedIndex = -1;
+                showRouteDropdown(this.value);
+            });
+
+            // Keyboard navigation
+            input.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+                    updateHighlight(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                    updateHighlight(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                        items[highlightedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Hide dropdown on click outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.typeahead-container')) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function updateHighlight(items) {
+            items.forEach((item, idx) => {
+                item.classList.toggle('highlighted', idx === highlightedIndex);
+            });
+            if (highlightedIndex >= 0 && items[highlightedIndex]) {
+                items[highlightedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showRouteDropdown(filter) {
+            const dropdown = document.getElementById('routeDropdown');
+            const filterLower = filter.toLowerCase();
+
+            const filtered = allRoutes.filter(route =>
+                route.name.toLowerCase().includes(filterLower) ||
+                (route.country_name && route.country_name.toLowerCase().includes(filterLower))
+            );
+
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: #999;">' + tr('routes.noRoutesFound', 'No routes found') + '</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(route => `
+                    <div class="typeahead-item" data-id="${route.id}" data-name="${route.name}">
+                        <div class="route-name">${route.name}</div>
+                        ${route.country_name ? `<div class="country-name">${route.country_name}</div>` : ''}
+                    </div>
+                `).join('');
+
+                // Add click handlers
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const name = this.dataset.name;
+                        document.getElementById('routeInput').value = name;
+                        document.getElementById('routeSelect').value = id;
+                        dropdown.style.display = 'none';
+                        handleRouteChange();
+                    });
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        // Handle route selection - load formations for this route (only those with coordinates)
+        async function handleRouteChange() {
+            const routeId = document.getElementById('routeSelect').value;
+            const formationSelect = document.getElementById('formationSelect');
+            const timetableSelect = document.getElementById('timetableSelect');
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            // Reset dependent dropdowns
+            formationSelect.innerHTML = '<option value="">' + tr('record.selectTrain', '-- Select a formation --') + '</option>';
+            formationSelect.disabled = true;
+            timetableSelect.innerHTML = '<option value="">' + tr('record.selectTimetable', '-- Select a timetable --') + '</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!routeId) return;
+
+            try {
+                const response = await fetch(`/api/routes/${routeId}/formations-with-coordinates`);
+                const formations = await response.json();
+
+                if (formations.length > 0) {
+                    formationSelect.disabled = false;
+                    formations.forEach(formation => {
+                        const option = document.createElement('option');
+                        option.value = formation.id;
+                        option.textContent = formation.name;
+                        formationSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Formations with coordinates loaded:', formations.length);
+            } catch (err) {
+                console.error('Failed to load formations:', err);
+            }
+        }
+
+        // Handle formation selection - load timetables for this route+formation
+        async function handleFormationChange() {
+            const routeId = document.getElementById('routeSelect').value;
+            const formationId = document.getElementById('formationSelect').value;
+            const timetableSelect = document.getElementById('timetableSelect');
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            // Reset timetable dropdown
+            timetableSelect.innerHTML = '<option value="">' + tr('record.selectTimetable', '-- Select a timetable --') + '</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!formationId) return;
+
+            try {
+                const response = await fetch(`/api/timetables?route_id=${routeId}&formation_id=${formationId}`);
+                const timetables = await response.json();
+
+                // Only show timetables with recorded data
+                const withData = timetables.filter(t => t.coordinate_count > 0);
+
+                if (withData.length > 0) {
+                    timetableSelect.disabled = false;
+                    withData.forEach(tt => {
+                        const option = document.createElement('option');
+                        option.value = tt.id;
+                        const label = tt.service ? `${tt.service}: ${tt.service_name}` : tt.service_name;
+                        option.textContent = `${label} (${tt.coordinate_count} ${tr('map.points', 'pts')})`;
+                        timetableSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Timetables with data:', withData.length);
+            } catch (err) {
+                console.error('Failed to load timetables:', err);
+            }
+        }
+
+        // Handle timetable selection - enable load button
+        function handleTimetableChange() {
+            const timetableId = document.getElementById('timetableSelect').value;
+            const loadBtn = document.getElementById('loadRouteBtn');
+
+            loadBtn.disabled = !timetableId;
+            console.log('Selected timetable:', timetableId);
+        }
+
+        // Load selected timetable data from database and display directly (no reload)
+        async function loadSelectedTimetable() {
+            const timetableId = document.getElementById('timetableSelect').value;
+
+            if (!timetableId) {
+                return;
+            }
+
+            try {
+                // Fetch route data directly from database
+                const response = await fetch(`/api/map/route-data/${timetableId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Log to console
+                console.log('=== ROUTE DATA FROM DATABASE ===');
+                console.log('Service Name:', data.routeName);
+                console.log('Timetable ID:', data.timetableId);
+                console.log('Total Coordinates:', data.totalPoints);
+                console.log('Timetable Entries:', data.timetable?.length || 0);
+                console.log('Timetable JSON:', JSON.stringify(data.timetable, null, 2));
+                console.log('=====================================');
+
+                // Send to server to set as active route (for telemetry tracking)
+                const uploadRes = await fetch('/api/upload-route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: `db_timetable_${timetableId}.json`,
+                        routeData: data
+                    })
+                });
+
+                const result = await uploadRes.json();
+                if (!result.success) {
+                    console.warn('Failed to set route on server:', result.error);
+                }
+
+                // Store in localStorage for persistence across page loads
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                localStorage.setItem('customRouteFilename', data.routeName);
+
+                // Clear existing route display
+                clearRouteDisplay();
+
+                // Display the route directly without reloading
+                routeData = data;
+                initializeRoute(data);
+
+                // Show the clear route button
+                document.getElementById('clearRouteBtn').style.display = 'block';
+
+                // Reflect the choice in the URL so the user can copy /
+                // bookmark / hand-edit it.
+                syncUrlTimetableParam(timetableId);
+
+            } catch (err) {
+                console.error('Failed to load timetable:', err);
+            }
+        }
+
+        // Clear existing route display from the map
+        function clearRouteDisplay() {
+            // Remove existing polyline
+            if (routePolyline) {
+                map.removeLayer(routePolyline);
+                routePolyline = null;
+            }
+
+            // Remove existing station markers
+            markerLayers.forEach(marker => map.removeLayer(marker));
+            markerLayers = [];
+
+            // Reset route data
+            routeData = null;
+        }
+
+        // Load config and hide dev tools if needed
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                if (!config.developmentMode) {
+                    const devTools = document.querySelector('.dev-tools');
+                    if (devTools) {
+                        devTools.style.display = 'none';
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load config:', err);
+            }
+        }
+
+        // Select timetable in dropdowns by timetable ID
+        async function selectTimetableInDropdowns(timetableId) {
+            if (!timetableId) return;
+
+            try {
+                // Get timetable details to find route_id and formation_id
+                const response = await fetch(`/api/timetables/${timetableId}`);
+                if (response.status === 404) {
+                    // Stale id pointing at a deleted/re-imported timetable.
+                    // Strip the cached state so the next page load doesn't
+                    // keep firing the same 404 against the same dead id.
+                    clearStaleCustomRoute('timetable ' + timetableId + ' returned 404');
+                    syncUrlTimetableParam(0);
+                    return;
+                }
+                const timetable = await response.json();
+
+                if (!timetable || timetable.error) {
+                    console.log('Could not find timetable:', timetableId);
+                    clearStaleCustomRoute('timetable ' + timetableId + ' lookup returned error');
+                    syncUrlTimetableParam(0);
+                    return;
+                }
+
+                // Wait for routes to load
+                while (allRoutes.length === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // Find and select the route
+                const route = allRoutes.find(r => r.id === timetable.route_id);
+                if (route) {
+                    document.getElementById('routeInput').value = route.name;
+                    document.getElementById('routeSelect').value = route.id;
+
+                    // Load formations for this route
+                    await handleRouteChange();
+
+                    // Get the first formation from timetable (formations array or legacy formation_id)
+                    const formationId = timetable.formations && timetable.formations.length > 0
+                        ? timetable.formations[0].id
+                        : timetable.formation_id;
+
+                    if (formationId) {
+                        // Select the formation
+                        const formationSelect = document.getElementById('formationSelect');
+                        formationSelect.value = formationId;
+
+                        // Load timetables for this route+formation
+                        await handleFormationChange();
+
+                        // Select the timetable
+                        const timetableSelect = document.getElementById('timetableSelect');
+                        timetableSelect.value = timetableId;
+                        handleTimetableChange();
+
+                        console.log('Dropdowns populated for timetable:', timetableId);
+                    }
+                }
+            } catch (err) {
+                console.error('Error selecting timetable in dropdowns:', err);
+            }
+        }
+
+        // Load routes on page load
+        loadRoutes();
+        setupRouteTypeahead();
+        loadConfig();
+        restoreTimetableSectionState();
+        restorePanelState();
+
+        // Update the browser URL to reflect the currently-loaded timetable
+        // without reloading the page. Lets users bookmark / share / hand-edit
+        // a specific service. Empty/zero id strips the param. Always strips
+        // ?route= so the two are mutually exclusive — selecting a timetable
+        // implies "show the service's path", not "show the whole route".
+        function syncUrlTimetableParam(timetableId) {
+            try {
+                const url = new URL(window.location.href);
+                if (timetableId) {
+                    url.searchParams.set('timetable', String(timetableId));
+                    url.searchParams.delete('route');
+                    url.searchParams.delete('r');
+                } else {
+                    url.searchParams.delete('timetable');
+                    url.searchParams.delete('tt');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (_) { /* old browsers; ignore */ }
+        }
+
+        // Mirror of syncUrlTimetableParam for the ?route= form. Sets the
+        // route param and strips any timetable param so the URL only ever
+        // names ONE source-of-truth (route OR timetable, never both).
+        function syncUrlRouteParam(routeId) {
+            try {
+                const url = new URL(window.location.href);
+                if (routeId) {
+                    url.searchParams.set('route', String(routeId));
+                    url.searchParams.delete('timetable');
+                    url.searchParams.delete('tt');
+                } else {
+                    url.searchParams.delete('route');
+                    url.searchParams.delete('r');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (_) { /* old browsers; ignore */ }
+        }
+
+        // Drop the cached "currently loaded" route from localStorage. Used
+        // when a stale id 404s so the next page-load doesn't keep retrying
+        // the dead reference.
+        function clearStaleCustomRoute(reason) {
+            console.warn('clearing cached customRoute:', reason);
+            localStorage.removeItem('customRoute');
+            localStorage.removeItem('customRouteFilename');
+            const clearBtn = document.getElementById('clearRouteBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
+        }
+
+        // Pull a timetable id from the page URL. Accepts `?timetable=<id>`
+        // (long form) and `?tt=<id>` (short alias) — first match wins.
+        // Returns 0 when neither is present or the value isn't a positive
+        // integer.
+        function readUrlTimetableId() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('timetable') || params.get('tt');
+            if (!raw) return 0;
+            const id = Number(raw);
+            return Number.isFinite(id) && id > 0 ? id : 0;
+        }
+
+        // Same idea for `?route=<id>` (or `?r=<id>`). When present, the
+        // route-only branch takes priority over `?timetable=` — the user
+        // wants the rails layer for the whole route, no service-specific
+        // path or stops.
+        function readUrlRouteId() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('route') || params.get('r');
+            if (!raw) return 0;
+            const id = Number(raw);
+            return Number.isFinite(id) && id > 0 ? id : 0;
+        }
+
+        // Load a route by id without picking a timetable — only the rails
+        // layer (and any route-derived markers) get rendered, no service
+        // path or stops. Used by the `?route=<id>` URL parameter for users
+        // who want to inspect the route's track layout standalone.
+        // Returns true on success, false if the id is dead.
+        async function loadRouteById(routeId) {
+            try {
+                const r = await fetch('/api/routes/' + routeId);
+                if (!r.ok) return false;
+                const route = await r.json();
+                if (!route || route.error || !route.id) return false;
+                // Build a minimal data shape that initializeRoute knows how
+                // to render: routeId drives the route-derived layer fetch
+                // inside attachServiceLayers; empty coordinates[] / timetable[]
+                // skip the service polyline + stops.
+                const data = {
+                    routeId:    route.id,
+                    routeName:  route.name || (tr('map.routeWord', 'Route') + ' ' + route.id),
+                    coordinates: [],
+                    timetable:   [],
+                };
+                routeData = data;
+                initializeRoute(data);
+                // Do NOT cache route-only mode in localStorage. The
+                // empty-coordinates blob would otherwise leak into later
+                // page-loads via the localStorage fallback (when no URL
+                // param is set or a ?timetable= id 404s) and silently
+                // overwrite the previously-cached timetable's path.
+                // Wipe any stale cache so the fallback only ever sees a
+                // valid timetable blob — the URL param is the persistence
+                // for route-only mode.
+                localStorage.removeItem('customRoute');
+                localStorage.removeItem('customRouteFilename');
+                document.getElementById('clearRouteBtn').style.display = 'block';
+                document.getElementById('routeInfoGroup').style.display = 'block';
+                syncUrlRouteParam(routeId);
+                return true;
+            } catch (err) {
+                console.warn('loadRouteById failed:', err);
+                return false;
+            }
+        }
+
+        // Load a specific timetable by id from the DB (route + coords +
+        // timetable entries) and drive initializeRoute with it. Mirrors what
+        // loadInitialRoute does after fetching server / localStorage state.
+        // Returns true on success, false if the id is dead.
+        async function loadTimetableById(timetableId) {
+            try {
+                const r = await fetch('/api/map/route-data/' + timetableId);
+                if (!r.ok) return false;
+                const data = await r.json();
+                if (!data || data.error) return false;
+                routeData = data;
+                initializeRoute(data);
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                if (data.routeName) localStorage.setItem('customRouteFilename', data.routeName);
+                document.getElementById('clearRouteBtn').style.display = 'block';
+                document.getElementById('routeInfoGroup').style.display = 'block';
+                if (data.timetableId) {
+                    await selectTimetableInDropdowns(data.timetableId);
+                }
+                syncUrlTimetableParam(timetableId);
+                return true;
+            } catch (err) {
+                console.warn('loadTimetableById failed:', err);
+                return false;
+            }
+        }
+
+        // Loading priority:
+        //   1. ?route=<id>     URL parameter — route-only mode (wins; any
+        //                      ?timetable= is ignored when present).
+        //   2. ?timetable=<id> URL parameter — service-specific mode.
+        //   3. server-side /route-data (a route loaded into the HUD process)
+        //   4. localStorage customRoute (last route this browser loaded)
+        // Each step is self-healing: a 404 on the cached id strips the
+        // stale state instead of looping on the next page load.
+        async function loadInitialRoute() {
+            const urlRouteId = readUrlRouteId();
+            if (urlRouteId) {
+                if (await loadRouteById(urlRouteId)) return;
+                console.warn('?route=' + urlRouteId + ' did not resolve to a valid route');
+                syncUrlRouteParam(0);
+            }
+
+            const urlTtId = readUrlTimetableId();
+            if (urlTtId) {
+                if (await loadTimetableById(urlTtId)) return;
+                console.warn('?timetable=' + urlTtId + ' did not resolve to a valid timetable');
+                // Strip the bad param from the URL so subsequent reloads
+                // don't keep firing the same 404.
+                syncUrlTimetableParam(0);
+            }
+
+            try {
+                // Check server first
+                const response = await fetch('/route-data');
+                const serverData = await response.json();
+
+                if (serverData && serverData.routeName && !serverData.error) {
+                    console.log('Loading route from server:', serverData.routeName);
+                    routeData = serverData;
+                    initializeRoute(serverData);
+
+                    // Sync localStorage with server data
+                    localStorage.setItem('customRoute', JSON.stringify(serverData));
+                    localStorage.setItem('customRouteFilename', serverData.routeName);
+
+                    // Show clear button and HUD link
+                    document.getElementById('clearRouteBtn').style.display = 'block';
+                    document.getElementById('routeInfoGroup').style.display = 'block';
+
+                    // Select the timetable in dropdowns
+                    if (serverData.timetableId) {
+                        await selectTimetableInDropdowns(serverData.timetableId);
+                    }
+                    return;
+                }
+            } catch (err) {
+                console.log('No route loaded on server, checking localStorage');
+            }
+
+            // Fall back to localStorage
+            const customRoute = localStorage.getItem('customRoute');
+            const customRouteFilename = localStorage.getItem('customRouteFilename');
+
+            if (customRoute) {
+                try {
+                    const data = JSON.parse(customRoute);
+                    // Reject cached blobs that have no path coords — they
+                    // were likely written before route-only mode stopped
+                    // caching, and loading them silently produces an empty
+                    // map. Treat as a stale cache and clear it.
+                    if (!Array.isArray(data.coordinates) || data.coordinates.length === 0) {
+                        console.warn('cached customRoute has no coordinates — clearing');
+                        localStorage.removeItem('customRoute');
+                        localStorage.removeItem('customRouteFilename');
+                        return;
+                    }
+                    console.log('Loading custom route from localStorage:', customRouteFilename);
+                    routeData = data;
+                    initializeRoute(data);
+
+                    // Show clear button since a route is loaded
+                    document.getElementById('clearRouteBtn').style.display = 'block';
+
+                    // Select the timetable in dropdowns
+                    if (data.timetableId) {
+                        await selectTimetableInDropdowns(data.timetableId);
+                    }
+                } catch (err) {
+                    console.error('Failed to load custom route:', err);
+                    localStorage.removeItem('customRoute');
+                    localStorage.removeItem('customRouteFilename');
+                }
+            }
+        }
+
+        loadInitialRoute();
+
+        function initializeRoute(data) {
+            if (data.error) {
+                document.getElementById('routeInfoGroup').style.display = 'none';
+                return;
+            }
+
+            // Show the route info section
+            document.getElementById('routeInfoGroup').style.display = 'block';
+
+            const parsed = parseRouteName(data.routeName || tr('map.unknown', 'Unknown'));
+            document.getElementById('routeName').textContent = parsed.name;
+            if (parsed.duration) {
+                document.getElementById('routeDuration').textContent = parsed.duration;
+                document.getElementById('routeDuration').parentElement.style.display = 'flex';
+            }
+
+            // Build the route polyline and station markers but DON'T add them
+            // directly to the map — pass them to ServiceMap.attach so the
+            // "Path" / "Stops" toggle checkboxes can hide/show them.
+            // Trim to start at first scheduled stop and end at last — GO VIA
+            // LOCATION entries are routing-only, not endpoints.
+            data.coordinates = trimPathToStops(data.coordinates, data.timetable);
+            const coordinates = data.coordinates.map(coord => [coord.latitude, coord.longitude]);
+            routePolyline = L.polyline(coordinates, {
+                color: '#0066ff',
+                weight: 4,
+                opacity: 0.6
+            });
+
+            // Rewrite each entry's lat/lng to the car_stop_sign matching
+            // the imported consist length, mirroring the HUD's
+            // applyDynamicStopCoords. The server populates car_stop_signs[]
+            // + vehicleCount on each entry; we pick the exact-count sign
+            // first, generic max=0 second, leave the rest alone.
+            currentVehicleCount = Number(data.vehicleCount) || 0;
+            applyDynamicStopCoords(data.timetable);
+
+            // Build stop markers without adding them to the map yet.
+            const stopMarkerLayers = [];
+            if (data.timetable && data.timetable.length > 0) {
+                buildTimetableStations(data.timetable, stopMarkerLayers);
+            }
+
+            console.log('Route loaded successfully');
+
+            // Hand off to the layer-bar helper. It puts the polyline in the
+            // 'path' group and the stops in the 'stops' group, then adds
+            // route-derived markers (platforms / signals / switches / track
+            // features). Toggling now works for every layer.
+            attachServiceLayers(data, coordinates, routePolyline, stopMarkerLayers)
+                .then(function () {
+                    // Fit bounds after attach. If the loader gave us a
+                    // service path, prefer that. Otherwise (route-only mode
+                    // — `?route=<id>` URL param) the path is empty, so fall
+                    // back to the bounds of every rail / point feature in
+                    // the route-derived layer groups. Without this fallback
+                    // the map sticks to wherever the previous load left it
+                    // and the rails draw off-screen.
+                    if (coordinates.length >= 2) {
+                        map.fitBounds(L.latLngBounds(coordinates), { padding: [50, 50] });
+                        return;
+                    }
+                    if (!serviceMapHandle || !serviceMapHandle.groups) return;
+                    var bounds = L.latLngBounds();
+                    Object.keys(serviceMapHandle.groups).forEach(function (k) {
+                        serviceMapHandle.groups[k].eachLayer(function (layer) {
+                            try {
+                                if (typeof layer.getBounds === 'function') {
+                                    bounds.extend(layer.getBounds());
+                                } else if (typeof layer.getLatLng === 'function') {
+                                    bounds.extend(layer.getLatLng());
+                                }
+                            } catch (_) { /* skip layers without bounds */ }
+                        });
+                    });
+                    if (bounds.isValid()) {
+                        map.fitBounds(bounds, { padding: [50, 50] });
+                    }
+                })
+                .catch(function (e) { console.warn('serviceLayerBar attach failed', e); });
+        }
+
+        // Resolve the DB route id from the loaded data, then call ServiceMap.
+        // Loaders that go through /api/map/route-data/<id> include `routeId`
+        // directly — prefer that. Otherwise fall back to matching by name
+        // against /api/routes.
+        let serviceMapHandle = null;
+        let lastAttachedRouteId = null;
+        async function attachServiceLayers(data, pathLatLngs, pathLayer, stopLayers) {
+            if (!window.ServiceMap) return;
+            let resolvedRouteId = (data && data.routeId) ? Number(data.routeId) : null;
+
+            if (!resolvedRouteId) {
+                const routeName = (data && data.routeName) ? String(data.routeName) : '';
+                if (routeName) {
+                    try {
+                        const routesRes = await fetch('/api/routes');
+                        if (routesRes.ok) {
+                            const routes = await routesRes.json();
+                            const lower = routeName.toLowerCase();
+                            let match = routes.find(function (r) { return (r.name || '').toLowerCase() === lower; });
+                            if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) === 0; });
+                            if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) !== -1; });
+                            if (match) resolvedRouteId = match.id;
+                        }
+                    } catch (_) { /* fall through */ }
+                }
+            }
+
+            // Even without a DB route match, still attach so the Path/Stops
+            // toggles work. Route-derived markers will simply be empty.
+            if (lastAttachedRouteId === resolvedRouteId && serviceMapHandle) return;
+            if (serviceMapHandle && serviceMapHandle.destroy) serviceMapHandle.destroy();
+            const entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
+            // Prefer the pre-built per-timetable feature blob when we know
+            // the timetable id — server-side filter at import time, single
+            // SELECT at runtime. Falls back to fetching the full route
+            // GeoJSON in route-only mode (no timetableId).
+            const tt_id = (data && data.timetableId) ? Number(data.timetableId) : 0;
+            serviceMapHandle = await ServiceMap.attach(map, {
+                routeId: resolvedRouteId || 0,
+                timetableId: tt_id || undefined,
+                barContainer: document.getElementById('serviceLayerBar'),
+                pathLatLngs: pathLatLngs,
+                scheduleEntries: entries,
+                pathLayer: pathLayer,
+                stopLayers: stopLayers,
+                storageKey: 'huddev.mapLayers'
+            });
+            lastAttachedRouteId = resolvedRouteId;
+        }
+
+        // Build station markers for the timetable. Doesn't add them to the
+        // map directly — the markers go into ServiceMap's "stops" layer
+        // group via opts.stopLayers so the Stops toggle controls them.
+        function buildTimetableStations(timetable, outArray) {
+            timetable.forEach((entry, index) => {
+                if (!entry.latitude || !entry.longitude) return;
+
+                const stationName = entry.location || `${tr('map.station', 'Station')} ${index + 1}`;
+                const stopNumber = entry.index + 1;
+
+                const mapMarker = L.circleMarker([entry.latitude, entry.longitude], {
+                    radius: 8,
+                    fillColor: '#00cc66',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).bindPopup(`
+                    <strong>#${stopNumber} ${stationName}</strong><br>
+                    <small>${tr('map.arr', 'Arr:')} ${entry.arrival || '-'} | ${tr('map.dep', 'Dep:')} ${entry.departure || '-'}</small><br>
+                    <small>${tr('map.platform', 'Platform:')} ${entry.structure_number || '-'}</small>
+                `);
+
+                outArray.push(mapMarker);
+                markerLayers.push(mapMarker);
+            });
+        }
+
+        // Connect to live position stream
+        const eventSource = new EventSource('/stream');
+
+        eventSource.onopen = () => {
+            console.log('Connected to live stream');
+            document.getElementById('statusIndicator').className = 'status-indicator status-connected';
+            document.getElementById('connectionStatusItem').style.display = 'none';
+        };
+
+        eventSource.onerror = () => {
+            console.log('Connection lost');
+            document.getElementById('statusIndicator').className = 'status-indicator status-lost';
+            document.getElementById('connectionStatus').textContent = tr('map.lostConnection', 'Lost Connection');
+            document.getElementById('connectionStatusItem').style.display = 'flex';
+        };
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            // Pump any registered short-lived consumers off the same
+            // stream (Load From Game flow). Previously each spun up its
+            // own EventSource('/stream') — wasteful while polling.
+            if (loadFromGameCallback) loadFromGameCallback(data);
+
+            // Pick up live consist length so future timetable loads use
+            // the right car_stop_sign. Doesn't re-position already-drawn
+            // markers — that'd require finding each L.circleMarker and
+            // calling setLatLng; out of scope here. Refresh the map to
+            // re-pick if the consist changes mid-session.
+            if (typeof data.vehicleCount === 'number') {
+                currentVehicleCount = data.vehicleCount;
+            }
+
+            // Update speed and direction
+            if (data.speed !== undefined) {
+                document.getElementById('speed').textContent = data.speed;
+            }
+            if (data.direction !== undefined) {
+                document.getElementById('direction').textContent =
+                    (directionKeyMap[data.direction]
+                        ? tr(directionKeyMap[data.direction], directionFallback[data.direction])
+                        : tr('map.directionUnknown', 'Unknown'));
+            }
+
+            // Update game time
+            if (data.localTime) {
+                try {
+                    const date = new Date(data.localTime);
+                    const hours = String(date.getUTCHours()).padStart(2, '0');
+                    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+                    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+                    document.getElementById('gameTime').textContent = `${hours}:${minutes}:${seconds}`;
+                } catch (e) {
+                    document.getElementById('gameTime').textContent = '--:--:--';
+                }
+            }
+
+            // Update timetable display
+            if (data.timetableTime && data.timetableLabel) {
+                document.getElementById('timetableDisplay').style.display = 'block';
+                document.getElementById('timetableTime').textContent = data.timetableTime;
+                document.getElementById('timetableLabel').textContent = data.timetableLabel;
+
+                if (data.distanceToStation !== null && data.distanceToStation !== undefined) {
+                    document.getElementById('distanceDisplay').style.display = 'block';
+                    const isImperial = data.distanceUnits === 'imperial';
+
+                    if (isImperial) {
+                        // Imperial: distance is in feet
+                        const feet = data.distanceToStation;
+                        if (feet > 5280) {
+                            // Convert to miles (5280 feet = 1 mile)
+                            document.getElementById('distanceValue').textContent = (feet / 5280).toFixed(1);
+                            document.getElementById('distanceUnit').textContent = 'mi';
+                        } else {
+                            document.getElementById('distanceValue').textContent = Math.round(feet).toLocaleString();
+                            document.getElementById('distanceUnit').textContent = 'ft';
+                        }
+                    } else {
+                        // Metric: distance is in meters
+                        if (data.distanceToStation > 3000) {
+                            document.getElementById('distanceValue').textContent = (data.distanceToStation / 1000).toFixed(1);
+                            document.getElementById('distanceUnit').textContent = 'km';
+                        } else {
+                            document.getElementById('distanceValue').textContent = Math.round(data.distanceToStation).toLocaleString();
+                            document.getElementById('distanceUnit').textContent = 'm';
+                        }
+                    }
+                } else {
+                    document.getElementById('distanceDisplay').style.display = 'none';
+                }
+            } else {
+                document.getElementById('timetableDisplay').style.display = 'none';
+            }
+
+            // Update train position
+            if (data.playerPosition && data.playerPosition.latitude && data.playerPosition.longitude) {
+                const lat = data.playerPosition.latitude;
+                const lng = data.playerPosition.longitude;
+
+                document.getElementById('currentLat').textContent = lat.toFixed(6);
+                document.getElementById('currentLng').textContent = lng.toFixed(6);
+
+                if (trainMarker) {
+                    trainMarker.setLatLng([lat, lng]);
+                } else {
+                    trainMarker = L.marker([lat, lng], { icon: trainIcon })
+                        .bindPopup('<strong>' + tr('map.yourTrain', 'Your Train') + '</strong>')
+                        .addTo(map);
+                }
+
+                if (firstPosition || isFollowingTrain) {
+                    map.setView([lat, lng], firstPosition ? 15 : map.getZoom());
+                    firstPosition = false;
+                }
+            }
+        };
+
+        console.log('Live Route Tracker initialized');
+    </script>
+    <script src="/js/i18n.js"></script>
+</body>
+</html>

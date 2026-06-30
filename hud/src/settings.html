@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Settings</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .form-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 10px 16px;
+      max-width: 880px;
+      align-items: center;
+    }
+    .form-grid label { color: var(--muted); font-size: 0.9rem; }
+    .form-grid input[type="text"],
+    .form-grid input[type="number"],
+    .form-grid select { width: 100%; }
+    .form-grid .checkbox-row { display: flex; align-items: center; gap: 8px; }
+    .section { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 18px; }
+    .section h2 { margin-top: 0; }
+    .actions { margin-top: 20px; display: flex; gap: 10px; align-items: center; }
+    .save-flash { font-size: 0.85rem; }
+    .save-flash.ok  { color: var(--good); }
+    .save-flash.err { color: var(--bad); }
+    .footer-note {
+      margin-top: 28px;
+      padding: 10px 12px;
+      background: var(--bg2);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .footer-note code { color: var(--text); background: var(--bg3); padding: 1px 5px; border-radius: 3px; }
+
+    /* Theme + units selectors — box/radio-card style (modeled on hud-go). */
+    .theme-selector { display: flex; gap: 10px; flex-wrap: wrap; }
+    .theme-option {
+      display: flex; align-items: center; gap: 8px; padding: 10px 15px;
+      border: 2px solid var(--border); border-radius: 6px; cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .theme-option:hover { border-color: var(--accent); }
+    .theme-option.active { border-color: var(--accent); background: var(--bg3); }
+    .theme-option input { display: none; }
+    .theme-option span { font-size: 0.9rem; color: var(--text); }
+    .theme-preview { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border); }
+    .theme-preview.dark { background: #0e1118; }
+    .theme-preview.light { background: #f4f6fb; }
+
+    /* Color-blind scheme selector — modeled on hud-go (radio cards + preview dots). */
+    .color-scheme-selector { display: flex; flex-direction: column; gap: 10px; }
+    .color-scheme-option {
+      display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+      border: 1px solid var(--border); border-radius: 6px; cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .color-scheme-option:hover, .color-scheme-option.active { border-color: var(--accent); background: var(--bg3); }
+    .color-scheme-option input[type="radio"] {
+      appearance: none; -webkit-appearance: none; width: 18px; height: 18px;
+      border: 2px solid var(--border); border-radius: 50%; cursor: pointer;
+      position: relative; flex-shrink: 0; margin: 0;
+    }
+    .color-scheme-option input[type="radio"]:checked { border-color: var(--accent); }
+    .color-scheme-option input[type="radio"]:checked::after {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+    }
+    .color-scheme-option span { font-size: 0.9rem; color: var(--text); }
+    .color-scheme-preview { display: flex; gap: 4px; }
+    .preview-dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 data-i18n="settings.title">Settings</h1>
+      <p class="muted"><span data-i18n="shell.settings.introEdit">Edit </span><code>configuration.json</code><span data-i18n="shell.settings.introAfter">. Changes persist immediately on Save.</span></p>
+
+      <form id="settings-form" autocomplete="off">
+        <div class="section">
+          <h2 data-i18n="shell.settings.sectionGeneral">General</h2>
+          <div class="form-grid">
+            <label for="api_key" data-i18n="shell.settings.commApiKey">CommAPI key</label>
+            <input id="api_key" name="api_key" type="text" placeholder="leave blank to read CommAPIKey.txt" data-i18n-placeholder="shell.settings.commApiKeyPlaceholder">
+
+            <label for="contributor_name" data-i18n="settings.contributorName">Contributor name</label>
+            <input id="contributor_name" name="contributor_name" type="text">
+
+            <label for="tsw_version" data-i18n="shell.settings.tswVersion">TSW version</label>
+            <select id="tsw_version" name="tsw_version">
+              <option value="tsw6">tsw6</option>
+              <option value="tsw5">tsw5</option>
+            </select>
+
+            <label data-i18n="settings.theme">Theme</label>
+            <div class="theme-selector">
+              <label class="theme-option">
+                <input type="radio" name="theme" value="dark">
+                <div class="theme-preview dark"></div>
+                <span data-i18n="settings.dark">Dark</span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="light">
+                <div class="theme-preview light"></div>
+                <span data-i18n="settings.light">Light</span>
+              </label>
+            </div>
+
+            <div>
+              <label data-i18n="settings.colorScheme">Color Scheme</label>
+              <div style="font-size:0.78rem;color:var(--muted);margin-top:3px;" data-i18n="shell.settings.cbDesc">Adjust button colors for color vision accessibility</div>
+            </div>
+            <div class="color-scheme-selector">
+              <label class="color-scheme-option">
+                <input type="radio" name="color_scheme" value="default">
+                <div class="color-scheme-preview">
+                  <span class="preview-dot" style="background:#28a745;"></span>
+                  <span class="preview-dot" style="background:#e94560;"></span>
+                  <span class="preview-dot" style="background:#0066ff;"></span>
+                  <span class="preview-dot" style="background:#ffc107;"></span>
+                </div>
+                <span data-i18n="settings.default">Default</span>
+              </label>
+              <label class="color-scheme-option">
+                <input type="radio" name="color_scheme" value="deuteranopia">
+                <div class="color-scheme-preview">
+                  <span class="preview-dot" style="background:#17a2b8;"></span>
+                  <span class="preview-dot" style="background:#e94560;"></span>
+                  <span class="preview-dot" style="background:#0066ff;"></span>
+                  <span class="preview-dot" style="background:#ffc107;"></span>
+                </div>
+                <span data-i18n="shell.settings.cbRedGreen">Red-Green (Deuteranopia/Protanopia)</span>
+              </label>
+              <label class="color-scheme-option">
+                <input type="radio" name="color_scheme" value="tritanopia">
+                <div class="color-scheme-preview">
+                  <span class="preview-dot" style="background:#28a745;"></span>
+                  <span class="preview-dot" style="background:#e94560;"></span>
+                  <span class="preview-dot" style="background:#9b59b6;"></span>
+                  <span class="preview-dot" style="background:#e67e22;"></span>
+                </div>
+                <span data-i18n="shell.settings.cbBlueYellow">Blue-Yellow (Tritanopia)</span>
+              </label>
+            </div>
+
+            <label for="language" data-i18n="settings.language">Language</label>
+            <select id="language" name="language">
+              <option value="en">English</option>
+              <option value="en-US">English (US)</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="it">Italiano</option>
+              <option value="es">Español</option>
+              <option value="pl">Polski</option>
+              <option value="ru">Русский</option>
+              <option value="zh">中文</option>
+              <option value="ja">日本語</option>
+            </select>
+
+            <label data-i18n="settings.distanceUnits">Distance Units</label>
+            <div class="theme-selector">
+              <label class="theme-option">
+                <input type="radio" name="distance_units" value="">
+                <span data-i18n="settings.metric">km / m</span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="distance_units" value="imperial">
+                <span data-i18n="settings.imperial">mi / ft</span>
+              </label>
+            </div>
+
+            <label data-i18n="settings.temperatureUnits">Temperature Units</label>
+            <div class="theme-selector">
+              <label class="theme-option">
+                <input type="radio" name="temperature_units" value="">
+                <span data-i18n="settings.celsius">°C</span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="temperature_units" value="fahrenheit">
+                <span data-i18n="settings.fahrenheit">°F</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 data-i18n="shell.settings.sectionKeyPaths">TSW key paths (override only if needed)</h2>
+          <div class="form-grid">
+            <label for="tsw5_key_path" data-i18n="shell.settings.tsw5KeyPath">TSW5 CommAPIKey.txt path</label>
+            <input id="tsw5_key_path" name="tsw5_key_path" type="text" placeholder="auto-detected from %USERPROFILE%\Documents\My Games\TrainSimWorld5\…" data-i18n-placeholder="shell.settings.tsw5KeyPathPlaceholder">
+
+            <label for="tsw6_key_path" data-i18n="shell.settings.tsw6KeyPath">TSW6 CommAPIKey.txt path</label>
+            <input id="tsw6_key_path" name="tsw6_key_path" type="text" placeholder="auto-detected from …TrainSimWorld6\…" data-i18n-placeholder="shell.settings.tsw6KeyPathPlaceholder">
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 data-i18n="shell.settings.sectionExtractor">Extractor</h2>
+          <div class="form-grid">
+            <label for="extractor_tsw_path" data-i18n="shell.settings.tswInstallPath">TSW install path</label>
+            <input id="extractor_tsw_path" name="extractor_tsw_path" type="text">
+
+            <label for="extractor_output_dir" data-i18n="shell.settings.outputDir">Output dir</label>
+            <input id="extractor_output_dir" name="extractor_output_dir" type="text">
+
+            <label for="extractor_temp_dir" data-i18n="shell.settings.tempDir">Temp dir</label>
+            <input id="extractor_temp_dir" name="extractor_temp_dir" type="text">
+
+            <label data-i18n="shell.settings.autoImportOnExtract">Auto-import on extract</label>
+            <div class="checkbox-row"><input id="extractor_auto_import" name="extractor_auto_import" type="checkbox"></div>
+
+            <label data-i18n="shell.settings.buildTimetableMaps">Build timetable maps on import</label>
+            <div class="checkbox-row"><input id="extractor_build_timetable_maps" name="extractor_build_timetable_maps" type="checkbox"></div>
+          </div>
+          <div class="muted" style="margin-top: 10px; font-size: 0.82rem;">
+            <span data-i18n="shell.settings.extractionNoteBefore">Repak health, pak discovery, parse-a-uasset, and DB refresh bridge live in the</span>
+            <a href="extraction.html" style="color:var(--accent);" data-i18n="shell.extraction.heading">Extraction</a><span data-i18n="shell.settings.extractionNoteAfter"> tab.</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 data-i18n="shell.settings.sectionRecording">Recording (GPS / simplification)</h2>
+          <div class="form-grid">
+            <label for="simplify_epsilon" data-i18n="shell.settings.simplifyEpsilon">Simplify epsilon</label>
+            <input id="simplify_epsilon" name="simplify_epsilon" type="number" step="any">
+
+            <label for="gps_noise_radius_meters" data-i18n="shell.settings.gpsNoiseRadius">GPS noise radius (m)</label>
+            <input id="gps_noise_radius_meters" name="gps_noise_radius_meters" type="number" step="any">
+
+            <label for="min_stop_duration_seconds" data-i18n="shell.settings.minStopDuration">Min stop duration (s)</label>
+            <input id="min_stop_duration_seconds" name="min_stop_duration_seconds" type="number" step="1">
+
+            <label for="min_points_for_stop" data-i18n="shell.settings.minPointsForStop">Min points for stop</label>
+            <input id="min_points_for_stop" name="min_points_for_stop" type="number" step="1">
+
+            <label for="auto_stop_timeout_seconds" data-i18n="shell.settings.autoStopTimeout">Auto-stop timeout (s)</label>
+            <input id="auto_stop_timeout_seconds" name="auto_stop_timeout_seconds" type="number" step="1">
+
+            <label for="save_frequency" data-i18n="shell.settings.saveFrequency">Save frequency</label>
+            <input id="save_frequency" name="save_frequency" type="number" step="1">
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 data-i18n="shell.settings.sectionDev">Dev</h2>
+          <div class="form-grid">
+            <label data-i18n="settings.developmentMode">Development mode</label>
+            <div class="checkbox-row"><input id="development_mode" name="development_mode" type="checkbox"></div>
+
+            <label data-i18n="settings.enableSubscriptions">Enable subscriptions</label>
+            <div class="checkbox-row"><input id="enable_subscriptions" name="enable_subscriptions" type="checkbox"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary" data-i18n="common.save">Save</button>
+          <button type="button" id="revert" data-i18n="shell.settings.revert">Revert</button>
+          <span class="save-flash" id="save-flash"></span>
+        </div>
+
+        <div class="footer-note">
+          <span data-i18n="shell.settings.footerReadWrite">Reading + writing </span><code id="config-path">…</code>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav, applyColorScheme, applyTheme } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('settings');
+
+    const { invoke } = window.__TAURI__.core;
+    const flash = document.getElementById('save-flash');
+    const form = document.getElementById('settings-form');
+
+    // Highlight the chosen card in every box-style group (theme, units, color scheme).
+    function updateOptionActive() {
+      document.querySelectorAll('.theme-option, .color-scheme-option').forEach((opt) => {
+        const r = opt.querySelector('input[type="radio"]');
+        opt.classList.toggle('active', !!(r && r.checked));
+      });
+    }
+    // Box selectors (theme / distance / temperature / color scheme) apply + PERSIST
+    // instantly on change — no Save needed — so they take effect everywhere right
+    // away (like the language selector). Other text/number/checkbox fields commit
+    // on Save as before.
+    form.addEventListener('change', async (e) => {
+      const el = e.target;
+      if (!el || el.type !== 'radio' || !el.name) return;
+      updateOptionActive();
+      if (el.name === 'theme') applyTheme(el.value);
+      if (el.name === 'color_scheme') applyColorScheme(el.value);
+      try {
+        const cfg = await invoke('get_config');
+        cfg[camelize(el.name)] = el.value;
+        await invoke('set_config', { config: cfg });
+        if (originalConfig) originalConfig[camelize(el.name)] = el.value;
+      } catch (err) { console.error('persist setting failed', err); }
+    });
+
+    // Apply a Config struct to the form. Tauri serializes our Rust struct as
+    // camelCase JSON — Config#[serde(rename_all = "camelCase")] — so the keys
+    // we look up are camelCase even though the form `name` attrs are
+    // snake_case (matching the JSON-on-disk shape the user is used to).
+    const camelize = (s) => s.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+    function apply(config) {
+      for (const el of form.elements) {
+        if (!el.name) continue;
+        const key = camelize(el.name);
+        const val = config[key];
+        if (val === undefined) continue;
+        if (el.type === 'checkbox') el.checked = !!val;
+        else if (el.type === 'radio') el.checked = (el.value === String(val));
+        else el.value = val == null ? '' : String(val);
+      }
+      updateOptionActive();
+    }
+
+    // Read the form back into a Config-shaped object that matches the
+    // camelCase serde wire format.
+    function collect() {
+      const out = {};
+      for (const el of form.elements) {
+        if (!el.name) continue;
+        const key = camelize(el.name);
+        if (el.type === 'checkbox')      out[key] = el.checked;
+        else if (el.type === 'radio')    { if (el.checked) out[key] = el.value; }
+        else if (el.type === 'number')   out[key] = el.value === '' ? 0 : Number(el.value);
+        else                              out[key] = el.value;
+      }
+      return out;
+    }
+
+    let originalConfig = null;
+    async function load() {
+      originalConfig = await invoke('get_config');
+      apply(originalConfig);
+      flash.textContent = '';
+      flash.className = 'save-flash';
+    }
+
+    document.getElementById('revert').addEventListener('click', () => {
+      if (originalConfig) apply(originalConfig);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      flash.textContent = t('shell.settings.saving', 'saving…');
+      flash.className = 'save-flash';
+      try {
+        await invoke('set_config', { config: collect() });
+        originalConfig = collect();
+        flash.textContent = t('shell.settings.saved', 'saved');
+        flash.className = 'save-flash ok';
+      } catch (err) {
+        flash.textContent = t('shell.settings.saveFailed', 'save failed: ') + (err && err.toString());
+        flash.className = 'save-flash err';
+      }
+    });
+
+    invoke('config_path').then((p) => {
+      document.getElementById('config-path').textContent = p;
+    });
+
+    // Await the locale + translate static markup, then load the config into the
+    // form. Re-running load() on language change is harmless (it just re-applies
+    // the same values) and keeps behaviour consistent with the other pages.
+    initPageI18n(() => {
+      load().catch((err) => {
+        flash.textContent = t('shell.settings.failedToLoad', 'failed to load config: ') + (err && err.toString());
+        flash.className = 'save-flash err';
+      });
+    });
+  </script>
+</body>
+</html>

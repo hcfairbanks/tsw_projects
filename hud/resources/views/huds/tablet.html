@@ -1,0 +1,3044 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TSW HUD - Tablet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/js/i18n.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #tutorial {
+            width: 100vw;
+            height: 100vh;
+            cursor: default;
+        }
+        #display {
+            position: fixed;
+            bottom: 5px;
+            left: 5px;
+            width: 50%;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            font-family: monospace;
+            white-space: pre;
+            font-size: 15px;
+            display: none;
+            border-radius: 8px;
+        }
+
+        .data-box {
+            position: fixed;
+            right: 5px;
+            background-color: white;
+            padding: 12px;
+            border: 2px solid #333;
+            font-family: Arial, sans-serif;
+            min-width: 120px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        .data-box-label {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+        .data-box-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+        }
+        #speedLimitBox { top: 10px; }
+        #powerHandleBox { top: 80px; }
+        #gradientBox { top: 140px; }
+
+        /* Desktop and large screens */
+        @media (min-width: 768px) {
+            #display {
+                bottom: 10px !important;
+                left: 10px !important;
+                width: 50% !important;
+                padding: 10px !important;
+                font-size: 18px !important;
+                border-radius: 0px !important;
+            }
+
+            .data-box {
+                right: 10px !important;
+                padding: 10px !important;
+                min-width: 120px !important;
+                border-radius: 0px !important;
+            }
+
+            .data-box-label {
+                font-size: 10px !important;
+            }
+
+            .data-box-value {
+                font-size: 18px !important;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .data-box {
+                padding: 15px !important;
+                min-width: 150px !important;
+            }
+            .data-box-label {
+                font-size: 12px !important;
+                margin-bottom: 5px;
+            }
+            .data-box-value {
+                font-size: 24px !important;
+            }
+            #display {
+                font-size: 18px !important;
+            }
+        }
+
+        /* Load Overlay Styles */
+        .load-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .load-overlay.active {
+            display: flex;
+        }
+
+        .load-overlay .load-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .load-overlay .load-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 10px;
+        }
+
+        .load-overlay .load-panel-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .load-overlay .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .load-overlay .close-btn:hover {
+            color: #000;
+        }
+
+        .load-overlay .route-selector {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .load-overlay .route-selector label {
+            font-size: 12px;
+            color: #666;
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        .load-overlay .route-selector label:first-of-type {
+            margin-top: 0;
+        }
+
+        .load-overlay .route-selector select,
+        .load-overlay .route-selector input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .load-overlay .route-selector button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .load-overlay .route-selector button:hover {
+            background: #0052cc;
+        }
+
+        .load-overlay .route-selector button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .load-overlay #clearRouteBtnOverlay {
+            background: #666;
+        }
+
+        .load-overlay #clearRouteBtnOverlay:hover {
+            background: #555;
+        }
+
+        .load-overlay .typeahead-container {
+            position: relative;
+        }
+
+        .load-overlay .typeahead-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 2001;
+        }
+
+        .load-overlay .typeahead-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .load-overlay .typeahead-item:last-child {
+            border-bottom: none;
+        }
+
+        .load-overlay .typeahead-item:hover,
+        .load-overlay .typeahead-item.highlighted {
+            background: #f0f0f0;
+        }
+
+        .load-overlay .typeahead-item .route-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .load-overlay .typeahead-item .country-name {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .load-overlay .loaded-info {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .load-overlay .loaded-info h3 {
+            color: #2e7d32;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .load-overlay .loaded-info p {
+            color: #388e3c;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .load-overlay .status-message {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .load-overlay .status-message.success {
+            color: #00cc66;
+        }
+
+        .load-overlay .status-message.error {
+            color: #ff0000;
+        }
+
+        /* Map Overlay Styles */
+        .map-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+        }
+
+        .map-overlay.active {
+            display: block;
+        }
+
+        .map-overlay .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 3001;
+            background: #000;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #fff;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .map-overlay .close-btn:hover {
+            background: #333;
+        }
+
+        /* "Follow Formation" toggle — sits to the LEFT of the close button.
+           Mirrors /map's Follow Train button. When active (.following) the
+           overlay map re-centres on the train marker every stream tick. */
+        .map-overlay .follow-formation-btn {
+            position: absolute;
+            top: 15px;
+            right: 70px;
+            z-index: 3001;
+            height: 44px;
+            padding: 0 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .map-overlay .follow-formation-btn:hover { background: #333; }
+        .map-overlay .follow-formation-btn.following {
+            background: #007a3d;
+        }
+        .map-overlay .follow-formation-btn.following:hover {
+            background: #00a050;
+        }
+
+        /* Push the Leaflet basemap switcher (and any other top-right controls)
+           down below the close button so they don't overlap. */
+        .map-overlay .leaflet-top.leaflet-right {
+            top: 70px;
+        }
+
+        .map-overlay .satellite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 3001;
+            background: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .map-overlay .satellite-btn:hover {
+            background: #333;
+        }
+
+        #overlayMap {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Service-map overlay icon styles — used by /js/service-map.js for
+           car stop signs (small blue dot + max-rail-vehicles tooltip),
+           platform markers (green diamond pin), and collectables (yellow
+           chip with black "C"). Required so the L.divIcon HTML emitted by
+           service-map.js renders correctly on this page too. */
+        .carstop-label { background: rgba(225,235,255,0.92); border: 1px solid rgba(40,80,180,0.55); border-radius: 2px; padding: 0 3px; font-size: 9px; color: #1a3a78; white-space: nowrap; }
+        .carstop-label::before { display: none; }
+        .collectable-icon { display: inline-block; width: 14px; height: 14px; line-height: 12px; text-align: center; font-size: 10px; font-weight: 700; font-family: system-ui, sans-serif; color: #000; background: #ffd700; border: 1px solid #000; vertical-align: middle; border-radius: 3px; box-sizing: border-box; }
+        .collectable-pin .collectable-icon { margin: 0; }
+    </style>
+    <script>
+
+// Global variable to track flashing state
+var flashState = false;
+setInterval(function() {
+    flashState = !flashState;
+}, 500);
+
+function degToRad(angle) {
+    return ((angle * Math.PI) / 180);
+}
+
+function radToDeg(angle) {
+    return ((angle * 180) / Math.PI);
+}
+
+function drawLine(options, line) {
+    options.ctx.beginPath();
+    options.ctx.strokeStyle = line.stroke;
+    options.ctx.lineWidth = line.width;
+    options.ctx.moveTo(line.from.X, line.from.Y);
+    options.ctx.lineTo(line.to.X, line.to.Y);
+    options.ctx.stroke();
+}
+
+function createLine(fromX, fromY, toX, toY, stroke, width, alpha) {
+    return {
+        from: { X: fromX, Y: fromY },
+        to: { X: toX, Y: toY },
+        stroke: stroke,
+        width: width,
+        alpha: alpha
+    };
+}
+
+function buildOptionsAsJSON(canvas, iSpeed) {
+    // Scaled for Samsung Tab S9 FE (1920x900 canvas)
+    var centerX = 960,
+        centerY = 490,
+        radius = 360,
+        outerRadius = 510;
+
+    return {
+        ctx: canvas.getContext('2d'),
+        speed: iSpeed,
+        center: { X: centerX, Y: centerY },
+        levelRadius: radius - 18,
+        gaugeOptions: {
+            center: { X: centerX, Y: centerY },
+            radius: radius
+        },
+        radius: outerRadius
+    };
+}
+
+function clearCanvas(options) {
+    options.ctx.clearRect(0, 0, 1920, 900);
+}
+
+function applyDefaultContextSettings(options) {
+    options.ctx.lineWidth = 2;
+    options.ctx.globalAlpha = 1.0;
+    options.ctx.strokeStyle = "rgb(255,255,255)";
+    options.ctx.fillStyle = "rgb(255,255,255)";
+}
+
+function drawOuterMetallicArc(options) {
+    options.ctx.beginPath();
+    options.ctx.fillStyle = "rgb(127,127,127)";
+    options.ctx.arc(options.center.X, options.center.Y, options.radius, 0, Math.PI, true);
+    options.ctx.fill();
+}
+
+function drawInnerMetallicArc(options) {
+    options.ctx.beginPath();
+    options.ctx.fillStyle = "rgb(255,255,255)";
+    options.ctx.arc(options.center.X, options.center.Y, (options.radius / 100) * 90, 0, Math.PI, true);
+    options.ctx.fill();
+}
+
+function drawMetallicArc(options) {
+    drawOuterMetallicArc(options);
+    drawInnerMetallicArc(options);
+}
+
+function drawBackground(options) {
+    options.ctx.globalAlpha = 1.0;
+    options.ctx.fillStyle = "rgb(0,0,0)";
+    options.ctx.fillRect(15, 15, 1370, 563);
+}
+
+
+function drawSmallTickMarks(options) {
+    var tickvalue = options.levelRadius + 28;
+    var gaugeOptions = options.gaugeOptions;
+    applyDefaultContextSettings(options);
+
+    for (var iTick = 10; iTick < 180; iTick += 20) {
+        var iTickRad = degToRad(iTick);
+        var onArchX = gaugeOptions.radius - (Math.cos(iTickRad) * tickvalue);
+        var onArchY = gaugeOptions.radius - (Math.sin(iTickRad) * tickvalue);
+        var innerTickX = gaugeOptions.radius - (Math.cos(iTickRad) * gaugeOptions.radius);
+        var innerTickY = gaugeOptions.radius - (Math.sin(iTickRad) * gaugeOptions.radius);
+
+        var fromX = (options.center.X - gaugeOptions.radius) + onArchX;
+        var fromY = (gaugeOptions.center.Y - gaugeOptions.radius) + onArchY;
+        var toX = (options.center.X - gaugeOptions.radius) + innerTickX;
+        var toY = (gaugeOptions.center.Y - gaugeOptions.radius) + innerTickY;
+
+        var line = createLine(fromX, fromY, toX, toY, "rgb(127,127,127)", 3, 0.6);
+        drawLine(options, line);
+    }
+}
+
+function drawLargeTickMarks(options) {
+    var tickvalue = options.levelRadius + 22;
+    var gaugeOptions = options.gaugeOptions;
+    applyDefaultContextSettings(options);
+
+    for (var iTick = 20; iTick < 180; iTick += 20) {
+        var iTickRad = degToRad(iTick);
+        var onArchX = gaugeOptions.radius - (Math.cos(iTickRad) * tickvalue);
+        var onArchY = gaugeOptions.radius - (Math.sin(iTickRad) * tickvalue);
+        var innerTickX = gaugeOptions.radius - (Math.cos(iTickRad) * gaugeOptions.radius);
+        var innerTickY = gaugeOptions.radius - (Math.sin(iTickRad) * gaugeOptions.radius);
+
+        var fromX = (options.center.X - gaugeOptions.radius) + onArchX;
+        var fromY = (gaugeOptions.center.Y - gaugeOptions.radius) + onArchY;
+        var toX = (options.center.X - gaugeOptions.radius) + innerTickX;
+        var toY = (gaugeOptions.center.Y - gaugeOptions.radius) + innerTickY;
+
+        var line = createLine(fromX, fromY, toX, toY, "rgb(127,127,127)", 3, 0.6);
+        drawLine(options, line);
+    }
+}
+
+function drawTicks(options) {
+    drawSmallTickMarks(options);
+    drawLargeTickMarks(options);
+}
+
+function drawTextMarkers(options) {
+    var gaugeOptions = options.gaugeOptions;
+    var iTickToPrint = 0;
+    applyDefaultContextSettings(options);
+
+    options.ctx.font = 'italic 14px sans-serif';
+    options.ctx.textBaseline = 'top';
+    options.ctx.beginPath();
+
+    for (var iTick = 10; iTick < 180; iTick += 20) {
+        var textRadius = gaugeOptions.radius * 1.1;
+        var innerTickX = gaugeOptions.radius - (Math.cos(degToRad(iTick)) * textRadius);
+        var innerTickY = gaugeOptions.radius - (Math.sin(degToRad(iTick)) * textRadius);
+        var xPos = (options.center.X - gaugeOptions.radius - 12) + innerTickX;
+        var yPos = (gaugeOptions.center.Y - gaugeOptions.radius - 12) + innerTickY;
+
+        if (iTick < 50) { xPos -= 5; yPos += 5; }
+        else if (iTick < 90) { /* default */ }
+        else if (iTick == 90) { xPos += 4; }
+        else if (iTick < 145) { xPos += 15; }
+        else { xPos += 25; yPos += 5; }
+
+        options.ctx.fillText(iTickToPrint, xPos, yPos);
+        iTickToPrint += 25;
+    }
+    options.ctx.stroke();
+}
+
+function drawCircleAtLimit(options, speedLimit) {
+    var limitAngle = (speedLimit * 160 / 200) + 10;
+    var gaugeOptions = options.gaugeOptions;
+
+    var arcX = gaugeOptions.radius - (Math.cos(degToRad(limitAngle)) * options.levelRadius);
+    var arcY = gaugeOptions.radius - (Math.sin(degToRad(limitAngle)) * options.levelRadius);
+    var arcFromX = (options.center.X - gaugeOptions.radius) + arcX;
+    var arcFromY = (gaugeOptions.center.Y - gaugeOptions.radius) + arcY;
+
+    var extendedRadius = gaugeOptions.radius + 36;
+    var innerTickX = gaugeOptions.radius - (Math.cos(degToRad(limitAngle)) * extendedRadius);
+    var innerTickY = gaugeOptions.radius - (Math.sin(degToRad(limitAngle)) * extendedRadius);
+    var xPos = (options.center.X - gaugeOptions.radius) + innerTickX;
+    var yPos = (gaugeOptions.center.Y - gaugeOptions.radius) + innerTickY;
+
+    var line = createLine(arcFromX, arcFromY, xPos, yPos, "rgb(255, 0, 0)", 4.8, 1.0);
+    drawLine(options, line);
+
+    options.ctx.beginPath();
+    options.ctx.fillStyle = "rgb(255, 255, 255)";
+    options.ctx.strokeStyle = "rgb(255, 0, 0)";
+    options.ctx.lineWidth = 3.6;
+    options.ctx.arc(xPos, yPos, 12, 0, Math.PI * 2, false);
+    options.ctx.fill();
+    options.ctx.stroke();
+}
+
+function drawSpeedometerColourArc(options) {
+    options.ctx.beginPath();
+    options.ctx.globalAlpha = 1.0;
+    options.ctx.lineWidth = 24;
+    options.ctx.strokeStyle = "rgb(180, 180, 180)";
+    options.ctx.arc(options.center.X, options.center.Y, options.levelRadius,
+                    Math.PI + degToRad(10),
+                    Math.PI + degToRad(10) + degToRad(160), false);
+    options.ctx.stroke();
+}
+
+function drawSpeedBar(options, speedLimit) {
+    var iSpeed = options.speed;
+    if (iSpeed > 200) iSpeed = 200;
+
+    var arcLength = (iSpeed * 160 / 200);
+
+    var barColor;
+    if (speedLimit && options.speed > speedLimit + 10) {
+        barColor = "rgb(255, 0, 0)";
+    } else if (speedLimit && options.speed > speedLimit) {
+        barColor = "rgb(255, 255, 0)";
+    } else {
+        barColor = "rgb(255, 255, 255)";
+    }
+
+    options.ctx.beginPath();
+    options.ctx.globalAlpha = 1.0;
+    options.ctx.lineWidth = 24;
+    options.ctx.strokeStyle = barColor;
+    options.ctx.arc(options.center.X, options.center.Y, options.levelRadius,
+                    Math.PI + degToRad(10),
+                    Math.PI + degToRad(10) + degToRad(arcLength), false);
+    options.ctx.stroke();
+}
+
+function drawSpeedBox(options, speedLimit, isSlipping) {
+    var boxWidth = 150;
+    var boxHeight = 90;
+    var boxX = options.center.X - (boxWidth / 2);
+    // Move up higher (was 2.2, now 2.8)
+    var boxY = options.center.Y - (boxHeight * 2.8);
+
+    var boxColor;
+    if (speedLimit && options.speed > speedLimit + 10) {
+        boxColor = flashState ? "rgb(255, 0, 0)" : "rgb(255, 255, 255)";
+    } else if (speedLimit && options.speed > speedLimit) {
+        boxColor = "rgb(255, 255, 0)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+    }
+
+    if (isSlipping) {
+        var zigzagColor = flashState ? "rgb(255, 0, 0)" : "rgb(255, 255, 255)";
+        options.ctx.strokeStyle = zigzagColor;
+        options.ctx.lineWidth = 2.4;
+        options.ctx.globalAlpha = 0.7;
+
+        var centerX = boxX + boxWidth / 2;
+
+        var leftPositions = [centerX - 55, centerX - 46];
+        var rightPositions = [centerX + 46, centerX + 55];
+        var allPositions = leftPositions.concat(rightPositions);
+
+        for (var i = 0; i < 4; i++) {
+            var startX = allPositions[i];
+            options.ctx.beginPath();
+            options.ctx.moveTo(startX, boxY + 12);
+
+            for (var j = 0; j < 6; j++) {
+                var xOffset = (j % 2 === 0) ? 6 : -6;
+                var yStep = 12;
+                options.ctx.lineTo(startX + xOffset, boxY + 12 + (j * yStep));
+            }
+            options.ctx.stroke();
+        }
+        options.ctx.globalAlpha = 1.0;
+    }
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 85px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(Math.round(options.speed), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawDistanceToDestination(options, distanceUnits) {
+    // Draw distance to destination under the digital speed, above brake boxes
+    var boxHeight = 90;
+    var boxY = options.center.Y - (boxHeight * 2.2) + boxHeight + 30; // Below speed box (original position)
+    var boxColor = "rgb(255, 255, 255)";
+
+    var displayDistance = options.distanceToDestination;
+    if (displayDistance !== null && displayDistance !== undefined) {
+        var distanceText = formatDistance(displayDistance, distanceUnits);
+        options.ctx.fillStyle = boxColor;
+        options.ctx.font = 'bold 85px sans-serif';
+        options.ctx.textAlign = 'center';
+        options.ctx.textBaseline = 'middle';
+        options.ctx.fillText(distanceText, options.center.X, boxY);
+    }
+}
+
+function drawBrakeBox(options, brakeValue) {
+    var boxWidth = 160;
+    var boxHeight = 95;
+    var boxX = options.center.X - (boxWidth / 2) + 270;
+    var boxY = options.center.Y + (boxHeight * 0.3) - 50;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 55px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = brakeValue !== undefined && brakeValue !== null ? Math.round(brakeValue) + '%' : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawLocomotiveBrakeBox(options, locomotiveBrakeValue) {
+    var boxWidth = 160;
+    var boxHeight = 95;
+    var boxX = options.center.X - (boxWidth / 2) + 270 - boxWidth - 25;
+    var boxY = options.center.Y + (boxHeight * 0.3) - 50;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 55px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = locomotiveBrakeValue !== undefined && locomotiveBrakeValue !== null ? Math.round(locomotiveBrakeValue * 100) + '%' : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawElectricDynamicBrakeBox(options, electricDynamicBrakeValue) {
+    var boxWidth = 160;
+    var boxHeight = 95;
+    var boxX = options.center.X - (boxWidth / 2) + 270 - (boxWidth * 2) - 50;
+    var boxY = options.center.Y + (boxHeight * 0.3) - 50;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 55px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = electricDynamicBrakeValue !== undefined && electricDynamicBrakeValue !== null ? Math.round(electricDynamicBrakeValue) + '%' : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawSpeedLimitBox(options, speedLimit) {
+    var boxWidth = 240;
+    var boxHeight = 145;
+    var boxX = 1920 - boxWidth - 30;
+    var boxY = 30;
+
+    var boxColor;
+    if (speedLimit && options.speed > speedLimit + 10) {
+        boxColor = flashState ? "rgb(255, 0, 0)" : "rgb(255, 255, 255)";
+    } else if (speedLimit && options.speed > speedLimit) {
+        boxColor = "rgb(255, 255, 0)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+    }
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 75px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = speedLimit !== undefined && speedLimit !== null ? Math.round(speedLimit) : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawDoorIndicators(options, doorLeft, doorRight) {
+    var boxX = 1920 - 220 - 30; // Same X as speed limit box
+    var boxY = 30; // Same Y as speed limit box
+    var centerY = boxY + 61; // Vertically centered with speed limit box
+
+    options.ctx.font = 'bold 50px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    // Only show if we have data (not null)
+    if (doorLeft !== null && doorLeft !== undefined) {
+        // L - Left door (BL = Back Left)
+        if (doorLeft > 0) {
+            options.ctx.fillStyle = "rgb(255, 255, 255)"; // White when open
+        } else {
+            options.ctx.fillStyle = "rgb(100, 100, 100)"; // Grey when closed
+        }
+        options.ctx.fillText('L', boxX - 120, centerY);
+    }
+
+    if (doorRight !== null && doorRight !== undefined) {
+        // R - Right door (BR = Back Right)
+        if (doorRight > 0) {
+            options.ctx.fillStyle = "rgb(255, 255, 255)"; // White when open
+        } else {
+            options.ctx.fillStyle = "rgb(100, 100, 100)"; // Grey when closed
+        }
+        options.ctx.fillText('R', boxX - 60, centerY);
+    }
+}
+
+function drawPowerHandleBox(options, powerHandle, isTractionLocked) {
+    var boxWidth = 240;
+    var boxHeight = 145;
+    var boxX = 1920 - boxWidth - 30;
+    var boxY = 30 + 145 + 20;
+
+    var boxColor = isTractionLocked ? "rgb(255, 0, 0)" : "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    var textColor = (powerHandle !== undefined && powerHandle !== null && powerHandle < 0) ? "rgb(255, 255, 0)" : "rgb(255, 255, 255)";
+    options.ctx.fillStyle = textColor;
+    options.ctx.font = 'bold 70px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = powerHandle !== undefined && powerHandle !== null ? Math.round(powerHandle) : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawGradientBox(options, incline) {
+    var boxWidth = 240;
+    var boxHeight = 145;
+    var boxX = 1920 - boxWidth - 30;
+    var boxY = 30 + 145 + 20 + 145 + 20;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 60px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = incline !== undefined && incline !== null ? incline.toFixed(1) + '%' : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawReverserIndicator(options, reverser) {
+    // Position to the left of gradient box (same Y level)
+    var centerX = 1920 - 220 - 30 - 90; // Left of gradient box
+    var centerY = 30 + 145 + 20 + 145 + 20 + 72; // Center of gradient box row
+
+    options.ctx.fillStyle = "rgb(255, 255, 255)";
+    options.ctx.strokeStyle = "rgb(255, 255, 255)";
+
+    if (reverser === -1) {
+        // X symbol (Handle removed)
+        options.ctx.lineWidth = 16;
+        options.ctx.beginPath();
+        options.ctx.moveTo(centerX - 25, centerY - 25);
+        options.ctx.lineTo(centerX + 25, centerY + 25);
+        options.ctx.stroke();
+        options.ctx.beginPath();
+        options.ctx.moveTo(centerX + 25, centerY - 25);
+        options.ctx.lineTo(centerX - 25, centerY + 25);
+        options.ctx.stroke();
+    } else if (reverser === 0) {
+        // Down arrow with stem (Reverse)
+        // Triangle pointing down
+        options.ctx.beginPath();
+        options.ctx.moveTo(centerX, centerY + 35); // Bottom point
+        options.ctx.lineTo(centerX - 30, centerY); // Top left
+        options.ctx.lineTo(centerX + 30, centerY); // Top right
+        options.ctx.closePath();
+        options.ctx.fill();
+        // Stem going up
+        options.ctx.fillRect(centerX - 8, centerY - 40, 16, 40);
+    } else if (reverser === 1) {
+        // Horizontal bar (Neutral)
+        options.ctx.fillRect(centerX - 30, centerY - 8, 60, 16);
+    } else if (reverser === 2) {
+        // Up arrow with stem (Forward)
+        // Triangle pointing up
+        options.ctx.beginPath();
+        options.ctx.moveTo(centerX, centerY - 35); // Top point
+        options.ctx.lineTo(centerX - 30, centerY); // Bottom left
+        options.ctx.lineTo(centerX + 30, centerY); // Bottom right
+        options.ctx.closePath();
+        options.ctx.fill();
+        // Stem going down
+        options.ctx.fillRect(centerX - 8, centerY, 16, 40);
+    }
+}
+
+function drawNextSpeedLimitBox(options, nextSpeedLimit) {
+    var boxWidth = 240;
+    var boxHeight = 123;
+    var boxX = 26;
+    var boxY = 26;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 3.6;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 65px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = nextSpeedLimit !== undefined && nextSpeedLimit !== null ? Math.round(nextSpeedLimit) : '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function formatDistanceShort(distanceMeters, distanceUnits) {
+    distanceMeters = distanceMeters / 100; // raw value is in cm
+    if (distanceUnits === 'imperial') {
+        var feet = distanceMeters * 3.28084;
+        if (feet > 5280) {
+            return (feet / 5280).toFixed(1) + ' mi';
+        }
+        return Math.round(feet) + ' ft';
+    }
+    if (distanceMeters > 3000) {
+        return (distanceMeters / 1000).toFixed(1) + ' km';
+    }
+    return Math.round(distanceMeters) + ' m';
+}
+
+function drawDistanceToNextSpeedLimitBox(options, distance, distanceUnits) {
+    var boxWidth = 240;
+    var boxHeight = 123;
+    var boxX = 26;
+    var boxY = 26 + 123 + 18;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 3.6;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 50px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = '--';
+    if (distance !== undefined && distance !== null) {
+        displayValue = formatDistanceShort(distance, distanceUnits);
+    }
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawSignalAspectBox(options, signalAspectClass) {
+    var boxWidth = 240;
+    var boxHeight = 123;
+    var boxX = 26 + 240 + 18;
+    var boxY = 26;
+
+    var aspect = (signalAspectClass || '').toLowerCase();
+    if (aspect === 'clear') {
+        options.ctx.fillStyle = 'rgb(40, 100, 40)';
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    } else if (aspect === 'stop') {
+        options.ctx.fillStyle = 'rgb(160, 30, 30)';
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+
+    options.ctx.strokeStyle = 'rgb(255, 255, 255)';
+    options.ctx.lineWidth = 3.6;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = 'rgb(255, 255, 255)';
+    options.ctx.font = 'bold 40px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = signalAspectClass || '--';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawDistanceToSignalBox(options, distance, distanceUnits) {
+    var boxWidth = 240;
+    var boxHeight = 123;
+    var boxX = 26 + 240 + 18;
+    var boxY = 26 + 123 + 18;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 3.6;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 50px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    var displayValue = '--';
+    if (distance !== undefined && distance !== null) {
+        displayValue = formatDistanceShort(distance, distanceUnits);
+    }
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+// Haversine formula for distance calculation (in meters)
+function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    var R = 6371000; // Earth's radius in meters
+    var phi1 = lat1 * Math.PI / 180;
+    var phi2 = lat2 * Math.PI / 180;
+    var deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    var deltaLambda = (lon2 - lon1) * Math.PI / 180;
+
+    var a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+}
+
+// Format distance for display
+function formatDistance(distanceMeters, distanceUnits) {
+    var isImperial = distanceUnits === 'imperial';
+    if (isImperial) {
+        // Convert meters to feet
+        var feet = distanceMeters * 3.28084;
+        if (feet > 5280) {
+            return (feet / 5280).toFixed(1) + 'mi';
+        } else {
+            return Math.round(feet) + 'ft';
+        }
+    } else {
+        if (distanceMeters > 3000) {
+            return (distanceMeters / 1000).toFixed(1) + 'km';
+        } else {
+            return Math.round(distanceMeters) + 'm';
+        }
+    }
+}
+
+// Draw station selector list on canvas
+function drawStationSelector(options, timetableItems, selectedIdx, playerPosition, distanceUnits, scrollOffset) {
+    if (!timetableItems || timetableItems.length === 0) return null;
+
+    var boxX = 26;
+    var boxY = 26 + 123 + 18 + 123 + 18; // Below distance to next speed limit box
+    var boxWidth = 453;
+    var itemHeight = 72;
+    var visibleItems = 5;
+    var boxHeight = itemHeight * visibleItems;
+    var arrowAreaHeight = 90; // Height for prev/next arrows
+
+    // Draw container background
+    options.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+    options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+    // Draw border
+    options.ctx.strokeStyle = "rgb(255, 255, 255)";
+    options.ctx.lineWidth = 3;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    // Save context for clipping
+    options.ctx.save();
+    options.ctx.beginPath();
+    options.ctx.rect(boxX, boxY, boxWidth, boxHeight);
+    options.ctx.clip();
+
+    // Draw items
+    var startIdx = Math.max(0, scrollOffset);
+    var endIdx = Math.min(timetableItems.length, startIdx + visibleItems);
+
+    for (var i = startIdx; i < endIdx; i++) {
+        var item = timetableItems[i];
+        var itemY = boxY + (i - startIdx) * itemHeight;
+        var isSelected = i === selectedIdx;
+
+        // Highlight selected item
+        if (isSelected) {
+            options.ctx.fillStyle = "rgba(0, 100, 255, 0.5)";
+            options.ctx.fillRect(boxX + 2, itemY + 2, boxWidth - 4, itemHeight - 4);
+        }
+
+        // Draw index number and station name
+        options.ctx.fillStyle = isSelected ? "rgb(255, 255, 255)" : "rgb(200, 200, 200)";
+        options.ctx.font = isSelected ? 'bold 40px sans-serif' : '40px sans-serif';
+        options.ctx.textAlign = 'left';
+        options.ctx.textBaseline = 'middle';
+
+        // Same render rule as desktop.html: null-location pass-through rows
+        // read as "VIA Location" instead of "Unknown [VIA]".
+        var displayName;
+        if (item.isPassThrough && !item.location) {
+            displayName = 'As Indicated';
+        } else {
+            displayName = item.location || item.action || 'Unknown';
+            if (item.isPassThrough) {
+                displayName += ' [VIA]';
+            }
+        }
+        if (displayName.length > 18) {
+            displayName = displayName.substring(0, 17) + '...';
+        }
+
+        // Show index number followed by station name
+        var indexedName = (i + 1) + '. ' + displayName;
+        options.ctx.fillText(indexedName, boxX + 16, itemY + itemHeight / 2);
+    }
+
+    options.ctx.restore();
+
+    // Draw prev/next arrow buttons below the list
+    var arrowY = boxY + boxHeight + 10;
+    var arrowWidth = (boxWidth - 14) / 2;
+    var canGoPrev = selectedIdx > 0;
+    var canGoNext = selectedIdx < timetableItems.length - 1;
+
+    // Previous button (left) - styled like other buttons
+    var prevColor = canGoPrev ? "rgb(255, 255, 255)" : "rgb(80, 80, 80)";
+    options.ctx.strokeStyle = prevColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, arrowY, arrowWidth, arrowAreaHeight);
+
+    // Left arrow and text (shifted left)
+    options.ctx.fillStyle = prevColor;
+    options.ctx.beginPath();
+    options.ctx.moveTo(boxX + arrowWidth / 2 - 80, arrowY + arrowAreaHeight / 2);
+    options.ctx.lineTo(boxX + arrowWidth / 2 - 40, arrowY + arrowAreaHeight / 2 - 24);
+    options.ctx.lineTo(boxX + arrowWidth / 2 - 40, arrowY + arrowAreaHeight / 2 + 24);
+    options.ctx.closePath();
+    options.ctx.fill();
+    options.ctx.font = 'bold 36px sans-serif';
+    options.ctx.textAlign = 'left';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('PREV'), boxX + arrowWidth / 2 - 20, arrowY + arrowAreaHeight / 2);
+
+    // Next button (right) - styled like other buttons
+    var nextX = boxX + arrowWidth + 14;
+    var nextColor = canGoNext ? "rgb(255, 255, 255)" : "rgb(80, 80, 80)";
+    options.ctx.strokeStyle = nextColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(nextX, arrowY, arrowWidth, arrowAreaHeight);
+
+    // Right arrow and text (shifted right)
+    options.ctx.fillStyle = nextColor;
+    options.ctx.beginPath();
+    options.ctx.moveTo(nextX + arrowWidth / 2 + 80, arrowY + arrowAreaHeight / 2);
+    options.ctx.lineTo(nextX + arrowWidth / 2 + 40, arrowY + arrowAreaHeight / 2 - 24);
+    options.ctx.lineTo(nextX + arrowWidth / 2 + 40, arrowY + arrowAreaHeight / 2 + 24);
+    options.ctx.closePath();
+    options.ctx.fill();
+    options.ctx.font = 'bold 36px sans-serif';
+    options.ctx.textAlign = 'right';
+    options.ctx.fillText(hudLabel('NEXT'), nextX + arrowWidth / 2 + 20, arrowY + arrowAreaHeight / 2);
+
+    return {
+        boxX: boxX,
+        boxY: boxY,
+        boxWidth: boxWidth,
+        boxHeight: boxHeight,
+        itemHeight: itemHeight,
+        visibleItems: visibleItems,
+        arrowY: arrowY,
+        arrowHeight: arrowAreaHeight,
+        arrowWidth: arrowWidth
+    };
+}
+
+function drawTimeBox(options, localTime) {
+    var boxWidth = 240;
+    var boxHeight = 65;
+    // Move left by 20% of canvas width (1920 * 0.20 = 384), then shift 50px right
+    var boxX = options.center.X - (boxWidth / 2) - 334;
+    var boxY = options.center.Y + (boxHeight * 0.3) + 120;
+
+    var boxColor = "rgb(255, 255, 255)";
+
+    var displayValue = '--:--:--';
+    if (localTime) {
+        try {
+            var timePart = localTime.split('T')[1].split('.')[0];
+            displayValue = timePart;
+        } catch (e) {
+            console.error('Error parsing time:', e);
+        }
+    }
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 52px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(displayValue, boxX + boxWidth / 2, boxY + boxHeight / 2);
+
+    // Draw thin line under in-game time
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 2;
+    options.ctx.beginPath();
+    options.ctx.moveTo(boxX + boxWidth / 2 - 100, boxY + boxHeight / 2 + 35);
+    options.ctx.lineTo(boxX + boxWidth / 2 + 100, boxY + boxHeight / 2 + 35);
+    options.ctx.stroke();
+}
+
+function drawTimetableBox(options, timetableTime, timetableLabel, distanceToStation, distanceUnits) {
+    var boxColor = "rgb(255, 255, 255)";
+
+    // Position under the time box (which is 384px left of center)
+    var baseX = options.center.X - 384;
+    var boxY = options.center.Y + (65 * 0.3) + 120 + 100; // Below time box (increased spacing)
+
+    // Use selected station from cached timetable items for display
+    var displayArrival = '--:--:--';
+    var displayDeparture = '--:--:--';
+    var displayLabel = '';
+    var displayDistance = null;
+    var displayIndex = null;
+
+    if (typeof cachedTimetableItems !== 'undefined' && cachedTimetableItems && cachedTimetableItems.length > 0 && typeof selectedStationIndex !== 'undefined' && selectedStationIndex >= 0 && selectedStationIndex < cachedTimetableItems.length) {
+        var selectedStation = cachedTimetableItems[selectedStationIndex];
+        displayArrival = selectedStation.arrival || '--:--:--';
+        displayDeparture = selectedStation.departure || '--:--:--';
+        if (selectedStation.isPassThrough && !selectedStation.location) {
+            displayLabel = 'As Indicated';
+        } else {
+            displayLabel = selectedStation.location || '';
+            if (selectedStation.isPassThrough) {
+                displayLabel += ' [VIA]';
+            }
+        }
+        displayIndex = selectedStationIndex + 1;
+
+        // Calculate distance client-side if we have player position
+        if (typeof currentPlayerPosition !== 'undefined' && currentPlayerPosition && selectedStation.latitude && selectedStation.longitude) {
+            var distMeters = calculateHaversineDistance(
+                currentPlayerPosition.latitude,
+                currentPlayerPosition.longitude,
+                selectedStation.latitude,
+                selectedStation.longitude
+            );
+            displayDistance = distMeters;
+        }
+    } else if (timetableTime) {
+        // Fallback to backend-provided values
+        displayArrival = timetableTime;
+        displayLabel = timetableLabel || '';
+        displayDistance = distanceToStation;
+    }
+
+    // Shift display 50px to the right
+    var displayX = baseX + 50;
+
+    // Draw arrival time (centered under in-game time)
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 52px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(displayArrival, displayX, boxY);
+
+    // Draw thin line under arrival time
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 2;
+    options.ctx.beginPath();
+    options.ctx.moveTo(displayX - 100, boxY + 35);
+    options.ctx.lineTo(displayX + 100, boxY + 35);
+    options.ctx.stroke();
+
+    // Draw index number and location name below the arrival time
+    // Index aligned with start of arrival time line, location to the right
+    options.ctx.textAlign = 'left';
+    options.ctx.font = 'bold 52px sans-serif';
+    if (displayIndex !== null) {
+        options.ctx.fillText(displayIndex + '. ' + displayLabel, displayX - 100, boxY + 75);
+    } else {
+        options.ctx.fillText(displayLabel, displayX - 100, boxY + 75);
+    }
+
+    // Draw departure time (to the right of arrival)
+    options.ctx.textAlign = 'center';
+    options.ctx.font = 'bold 52px sans-serif';
+    options.ctx.fillText(displayDeparture, displayX + 240, boxY);
+
+    // Draw thin line under departure time
+    options.ctx.beginPath();
+    options.ctx.moveTo(displayX + 140, boxY + 35);
+    options.ctx.lineTo(displayX + 340, boxY + 35);
+    options.ctx.stroke();
+
+    // Store distance for drawDistanceToDestination
+    options.distanceToDestination = displayDistance;
+}
+
+// Draw temperature display
+function drawTemperature(options, temperature, temperatureUnits) {
+    if (temperature === null || temperature === undefined) return;
+
+    // Position in top right corner
+    var boxX = 1750;
+    var boxY = 30;
+    var boxColor = "rgb(255, 255, 255)";
+
+    // Convert temperature if needed
+    var displayTemp = temperature;
+    var unitSymbol = '°C';
+    if (temperatureUnits === 'fahrenheit') {
+        displayTemp = (temperature * 9/5) + 32;
+        unitSymbol = '°F';
+    }
+
+    // Round to 1 decimal place
+    displayTemp = Math.round(displayTemp * 10) / 10;
+
+    options.ctx.fillStyle = boxColor;
+    options.ctx.font = 'bold 36px sans-serif';
+    options.ctx.textAlign = 'right';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(displayTemp + unitSymbol, boxX, boxY);
+}
+
+function drawDataButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1300;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('DATA'), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawLoadButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1540;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('LOAD'), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawMapButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1420;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('MAP'), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+function drawRefreshButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1660;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('REFRESH'), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+// Save Location button (development mode only)
+function drawSaveLocButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1180;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+    options.ctx.fillText(hudLabel('SAVE LOC'), boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+// Fullscreen toggle button
+function drawFullscreenButton(options, isHovered, isPressed) {
+    var boxWidth = 110;
+    var boxHeight = 55;
+    var boxX = 1780;
+    var boxY = 800;
+
+    var boxColor, fillColor, backgroundColor;
+    if (isPressed) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(200, 200, 200)";
+    } else if (isHovered) {
+        boxColor = "rgb(0, 0, 0)";
+        fillColor = "rgb(0, 0, 0)";
+        backgroundColor = "rgb(255, 255, 255)";
+    } else {
+        boxColor = "rgb(255, 255, 255)";
+        fillColor = "rgb(255, 255, 255)";
+        backgroundColor = null;
+    }
+
+    if (backgroundColor) {
+        options.ctx.fillStyle = backgroundColor;
+        options.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    }
+    options.ctx.strokeStyle = boxColor;
+    options.ctx.lineWidth = 4;
+    options.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    options.ctx.fillStyle = fillColor;
+    options.ctx.font = 'bold 18px sans-serif';
+    options.ctx.textAlign = 'center';
+    options.ctx.textBaseline = 'middle';
+
+    // Show different text based on fullscreen state
+    var buttonText = document.fullscreenElement ? 'EXIT FS' : 'FULLSCR';
+    options.ctx.fillText(buttonText, boxX + boxWidth / 2, boxY + boxHeight / 2);
+}
+
+// Curved speed progress bar with speed limit marker (matching original speedometer style)
+function drawCurvedSpeedBar(options, speed, speedLimit) {
+    // Use same position as existing speedometer
+    var centerX = options.center.X;
+    var centerY = options.center.Y;
+    var radius = options.levelRadius;
+    var lineWidth = 24;
+    var maxSpeed = 200;
+
+    // Arc angles matching existing speedometer (10 to 170 degrees = 160 degree arc)
+    var startAngle = Math.PI + degToRad(10);
+    var totalArcAngle = degToRad(160);
+
+    // Background arc (gray) - matching original drawSpeedometerColourArc
+    options.ctx.beginPath();
+    options.ctx.globalAlpha = 1.0;
+    options.ctx.arc(centerX, centerY, radius, startAngle, startAngle + totalArcAngle, false);
+    options.ctx.lineWidth = lineWidth;
+    options.ctx.strokeStyle = 'rgb(180, 180, 180)';
+    options.ctx.stroke();
+
+    // Speed arc (colored based on limit) - matching original drawSpeedBar colors
+    var iSpeed = speed;
+    if (iSpeed > maxSpeed) iSpeed = maxSpeed;
+    var arcLength = (iSpeed * 160 / maxSpeed);
+
+    var barColor;
+    if (speedLimit && speed > speedLimit + 10) {
+        barColor = 'rgb(255, 0, 0)';    // Red - over limit by 10+
+    } else if (speedLimit && speed > speedLimit) {
+        barColor = 'rgb(255, 255, 0)';  // Yellow - over limit
+    } else {
+        barColor = 'rgb(255, 255, 255)'; // White - under limit
+    }
+
+    if (speed > 0) {
+        options.ctx.beginPath();
+        options.ctx.globalAlpha = 1.0;
+        options.ctx.arc(centerX, centerY, radius, startAngle, startAngle + degToRad(arcLength), false);
+        options.ctx.lineWidth = lineWidth;
+        options.ctx.strokeStyle = barColor;
+        options.ctx.stroke();
+    }
+
+    // Speed limit marker (red line across the progress bar)
+    if (speedLimit && speedLimit > 0 && speedLimit <= maxSpeed) {
+        var limitRatio = speedLimit / maxSpeed;
+        var limitAngle = startAngle + limitRatio * totalArcAngle;
+
+        // Calculate inner and outer points of the line - stay within the progress bar
+        var innerRadius = radius - lineWidth / 2 + 1;
+        var outerRadius = radius + lineWidth / 2 - 1;
+
+        var innerX = centerX + Math.cos(limitAngle) * innerRadius;
+        var innerY = centerY + Math.sin(limitAngle) * innerRadius;
+        var outerX = centerX + Math.cos(limitAngle) * outerRadius;
+        var outerY = centerY + Math.sin(limitAngle) * outerRadius;
+
+        // Red line across the progress bar
+        options.ctx.beginPath();
+        options.ctx.moveTo(innerX, innerY);
+        options.ctx.lineTo(outerX, outerY);
+        options.ctx.lineWidth = 16;
+        options.ctx.strokeStyle = 'rgb(255, 0, 0)';
+        options.ctx.stroke();
+    }
+}
+
+function draw(iSpeed, speedLimit, isSlipping, powerHandle, incline, nextSpeedLimit, distanceToNextSpeedLimit, trainBrakeValue, trainBrakeActive, locomotiveBrakeValue, locomotiveBrakeActive, electricDynamicBrakeValue, electricBrakeActive, isTractionLocked, localTime, timetableTime, timetableLabel, distanceToStation, reverser, doorLeft, doorRight, distanceUnits, playerPosition, temperature, temperatureUnits, distanceToSignal, signalAspectClass) {
+    var canvas = document.getElementById('tutorial');
+    if (canvas !== null && canvas.getContext) {
+        var options = buildOptionsAsJSON(canvas, iSpeed);
+        clearCanvas(options);
+        drawBackground(options);
+        drawTicks(options);
+        drawTextMarkers(options);
+        drawCurvedSpeedBar(options, iSpeed, speedLimit);
+        drawSpeedBox(options, speedLimit, isSlipping);
+        if (trainBrakeActive) {
+            drawBrakeBox(options, trainBrakeValue);
+        }
+        if (locomotiveBrakeActive) {
+            drawLocomotiveBrakeBox(options, locomotiveBrakeValue);
+        }
+        if (electricBrakeActive) {
+            drawElectricDynamicBrakeBox(options, electricDynamicBrakeValue);
+        }
+        drawSpeedLimitBox(options, speedLimit);
+        drawDoorIndicators(options, doorLeft, doorRight);
+        drawPowerHandleBox(options, powerHandle, isTractionLocked);
+        drawGradientBox(options, incline);
+        drawReverserIndicator(options, reverser);
+        if (distanceToNextSpeedLimit !== undefined && distanceToNextSpeedLimit !== null && distanceToNextSpeedLimit > 1) {
+            drawNextSpeedLimitBox(options, nextSpeedLimit);
+            drawDistanceToNextSpeedLimitBox(options, distanceToNextSpeedLimit, distanceUnits);
+        }
+        drawSignalAspectBox(options, signalAspectClass);
+        drawDistanceToSignalBox(options, distanceToSignal, distanceUnits);
+        // Draw station selector if we have timetable items
+        if (cachedTimetableItems && cachedTimetableItems.length > 0) {
+            stationSelectorBounds = drawStationSelector(options, cachedTimetableItems, selectedStationIndex, playerPosition, distanceUnits, stationScrollOffset);
+        }
+        drawTimeBox(options, localTime);
+        drawTimetableBox(options, timetableTime, timetableLabel, distanceToStation, distanceUnits);
+        drawDistanceToDestination(options, distanceUnits);
+        drawLoadButton(options, isLoadHovered, isLoadPressed);
+        drawMapButton(options, isMapHovered, isMapPressed);
+        drawRefreshButton(options, isRefreshHovered, isRefreshPressed);
+        drawFullscreenButton(options, isFullscreenHovered, isFullscreenPressed);
+        if (isDevelopmentMode) {
+            drawDataButton(options, isDataHovered, isDataPressed);
+            drawSaveLocButton(options, isSaveLocHovered, isSaveLocPressed);
+        }
+        // Draw toast popup if active — centered over the speedometer (960, 490)
+        if (toastMessage) {
+            var ctx = options.ctx;
+            ctx.save();
+            ctx.font = 'bold 40px sans-serif';
+            var tw = ctx.measureText(toastMessage).width;
+            var boxW = tw + 80;
+            var boxH = 80;
+            var tx = 960 - boxW / 2;
+            var ty = 490 - boxH / 2;
+            ctx.fillStyle = toastIsError ? 'rgba(200, 30, 30, 0.95)' : 'rgba(0, 140, 60, 0.95)';
+            ctx.beginPath();
+            ctx.roundRect(tx, ty, boxW, boxH, 14);
+            ctx.fill();
+            ctx.strokeStyle = toastIsError ? 'rgba(255, 100, 100, 0.9)' : 'rgba(100, 255, 150, 0.9)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(toastMessage, 960, 490);
+            ctx.restore();
+        }
+    } else {
+        alert(i18n.t('hud.canvasNotSupported'));
+    }
+}
+
+    </script>
+    <script>
+        function toggleDisplay() {
+            var display = document.getElementById('display');
+            if (display.style.display === 'none' || display.style.display === '') {
+                display.style.display = 'block';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+        // Painted at boot and whenever the SSE stream drops. Deliberately
+        // does NOT call the regular draw() at zero — a full speedometer
+        // showing 0 mph / -- limit reads as broken output (we've been bitten
+        // by this before — see feedback_no_demo_fallback). The blank canvas
+        // + bold OFFLINE label makes the disconnected state unambiguous.
+        function drawOffline(reason) {
+            var canvas = document.getElementById('tutorial');
+            if (!canvas || !canvas.getContext) return;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#7a8290';
+            ctx.font = 'bold 96px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(hudLabel('OFFLINE'), canvas.width / 2, canvas.height / 2 - 30);
+            ctx.font = '32px sans-serif';
+            ctx.fillStyle = '#4a5260';
+            ctx.fillText(reason || i18n.t('hud.waitingForTelemetry'), canvas.width / 2, canvas.height / 2 + 50);
+        }
+    </script>
+</head>
+<body onload='drawOffline();'>
+<script>
+// Translate canvas-drawn HUD button labels (fillText can't use data-i18n).
+window.hudLabel = function (en) {
+  var M = {'DATA':'shell.hudbtn.data','LOAD':'shell.hudbtn.load','MAP':'shell.hudbtn.map',
+           'NEXT':'shell.hudbtn.next','PREV':'shell.hudbtn.prev','REFRESH':'shell.hudbtn.refresh',
+           'SAVE LOC':'shell.hudbtn.saveLoc','OFFLINE':'shell.hudbtn.offline'};
+  var k = M[en];
+  try { if (k && typeof i18n !== 'undefined' && i18n.t) { var v = i18n.t(k); if (v && v !== k) return v; } } catch (e) {}
+  return en;
+};
+</script>
+
+    <div id="container">
+        <canvas id="tutorial" width="1920" height="900" data-i18n="hud.canvasNotAvailable">Canvas not available.</canvas>
+    </div>
+
+
+    <div id="display" data-i18n="data.waitingForData">Waiting for data...</div>
+
+    <!-- Load Route Overlay -->
+    <div id="loadOverlay" class="load-overlay">
+        <div class="load-panel">
+            <div class="load-panel-header">
+                <h2 data-i18n="map.loadTimetable">Load Timetable</h2>
+                <button class="close-btn" onclick="hideLoadOverlay()">&times;</button>
+            </div>
+
+            <div id="loadedInfoOverlay" class="loaded-info" style="display: none;">
+                <h3 data-i18n="hud.currentlyLoaded">Currently Loaded:</h3>
+                <p id="loadedRouteNameOverlay">-</p>
+            </div>
+
+            <div class="route-selector">
+                <label data-i18n="map.route">Route:</label>
+                <div class="typeahead-container">
+                    <input type="text" id="routeInputOverlay" data-i18n-placeholder="record.typeToSearchRoutes" placeholder="Type to search routes..." autocomplete="off">
+                    <div id="routeDropdownOverlay" class="typeahead-dropdown" style="display: none;"></div>
+                    <input type="hidden" id="routeSelectOverlay" value="">
+                </div>
+
+                <label data-i18n="map.train">Train:</label>
+                <select id="trainSelectOverlay" onchange="handleTrainChangeOverlay()" disabled>
+                    <option value="" data-i18n="record.selectRouteFirst">-- Select a route first --</option>
+                </select>
+
+                <label data-i18n="map.timetable">Timetable:</label>
+                <select id="timetableSelectOverlay" onchange="handleTimetableChangeOverlay()" disabled>
+                    <option value="" data-i18n="record.selectTimetable">-- Select a timetable --</option>
+                </select>
+
+                <button id="loadRouteBtnOverlay" onclick="loadSelectedTimetableOverlay()" disabled data-i18n="map.load">Load Timetable</button>
+                <button id="clearRouteBtnOverlay" onclick="clearLoadedRouteOverlay()" style="display: none;" data-i18n="map.clearLoadedRoute">Clear Loaded Route</button>
+
+                <div class="status-message" id="statusMessageOverlay"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Overlay -->
+    <div id="mapOverlay" class="map-overlay">
+        <button id="overlayFollowFormationBtn" class="follow-formation-btn" onclick="toggleOverlayFollowFormation()" data-i18n="map.followTrain" data-i18n-title="hud.followFormationTitle" title="Center the map on the formation and keep it centered as the train moves">Follow Formation</button>
+        <button class="close-btn" onclick="hideMapOverlay()">&times;</button>
+        <div id="overlayMap"></div>
+        <!-- Layer toggle bar — bottom-left of the map overlay. Same shape
+             and behaviour as /map: a "Layers" button collapses/expands the
+             bar of per-layer checkboxes. State (open/closed AND each
+             layer's on/off) is persisted in localStorage under shared keys
+             (huddev.mapLayers + huddev.mapLayerPanel) so toggling any layer
+             on /map, /desktop, /tablet, or any timetable view propagates to
+             the others on next load. -->
+        <div id="overlayServiceLayerWrapper" data-state="open" style="position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3001; display: flex; flex-direction: row; align-items: flex-end; gap: 8px;">
+            <button id="overlayServiceLayerToggleBtn" onclick="toggleOverlayServiceLayerPanel()" style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 12px; background: rgba(0,0,0,0.85); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                <span id="overlayServiceLayerToggleArrow">&#9662;</span>
+                <span id="overlayServiceLayerToggleLabel" data-i18n="map.layers">Layers</span>
+            </button>
+            <div id="overlayServiceLayerBar" style="flex: 1 1 auto; min-width: 0;"></div>
+        </div>
+    </div>
+    <style>
+        /* Style the layer-toggle bar inside the tablet HUD's map overlay.
+           Tablet has limited horizontal space — twelve toggles don't fit on
+           one line at typical tablet widths (1024-1280px), so the bar wraps
+           to multiple rows here instead of forcing horizontal scroll. The
+           bar spans nearly the full width of the overlay (left: 12px right:
+           12px) and grows upward as rows wrap. */
+        #overlayServiceLayerWrapper, #overlayServiceLayerWrapper * { color: #fff; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerBar { display: none; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerToggleLabel { display: none; }
+        #overlayServiceLayerWrapper[data-state="closed"] #overlayServiceLayerToggleBtn { padding: 0; min-width: 44px; width: 44px; }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] {
+            min-height: 44px;
+            display: flex !important;
+            align-items: center !important;
+            padding: 6px 14px !important;
+            margin: 0 !important;
+        }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] > div {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 8px 14px !important;
+        }
+        #overlayServiceLayerBar [data-svc-layer-bar="1"] strong { display: none; }
+    </style>
+    <script>
+        // Toggle the layer panel between full-bar and just-button states.
+        // Persisted under huddev.mapLayerPanel (shared with /map and desktop).
+        function toggleOverlayServiceLayerPanel() {
+            var wrap = document.getElementById('overlayServiceLayerWrapper');
+            var arrow = document.getElementById('overlayServiceLayerToggleArrow');
+            var next = wrap.getAttribute('data-state') === 'open' ? 'closed' : 'open';
+            wrap.setAttribute('data-state', next);
+            arrow.innerHTML = next === 'open' ? '&#9662;' : '&#9652;';
+            try { localStorage.setItem('huddev.mapLayerPanel', next); } catch (_) {}
+        }
+        (function () {
+            try {
+                if (localStorage.getItem('huddev.mapLayerPanel') === 'closed') {
+                    document.getElementById('overlayServiceLayerWrapper').setAttribute('data-state', 'closed');
+                    document.getElementById('overlayServiceLayerToggleArrow').innerHTML = '&#9652;';
+                }
+            } catch (_) { /* ignore */ }
+        })();
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/leaflet-extras.js"></script>
+    <script src="/js/service-map.js"></script>
+    <script>
+        function refreshPage() {
+            location.reload();
+        }
+
+        var canvas = document.getElementById('tutorial');
+        var isMapHovered = false;
+        var isRefreshHovered = false;
+        var isLoadHovered = false;
+        var isFullscreenHovered = false;
+        var isDataHovered = false;
+        var isSaveLocHovered = false;
+        var isMapPressed = false;
+        var isRefreshPressed = false;
+        var isLoadPressed = false;
+        var isFullscreenPressed = false;
+        var isDataPressed = false;
+        var isSaveLocPressed = false;
+        var isDevelopmentMode = false;
+
+        // Timetable selector state
+        var cachedTimetableItems = [];
+        var selectedStationIndex = 0;
+        var stationScrollOffset = 0;
+        var stationSelectorBounds = null;
+        var currentPlayerPosition = null;
+        var currentTile = null;
+
+        // Load config to check development mode
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                isDevelopmentMode = config.developmentMode || false;
+                // Hide display div when not in dev mode
+                if (!isDevelopmentMode) {
+                    document.getElementById('display').style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Failed to load config:', err);
+            }
+        }
+        loadConfig();
+
+        // Helper function to scale mouse coordinates to canvas coordinates
+        function getCanvasCoordinates(event) {
+            var rect = canvas.getBoundingClientRect();
+            var scaleX = canvas.width / rect.width;
+            var scaleY = canvas.height / rect.height;
+            return {
+                x: (event.clientX - rect.left) * scaleX,
+                y: (event.clientY - rect.top) * scaleY
+            };
+        }
+
+        // Check if coordinates are within prev arrow button
+        function isInPrevArrow(x, y) {
+            if (!stationSelectorBounds) return false;
+            var b = stationSelectorBounds;
+            return x >= b.boxX && x <= b.boxX + b.arrowWidth && y >= b.arrowY && y <= b.arrowY + b.arrowHeight;
+        }
+
+        // Check if coordinates are within next arrow button
+        function isInNextArrow(x, y) {
+            if (!stationSelectorBounds) return false;
+            var b = stationSelectorBounds;
+            var nextX = b.boxX + b.arrowWidth + 10;
+            return x >= nextX && x <= nextX + b.arrowWidth && y >= b.arrowY && y <= b.arrowY + b.arrowHeight;
+        }
+
+        // Check if coordinates are within MAP button bounds (1420, 800, 110x55)
+        function isInMapButton(x, y) {
+            return x >= 1420 && x <= 1530 && y >= 800 && y <= 855;
+        }
+
+        // Check if coordinates are within REFRESH button bounds (1660, 800, 110x55)
+        function isInRefreshButton(x, y) {
+            return x >= 1660 && x <= 1770 && y >= 800 && y <= 855;
+        }
+
+        // Check if coordinates are within LOAD button bounds (1540, 800, 110x55)
+        function isInLoadButton(x, y) {
+            return x >= 1540 && x <= 1650 && y >= 800 && y <= 855;
+        }
+
+        // Check if coordinates are within FULLSCREEN button bounds (1780, 800, 110x55)
+        function isInFullscreenButton(x, y) {
+            return x >= 1780 && x <= 1890 && y >= 800 && y <= 855;
+        }
+
+        // Check if coordinates are within DATA button bounds (1300, 800, 110x55)
+        function isInDataButton(x, y) {
+            return x >= 1300 && x <= 1410 && y >= 800 && y <= 855;
+        }
+
+        // Check if coordinates are within SAVE LOC button bounds (1180, 800, 110x55)
+        // Show a temporary toast message on screen (no alert/popup)
+        var toastTimeout = null;
+        var toastMessage = '';
+        var toastIsError = false;
+        function showToast(msg, isError) {
+            toastMessage = msg;
+            toastIsError = !!isError;
+            // Release Save Loc button focus
+            isSaveLocPressed = false;
+            isSaveLocHovered = false;
+            redrawButtons();
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(function() {
+                toastMessage = '';
+                redrawButtons();
+            }, 3000);
+        }
+
+        function isInSaveLocButton(x, y) {
+            return x >= 1180 && x <= 1290 && y >= 800 && y <= 855;
+        }
+
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log('Fullscreen error:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        canvas.addEventListener('mousedown', function(event) {
+            var coords = getCanvasCoordinates(event);
+
+            if (isInMapButton(coords.x, coords.y)) {
+                isMapPressed = true;
+                redrawButtons();
+            }
+            else if (isInRefreshButton(coords.x, coords.y)) {
+                isRefreshPressed = true;
+                redrawButtons();
+            }
+            else if (isInLoadButton(coords.x, coords.y)) {
+                isLoadPressed = true;
+                redrawButtons();
+            }
+            else if (isInFullscreenButton(coords.x, coords.y)) {
+                isFullscreenPressed = true;
+                redrawButtons();
+            }
+            else if (isDevelopmentMode && isInDataButton(coords.x, coords.y)) {
+                isDataPressed = true;
+                redrawButtons();
+            }
+            else if (isDevelopmentMode && isInSaveLocButton(coords.x, coords.y)) {
+                isSaveLocPressed = true;
+                redrawButtons();
+            }
+        });
+
+        canvas.addEventListener('mouseup', function(event) {
+            if (isMapPressed || isRefreshPressed || isLoadPressed || isFullscreenPressed || isDataPressed || isSaveLocPressed) {
+                isMapPressed = false;
+                isRefreshPressed = false;
+                isLoadPressed = false;
+                isFullscreenPressed = false;
+                isDataPressed = false;
+                isSaveLocPressed = false;
+                redrawButtons();
+            }
+        });
+
+        canvas.addEventListener('mouseleave', function(event) {
+            isMapPressed = false;
+            isRefreshPressed = false;
+            isLoadPressed = false;
+            isFullscreenPressed = false;
+            isDataPressed = false;
+            isSaveLocPressed = false;
+            isMapHovered = false;
+            isRefreshHovered = false;
+            isLoadHovered = false;
+            isFullscreenHovered = false;
+            isDataHovered = false;
+            isSaveLocHovered = false;
+            canvas.style.cursor = 'default';
+            redrawButtons();
+        });
+
+        function redrawButtons() {
+            if (currentData) {
+                var temp = currentData.weather ? currentData.weather.Temperature : null;
+                draw(Math.round(currentData.speed), currentData.limit, currentData.isSlipping, currentData.powerHandle, currentData.incline, currentData.nextSpeedLimit, currentData.distanceToNextSpeedLimit, currentData.trainBreak, currentData.trainBrakeActive, currentData.locomotiveBrakeHandle, currentData.locomotiveBrakeActive, currentData.electricDynamicBrake, currentData.electricBrakeActive, currentData.isTractionLocked, currentData.localTime, currentData.timetableTime, currentData.timetableLabel, currentData.distanceToStation, currentData.reverser, currentData.doorFrontLeft, currentData.doorFrontRight, currentData.distanceUnits, currentPlayerPosition, temp, currentData.temperatureUnits, currentData.distanceToSignal, currentData.signalAspectClass);
+            } else {
+                draw(0);
+            }
+        }
+
+        // Check if coordinates are within station selector bounds
+        function isInStationSelector(x, y) {
+            if (!stationSelectorBounds) return false;
+            var b = stationSelectorBounds;
+            return x >= b.boxX && x <= b.boxX + b.boxWidth && y >= b.boxY && y <= b.boxY + b.boxHeight;
+        }
+
+        // Get which station item was clicked
+        function getClickedStationIndex(x, y) {
+            if (!stationSelectorBounds || !cachedTimetableItems) return -1;
+            var b = stationSelectorBounds;
+            if (x < b.boxX || x > b.boxX + b.boxWidth) return -1;
+            if (y < b.boxY || y > b.boxY + b.boxHeight) return -1;
+
+            var relativeY = y - b.boxY;
+            var clickedVisibleIndex = Math.floor(relativeY / b.itemHeight);
+            var actualIndex = stationScrollOffset + clickedVisibleIndex;
+
+            if (actualIndex >= 0 && actualIndex < cachedTimetableItems.length) {
+                return actualIndex;
+            }
+            return -1;
+        }
+
+        // Handle station selection
+        async function selectStation(index) {
+            if (index < 0 || index >= cachedTimetableItems.length) return;
+
+            selectedStationIndex = index;
+
+            // Center selected item in the scroll view (keep it in the middle)
+            var visibleItems = 5;
+            var middleOffset = Math.floor(visibleItems / 2);
+            var maxScroll = Math.max(0, cachedTimetableItems.length - visibleItems);
+            stationScrollOffset = Math.max(0, Math.min(index - middleOffset, maxScroll));
+
+            // Set to index - 1 so the NEXT station (index) becomes the target
+            var arrivedIndex = index - 1;
+            try {
+                await fetch('/api/set-timetable-index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ index: arrivedIndex })
+                });
+                console.log('Set arrived index to:', arrivedIndex, '(target station:', index, ')');
+            } catch (err) {
+                console.error('Failed to set timetable index:', err);
+            }
+
+            redrawButtons();
+        }
+
+        // Save current player location to the selected timetable entry
+        async function saveCurrentLocationToTimetable() {
+            if (!currentPlayerPosition || !currentPlayerPosition.latitude || !currentPlayerPosition.longitude) {
+                console.error('No player position available');
+                showToast(i18n.t('hud.toastNoPosition'), true);
+                return;
+            }
+
+            if (!cachedTimetableItems || cachedTimetableItems.length === 0) {
+                console.error('No timetable loaded');
+                showToast(i18n.t('hud.toastNoTimetable'), true);
+                return;
+            }
+
+            if (selectedStationIndex < 0 || selectedStationIndex >= cachedTimetableItems.length) {
+                console.error('Invalid station selection');
+                showToast(i18n.t('hud.toastInvalidStation'), true);
+                return;
+            }
+
+            var selectedStation = cachedTimetableItems[selectedStationIndex];
+            var entryId = selectedStation.id;
+
+            if (!entryId) {
+                console.error('Selected station has no ID');
+                showToast(i18n.t('hud.toastNoStationId'), true);
+                return;
+            }
+
+            try {
+                var payload = {
+                    entryId: entryId,
+                    latitude: currentPlayerPosition.latitude,
+                    longitude: currentPlayerPosition.longitude
+                };
+                if (currentTile && typeof currentTile.x === 'number' && typeof currentTile.y === 'number') {
+                    payload.x = currentTile.x;
+                    payload.y = currentTile.y;
+                }
+                var response = await fetch('/api/update-timetable-coordinates', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                var result = await response.json();
+                if (result.success) {
+                    // Update local cache
+                    cachedTimetableItems[selectedStationIndex].latitude = currentPlayerPosition.latitude;
+                    cachedTimetableItems[selectedStationIndex].longitude = currentPlayerPosition.longitude;
+                    if (payload.x !== undefined) {
+                        cachedTimetableItems[selectedStationIndex].x = payload.x;
+                        cachedTimetableItems[selectedStationIndex].y = payload.y;
+                    }
+                    console.log('Location saved for station:', selectedStation.location, 'Lat:', currentPlayerPosition.latitude, 'Lng:', currentPlayerPosition.longitude, 'Tile:', payload.x, payload.y);
+                    showToast(i18n.t('hud.toastSaved') + selectedStation.location);
+                } else {
+                    console.error('Failed to save location:', result.error);
+                    showToast(i18n.t('hud.toastFailed') + (result.error || i18n.t('hud.unknownError')), true);
+                }
+            } catch (err) {
+                console.error('Error saving location:', err);
+                showToast(i18n.t('hud.toastError') + err.message, true);
+            }
+        }
+
+        // Handle scroll wheel on station selector
+        function handleStationScroll(deltaY) {
+            if (!cachedTimetableItems || cachedTimetableItems.length === 0) return;
+
+            var maxScroll = Math.max(0, cachedTimetableItems.length - 5);
+            if (deltaY > 0) {
+                stationScrollOffset = Math.min(stationScrollOffset + 1, maxScroll);
+            } else {
+                stationScrollOffset = Math.max(stationScrollOffset - 1, 0);
+            }
+            redrawButtons();
+        }
+
+        canvas.addEventListener('mousemove', function(event) {
+            var coords = getCanvasCoordinates(event);
+
+            var wasMapHovered = isMapHovered;
+            var wasRefreshHovered = isRefreshHovered;
+            var wasLoadHovered = isLoadHovered;
+            var wasFullscreenHovered = isFullscreenHovered;
+            var wasDataHovered = isDataHovered;
+            var wasSaveLocHovered = isSaveLocHovered;
+
+            isMapHovered = isInMapButton(coords.x, coords.y);
+            isRefreshHovered = isInRefreshButton(coords.x, coords.y);
+            isLoadHovered = isInLoadButton(coords.x, coords.y);
+            isFullscreenHovered = isInFullscreenButton(coords.x, coords.y);
+            isDataHovered = isDevelopmentMode && isInDataButton(coords.x, coords.y);
+            isSaveLocHovered = isDevelopmentMode && isInSaveLocButton(coords.x, coords.y);
+
+            // Check for interactive areas
+            var isOverButton = isMapHovered || isRefreshHovered || isLoadHovered || isFullscreenHovered || isDataHovered || isSaveLocHovered ||
+                               isInPrevArrow(coords.x, coords.y) ||
+                               isInNextArrow(coords.x, coords.y) ||
+                               isInStationSelector(coords.x, coords.y);
+
+            if (isOverButton) {
+                canvas.style.cursor = 'pointer';
+            } else {
+                canvas.style.cursor = 'default';
+            }
+
+            if (wasMapHovered !== isMapHovered || wasRefreshHovered !== isRefreshHovered || wasLoadHovered !== isLoadHovered || wasFullscreenHovered !== isFullscreenHovered || wasDataHovered !== isDataHovered || wasSaveLocHovered !== isSaveLocHovered) {
+                redrawButtons();
+            }
+        });
+
+        canvas.addEventListener('click', function(event) {
+            var coords = getCanvasCoordinates(event);
+
+            if (isInMapButton(coords.x, coords.y)) {
+                showMapOverlay();
+            }
+            else if (isInRefreshButton(coords.x, coords.y)) {
+                refreshPage();
+            }
+            else if (isInLoadButton(coords.x, coords.y)) {
+                showLoadOverlay();
+            }
+            else if (isInFullscreenButton(coords.x, coords.y)) {
+                toggleFullscreen();
+            }
+            else if (isDevelopmentMode && isInDataButton(coords.x, coords.y)) {
+                toggleDisplay();
+            }
+            else if (isDevelopmentMode && isInSaveLocButton(coords.x, coords.y)) {
+                saveCurrentLocationToTimetable();
+            }
+            else if (isInPrevArrow(coords.x, coords.y)) {
+                if (selectedStationIndex > 0) {
+                    selectStation(selectedStationIndex - 1);
+                }
+            }
+            else if (isInNextArrow(coords.x, coords.y)) {
+                if (cachedTimetableItems && selectedStationIndex < cachedTimetableItems.length - 1) {
+                    selectStation(selectedStationIndex + 1);
+                }
+            }
+            else if (isInStationSelector(coords.x, coords.y)) {
+                var clickedIndex = getClickedStationIndex(coords.x, coords.y);
+                if (clickedIndex >= 0) {
+                    selectStation(clickedIndex);
+                }
+            }
+        });
+
+        // Handle mouse wheel for scrolling station selector
+        canvas.addEventListener('wheel', function(event) {
+            var coords = getCanvasCoordinates(event);
+            if (isInStationSelector(coords.x, coords.y)) {
+                event.preventDefault();
+                handleStationScroll(event.deltaY);
+            }
+        }, { passive: false });
+
+        // Connect to the server's /stream endpoint
+        const eventSource = new EventSource('/stream');
+
+        var currentData = null;
+        var lastSignalAspectClass = null;
+        var lastDistanceToSignal = null;
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                      (typeof window.orientation !== 'undefined') ||
+                      (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+
+        // Redraw at regular intervals to support flashing
+        setInterval(function() {
+            if (currentData) {
+                var temp = currentData.weather ? currentData.weather.Temperature : null;
+                draw(Math.round(currentData.speed), currentData.limit, currentData.isSlipping, currentData.powerHandle, currentData.incline, currentData.nextSpeedLimit, currentData.distanceToNextSpeedLimit, currentData.trainBreak, currentData.trainBrakeActive, currentData.locomotiveBrakeHandle, currentData.locomotiveBrakeActive, currentData.electricDynamicBrake, currentData.electricBrakeActive, currentData.isTractionLocked, currentData.localTime, currentData.timetableTime, currentData.timetableLabel, currentData.distanceToStation, currentData.reverser, currentData.doorFrontLeft, currentData.doorFrontRight, currentData.distanceUnits, currentPlayerPosition, temp, currentData.temperatureUnits, lastDistanceToSignal, lastSignalAspectClass);
+            }
+        }, 100);
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            currentData = data;
+            // Update player position for station distance calculations
+            if (data.playerPosition) {
+                currentPlayerPosition = data.playerPosition;
+            }
+            currentTile = data.currentTile || null;
+            document.getElementById('display').innerText = JSON.stringify(data, null, 2);
+            if (data.signalAspectClass != null) {
+                lastSignalAspectClass = data.signalAspectClass;
+            }
+            if (data.distanceToSignal != null) {
+                lastDistanceToSignal = data.distanceToSignal;
+            }
+            var temp = data.weather ? data.weather.Temperature : null;
+            draw(Math.round(data.speed), data.limit, data.isSlipping, data.powerHandle, data.incline, data.nextSpeedLimit, data.distanceToNextSpeedLimit, data.trainBreak, data.trainBrakeActive, data.locomotiveBrakeHandle, data.locomotiveBrakeActive, data.electricDynamicBrake, data.electricBrakeActive, data.isTractionLocked, data.localTime, data.timetableTime, data.timetableLabel, data.distanceToStation, data.reverser, data.doorFrontLeft, data.doorFrontRight, data.distanceUnits, currentPlayerPosition, temp, data.temperatureUnits, lastDistanceToSignal, lastSignalAspectClass);
+
+            // Live consist length from TSW — when it changes, re-pick the
+            // per-stop car_stop_sign so distance-to-stop matches the
+            // actual stop point for the current consist length.
+            if (typeof data.vehicleCount === 'number' && data.vehicleCount !== currentVehicleCount) {
+                currentVehicleCount = data.vehicleCount;
+                applyDynamicStopCoords();
+            }
+
+            // Mirror the player position onto the map overlay's train marker.
+            // Previously a second EventSource('/stream') was opened just for
+            // this — wasteful (double the bandwidth + server-side broadcast
+            // fan-out). Reuse the one we already have.
+            if (overlayMap && data.playerPosition && data.playerPosition.latitude && data.playerPosition.longitude) {
+                const lat = data.playerPosition.latitude;
+                const lng = data.playerPosition.longitude;
+                if (overlayTrainMarker) {
+                    overlayTrainMarker.setLatLng([lat, lng]);
+                } else if (overlayTrainIcon) {
+                    overlayTrainMarker = L.marker([lat, lng], { icon: overlayTrainIcon })
+                        .bindPopup('<strong>' + i18n.t('hud.yourTrain') + '</strong>')
+                        .addTo(overlayMap);
+                }
+                if (overlayIsFollowingFormation) {
+                    overlayMap.setView([lat, lng], overlayMap.getZoom());
+                }
+            }
+        };
+
+        eventSource.onerror = () => {
+            console.error("SSE connection lost.");
+            // Drop back to the OFFLINE placeholder so stale data on screen
+            // doesn't pretend the stream is still live. The setInterval
+            // redraw above also bails because currentData stays at its last
+            // value — clear it so the redraw loop stops painting.
+            currentData = null;
+            drawOffline(i18n.t('hud.streamLost'));
+        };
+
+        // =============================================
+        // Load Overlay Functionality
+        // =============================================
+
+        let allRoutesOverlay = [];
+        let highlightedIndexOverlay = -1;
+
+        function showLoadOverlay() {
+            document.getElementById('loadOverlay').classList.add('active');
+            if (allRoutesOverlay.length === 0) {
+                loadRoutesOverlay();
+            }
+            checkExistingRouteOverlay();
+        }
+
+        function hideLoadOverlay() {
+            document.getElementById('loadOverlay').classList.remove('active');
+            document.getElementById('routeDropdownOverlay').style.display = 'none';
+        }
+
+        // Map overlay variables
+        var overlayMap = null;
+        var overlayRoutePolyline = null;
+        var overlayTrainMarker = null;
+        var overlayMarkerLayers = [];
+        var overlayEventSource = null;
+        var overlayTrainIcon = null;
+        // "Follow Formation" toggle state — when true, the stream handler
+        // re-centres overlayMap on the train marker every tick. Mirrors the
+        // /map page's Follow Train button.
+        var overlayIsFollowingFormation = false;
+
+        function toggleOverlayFollowFormation() {
+            var btn = document.getElementById('overlayFollowFormationBtn');
+            overlayIsFollowingFormation = !overlayIsFollowingFormation;
+            if (overlayIsFollowingFormation) {
+                btn.classList.add('following');
+                btn.textContent = i18n.t('hud.follow');
+                btn.title = i18n.t('hud.stopFollowingTitle');
+                if (overlayMap && overlayTrainMarker) {
+                    var p = overlayTrainMarker.getLatLng();
+                    overlayMap.setView([p.lat, p.lng], overlayMap.getZoom());
+                }
+            } else {
+                btn.classList.remove('following');
+                btn.textContent = i18n.t('map.followTrain');
+                btn.title = i18n.t('hud.followFormationTitle');
+            }
+        }
+
+        function showMapOverlay() {
+            document.getElementById('mapOverlay').classList.add('active');
+            hideLoadOverlay();
+
+            if (!overlayMap) {
+                // preferCanvas: true — render vector layers to canvas instead
+                // of one <path> per feature in SVG. Big DLCs ship thousands of
+                // track/signal/switch features and SVG dominates first paint.
+                overlayMap = L.map('overlayMap', { preferCanvas: true }).setView([51.5, -0.1], 13);
+
+                // Basemap switcher (Map / Satellite / Topo) shared with the
+                // route page — replaces the old single-button satellite toggle.
+                LeafletExtras.attachBasemapControls(overlayMap);
+
+                overlayTrainIcon = L.divIcon({
+                    className: 'train-marker',
+                    html: '<div style="width: 20px; height: 20px; background: #ffa500; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px rgba(255,165,0,0.8), 0 2px 6px rgba(0,0,0,0.3);"></div>',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+            }
+
+            setTimeout(function() {
+                overlayMap.invalidateSize();
+                loadMapRoute();
+            }, 100);
+
+            startMapPositionUpdates();
+        }
+
+        function hideMapOverlay() {
+            document.getElementById('mapOverlay').classList.remove('active');
+            if (overlayEventSource) {
+                overlayEventSource.close();
+                overlayEventSource = null;
+            }
+        }
+
+        async function loadMapRoute() {
+            try {
+                const response = await fetch('/route-data');
+                const data = await response.json();
+
+                if (!data || data.error || !data.coordinates || data.coordinates.length === 0) {
+                    console.log('No route data available for map overlay');
+                    return;
+                }
+
+                // Clear existing layers
+                if (overlayRoutePolyline) {
+                    overlayMap.removeLayer(overlayRoutePolyline);
+                }
+                overlayMarkerLayers.forEach(function(layer) {
+                    overlayMap.removeLayer(layer);
+                });
+                overlayMarkerLayers = [];
+
+                // Draw route polyline + station markers WITHOUT adding to the
+                // map yet — ServiceMap.attach (called below) takes ownership
+                // and applies the user's "Path" / "Stops" visibility prefs
+                // from /settings (huddev.mapLayers). The fallback path
+                // inside attachOverlayServiceLayers adds them directly when
+                // the route can't be resolved (so the basic map still works).
+                var routeCoords = data.coordinates.map(function(coord) {
+                    return [coord.latitude, coord.longitude];
+                });
+                overlayRoutePolyline = L.polyline(routeCoords, {
+                    color: '#0066ff',
+                    weight: 4,
+                    opacity: 0.6
+                });
+
+                // Fit bounds works on the polyline's getBounds() regardless
+                // of whether it's been added to the map.
+                overlayMap.fitBounds(overlayRoutePolyline.getBounds(), { padding: [50, 50] });
+
+                // Build station markers (also unattached for the same reason).
+                if (data.timetable && data.timetable.length > 0) {
+                    data.timetable.forEach(function(entry, index) {
+                        if (!entry.latitude || !entry.longitude) return;
+
+                        var stationIcon = L.divIcon({
+                            className: 'station-marker',
+                            html: '<div style="width: 12px; height: 12px; background: #00cc66; border: 2px solid white; border-radius: 50%;"></div>',
+                            iconSize: [12, 12],
+                            iconAnchor: [6, 6]
+                        });
+                        var marker = L.marker([entry.latitude, entry.longitude], { icon: stationIcon })
+                            .bindTooltip(entry.location || i18n.t('hud.stationPrefix') + ' ' + (index + 1), { permanent: false, direction: 'top' });
+                        overlayMarkerLayers.push(marker);
+                    });
+                }
+
+                // Hand path + stops + route-derived layers (platforms,
+                // signals, switches, track features) to ServiceMap so the
+                // /settings "Map Layers" toggles drive visibility.
+                attachOverlayServiceLayers(data, routeCoords, overlayRoutePolyline, overlayMarkerLayers).catch(function (e) {
+                    console.warn('overlay serviceLayer attach failed', e);
+                });
+
+            } catch (err) {
+                console.error('Failed to load map route:', err);
+            }
+        }
+
+        var overlayServiceMapHandle = null;
+        var overlayLastAttachedRouteId = null;
+        async function attachOverlayServiceLayers(data, pathLatLngs, pathLayer, stopLayers) {
+            // Fallback: when ServiceMap isn't available or no route resolves,
+            // add the path + stops directly so the user still sees a map.
+            // Layer prefs only apply when ServiceMap takes ownership.
+            function fallbackAddDirect() {
+                if (pathLayer) pathLayer.addTo(overlayMap);
+                (stopLayers || []).forEach(function (s) { s.addTo(overlayMap); });
+            }
+            if (!window.ServiceMap) { fallbackAddDirect(); return; }
+            var bar = document.getElementById('overlayServiceLayerBar');
+            var resolvedRouteId = (data && data.routeId) ? Number(data.routeId) : null;
+            if (!resolvedRouteId) {
+                var routeName = (data && data.routeName) ? String(data.routeName) : '';
+                if (!routeName) { if (bar) bar.style.display = 'none'; fallbackAddDirect(); return; }
+                try {
+                    var routesRes = await fetch('/api/routes');
+                    if (routesRes.ok) {
+                        var routes = await routesRes.json();
+                        var lower = routeName.toLowerCase();
+                        var match = routes.find(function (r) { return (r.name || '').toLowerCase() === lower; });
+                        if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) === 0; });
+                        if (!match) match = routes.find(function (r) { return lower.indexOf((r.name || '').toLowerCase()) !== -1; });
+                        if (match) resolvedRouteId = match.id;
+                    }
+                } catch (_) { /* fall through */ }
+            }
+            if (!resolvedRouteId) { if (bar) bar.style.display = 'none'; fallbackAddDirect(); return; }
+            // Always tear down the previous handle and re-attach. Skipping
+            // re-attach when the route hasn't changed would leave stale
+            // pathLayer/stopLayers references on the map (each call to
+            // loadMapRoute() builds new ones) and would also miss any
+            // /settings layer-pref changes the user made between opens.
+            if (overlayServiceMapHandle && overlayServiceMapHandle.destroy) overlayServiceMapHandle.destroy();
+            var entries = (data && Array.isArray(data.timetable)) ? data.timetable : [];
+            overlayServiceMapHandle = await ServiceMap.attach(overlayMap, {
+                // Pass timetableId so ServiceMap hits the pre-built
+                // /api/timetables/{id}/map-features blob (single SELECT)
+                // instead of falling back to /api/routes/{id}/map-data
+                // and running the cold proximity filter client-side.
+                timetableId: (data && data.timetableId) ? data.timetableId : undefined,
+                routeId: resolvedRouteId,
+                barContainer: bar,
+                pathLatLngs: pathLatLngs,
+                pathLayer: pathLayer,
+                stopLayers: stopLayers,
+                scheduleEntries: entries,
+                // Shared with the desktop HUD; configured at /settings.
+                // Single shared storage key across every map surface.
+                storageKey: 'huddev.mapLayers',
+                hideBar: false
+            });
+            overlayLastAttachedRouteId = resolvedRouteId;
+        }
+
+        // Map overlay position updates piggyback on the page-level
+        // eventSource (see onmessage above). This used to open a second
+        // EventSource('/stream'), which doubled the SSE fan-out for no
+        // reason — both consumers want data.playerPosition.
+        function startMapPositionUpdates() { /* no-op */ }
+
+        // Close map overlay when clicking outside
+        document.getElementById('mapOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideMapOverlay();
+            }
+        });
+
+        // Close overlay when clicking outside the panel
+        document.getElementById('loadOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLoadOverlay();
+            }
+        });
+
+        // Close overlay on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideLoadOverlay();
+                hideMapOverlay();
+            }
+        });
+
+        // Load routes for typeahead (only routes with timetables that have coordinates)
+        async function loadRoutesOverlay() {
+            try {
+                const response = await fetch('/api/routes/with-coordinates');
+                allRoutesOverlay = await response.json();
+                setupRouteTypeaheadOverlay();
+                console.log('Routes with coordinates loaded for overlay:', allRoutesOverlay.length);
+            } catch (err) {
+                console.error('Failed to load routes:', err);
+            }
+        }
+
+        // Setup typeahead for route input
+        function setupRouteTypeaheadOverlay() {
+            const input = document.getElementById('routeInputOverlay');
+            const dropdown = document.getElementById('routeDropdownOverlay');
+
+            input.addEventListener('focus', function() {
+                showRouteDropdownOverlay(this.value);
+            });
+
+            input.addEventListener('input', function() {
+                highlightedIndexOverlay = -1;
+                showRouteDropdownOverlay(this.value);
+            });
+
+            input.addEventListener('keydown', function(e) {
+                const items = dropdown.querySelectorAll('.typeahead-item');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    highlightedIndexOverlay = Math.min(highlightedIndexOverlay + 1, items.length - 1);
+                    updateHighlightOverlay(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    highlightedIndexOverlay = Math.max(highlightedIndexOverlay - 1, 0);
+                    updateHighlightOverlay(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (highlightedIndexOverlay >= 0 && items[highlightedIndexOverlay]) {
+                        items[highlightedIndexOverlay].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.typeahead-container')) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function updateHighlightOverlay(items) {
+            items.forEach((item, idx) => {
+                item.classList.toggle('highlighted', idx === highlightedIndexOverlay);
+            });
+            if (highlightedIndexOverlay >= 0 && items[highlightedIndexOverlay]) {
+                items[highlightedIndexOverlay].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function showRouteDropdownOverlay(filter) {
+            const dropdown = document.getElementById('routeDropdownOverlay');
+            const filterLower = filter.toLowerCase();
+
+            const filtered = allRoutesOverlay.filter(route =>
+                route.name.toLowerCase().includes(filterLower) ||
+                (route.country_name && route.country_name.toLowerCase().includes(filterLower))
+            );
+
+            if (filtered.length === 0) {
+                dropdown.innerHTML = '<div class="typeahead-item" style="color: #999;">' + i18n.t('routes.noRoutesFound') + '</div>';
+            } else {
+                dropdown.innerHTML = filtered.map(route => `
+                    <div class="typeahead-item" data-id="${route.id}" data-name="${route.name}">
+                        <div class="route-name">${route.name}</div>
+                        ${route.country_name ? `<div class="country-name">${route.country_name}</div>` : ''}
+                    </div>
+                `).join('');
+
+                dropdown.querySelectorAll('.typeahead-item[data-id]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const name = this.dataset.name;
+                        document.getElementById('routeInputOverlay').value = name;
+                        document.getElementById('routeSelectOverlay').value = id;
+                        dropdown.style.display = 'none';
+                        handleRouteChangeOverlay();
+                    });
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        // Handle route selection - load trains for this route (only those with coordinates)
+        async function handleRouteChangeOverlay() {
+            const routeId = document.getElementById('routeSelectOverlay').value;
+            const trainSelect = document.getElementById('trainSelectOverlay');
+            const timetableSelect = document.getElementById('timetableSelectOverlay');
+            const loadBtn = document.getElementById('loadRouteBtnOverlay');
+
+            trainSelect.innerHTML = '<option value="">' + t('record.selectRouteFirst', '-- Select a route first --') + '</option>';
+            trainSelect.disabled = true;
+            timetableSelect.innerHTML = '<option value="">' + t('record.selectTimetable', '-- Select a timetable --') + '</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!routeId) return;
+
+            try {
+                const response = await fetch(`/api/routes/${routeId}/trains-with-coordinates`);
+                const trains = await response.json();
+
+                if (trains.length > 0) {
+                    trainSelect.disabled = false;
+                    trains.forEach(train => {
+                        const option = document.createElement('option');
+                        option.value = train.id;
+                        option.textContent = train.name;
+                        trainSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Trains with coordinates loaded:', trains.length);
+            } catch (err) {
+                console.error('Failed to load trains:', err);
+            }
+        }
+
+        // Handle train selection - load timetables for this route+train
+        async function handleTrainChangeOverlay() {
+            const routeId = document.getElementById('routeSelectOverlay').value;
+            const trainId = document.getElementById('trainSelectOverlay').value;
+            const timetableSelect = document.getElementById('timetableSelectOverlay');
+            const loadBtn = document.getElementById('loadRouteBtnOverlay');
+
+            timetableSelect.innerHTML = '<option value="">' + t('record.selectTimetable', '-- Select a timetable --') + '</option>';
+            timetableSelect.disabled = true;
+            loadBtn.disabled = true;
+
+            if (!trainId) return;
+
+            try {
+                const response = await fetch(`/api/timetables?route_id=${routeId}&train_id=${trainId}`);
+                const timetables = await response.json();
+
+                // Show all timetables, even those without coordinates
+                if (timetables.length > 0) {
+                    timetableSelect.disabled = false;
+                    timetables.forEach(tt => {
+                        const option = document.createElement('option');
+                        option.value = tt.id;
+                        option.textContent = tt.coordinate_count > 0
+                            ? `${tt.service_name} (${tt.coordinate_count} ${i18n.t('hud.pts')})`
+                            : `${tt.service_name} (${i18n.t('hud.noCoords')})`;
+                        timetableSelect.appendChild(option);
+                    });
+                }
+
+                console.log('Timetables loaded:', timetables.length);
+            } catch (err) {
+                console.error('Failed to load timetables:', err);
+            }
+        }
+
+        // Handle timetable selection - enable load button
+        function handleTimetableChangeOverlay() {
+            const timetableId = document.getElementById('timetableSelectOverlay').value;
+            const loadBtn = document.getElementById('loadRouteBtnOverlay');
+
+            loadBtn.disabled = !timetableId;
+            console.log('Selected timetable:', timetableId);
+        }
+
+        // Load selected timetable data from database
+        async function loadSelectedTimetableOverlay() {
+            const timetableId = document.getElementById('timetableSelectOverlay').value;
+            const statusMessage = document.getElementById('statusMessageOverlay');
+
+            if (!timetableId) return;
+
+            statusMessage.textContent = i18n.t('common.loading');
+            statusMessage.className = 'status-message';
+
+            try {
+                const response = await fetch(`/api/map/route-data/${timetableId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                console.log('Route data loaded:', data.routeName);
+
+                // Send to server to set as active route
+                const uploadRes = await fetch('/api/upload-route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: `db_timetable_${timetableId}.json`,
+                        routeData: data
+                    })
+                });
+
+                const result = await uploadRes.json();
+                if (!result.success) {
+                    console.warn('Failed to set route on server:', result.error);
+                }
+
+                // Store in localStorage
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                localStorage.setItem('customRouteFilename', data.routeName);
+
+                // Update UI
+                updateLoadedStateOverlay(data.routeName);
+
+                statusMessage.textContent = i18n.t('hud.timetableLoaded');
+                statusMessage.className = 'status-message success';
+
+                // Load timetable items for station selector
+                await loadTimetableItems();
+
+                // Auto-close overlay after successful load
+                setTimeout(function() {
+                    hideLoadOverlay();
+                }, 1000);
+
+            } catch (err) {
+                console.error('Failed to load timetable:', err);
+                statusMessage.textContent = i18n.t('hud.toastError') + err.message;
+                statusMessage.className = 'status-message error';
+            }
+        }
+
+        // Clear loaded route
+        async function clearLoadedRouteOverlay() {
+            const statusMessage = document.getElementById('statusMessageOverlay');
+
+            try {
+                await fetch('/api/clear-route', { method: 'POST' });
+
+                localStorage.removeItem('customRoute');
+                localStorage.removeItem('customRouteFilename');
+
+                document.getElementById('loadedInfoOverlay').style.display = 'none';
+                document.getElementById('clearRouteBtnOverlay').style.display = 'none';
+
+                // Reset dropdowns
+                document.getElementById('routeInputOverlay').value = '';
+                document.getElementById('routeSelectOverlay').value = '';
+                document.getElementById('trainSelectOverlay').innerHTML = '<option value="">' + t('record.selectRouteFirst', '-- Select a route first --') + '</option>';
+                document.getElementById('trainSelectOverlay').disabled = true;
+                document.getElementById('timetableSelectOverlay').innerHTML = '<option value="">' + t('record.selectTimetable', '-- Select a timetable --') + '</option>';
+                document.getElementById('timetableSelectOverlay').disabled = true;
+                document.getElementById('loadRouteBtnOverlay').disabled = true;
+
+                // Clear cached timetable items
+                cachedTimetableItems = [];
+                selectedStationIndex = 0;
+                stationScrollOffset = 0;
+                redrawButtons();
+
+                statusMessage.textContent = t('hud.routeCleared', 'Route cleared.');
+                statusMessage.className = 'status-message';
+
+            } catch (err) {
+                console.error('Failed to clear route:', err);
+                statusMessage.textContent = i18n.t('hud.toastError') + err.message;
+                statusMessage.className = 'status-message error';
+            }
+        }
+
+        // Update UI to show loaded state
+        function updateLoadedStateOverlay(routeName) {
+            document.getElementById('loadedInfoOverlay').style.display = 'block';
+            document.getElementById('loadedRouteNameOverlay').textContent = routeName;
+            document.getElementById('clearRouteBtnOverlay').style.display = 'block';
+        }
+
+        // Check for existing loaded route
+        async function checkExistingRouteOverlay() {
+            try {
+                // Check server for currently loaded route
+                const response = await fetch('/route-data');
+                const serverData = await response.json();
+
+                if (serverData && serverData.routeName && !serverData.error) {
+                    // Server has a route loaded - use that
+                    updateLoadedStateOverlay(serverData.routeName);
+                    return;
+                }
+            } catch (err) {
+                console.log('No route loaded on server');
+            }
+
+            // Fall back to localStorage
+            const customRouteFilename = localStorage.getItem('customRouteFilename');
+
+            if (customRouteFilename) {
+                updateLoadedStateOverlay(customRouteFilename);
+            }
+        }
+
+        // =============================================
+        // Timetable Station Selector (Canvas-based)
+        // =============================================
+
+        // Latest known vehicle count for the player's consist; used by
+        // applyDynamicStopCoords to pick the matching car_stop_sign per
+        // platform. Initially sourced from /api/timetable-items (imported
+        // formation's car_count); /stream's vehicleCount overrides when a
+        // live TSW subscription for consist length is wired.
+        var currentVehicleCount = 0;
+
+        function applyDynamicStopCoords() {
+            if (!cachedTimetableItems || !cachedTimetableItems.length) return;
+            // Only the FIRST WAIT FOR SERVICE is the spawn (server set
+            // its coords to path[0]); later WAIT FOR SERVICE rows are
+            // mid-route train moves and need the normal sign pick.
+            var seenFirstWaitForService = false;
+            cachedTimetableItems.forEach(function (item) {
+                if (item.action === 'WAIT FOR SERVICE' && !seenFirstWaitForService) {
+                    seenFirstWaitForService = true;
+                    return;
+                }
+                var signs = item.car_stop_signs;
+                if (!signs || !signs.length) return;
+                // Snug-fit picker — exact match > next-larger > max=0 generic.
+                // See desktop.html for the rationale.
+                var pick = null;
+                var bestScore = Infinity;
+                for (var i = 0; i < signs.length; i++) {
+                    var max = signs[i].max_rail_vehicles;
+                    var score;
+                    if (max === currentVehicleCount) score = 0;
+                    else if (max > currentVehicleCount) score = max - currentVehicleCount;
+                    else if (max === 0)                 score = 99999;
+                    else                                score = 99999 + (currentVehicleCount - max);
+                    if (score < bestScore) {
+                        bestScore = score;
+                        pick = signs[i];
+                    }
+                }
+                if (pick) {
+                    item.latitude = pick.latitude;
+                    item.longitude = pick.longitude;
+                }
+            });
+        }
+
+        // Load timetable items once (called on page load and after timetable selection)
+        async function loadTimetableItems() {
+            try {
+                const response = await fetch('/api/timetable-items');
+                const data = await response.json();
+
+                if (data.items && data.items.length > 0) {
+                    // Cache items for canvas drawing
+                    cachedTimetableItems = data.items;
+                    currentVehicleCount = Number(data.vehicleCount) || 0;
+                    applyDynamicStopCoords();
+
+                    // currentIndex is the "arrived at" index, so target is currentIndex + 1
+                    const targetIndex = Math.max(0, data.currentIndex + 1);
+                    selectedStationIndex = Math.min(targetIndex, cachedTimetableItems.length - 1);
+
+                    // Adjust scroll to show selected station
+                    if (selectedStationIndex >= 5) {
+                        stationScrollOffset = selectedStationIndex - 2;
+                    } else {
+                        stationScrollOffset = 0;
+                    }
+
+                    console.log('Timetable items loaded:', cachedTimetableItems.length, 'stations, target:', selectedStationIndex);
+                } else {
+                    cachedTimetableItems = [];
+                    selectedStationIndex = 0;
+                    stationScrollOffset = 0;
+                }
+
+                // Trigger redraw
+                redrawButtons();
+            } catch (err) {
+                console.error('Failed to load timetable items:', err);
+            }
+        }
+
+        // Translation helper function
+        function t(key, fallback) {
+            return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
+        }
+
+        // Auto-load timetable from query param (e.g., /tablet?timetable=2543)
+        async function autoLoadTimetable() {
+            const params = new URLSearchParams(window.location.search);
+            const timetableId = params.get('timetable');
+            if (!timetableId) return;
+
+            try {
+                const response = await fetch(`/api/map/route-data/${timetableId}`);
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                const uploadRes = await fetch('/api/upload-route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: `db_timetable_${timetableId}.json`,
+                        routeData: data
+                    })
+                });
+
+                const result = await uploadRes.json();
+                if (!result.success) {
+                    console.warn('Failed to set route on server:', result.error);
+                }
+
+                localStorage.setItem('customRoute', JSON.stringify(data));
+                localStorage.setItem('customRouteFilename', data.routeName);
+                updateLoadedStateOverlay(data.routeName);
+                await loadTimetableItems();
+                console.log('Auto-loaded timetable:', data.routeName);
+            } catch (err) {
+                console.error('Failed to auto-load timetable:', err);
+            }
+        }
+
+        // Load timetable items once on page load
+        loadTimetableItems();
+        autoLoadTimetable();
+
+        // Initialize i18n
+        if (typeof i18n !== 'undefined' && i18n.init) {
+            i18n.init();
+        }
+    </script>
+</body>
+</html>

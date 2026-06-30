@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Extraction</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    h1 { margin: 0 0 12px 0; }
+    h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .panel {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 18px;
+      margin-bottom: 14px; max-width: 1200px;
+    }
+    .panel .head {
+      display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
+    }
+    .panel .head .slice { color: var(--muted); font-size: 0.78rem; font-weight: 500; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .grow { flex: 1; min-width: 220px; }
+    input[type="text"], select {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 7px 9px; font-size: 0.9rem;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+    button {
+      background: var(--bg3); color: var(--text); border: 1px solid var(--border);
+      border-radius: 5px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #061018; border-color: var(--accent); font-weight: 700; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    button:hover:not(:disabled) { border-color: var(--accent); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      background: var(--bg3); color: var(--accent); padding: 8px 10px;
+      text-align: left; font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    .pill {
+      display: inline-block; padding: 1px 8px; border-radius: 999px;
+      background: var(--bg3); color: var(--muted); font-size: 0.7rem;
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .pill.flat     { background: rgba( 95,211,122,0.15); color: var(--good); }
+    .pill.nested   { background: rgba(255,178, 77,0.15); color: var(--warn); }
+    .pill.coredata { background: rgba(120,170,255,0.15); color: var(--accent); }
+    .pill.ok       { background: rgba( 95,211,122,0.15); color: var(--good); }
+    .pill.miss     { background: rgba(229, 82, 82,0.15); color: var(--bad); }
+
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; color: var(--muted); }
+    .flash { font-size: 0.85rem; min-height: 1.2em; }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+    .flash.warn { color: var(--warn); }
+    pre.result {
+      margin: 10px 0 0 0; padding: 10px;
+      background: var(--bg3); border-radius: 6px;
+      font-size: 0.76rem; max-height: 260px; overflow: auto;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .status-line {
+      font-size: 0.82rem; font-family: ui-monospace, monospace;
+      margin-bottom: 10px; line-height: 1.6;
+    }
+
+    /* Settings rows — inline label + input + Save button. */
+    .settings-row {
+      display: grid;
+      grid-template-columns: 160px 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .settings-row label { font-size: 0.85rem; color: var(--muted); }
+    .settings-row input[type=text] {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 9px; font-size: 0.9rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    /* ---- Nuke button + hazard styling ---- */
+    .panel.danger {
+      border-color: rgba(229, 82, 82, 0.4);
+      background: linear-gradient(180deg, rgba(229, 82, 82, 0.06), var(--bg2));
+    }
+    .nuke-btn {
+      background: linear-gradient(180deg, #ff6b6b, #c92a2a);
+      color: #fff; border: 1px solid #c92a2a;
+      font-weight: 800; letter-spacing: 0.6px;
+      padding: 8px 16px; text-transform: uppercase; font-size: 0.82rem;
+    }
+    .nuke-btn:hover:not(:disabled) {
+      background: linear-gradient(180deg, #ff8585, #d83434);
+      border-color: #ff6b6b;
+    }
+
+    /* Modal overlay + dialog */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.75); z-index: 9999;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--bg2); border: 1px solid rgba(229, 82, 82, 0.5);
+      border-radius: 10px; padding: 22px 24px;
+      max-width: 560px; width: 90%;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    }
+    .modal h2 { color: var(--bad); margin: 0 0 12px 0; border: 0; padding: 0; }
+    .modal p { margin: 8px 0; line-height: 1.5; }
+    .modal .kept-list, .modal pre {
+      background: var(--bg3); padding: 8px 10px; border-radius: 4px;
+      font-family: ui-monospace, monospace; font-size: 0.78rem;
+      max-height: 180px; overflow: auto;
+    }
+    .modal label.confirm-label { display: block; margin: 14px 0 4px; font-size: 0.85rem; color: var(--muted); }
+    .modal input.confirm-input {
+      width: 100%; background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 7px 9px; font-size: 0.9rem;
+    }
+    .modal .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+    .modal .actions .cancel-btn { background: var(--bg3); color: var(--text); border: 1px solid var(--border); padding: 7px 16px; }
+    .modal .actions .confirm-btn {
+      background: var(--bg3); color: var(--muted);
+      border: 1px solid var(--border); padding: 7px 16px;
+      cursor: not-allowed;
+    }
+    .modal .actions .confirm-btn.armed {
+      background: linear-gradient(180deg, #ff6b6b, #c92a2a);
+      color: #fff; border-color: #c92a2a;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 data-i18n="shell.extraction.heading">Extraction</h1>
+      <p class="muted" style="max-width: 1200px;" data-i18n="shell.extraction.intro">
+        Native pak → uasset → DB pipeline. No terminal, no separate hud-go server.
+      </p>
+
+      <!-- Load my DLCs — one-click "scan + extract every pak" button.
+           Same as hud-go's btnLoadAllDLCs: ignores any per-pak
+           completed-marker, re-extracts EVERY discovered pak in one
+           go, surfaces a live tally + per-pak status. -->
+      <div class="panel" style="border-color: rgba(46, 174, 119, 0.5);">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0;" data-i18n="extractor.loadMyDLCs">Load my DLCs</h2>
+          <span class="slice" data-i18n="shell.extraction.loadAllSlice">one-click: scan + extract every pak</span>
+        </div>
+        <p class="muted" style="margin: 0 0 10px 0; font-size: 0.82rem; line-height: 1.5;" data-i18n="shell.extraction.loadAllDesc">
+          Scans your TSW6 install, extracts every route + train DLC, and writes them straight into
+          the catalog + per-route zip in one step. Each pak takes 5&ndash;30 s; a full library is
+          5&ndash;30 minutes total.
+        </p>
+        <div class="row">
+          <button id="loadAllBtn" class="primary" style="font-size: 0.95rem; padding: 10px 22px; font-weight: 700;" data-i18n="extractor.loadMyDLCs">Load my DLCs</button>
+          <label style="font-size: 0.82rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px;">
+            <input id="loadAllForce" type="checkbox"> <span data-i18n="shell.extraction.reExtractCompleted">Re-extract paks already marked completed</span>
+          </label>
+          <span id="loadAllStatus" class="muted" style="font-size: 0.85rem;"></span>
+          <span id="loadAllFlash" class="flash"></span>
+        </div>
+        <div id="loadAllLog" class="result" style="display: none; margin-top: 10px; max-height: 240px; overflow: auto; font-size: 0.78rem; line-height: 1.45;"></div>
+      </div>
+
+      <!-- Settings (TSW install path + output / temp dirs). Mirrors
+           hud-go's extractor Settings card so the user doesn't have to
+           leave the Extraction tab to fix a wrong path. -->
+      <div class="panel">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0;" data-i18n="extractor.settings">Settings</h2>
+          <span class="slice" data-i18n="shell.extraction.settingsSlice">paths the extractor uses</span>
+        </div>
+        <div class="settings-row">
+          <label for="cfgTswPath" data-i18n="shell.extraction.tswInstallFolder">TSW install folder</label>
+          <input id="cfgTswPath" type="text" placeholder="e.g. D:/SteamLibrary/steamapps/common/Train Sim World 6">
+          <button data-cfg-save="extractorTswPath" data-cfg-from="cfgTswPath" data-i18n="common.save">Save</button>
+          <button data-cfg-detect="cfgTswPath" title="Search common Steam library locations" data-i18n="shell.extraction.autoDetect" data-i18n-title="shell.extraction.autoDetectTitle">Auto-detect</button>
+        </div>
+        <div class="settings-row">
+          <label for="cfgOutputDir" data-i18n="shell.extraction.outputFolder">Output folder</label>
+          <input id="cfgOutputDir" type="text" placeholder="(empty = hud working dir)">
+          <button data-cfg-save="extractorOutputDir" data-cfg-from="cfgOutputDir" data-i18n="common.save">Save</button>
+        </div>
+        <div class="settings-row">
+          <label for="cfgTempDir" data-i18n="shell.extraction.tempFolder">Temp folder</label>
+          <input id="cfgTempDir" type="text" placeholder="(empty = next to hud.exe)">
+          <button data-cfg-save="extractorTempDir" data-cfg-from="cfgTempDir" data-i18n="common.save">Save</button>
+        </div>
+        <div id="cfgFlash" class="flash" style="margin-top: 6px;"></div>
+      </div>
+
+      <!-- Repak health -->
+      <div class="panel dev-only">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0;" data-i18n="shell.extraction.repakHeading">Repak binary</h2>
+          <span class="slice" data-i18n="shell.extraction.repakSlice">pak unpacker</span>
+        </div>
+        <div id="repakStatus" class="status-line muted" data-i18n="shell.extraction.checking">checking…</div>
+        <div class="row">
+          <button id="repakCheckBtn" data-i18n="shell.extraction.recheck">Recheck</button>
+          <span class="flash" id="repakFlash"></span>
+        </div>
+        <div class="muted" style="margin-top: 8px; font-size: 0.78rem; line-height: 1.45;">
+          <span data-i18n="shell.extraction.repakNote1">Bundled</span> <code>repak.exe</code> <span data-i18n="shell.extraction.repakNote2">handles Oodle-compressed TSW6 paks. Drop it into</span>
+          <code>hud/resources/repak.exe</code>, <span data-i18n="shell.extraction.repakNote3">next to</span> <code>hud.exe</code>, <span data-i18n="shell.extraction.repakNote4">or anywhere on PATH.</span>
+          <a href="https://github.com/trumank/repak/releases" target="_blank" rel="noopener" style="color:var(--accent);">github.com/trumank/repak</a>.
+        </div>
+      </div>
+
+      <!-- Pak discovery -->
+      <div class="panel dev-only">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0;" data-i18n="shell.extraction.discoveredHeading">Discovered route paks</h2>
+          <span class="slice" data-i18n="shell.extraction.discoveredSlice">native scan of TSW install dir</span>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+          <button id="scanBtn" class="primary" data-i18n="shell.extraction.scanInstall">Scan TSW install</button>
+          <button id="thumbsBtn" title="Decode train-class thumbnails from every installed pak (incl. loco/scenario content packs that aren't routes), canonical liveries preferred, then re-link each class. Fixes the Train Classes tab images." data-i18n="shell.extraction.refreshImages" data-i18n-title="shell.extraction.refreshImagesTitle">Refresh train-class images</button>
+          <span id="scanFlash" class="flash"></span>
+        </div>
+        <div id="paksWrap" style="display: none;">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="common.name">Name</th>
+                <th data-i18n="shell.extraction.colLayout">Layout</th>
+                <th data-i18n="shell.extraction.colPath">Path</th>
+                <th style="white-space:nowrap;" data-i18n="common.actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="paksBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Parse-a-uasset health -->
+      <div class="panel dev-only">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0;" data-i18n="shell.extraction.parseHeading">Parse a uasset</h2>
+          <span class="slice" data-i18n="shell.extraction.parseSlice">cooked binary walker</span>
+        </div>
+        <p class="muted" style="margin: 0 0 8px 0; font-size: 0.82rem;">
+          <span data-i18n="shell.extraction.parseDesc1">Point at any unpacked</span> <code>*.uasset</code> <span data-i18n="shell.extraction.parseDesc2">and hud picks the matching cooked parser.</span>
+        </p>
+        <div class="row">
+          <div class="grow"><input type="text" id="parsePath" placeholder="e.g. C:\Temp\WCMLSouth_unpack\…\EMKRouteDefinition.uasset"></div>
+          <select id="parseKind">
+            <option value="route">RouteDefinition</option>
+            <option value="rvd">RVD</option>
+            <option value="scenario">ScenarioDefinition</option>
+            <option value="timetable">Timetable</option>
+            <option value="datatrack">DataTrack</option>
+          </select>
+          <button id="parseBtn" class="primary" data-i18n="shell.extraction.parse">Parse</button>
+        </div>
+        <pre id="parseResult" class="result" style="display: none;"></pre>
+      </div>
+
+
+      <!-- Development Tools — dev-only. Mirrors hud-go's dev card on
+           its extractor page: Build Timetable Maps toggle, Auto Import
+           toggle, Rebuild train_classes button. -->
+      <div class="panel dev-only" style="border-color: rgba(229,82,82,0.4);">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0; color: var(--bad);" data-i18n="shell.extraction.devToolsHeading">Development Tools</h2>
+          <span class="slice" data-i18n="shell.extraction.devToolsSlice">dev-mode only</span>
+        </div>
+        <div class="settings-row">
+          <label for="cfgBuildTimetableMaps" data-i18n="shell.extraction.buildTimetableMaps">Build Timetable Maps</label>
+          <span class="muted" style="font-size: 0.82rem;" data-i18n="shell.extraction.buildTimetableMapsDesc">Pre-build per-timetable filtered map features during extract. Slow (30s+ per timetable on big DLCs).</span>
+          <label style="justify-self: start;">
+            <input id="cfgBuildTimetableMaps" type="checkbox" data-cfg-bool="extractorBuildTimetableMaps">
+          </label>
+          <span></span>
+        </div>
+        <div class="settings-row">
+          <label for="cfgAutoImport" data-i18n="shell.extraction.autoImport">Auto Import</label>
+          <span class="muted" style="font-size: 0.82rem;" data-i18n="shell.extraction.autoImportDesc">After each pak extracts, wipe + re-import the route. (Always on for "Load my DLCs".)</span>
+          <label style="justify-self: start;">
+            <input id="cfgAutoImport" type="checkbox" data-cfg-bool="extractorAutoImport">
+          </label>
+          <span></span>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <button id="rebuildClassesBtn" data-i18n="shell.extraction.rebuildClasses">Rebuild train_classes from RVDs</button>
+          <span id="rebuildClassesFlash" class="flash"></span>
+        </div>
+        <pre id="rebuildClassesResult" class="result" style="display: none; margin-top: 8px;"></pre>
+      </div>
+
+      <!-- Nuke DB — dev-only -->
+      <div class="panel danger dev-only">
+        <div class="head">
+          <h2 style="border:0; padding:0; margin:0; color: var(--bad);" data-i18n="shell.extraction.nukeHeading">☢ Nuke DB</h2>
+          <span class="slice" data-i18n="shell.extraction.nukeSlice">power-user wipe (dev mode only)</span>
+        </div>
+        <p class="muted" style="margin: 0 0 10px 0; font-size: 0.82rem; line-height: 1.5;">
+          <span data-i18n="shell.extraction.nukeDesc1">Wipes</span> <strong data-i18n="shell.extraction.nukeEveryUserTable">every user table</strong> <span data-i18n="shell.extraction.nukeDesc2">except the curated seeds</span>
+          (<code>countries</code>, <code>weather_presets</code>, <code>timetable_actions</code>) <span data-i18n="shell.extraction.nukeDesc3">so you
+          can re-extract from scratch. Schema stays intact, autoincrement counters reset, and the
+          file is</span> <code>VACUUM</code><span data-i18n="shell.extraction.nukeDesc4">ed so it actually shrinks. Requires typing</span>
+          <code>nuke</code> <span data-i18n="shell.extraction.nukeDesc5">to confirm.</span>
+        </p>
+        <div class="row">
+          <button id="nukeOpenBtn" class="nuke-btn" data-i18n="shell.extraction.nukeHeading">☢ Nuke DB</button>
+          <span id="nukeFlash" class="flash"></span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Confirm modal -->
+  <div id="nukeOverlay" class="modal-overlay" onclick="if(event.target===this)closeNuke()">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h2 data-i18n="shell.extraction.modalTitle">☢ Wipe the entire user catalog?</h2>
+      <p data-i18n="shell.extraction.modalBody">Every imported route, timetable, formation, train class, coordinate set, pak catalog
+        entry — gone. This cannot be undone.</p>
+      <p><span data-i18n="shell.extraction.modalKeptIntro1">The following lookup tables will be</span> <strong data-i18n="shell.extraction.modalKept">kept</strong> <span data-i18n="shell.extraction.modalKeptIntro2">(schema-seeded, not
+        user-imported):</span></p>
+      <div class="kept-list">countries · weather_presets · timetable_actions</div>
+      <label class="confirm-label" for="nukeConfirmInput"><span data-i18n="shell.extraction.modalConfirmType">Type</span> <code>nuke</code> <span data-i18n="shell.extraction.modalConfirmToConfirm">to confirm:</span></label>
+      <input type="text" id="nukeConfirmInput" class="confirm-input" autocomplete="off">
+      <div class="actions">
+        <button class="cancel-btn" id="nukeCancelBtn" data-i18n="common.cancel">Cancel</button>
+        <button class="confirm-btn" id="nukeConfirmBtn" data-i18n="shell.extraction.modalWipeIt">☢ Wipe it</button>
+      </div>
+      <pre id="nukeResult" style="display:none; margin-top: 12px;"></pre>
+    </div>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import './shared/dev.js';
+    renderNav('extraction');
+
+    const { invoke } = window.__TAURI__.core;
+    const { listen } = window.__TAURI__.event;
+
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g,
+      (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const fmtBytes = (n) => {
+      if (!n) return '0 B';
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+      if (n < 1024 * 1024 * 1024) return (n / (1024 * 1024)).toFixed(1) + ' MB';
+      return (n / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    };
+
+    // ---- Repak status ----------------------------------------------------
+    const repakStatus = document.getElementById('repakStatus');
+    const repakBtn    = document.getElementById('repakCheckBtn');
+
+    async function refreshRepak() {
+      repakStatus.textContent = t('shell.extraction.checking', 'checking…');
+      try {
+        const info = await invoke('extractor_find_repak');
+        repakStatus.innerHTML =
+          `<span class="pill ok">${esc(t('shell.extraction.found', 'found'))}</span> ${esc(t('shell.extraction.source', 'source'))}: <strong>${esc(info.source)}</strong><br>` +
+          `<span class="mono">${esc(info.path)}</span>`;
+      } catch (err) {
+        repakStatus.innerHTML = `<span class="pill miss">${esc(t('shell.extraction.missing', 'missing'))}</span> ${esc(String(err))}`;
+      }
+    }
+    repakBtn.addEventListener('click', refreshRepak);
+    // initial readout fired by initPageI18n() once the locale is ready
+
+    // ---- Pak discovery ---------------------------------------------------
+    const scanBtn   = document.getElementById('scanBtn');
+    const scanFlash = document.getElementById('scanFlash');
+    const paksWrap  = document.getElementById('paksWrap');
+    const paksBody  = document.getElementById('paksBody');
+
+    async function scan() {
+      scanBtn.disabled = true;
+      scanFlash.textContent = t('shell.extraction.scanning', 'scanning…');
+      scanFlash.className = 'flash';
+      try {
+        const rows = await invoke('extractor_list_routes');
+        if (!rows || rows.length === 0) {
+          paksWrap.style.display = 'none';
+          scanFlash.textContent = t('shell.extraction.noPaksFound', 'no paks found — check Settings → Extractor → TSW install path');
+          scanFlash.className = 'flash warn';
+        } else {
+          // Pre-fetch which paks are marked completed so we can render
+          // a badge + the right Mark/Unmark label per row.
+          let completedSet = new Set();
+          try { completedSet = new Set(await invoke('extractor_completed_list')); } catch (_) {}
+          // And check zip-on-disk per pak so the Delete zip button only
+          // shows when there's actually one to delete.
+          const zipState = await Promise.all(rows.map(async (r) => {
+            const dn = r.display_name || r.name;
+            try { return await invoke('extractor_zip_exists', { args: { display_name: dn } }); }
+            catch (_) { return false; }
+          }));
+
+          paksBody.innerHTML = rows.map((r, i) => {
+            // Resolved human DLC name (hud-go style); codename is the
+            // stable key for completed-marks, shown as a subtitle.
+            const dn       = r.display_name || r.name;
+            const isDone   = completedSet.has(r.name);
+            const hasZip   = zipState[i];
+            const doneBadge = isDone ? ` <span class="pill ok" title="${esc(t('shell.extraction.markedCompletedTitle', 'Marked completed'))}">✓ ${esc(t('extractor.pillDone', 'done'))}</span>` : '';
+            const zipBadge  = hasZip ? ` <span class="pill" title="${esc(t('shell.extraction.zipOnDiskTitle', 'Zip on disk'))}">zip</span>` : '';
+            const country   = r.country_code ? ` <span class="pill" title="${esc(t('shell.extraction.countryTitle', 'Country'))}">${esc(r.country_code)}</span>` : '';
+            const sub       = (dn !== r.name)
+              ? `<div class="mono" style="opacity:.55; font-size:.82em; font-weight:normal;">${esc(r.name)}</div>`
+              : '';
+            const markBtn   = isDone
+              ? `<button data-act="unmark" data-name="${esc(r.name)}" title="${esc(t('shell.extraction.unmarkTitle', 'Remove the completed mark'))}">${esc(t('extractor.unmark', 'Unmark'))}</button>`
+              : `<button data-act="mark"   data-name="${esc(r.name)}" title="${esc(t('shell.extraction.markTitle', 'Mark this pak as completed'))}">${esc(t('shell.extraction.markBtn', 'Mark ✓'))}</button>`;
+            // Zip ops key on the DISPLAY name (zips are named after it).
+            const deleteZipBtn = hasZip
+              ? `<button data-act="delzip" data-name="${esc(dn)}" title="${esc(t('shell.extraction.deleteZipTitle', 'Delete the per-route zip on disk'))}">${esc(t('extractor.deleteZipTitle', 'Delete zip'))}</button>`
+              : '';
+            return `<tr data-pak="${esc(r.pak_path)}">
+              <td><strong>${esc(dn)}</strong>${country}${doneBadge}${zipBadge}${sub}</td>
+              <td><span class="pill ${esc(r.layout)}">${esc(r.layout)}</span></td>
+              <td class="mono">${esc(r.pak_path)}</td>
+              <td style="white-space:nowrap;">
+                <button data-act="extract" data-path="${esc(r.pak_path)}" data-name="${esc(r.name)}" class="primary">${esc(t('extractor.extractedBtn', 'Extract'))}</button>
+                ${markBtn}
+                ${deleteZipBtn}
+                <button data-act="copy" data-path="${esc(r.pak_path)}">${esc(t('shell.extraction.copyPath', 'Copy path'))}</button>
+              </td>
+            </tr>
+            <tr class="result-row" data-result-for="${esc(r.pak_path)}" style="display:none;">
+              <td colspan="4" style="padding: 0 12px 10px;">
+                <pre class="result" style="display:block; max-height: 320px;"></pre>
+              </td>
+            </tr>`;
+          }).join('');
+          paksWrap.style.display = 'block';
+          scanFlash.textContent = `${t('shell.extraction.foundLabel', 'found')} ${rows.length} pak${rows.length === 1 ? '' : 's'}`;
+          scanFlash.className = 'flash ok';
+        }
+      } catch (err) {
+        paksWrap.style.display = 'none';
+        scanFlash.textContent = String(err);
+        scanFlash.className = 'flash err';
+      } finally {
+        scanBtn.disabled = false;
+      }
+    }
+    scanBtn.addEventListener('click', scan);
+
+    // Decode all paks' train-class thumbnails into the shared cache +
+    // re-resolve associations (hud-go catalog scan). One-off; fixes the
+    // Train Classes tab without re-extracting routes.
+    const thumbsBtn = document.getElementById('thumbsBtn');
+    thumbsBtn.addEventListener('click', async () => {
+      thumbsBtn.disabled = true;
+      const orig = thumbsBtn.textContent;
+      thumbsBtn.textContent = t('shell.extraction.decoding', 'Decoding…');
+      scanFlash.textContent = t('shell.extraction.decodingThumbs', 'decoding train-class thumbnails across all paks — this takes a minute…');
+      scanFlash.className = 'flash';
+      try {
+        const n = await invoke('extractor_rebuild_thumbnails');
+        scanFlash.textContent = `${t('shell.extraction.decodedLabel', 'decoded')} ${n} ${t('shell.extraction.thumbsRelinked', 'thumbnails and re-linked train classes')}`;
+        scanFlash.className = 'flash ok';
+      } catch (e) {
+        scanFlash.textContent = t('shell.extraction.thumbRefreshFailed', 'thumbnail refresh failed: ') + String(e);
+        scanFlash.className = 'flash err';
+      } finally {
+        thumbsBtn.disabled = false;
+        thumbsBtn.textContent = orig;
+      }
+    });
+
+    paksBody.addEventListener('click', async (ev) => {
+      const btn = ev.target.closest('button[data-act]');
+      if (!btn) return;
+      const pakPath = btn.dataset.path;
+
+      if (btn.dataset.act === 'copy') {
+        try {
+          await navigator.clipboard.writeText(pakPath);
+          btn.textContent = t('shell.extraction.copied', 'Copied');
+          setTimeout(() => { btn.textContent = t('shell.extraction.copyPath', 'Copy path'); }, 1200);
+        } catch (e) { alert(t('shell.extraction.clipboardFailed', 'clipboard write failed: ') + e); }
+        return;
+      }
+
+      if (btn.dataset.act === 'mark' || btn.dataset.act === 'unmark') {
+        const cmd = btn.dataset.act === 'mark' ? 'extractor_mark_completed' : 'extractor_unmark_completed';
+        btn.disabled = true;
+        try {
+          await invoke(cmd, { codename: btn.dataset.name });
+          scan(); // re-render to flip the badge + button label
+        } catch (e) { alert(t('shell.extraction.failedColon', 'failed: ') + e); btn.disabled = false; }
+        return;
+      }
+
+      if (btn.dataset.act === 'delzip') {
+        if (!confirm(`${t('shell.extraction.confirmDeleteZip', 'Delete the on-disk zip for')} ${btn.dataset.name}?`)) return;
+        btn.disabled = true;
+        try {
+          const deleted = await invoke('extractor_delete_zip', { args: { display_name: btn.dataset.name } });
+          if (deleted) { scan(); } else { alert(t('shell.extraction.noZipOnDisk', 'no zip on disk for that pak')); btn.disabled = false; }
+        } catch (e) { alert(t('shell.extraction.failedColon', 'failed: ') + e); btn.disabled = false; }
+        return;
+      }
+
+      if (btn.dataset.act === 'extract') {
+        const resultRow = paksBody.querySelector(`tr.result-row[data-result-for="${cssEsc(pakPath)}"]`);
+        const pre = resultRow.querySelector('pre');
+        const wasOpen = resultRow.style.display !== 'none';
+        // Toggle-close on second click while a run is NOT in progress.
+        if (wasOpen && !btn.disabled) { resultRow.style.display = 'none'; return; }
+        resultRow.style.display = 'table-row';
+        pre.style.color = '';
+        pre.textContent = t('shell.extraction.unpackingParsing', 'unpacking + parsing… this can take 5-30 s on a big route pak');
+        btn.disabled = true;
+        const originalLabel = btn.textContent;
+        btn.textContent = t('shell.extraction.extracting', 'Extracting…');
+        try {
+          const counts = await invoke('extractor_run_pak', { args: { pak_path: pakPath } });
+          if (counts.skipped) {
+            pre.style.color = 'var(--warn)';
+            pre.textContent = t('shell.extraction.skippedDash', 'skipped — ') + counts.skipped;
+            btn.textContent = t('shell.extraction.btnSkipped', 'Skipped');
+            if (btn.dataset.name) {
+              try { await invoke('extractor_mark_completed', { codename: btn.dataset.name }); }
+              catch (_) {}
+            }
+            setTimeout(() => { btn.textContent = originalLabel; scan(); }, 1800);
+            return;
+          }
+          const errors = counts.errors || [];
+          pre.style.color = errors.length ? 'var(--warn)' : '';
+          pre.textContent = JSON.stringify(counts, null, 2);
+          btn.textContent = errors.length ? t('shell.extraction.doneWithWarnings', 'Done (with warnings)') : t('shell.extraction.extracted', 'Extracted');
+          // Auto-mark completed on a clean extract (hud-go's behavior
+          // when auto_import=true). Best-effort.
+          if (errors.length === 0 && btn.dataset.name) {
+            try { await invoke('extractor_mark_completed', { codename: btn.dataset.name }); }
+            catch (_) {}
+          }
+          setTimeout(() => { btn.textContent = originalLabel; scan(); }, 1800);
+        } catch (err) {
+          pre.style.color = 'var(--bad)';
+          pre.textContent = t('shell.extraction.extractionFailed', 'extraction failed: ') + String(err);
+          btn.textContent = t('shell.extraction.btnFailed', 'Failed');
+          setTimeout(() => { btn.textContent = originalLabel; }, 2400);
+        } finally {
+          btn.disabled = false;
+        }
+      }
+    });
+
+    // CSS.escape polyfill — needed because pak paths contain backslashes
+    // and Windows-style drive letters that we use as selector identifiers.
+    function cssEsc(s) {
+      if (window.CSS && window.CSS.escape) return window.CSS.escape(s);
+      return String(s).replace(/[^a-zA-Z0-9_-]/g, c => '\\' + c);
+    }
+
+    // ---- Parse-a-uasset --------------------------------------------------
+    const parsePath   = document.getElementById('parsePath');
+    const parseKind   = document.getElementById('parseKind');
+    const parseBtn    = document.getElementById('parseBtn');
+    const parseResult = document.getElementById('parseResult');
+
+    parseBtn.addEventListener('click', async () => {
+      const path = parsePath.value.trim();
+      if (!path) { parseResult.style.display = 'none'; return; }
+      parseBtn.disabled = true;
+      parseResult.style.display = 'block';
+      parseResult.textContent = t('shell.extraction.parsing', 'parsing…');
+      parseResult.style.color = '';
+      const cmd = {
+        route:     'extractor_parse_route_definition',
+        rvd:       'extractor_parse_rvd',
+        scenario:  'extractor_parse_scenario',
+        timetable: 'extractor_parse_timetable',
+        datatrack: 'extractor_parse_datatrack',
+      }[parseKind.value];
+      try {
+        const payload = parseKind.value === 'timetable'
+          ? { args: { uasset_path: path, route_name: '' } }
+          : { uassetPath: path };
+        const data = await invoke(cmd, payload);
+        parseResult.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        parseResult.textContent = t('shell.extraction.failedColon', 'failed: ') + String(err);
+        parseResult.style.color = 'var(--bad)';
+      } finally {
+        parseBtn.disabled = false;
+      }
+    });
+
+    // (Removed: the legacy "Refresh DB from Go extractor" bridge.)
+    function refreshDbStatus() {} // no-op kept so stray callers don't throw
+
+    // ---- Load my DLCs (bulk extract) -------------------------------------
+    //
+    // Clones hud-go's btnLoadAllDLCs: discover every pak, then extract
+    // them sequentially calling extractor_run_pak per pak. Live tally
+    // + per-pak result line in the log panel so the user can watch
+    // progress without leaving the page.
+    const loadAllBtn    = document.getElementById('loadAllBtn');
+    const loadAllStatus = document.getElementById('loadAllStatus');
+    const loadAllFlash  = document.getElementById('loadAllFlash');
+    const loadAllLog    = document.getElementById('loadAllLog');
+
+    function appendLoadLog(msg, kind) {
+      const div = document.createElement('div');
+      div.textContent = msg;
+      if (kind === 'ok')   div.style.color = 'var(--ok, #2eae77)';
+      if (kind === 'warn') div.style.color = 'var(--warn, #c97f1e)';
+      if (kind === 'err')  div.style.color = 'var(--bad, #c92a2a)';
+      loadAllLog.appendChild(div);
+      // Cap to last 2000 lines so a long run doesn't OOM the page.
+      while (loadAllLog.childElementCount > 2000) loadAllLog.removeChild(loadAllLog.firstChild);
+      loadAllLog.scrollTop = loadAllLog.scrollHeight;
+    }
+
+    // Stream stage-level pipeline progress from the Rust side. Every
+    // pak extraction emits `extractor:log` events as it walks through
+    // unpack → scan → RVD → timetables → DataTrack → cookedmap → zip.
+    // We subscribe once at module load; the visible log lives inside
+    // the Load my DLCs panel and individual Extract buttons (the
+    // single-pak result row toggles visibility but the same log feeds
+    // both).
+    listen('extractor:log', (ev) => {
+      const { kind, msg } = ev.payload || {};
+      if (!msg) return;
+      // Open the log panel automatically if it's still hidden — the
+      // single-pak Extract flow doesn't open it itself.
+      if (loadAllLog.style.display === 'none' || loadAllLog.style.display === '') {
+        loadAllLog.style.display = 'block';
+      }
+      appendLoadLog(msg, kind);
+    });
+
+    loadAllBtn.addEventListener('click', async () => {
+      loadAllBtn.disabled = true;
+      loadAllFlash.textContent = '';
+      loadAllFlash.className = 'flash';
+      loadAllLog.style.display = 'block';
+      loadAllLog.innerHTML = '';
+      loadAllStatus.textContent = t('shell.extraction.discoveringPaks', 'discovering paks…');
+
+      let rows;
+      try {
+        rows = await invoke('extractor_list_routes');
+      } catch (e) {
+        loadAllStatus.textContent = '';
+        loadAllFlash.textContent = t('shell.extraction.discoverFailed', 'discover failed: ') + String(e);
+        loadAllFlash.className = 'flash err';
+        loadAllBtn.disabled = false;
+        return;
+      }
+
+      if (!rows || rows.length === 0) {
+        loadAllStatus.textContent = '';
+        loadAllFlash.textContent = t('shell.extraction.noPaksSetPath', 'no paks found — set the TSW install path above');
+        loadAllFlash.className = 'flash warn';
+        loadAllBtn.disabled = false;
+        return;
+      }
+
+      // Skip paks already marked completed unless the force toggle is on.
+      const force = document.getElementById('loadAllForce').checked;
+      let completedSet = new Set();
+      try { completedSet = new Set(await invoke('extractor_completed_list')); } catch (_) {}
+      const before = rows.length;
+      if (!force) rows = rows.filter((r) => !completedSet.has(r.name));
+      const skipped = before - rows.length;
+
+      if (rows.length === 0) {
+        loadAllStatus.textContent = '';
+        loadAllFlash.textContent  = `${t('shell.extraction.nothingToExtractAll', 'nothing to extract — all')} ${before} ${t('shell.extraction.paksAlreadyCompleted', 'paks already marked completed')}`;
+        loadAllFlash.className    = 'flash warn';
+        loadAllBtn.disabled = false;
+        return;
+      }
+      appendLoadLog(
+        `${t('shell.extraction.discoveredLabel', 'Discovered')} ${before} pak${before === 1 ? '' : 's'}` +
+        (skipped > 0 ? ` (${t('shell.extraction.skippingLabel', 'skipping')} ${skipped} ${t('shell.extraction.alreadyMarkedCompleted', 'already marked completed')})` : '') +
+        `. ${t('shell.extraction.extractingLabel', 'Extracting')} ${rows.length}…`,
+        'ok'
+      );
+
+      const totals = {
+        ok: 0, warn: 0, err: 0, skipped: 0,
+        rvds: 0, timetables: 0,
+        train_classes: 0, services: 0, formations: 0,
+        car_stop_signs: 0, track_markers: 0,
+        timetable_paths: 0, route_locations: 0,
+        thumbnails: 0, zips: 0,
+      };
+
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        loadAllStatus.textContent = `[${i + 1}/${rows.length}] ${r.name}…`;
+        try {
+          const counts = await invoke('extractor_run_pak', { args: { pak_path: r.pak_path } });
+          // A shared/content pak with nothing extractable is a SKIP, not a
+          // failure and not a warning. Report it as such and move on.
+          if (counts.skipped) {
+            totals.skipped++;
+            try { await invoke('extractor_mark_completed', { codename: r.name }); }
+            catch (_) {}
+            appendLoadLog(`[${i + 1}/${rows.length}] ${r.name}: ${t('shell.extraction.skippedDash', 'skipped — ')}${counts.skipped}`, 'warn');
+            continue;
+          }
+          const errCount = (counts.errors || []).length;
+          const kind = errCount === 0 ? 'ok' : 'warn';
+          if (errCount === 0) {
+            totals.ok++;
+            // Mark completed on clean extracts. Best-effort.
+            try { await invoke('extractor_mark_completed', { codename: r.name }); }
+            catch (_) {}
+          } else { totals.warn++; }
+          totals.rvds            += counts.rvds_parsed                  || 0;
+          totals.timetables      += counts.timetables_parsed            || 0;
+          totals.train_classes   += counts.train_classes_written        || 0;
+          totals.services        += counts.services_written             || 0;
+          totals.formations      += counts.formations_written           || 0;
+          totals.car_stop_signs  += counts.car_stop_signs_written       || 0;
+          totals.track_markers   += counts.track_markers_written        || 0;
+          totals.timetable_paths += counts.timetable_paths_written      || 0;
+          totals.route_locations += counts.route_locations_written      || 0;
+          totals.thumbnails      += counts.thumbnails_written           || 0;
+          if (counts.zip) { totals.zips++; }
+
+          const zipBit = counts.zip
+            ? ` zip=${counts.zip.zip_path.split(/[\\/]/).pop()} (${(counts.zip.bytes / 1024 / 1024).toFixed(1)} MB)`
+            : ' zip=skipped';
+          appendLoadLog(
+            `[${i + 1}/${rows.length}] ${r.name}: ${counts.timetables_parsed || 0} TTs · `
+            + `${counts.services_written || 0} svc · ${counts.train_classes_written || 0} cls · `
+            + `${counts.timetable_paths_written || 0} paths · ${counts.thumbnails_written || 0} thumbs · `
+            + `${counts.route_coords_written ? 'rails✓' : 'rails✗'}${zipBit}`
+            + (errCount ? `  (${errCount} warning${errCount === 1 ? '' : 's'})` : ''),
+            kind,
+          );
+        } catch (e) {
+          totals.err++;
+          appendLoadLog(`[${i + 1}/${rows.length}] ${r.name}: ${t('shell.extraction.failedDash', 'FAILED — ')}${String(e)}`, 'err');
+        }
+      }
+
+      // Finalise: one global canonical-first thumbnail rebuild + class
+      // reconcile across EVERY installed pak. Per-pak extraction decodes
+      // thumbnails incrementally and can latch onto a non-canonical livery
+      // that happened to decode first (and content-only packs like Cajon
+      // Pass may not be in the route list at all). This pass re-decodes
+      // canonical liveries over Training-Centre placeholders, re-links
+      // rail_vehicle_class, backfills is_drivable, and re-resolves every
+      // thumbnail — so the Train Classes tab lands on the full set with
+      // the right images without anyone clicking "Refresh".
+      loadAllStatus.textContent = t('shell.extraction.finalisingImages', 'Finalising train-class images…');
+      try {
+        const decoded = await invoke('extractor_rebuild_thumbnails');
+        appendLoadLog(`${t('shell.extraction.finaliseRebuilt', 'finalise: rebuilt train-class images')} (${decoded} ${t('shell.extraction.decodedLabel', 'decoded')})`, 'ok');
+      } catch (e) {
+        appendLoadLog(`${t('shell.extraction.finaliseFailed', 'finalise: image rebuild failed — ')}${String(e)}`, 'warn');
+      }
+
+      loadAllStatus.textContent = '';
+      const summary =
+        `${t('shell.extraction.summaryDone', 'done')} · ${totals.ok} ${t('shell.extraction.summaryOk', 'ok')} · ${totals.warn} ${t('shell.extraction.summaryWithWarnings', 'with warnings')} · `
+        + `${totals.skipped} ${t('shell.extraction.summarySkipped', 'skipped')} · ${totals.err} ${t('shell.extraction.summaryFailed', 'failed')} · `
+        + `${totals.train_classes} ${t('shell.extraction.summaryClasses', 'classes')} · ${totals.services} ${t('shell.extraction.summaryServices', 'services')} · `
+        + `${totals.timetable_paths} ${t('shell.extraction.summaryTimetablePaths', 'timetable paths')} · ${totals.thumbnails} ${t('shell.extraction.summaryThumbnails', 'thumbnails')} · `
+        + `${totals.zips} ${t('shell.extraction.summaryZipsWritten', 'zips written')}`;
+      appendLoadLog(summary, totals.err > 0 ? 'err' : 'ok');
+      loadAllFlash.textContent = summary;
+      loadAllFlash.className = `flash ${totals.err > 0 ? 'err' : 'ok'}`;
+      loadAllBtn.disabled = false;
+      // Refresh DB bridge readout so the size update is visible. Also
+      // re-render the pak table so the new ✓ done badges show up.
+      refreshDbStatus();
+      scan();
+    });
+
+    // ---- Inline Settings (TSW path / output / temp) ----------------------
+    //
+    // Mirrors hud-go's extractor Settings card: type a path, click Save,
+    // we PATCH it into the config without leaving the page. "Auto-detect"
+    // walks Steam libraryfolders.vdf + Epic for "Train Sim World 6".
+    const cfgFlash = document.getElementById('cfgFlash');
+
+    async function loadCfgFields() {
+      try {
+        const cfg = await invoke('get_config');
+        // Config struct is `#[serde(rename_all = "camelCase")]` on the
+        // Rust side, so the JSON Tauri hands us uses camelCase keys.
+        // Reading + writing snake_case here silently no-ops the save
+        // (Rust ignores unknown keys, keeps the old value).
+        document.getElementById('cfgTswPath').value   = cfg.extractorTswPath   || '';
+        document.getElementById('cfgOutputDir').value = cfg.extractorOutputDir || '';
+        document.getElementById('cfgTempDir').value   = cfg.extractorTempDir   || '';
+        const cbMaps = document.getElementById('cfgBuildTimetableMaps');
+        const cbAuto = document.getElementById('cfgAutoImport');
+        if (cbMaps) cbMaps.checked = !!cfg.extractorBuildTimetableMaps;
+        if (cbAuto) cbAuto.checked = !!cfg.extractorAutoImport;
+      } catch (e) { /* leave fields blank; user can still type */ }
+    }
+    loadCfgFields();
+
+    // Boolean toggle save (Build Timetable Maps + Auto Import).
+    document.querySelectorAll('input[data-cfg-bool]').forEach((inp) => {
+      inp.addEventListener('change', async () => {
+        const field = inp.dataset.cfgBool;
+        try {
+          const cfg = await invoke('get_config');
+          cfg[field] = inp.checked;
+          await invoke('set_config', { config: cfg });
+          cfgFlash.textContent = `${field} = ${inp.checked}`;
+          cfgFlash.className = 'flash ok';
+        } catch (e) {
+          cfgFlash.textContent = t('shell.extraction.saveFailed', 'save failed: ') + String(e);
+          cfgFlash.className = 'flash err';
+        }
+      });
+    });
+
+    // Rebuild train_classes from RVDs (dev-tools drift recovery).
+    const rebuildBtn    = document.getElementById('rebuildClassesBtn');
+    const rebuildFlash  = document.getElementById('rebuildClassesFlash');
+    const rebuildResult = document.getElementById('rebuildClassesResult');
+    if (rebuildBtn) {
+      rebuildBtn.addEventListener('click', async () => {
+        rebuildBtn.disabled = true;
+        rebuildFlash.textContent = t('shell.extraction.rebuilding', 'rebuilding…');
+        rebuildFlash.className = 'flash';
+        try {
+          const res = await invoke('extractor_rebuild_train_classes');
+          rebuildResult.style.display = 'block';
+          rebuildResult.textContent = JSON.stringify(res, null, 2);
+          rebuildFlash.textContent =
+            `${t('shell.extraction.rebuildLinked', 'linked')} ${res.linked} · ${t('shell.extraction.rebuildInserted', 'inserted')} ${res.inserted} · ${t('shell.extraction.rebuildBackfilled', 'backfilled')} ${res.backfilled} · `
+            + `${t('shell.extraction.rebuildThumbsFixed', 'thumbs fixed')} ${res.thumbs_fixed} · ${t('shell.extraction.rebuildTotal', 'total')} ${res.total_train_classes} (${res.total_with_rvc} ${t('shell.extraction.rebuildLinkedSuffix', 'linked')})`;
+          rebuildFlash.className = 'flash ok';
+        } catch (e) {
+          rebuildResult.style.display = 'block';
+          rebuildResult.textContent = t('shell.extraction.failedColon', 'failed: ') + String(e);
+          rebuildFlash.textContent = t('shell.extraction.failedWord', 'failed');
+          rebuildFlash.className = 'flash err';
+        } finally {
+          rebuildBtn.disabled = false;
+        }
+      });
+    }
+
+    document.querySelectorAll('button[data-cfg-save]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const field = btn.dataset.cfgSave;
+        const inputId = btn.dataset.cfgFrom;
+        const value = document.getElementById(inputId).value.trim();
+        btn.disabled = true;
+        try {
+          const cfg = await invoke('get_config');
+          cfg[field] = value;
+          await invoke('set_config', { config: cfg });
+          cfgFlash.textContent = `${t('shell.extraction.savedLabel', 'saved')} ${field} = ${value || t('shell.extraction.emptyParen', '(empty)')}`;
+          cfgFlash.className = 'flash ok';
+          // After saving the TSW install path, rerun the pak scan so the
+          // user sees the result immediately.
+          if (field === 'extractorTswPath') { scan(); }
+        } catch (e) {
+          cfgFlash.textContent = t('shell.extraction.saveFailed', 'save failed: ') + String(e);
+          cfgFlash.className = 'flash err';
+        } finally { btn.disabled = false; }
+      });
+    });
+
+    document.querySelectorAll('button[data-cfg-detect]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const inputId = btn.dataset.cfgDetect;
+        const inp = document.getElementById(inputId);
+        btn.disabled = true;
+        const origText = btn.textContent;
+        btn.textContent = t('shell.extraction.searching', 'searching…');
+        try {
+          const found = await invoke('extractor_autodetect_tsw_root');
+          if (found) {
+            inp.value = found;
+            cfgFlash.textContent = `${t('shell.extraction.foundAt', 'found at')} ${found} ${t('shell.extraction.clickSaveToKeep', '— click Save to keep it')}`;
+            cfgFlash.className = 'flash ok';
+          } else {
+            cfgFlash.textContent = t('shell.extraction.noTswInstall', 'no Train Sim World 6 install found in common Steam / Epic locations');
+            cfgFlash.className = 'flash warn';
+          }
+        } catch (e) {
+          cfgFlash.textContent = t('shell.extraction.detectFailed', 'detect failed: ') + String(e);
+          cfgFlash.className = 'flash err';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = origText;
+        }
+      });
+    });
+
+    // ---- Nuke DB ---------------------------------------------------------
+    const nukeOpenBtn    = document.getElementById('nukeOpenBtn');
+    const nukeOverlay    = document.getElementById('nukeOverlay');
+    const nukeCancelBtn  = document.getElementById('nukeCancelBtn');
+    const nukeConfirmBtn = document.getElementById('nukeConfirmBtn');
+    const nukeConfirmInp = document.getElementById('nukeConfirmInput');
+    const nukeResult     = document.getElementById('nukeResult');
+    const nukeFlash      = document.getElementById('nukeFlash');
+
+    function openNuke() {
+      nukeOverlay.classList.add('active');
+      nukeConfirmInp.value = '';
+      nukeResult.style.display = 'none';
+      nukeConfirmBtn.classList.remove('armed');
+      nukeConfirmBtn.disabled = true;
+      setTimeout(() => nukeConfirmInp.focus(), 50);
+    }
+    window.closeNuke = () => {
+      nukeOverlay.classList.remove('active');
+    };
+    nukeOpenBtn.addEventListener('click', openNuke);
+    nukeCancelBtn.addEventListener('click', () => window.closeNuke());
+
+    // Arm the confirm button only when the user types the magic word.
+    nukeConfirmInp.addEventListener('input', () => {
+      const armed = nukeConfirmInp.value.trim().toLowerCase() === 'nuke';
+      nukeConfirmBtn.classList.toggle('armed', armed);
+      nukeConfirmBtn.disabled = !armed;
+    });
+
+    nukeConfirmBtn.addEventListener('click', async () => {
+      if (!nukeConfirmBtn.classList.contains('armed')) return;
+      nukeConfirmBtn.disabled = true;
+      nukeCancelBtn.disabled  = true;
+      nukeFlash.textContent = t('shell.extraction.wiping', 'wiping…');
+      nukeFlash.className = 'flash';
+      try {
+        const res = await invoke('extractor_nuke_db');
+        const wipedRows = Object.entries(res.wiped || {});
+        const totalRows = wipedRows.reduce((s, [, n]) => s + n, 0);
+        const totalTbls = wipedRows.length;
+        nukeResult.style.display = 'block';
+        nukeResult.textContent = JSON.stringify(res, null, 2);
+        if (res.success) {
+          nukeFlash.textContent =
+            `${t('shell.extraction.wipedLabel', 'wiped')} ${totalRows.toLocaleString()} ${t('shell.extraction.rowsAcross', 'rows across')} ${totalTbls} ${t('shell.extraction.tablesKept', 'tables · kept')} ${res.kept.length} ${t('shell.extraction.seedTables', 'seed tables')}`
+            + ` · ${t('shell.extraction.deletedLabel', 'deleted')} ${(res.images_deleted || 0).toLocaleString()} ${t('shell.extraction.imagesLabel', 'images')}`
+            + (res.vacuum_error ? ` · ${t('shell.extraction.vacuumFailed', 'VACUUM failed: ')}${res.vacuum_error}` : '');
+          nukeFlash.className = 'flash ok';
+          // Refresh the DB-bridge status so the local size readout updates.
+          refreshDbStatus();
+        } else {
+          nukeFlash.textContent = `${t('shell.extraction.partialWipe', 'partial wipe — ')}${res.errors.length} ${t('shell.extraction.tableErrors', 'table error(s); see result below')}`;
+          nukeFlash.className = 'flash err';
+        }
+      } catch (err) {
+        nukeResult.style.display = 'block';
+        nukeResult.textContent = t('shell.extraction.nukeFailed', 'nuke failed: ') + String(err);
+        nukeFlash.textContent = t('shell.extraction.failedWord', 'failed');
+        nukeFlash.className = 'flash err';
+      } finally {
+        nukeCancelBtn.disabled = false;
+      }
+    });
+
+    // Await the locale, translate static markup, and re-render the dynamic
+    // readouts (repak status, DB-bridge status) so their JS-built text picks
+    // up the active language — once now and again on every language change.
+    initPageI18n(() => { refreshRepak(); refreshDbStatus(); });
+  </script>
+</body>
+</html>

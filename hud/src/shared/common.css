@@ -1,0 +1,84 @@
+/* Design tokens shared by the shell window and overlay widgets.
+   Widgets pull in widget.css too for the transparent-body styling. */
+
+:root {
+  --bg:    #0e1118;
+  --bg2:   #161a23;
+  --bg3:   #1e2330;
+  --line:  rgba(120, 170, 255, 0.22);
+  --border: rgba(255, 255, 255, 0.08);
+  --text:  #e9eefb;
+  --muted: #8a93a8;
+  --accent:#4fc3f7;
+  --accent2:#7c5cff;
+  --warn:  #ffb24d;
+  --bad:   #ff5a52;
+  --good:  #5fd37a;
+}
+
+/* Light theme (set data-theme="light" on <html>). Overrides the dark neutrals;
+   keeps the accent/status hues so color-blind schemes still layer on top. */
+html[data-theme="light"] {
+  --bg:     #f4f6fb;
+  --bg2:    #ffffff;
+  --bg3:    #e7ebf3;
+  --line:   rgba(0, 0, 0, 0.12);
+  --border: rgba(0, 0, 0, 0.14);
+  --text:   #14181f;
+  --muted:  #5b6577;
+}
+/* The bright cyan accent is hard to read as a link on the light background;
+   use a darker blue for links in light mode (links only — buttons/highlights
+   keep the accent). */
+html[data-theme="light"] a { color: #1565c0; }
+
+/* Color-blind schemes (set data-color-scheme on <html>). Ported from hud-go.
+   Red-green CB: shift green→teal and red→orange so they stop colliding.
+   Blue-yellow CB: shift the blue accent→purple and amber→orange. */
+html[data-color-scheme="deuteranopia"],
+html[data-color-scheme="protanopia"] {
+  --good:    #17a2b8;
+  --bad:     #ff7043;
+  --accent2: #17a2b8;
+}
+html[data-color-scheme="tritanopia"] {
+  --accent:  #9b59b6;
+  --accent2: #e67e22;
+  --warn:    #e67e22;
+  --bad:     #e74c3c;
+}
+
+* { box-sizing: border-box; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+button:hover { background: var(--bg3); border-color: var(--accent); }
+button:active { transform: translateY(1px); }
+button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+button.primary:hover { background: #7fd3fa; }
+
+input, select, textarea {
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+a { color: var(--accent); }

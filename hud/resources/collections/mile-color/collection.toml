@@ -1,0 +1,19 @@
+name = "Mile Color"
+description = ""
+author = ""
+
+[[widgets]]
+id = "mile-color"
+title = "Mile Color"
+path = "mile-color-changer.html"
+source = "library"
+default_size = [
+    480,
+    320,
+]
+default_pos = [
+    40,
+    40,
+]
+always_on_top = true
+transparent = true

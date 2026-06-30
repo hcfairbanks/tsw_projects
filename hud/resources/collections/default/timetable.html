@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timetable</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .tt-list { max-height: 300px; overflow-y: auto; margin: -4px -4px 0; padding: 0 4px; }
+    .tt-list::-webkit-scrollbar { width: 6px; }
+    .tt-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+    .stop { display: flex; align-items: center; gap: 10px; padding: 7px 4px;
+            border-bottom: 1px solid var(--bg2); }
+    .stop:last-child { border-bottom: none; }
+    .stop .time { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.92rem; width: 44px; flex: none; }
+    .stop .name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.9rem; }
+    .stop .badge { font-size: 0.6rem; letter-spacing: 0.5px; text-transform: uppercase;
+                   padding: 2px 6px; border-radius: 5px; background: var(--bg2); color: var(--muted); flex: none; }
+    .stop .badge.stop  { background: rgba(95,211,122,0.16); color: var(--good); }
+    .stop .badge.pass  { background: rgba(120,170,255,0.16); color: var(--accent); }
+    .stop .badge.wait  { background: rgba(255,178,77,0.16); color: var(--warn); }
+    .stop.next { background: rgba(120,170,255,0.10); border-radius: 8px; }
+    .stop.next .name { color: #fff; }
+    .empty { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span class="title" id="ttTitle"><span data-i18n="shell.widget.timetable">Timetable</span> · <span data-source>OFFLINE</span></span>
+      <span class="btns">
+        <button data-collapse title="Collapse">—</button>
+        <button data-close title="Close">×</button>
+      </span>
+    </div>
+    <div class="body">
+      <div class="tt-list" id="list"><div class="empty" data-i18n="shell.widget.loading">Loading…</div></div>
+    </div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    function hhmm(s) { return (typeof s === 'string' && s.length >= 5) ? s.slice(0, 5) : (s || ''); }
+
+    function badgeClass(action) {
+      var a = (action || '').toUpperCase();
+      if (a.indexOf('WAIT') === 0) return 'wait';
+      if (a.indexOf('PASS') === 0) return 'pass';
+      if (a.indexOf('STOP') === 0 || a.indexOf('LOAD') === 0) return 'stop';
+      return '';
+    }
+
+    function render(entries, meta) {
+      var title = (meta && meta.name) ? meta.name : window.widgetTr('shell.widget.service', 'Service');
+      document.getElementById('ttTitle').innerHTML =
+        title + ' · <span data-source>' + (window.__live ? 'LIVE' : 'OFFLINE') + '</span>';
+
+      var list = document.getElementById('list');
+      if (!entries || !entries.length) { list.innerHTML = '<div class="empty">' + window.widgetTr('shell.widget.noStops', 'No stops.') + '</div>'; return; }
+
+      // Mark the first STOP as "next" purely for the POC visual.
+      var nextIdx = entries.findIndex(function (e) { return badgeClass(e.action) === 'stop'; });
+
+      list.innerHTML = entries.map(function (e, i) {
+        var time = hhmm(e.time2 || e.time1);
+        var name = e.location || e.details || '—';
+        var bc = badgeClass(e.action);
+        var label = (e.action || '').replace(/^(\w+).*/, '$1');
+        return '<div class="stop' + (i === nextIdx ? ' next' : '') + '">' +
+                 '<span class="time">' + time + '</span>' +
+                 '<span class="name">' + name + '</span>' +
+                 '<span class="badge ' + bc + '">' + (label || '·') + '</span>' +
+               '</div>';
+      }).join('');
+      window.widget.sync();
+    }
+
+    function showOffline(msg) {
+      window.__live = false; window.widget.setLive(false);
+      document.getElementById('list').innerHTML =
+        '<div class="empty">' + (msg || window.widgetTr('shell.widget.notConnectedHudgo', 'Not connected to hud-go.')) + '</div>';
+      window.widget.sync();
+    }
+
+    async function load() {
+      try {
+        // Lightweight: one timetable, not the whole catalog (which is ~40 MB).
+        var ttRes = await fetch(window.SERVER_BASE + '/api/timetables/paginated?page=1&limit=1');
+        if (!ttRes.ok) throw new Error('no timetables');
+        var page = await ttRes.json();
+        var tt = (page.data && page.data[0]) || null;
+        if (!tt) { showOffline(window.widgetTr('shell.widget.noTimetablesLoaded', 'No timetables loaded.')); return; }
+        var eRes = await fetch(window.SERVER_BASE + '/api/timetables/' + tt.id + '/entries');
+        var entries = await eRes.json();
+        if (!Array.isArray(entries) || !entries.length) { showOffline(window.widgetTr('shell.widget.noStopsInTimetable', 'No stops in this timetable.')); return; }
+        window.__live = true; window.widget.setLive(true);
+        render(entries, { name: tt.current_service_name || tt.service_name || ('Service ' + tt.id) });
+      } catch (err) {
+        showOffline();
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

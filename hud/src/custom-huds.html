@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Custom HUDs</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .head-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+    .head-row .muted { color: var(--muted); font-size: 0.88rem; }
+    .head-row .actions { margin-left: auto; display: flex; gap: 8px; }
+    .head-row button {
+      background: var(--bg2); color: var(--text); border: 1px solid var(--border);
+      border-radius: 5px; padding: 5px 14px; font-size: 0.82rem; cursor: pointer;
+    }
+    .head-row button:hover { border-color: var(--accent); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; max-width: 1080px; }
+    .card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: border-color 0.12s, transform 0.12s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .card .title { font-weight: 700; font-size: 1rem; color: var(--text); }
+    .card .filename { color: var(--muted); font-size: 0.75rem; font-family: ui-monospace, monospace; word-break: break-all; }
+    .card .size { color: var(--muted); font-size: 0.72rem; }
+    .card .row { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .card .row button {
+      background: var(--accent); color: #061018; border: 0; border-radius: 5px;
+      padding: 5px 12px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    }
+    .card .row button.ghost { background: var(--bg3); color: var(--text); border: 1px solid var(--border); font-weight: 500; }
+    .card .row button:hover { filter: brightness(1.1); }
+    .card .qr { display: flex; justify-content: center; margin-top: 4px; }
+    .card .qr img { width: 150px; height: 150px; background: #fff; border-radius: 8px; padding: 6px; display: block; }
+    .card .qr-hint { color: var(--muted); font-size: 0.72rem; text-align: center; }
+
+    .srv-bar { max-width: 1080px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.9rem; }
+    .srv-bar .pill { padding: 2px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+    .srv-bar .pill.live { background: rgba(95,211,122,0.18); color: var(--good); }
+    .srv-bar .pill.off  { background: rgba(255,90,82,0.18); color: var(--bad); }
+    .srv-bar .meta { color: var(--muted); font-family: ui-monospace, monospace; font-size: 0.82rem; }
+    .log {
+      max-width: 1080px; background: #0a0d14; border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;
+      font-family: ui-monospace, monospace; font-size: 0.78rem; color: var(--muted);
+      white-space: pre-wrap; max-height: 180px; overflow: auto;
+    }
+    .log .empty { font-style: italic; }
+
+    .empty {
+      padding: 32px; text-align: center; color: var(--muted);
+      background: var(--bg2); border-radius: 8px;
+    }
+    .empty code { background: var(--bg3); color: var(--text); padding: 2px 8px; border-radius: 4px; }
+    .warn-banner {
+      max-width: 1080px;
+      background: rgba(255,178,77,0.10); border: 1px solid rgba(255,178,77,0.35);
+      color: var(--warn);
+      padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 0.85rem;
+    }
+    .warn-banner code { color: var(--text); background: var(--bg3); padding: 1px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="margin: 0 0 4px 0;" data-i18n="nav.customHuds">Custom HUDs</h1>
+      <div class="head-row">
+        <span class="muted"><span data-i18n="shell.customHuds.introBefore">User-supplied HTML pages dropped into</span> <code style="background:var(--bg2);padding:1px 6px;border-radius:3px;">resources/custom_huds/</code> <span data-i18n="shell.customHuds.introAfter">— each one becomes a HUD the Web HUD server hosts.</span></span>
+        <div class="actions">
+          <button id="dl-guide" data-i18n="shell.downloadGuide">Download LLM guide</button>
+          <button id="refresh" data-i18n="shell.customHuds.reload">Reload</button>
+          <button id="copyDir" data-i18n="shell.customHuds.copyFolderPath">Copy folder path</button>
+        </div>
+      </div>
+
+      <p class="muted" style="max-width:1080px;font-size:0.85rem;margin:0 0 10px 0;" data-i18n="shell.customHuds.serverHint">Custom HUDs are served by the Web HUD server. Start it below, then scan a card's QR on your phone or open it here.</p>
+
+      <div id="root"><p class="muted" data-i18n="common.loading">loading…</p></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import { mountServerControls } from './shared/server-controls.js';
+    renderNav('custom-huds');
+
+    const { invoke } = window.__TAURI__.core;
+    let serverDir = null;
+    let lastStatus = null;
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function fmtSize(n) {
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return Math.round(n / 1024) + ' KB';
+      return (n / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    const qrCache = new Map();
+    async function qrFor(url) {
+      if (qrCache.has(url)) return qrCache.get(url);
+      const data = await invoke('qr_png_data_url', { text: url });
+      qrCache.set(url, data);
+      return data;
+    }
+
+    function card(h, port, lan) {
+      // serve_custom_hud routes on the SLUG (no extension) — using the filename
+      // (with .html) 400s because '.' isn't an allowed HUD-name char.
+      const slug = encodeURIComponent(h.slug);
+      const deskUrl = port ? `http://127.0.0.1:${port}/custom-huds/${slug}` : '';
+      const lanUrl  = (port && lan) ? `http://${lan}:${port}/custom-huds/${slug}` : '';
+      const shareUrl = lanUrl || deskUrl;
+      const disabled = port ? '' : 'disabled style="opacity:0.45;cursor:default;"';
+      const qrBlock = lanUrl
+        ? `<div class="qr"><img alt="${esc(t('shell.webHud.qrAlt', 'QR'))}" data-qr="${esc(lanUrl)}" title="${esc(lanUrl)}"></div>
+           <div class="qr-hint">${esc(t('shell.customHuds.scanHint', 'Scan to open on your phone'))}</div>`
+        : '';
+      return `<div class="card">
+        <div class="title">${esc(h.title)}</div>
+        <div class="filename">${esc(h.filename)}</div>
+        <div class="size">${fmtSize(h.size)}</div>
+        ${qrBlock}
+        <div class="row">
+          <button data-url="${esc(deskUrl)}" data-act="open" ${disabled}>${esc(t('shell.customHuds.openInBrowser', 'Open in browser'))}</button>
+          <button class="ghost" data-act="copy" data-url="${esc(shareUrl)}" ${disabled}>${esc(t('shell.customHuds.copyUrl', 'Copy URL'))}</button>
+        </div>
+      </div>`;
+    }
+
+    // Rendered BELOW the shared server toolbar (only when the server is up).
+    async function renderHudCards(content, s) {
+      lastStatus = s;
+      const port = s && s.port, lan = s && s.lan_ip;
+      try {
+        const items = await invoke('custom_huds_list');
+        if (!items || !items.length) {
+          content.innerHTML = `<div class="empty">${esc(t('shell.customHuds.emptyBefore', 'No custom HUDs found. Drop any .html file into'))} <code>…/resources/custom_huds/</code> ${esc(t('shell.customHuds.emptyAfter', 'and click Reload.'))}</div>`;
+          return;
+        }
+        serverDir = items[0].path.replace(/[\\\/][^\\\/]+$/, '');
+        content.innerHTML = '<div class="grid">' + items.map((h) => card(h, port, lan)).join('') + '</div>';
+        content.querySelectorAll('img[data-qr]').forEach(async (img) => {
+          try { img.src = await qrFor(img.dataset.qr); } catch (e) { /* leave blank */ }
+        });
+        content.querySelectorAll('button[data-act]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const url = btn.getAttribute('data-url');
+            if (!url) return;
+            const act = btn.getAttribute('data-act');
+            if (act === 'open') {
+              try { await invoke('open_external', { url }); }
+              catch (e) { alert(t('shell.customHuds.openFailed', 'open failed: ') + e); }
+            } else if (act === 'copy') {
+              try {
+                await navigator.clipboard.writeText(url);
+                btn.textContent = t('shell.customHuds.copied', 'Copied');
+                setTimeout(() => { btn.textContent = t('shell.customHuds.copyUrl', 'Copy URL'); }, 1100);
+              } catch (e) { alert(t('shell.customHuds.copyFailed', 'copy failed: ') + e); }
+            }
+          });
+        });
+      } catch (e) {
+        content.innerHTML = `<div class="empty" style="color: var(--bad);">${esc(t('shell.customHuds.loadFailed', 'load failed: '))}${esc(e)}</div>`;
+      }
+    }
+    // Reload re-renders the card list into the shared controls' content slot.
+    function reloadCards() {
+      const c = document.getElementById('sc-content');
+      if (c && lastStatus) renderHudCards(c, lastStatus);
+    }
+
+    document.getElementById('refresh').addEventListener('click', reloadCards);
+    document.getElementById('copyDir').addEventListener('click', async () => {
+      if (!serverDir) { alert(t('shell.customHuds.noHudsYet', 'no HUDs found yet')); return; }
+      try {
+        await navigator.clipboard.writeText(serverDir);
+        const b = document.getElementById('copyDir');
+        b.textContent = t('shell.customHuds.copied', 'Copied');
+        setTimeout(() => { b.textContent = t('shell.customHuds.copyFolderPath', 'Copy folder path'); }, 1100);
+      } catch (e) { alert(t('shell.customHuds.copyFailed', 'copy failed: ') + e); }
+    });
+
+    // ---- downloadable LLM authoring guide (custom HUD = browser page + SSE) ----
+    const GUIDE = `TSW HUD — Build a Custom HUD (complete guide for an LLM)
+=======================================================
+
+Read this whole file before writing code. A "custom HUD" is ONE .html file shown
+in a WEB BROWSER, served by this app's built-in web server. With the facts below
+you can build a working HUD on the first attempt.
+
+############################################################
+# GOLDEN RULE — NEVER USE FAKE DATA
+############################################################
+NEVER invent, fake, simulate, randomize, hardcode, or "demo" any value. Every
+number/text shown MUST come from a real /stream message or /api response. If
+there is no live data (waiting:true, field missing, fetch failed), show OFFLINE
+and blank placeholders ("--"/"—") — NEVER a made-up or animated placeholder
+number. A fabricated value looks like a real reading and is dangerous/misleading.
+No Math.random(), no sample/mock objects, no "example" values left in the code.
+
+############################################################
+# 0. THE #1 RULE — a custom HUD is a BROWSER page, NOT a Tauri app
+############################################################
+- There is NO window.__TAURI__, NO invoke(), NO Tauri API. Calling invoke() throws
+  "Cannot read properties of undefined (reading 'core')" and the HUD shows nothing.
+  (That is the most common reason an LLM-built HUD fails.)
+- Get LIVE data from a Server-Sent-Events stream:   new EventSource('/stream')
+- Get everything else with fetch() to the /api/... endpoints in section 3.
+- Use RELATIVE urls only: '/stream', '/api/...'. The page is served from the same
+  origin as the API. NEVER hardcode http://127.0.0.1, an IP, or a port.
+- It is a normal, full, OPAQUE browser page (not transparent like an overlay
+  widget). Give it a background. Make it RESPONSIVE — it is usually opened on a
+  phone: include <meta name="viewport" content="width=device-width, initial-scale=1">.
+- The file's <title> becomes its name on the Custom HUDs tab.
+- Plain HTML/CSS/JS. You may load libraries (Leaflet, etc.) from a CDN.
+
+############################################################
+# 1. LIVE TELEMETRY — EventSource('/stream')   [~10 messages/sec, no polling]
+############################################################
+    const es = new EventSource('/stream');
+    es.onmessage = (ev) => {
+      let d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+      if (d.waiting) { showOffline(d.message); return; }   // not connected yet
+      render(d);                                            // live telemetry
+    };
+    es.onerror = () => showOffline('reconnecting…');        // browser auto-reconnects
+
+Each tick delivers EXACTLY ONE of:
+  A) Not connected / no active service:
+       { "waiting": true, "message": "Waiting for TSW connection..." }
+  B) Connected: a FLAT object of live fields (below). It does NOT contain
+     "waiting". There is NO "connected" boolean over SSE — test 'if (d.waiting)'
+     to distinguish; absence of waiting + presence of fields = live.
+
+LIVE FIELDS — present only while a DRIVABLE train is loaded, and they VARY by
+loco/DLC, so ALWAYS null-check every field. Numeric values are ALREADY converted
+to the user's units (see distanceUnits); do not convert again.
+  speed                     number   current speed
+  limit                     number   current line speed limit (0 when none)
+  nextSpeedLimit            number   upcoming speed limit
+  distanceToNextSpeedLimit  number   metres to that next limit
+  distanceToSignal          number   metres to the next signal
+  signalAspectClass         string   signal aspect / colour name
+  incline                   number   gradient
+  direction                 number   travel-direction indicator
+  reverser                  string   reverser position, e.g. "Forward"
+  powerHandle               number   throttle, 0..100
+  trainBreak                number   train brake, 0..100   (yes, spelled "Break")
+  trainBrakeActive          boolean
+  locomotiveBrakeHandle     number   independent / loco brake
+  locomotiveBrakeActive     boolean
+  electricDynamicBrake      number   dynamic brake, 0..100
+  electricBrakeActive       boolean
+  isSlipping                boolean  wheel slip
+  isTractionLocked          boolean
+  doorFrontLeft             boolean  door open (left)
+  doorFrontRight            boolean  door open (right)
+  vehicleCount              number   vehicles in the formation
+  localTime                 string   in-game clock, "HH:MM"
+  playerPosition            object   { latitude: number, longitude: number }
+  currentTile               object   { x: number, y: number }
+  currentServiceName        string   active service id — feed to /api/timetables/detect
+  weather                   object   current weather values
+  cameraMode                number
+  distanceUnits             string   "imperial" => mph/feet, "" => km/h & metres
+  temperatureUnits          string   "fahrenheit", or "" for celsius
+Fields beginning with "_" (e.g. _stations, _markers) are internal — ignore them.
+DISCOVER the exact fields a loco exposes, once, live:
+    es.onmessage = e => console.log(JSON.parse(e.data))
+
+############################################################
+# 2. CRITICAL GOTCHA — route / schedule data must be LOADED first
+############################################################
+/stream telemetry ALWAYS works. BUT the route/schedule HTTP endpoints
+(/route-data and /api/timetable-items) return EMPTY ({} or {items:[]}) until a
+route has been LOADED into the server. A route is loaded when the user runs the
+"TSW Quick Start" (it detects the service and redirects to /desktop?timetable=ID),
+or when you call the load endpoints yourself (section 3). Therefore:
+  - A HUD that only shows live DRIVING data needs ONLY /stream — nothing else.
+  - A HUD that shows the schedule / route line must handle the empty case, and
+    should rely on a route already being loaded (or load one and poll until
+    /api/timetable-items returns items).
+This is the second most common reason a HUD "shows nothing": it fetched route
+data before any route was loaded.
+
+############################################################
+# 3. HTTP API  (const j = await (await fetch('/api/...')).json();)   relative urls
+############################################################
+LOADED-ROUTE STATE  (empty until a route is loaded — see section 2)
+  GET  /route-data
+       -> {} if none, else: { displayName, country, vehicleCount,
+            coordinates:[{latitude,longitude},…], timetable:[ stop objects ],
+            timetableStations:[…], currentRouteFile, … }
+  GET  /api/timetable-items
+       -> { items:[ stop objects: {station, latitude, longitude, …} ],
+            currentIndex:number, vehicleCount:number }
+  POST /api/set-timetable-index        body {"index": N}     -> {"success": true}
+
+DETECT  (turn the live currentServiceName into a timetable id)
+  GET  /api/timetables/detect?current_service_name=<name>&lat=<lat>&lng=<lng>
+       (lat/lng optional, used to disambiguate by distance)
+       -> { found:true, timetable_id, service_name, current_service_name,
+            route_id, route_name, candidate_count, match_distance_m? }
+          or { found:false, current_service_name }
+
+CATALOG  (these work WITHOUT a loaded route — straight from the database)
+  GET  /api/timetables                          -> array of timetables (for a picker)
+  GET  /api/timetables/:id                       -> one timetable (details + rows)
+  GET  /api/routes/with-coordinates              -> routes that have a drawable path
+  GET  /api/routes/:id/map-data                  -> GeoJSON FeatureCollection
+                                                    (rails / signals / markers)
+  GET  /api/routes/:id/formations-with-coordinates -> formations on that route
+  GET  /api/timetables/:id/map-features          -> { timetable_id, features }
+                                                    (GeoJSON filtered to the service)
+  POST /api/timetables/:id/build-map-features     -> build the above (SLOW, 5-30s)
+
+LOAD / CLEAR  (put a route into the server so the LOADED-ROUTE endpoints fill)
+  GET  /api/hud/load-route?...     POST /api/upload-route      POST /api/clear-route
+  GET  /api/hud/browse                                          (file browse helper)
+
+CONFIG / UNITS
+  GET  /api/config            -> app config: language, distanceUnits,
+                                 temperatureUnits, theme, contributorName, …
+  GET  /api/config/server-urls-> { local, network }   (loopback + LAN base urls)
+
+WEATHER
+  GET  /api/weather-presets                 -> array of presets
+  POST /api/weather-presets                 -> create   (body = preset)
+  PUT|DELETE /api/weather-presets/:id        -> update / delete
+  PATCH /api/weather/set                     -> set weather values in TSW
+  GET  /api/weather/live  (+ POST /api/weather/live/apply)
+  GET  /api/weather/historical  (+ POST /api/weather/historical/apply)
+
+MAPS: Leaflet (CDN) works. Get geometry from /api/routes/:id/map-data (GeoJSON).
+Coordinate order differs per source ([lng,lat] arrays vs {latitude,longitude}
+objects) — console.log one before you plot it.
+
+############################################################
+# 4. COMPLETE WORKING EXAMPLE  (responsive: speed, limit, next stop)
+############################################################
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <title>Speed + Next Stop</title>
+      <style>
+        html,body { margin:0; height:100%; background:#0e1118; color:#e9eefb;
+                    font-family:system-ui,sans-serif; }
+        .wrap { height:100%; display:flex; flex-direction:column;
+                align-items:center; justify-content:center; gap:10px; text-align:center; }
+        .dot { width:10px; height:10px; border-radius:50%; background:#ff5a52; }
+        .dot.live { background:#5fd37a; }
+        .speed { font:800 24vw ui-monospace,monospace; line-height:1; }
+        .unit { font-size:5vw; color:#8a93a8; margin-left:.2em; }
+        .limit, .stop { font:600 6vw ui-monospace,monospace; }
+        .lab { color:#8a93a8; }
+        .off { color:#8a93a8; font-size:5vw; min-height:1.2em; }
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <div class="dot" id="dot"></div>
+        <div class="speed"><span id="speed">--</span><span class="unit" id="unit">km/h</span></div>
+        <div class="limit"><span class="lab">LIMIT</span> <span id="limit">--</span></div>
+        <div class="stop"><span class="lab">NEXT</span> <span id="stop">—</span></div>
+        <div class="off" id="off">OFFLINE</div>
+      </div>
+      <script>
+        var $ = function (id) { return document.getElementById(id); };
+        function showOffline(msg) {
+          $('dot').classList.remove('live');
+          $('off').textContent = msg || 'OFFLINE';
+          $('speed').textContent = '--'; $('limit').textContent = '--';
+        }
+        function render(d) {
+          $('dot').classList.add('live'); $('off').textContent = '';
+          $('unit').textContent = d.distanceUnits === 'imperial' ? 'mph' : 'km/h';
+          $('speed').textContent = d.speed != null ? Math.round(d.speed) : '--';
+          $('limit').textContent = d.limit != null ? Math.round(d.limit) : '--';
+        }
+        var es = new EventSource('/stream');
+        es.onmessage = function (ev) {
+          var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+          if (d.waiting) showOffline(d.message); else render(d);
+        };
+        es.onerror = function () { showOffline('reconnecting…'); };
+        // Next stop from the loaded route's schedule (empty until a route loads).
+        function pollStops() {
+          fetch('/api/timetable-items').then(function (r) { return r.json(); })
+            .then(function (j) {
+              var items = j.items || [], idx = j.currentIndex || 0;
+              var next = items[idx] || items[items.length - 1];
+              $('stop').textContent = next ? (next.station || next.location || '—') : '—';
+            }).catch(function () {});
+        }
+        setInterval(pollStops, 4000); pollStops();
+      <\/script>
+    </body>
+    </html>
+
+############################################################
+# 5. WHY CUSTOM HUDS FAIL — fix every one of these before shipping
+############################################################
+1. Used window.__TAURI__ / invoke()  -> WRONG: it is a browser page. Use /stream + fetch.
+2. Hardcoded http://127.0.0.1 or a port -> use RELATIVE '/stream' and '/api/...'.
+3. Treated every /stream message as live -> check 'if (d.waiting)' FIRST.
+4. Expected a "connected" field over SSE -> there is none; waiting:true = offline.
+5. Read /route-data or /api/timetable-items with no route loaded -> handle {} / items:[].
+6. Guessed field names -> console.log a /stream message; null-check everything.
+7. Re-converted units -> values are pre-converted; just label per distanceUnits.
+8. Not responsive -> add the viewport meta tag and use vw/vh; HUDs open on phones.
+9. Server not running -> start it (Custom HUDs "Start server" button, or Web HUD tab).
+10. Heavy per-frame work in es.onmessage (10/sec) -> keep render() cheap; do slow
+    fetches on their own setInterval (e.g. every few seconds), not per message.
+
+############################################################
+# 6. INSTALL
+############################################################
+1. Save the file (e.g. speed-hud.html). Its <title> becomes the display name.
+2. Custom HUDs tab -> "Copy folder path" -> drop the file in that folder -> Reload.
+3. Start the server (Custom HUDs "Start server" button, or the Web HUD tab).
+4. Scan the card's QR code on your phone (same Wi-Fi), or click "Open in browser".`;
+    document.getElementById('dl-guide').addEventListener('click', async () => {
+      try {
+        const saved = await invoke('save_text_file', { defaultName: 'tsw-hud-custom-hud-guide.txt', contents: GUIDE });
+        if (saved) { /* native save dialog handled it */ }
+      } catch (e) { alert('save failed: ' + (e && e.toString())); }
+    });
+
+    // Shared server controls — IDENTICAL to the Web HUD tab (same Start/Stop,
+    // Running pill, port/LAN line, boot log, messages). The HUD cards render
+    // below the toolbar via renderRunning. unlockWhenRunning: cards appear as
+    // soon as the server is up (no telemetry needed).
+    const ctrl = mountServerControls(document.getElementById('root'), {
+      unlockWhenRunning: true,
+      renderRunning: renderHudCards,
+    });
+    initPageI18n(() => { ctrl.reset(); ctrl.refresh(); });
+  </script>
+</body>
+</html>

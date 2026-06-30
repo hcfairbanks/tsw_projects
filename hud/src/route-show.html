@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Route</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #rtmap { height: 480px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+    .ttbar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .ttbar .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; padding: 3px 8px;
+      border-radius: 12px; border: 1px solid var(--border); cursor: pointer; user-select: none; background: var(--bg2); }
+    .ttbar .chip .sw { width: 9px; height: 9px; border-radius: 50%; }
+    .ttbar .chip.off { opacity: 0.42; }
+    .leaflet-container { font: inherit; background: var(--bg3); }
+  </style>
+  <style>
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .crumbs a { color: var(--accent); }
+
+    .header-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin: 4px 0 14px 0; }
+    .header-row h1 { margin: 0; display: inline-flex; align-items: baseline; gap: 10px; }
+    .header-row h1 .flag-code {
+      background: var(--bg3); color: var(--text);
+      padding: 1px 8px; border-radius: 3px;
+      font-family: ui-monospace, monospace; font-size: 0.6em; letter-spacing: 0.4px;
+      font-weight: 500;
+    }
+    .header-row .actions { display: flex; gap: 8px; }
+    .header-row .actions button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .header-row .actions button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+    .header-row .actions button:hover { border-color: var(--accent); }
+
+    .panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; max-width: 760px; }
+    .panel h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+
+    .kv { display: grid; grid-template-columns: 200px 1fr; gap: 8px 18px; font-size: 0.9rem; align-items: center; }
+    .kv .k { color: var(--muted); }
+    .kv .v { color: var(--text); }
+    .kv .v.muted { color: var(--muted); font-style: italic; }
+    .kv .v code { background: var(--bg3); padding: 1px 6px; border-radius: 3px; }
+
+    .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.74rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; }
+    .pill.good { background: rgba(95,211,122,0.18); color: var(--good); }
+    .pill.idle { background: rgba(255,255,255,0.07); color: var(--muted); }
+
+    /* Edit mode: same grid, but values become inputs. */
+    .kv input[type="text"], .kv input[type="number"], .kv select {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 10px; font-size: 0.88rem; width: 100%;
+    }
+    .kv input:focus, .kv select:focus { outline: none; border-color: var(--accent); }
+    .kv .checkbox { display: flex; align-items: center; gap: 8px; }
+    .kv .checkbox input { width: 16px; height: 16px; }
+
+    .footer-bar { display: flex; align-items: center; gap: 10px; }
+    .flash { font-size: 0.85rem; flex: 1; min-width: 0; }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+
+    .err { color: var(--bad); margin: 12px 0; }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 14px;
+    }
+    .stat .n { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+    .stat .l { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.4px; text-transform: uppercase; }
+    .stat a { color: inherit; text-decoration: none; }
+    .stat a:hover .n { color: var(--accent); }
+    a.stat-link { display: block; color: inherit; text-decoration: none; cursor: pointer; transition: border-color .12s, background .12s; }
+    a.stat-link:hover { border-color: var(--accent); background: var(--bg2); }
+    a.stat-link:hover .n { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="crumbs"><a href="routes.html" data-i18n="routes.backToRoutes">← Routes</a></div>
+
+      <div class="header-row">
+        <h1 id="title" data-i18n="common.loading">Loading…</h1>
+        <div class="actions" id="actions">
+          <button id="back" data-i18n="common.back">Back</button>
+          <button id="exportBtn" data-i18n="shell.routes.export" title="Export this route's timetables + train-class images as a shareable zip">Export</button>
+          <button id="deleteBtn" class="dev-only" data-i18n="shell.routes.delete" title="Delete this route and every timetable / formation / coordinate tied to it" style="border-color:var(--bad);color:var(--bad);">Delete</button>
+          <button id="editBtn" class="primary" data-i18n="common.edit">Edit</button>
+        </div>
+      </div>
+
+      <div id="err" class="err" style="display:none;"></div>
+
+      <!-- Whole-route map (built once; outside #panels so re-renders don't wipe Leaflet). -->
+      <div id="mapPanel" class="panel" style="display:none;">
+        <h2>Map</h2>
+        <div id="rtmap"></div>
+        <div id="rtbar" class="ttbar"></div>
+      </div>
+
+      <div id="panels"></div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { whenReady } from './shared/dev.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import { showBusy } from './shared/busy.js';
+    renderNav('routes');
+
+    const { invoke } = window.__TAURI__.core;
+    const id = Number(new URLSearchParams(location.search).get('id') || 0);
+    const startInEdit = new URLSearchParams(location.search).get('edit') === '1';
+
+    let DATA = null;
+    let COUNTRIES = [];
+    let mode = 'view'; // or 'edit'
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function fmt(v) {
+      if (v === null || v === undefined || v === '') return '<span class="v muted">—</span>';
+      return esc(v);
+    }
+
+    document.getElementById('back').addEventListener('click', () => history.length > 1 ? history.back() : (location.href = 'routes.html'));
+
+    document.getElementById('exportBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('exportBtn');
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = t('shell.routes.exporting', 'Building…');
+      try {
+        const saved = await invoke('export_route', { routeId: id });
+        btn.textContent = saved ? t('shell.routes.exported', 'Saved ✓') : orig; // null = user cancelled
+      } catch (e) {
+        btn.textContent = t('shell.routes.exportFailed', 'Export failed');
+        const err = document.getElementById('err');
+        err.textContent = t('shell.routes.exportFailedMsg', 'Export failed: ') + e; err.style.display = '';
+      } finally {
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = orig; }, 2500);
+      }
+    });
+
+    // Delete: cascade-wipe this route. Dev-only. Confirm with the timetable
+    // count so a click-through is unambiguous, then bounce back to the index.
+    document.getElementById('deleteBtn').addEventListener('click', async () => {
+      const r = (DATA && DATA.route) || {};
+      const counts = (DATA && DATA.counts) || {};
+      const name = r.name || t('shell.routes.unnamed', '(unnamed)');
+      const ttN = counts.timetables ?? 0;
+      const msg = t('shell.routes.deleteConfirm', 'Delete "{name}" and its {n} timetables? This cannot be undone.')
+        .replace('{name}', name).replace('{n}', ttN);
+      if (!confirm(msg)) return;
+      const btn = document.getElementById('deleteBtn');
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      btn.disabled = true;
+      const busy = showBusy(t('shell.routes.deleting', 'Deleting route…'));
+      try {
+        await invoke('delete_route', { routeId: id });
+        location.href = 'routes.html';
+      } catch (e) {
+        busy.close();
+        btn.disabled = false; btn.textContent = t('shell.routes.delete', 'Delete');
+        err.textContent = t('shell.routes.deleteFailedMsg', 'Delete failed: ') + e; err.style.display = '';
+      }
+    });
+
+    function renderTitle() {
+      const r = DATA.route || {};
+      const co = DATA.country || {};
+      const flag = co.code ? `<span class="flag-code">${esc(co.code)}</span>` : '';
+      const name = r.name || t('shell.routes.unnamed', '(unnamed)');
+      document.getElementById('title').innerHTML = esc(name) + (co.name ? ' ' + flag + ' <span style="color:var(--muted);font-weight:500;">' + esc(co.name) + '</span>' : '');
+      document.title = 'TSW HUD · ' + name;
+    }
+
+    function renderView() {
+      mode = 'view';
+      document.getElementById('editBtn').textContent = t('common.edit', 'Edit');
+      document.getElementById('editBtn').className = 'primary';
+      renderTitle();
+      const r = DATA.route || {};
+      const co = DATA.country || {};
+      const counts = DATA.counts || {};
+      const best = r.best_data
+        ? `<span class="pill good">${esc(t('shell.routes.pillBest', 'best'))}</span>`
+        : `<span class="pill idle">${esc(t('shell.routes.pillNotBest', 'not best'))}</span>`;
+      const isReal = (r.is_real_route ?? 1) ? true : false;
+      const realPill = isReal
+        ? `<span class="pill good">${esc(t('shell.routes.pillRealRoute', 'route'))}</span>`
+        : `<span class="pill idle">${esc(t('shell.routes.pillNotRealRoute', 'not a route (DLC)'))}</span>`;
+
+      const countryLine = co.id
+        ? (co.code ? `<code>${esc(co.code)}</code> ${esc(co.name)}` : esc(co.name))
+        : '<span class="muted">—</span>';
+
+      document.getElementById('panels').innerHTML = `
+        <div class="panel">
+          <h2>${esc(t('shell.routes.colRoute', 'Route'))}</h2>
+          <div class="kv">
+            <div class="k">${esc(t('common.id', 'ID'))}</div>                    <div class="v"><code>${r.id}</code></div>
+            <div class="k">${esc(t('common.name', 'Name'))}</div>                  <div class="v">${fmt(r.name)}</div>
+            <div class="k">${esc(t('routes.country', 'Country'))}</div>               <div class="v">${countryLine}</div>
+            <div class="k">${esc(t('routes.tswVersion', 'TSW version'))}</div>           <div class="v">TSW ${fmt(r.tsw_version)}</div>
+            <div class="k">${esc(t('shell.routes.realRoute', 'Real route'))}</div>            <div class="v">${realPill}</div>
+            <div class="k">${esc(t('routes.bestData', 'Best data'))}</div>             <div class="v">${best}</div>
+            <div class="k">${esc(t('shell.routes.crossPakReference', 'Cross-pak reference'))}</div>   <div class="v">${fmt(r.cross_pak_reference_name)}</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>${esc(t('shell.routes.relatedCounts', 'Related counts'))}</h2>
+          <div class="stat-grid">
+            <a href="timetables.html?route_id=${r.id}" class="stat stat-link" title="${esc(t('shell.routes.filterTimetablesTitle', 'filter timetables by this route'))}"><div class="n">${counts.timetables ?? '—'}</div><div class="l">${esc(t('shell.routes.statTimetables', 'timetables'))}</div></a>
+            <div class="stat"><div class="n">${counts.formations ?? '—'}</div><div class="l">${esc(t('shell.routes.statFormations', 'formations'))}</div></div>
+            <div class="stat"><div class="n">${counts.sections ?? '—'}</div><div class="l">${esc(t('shell.routes.statSections', 'sections'))}</div></div>
+            <div class="stat"><div class="n">${counts.locations ?? '—'}</div><div class="l">${esc(t('shell.routes.statLocations', 'locations'))}</div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEdit() {
+      mode = 'edit';
+      document.getElementById('editBtn').textContent = t('common.cancel', 'Cancel');
+      document.getElementById('editBtn').className = '';
+      renderTitle();
+      const r = DATA.route || {};
+      const countryOpts = [`<option value="">${esc(t('shell.routes.unset', '(unset)'))}</option>`].concat(
+        COUNTRIES.map(([cid, name, code]) =>
+          `<option value="${cid}"${cid === r.country_id ? ' selected' : ''}>${esc(name)}${code ? ' (' + esc(code) + ')' : ''}</option>`));
+      const tswOpts = [1,2,3,4,5].map((v) =>
+        `<option value="${v}"${r.tsw_version === v ? ' selected' : ''}>TSW ${v}</option>`).join('');
+      document.getElementById('panels').innerHTML = `
+        <div class="panel">
+          <h2>${esc(t('routes.editRoute', 'Edit route'))}</h2>
+          <form id="form" onsubmit="return false;" autocomplete="off">
+            <div class="kv">
+              <div class="k">${esc(t('common.id', 'ID'))}</div>                  <div class="v"><code>${r.id}</code> <span class="muted" style="font-size:0.8rem;">${esc(t('shell.routes.readOnly', '(read-only)'))}</span></div>
+
+              <label class="k" for="f-name">${esc(t('common.name', 'Name'))}</label>
+              <div class="v"><input type="text" id="f-name" value="${esc(r.name || '')}" required></div>
+
+              <label class="k" for="f-country_id">${esc(t('routes.country', 'Country'))}</label>
+              <div class="v"><select id="f-country_id">${countryOpts.join('')}</select></div>
+
+              <label class="k" for="f-tsw_version">${esc(t('routes.tswVersion', 'TSW version'))}</label>
+              <div class="v"><select id="f-tsw_version">${tswOpts}</select></div>
+
+              <label class="k" for="f-cross">${esc(t('shell.routes.crossPakReference', 'Cross-pak reference'))}</label>
+              <div class="v"><input type="text" id="f-cross" value="${esc(r.cross_pak_reference_name || '')}" placeholder="${esc(t('shell.routes.crossPakPlaceholder', 'extractor key — leave blank if unknown'))}"></div>
+
+              <label class="k">${esc(t('shell.routes.realRoute', 'Real route'))}</label>
+              <div class="v checkbox"><input type="checkbox" id="f-real" ${(r.is_real_route ?? 1) ? 'checked' : ''}><label for="f-real">${esc(t('shell.routes.realRouteHint', 'A drivable route — uncheck for loco / cargo / content-pack DLC so it is hidden from the routes list'))}</label></div>
+
+              <label class="k">${esc(t('routes.bestData', 'Best data'))}</label>
+              <div class="v checkbox"><input type="checkbox" id="f-best" ${r.best_data ? 'checked' : ''}><label for="f-best">${esc(t('shell.routes.bestDataHint', 'Mark as the preferred dataset for this route'))}</label></div>
+            </div>
+            <div class="footer-bar" style="margin-top:16px;">
+              <button type="button" id="saveBtn" class="primary" style="background:var(--accent);color:#061018;border:0;border-radius:5px;padding:6px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;">${esc(t('common.save', 'Save'))}</button>
+              <button type="button" id="cancelBtn" style="background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:0.85rem;font-weight:600;cursor:pointer;">${esc(t('common.cancel', 'Cancel'))}</button>
+              <span class="flash" id="flash"></span>
+            </div>
+          </form>
+        </div>
+      `;
+      document.getElementById('cancelBtn').addEventListener('click', renderView);
+      document.getElementById('saveBtn').addEventListener('click', save);
+    }
+
+    document.getElementById('editBtn').addEventListener('click', () => {
+      if (mode === 'view') renderEdit();
+      else renderView();
+    });
+
+    async function save() {
+      const flash = document.getElementById('flash');
+      flash.textContent = t('shell.routes.saving', 'saving…'); flash.className = 'flash';
+      const $ = (k) => document.getElementById(k);
+      const name = $('f-name').value.trim();
+      if (!name) { flash.textContent = t('shell.routes.nameRequired', 'name is required'); flash.className = 'flash err'; return; }
+      const cid = $('f-country_id').value;
+      const body = {
+        name,
+        country_id: cid === '' ? null : Number(cid),
+        tsw_version: Number($('f-tsw_version').value),
+        cross_pak_reference_name: $('f-cross').value.trim() || '',
+        best_data: $('f-best').checked,
+        is_real_route: $('f-real').checked,
+      };
+      try {
+        await invoke('route_update', { id, body });
+        flash.textContent = t('shell.routes.saved', 'saved'); flash.className = 'flash ok';
+        DATA = await invoke('route_detail', { id });
+        setTimeout(renderView, 500);
+      } catch (e) {
+        flash.textContent = t('shell.routes.saveFailed', 'save failed: ') + e; flash.className = 'flash err';
+      }
+    }
+
+    // ---- Whole-route map (Leaflet): rails + all route features ----
+    const CAT = { Tracks:'#5f6772', Platforms:'#5fd37a', Sidings:'#c79a5b', Signals:'#ff5a52',
+      Switches:'#ffb24d', 'Car stops':'#4fc3f7', Tunnels:'#7a8aa0', Collectables:'#b388ff', Other:'#cccccc' };
+    const MAP_ORDER = ['Tracks','Platforms','Sidings','Signals','Switches','Car stops','Tunnels','Collectables','Other'];
+    let tmap = null;
+    const LAYERS = {};
+    const lyEnabled = JSON.parse(localStorage.getItem('rtShowLayers') || 'null') || {};
+    function lyOn(n) { return (n in lyEnabled) ? lyEnabled[n] : (n === 'Tracks' || n === 'Platforms' || n === 'Car stops'); }
+    function toLL(c) {
+      if (Array.isArray(c)) return (c.length >= 2 && c[0] != null && c[1] != null) ? [c[1], c[0]] : null;
+      if (c && c.latitude != null && c.longitude != null) return [c.latitude, c.longitude];
+      return null;
+    }
+    function segLL(seg) { return (seg || []).map(toLL).filter(Boolean); }
+    function applyLayer(n) {
+      const ly = LAYERS[n]; if (!ly || !tmap) return;
+      if (lyOn(n)) { if (!tmap.hasLayer(ly)) tmap.addLayer(ly); }
+      else if (tmap.hasLayer(ly)) tmap.removeLayer(ly);
+    }
+    function rebuildBar() {
+      const bar = document.getElementById('rtbar');
+      bar.innerHTML = MAP_ORDER.filter((n) => LAYERS[n]).map((n) =>
+        `<span class="chip ${lyOn(n) ? '' : 'off'}" data-n="${n}"><span class="sw" style="background:${CAT[n]}"></span>${n}</span>`
+      ).join('');
+      bar.querySelectorAll('.chip').forEach((el) => el.addEventListener('click', () => {
+        const n = el.getAttribute('data-n');
+        lyEnabled[n] = !lyOn(n);
+        localStorage.setItem('rtShowLayers', JSON.stringify(lyEnabled));
+        applyLayer(n); rebuildBar();
+      }));
+    }
+    async function initRouteMap() {
+      if (tmap || typeof L === 'undefined') return;
+      let rm; try { rm = await invoke('get_route_map_data', { routeId: id }); } catch (e) { return; }
+      const segs = (rm && Array.isArray(rm.coordinates)) ? rm.coordinates : [];
+      const tg = L.layerGroup(); let any = false; const bounds = L.latLngBounds([]);
+      segs.forEach((seg) => { const ll = segLL(seg); if (ll.length > 1) { L.polyline(ll, { color: CAT.Tracks, weight: 1.5, opacity: 0.6 }).addTo(tg); ll.forEach((p) => bounds.extend(p)); any = true; } });
+      if (!any) return; // route has no rail geometry → leave map hidden
+      document.getElementById('mapPanel').style.display = '';
+      tmap = L.map('rtmap', { preferCanvas: true, attributionControl: false });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        { subdomains: 'abcd', maxZoom: 19 }).addTo(tmap);
+      LAYERS.Tracks = tg;
+      try {
+        const rmk = await invoke('get_route_markers', { routeId: id });
+        const groups = {};
+        const add = (cat, lat, lng, name, radius) => {
+          if (lat == null || lng == null) return;
+          const mk = L.circleMarker([lat, lng], { radius, color: '#0b0e14', weight: 1, fillColor: CAT[cat] || '#ccc', fillOpacity: 0.9 });
+          if (name) mk.bindPopup(`<b>${esc(name)}</b><br><small>${esc(cat)}</small>`);
+          (groups[cat] = groups[cat] || L.layerGroup()).addLayer(mk);
+        };
+        (rmk.markers || []).forEach((m) => {
+          const ty = (m.type || '').toLowerCase();
+          const cat = ty.indexOf('platform') >= 0 ? 'Platforms' : ty.indexOf('siding') >= 0 ? 'Sidings'
+            : ty.indexOf('signal') >= 0 ? 'Signals' : ty.indexOf('switch') >= 0 ? 'Switches'
+            : ty.indexOf('tunnel') >= 0 ? 'Tunnels' : 'Other';
+          add(cat, m.latitude, m.longitude, m.name, 4);
+        });
+        (rmk.carStops || []).forEach((s) => add('Car stops', s.latitude, s.longitude, null, 3));
+        (rmk.signals || []).forEach((s) => add('Signals', s.latitude, s.longitude, s.name, 3));
+        (rmk.switches || []).forEach((s) => add('Switches', s.latitude, s.longitude, s.name, 3));
+        (rmk.collectables || []).forEach((s) => add('Collectables', s.latitude, s.longitude, s.name, 4));
+        for (const g in groups) LAYERS[g] = groups[g];
+      } catch (e) { /* features optional */ }
+      for (const n in LAYERS) applyLayer(n);
+      rebuildBar();
+      if (bounds.isValid()) tmap.fitBounds(bounds, { padding: [20, 20] });
+      setTimeout(() => tmap.invalidateSize(), 60);
+    }
+
+    async function load() {
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      if (!id) { err.textContent = t('shell.routes.noIdInUrl', 'no id in URL'); err.style.display = ''; return; }
+      try {
+        const [d, opts] = await Promise.all([
+          invoke('route_detail', { id }),
+          invoke('timetable_filter_options'),
+        ]);
+        DATA = d;
+        COUNTRIES = opts.countries || [];
+        if (startInEdit) renderEdit(); else renderView();
+        initRouteMap();
+      } catch (e) {
+        err.textContent = t('shell.routes.loadFailed', 'load failed: ') + e; err.style.display = '';
+        document.getElementById('title').textContent = t('shell.routes.errorTitle', '(error)');
+      }
+    }
+
+    // Re-render the current view (view or edit) on language change so JS-built
+    // labels, the title, and counts pick up the new locale. DATA is null until
+    // load() finishes, so guard against re-rendering before then.
+    function rerender() {
+      if (!DATA) return;
+      // Don't clobber an in-progress edit: renderEdit() reseeds fields from DATA
+      // and would wipe unsaved typing. Re-render only the read-only view.
+      if (mode === 'edit') return;
+      renderView();
+    }
+
+    whenReady().then(async () => {
+      await initPageI18n(rerender);
+      await load();
+    });
+  </script>
+</body>
+</html>

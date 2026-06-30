@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Weather</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    /* Sub-tab strip — same look as the main shell tabs but a notch smaller. */
+    .subtabs { display: flex; gap: 4px; margin: 6px 0 16px 0; border-bottom: 1px solid var(--border); }
+    .subtabs button {
+      background: transparent; color: var(--muted); border: 0;
+      padding: 6px 14px 9px; font-size: 0.85rem; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .subtabs button:hover { color: var(--text); }
+    .subtabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+
+    .panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      max-width: 900px;
+    }
+    .panel h2 {
+      margin: 0 0 12px 0; font-size: 1rem; color: var(--accent);
+      border-bottom: 1px solid var(--border); padding-bottom: 8px;
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    .panel h2 .sub { color: var(--muted); font-weight: 500; font-size: 0.85rem; }
+
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .row label { color: var(--muted); font-size: 0.88rem; }
+    select, input[type="text"], input[type="number"], input[type="date"] {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 10px; font-size: 0.88rem;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--accent); }
+    button.primary { background: var(--accent); color: #061018; border: 0; border-radius: 5px; padding: 6px 14px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    button.primary:hover { background: #7fd3fa; }
+    button.primary:disabled { opacity: 0.45; cursor: default; }
+    button.ghost { background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 5px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; }
+    button.ghost:hover { border-color: var(--accent); }
+    button.danger { background: var(--bg2); color: var(--bad); border: 1px solid rgba(255,90,82,0.45); border-radius: 5px; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; }
+    button.danger:hover { background: rgba(255,90,82,0.10); }
+
+    .flash { font-size: 0.85rem; color: var(--muted); }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+    .hint { color: var(--muted); font-size: 0.8rem; margin: -4px 0 8px 0; }
+
+    /* Values panel — show the 7 TSW weather params after a fetch. */
+    .values { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 18px; margin-top: 8px; font-size: 0.85rem; }
+    .values .k { color: var(--muted); }
+    .values .v { color: var(--text); font-variant-numeric: tabular-nums; }
+
+    /* Presets table (Manage Presets sub-tab). */
+    table.presets {
+      width: 100%;
+      max-width: 1080px;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    table.presets thead th {
+      background: var(--bg3); color: var(--text);
+      text-align: left; padding: 8px 10px;
+      font-size: 0.7rem; letter-spacing: 0.5px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.presets tbody td { padding: 5px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    table.presets tbody tr.new { background: rgba(95,211,122,0.07); }
+    table.presets tbody tr.dirty { background: rgba(255,178,77,0.08); }
+    table.presets input { width: 100%; background: var(--bg); color: var(--text); border: 1px solid transparent; border-radius: 4px; padding: 4px 6px; font-size: 0.82rem; }
+    table.presets input[type="number"] { width: 80px; min-width: 80px; }
+    table.presets input.name { min-width: 160px; }
+    table.presets input:focus { outline: none; border-color: var(--accent); }
+    table.presets .row-actions { display: flex; gap: 4px; white-space: nowrap; }
+    table.presets .row-actions button { padding: 3px 8px; font-size: 0.72rem; border-radius: 4px; }
+    .pill {
+      display: inline-block; padding: 2px 9px; border-radius: 999px;
+      font-size: 0.74rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600;
+    }
+    .pill.warn { background: rgba(255,178,77,0.18); color: var(--warn); }
+    .pill.idle { background: rgba(255,255,255,0.07); color: var(--muted); }
+    .pill.good { background: rgba(95,211,122,0.18); color: var(--good); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="flex:none;" data-i18n="weather.title">Weather</h1>
+
+      <nav class="subtabs" id="subtabs">
+        <button data-sub="weather" class="on" data-i18n="weather.title">Weather</button>
+        <button data-sub="manage" data-i18n="weather.managePresets">Manage Presets</button>
+      </nav>
+
+      <div id="view"></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('weather');
+
+    const { invoke } = window.__TAURI__.core;
+    let presets = [];
+    let sub = (new URLSearchParams(location.search).get('sub') === 'manage') ? 'manage' : 'weather';
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+    function fmtNum(v) { return v == null ? '' : (Math.round(Number(v) * 100) / 100); }
+
+    function setSub(s) {
+      sub = s;
+      document.querySelectorAll('#subtabs button').forEach((b) =>
+        b.classList.toggle('on', b.getAttribute('data-sub') === s));
+      render();
+    }
+    document.querySelectorAll('#subtabs button').forEach((b) => {
+      b.addEventListener('click', () => setSub(b.getAttribute('data-sub')));
+    });
+
+    async function loadPresets() {
+      try { presets = await invoke('weather_presets'); }
+      catch (e) { presets = []; console.warn(e); }
+    }
+
+    function renderValues(v) {
+      if (!v) return '';
+      return `<div class="values">
+        <div class="k">${t('weather.temperature','Temperature')}</div>   <div class="v">${fmtNum(v.temperature)} °C</div>  <div></div>
+        <div class="k">${t('weather.cloudiness','Cloudiness')}</div>    <div class="v">${fmtNum(v.cloudiness)}</div>     <div></div>
+        <div class="k">${t('weather.precipitation','Precipitation')}</div> <div class="v">${fmtNum(v.precipitation)}</div>  <div></div>
+        <div class="k">${t('weather.wetness','Wetness')}</div>       <div class="v">${fmtNum(v.wetness)}</div>        <div></div>
+        <div class="k">${t('weather.groundSnow','Ground snow')}</div>   <div class="v">${fmtNum(v.ground_snow)}</div>    <div></div>
+        <div class="k">${t('weather.piledSnow','Piled snow')}</div>    <div class="v">${fmtNum(v.piled_snow)}</div>     <div></div>
+        <div class="k">${t('weather.fogDensity','Fog density')}</div>   <div class="v">${fmtNum(v.fog_density)}</div>    <div></div>
+      </div>`;
+    }
+
+    // -------- Weather sub-tab --------
+
+    function renderWeather() {
+      const options = [`<option value="">${esc(t('weather.selectPreset','— Select preset —'))}</option>`].concat(
+        presets.map((p) => `<option value="${p.id}">${esc(p.name)}</option>`)
+      ).join('');
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById('view').innerHTML = `
+        <div class="panel">
+          <h2>${t('weather.presets','Presets')} <span class="sub">${t('shell.weather.presetsSub','Apply a saved set of values to TSW')}</span></h2>
+          <div class="row">
+            <select id="presetSel" style="min-width: 240px;">${options}</select>
+            <button id="applyPreset" class="primary">${t('shell.weather.applyPreset','Apply preset')}</button>
+            <button id="goManage" class="ghost">${t('shell.weather.managePresetsBtn','Manage presets')}</button>
+            <span class="flash" id="presetFlash"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>${t('weather.liveWeather','Live Weather')} <span class="sub">${t('shell.weather.liveSub','Sync weather from the real world')}</span></h2>
+          <p class="hint">${t('shell.weather.liveHint','Reads your player position from the always-on TSW poller, asks Open-Meteo for the current conditions there, then PATCHes the mapped values to TSW.')}</p>
+          <div class="row">
+            <button id="liveApply" class="primary">${t('shell.weather.applyNow','Apply now')}</button>
+            <span class="flash" id="liveFlash"></span>
+          </div>
+          <div id="liveValues"></div>
+        </div>
+
+        <div class="panel">
+          <h2>${t('weather.historicalWeather','Historical Weather')} <span class="sub">${t('shell.weather.historicalSub','Pick a date — uses in-game hour to choose the bucket')}</span></h2>
+          <div class="row">
+            <label for="histDate">${t('common.date','Date')}</label>
+            <input type="date" id="histDate" value="${today}" max="${today}">
+            <button id="histApply" class="primary">${t('shell.weather.applyHistorical','Apply historical')}</button>
+            <span class="flash" id="histFlash"></span>
+          </div>
+          <div id="histValues"></div>
+        </div>
+      `;
+
+      document.getElementById('applyPreset').addEventListener('click', async () => {
+        const id = Number(document.getElementById('presetSel').value);
+        const flash = document.getElementById('presetFlash');
+        if (!id) { flash.textContent = t('shell.weather.pickPresetFirst','pick a preset first'); flash.className = 'flash err'; return; }
+        flash.textContent = t('shell.weather.applying','applying…'); flash.className = 'flash';
+        try { flash.textContent = await invoke('weather_apply_preset', { id }); flash.className = 'flash ok'; }
+        catch (e) { flash.textContent = t('shell.weather.failed','failed: ') + e; flash.className = 'flash err'; }
+      });
+      document.getElementById('goManage').addEventListener('click', () => setSub('manage'));
+
+      document.getElementById('liveApply').addEventListener('click', async () => {
+        const flash = document.getElementById('liveFlash');
+        flash.textContent = t('shell.weather.fetching','fetching…'); flash.className = 'flash';
+        try {
+          const r = await invoke('weather_live_apply');
+          flash.textContent = `${t('shell.weather.applied','applied')} ${r.applied}/${r.total} ${t('weather.at','at')} ${r.player.latitude.toFixed(4)}, ${r.player.longitude.toFixed(4)}`;
+          flash.className = 'flash ok';
+          document.getElementById('liveValues').innerHTML = renderValues(r.values);
+        } catch (e) { flash.textContent = t('shell.weather.failed','failed: ') + e; flash.className = 'flash err'; }
+      });
+
+      document.getElementById('histApply').addEventListener('click', async () => {
+        const flash = document.getElementById('histFlash');
+        const date = document.getElementById('histDate').value;
+        if (!date) { flash.textContent = t('shell.weather.pickDateFirst','pick a date first'); flash.className = 'flash err'; return; }
+        flash.textContent = t('shell.weather.fetching','fetching…'); flash.className = 'flash';
+        try {
+          const r = await invoke('weather_historical_apply', { date });
+          flash.textContent = `${t('shell.weather.applied','applied')} ${r.applied}/${r.total} ${t('shell.weather.for','for')} ${r.date} (${t('shell.weather.gameHour','game hour')} ${r.game_hour}, ${t('shell.weather.bucket','bucket')} ${r.hour_idx})`;
+          flash.className = 'flash ok';
+          document.getElementById('histValues').innerHTML = renderValues(r.values);
+        } catch (e) { flash.textContent = t('shell.weather.failed','failed: ') + e; flash.className = 'flash err'; }
+      });
+    }
+
+    // -------- Manage Presets sub-tab --------
+
+    const FIELDS = [
+      { k: 'temperature',   label: 'Temp °C', lkey: 'shell.weather.colTemp',  step: 0.5 },
+      { k: 'cloudiness',    label: 'Cloud',   lkey: 'weatherPresets.tableCloud',  step: 0.01 },
+      { k: 'precipitation', label: 'Precip',  lkey: 'weatherPresets.tablePrecip', step: 0.01 },
+      { k: 'wetness',       label: 'Wetness', lkey: 'weatherPresets.wetness', step: 0.01 },
+      { k: 'ground_snow',   label: 'Snow grd',lkey: 'shell.weather.colGroundSnow', step: 0.01 },
+      { k: 'piled_snow',    label: 'Snow pile',lkey: 'shell.weather.colPiledSnow', step: 0.01 },
+      { k: 'fog_density',   label: 'Fog',     lkey: 'weatherPresets.tableFog', step: 0.01 },
+    ];
+
+    let editPresets = [];
+    let pendingNew  = null;
+
+    function snapshotPresets() {
+      editPresets = presets.map((p) => Object.assign({}, p, { _dirty: false }));
+      pendingNew = null;
+    }
+
+    function presetRow(p, idx, isNew) {
+      const cls = isNew ? 'new' : (p._dirty ? 'dirty' : '');
+      const id = isNew ? '' : `<code style="color:var(--muted);">${p.id}</code>`;
+      const fields = FIELDS.map((f) =>
+        `<td><input type="number" step="${f.step}" data-k="${f.k}" value="${p[f.k] == null ? '' : p[f.k]}"></td>`
+      ).join('');
+      return `<tr class="${cls}" data-idx="${idx}" data-new="${isNew ? '1' : '0'}">
+        <td>${id}</td>
+        <td><input type="text" class="name" data-k="name" value="${esc(p.name || '')}"></td>
+        ${fields}
+        <td>
+          <div class="row-actions">
+            <button class="primary" data-act="save">${t('common.save','Save')}</button>
+            ${isNew ? `<button class="ghost" data-act="discard">${t('shell.weather.discard','Discard')}</button>`
+                    : `<button class="danger" data-act="delete">${t('common.delete','Delete')}</button>`}
+          </div>
+        </td>
+      </tr>`;
+    }
+
+    function renderManage() {
+      const rows = editPresets.map((p, i) => presetRow(p, i, false)).join('');
+      const newRow = pendingNew ? presetRow(pendingNew, -1, true) : '';
+      const headFields = FIELDS.map((f) => `<th>${t(f.lkey, f.label)}</th>`).join('');
+      const emptyRow = `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:24px;">${t('shell.weather.noPresetsYet','no presets yet — add one')}</td></tr>`;
+      document.getElementById('view').innerHTML = `
+        <div class="row" style="max-width: 1080px; justify-content: space-between;">
+          <span class="hint">${t('shell.weather.manageHint','Click cells to edit; per-row Save commits. Add new presets at the bottom.')}</span>
+          <span class="row" style="margin:0;">
+            <button id="reload" class="ghost">${t('shell.weather.reload','Reload')}</button>
+            <button id="addNew" class="primary">${t('shell.weather.newPreset','+ New preset')}</button>
+          </span>
+        </div>
+        <table class="presets">
+          <thead>
+            <tr>
+              <th>${t('shell.weather.colId','ID')}</th>
+              <th>${t('common.name','Name')}</th>
+              ${headFields}
+              <th>${t('common.actions','Actions')}</th>
+            </tr>
+          </thead>
+          <tbody id="presetsBody">${newRow}${rows || (newRow ? '' : emptyRow)}</tbody>
+        </table>
+      `;
+
+      document.getElementById('reload').addEventListener('click', async () => {
+        await loadPresets(); snapshotPresets(); render();
+      });
+      document.getElementById('addNew').addEventListener('click', () => {
+        pendingNew = { name: '', temperature: 20, cloudiness: 0.3, precipitation: 0, wetness: 0, ground_snow: 0, piled_snow: 0, fog_density: 0 };
+        renderManage();
+        const nameEl = document.querySelector('tr[data-new="1"] input.name');
+        if (nameEl) nameEl.focus();
+      });
+
+      // Wire input edits → mark dirty
+      document.querySelectorAll('#presetsBody input').forEach((el) => {
+        el.addEventListener('input', () => {
+          const tr = el.closest('tr');
+          const idx = Number(tr.getAttribute('data-idx'));
+          const isNew = tr.getAttribute('data-new') === '1';
+          const target = isNew ? pendingNew : editPresets[idx];
+          if (!target) return;
+          const k = el.getAttribute('data-k');
+          target[k] = (el.type === 'number')
+            ? (el.value === '' ? 0 : Number(el.value))
+            : el.value;
+          if (!isNew) {
+            target._dirty = true;
+            tr.classList.add('dirty');
+          }
+        });
+      });
+
+      document.querySelectorAll('#presetsBody button').forEach((btn) => {
+        btn.addEventListener('click', () => onRowAct(btn));
+      });
+    }
+
+    async function onRowAct(btn) {
+      const tr = btn.closest('tr');
+      const idx = Number(tr.getAttribute('data-idx'));
+      const isNew = tr.getAttribute('data-new') === '1';
+      const act = btn.getAttribute('data-act');
+      const target = isNew ? pendingNew : editPresets[idx];
+      if (!target) return;
+      if (act === 'discard') { pendingNew = null; renderManage(); return; }
+      if (act === 'delete') {
+        if (!confirm(`${t('shell.weather.confirmDeletePrefix','Delete preset')} "${target.name}"?`)) return;
+        try {
+          await invoke('weather_preset_delete', { id: target.id });
+          await loadPresets(); snapshotPresets(); renderManage();
+        } catch (e) { alert(t('shell.weather.deleteFailed','delete failed: ') + e); }
+        return;
+      }
+      if (act === 'save') {
+        const body = {
+          id: isNew ? null : target.id,
+          name: target.name || '',
+          temperature: Number(target.temperature) || 0,
+          cloudiness: Number(target.cloudiness) || 0,
+          precipitation: Number(target.precipitation) || 0,
+          wetness: Number(target.wetness) || 0,
+          ground_snow: Number(target.ground_snow) || 0,
+          piled_snow: Number(target.piled_snow) || 0,
+          fog_density: Number(target.fog_density) || 0,
+        };
+        try {
+          await invoke('weather_preset_save', { body });
+          await loadPresets(); snapshotPresets(); renderManage();
+        } catch (e) { alert(t('shell.weather.saveFailed','save failed: ') + e); }
+      }
+    }
+
+    // -------- entry --------
+
+    function render() {
+      if (sub === 'manage') renderManage();
+      else renderWeather();
+    }
+
+    (async function init() {
+      await loadPresets();
+      snapshotPresets();
+      initPageI18n(() => render());
+    })();
+  </script>
+</body>
+</html>

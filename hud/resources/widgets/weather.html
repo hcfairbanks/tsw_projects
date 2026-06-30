@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .widget { width: 320px; position: relative; }
+    .body { padding: 10px 12px 14px; }
+
+    .preset-row { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; }
+    /* Native <select> on a dark theme: force a solid opaque background so
+       the OS dropdown panel inherits dark + light-on-dark instead of
+       defaulting to system white. Custom caret SVG since the default
+       chevron is invisible against the dark bg. */
+    .preset-row select {
+      flex: 1; min-width: 0;
+      background: #1d2230;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 5px 26px 5px 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%23e9eefb'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
+    .preset-row select:focus { outline: none; border-color: var(--accent); }
+    .preset-row select:hover { border-color: var(--accent); }
+    /* The popup options — Chromium honours these even though the panel
+       itself is OS-rendered. Solid dark + light text matches the widget. */
+    .preset-row select option {
+      background: #1d2230;
+      color: var(--text);
+      padding: 6px 8px;
+    }
+    .preset-row select option:checked {
+      background: var(--accent);
+      color: #061018;
+    }
+    .preset-row button {
+      background: var(--accent); color: #061018; border: none;
+      border-radius: 5px; padding: 5px 10px; font-size: 0.74rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.4px;
+    }
+    .preset-row button:hover { background: #7fd3fa; }
+    .preset-row button:disabled { opacity: 0.45; cursor: default; }
+
+    .divider { border-top: 1px solid rgba(255,255,255,0.18); margin: 8px -4px 10px; }
+
+    .slider-row { display: grid; grid-template-columns: 70px 1fr 36px; gap: 8px; align-items: center; padding: 3px 0; }
+    .slider-row label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.3px; }
+    .slider-row input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; background: rgba(255,255,255,0.15);
+      border-radius: 3px; outline: none; cursor: pointer;
+    }
+    .slider-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+    }
+    .slider-row .val {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.72rem; color: var(--text);
+      text-align: right; font-weight: 700;
+    }
+    /* Temperature slider gets a warm-cool gradient track so the value reads
+       at a glance — blue for sub-zero, red for hot. */
+    .slider-row.temp input[type="range"] {
+      background: linear-gradient(to right, #4fc3f7 0%, #ffffff 33%, #ffb24d 66%, #ff5a52 100%);
+    }
+
+    .apply-row { display: flex; gap: 6px; align-items: center; margin-top: 10px; }
+    .apply-row button {
+      background: var(--accent); color: #061018; border: none;
+      border-radius: 5px; padding: 6px 14px; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.4px;
+    }
+    .apply-row button.ghost {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--line); font-weight: 500;
+    }
+    .apply-row .flash {
+      font-size: 0.72rem; flex: 1; min-width: 0; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .apply-row .flash.ok { color: var(--good); }
+    .apply-row .flash.err { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span class="title"><span data-i18n="shell.widget.weather">Weather</span> · <span data-source>OFFLINE</span></span>
+      <span class="btns">
+        <button data-collapse title="Collapse">—</button>
+        <button data-close title="Close">×</button>
+      </span>
+    </div>
+    <div class="body">
+      <div class="preset-row">
+        <select id="presetSel"><option value="" data-i18n="shell.widget.presetPlaceholder">— Preset —</option></select>
+        <button id="applyPresetBtn" data-i18n="shell.widget.apply">Apply</button>
+      </div>
+      <div class="divider"></div>
+      <div id="sliders"></div>
+      <div class="apply-row">
+        <button id="applyManualBtn" data-i18n="shell.widget.applyManual">Apply manual</button>
+        <button id="resetBtn" class="ghost" data-i18n="shell.widget.reset">Reset</button>
+        <span class="flash" id="flash"></span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Live weather: pulls current Open-Meteo conditions for the player's
+           position and PATCHes the mapped TSW values. -->
+      <div class="apply-row">
+        <button id="liveBtn" data-i18n="shell.widget.liveWeather">Live weather</button>
+        <span class="flash" id="liveFlash"></span>
+      </div>
+
+      <!-- Historical: pick a real-world date; uses the in-game hour to pick
+           the closest hourly bucket from Open-Meteo's archive. -->
+      <div class="apply-row" style="margin-top: 6px;">
+        <input type="date" id="histDate"
+          style="background: var(--bg2); color: var(--text); border: 1px solid var(--line);
+                 border-radius: 5px; padding: 4px 8px; font-size: 0.74rem; flex: 0 0 130px;">
+        <button id="histBtn" data-i18n="shell.widget.historical">Historical</button>
+        <span class="flash" id="histFlash"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    var invoke = window.__TAURI__.core.invoke;
+
+    // [id, label, min, max, step, default, extraClass]
+    var FIELDS = [
+      ['temperature',   'Temp °C', -20, 40, 0.5, 15, 'temp'],
+      ['cloudiness',    'Cloud',     0,  1, 0.01, 0.30],
+      ['precipitation', 'Precip',    0,  1, 0.01, 0.0],
+      ['wetness',       'Wetness',   0,  1, 0.01, 0.0],
+      ['ground_snow',   'Snow grd',  0,  1, 0.01, 0.0],
+      ['piled_snow',    'Snow pile', 0,  1, 0.01, 0.0],
+      ['fog_density',   'Fog',       0,  1, 0.01, 0.0],
+    ];
+
+    var presets = [];
+    var FAHRENHEIT = false; // display temp in °F (slider value stays °C for the game)
+    var slidersEl = document.getElementById('sliders');
+    var flashEl = document.getElementById('flash');
+    var presetSel = document.getElementById('presetSel');
+
+    function fmtVal(id, v) {
+      if (id === 'temperature') return FAHRENHEIT ? String(Math.round(v * 9 / 5 + 32)) : v.toFixed(1);
+      return Math.round(v * 100) / 100;
+    }
+    function buildSliders() {
+      slidersEl.innerHTML = FIELDS.map(function (f) {
+        var id = f[0], label = f[1], mn = f[2], mx = f[3], st = f[4], def = f[5], cls = f[6] || '';
+        if (id === 'temperature') label = 'Temp °' + (FAHRENHEIT ? 'F' : 'C');
+        return '<div class="slider-row ' + cls + '">' +
+          '<label for="sl_' + id + '">' + label + '</label>' +
+          '<input type="range" id="sl_' + id + '" data-k="' + id + '"' +
+          ' min="' + mn + '" max="' + mx + '" step="' + st + '" value="' + def + '">' +
+          '<span class="val" data-vfor="' + id + '">' + fmtVal(id, def) + '</span>' +
+          '</div>';
+      }).join('');
+      slidersEl.querySelectorAll('input[type="range"]').forEach(function (i) {
+        i.addEventListener('input', function () {
+          var k = i.getAttribute('data-k');
+          var span = slidersEl.querySelector('[data-vfor="' + k + '"]');
+          if (span) span.textContent = fmtVal(k, Number(i.value));
+        });
+      });
+    }
+    function readValues() {
+      var out = {};
+      FIELDS.forEach(function (f) {
+        var id = f[0];
+        var v = slidersEl.querySelector('#sl_' + id);
+        out[id] = v ? Number(v.value) : 0;
+      });
+      return out;
+    }
+    function setValues(v) {
+      FIELDS.forEach(function (f) {
+        var id = f[0];
+        var el = slidersEl.querySelector('#sl_' + id);
+        var num = (v && v[id] != null) ? Number(v[id]) : f[5];
+        if (el) {
+          el.value = num;
+          var span = slidersEl.querySelector('[data-vfor="' + id + '"]');
+          if (span) span.textContent = fmtVal(id, num);
+        }
+      });
+    }
+    // Clear the success message from every OTHER apply section — only the
+    // most-recent apply should show the green status, so the widget doesn't
+    // mislead with stale "applied" text from a previous section.
+    function clearOtherFlashes(keepEl) {
+      [flashEl,
+       document.getElementById('liveFlash'),
+       document.getElementById('histFlash')].forEach(function (el) {
+        if (el && el !== keepEl) { el.textContent = ''; el.className = 'flash'; }
+      });
+    }
+    function setFlash(msg, cls) {
+      flashEl.textContent = msg || '';
+      flashEl.className = 'flash' + (cls ? ' ' + cls : '');
+      if (cls === 'ok') clearOtherFlashes(flashEl);
+    }
+
+    async function loadPresets() {
+      try {
+        presets = await invoke('weather_presets');
+        var opts = ['<option value="">— Preset —</option>'];
+        (presets || []).forEach(function (p) {
+          opts.push('<option value="' + p.id + '">' + escAttr(p.name) + '</option>');
+        });
+        presetSel.innerHTML = opts.join('');
+      } catch (e) {
+        setFlash('preset load failed: ' + e, 'err');
+      }
+    }
+    function escAttr(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+    }
+
+    presetSel.addEventListener('change', function () {
+      var id = presetSel.value;
+      if (!id) return;
+      var p = presets.find(function (x) { return String(x.id) === String(id); });
+      if (p) setValues(p);
+    });
+
+    document.getElementById('applyPresetBtn').addEventListener('click', async function () {
+      var id = presetSel.value;
+      if (!id) { setFlash('pick a preset first', 'err'); return; }
+      setFlash('applying preset…');
+      try {
+        var r = await invoke('weather_apply_preset', { id: Number(id) });
+        setFlash(r, 'ok');
+      } catch (e) { setFlash('preset apply failed: ' + e, 'err'); }
+    });
+
+    document.getElementById('applyManualBtn').addEventListener('click', async function () {
+      setFlash('applying…');
+      try {
+        var r = await invoke('weather_apply', { values: readValues() });
+        setFlash(r, 'ok');
+      } catch (e) { setFlash('apply failed: ' + e, 'err'); }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      setValues(null);
+      setFlash('');
+      presetSel.value = '';
+    });
+
+    // --- Live + Historical (same backend commands the shell Weather tab uses) ---
+    function fmtLatLng(p) {
+      return p && p.latitude != null
+        ? p.latitude.toFixed(3) + ', ' + p.longitude.toFixed(3)
+        : '(no pos)';
+    }
+    function applyValuesToSliders(v) {
+      if (!v) return;
+      setValues(v);  // populate the manual sliders with what was just applied
+    }
+
+    var liveFlash = document.getElementById('liveFlash');
+    function setLiveFlash(msg, cls) {
+      liveFlash.textContent = msg || '';
+      liveFlash.className = 'flash' + (cls ? ' ' + cls : '');
+      if (cls === 'ok') clearOtherFlashes(liveFlash);
+    }
+    document.getElementById('liveBtn').addEventListener('click', async function () {
+      setLiveFlash('fetching…');
+      try {
+        var r = await invoke('weather_live_apply');
+        applyValuesToSliders(r.values);
+        setLiveFlash('applied ' + r.applied + '/' + r.total + ' @ ' + fmtLatLng(r.player), 'ok');
+      } catch (e) { setLiveFlash('failed: ' + e, 'err'); }
+    });
+
+    var histFlash = document.getElementById('histFlash');
+    function setHistFlash(msg, cls) {
+      histFlash.textContent = msg || '';
+      histFlash.className = 'flash' + (cls ? ' ' + cls : '');
+      if (cls === 'ok') clearOtherFlashes(histFlash);
+    }
+    // Default the date input to today.
+    var today = new Date();
+    document.getElementById('histDate').value = today.toISOString().slice(0, 10);
+    document.getElementById('histDate').max = today.toISOString().slice(0, 10);
+    document.getElementById('histBtn').addEventListener('click', async function () {
+      var date = document.getElementById('histDate').value;
+      if (!date) { setHistFlash('pick a date', 'err'); return; }
+      setHistFlash('fetching…');
+      try {
+        var r = await invoke('weather_historical_apply', { date: date });
+        applyValuesToSliders(r.values);
+        setHistFlash('applied ' + r.applied + '/' + r.total + ' · hour ' + r.game_hour, 'ok');
+      } catch (e) { setHistFlash('failed: ' + e, 'err'); }
+    });
+
+    // The widget doesn't strictly need telemetry to function (it pushes
+    // values to TSW), but we still set the live-dot so the user sees that
+    // the always-on poller is connected.
+    async function poll() {
+      try {
+        var d = await invoke('get_telemetry');
+        if (d && d.connected)    window.widget.setStatus('live');
+        else if (d && d.loading) window.widget.setStatus('loading', d.status);
+        else                     window.widget.setStatus('offline');
+      } catch (e) { window.widget.setStatus('offline'); }
+      setTimeout(poll, 1500);
+    }
+
+    (async function () {
+      try { var c = await invoke('get_config'); FAHRENHEIT = !!(c && c.temperatureUnits === 'fahrenheit'); } catch (e) {}
+      buildSliders();
+    })();
+    loadPresets();
+    poll();
+  </script>
+</body>
+</html>

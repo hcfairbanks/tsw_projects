@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Collections</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .collections { display: grid; gap: 14px; max-width: 880px; }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card .head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card h2 { margin: 0 0 4px 0; font-size: 1.05rem; }
+    .card .desc { color: var(--muted); font-size: 0.88rem; margin: 0; line-height: 1.45; }
+    .card .meta { color: var(--muted); font-size: 0.78rem; margin: 8px 0 0 0; }
+    .card .meta code { color: var(--text); background: var(--bg3); padding: 1px 5px; border-radius: 3px; }
+
+    .card .actions { display: flex; gap: 8px; flex: none; }
+    .widget-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 6px;
+    }
+    .widget-list li {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+    }
+    .widget-list li .id { color: var(--text); }
+    .widget-list li .dim { color: var(--muted); font-size: 0.75rem; }
+
+    .flash { margin-top: 12px; font-size: 0.85rem; min-height: 1.2em; }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+
+    .empty {
+      padding: 32px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--bg2);
+      border-radius: 8px;
+    }
+    .empty code { color: var(--text); background: var(--bg3); padding: 2px 6px; border-radius: 4px; }
+
+    .toolbar { margin: 0 0 16px 0; display: flex; gap: 8px; }
+
+    /* ---- editor ---- */
+    .editor { max-width: 880px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    .editor h2 { margin: 0 0 16px 0; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 4px; }
+    .field input[type="text"], .field textarea { width: 100%; }
+    .field textarea { resize: vertical; min-height: 56px; }
+    .field .hint { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+    .widgets-edit { margin-top: 8px; display: grid; gap: 10px; }
+    .wrow {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 12px;
+    }
+    .wrow .full { grid-column: 1 / -1; }
+    .wrow .num-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .wrow label { display: block; font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; }
+    .wrow input[type="text"], .wrow input[type="number"], .wrow select { width: 100%; }
+    .wrow .hint { font-size: 0.78rem; color: var(--muted); }
+    .wrow .flags { display: flex; gap: 16px; align-items: center; }
+    .wrow .flags label { display: inline-flex; gap: 6px; align-items: center; margin: 0; font-size: 0.82rem; color: var(--text); }
+    .wrow .wrow-head { display: flex; justify-content: space-between; align-items: center; }
+    .wrow .wrow-head .num { color: var(--muted); font-size: 0.78rem; }
+
+    .editor-actions { margin-top: 18px; display: flex; gap: 8px; align-items: center; }
+    .editor-actions .spacer { flex: 1; }
+    button.danger { border-color: var(--bad); color: var(--bad); }
+    button.danger:hover { background: var(--bad); color: #061018; border-color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 data-i18n="shell.collectionsHeading">Collections</h1>
+      <p class="muted" data-i18n="shell.collectionsIntro">
+        Each collection is a set of overlay widgets. Click Load and every widget opens as its own transparent
+        always-on-top window — all in this process, all at the same time, no per-window loading flash.
+      </p>
+      <div class="toolbar" id="toolbar">
+        <button class="primary" id="new-collection" data-i18n="shell.newCollection">+ New collection</button>
+      </div>
+      <div id="root">
+        <p class="muted" data-i18n="common.loading">Loading…</p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    renderNav('collections');
+
+    const { invoke } = window.__TAURI__.core;
+    const root = document.getElementById('root');
+    const toolbar = document.getElementById('toolbar');
+
+    // Last list fetched from the backend; the editor looks up a collection by
+    // slug from here when Edit is clicked.
+    let lastItems = [];
+    // True while the editor form is open — suppresses the language-change
+    // re-render so an in-progress edit isn't wiped.
+    let editing = false;
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    const SLUG_RE = /^[A-Za-z0-9._-]+$/;
+
+    // Derive a URL-safe folder slug / widget id from a human name.
+    function slugify(name) {
+      const s = String(name).toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^[-.]+|[-.]+$/g, '');
+      return s || 'collection';
+    }
+    function safeId(name) {
+      const s = String(name).toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^[-.]+|[-.]+$/g, '');
+      return s || 'widget';
+    }
+
+    function renderEmpty() {
+      root.innerHTML = `<div class="empty">${esc(t('shell.noCollections'))}</div>`;
+    }
+
+    function renderCards(items) {
+      const cards = items.map((c) => {
+        const widgets = (c.manifest.widgets || []).map((w) => `
+          <li>
+            <div class="id">${esc(w.title || w.id)}</div>
+            <div class="dim">${w.default_size[0]}×${w.default_size[1]} @ (${w.default_pos[0]}, ${w.default_pos[1]})${w.transparent ? ' · transparent' : ''}${w.always_on_top ? ' · on top' : ''}</div>
+          </li>
+        `).join('');
+        return `
+          <article class="card" data-slug="${esc(c.slug)}">
+            <div class="head">
+              <div>
+                <h2>${esc(c.manifest.name || c.slug)}</h2>
+                <p class="desc">${esc(c.manifest.description || t('shell.collections.noDescription', 'no description'))}</p>
+                <p class="meta">${esc(t('shell.collections.slugLabel', 'slug'))} <code>${esc(c.slug)}</code>${c.manifest.author ? ' · ' + esc(t('shell.collections.authorLabel', 'author')) + ' <code>' + esc(c.manifest.author) + '</code>' : ''} · ${c.manifest.widgets.length} ${esc(c.manifest.widgets.length === 1 ? t('shell.collections.widgetOne', 'widget') : t('shell.collections.widgetMany', 'widgets'))}</p>
+              </div>
+              <div class="actions">
+                <button class="primary" data-action="load">${esc(t('shell.load'))}</button>
+                <button data-action="close">${esc(t('shell.closeAll'))}</button>
+                <button data-action="edit">${esc(t('common.edit', 'Edit'))}</button>
+              </div>
+            </div>
+            <ul class="widget-list">${widgets}</ul>
+            <div class="flash" data-flash></div>
+          </article>
+        `;
+      }).join('');
+      root.innerHTML = `<div class="collections">${cards}</div>`;
+
+      root.querySelectorAll('.card').forEach((card) => {
+        const slug = card.dataset.slug;
+        const flash = card.querySelector('[data-flash]');
+        card.querySelector('[data-action="load"]').addEventListener('click', async () => {
+          flash.textContent = t('shell.collections.openingWindows', 'opening windows…');
+          flash.className = 'flash';
+          try {
+            const labels = await invoke('open_collection', { slug });
+            flash.textContent = t('shell.collections.openedPrefix', 'opened: ') + labels.join(', ');
+            flash.className = 'flash ok';
+          } catch (e) {
+            flash.textContent = t('shell.collections.openFailed', 'open failed: ') + (e && e.toString());
+            flash.className = 'flash err';
+          }
+        });
+        card.querySelector('[data-action="close"]').addEventListener('click', async () => {
+          try {
+            const n = await invoke('close_collection', { slug });
+            flash.textContent = t('shell.collections.closed', 'closed {n} window(s)').replace('{n}', n);
+            flash.className = 'flash ok';
+          } catch (e) {
+            flash.textContent = t('shell.collections.closeFailed', 'close failed: ') + (e && e.toString());
+            flash.className = 'flash err';
+          }
+        });
+        card.querySelector('[data-action="edit"]').addEventListener('click', () => {
+          const c = lastItems.find((x) => x.slug === slug);
+          if (c) openEditor(c);
+        });
+      });
+    }
+
+    // ---------------------------------------------------------------- editor
+
+    function widgetRowHtml(w, i, libWidgets) {
+      w = w || {};
+      const pos = w.default_pos || [40, 40];
+      const hasLib = libWidgets && libWidgets.length > 0;
+      const nameVal = w.title || w.id || '';
+
+      // Auto-built dropdown of every widget in the library. If an existing
+      // widget points at a file that isn't in the library, keep it as a
+      // fallback option so editing never silently drops it.
+      const opts = (libWidgets || []).map((lw) =>
+        `<option value="${esc(lw.filename)}" data-lib="1" data-title="${esc(lw.title)}" ${lw.filename === w.path ? 'selected' : ''}>${esc(lw.title)}</option>`
+      );
+      if (w.path && !(libWidgets || []).some((lw) => lw.filename === w.path)) {
+        opts.unshift(`<option value="${esc(w.path)}" selected>${esc(w.path)} (not in library)</option>`);
+      }
+      const dropdown = (hasLib || w.path)
+        ? `<select data-f="widget">${opts.join('')}</select>`
+        : `<div class="hint"><span data-i18n="shell.collections.noLibBefore">No widgets yet — upload one on the</span> <a href="widgets.html" data-i18n="shell.widgetsHeading">Widgets</a> <span data-i18n="shell.collections.noLibAfter">tab.</span></div>`;
+
+      // Size isn't shown, but preserve any existing one so edits don't reset it.
+      const size = w.default_size ? `${w.default_size[0]},${w.default_size[1]}` : '';
+
+      return `
+        <div class="wrow" data-wrow data-size="${size}">
+          <div class="wrow-head full">
+            <span class="num">${esc(t('shell.fieldWidget'))} ${i + 1}</span>
+            <button type="button" data-action="remove-widget">${esc(t('shell.remove'))}</button>
+          </div>
+          <div class="full">
+            <label>${esc(t('shell.fieldName'))}</label>
+            <input type="text" data-f="name" value="${esc(nameVal)}" placeholder="${esc(t('shell.collections.widgetNamePh', 'Dashboard'))}">
+          </div>
+          <div class="full">
+            <label>${esc(t('shell.fieldWidget'))}</label>
+            ${dropdown}
+          </div>
+          <div class="full">
+            <div class="num-grid">
+              <div><label>${esc(t('shell.xStart'))}</label><input type="number" data-f="x" value="${pos[0]}"></div>
+              <div><label>${esc(t('shell.yStart'))}</label><input type="number" data-f="y" value="${pos[1]}"></div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // Fill an empty Name from the selected widget (never clobbers a typed name).
+    function autofillName(row) {
+      const sel = row.querySelector('[data-f="widget"]');
+      const nameIn = row.querySelector('[data-f="name"]');
+      if (!sel || !nameIn || nameIn.value.trim()) return;
+      const opt = sel.options[sel.selectedIndex];
+      if (!opt) return;
+      nameIn.value = opt.dataset.title || opt.value.replace(/\.html?$/i, '');
+    }
+
+    // `existing` is a Collection from list_collections, or null for a new one.
+    async function openEditor(existing) {
+      const isNew = !existing;
+      const m = existing ? existing.manifest : { name: '', description: '', author: '', widgets: [] };
+      const slug = existing ? existing.slug : '';
+      const widgets = m.widgets && m.widgets.length ? m.widgets : (isNew ? [{}] : []);
+
+      let libWidgets = [];
+      try { libWidgets = await invoke('widgets_list'); } catch (e) { libWidgets = []; }
+
+      editing = true;
+      toolbar.style.display = 'none';
+      root.innerHTML = `
+        <div class="editor">
+          <h2>${esc(isNew ? t('shell.newCollectionTitle') : t('shell.editCollectionTitle'))}</h2>
+          <div class="field">
+            <label>${esc(t('shell.collectionName'))}</label>
+            <input type="text" id="ed-name" value="${esc(m.name || '')}" placeholder="${esc(t('shell.collections.namePh', 'My overlay set'))}">
+          </div>
+
+          <h2 style="font-size:1rem;">${esc(t('shell.widgetsSection'))}</h2>
+          <div class="field hint" style="margin-top:-6px;">${esc(t('shell.widgetsRowHint'))}</div>
+          <div class="widgets-edit" id="ed-widgets">
+            ${widgets.map((w, i) => widgetRowHtml(w, i, libWidgets)).join('')}
+          </div>
+          <button type="button" id="ed-add-widget" style="margin-top:10px;">${esc(t('shell.addWidget'))}</button>
+
+          <div class="editor-actions">
+            <button class="primary" id="ed-save">${esc(t('common.save', 'Save'))}</button>
+            <button id="ed-cancel">${esc(t('common.cancel', 'Cancel'))}</button>
+            <span class="spacer"></span>
+            ${isNew ? '' : '<button class="danger" id="ed-delete">' + esc(t('shell.deleteCollection')) + '</button>'}
+            <span class="flash" id="ed-flash"></span>
+          </div>
+        </div>`;
+
+      const widgetsHost = document.getElementById('ed-widgets');
+      const flash = document.getElementById('ed-flash');
+
+      function renumber() {
+        widgetsHost.querySelectorAll('[data-wrow]').forEach((row, i) => {
+          row.querySelector('.num').textContent = t('shell.fieldWidget') + ' ' + (i + 1);
+        });
+      }
+      function wireRow(row) {
+        row.querySelector('[data-action="remove-widget"]').addEventListener('click', () => {
+          row.remove();
+          renumber();
+        });
+        const sel = row.querySelector('[data-f="widget"]');
+        if (sel) {
+          sel.addEventListener('change', () => autofillName(row));
+          autofillName(row); // seed an empty Name from the preselected widget
+        }
+      }
+      widgetsHost.querySelectorAll('[data-wrow]').forEach(wireRow);
+
+      document.getElementById('ed-add-widget').addEventListener('click', () => {
+        const count = widgetsHost.querySelectorAll('[data-wrow]').length;
+        const tmp = document.createElement('div');
+        tmp.innerHTML = widgetRowHtml({}, count, libWidgets);
+        const row = tmp.firstElementChild;
+        widgetsHost.appendChild(row);
+        wireRow(row);
+      });
+
+      document.getElementById('ed-cancel').addEventListener('click', () => {
+        toolbar.style.display = '';
+        refresh();
+      });
+
+      if (!isNew) {
+        document.getElementById('ed-delete').addEventListener('click', async () => {
+          if (!confirm(t('shell.collections.confirmDelete', 'Delete collection "{name}" and all its files? This can\'t be undone.').replace('{name}', m.name || slug))) return;
+          try {
+            await invoke('delete_collection', { slug });
+            toolbar.style.display = '';
+            refresh();
+          } catch (e) {
+            flash.textContent = t('shell.collections.deleteFailed', 'delete failed: ') + (e && e.toString());
+            flash.className = 'flash err';
+          }
+        });
+      }
+
+      document.getElementById('ed-save').addEventListener('click', async () => {
+        flash.className = 'flash';
+        flash.textContent = '';
+
+        const name = document.getElementById('ed-name').value.trim();
+        if (!name) {
+          flash.textContent = t('shell.collections.nameRequired', 'collection name is required');
+          flash.className = 'flash err';
+          return;
+        }
+
+        // New collection: derive a folder slug from the name (deduped against
+        // existing collections). Editing keeps the original slug.
+        let slugVal = slug;
+        if (isNew) {
+          const used = new Set(lastItems.map((c) => c.slug));
+          slugVal = slugify(name);
+          let base = slugVal, n = 2;
+          while (used.has(slugVal)) slugVal = `${base}-${n++}`;
+        }
+
+        const widgetsOut = [];
+        const usedIds = new Set();
+        const rows = widgetsHost.querySelectorAll('[data-wrow]');
+        for (const row of rows) {
+          const get = (f) => row.querySelector(`[data-f="${f}"]`);
+          const nm = get('name') ? get('name').value.trim() : '';
+          const sel = get('widget');
+          const path = sel ? sel.value.trim() : '';
+          if (!path) {
+            flash.textContent = t('shell.collections.pickWidget', 'pick a widget for each row — upload some on the Widgets tab first');
+            flash.className = 'flash err';
+            return;
+          }
+          if (!nm) {
+            flash.textContent = t('shell.collections.widgetNeedsName', 'every widget needs a name');
+            flash.className = 'flash err';
+            return;
+          }
+
+          // Unique id derived from the name (used in the window label).
+          let id = safeId(nm), base = id, k = 2;
+          while (usedIds.has(id)) id = `${base}-${k++}`;
+          usedIds.add(id);
+
+          const opt = sel.options[sel.selectedIndex];
+          const isLib = !!(opt && opt.dataset.lib === '1');
+
+          // Overlays are always on top and transparent (their bodies are built
+          // transparent) — these aren't user-toggleable.
+          const widget = {
+            id,
+            title: nm,
+            path,
+            default_pos: [parseInt(get('x').value, 10) || 0, parseInt(get('y').value, 10) || 0],
+            always_on_top: true,
+            transparent: true,
+          };
+          if (isLib) widget.source = 'library';
+
+          // Preserve a previously-set size (not shown in the form).
+          const sizeAttr = row.dataset.size;
+          if (sizeAttr) {
+            const parts = sizeAttr.split(',').map((v) => parseInt(v, 10));
+            if (parts.length === 2 && parts.every((v) => !isNaN(v))) widget.default_size = parts;
+          }
+          widgetsOut.push(widget);
+        }
+
+        const manifest = {
+          name,
+          description: m.description || '',
+          author: m.author || '',
+          widgets: widgetsOut,
+        };
+
+        flash.textContent = t('shell.collections.saving', 'saving…');
+        try {
+          await invoke('save_collection', { slug: slugVal, manifest });
+          toolbar.style.display = '';
+          refresh();
+        } catch (e) {
+          flash.textContent = t('shell.collections.saveFailed', 'save failed: ') + (e && e.toString());
+          flash.className = 'flash err';
+        }
+      });
+    }
+
+    document.getElementById('new-collection').addEventListener('click', () => openEditor(null));
+
+    async function refresh() {
+      editing = false;
+      try {
+        const items = await invoke('list_collections');
+        lastItems = items || [];
+        if (lastItems.length === 0) renderEmpty();
+        else renderCards(lastItems);
+      } catch (e) {
+        root.innerHTML = `<div class="empty">${esc(t('shell.collections.loadFailed', 'failed to load: '))}${esc(e && e.toString())}</div>`;
+      }
+    }
+
+    // Await the locale, translate static markup, render the list, and re-render
+    // it whenever the language changes (unless the editor is open).
+    initPageI18n(() => { if (!editing) refresh(); });
+  </script>
+</body>
+</html>

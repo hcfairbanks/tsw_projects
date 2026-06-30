@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* Dashboard-specific: float the header on TOP of the body so it doesn't
+       reserve vertical space. opacity-only fade keeps the header clickable
+       (drag the window from anywhere along the top, even when invisible).
+       z-index pulls it above the gauge / boxes on hover. */
+    .widget { position: relative; }
+    .widget .hdr {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      opacity: 0;
+      border-bottom: none;
+      background: linear-gradient(to bottom, rgba(14,17,24,0.92) 60%, rgba(14,17,24,0));
+      transition: opacity 120ms ease-out;
+    }
+    /* Only force the header visible on hover or when collapsed (when the
+       header is the ONLY thing the user can click to restore the widget).
+       Loading / offline state is communicated by the body, so we keep the
+       header transparent there too — matches the user's "hover only"
+       expectation. */
+    .widget:hover .hdr,
+    .widget.collapsed .hdr { opacity: 1; }
+    /* When collapsed, the body is display:none and the header is the only
+       content. Flip it back to static positioning so it actually contributes
+       height to .widget — otherwise syncSize sees a 0px box and shrinks the
+       OS window to a phantom strip. Solid background since there's nothing
+       behind it to fade into. */
+    .widget.collapsed .hdr {
+      position: static;
+      background: rgba(14, 17, 24, 0.92);
+    }
+    .widget.collapsed { min-width: 200px; }
+    /* Body now starts at the very top of the widget; nudge the layout down a
+       hair so the topmost row's borders don't fight the rounded panel edge. */
+    .body { padding-top: 6px; }
+
+    /* hud-go tablet arrangement:
+         left  : next-limit + signal (top) , dist-to-next-limit + dist-to-signal (mid)
+         center: speedometer (mid) , three brakes (bottom)
+         right : doors + speed-limit (top) , reverser + power (mid) , incline (bottom) */
+    /* `center` (not space-between) pulls the three columns together — the
+       widget's container width is usually a lot wider than the natural
+       content, so space-between created an empty gulf on either side of the
+       speedometer. Fixed 24px gap keeps things visually grouped. */
+    .layout { display: flex; justify-content: center; align-items: flex-start; gap: 24px; }
+    /* Shrink-wrap the widget to its content so the OS window auto-fits via
+       widget.js's syncSize. Without this, .widget stretches to whatever the
+       manifest declared and we'd waste horizontal space. */
+    .widget { width: max-content; }
+
+    .left { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-content: start; }
+    .center { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .right { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .rrow { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+
+    .gauge { position: relative; width: 118px; height: 118px; flex: none; }
+    .gauge canvas { position: absolute; inset: 0; }
+    .gauge .readout { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+    .gauge .spd { font-size: 2.5rem; font-weight: 800; line-height: 0.9; letter-spacing: -1px; }
+    .gauge .unit { font-size: 0.58rem; opacity: 0.6; letter-spacing: 2px; }
+    .gauge.over .spd { color: var(--bad); text-shadow: 0 0 14px rgba(255,90,82,0.6); }
+    .gauge .slip { position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); color: var(--bad); font-size: 0.95rem; }
+    .gauge .slip.lock { color: var(--warn); } .gauge .slip.hide { display: none; }
+
+    /* Traction-slip zigzag bolts — pair on each side of the speedometer,
+       matches the web HUD's drawSpeedBox slip pattern (4 jagged lines, 2 per
+       side, ±6px alternating zigzag). Hidden until isSlipping fires, then
+       flashes between full and dimmed red. */
+    .slip-bolt {
+      position: absolute;
+      top: 6px; bottom: 6px;
+      width: 21px;              /* 9 + 3 + 9 — explicit so the absolute */
+                                /* box can't get squashed by neighbours. */
+      display: none;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 3px;
+      pointer-events: none;
+    }
+    .slip-bolt svg {
+      height: 100%;
+      width: 9px;
+      flex: 0 0 9px;            /* no shrink / no grow — keep the gap intact */
+      display: block;
+    }
+    .slip-bolt.left  { right: 100%; margin-right: 4px; }
+    .slip-bolt.right { left:  100%; margin-left:  4px; }
+    .gauge.slip-on .slip-bolt {
+      display: flex;
+      animation: slip-flash 0.42s steps(2, end) infinite;
+    }
+    .gauge.slip-lock .slip-bolt {
+      display: flex;
+      animation: slip-flash 0.85s steps(2, end) infinite;
+      filter: hue-rotate(-30deg) saturate(0.85) brightness(1.1);
+    }
+    @keyframes slip-flash {
+      0%   { opacity: 1.0; }
+      50%  { opacity: 0.45; }
+      100% { opacity: 1.0; }
+    }
+
+    /* Reserve the destination-distance row's vertical space even when empty
+       so the layout doesn't jump the moment the user picks a destination
+       (or the value first arrives). Using visibility:hidden + a fixed
+       min-height keeps the row in the flow. */
+    .dist { font-size: 1.05rem; font-weight: 800; color: var(--accent); line-height: 1;
+            min-height: 1.05rem; min-width: 60px; text-align: center; }
+    .dist small { font-size: 0.55rem; opacity: 0.75; }
+    .dist.empty { visibility: hidden; }
+
+    /* Left-column boxes carry the "distance to next" values which can run
+       from "--" up to "999m" or "1.2km". Fix the WIDTH (not just min-width)
+       so the box never grows mid-game and pushes the gauge sideways. The
+       right column never goes into the hundreds so it uses the default. */
+    .left .box { width: 78px; min-width: 78px; }
+
+    .box { border: 2px solid #fff; border-radius: 5px; padding: 6px 4px; text-align: center; min-width: 58px; }
+    .box .bv { font-size: 1.1rem; font-weight: 800; line-height: 1; white-space: nowrap; color: #fff; }
+    .box .bv small { font-size: 0.52rem; opacity: 0.75; margin-left: 1px; }
+    /* hud-go drawSpeedLimitBox: white at/under limit (safe), yellow when over,
+       flashing red when >10 over. */
+    .box.limit { border-color: #fff; }
+    .box.limit.over { border-color: #ffd400; }
+    .box.limit.over10 { border-color: #ff3b30; animation: limit-flash 0.6s steps(2, end) infinite; }
+    @keyframes limit-flash { 50% { border-color: #fff; } }
+
+    /* Stretch grip — drag the corner to scale the whole widget proportionally
+       (same look as the Schedule's resize handle). */
+    .widget { position: relative; }
+    .resize-handle {
+      position: absolute; right: 0; bottom: 0; width: 20px; height: 20px; z-index: 20;
+      cursor: nwse-resize;
+      background: linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.55) 62%, transparent 62%);
+    }
+    .widget.collapsed .resize-handle { display: none; }
+    .box.signal { min-height: 36px; display: flex; align-items: center; justify-content: center; }
+    .box.signal .bv { font-size: 0.66rem; font-weight: 700; }
+    /* hud-go desktop exact conditions: clear=green, stop=red, else no fill. */
+    .box.signal.clear { background: rgb(40,100,40); }
+    .box.signal.stop { background: rgb(160,30,30); }
+
+    .brakes { display: flex; gap: 6px; }
+    .brakes .b { background: var(--bg2); border-radius: 6px; padding: 5px 7px; min-width: 44px; text-align: center;
+                 font-size: 1rem; font-weight: 800; }
+    .brakes .b small { font-size: 0.52rem; opacity: 0.7; }
+
+    .ic { font-size: 1.4rem; line-height: 1; } .ic.rev { color: #fff; }
+    .doors { display: inline-flex; gap: 4px; font-weight: 800; font-size: 1.05rem; }
+    /* hud-go drawDoorIndicators: open = white, closed = grey. (no-data = dim) */
+    .doors span { color: rgb(100,100,100); } .doors span.open { color: #fff; } .doors span.nodata { opacity: 0.3; }
+
+    /* In-game clock (HH:MM:SS) pinned to the bottom-left corner of the
+       widget body. Absolute so it doesn't perturb the 3-column layout. */
+    .clock-tag {
+      position: absolute;
+      left: 12px;
+      bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      z-index: 5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span class="title"><span data-i18n="shell.widget.tablet">Tablet</span> · <span data-source>OFFLINE</span></span>
+      <span class="btns"><button data-collapse title="Collapse">—</button><button data-close title="Close">×</button></span>
+    </div>
+    <div class="body">
+      <div class="clock-tag" id="clock">--:--:--</div>
+      <div class="layout">
+        <div class="left">
+          <div class="box" id="nextBox"><div class="bv" id="next">--</div></div>
+          <div class="box signal" id="signalBox"><div class="bv" id="sig"></div></div>
+          <div class="box" id="distNextBox"><div class="bv" id="distlim">--</div></div>
+          <div class="box" id="distSigBox"><div class="bv" id="distsig">--</div></div>
+        </div>
+
+        <div class="center">
+          <div class="dist empty" id="dist"></div>
+          <div class="gauge" id="gauge">
+            <canvas id="arc" width="118" height="118"></canvas>
+            <div class="readout"><div class="spd" id="spd">--</div><div class="unit" id="unit">KM</div></div>
+            <!-- Slip-zigzag bolts: two SVGs each side. -6/+6 alternating x
+                 offset matches the web HUD's drawSpeedBox pattern. -->
+            <span class="slip-bolt left" id="slipL" title="Traction slipping">
+              <svg viewBox="0 0 12 80" preserveAspectRatio="none"><polyline points="6,0 0,11 12,22 0,34 12,46 0,58 12,69 0,80" fill="none" stroke="#ff2a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"/></svg>
+              <svg viewBox="0 0 12 80" preserveAspectRatio="none"><polyline points="6,0 0,11 12,22 0,34 12,46 0,58 12,69 0,80" fill="none" stroke="#ff2a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"/></svg>
+            </span>
+            <span class="slip-bolt right" id="slipR" title="Traction slipping">
+              <svg viewBox="0 0 12 80" preserveAspectRatio="none"><polyline points="6,0 0,11 12,22 0,34 12,46 0,58 12,69 0,80" fill="none" stroke="#ff2a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"/></svg>
+              <svg viewBox="0 0 12 80" preserveAspectRatio="none"><polyline points="6,0 0,11 12,22 0,34 12,46 0,58 12,69 0,80" fill="none" stroke="#ff2a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"/></svg>
+            </span>
+          </div>
+          <div class="brakes">
+            <div class="b" id="tb">--</div><div class="b" id="lb">--</div><div class="b" id="db">--</div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="rrow">
+            <span class="doors" id="doors" title="Doors"><span id="doorL">L</span><span id="doorR">R</span></span>
+            <div class="box limit" id="limitBox"><div class="bv" id="limit">--</div></div>
+          </div>
+          <div class="rrow">
+            <span class="ic rev" id="rev" title="Reverser"></span>
+            <div class="box" id="powerBox"><div class="bv" id="ph">--</div></div>
+          </div>
+          <div class="box" id="inclineBox"><div class="bv" id="grad">--</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="resize-handle" id="stretchGrip" title="Drag to stretch"></div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    var $ = function (id) { return document.getElementById(id); };
+    var ctx = $('arc').getContext('2d');
+    var MUTED = 'var(--muted)', TXT = 'var(--text)', GOOD = 'var(--good)', WARN = 'var(--warn)', BAD = 'var(--bad)', ACC = 'var(--accent)';
+
+    // Gauge full-scale = train max speed; fill coloured by over-limit; a red
+    // band marks the speed limit (like hud-go's speedometer).
+    function drawArc(speed, maxScale, limit) {
+      var s = 118, c = s / 2, r = 49, start = Math.PI * 0.75, end = Math.PI * 2.25, span = end - start;
+      ctx.clearRect(0, 0, s, s);
+      ctx.beginPath(); ctx.lineCap = 'round'; ctx.arc(c, c, r, start, end);
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 8; ctx.stroke();
+
+      var frac = maxScale > 0 ? Math.max(0, Math.min(1, speed / maxScale)) : 0;
+      var col = (limit && speed > limit + 10) ? '#ff3b30' : (limit && speed > limit) ? '#ffd400' : '#4fc3f7';
+      if (frac > 0) {
+        ctx.beginPath(); ctx.lineCap = 'round'; ctx.arc(c, c, r, start, start + span * frac);
+        ctx.strokeStyle = col; ctx.lineWidth = 8; ctx.stroke();
+      }
+      if (limit && maxScale > 0 && limit <= maxScale) {
+        var la = start + span * (limit / maxScale), ri = r - 7, ro = r + 7;
+        ctx.beginPath(); ctx.lineCap = 'butt';
+        ctx.moveTo(c + Math.cos(la) * ri, c + Math.sin(la) * ri);
+        ctx.lineTo(c + Math.cos(la) * ro, c + Math.sin(la) * ro);
+        ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 5; ctx.stroke();
+      }
+    }
+    // Distance formatting honours the distance-units setting (IMPERIAL set in
+    // setData). Imperial: feet, switching to miles at >= 1 mile. Metric: m / km.
+    var IMPERIAL = false;
+    function distNum(m) {
+      if (IMPERIAL) { var ft = m * 3.28084; return ft >= 5280 ? (ft / 5280).toFixed(1) + '<small>mi</small>' : Math.round(ft) + '<small>ft</small>'; }
+      return m >= 1000 ? (m / 1000).toFixed(1) + '<small>km</small>' : Math.round(m) + '<small>m</small>';
+    }
+    function boxDist(cm) { return distNum(cm / 100); } // DriverAid sends cm
+    function brakeCol(p) { return p <= 0 ? MUTED : (p >= 60 ? BAD : WARN); }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function haversine(a, b, c, d) { var R = 6371000, p = Math.PI / 180, x = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(x)); }
+    function setB(id, txt, col) { var e = $(id); e.innerHTML = txt; e.style.color = col; }
+
+    function setData(d) {
+      IMPERIAL = d.distanceUnits === 'imperial';
+      var imperial = IMPERIAL;
+      var speed = Math.max(0, Math.round(d.speed || 0));
+      var limit = (d.limit != null && d.limit > 0) ? Math.round(d.limit) : null;
+      var over = limit != null && speed > limit + 1;
+      $('spd').textContent = speed; $('unit').textContent = imperial ? 'MPH' : 'KM';
+      $('gauge').classList.toggle('over', over);
+      var maxScale = (d.maxSpeed && d.maxSpeed > 0) ? d.maxSpeed : 200; // train max, else hud-go's 200
+      drawArc(speed, maxScale, limit);
+
+      // LIMIT (top-right, red sign)
+      var lb = $('limitBox'); lb.className = 'box limit';
+      if (limit != null) { $('limit').textContent = limit; if (speed > limit + 10) lb.classList.add('over10'); else if (speed > limit) lb.classList.add('over'); }
+      else $('limit').textContent = '--';
+
+      // NEXT limit (top-left)
+      var nl = (d.nextSpeedLimit != null && d.nextSpeedLimit > 0) ? Math.round(d.nextSpeedLimit) : null;
+      $('next').innerHTML = (nl != null) ? nl : '--';
+
+      // DIST to next limit (mid-left)
+      var nd = d.distanceToNextSpeedLimit;
+      $('distlim').innerHTML = (nd != null && nd > 0) ? boxDist(nd) : '--';
+
+      // SIGNAL status — same words + colours as hud-go: green if clear,
+      // red if stop, otherwise just the word (no fill).
+      var asp = d.signalAspectClass || '', al = asp.toLowerCase(), sb = $('signalBox'); sb.className = 'box signal';
+      if (al === 'clear') sb.classList.add('clear'); else if (al === 'stop') sb.classList.add('stop');
+      $('sig').textContent = asp || '--';
+
+      // DIST to next signal (mid, right of dist-to-next-limit)
+      $('distsig').innerHTML = (d.distanceToSignal != null && d.distanceToSignal > 0) ? boxDist(d.distanceToSignal) : '--';
+
+      // POWER (mid-right)
+      var ph = (d.powerHandle != null) ? d.powerHandle : 0;
+      setB('ph', String(ph), ph > 0 ? GOOD : (ph < 0 ? WARN : '#fff'));
+
+      // INCLINE (bottom-right)
+      if (d.incline != null) setB('grad', (d.incline > 0 ? '+' : '') + d.incline.toFixed(1) + '<small>%</small>', Math.abs(d.incline) < 0.1 ? MUTED : '#fff');
+      else setB('grad', '--', MUTED);
+
+      // THREE BRAKES (bottom-center): train / loco / dynamic
+      var tb = (d.trainBreak != null) ? Math.max(0, Math.min(100, Math.round(d.trainBreak))) : 0;
+      setB('tb', tb + '<small>%</small>', brakeCol(tb));
+      var lbk = (d.locomotiveBrakeHandle != null) ? Math.round(Math.max(0, Math.min(1, d.locomotiveBrakeHandle)) * 100) : 0;
+      setB('lb', lbk + '<small>%</small>', brakeCol(lbk));
+      var db = (d.electricDynamicBrake != null) ? Math.max(0, Math.min(100, Math.round(d.electricDynamicBrake))) : 0;
+      setB('db', db + '<small>%</small>', db <= 0 ? MUTED : ACC);
+
+      // REVERSER (mid-right, left of power) — hud-go glyphs, white
+      var rsym = { '-1': '✕', '0': '↓', '1': '▬', '2': '↑' };
+      $('rev').textContent = rsym[String(d.reverser)] || '';
+
+      // DOORS (top-right, left of speed limit) — white closed / red open
+      function dc(v) { return (v === null || v === undefined) ? 'nodata' : (v ? 'open' : ''); }
+      $('doorL').className = dc(d.doorFrontLeft); $('doorR').className = dc(d.doorFrontRight);
+
+      // SLIP — flanking zigzag bolts shown ONLY while actively slipping, and
+      // removed the instant it stops. (Traction-lock no longer drives the bolts
+      // so they can't linger once the slip ends.)
+      var g = $('gauge');
+      g.classList.toggle('slip-on', !!d.isSlipping);
+      g.classList.remove('slip-lock');
+
+      window.widget.sync();
+    }
+
+    // Normalise a station name for fuzzy matching: lowercase, drop platform/
+    // track qualifiers, strip non-alphanumerics. So "Boston Back Bay Track 5"
+    // and "Back Bay" both reduce to a comparable core.
+    function normName(s) {
+      return String(s == null ? '' : s).toLowerCase()
+        .replace(/\b(track|platform|gleis|bahnsteig|voie|binario)\b\s*\w*/g, '')
+        .replace(/[^a-z0-9]/g, '');
+    }
+    // Distance (metres) to a named stop, looked up in the game's live station +
+    // marker lists (DriverAid.TrackData). The catalog has no per-stop coords,
+    // so this is the only way to measure to a *selected* destination — and it
+    // only works while that stop is within the game's reported horizon.
+    function stationDistanceFor(d, name) {
+      var key = normName(name); if (!key) return null;
+      var lists = [d._stations || [], d._markers || []], best = null;
+      for (var li = 0; li < lists.length; li++) {
+        var arr = lists[li];
+        for (var i = 0; i < arr.length; i++) {
+          var s = arr[i]; if (!s) continue;
+          var cm = s.distanceToStationCM; if (cm == null || cm <= 0) continue;
+          var sn = normName(s.stationName || s.markerName); if (!sn) continue;
+          if (sn === key || sn.indexOf(key) >= 0 || key.indexOf(sn) >= 0) {
+            var m = cm / 100; if (best == null || m < best) best = m;
+          }
+        }
+      }
+      return best;
+    }
+
+    function showDist(el, meters, title) {
+      var was = el.classList.contains('empty');
+      el.innerHTML = distNum(meters);
+      el.title = title || '';
+      el.classList.remove('empty');
+      if (was) window.widget.sync();
+    }
+    function hideDist(el, title) {
+      if (title != null) el.title = title;
+      if (!el.classList.contains('empty')) { el.classList.add('empty'); window.widget.sync(); }
+    }
+
+    async function updateDest(d) {
+      var el = $('dist');
+      try {
+        var sel = await invoke('get_selected_stop');
+        var selName = (sel && sel.name) ? sel.name : '';
+        var pp = d.playerPosition;
+        // Distance is shown ONLY for a destination the user explicitly picked in
+        // the Schedule — never auto-filled on load. No selection → blank.
+        if (!selName) {
+          hideDist(el);
+        } else if (sel.lat != null && sel.lng != null && pp && pp.latitude != null) {
+          // Selected stop has a resolved coordinate → straight-line distance to
+          // it from the player. Works for any chosen destination, any distance.
+          showDist(el, haversine(pp.latitude, pp.longitude, sel.lat, sel.lng), selName);
+        } else {
+          // Selected but no coordinate → fall back to the game's live station
+          // list (only covers the next ~2 stations); blank if it's not there.
+          var sd = stationDistanceFor(d, selName);
+          if (sd != null) showDist(el, sd, selName); else hideDist(el, selName);
+        }
+      } catch (e) {}
+    }
+
+    function clearReadouts() {
+      ['spd', 'next', 'distlim', 'distsig', 'sig', 'limit', 'ph', 'grad', 'tb', 'lb', 'db'].forEach(function (id) { $(id).innerHTML = '--'; $(id).style.color = ''; });
+      $('limitBox').className = 'box limit'; $('signalBox').className = 'box signal';
+      $('rev').textContent = '';
+      $('doorL').className = 'nodata'; $('doorR').className = 'nodata';
+      $('gauge').classList.remove('slip-on', 'slip-lock');
+      $('dist').classList.add('empty');
+      $('clock').textContent = '--:--:--';
+      drawArc(0, 100, false);
+    }
+    function updateClock(d) {
+      // In-game time as HH:MM:SS — read straight from the localTime ISO
+      // string so we don't shift into the PC's timezone.
+      var c = $('clock');
+      if (d && typeof d.localTime === 'string') {
+        var m = /T(\d{2}:\d{2}:\d{2})/.exec(d.localTime);
+        if (m) { c.textContent = m[1]; return; }
+      }
+      c.textContent = '--:--:--';
+    }
+    function showOffline() { window.widget.setStatus('offline'); clearReadouts(); }
+    function showLoading() { window.widget.setStatus('loading'); clearReadouts(); }
+
+    var invoke = window.__TAURI__.core.invoke;
+    async function poll() {
+      try {
+        var d = await invoke('get_telemetry');
+        if (d && d.connected)       { window.widget.setStatus('live'); setData(d); updateClock(d); await updateDest(d); }
+        else if (d && d.loading)    { window.widget.setStatus('loading', d.status); }
+        else                         { showOffline(); }
+      } catch (e) { showOffline(); }
+      setTimeout(poll, 150);
+    }
+    // Stretch: proportional zoom of the whole widget. CSS `zoom` scales every
+    // element (gauge, boxes, text) AND the layout box, so widget.js's syncSize
+    // (which reads the zoomed bounding rect) grows the OS window to match.
+    // Persisted so the size survives reopen.
+    var widgetEl = document.getElementById('widget');
+    var tabletZoom = parseFloat(localStorage.getItem('tabletZoom')) || 1;
+    function applyZoom() {
+      widgetEl.style.zoom = tabletZoom;
+      if (window.widget && window.widget.sync) window.widget.sync();
+    }
+    function setZoom(z) {
+      tabletZoom = Math.max(0.6, Math.min(3, Math.round(z * 1000) / 1000));
+      localStorage.setItem('tabletZoom', String(tabletZoom));
+      applyZoom();
+    }
+    // Drag the corner grip to stretch: down/right grows, up/left shrinks.
+    (function () {
+      var grip = document.getElementById('stretchGrip');
+      if (!grip) return;
+      var dragging = false, sx = 0, sy = 0, startZoom = 1;
+      grip.addEventListener('mousedown', function (e) {
+        dragging = true; sx = e.screenX; sy = e.screenY; startZoom = tabletZoom;
+        e.preventDefault(); e.stopPropagation();
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        var d = ((e.screenX - sx) + (e.screenY - sy)) / 2;
+        setZoom(startZoom + d * 0.006);
+      });
+      window.addEventListener('mouseup', function () { dragging = false; });
+    })();
+    applyZoom();
+
+    showLoading(); // initial paint: assume we're still waking up
+    poll();
+  </script>
+</body>
+</html>

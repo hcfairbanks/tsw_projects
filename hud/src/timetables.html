@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Timetables</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    /* Filter bar — two horizontal-wrap rows, grouped roughly the way
+       hud-rust's egui timetables tab grouped them. */
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: center;
+    }
+    .filter-row label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.3px;
+    }
+    .filter-row input[type="text"],
+    .filter-row input[type="number"],
+    .filter-row select {
+      background: var(--bg3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 0.82rem;
+    }
+    .filter-row input:focus,
+    .filter-row select:focus { outline: none; border-color: var(--accent); }
+    .filter-row .range {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .filter-row .range input { width: 96px; }
+    .filter-row select { min-width: 130px; max-width: 240px; }
+    .filter-row select.compact { min-width: 110px; }
+    .filter-row .actions { margin-left: auto; display: flex; gap: 6px; }
+    .filter-row .actions button.primary { background: var(--accent); color: #061018; border: none; }
+    .filter-row .actions button.primary:hover { background: #7fd3fa; }
+    .filter-row .actions button {
+      background: var(--bg2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 5px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-row .actions button:hover { border-color: var(--accent); }
+
+    /* Country dropdown shows flag glyph next to name — not really achievable
+       in a native <select>, but the value-only fallback reads cleanly. */
+    .filter-row .flag {
+      width: 18px; height: 12px; vertical-align: middle;
+      border-radius: 2px; margin-right: 4px; object-fit: cover;
+    }
+
+    /* Results table. Compact rows, striped, sticky header, sortable columns. */
+    .results-wrap {
+      flex: 1;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg2);
+    }
+    table.results {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    table.results thead th {
+      position: sticky;
+      top: 0;
+      background: var(--bg3);
+      color: var(--text);
+      text-align: left;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    table.results thead th.sort-asc::after  { content: ' \25B2'; opacity: 0.8; font-size: 0.7em; }
+    table.results thead th.sort-desc::after { content: ' \25BC'; opacity: 0.8; font-size: 0.7em; }
+    table.results thead th:not(.sortable) { cursor: default; }
+    table.results tbody td {
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text);
+      vertical-align: middle;
+      white-space: nowrap;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    table.results tbody tr:nth-child(even) { background: rgba(255,255,255,0.025); }
+    table.results tbody tr:hover { background: rgba(120,170,255,0.08); }
+    .num { font-variant-numeric: tabular-nums; }
+
+    .footer-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .footer-bar .spacer { flex: 1; }
+    .footer-bar button {
+      background: var(--bg2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .footer-bar button:hover { border-color: var(--accent); }
+    .footer-bar button:disabled { opacity: 0.4; cursor: default; }
+
+    .err { color: var(--bad); font-size: 0.85rem; margin: 8px 0; }
+    .body { display: flex; flex-direction: column; }
+    @keyframes pulse {
+      0%   { opacity: 1.0; transform: scale(1.0); }
+      100% { opacity: 0.4; transform: scale(0.7); }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="flex: none;" data-i18n="timetables.title">Timetables</h1>
+
+      <div class="filters" id="filters">
+        <!-- populated by JS once options arrive -->
+      </div>
+
+      <div class="err" id="err" style="display:none;"></div>
+
+      <div class="results-wrap">
+        <table class="results">
+          <thead><tr id="head"></tr></thead>
+          <tbody id="body"></tbody>
+        </table>
+      </div>
+
+      <div class="footer-bar">
+        <button id="prev" data-i18n="shell.timetables.prev">◀ Prev</button>
+        <span id="pageinfo">Page 1 / 1 · 0 results</span>
+        <button id="next" data-i18n="shell.timetables.next">Next ▶</button>
+        <span class="spacer"></span>
+        <span class="muted" data-i18n="shell.timetables.perPage">25 / page</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, initPageI18n } from './shared/i18n.js';
+    import { makeColumnsResizable } from './shared/colresize.js';
+    renderNav('timetables');
+
+    const { invoke } = window.__TAURI__.core;
+    const PAGE_SIZE = 25;
+
+    // 10 columns the backend returns:
+    //   service, service_name, route, section, formations,
+    //   start, duration, stops, coord_source, conductor
+    // label is resolved through t() at render time so it follows the locale.
+    function cols() {
+      return [
+        // `di` indexes into the backend row array (fixed order: service_name,
+        // route, section, formations, start_time, duration, stops, coord_source,
+        // conductor). Display order below is independent of that. `link:true`
+        // marks the column that links to the detail page.
+        { key: 'start_time',   di: 4, label: t('timetables.startTime', 'Start'),       sort: 'start_time',          cls: 'num' },
+        { key: 'duration',     di: 5, label: t('timetables.duration', 'Duration'),     sort: 'duration',            cls: 'num' },
+        { key: 'service_name', di: 0, label: t('timetables.serviceName', 'Service name'), sort: 'service_name',     link: true },
+        { key: 'stops',        di: 6, label: t('timetables.stops', 'Stops'),                                        cls: 'num' },
+        { key: 'section',      di: 2, label: t('timetables.section', 'Section') },
+        { key: 'conductor',    di: 8, label: t('timetables.conductor', 'Conductor'), sort: 'conductor_compatible' },
+      ];
+    }
+    let COLS = cols();
+
+    const STATE = {
+      filter: {
+        search:'', country_id:'', route_id:'', class_id:'', section:'',
+        start_min:'', start_max:'', dur_min:'', dur_max:'',
+        stops_min:'', stops_max:'',
+        conductor:'', service_type:'', source:'', coord_source:'',
+        sort_by:'', sort_dir:'DESC',
+        dev: false,
+      },
+      page: 0,
+      total: 0,
+      rows: [],
+      options: null,
+    };
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function flagSrc(code) {
+      const c = (code || '').toLowerCase();
+      if (!/^[a-z]{2}$/.test(c)) return null;
+      // hud-rust/resources/flags/<code>.png is served via the widget protocol
+      // for HTML files in the same origin — but for shell pages we'd need
+      // a separate route. For now skip flag rendering in the dropdown.
+      return null;
+    }
+
+    // Route dropdown options, optionally narrowed to a single country so the
+    // user isn't scrolling every route to find one. countryId is the string
+    // value from the Country select ('' = all countries).
+    function routeOptionsHtml(countryId) {
+      const routes = (STATE.options && STATE.options.routes) || [];
+      const cid = countryId == null ? '' : String(countryId);
+      const filtered = cid
+        ? routes.filter(([id, name, rcid]) => rcid != null && String(rcid) === cid)
+        : routes;
+      return ['<option value="">' + esc(t('shell.timetables.allRoutes', 'All routes')) + '</option>']
+        .concat(filtered.map(([id, name]) => `<option value="${id}">${esc(name)}</option>`))
+        .join('');
+    }
+
+    // Rebuild #f-route to match the selected country and drop a now-invalid
+    // route selection. Returns true if the route value was cleared.
+    function syncRouteDropdown() {
+      const country = document.getElementById('f-country');
+      const route = document.getElementById('f-route');
+      if (!country || !route) return false;
+      const prev = route.value;
+      route.innerHTML = routeOptionsHtml(country.value);
+      // Keep the prior route only if it still belongs to the chosen country.
+      const stillValid = Array.from(route.options).some((o) => o.value === prev);
+      route.value = stillValid ? prev : '';
+      return !stillValid && prev !== '';
+    }
+
+    // Section dropdown options, optionally narrowed to one route. routeId is the
+    // string value from the Route select ('' = all routes). Always keeps the
+    // "All sections" + "(no section)" entries.
+    function sectionOptionsHtml(routeId) {
+      const sections = (STATE.options && STATE.options.sections) || [];
+      const rid = routeId == null ? '' : String(routeId);
+      const filtered = rid
+        ? sections.filter(([name, srid]) => srid != null && String(srid) === rid)
+        : sections;
+      return ['<option value="">' + esc(t('shell.timetables.allSections', 'All sections')) + '</option>',
+              '<option value="__none__">' + esc(t('shell.timetables.noSection', '(no section)')) + '</option>']
+        .concat(filtered.map(([name]) => `<option value="${esc(name)}">${esc(name)}</option>`))
+        .join('');
+    }
+
+    // Rebuild #f-section to match the selected route and drop a now-invalid
+    // section selection (keeps '' and '__none__', which apply to any route).
+    function syncSectionDropdown() {
+      const route = document.getElementById('f-route');
+      const section = document.getElementById('f-section');
+      if (!route || !section) return;
+      const prev = section.value;
+      section.innerHTML = sectionOptionsHtml(route.value);
+      const stillValid = Array.from(section.options).some((o) => o.value === prev);
+      section.value = stillValid ? prev : '';
+    }
+
+    function buildFilters() {
+      const o = STATE.options;
+      const all = t('common.all', 'All');
+      const yes = t('common.yes', 'Yes');
+      const no  = t('common.no', 'No');
+      const countryOpts = ['<option value="">' + esc(t('shell.timetables.allCountries', 'All countries')) + '</option>'].concat(
+        (o.countries || []).map(([id, name, code]) =>
+          `<option value="${id}">${esc(name)}${code ? ' (' + esc(code) + ')' : ''}</option>`));
+      const routeOpts = routeOptionsHtml(STATE.filter.country_id);
+      const classOpts = ['<option value="">' + esc(t('shell.timetables.allClasses', 'All classes')) + '</option>'].concat(
+        (o.classes || []).map(([id, name]) => `<option value="${id}">${esc(name)}</option>`));
+      const sectionOpts = sectionOptionsHtml(STATE.filter.route_id);
+
+      const f = document.getElementById('filters');
+      f.innerHTML = `
+        <div class="filter-row">
+          <label>${esc(t('timetables.serviceLabel', 'Service:'))}</label>
+          <input type="text" id="f-search" placeholder="${esc(t('shell.timetables.servicePlaceholder', 'service'))}" style="width: 180px;">
+          <label>${esc(t('shell.timetables.countryLabel', 'Country:'))}</label>
+          <select id="f-country" class="compact">${countryOpts.join('')}</select>
+          <label>${esc(t('timetables.routeLabel', 'Route:'))}</label>
+          <select id="f-route">${routeOpts}</select>
+          <label>${esc(t('timetables.sectionLabel', 'Section:'))}</label>
+          <select id="f-section" class="compact">${sectionOpts}</select>
+          <label>${esc(t('shell.timetables.trainClassLabel', 'Train Class:'))}</label>
+          <select id="f-class">${classOpts.join('')}</select>
+        </div>
+        <div class="filter-row">
+          <label>${esc(t('timetables.startTimeLabel', 'Start:'))}</label>
+          <span class="range">
+            <input type="text" id="f-startMin" placeholder="HH:MM:SS">
+            <span>–</span>
+            <input type="text" id="f-startMax" placeholder="HH:MM:SS">
+          </span>
+          <label>${esc(t('timetables.durationLabel', 'Duration:'))}</label>
+          <span class="range">
+            <input type="text" id="f-durMin" placeholder="HH:MM:SS">
+            <span>–</span>
+            <input type="text" id="f-durMax" placeholder="HH:MM:SS">
+          </span>
+          <label>${esc(t('shell.timetables.stopsLabel', 'Stops:'))}</label>
+          <span class="range">
+            <input type="number" id="f-stopsMin" placeholder="${esc(t('shell.timetables.min', 'min'))}" min="0">
+            <span>–</span>
+            <input type="number" id="f-stopsMax" placeholder="${esc(t('shell.timetables.max', 'max'))}" min="0">
+          </span>
+          <label>${esc(t('timetables.conductorLabel', 'Conductor:'))}</label>
+          <select id="f-conductor" class="compact">
+            <option value="">${esc(all)}</option><option value="yes">${esc(yes)}</option><option value="no">${esc(no)}</option>
+          </select>
+          <label>${esc(t('shell.timetables.typeLabel', 'Type:'))}</label>
+          <select id="f-type" class="compact">
+            <option value="">${esc(all)}</option><option value="passenger">${esc(t('timetables.passenger', 'Passenger'))}</option><option value="freight">${esc(t('timetables.freight', 'Freight'))}</option>
+          </select>
+          <label>${esc(t('timetables.sourceLabel', 'Source:'))}</label>
+          <select id="f-source" class="compact">
+            <option value="">${esc(all)}</option>
+            <option value="Timetable">${esc(t('timetables.sourceTimetable', 'Timetable'))}</option>
+            <option value="Scenario">${esc(t('timetables.sourceScenario', 'Scenario'))}</option>
+            <option value="Training">${esc(t('timetables.sourceTraining', 'Training'))}</option>
+          </select>
+          <label>${esc(t('timetables.playableLabel', 'Playable:'))}</label>
+          <select id="f-playable" class="compact">
+            <option value="">${esc(all)}</option>
+            <option value="yes">${esc(yes)}</option>
+            <option value="no">${esc(no)}</option>
+          </select>
+          <span class="actions">
+            <button id="f-clear">${esc(t('common.clear', 'Clear'))}</button>
+            <button id="f-go" class="primary">${esc(t('common.search', 'Search'))}</button>
+          </span>
+        </div>
+      `;
+
+      // Wire change-on-Enter for the text inputs.
+      document.getElementById('f-search').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') applyFilters(true);
+      });
+      document.getElementById('f-go').addEventListener('click', () => applyFilters(true));
+      document.getElementById('f-clear').addEventListener('click', clearFilters);
+
+      // Auto-search on dropdown change (matches the hud-rust egui behaviour).
+      ['f-section','f-class','f-conductor','f-type','f-source','f-playable'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', () => applyFilters(true));
+      });
+      // Country change narrows the Route dropdown (which can clear the route),
+      // which in turn narrows the Section dropdown.
+      document.getElementById('f-country').addEventListener('change', () => {
+        syncRouteDropdown();
+        syncSectionDropdown();
+        applyFilters(true);
+      });
+      // Route change narrows the Section dropdown to that route's sections.
+      document.getElementById('f-route').addEventListener('change', () => {
+        syncSectionDropdown();
+        applyFilters(true);
+      });
+    }
+
+    function buildHead() {
+      COLS = cols();
+      const head = document.getElementById('head');
+      head.innerHTML = COLS.map((c) => {
+        const sortable = !!c.sort;
+        const cls = (sortable ? 'sortable' : '') +
+          (sortable && STATE.filter.sort_by === c.sort
+            ? (STATE.filter.sort_dir === 'ASC' ? ' sort-asc' : ' sort-desc')
+            : '') +
+          (c.cls ? ' ' + c.cls : '');
+        return `<th class="${cls.trim()}" data-sort="${c.sort || ''}">${esc(c.label)}</th>`;
+      }).join('');
+      head.querySelectorAll('th[data-sort]').forEach((th) => {
+        const s = th.getAttribute('data-sort');
+        if (!s) return;
+        th.addEventListener('click', () => {
+          if (STATE.filter.sort_by === s) {
+            STATE.filter.sort_dir = STATE.filter.sort_dir === 'ASC' ? 'DESC' : 'ASC';
+          } else {
+            STATE.filter.sort_by = s;
+            STATE.filter.sort_dir = 'ASC';
+          }
+          STATE.page = 0;
+          search();
+        });
+      });
+      makeColumnsResizable(head.closest('table'), 'timetables');
+    }
+
+    function renderRows() {
+      const body = document.getElementById('body');
+      if (!STATE.rows.length) {
+        body.innerHTML = `<tr><td colspan="${COLS.length}" style="text-align:center;color:var(--muted);padding:24px;">${esc(t('shell.timetables.noRowsMatch', 'no rows match'))}</td></tr>`;
+        return;
+      }
+      // The column flagged `link:true` ("Service name") links to the detail
+      // page. ids[] is returned alongside rows[] by timetable_search so we never
+      // need a second IPC round-trip to resolve a clicked row. Cells read from
+      // the backend row array by each column's `di` (data index).
+      body.innerHTML = STATE.rows.map((r, rowIdx) => {
+        const id = STATE.rowIds ? STATE.rowIds[rowIdx] : null;
+        return '<tr>' + COLS.map((c) => {
+          const cls = c.cls ? ` class="${c.cls}"` : '';
+          const cell = esc(r[c.di] || '');
+          if (c.link && id != null) {
+            return `<td${cls}><a href="timetable-show.html?id=${id}" style="color:var(--accent);text-decoration:none;">${cell || esc(t('shell.timetables.open', '(open)'))}</a></td>`;
+          }
+          return `<td${cls}>${cell}</td>`;
+        }).join('') + '</tr>';
+      }).join('');
+    }
+
+    function updateFooter() {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      const results = STATE.total === 1
+        ? t('shell.timetables.result', 'result')
+        : t('shell.timetables.results', 'results');
+      document.getElementById('pageinfo').textContent =
+        `${t('shell.timetables.page', 'Page')} ${STATE.page + 1} / ${pages} · ${STATE.total} ${results}`;
+      document.getElementById('prev').disabled = STATE.page <= 0;
+      document.getElementById('next').disabled = STATE.page + 1 >= pages;
+    }
+
+    function readFiltersFromUI() {
+      const v = (id) => document.getElementById(id).value || '';
+      const f = STATE.filter;
+      f.search       = v('f-search');
+      f.country_id   = v('f-country');
+      f.route_id     = v('f-route');
+      f.class_id     = v('f-class');
+      f.section      = v('f-section');
+      f.start_min    = v('f-startMin');
+      f.start_max    = v('f-startMax');
+      f.dur_min      = v('f-durMin');
+      f.dur_max      = v('f-durMax');
+      f.stops_min    = v('f-stopsMin');
+      f.stops_max    = v('f-stopsMax');
+      f.conductor    = v('f-conductor');
+      f.service_type = v('f-type');
+      f.source       = v('f-source');
+      f.playable     = v('f-playable');
+    }
+
+    function applyFilters(resetPage) {
+      readFiltersFromUI();
+      if (resetPage) STATE.page = 0;
+      search();
+    }
+
+    // Re-read every filter input/select into a plain map so we can restore the
+    // user's in-progress filter values across a language-change rebuild.
+    function snapshotFilterUI() {
+      const ids = ['f-search','f-country','f-route','f-section','f-class',
+        'f-startMin','f-startMax','f-durMin','f-durMax','f-stopsMin','f-stopsMax',
+        'f-conductor','f-type','f-source','f-playable'];
+      const snap = {};
+      ids.forEach((id) => { const el = document.getElementById(id); if (el) snap[id] = el.value; });
+      return snap;
+    }
+    function restoreFilterUI(snap) {
+      if (!snap) return;
+      Object.keys(snap).forEach((id) => { const el = document.getElementById(id); if (el) el.value = snap[id]; });
+    }
+
+    function clearFilters() {
+      STATE.filter = {
+        search:'', country_id:'', route_id:'', class_id:'', section:'',
+        start_min:'', start_max:'', dur_min:'', dur_max:'',
+        stops_min:'', stops_max:'',
+        conductor:'', service_type:'', source:'', coord_source:'',
+        sort_by:'', sort_dir:'DESC',
+        dev: false,
+      };
+      // Push the cleared values back into the UI inputs/selects.
+      ['f-search','f-country','f-route','f-section','f-class',
+       'f-startMin','f-startMax','f-durMin','f-durMax','f-stopsMin','f-stopsMax',
+       'f-conductor','f-type','f-source','f-playable'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      STATE.page = 0;
+      search();
+    }
+
+    function showSearching() {
+      const body = document.getElementById('body');
+      body.innerHTML =
+        '<tr><td colspan="' + COLS.length + '" style="text-align:center;color:var(--muted);padding:24px;">' +
+        '<span style="display:inline-flex;align-items:center;gap:10px;">' +
+        '<span style="width:10px;height:10px;border-radius:50%;background:var(--warn);' +
+        'animation:pulse 1.2s infinite alternate;"></span>' + esc(t('shell.timetables.searching', 'Searching…')) + '</span></td></tr>';
+    }
+
+    // Persist the current search so opening a timetable and clicking Back (or
+    // returning via the Timetables tab) restores the same filters + page.
+    const SEARCH_KEY = 'timetablesSearchState';
+    function saveSearchState() {
+      try { sessionStorage.setItem(SEARCH_KEY, JSON.stringify({ filter: STATE.filter, page: STATE.page })); } catch (e) {}
+    }
+    function restoreSearchState() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem(SEARCH_KEY) || 'null');
+        if (s && s.filter) { STATE.filter = { ...STATE.filter, ...s.filter }; STATE.page = s.page || 0; return true; }
+      } catch (e) {}
+      return false;
+    }
+    // Push STATE.filter into the filter chrome (used after restoring a saved
+    // search, since the normal render() seeds the inputs from the DOM, not STATE).
+    function writeFiltersToUI() {
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+      const f = STATE.filter;
+      set('f-search', f.search);     set('f-country', f.country_id);
+      syncRouteDropdown();           set('f-route', f.route_id);    // route options depend on country
+      syncSectionDropdown();         set('f-section', f.section);   // section options depend on route
+      set('f-class', f.class_id);
+      set('f-startMin', f.start_min); set('f-startMax', f.start_max);
+      set('f-durMin', f.dur_min);     set('f-durMax', f.dur_max);
+      set('f-stopsMin', f.stops_min); set('f-stopsMax', f.stops_max);
+      set('f-conductor', f.conductor); set('f-type', f.service_type);
+      set('f-source', f.source);       set('f-playable', f.playable);
+    }
+
+    async function search() {
+      const errEl = document.getElementById('err');
+      errEl.style.display = 'none';
+      saveSearchState();
+      showSearching();
+      try {
+        const result = await invoke('timetable_search', {
+          filter: STATE.filter,
+          page: STATE.page,
+          perPage: PAGE_SIZE,
+        });
+        STATE.rows   = result.rows  || [];
+        STATE.rowIds = result.ids   || [];
+        STATE.total  = result.total || 0;
+        buildHead();
+        renderRows();
+        updateFooter();
+      } catch (e) {
+        errEl.textContent = t('shell.timetables.searchFailed', 'search failed: ') + (e && e.toString());
+        errEl.style.display = '';
+        document.getElementById('body').innerHTML = '';
+      }
+    }
+
+    document.getElementById('prev').addEventListener('click', () => {
+      if (STATE.page > 0) { STATE.page--; search(); }
+    });
+    document.getElementById('next').addEventListener('click', () => {
+      const pages = Math.max(1, Math.ceil(STATE.total / PAGE_SIZE));
+      if (STATE.page + 1 < pages) { STATE.page++; search(); }
+    });
+
+    // Rebuild the filter chrome + header in the current language, preserving any
+    // in-progress filter values. Called once at startup and again on each
+    // language change (via initPageI18n).
+    function render() {
+      if (!STATE.options) return; // options not loaded yet
+      const snap = snapshotFilterUI();
+      buildFilters();
+      restoreFilterUI(snap);
+      syncRouteDropdown();   // realign route options with the restored country
+      syncSectionDropdown(); // realign section options with the restored route
+      buildHead();
+      renderRows();
+      updateFooter();
+    }
+
+    (async function init() {
+      try {
+        STATE.options = await invoke('timetable_filter_options');
+      } catch (e) {
+        STATE.options = { countries: [], routes: [], classes: [], sections: [] };
+        const errEl = document.getElementById('err');
+        errEl.textContent = t('shell.timetables.filterOptionsFailed', 'filter options failed: ') + (e && e.toString());
+        errEl.style.display = '';
+      }
+      // Pre-filter by route when arrived from route-show (timetables.html?route_id=N).
+      // A ?route_id= deep-link (from route-show) takes precedence and starts a
+      // fresh filter on that route; otherwise restore the prior search (Back).
+      const urlRoute = new URLSearchParams(location.search).get('route_id');
+      let restored = false;
+      if (urlRoute) STATE.filter.route_id = urlRoute;
+      else restored = restoreSearchState();
+      // Build static-translated chrome + initial dynamic UI, and re-render on
+      // language change.
+      await initPageI18n(() => render());
+      // Reflect the pre-applied route filter in the dropdown after it's built,
+      // then narrow the section dropdown to that route.
+      if (urlRoute) {
+        const sel = document.getElementById('f-route');
+        if (sel) sel.value = urlRoute;
+        syncSectionDropdown();
+      } else if (restored) {
+        writeFiltersToUI(); // populate the chrome from the restored search
+      }
+      await search();
+    })();
+  </script>
+</body>
+</html>

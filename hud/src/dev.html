@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Dev</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
+  <style>
+    /* Sub-tab strip — same look as weather.html's sub-tabs. */
+    .subtabs { display: flex; gap: 4px; margin: 6px 0 16px 0; border-bottom: 1px solid var(--border); }
+    .subtabs button {
+      background: transparent; border: 0; border-bottom: 2px solid transparent;
+      color: var(--muted); padding: 8px 14px; cursor: pointer;
+      font-size: 0.9rem; transition: color 0.12s, border-color 0.12s;
+    }
+    .subtabs button:hover { color: var(--text); }
+    .subtabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+
+    /* Shared chrome the sub-tab modules expect. */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; max-width: 1280px; }
+    .card h2 { margin: 0 0 12px 0; font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+    .row .grow  { flex: 1; min-width: 200px; }
+    .row .small { flex: 0 0 120px; }
+    label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+    input[type="text"], input[type="number"], select {
+      width: 100%; background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 7px 9px; font-size: 0.9rem;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+    button {
+      background: var(--bg3); color: var(--text); border: 1px solid var(--border);
+      border-radius: 5px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); }
+    button.primary { background: var(--accent); color: #061018; border-color: var(--accent); font-weight: 700; }
+    button.danger  { background: rgba(229,82,82,0.15); color: var(--bad); border-color: rgba(229,82,82,0.4); }
+    button.danger:hover { background: rgba(229,82,82,0.25); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    table thead th { background: var(--bg3); color: var(--accent); padding: 8px 10px; text-align: left; font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    table tbody td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    table tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .actions { white-space: nowrap; }
+    .actions button { padding: 4px 10px; font-size: 0.75rem; margin-right: 4px; }
+    .flash { color: var(--bad); margin: 8px 0; font-size: 0.85rem; min-height: 1.2em; }
+    .flash.ok { color: var(--good); }
+    .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--bg3); color: var(--muted); font-size: 0.72rem; }
+    .fi { margin-right: 6px; }
+    .footer-bar { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 0.85rem; color: var(--muted); }
+    .footer-bar .spacer { flex: 1; }
+    code { background: var(--bg3); padding: 1px 6px; border-radius: 3px; font-size: 0.8rem; }
+    #editCard { display: none; }
+    #editCard.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <h1 style="flex:none;" data-i18n="shell.dev.title">Dev</h1>
+
+      <nav class="subtabs" id="subtabs">
+        <button data-sub="countries"  class="on" data-i18n="nav.countries">Countries</button>
+        <button data-sub="locations" data-i18n="nav.locations">Locations</button>
+        <button data-sub="formations" data-i18n="nav.formations">Formations</button>
+        <button data-sub="api-subscriptions" data-i18n="shell.dev.apiSubscriptions">API Subscriptions</button>
+      </nav>
+
+      <div id="view"></div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { t, ensureLocale } from './shared/i18n.js';
+    import './shared/dev.js';
+    renderNav('dev');
+
+    // Pick the initial sub-tab from ?sub=…, defaulting to countries. Lets
+    // bookmarks deep-link directly to a section.
+    const initial = (() => {
+      const s = new URLSearchParams(location.search).get('sub');
+      return ['countries','locations','formations','api-subscriptions'].includes(s) ? s : 'countries';
+    })();
+
+    const view = document.getElementById('view');
+    const buttons = document.querySelectorAll('#subtabs button');
+
+    async function setSub(s) {
+      buttons.forEach((b) => b.classList.toggle('on', b.getAttribute('data-sub') === s));
+      // Reflect the active section in the URL so refresh keeps the user
+      // where they were and the back button works between sub-tabs.
+      const u = new URL(location.href);
+      u.searchParams.set('sub', s);
+      history.replaceState(null, '', u);
+      view.innerHTML = `<div class="muted" style="padding:24px;">${t('common.loading', 'loading…')}</div>`;
+      try {
+        const mod = await import(`./dev/${s}.js`);
+        mod.mount(view);
+      } catch (e) {
+        view.innerHTML = `<div class="flash" style="padding:16px;">${t('shell.dev.moduleLoadFailed', 'module load failed')}: ${String(e)}</div>`;
+      }
+    }
+    buttons.forEach((b) => b.addEventListener('click', () => setSub(b.getAttribute('data-sub'))));
+    // Await the locale before mounting so the first sub-tab renders translated.
+    ensureLocale().then(() => setSub(initial));
+  </script>
+</body>
+</html>

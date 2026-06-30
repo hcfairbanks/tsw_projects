@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* Shrink-wrap to content so the auto-sizer follows the width we set on the
+       header + body; drag the corner grip to make it wider / taller. */
+    .widget { width: max-content; position: relative; }
+    .resize-handle { position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; z-index: 50;
+      cursor: nwse-resize; background: linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.55) 62%, transparent 62%); }
+    .widget.collapsed .resize-handle { display: none; }
+    .meta { display: flex; justify-content: space-between; align-items: baseline;
+            font-size: 0.7rem; color: var(--muted); margin: -2px 0 8px; }
+    .meta .clock { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--text); font-size: 0.95rem; }
+    .meta .next { text-align: right; } .meta .next b { color: var(--accent); }
+
+    .tt-list { max-height: 320px; overflow-y: auto; margin: 0 -4px; padding: 0 4px; }
+    .tt-list::-webkit-scrollbar { width: 6px; }
+    .tt-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+    /* Stop row is now a flex grid: idx | arrival | departure | name | badge.
+       arr/dep are full HH:MM:SS — fixed-width tabular-nums cells so the
+       columns line up vertically across rows. */
+    .stop { display: flex; align-items: center; gap: 9px; padding: 6px 5px; border-radius: 7px;
+            border-bottom: 1px solid rgba(255,255,255,0.22); cursor: pointer; }
+    .stop:last-child { border-bottom: none; }
+    .stop:hover { background: rgba(255,255,255,0.05); }
+    .stop.selected { background: rgba(120,170,255,0.22); box-shadow: inset 0 0 0 1px var(--accent); }
+    .stop.selected .name { color: #fff; font-weight: 700; }
+    .stop .idx { font-size: 0.62rem; color: var(--muted); width: 16px; flex: none; text-align: right; }
+    .stop .arr,
+    .stop .dep { font-variant-numeric: tabular-nums; font-size: 0.74rem; width: 58px; flex: none; line-height: 1.2; text-align: right; }
+    .stop .arr { color: var(--muted); }
+    .stop .dep { color: var(--text); font-weight: 700; }
+    .stop .name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.9rem; }
+    .stop .badge { font-size: 0.56rem; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 5px;
+                   border-radius: 5px; background: var(--bg2); color: var(--muted); flex: none; }
+    .stop .badge.via { background: rgba(120,170,255,0.16); color: var(--accent); }
+    .stop .badge.wait { background: rgba(255,178,77,0.16); color: var(--warn); }
+    .stop.current { background: rgba(120,170,255,0.14); }
+    .stop.current .name { color: #fff; font-weight: 700; }
+    .stop.passed { opacity: 0.42; }
+
+    /* Column header row mirrors the .stop layout so labels line up over
+       their cells. Non-clickable. */
+    .stop-head { display: flex; align-items: center; gap: 9px; padding: 4px 5px 6px;
+                 border-bottom: 1px solid rgba(255,255,255,0.42); margin-bottom: 4px;
+                 font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
+    .stop-head .idx,
+    .stop-head .arr,
+    .stop-head .dep,
+    .stop-head .name { font-weight: 600; }
+    .stop-head .arr,
+    .stop-head .dep { width: 58px; flex: none; text-align: right; }
+    .stop-head .idx { width: 16px; flex: none; text-align: right; }
+    .stop-head .name { flex: 1; min-width: 0; }
+
+    .empty { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 18px 6px; }
+
+    /* Paper-mode (high-contrast inverted) — toggled by the ◐ button in the
+       header. Solid yellowish paper bg, black text, no transparency.
+       Easier to read in sunlight / on streamed footage. */
+    .widget.invert { background: #f4e9c8 !important; color: #111; border-color: #c5b888; backdrop-filter: none; box-shadow: 0 6px 22px rgba(0,0,0,0.3); }
+    .widget.invert .hdr { border-bottom-color: #c5b888; }
+    .widget.invert .hdr .title { color: #444; }
+    .widget.invert .hdr .dot { background: #c14a44; }
+    .widget.invert .hdr .dot.live { background: #1f8a3a; box-shadow: 0 0 6px rgba(31,138,58,0.6); }
+    .widget.invert .hdr .dot.loading { background: #c98a2c; box-shadow: 0 0 6px rgba(201,138,44,0.5); }
+    .widget.invert .hdr button { background: rgba(0,0,0,0.06); color: #333; }
+    .widget.invert .hdr button:hover { background: rgba(0,0,0,0.14); color: #000; }
+    .widget.invert .meta { color: #555; }
+    .widget.invert .meta .clock { color: #000; }
+    .widget.invert .meta .next b { color: #1f5fa8; }
+    .widget.invert .stop-head { color: #444; border-bottom-color: #6b5a28; }
+    .widget.invert .stop { border-bottom-color: #a89665; }
+    .widget.invert .stop:hover { background: rgba(0,0,0,0.05); }
+    .widget.invert .stop.selected { background: rgba(31,95,168,0.18); box-shadow: inset 0 0 0 1px #1f5fa8; }
+    .widget.invert .stop.selected .name { color: #000; }
+    .widget.invert .stop .idx { color: #777; }
+    .widget.invert .stop .arr { color: #666; }
+    .widget.invert .stop .dep { color: #000; }
+    .widget.invert .stop .name { color: #111; }
+    .widget.invert .stop .badge { background: rgba(0,0,0,0.08); color: #555; }
+    .widget.invert .stop .badge.via { background: rgba(31,95,168,0.18); color: #1f5fa8; }
+    .widget.invert .stop .badge.wait { background: rgba(201,138,44,0.22); color: #8c5a14; }
+    .widget.invert .stop.current { background: rgba(31,95,168,0.12); }
+    .widget.invert .stop.current .name { color: #000; }
+    .widget.invert .empty { color: #666; }
+    .widget.invert .tt-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
+    .widget.invert .loading-overlay { background: rgba(244,233,200,0.55); }
+    /* Resize grip in paper mode — black diagonal instead of the dark-mode
+       white one, so it still reads against the paper background. */
+    .widget.invert .resize-handle {
+      background: linear-gradient(135deg, transparent 45%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0.7) 62%, transparent 62%);
+    }
+    .widget.invert .loading-overlay .lbl { color: #8c5a14; }
+    .widget.invert .loading-overlay .status { color: #555; }
+    .widget.invert .loading-overlay .elapsed { color: #111; }
+
+    /* Invert toggle button styling — inactive: subtle; active: filled in the
+       same paper colour so the button itself previews the mode. */
+    .hdr button.invert-btn { font-size: 12px; line-height: 1; }
+    .widget.invert .hdr button.invert-btn { background: #f4e9c8; color: #111; border: 1px solid #c5b888; }
+  </style>
+</head>
+<body>
+  <div class="widget" id="widget">
+    <div class="hdr">
+      <span class="dot"></span>
+      <span class="title" id="ttTitle"><span data-i18n="shell.widget.schedule">Schedule</span> · <span data-source>OFFLINE</span></span>
+      <span class="btns">
+        <button id="invertBtn" class="invert-btn" title="Toggle paper mode (high-contrast)">◐</button>
+        <button data-collapse title="Collapse">—</button>
+        <button data-close title="Close">×</button>
+      </span>
+    </div>
+    <div class="body">
+      <div class="meta"><span class="clock" id="clock">--:--</span><span class="next" id="nextStop"></span></div>
+      <div class="tt-list" id="list"><div class="empty" data-i18n="shell.widget.connecting">Connecting…</div></div>
+    </div>
+    <div class="resize-handle" id="resize" title="Drag to resize"></div>
+  </div>
+
+  <script src="widget.js"></script>
+  <script>
+    var invoke = window.__TAURI__.core.invoke;
+    var items = [], nearestIdx = -1, selectedIdx = -1, playerPos = null;
+    var curService = null, curId = null, detectedWithoutPos = false;
+
+    // Paper-mode (high-contrast inverted) toggle. Solid yellowish bg + black
+    // text; preference persists across reopens via localStorage.
+    var widgetRoot = document.getElementById('widget');
+    function applyInvert(on) {
+      widgetRoot.classList.toggle('invert', !!on);
+      localStorage.setItem('scheduleInvert', on ? '1' : '0');
+    }
+    applyInvert(localStorage.getItem('scheduleInvert') === '1');
+    document.getElementById('invertBtn').addEventListener('click', function () {
+      applyInvert(!widgetRoot.classList.contains('invert'));
+    });
+
+    // Times come from the DB as "HH:MM:SS" (sometimes "HH:MM") — return the
+    // full hh:mm:ss when available, otherwise pad. User wants seconds visible
+    // because the SS is meaningful (e.g. dwell timing).
+    function hms(s) {
+      if (typeof s !== 'string' || !s.length) return '--:--:--';
+      if (s.length >= 8) return s.slice(0, 8);
+      if (s.length >= 5) return s.slice(0, 5) + ':00';
+      return s;
+    }
+    function haversine(a, b, c, d) {
+      var R = 6371000, p = Math.PI / 180, dLat = (c - a) * p, dLon = (d - b) * p;
+      var x = Math.sin(dLat / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin(dLon / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(x));
+    }
+    var IMPERIAL = false; // set from telemetry distanceUnits
+    function fmtDist(m) {
+      if (m == null) return '';
+      if (IMPERIAL) { var ft = m * 3.28084; return ft >= 5280 ? (ft / 5280).toFixed(1) + ' mi' : Math.round(ft) + ' ft'; }
+      return m >= 1000 ? (m / 1000).toFixed(1) + ' km' : Math.round(m) + ' m';
+    }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function badge(it) {
+      var a = (it.action || '').toUpperCase();
+      if (a.indexOf('WAIT') === 0) return { cls: 'wait', txt: window.widgetTr('shell.widget.badgeWait', 'wait') };
+      if (it.isPassThrough) return { cls: 'via', txt: window.widgetTr('shell.widget.badgeVia', 'via') };
+      return null;
+    }
+    function nameOf(it) {
+      if (it.isPassThrough && !it.location) return window.widgetTr('shell.widget.asIndicated', 'As Indicated');
+      var n = it.location || window.widgetTr('shell.widget.unknown', 'Unknown');
+      return it.isPassThrough ? n + ' [VIA]' : n;
+    }
+    function setSource(txt, live) { window.widget.setLive(!!live); var t = document.querySelector('[data-source]'); if (t) t.textContent = txt; }
+
+    function render() {
+      var list = document.getElementById('list');
+      if (!items.length) { list.innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.noStops', 'No stops.')) + '</div>'; window.widget.sync(); return; }
+      // Header row + stop rows. ARR / DEP are separate fixed-width columns
+      // so they line up across rows; full HH:MM:SS resolution.
+      var head = '<div class="stop-head">' +
+        '<span class="idx">#</span>' +
+        '<span class="arr">' + esc(window.widgetTr('shell.widget.colArrival', 'Arrival')) + '</span>' +
+        '<span class="dep">' + esc(window.widgetTr('shell.widget.colDeparture', 'Departure')) + '</span>' +
+        '<span class="name">' + esc(window.widgetTr('shell.widget.colStop', 'Stop')) + '</span>' +
+        '</div>';
+      list.innerHTML = head + items.map(function (it, i) {
+        var b = badge(it);
+        var cls = 'stop' + (i === selectedIdx ? ' selected' : '') + (i === nearestIdx ? ' current' : '') + (nearestIdx >= 0 && i < nearestIdx ? ' passed' : '');
+        return '<div class="' + cls + '" data-i="' + i + '">' +
+          '<span class="idx">' + (i + 1) + '</span>' +
+          '<span class="arr">' + hms(it.arrival) + '</span>' +
+          '<span class="dep">' + hms(it.departure) + '</span>' +
+          '<span class="name">' + esc(nameOf(it)) + '</span>' +
+          (b ? '<span class="badge ' + b.cls + '">' + b.txt + '</span>' : '') + '</div>';
+      }).join('');
+      Array.prototype.forEach.call(list.querySelectorAll('.stop'), function (el) {
+        el.addEventListener('click', function () { selectStop(+el.getAttribute('data-i')); });
+      });
+      window.widget.sync();
+    }
+
+    // Pick a stop → push it to the shared state so the dashboard shows live
+    // distance to it. Stops without coordinates can't be targeted.
+    function selectStop(i) {
+      selectedIdx = i;
+      var it = items[i];
+      invoke('set_selected_stop', {
+        name: nameOf(it).replace(' [VIA]', ''),
+        lat: (it.latitude != null) ? it.latitude : null,
+        lng: (it.longitude != null) ? it.longitude : null,
+      }).catch(function () {});
+      render();
+    }
+
+    // Game's own distance-to-next-station (DriverAid.TrackData), used when the
+    // catalog has no per-stop coordinates to compute a nearest-stop from.
+    var gameNextDist = null, gameNextName = null;
+
+    // Nearest stop with coordinates = "where you are" in the schedule.
+    function recomputeNearest() {
+      if (!items.length) return;
+      var best = -1, bestD = Infinity;
+      if (playerPos) {
+        for (var i = 0; i < items.length; i++) {
+          var it = items[i];
+          if (it.latitude == null || it.longitude == null) continue;
+          var dd = haversine(playerPos.latitude, playerPos.longitude, it.latitude, it.longitude);
+          if (dd < bestD) { bestD = dd; best = i; }
+        }
+      }
+      if (best !== nearestIdx) { nearestIdx = best; render(); }
+      var el = document.getElementById('nextStop');
+      if (best >= 0) el.innerHTML = esc(window.widgetTr('shell.widget.at', 'at')) + ' <b>' + esc(nameOf(items[best]).replace(' [VIA]', '')) + '</b> · ' + fmtDist(bestD);
+      else if (gameNextDist != null && gameNextDist > 0) el.innerHTML = '<b>' + esc(gameNextName || window.widgetTr('shell.widget.nextStop', 'Next stop')) + '</b> · ' + fmtDist(gameNextDist);
+      else el.textContent = '';
+    }
+
+    async function onTelemetry(d) {
+      if (d) IMPERIAL = d.distanceUnits === 'imperial';
+      if (!d || (!d.connected && !d.loading)) { setSource('OFFLINE', false); window.widget.setStatus('offline'); document.getElementById('list').innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.notConnectedTsw', 'Not connected to TSW.')) + '</div>'; window.widget.sync(); curService = null; return; }
+      if (d && !d.connected && d.loading) { window.widget.setStatus('loading', d.status); return; }
+      // Telemetry live — clear the .is-loading overlay (which would otherwise
+      // dim the schedule body forever) and proceed with the data flow.
+      window.widget.setStatus('live');
+      // In-game time: read HH:MM:SS straight from the ISO string. (Using
+      // new Date().toTimeString() would shift it into the PC's timezone.)
+      if (d.localTime) { var m = /T(\d{2}:\d{2}:\d{2})/.exec(d.localTime); document.getElementById('clock').textContent = m ? m[1] : hhmm(d.localTime); }
+      playerPos = d.playerPosition || playerPos;
+      gameNextDist = (d.distanceToStation != null) ? d.distanceToStation : null;
+      gameNextName = d.nextStation || null;
+
+      var svc = d.currentServiceName || null;
+      // Re-detect if the first lock happened before we had a position —
+      // get_active_timetable returns an arbitrary same-named row without one.
+      if (svc !== curService || (curId && detectedWithoutPos && playerPos)) {
+        detectedWithoutPos = !playerPos;
+        curService = svc; curId = null; items = []; nearestIdx = -1; selectedIdx = -1;
+        invoke('set_selected_stop', { name: '', lat: null, lng: null }).catch(function () {});
+        if (!svc) { setSource('NO SERVICE', false); document.getElementById('ttTitle').innerHTML = esc(window.widgetTr('shell.widget.schedule', 'Schedule')) + ' · <span data-source>NO SERVICE</span>'; document.getElementById('list').innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.noActiveService', 'No active service.')) + '</div>'; window.widget.sync(); return; }
+        try {
+          var res = await invoke('get_active_timetable', { serviceName: svc, lat: playerPos ? playerPos.latitude : null, lng: playerPos ? playerPos.longitude : null });
+          if (res && res.found) {
+            curId = res.id;
+            document.getElementById('ttTitle').innerHTML = esc(res.name) + ' · <span data-source>LIVE</span>';
+            items = await invoke('get_timetable_entries', { id: res.id });
+            render();
+          } else {
+            document.getElementById('ttTitle').innerHTML = esc(window.widgetTr('shell.widget.schedule', 'Schedule')) + ' · <span data-source>NOT FOUND</span>';
+            document.getElementById('list').innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.service', 'Service')) + ' "' + esc(svc) + '"<br>' + esc(window.widgetTr('shell.widget.notInDatabase', 'not in the database.')) + '</div>';
+            window.widget.sync();
+          }
+        } catch (e) {
+          document.getElementById('list').innerHTML = '<div class="empty">' + esc(window.widgetTr('shell.widget.dbError', 'DB error:')) + ' ' + esc(e) + '</div>'; window.widget.sync();
+        }
+      }
+      recomputeNearest();
+    }
+
+    async function poll() {
+      try { await onTelemetry(await invoke('get_telemetry')); } catch (e) { setSource('OFFLINE', false); }
+      setTimeout(poll, 1000);
+    }
+
+    // Resizable: width is pinned on header+body (so the long service title
+    // ellipsis-truncates instead of stretching the panel). Height auto-hugs the
+    // stops (capped by the CSS max-height) until you drag the corner, after
+    // which it's an explicit height — so you can make the panel longer than the
+    // stop list (or shorter, with a scrollbar).
+    var schedW = 420, schedH = null, _hdr, _body, _list;
+    function applySched() {
+      if (!_hdr) { _hdr = document.querySelector('.hdr'); _body = document.querySelector('.body'); _list = document.getElementById('list'); }
+      _hdr.style.width = schedW + 'px';
+      _body.style.width = schedW + 'px';
+      if (schedH != null) { _list.style.height = schedH + 'px'; _list.style.maxHeight = schedH + 'px'; }
+      else { _list.style.height = ''; _list.style.maxHeight = ''; }
+      window.widget.sync();
+    }
+    (function () {
+      var rh = document.getElementById('resize');
+      var dragging = false, sx, sy, sw, sh;
+      rh.addEventListener('mousedown', function (e) {
+        dragging = true; sx = e.screenX; sy = e.screenY;
+        sw = schedW; sh = (schedH != null) ? schedH : document.getElementById('list').offsetHeight;
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        schedW = Math.max(300, sw + (e.screenX - sx));
+        schedH = Math.max(120, sh + (e.screenY - sy));
+        applySched();
+      });
+      window.addEventListener('mouseup', function () { dragging = false; });
+      applySched();
+    })();
+
+    poll();
+  </script>
+</body>
+</html>

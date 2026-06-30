@@ -1,0 +1,151 @@
+/* Shared layout for every shell page (everything except overlay widgets).
+   Pulls in common.css's design tokens. */
+
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
+
+.shell { display: flex; flex-direction: column; height: 100vh; }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+.tabs a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.tabs a:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
+.tabs a.on { background: var(--accent); color: #061018; }
+
+/* Language flag picker, pushed to the right end of the tab strip. */
+.lang-widget { margin-left: auto; position: relative; display: flex; align-items: center; }
+.lang-current {
+  display: flex; align-items: center; gap: 6px;
+  background: transparent; border: 1px solid transparent;
+  padding: 4px 8px; border-radius: 6px; cursor: pointer; color: var(--muted);
+}
+.lang-current:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--border); }
+.lang-current img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; display: block; }
+.lang-current .arrow { font-size: 0.55rem; }
+.lang-menu {
+  position: absolute; right: 0; top: 100%; margin-top: 6px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 4px; min-width: 170px; z-index: 50; display: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.lang-menu.open { display: block; }
+.lang-opt {
+  display: flex; align-items: center; gap: 9px;
+  padding: 6px 8px; border-radius: 5px; cursor: pointer;
+  font-size: 0.85rem; color: var(--text);
+}
+.lang-opt:hover { background: var(--bg3); }
+.lang-opt.active { background: var(--accent); color: #061018; }
+.lang-opt img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; display: block; }
+
+.body { flex: 1; padding: 24px; overflow: auto; }
+
+h1 { color: var(--text); margin: 0 0 16px 0; font-size: 1.4rem; }
+h2 { color: var(--text); margin: 24px 0 12px 0; font-size: 1.1rem; }
+
+.muted { color: var(--muted); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.status-line {
+  margin-top: 16px;
+  padding: 10px 12px;
+  background: var(--bg2);
+  border-radius: 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+.status-line .ok  { color: var(--good); }
+.status-line .err { color: var(--bad); }
+.status-line code { background: var(--bg3); padding: 2px 6px; border-radius: 4px; }
+
+/* Dev-only UI is hidden until shared/dev.js confirms developmentMode is on
+   (which adds .is-dev to <html>). Use `.dev-only` on any button, row, or
+   section that should only be visible to power users. */
+.dev-only { display: none; }
+html.is-dev .dev-only { display: revert; }
+
+/* Full-screen busy overlay (shared/busy.js): spinning ring with a live
+   elapsed-time counter centered inside it. Covers long route import / delete
+   operations. The ring rotates; the timer stays upright (it's overlaid, not
+   a child of the spinning element). */
+.busy-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6, 10, 18, 0.66); backdrop-filter: blur(2px);
+}
+.busy-box { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.busy-spinner { position: relative; width: 120px; height: 120px; }
+.busy-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 7px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--accent);
+  animation: busy-spin 0.9s linear infinite;
+}
+.busy-time {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-variant-numeric: tabular-nums; font-size: 1.45rem; font-weight: 700;
+  color: var(--text); letter-spacing: 0.5px;
+}
+.busy-label { color: var(--muted); font-size: 0.92rem; letter-spacing: 0.3px; }
+@keyframes busy-spin { to { transform: rotate(360deg); } }
+
+/* Inverse of .dev-only: visible normally, hidden once dev mode is on. Used to
+   strip debug/clutter columns (Coord src, Formations, route Id) from the data
+   tables when a power user is in dev mode. */
+html.is-dev .col-dev-hide { display: none; }
+
+/* Drag-to-resize grip appended to each table header cell by shared/colresize.js.
+   Anchors to the sticky <th> (which is its positioning context). */
+.col-resizer {
+  position: absolute; top: 0; right: 0; width: 6px; height: 100%;
+  cursor: col-resize; user-select: none; touch-action: none;
+}
+.col-resizer:hover { background: var(--accent); opacity: 0.55; }
+
+/* Shared Web-HUD server controls (server-controls.js) — used by BOTH the Web HUD
+   and Custom HUDs tabs so the start/stop/status/boot-log section is identical.
+   Ported verbatim from the Web HUD tab (the canonical design). */
+.toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.toolbar label { color: var(--muted); font-size: 0.88rem; }
+.toolbar input[type="number"] { width: 90px; }
+.pill {
+  display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 0.75rem;
+  letter-spacing: 0.6px; text-transform: uppercase; font-weight: 600;
+}
+.pill.live  { background: rgba(95, 211, 122, 0.18); color: var(--good); }
+.pill.warn  { background: rgba(255, 178, 77, 0.18); color: var(--warn); }
+.pill.idle  { background: rgba(255, 255, 255, 0.07); color: var(--muted); }
+.pill.error { background: rgba(255, 90, 82, 0.18);  color: var(--bad); }
+.err-text { color: var(--bad); font-size: 0.85rem; }
+.start-panel {
+  margin-top: 18px; padding: 16px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 8px; max-width: 520px;
+}
+.start-panel .row { display: flex; align-items: center; gap: 10px; }
+.connecting-wrap {
+  display: grid; grid-template-columns: minmax(360px, 1fr) 260px;
+  gap: 18px; max-width: 1000px; margin-top: 16px;
+}
+.connecting-wrap h2 { margin: 0 0 8px 0; font-size: 1rem; }
+.sc-logwrap { margin: 10px 0 4px 0; max-width: 1000px; }
+.sc-logwrap summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; margin-bottom: 6px; }
+.log {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 14px; max-height: 320px; overflow-y: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem; line-height: 1.55; color: var(--text); white-space: pre-wrap;
+}
+.log .empty { color: var(--muted); font-style: italic; }

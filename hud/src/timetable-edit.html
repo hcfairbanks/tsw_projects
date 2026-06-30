@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSW HUD · Edit Timetable</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <link rel="stylesheet" href="shared/shell.css">
+  <style>
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .crumbs a { color: var(--accent); }
+
+    .header-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap; margin: 4px 0 14px 0;
+    }
+    .header-row h1 { margin: 0; }
+    .header-row .actions { display: flex; gap: 8px; }
+    .header-row .actions button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .header-row .actions button.primary { background: var(--accent); color: #061018; border-color: var(--accent); }
+    .header-row .actions button:hover { border-color: var(--accent); }
+
+    .panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .panel h2 {
+      margin: 0 0 12px 0; font-size: 1rem; color: var(--accent);
+      border-bottom: 1px solid var(--border); padding-bottom: 8px;
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    .panel h2 .count { color: var(--muted); font-weight: 500; font-size: 0.85rem; }
+    .panel.wide { max-width: none; }
+    .panel-header { max-width: 760px; }
+
+    .form-grid { display: grid; grid-template-columns: 180px 1fr; gap: 10px 16px; align-items: center; }
+    .form-grid label { color: var(--muted); font-size: 0.88rem; }
+    .form-grid input[type="text"],
+    .form-grid input[type="number"],
+    .form-grid select {
+      background: var(--bg3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 0.88rem;
+      width: 100%;
+    }
+    .form-grid input:focus,
+    .form-grid select:focus { outline: none; border-color: var(--accent); }
+    .form-grid .checkbox { display: flex; align-items: center; gap: 8px; }
+    .form-grid .checkbox input { width: 16px; height: 16px; }
+    .form-grid .checkbox label { color: var(--text); font-size: 0.88rem; cursor: pointer; }
+
+    /* Entries editor: horizontal-scrolling table, per-row save/delete. */
+    .entries-wrap { overflow: auto; max-height: 60vh; border: 1px solid var(--border); border-radius: 6px; }
+    table.entries {
+      width: max-content; border-collapse: collapse; font-size: 0.78rem;
+    }
+    table.entries thead th {
+      position: sticky; top: 0; background: var(--bg3); color: var(--text);
+      text-align: left; padding: 7px 8px;
+      font-size: 0.66rem; letter-spacing: 0.5px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.entries tbody td { padding: 4px 6px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    table.entries tbody tr.dirty { background: rgba(255,178,77,0.08); }
+    table.entries tbody tr.saving { background: rgba(120,170,255,0.06); }
+    table.entries tbody tr.saved { background: rgba(95,211,122,0.06); transition: background 0.6s ease; }
+    table.entries tbody tr.err { background: rgba(255,90,82,0.10); }
+
+    table.entries input, table.entries select {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid transparent; border-radius: 4px;
+      padding: 4px 6px; font-size: 0.78rem;
+      width: 100%; min-width: 70px;
+    }
+    table.entries input[type="number"] { width: 80px; min-width: 80px; }
+    table.entries input.coord { width: 110px; }
+    table.entries input.time { width: 90px; }
+    table.entries select { min-width: 130px; }
+    table.entries input:focus, table.entries select:focus { outline: none; border-color: var(--accent); }
+
+    table.entries .row-actions { display: flex; gap: 4px; white-space: nowrap; }
+    table.entries .row-actions button {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 3px 8px; font-size: 0.72rem; cursor: pointer;
+    }
+    table.entries .row-actions button.danger  { color: var(--bad); border-color: rgba(255,90,82,0.45); }
+    table.entries .row-actions button:hover { border-color: var(--accent); }
+    table.entries tr.new    { background: rgba(95,211,122,0.07); }
+    table.entries tr.marked { background: rgba(255,90,82,0.10); text-decoration: line-through; }
+    table.entries tr.marked input, table.entries tr.marked select { opacity: 0.55; }
+
+    .entries-footer {
+      display: flex; align-items: center; gap: 10px; margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .entries-footer button {
+      background: var(--bg2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 14px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    }
+    .entries-footer button.primary {
+      background: var(--accent); color: #061018; border-color: var(--accent);
+    }
+    .entries-footer button:hover { border-color: var(--accent); }
+    .entries-footer .pending { color: var(--warn); font-size: 0.85rem; }
+    .entries-footer .pending strong { font-weight: 700; }
+    .entries-footer .flash { font-size: 0.85rem; flex: 1; min-width: 200px; text-align: right; }
+    .entries-footer .flash.ok  { color: var(--good); }
+    .entries-footer .flash.err { color: var(--bad); }
+
+    .footer-bar { display: flex; align-items: center; gap: 10px; }
+    .flash { font-size: 0.85rem; flex: 1; }
+    .flash.ok  { color: var(--good); }
+    .flash.err { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="body">
+      <div class="crumbs"><a href="timetables.html" data-i18n="timetables.backToTimetables">← Timetables</a></div>
+
+      <div class="header-row">
+        <h1 id="title" data-i18n="shell.timetables.editTimetable">Edit Timetable</h1>
+        <div class="actions">
+          <button id="cancel" data-i18n="common.cancel">Cancel</button>
+          <button id="save" class="primary" data-i18n="shell.timetables.saveHeader">Save header</button>
+        </div>
+      </div>
+
+      <!-- HEADER -->
+      <div id="editor">
+        <div class="panel panel-header">
+          <h2 data-i18n="shell.timetables.identity">Identity</h2>
+          <form id="form" autocomplete="off" onsubmit="return false;">
+            <div class="form-grid">
+              <label for="f-service_name" data-i18n="timetables.serviceName">Service name</label>
+              <input id="f-service_name" type="text">
+
+              <label for="f-service" data-i18n="timetables.serviceCode">Service code</label>
+              <input id="f-service" type="text" placeholder="short code" data-i18n-placeholder="shell.timetables.shortCode">
+
+              <label for="f-current_service_name" data-i18n="shell.timetables.currentServiceName">Current service name</label>
+              <input id="f-current_service_name" type="text" placeholder="as TSW reports it" data-i18n-placeholder="shell.timetables.asTswReportsIt">
+
+              <label for="f-bound" data-i18n="shell.timetables.bound">Bound</label>
+              <select id="f-bound">
+                <option value="" data-i18n="shell.timetables.unset">(unset)</option>
+                <option value="northbound" data-i18n="timetables.northbound">Northbound</option>
+                <option value="southbound" data-i18n="timetables.southbound">Southbound</option>
+                <option value="eastbound" data-i18n="timetables.eastbound">Eastbound</option>
+                <option value="westbound" data-i18n="timetables.westbound">Westbound</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel panel-header">
+          <h2 data-i18n="shell.timetables.classification">Classification</h2>
+          <div class="form-grid">
+            <label for="f-service_type" data-i18n="timetables.serviceType">Service type</label>
+            <select id="f-service_type">
+              <option value="" data-i18n="shell.timetables.unchanged">(unchanged)</option>
+              <option value="passenger" data-i18n="shell.timetables.passengerLower">passenger</option>
+              <option value="freight" data-i18n="shell.timetables.freightLower">freight</option>
+            </select>
+
+            <label for="f-source" data-i18n="timetables.source">Source</label>
+            <select id="f-source">
+              <option value="" data-i18n="shell.timetables.unchanged">(unchanged)</option>
+              <option value="Timetable" data-i18n="timetables.sourceTimetable">Timetable</option>
+              <option value="Scenario" data-i18n="timetables.sourceScenario">Scenario</option>
+              <option value="Training" data-i18n="timetables.sourceTraining">Training</option>
+            </select>
+
+            <label data-i18n="shell.timetables.playable">Playable</label>
+            <div class="checkbox"><input id="f-playable" type="checkbox"><label for="f-playable" data-i18n="timetables.playableHint">Player can drive this service</label></div>
+
+            <label data-i18n="timetables.conductorCompatible">Conductor compatible</label>
+            <div class="checkbox"><input id="f-conductor" type="checkbox"><label for="f-conductor" data-i18n="shell.timetables.conductorModeSupported">Conductor mode supported</label></div>
+          </div>
+        </div>
+
+        <div class="panel panel-header">
+          <h2 data-i18n="shell.timetables.schedule">Schedule</h2>
+          <div class="form-grid">
+            <label for="f-start_time" data-i18n="timetables.startTime">Start time</label>
+            <input id="f-start_time" type="text" placeholder="HH:MM:SS">
+
+            <label for="f-duration" data-i18n="timetables.duration">Duration</label>
+            <input id="f-duration" type="text" placeholder="HH:MM:SS">
+          </div>
+        </div>
+
+        <div class="panel panel-header">
+          <h2 data-i18n="shell.timetables.relations">Relations</h2>
+          <div class="form-grid">
+            <label for="f-route_id" data-i18n="timetables.route">Route</label>
+            <select id="f-route_id"><option value="" data-i18n="shell.timetables.unset">(unset)</option></select>
+
+            <label for="f-formation_id" data-i18n="formations.formation">Formation</label>
+            <select id="f-formation_id"><option value="" data-i18n="shell.timetables.unset">(unset)</option></select>
+
+            <label for="f-section_id" data-i18n="timetables.section">Section</label>
+            <select id="f-section_id"><option value="" data-i18n="shell.timetables.unset">(unset)</option></select>
+          </div>
+        </div>
+
+        <div class="panel panel-header">
+          <h2 data-i18n="shell.timetables.provenance">Provenance</h2>
+          <div class="form-grid">
+            <label for="f-contributor" data-i18n="timetables.contributor">Contributor</label>
+            <input id="f-contributor" type="text">
+
+            <label for="f-coordinates_contributor" data-i18n="shell.timetables.coordsContributor">Coords contributor</label>
+            <input id="f-coordinates_contributor" type="text">
+
+            <label for="f-service_images" data-i18n="shell.timetables.serviceImages">Service images</label>
+            <input id="f-service_images" type="text" placeholder="comma-separated paths/URLs" data-i18n-placeholder="shell.timetables.commaSeparatedPaths">
+          </div>
+        </div>
+
+        <div class="footer-bar">
+          <span class="flash" id="flash"></span>
+        </div>
+
+        <!-- ENTRIES -->
+        <div class="panel wide">
+          <h2><span data-i18n="shell.timetables.entries">Entries</span> <span class="count" id="entriesCount"></span></h2>
+          <div class="entries-wrap">
+            <table class="entries">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th data-i18n="timetables.action">Action</th>
+                  <th data-i18n="shell.timetables.locationId">Location id</th>
+                  <th data-i18n="shell.timetables.structure">Structure</th>
+                  <th data-i18n="shell.timetables.structNum">Struct #</th>
+                  <th>time1</th>
+                  <th>time2</th>
+                  <th data-i18n="extraction.latitude">Latitude</th>
+                  <th data-i18n="extraction.longitude">Longitude</th>
+                  <th data-i18n="shell.timetables.tileX">Tile X</th>
+                  <th data-i18n="shell.timetables.tileY">Tile Y</th>
+                  <th data-i18n="shell.timetables.apiName">API name</th>
+                  <th data-i18n="timetables.detailsColumn">Details</th>
+                  <th data-i18n="shell.timetables.cargo">Cargo</th>
+                  <th data-i18n="shell.timetables.waitTime">Wait time</th>
+                  <th data-i18n="timetables.coordSource">Coord src</th>
+                  <th data-i18n="shell.timetables.carStopId">CarStop id</th>
+                  <th data-i18n="shell.timetables.trackMarkerId">Track marker id</th>
+                  <th data-i18n="common.actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="entriesBody">
+                <tr><td colspan="19" style="text-align:center;color:var(--muted);padding:24px;" data-i18n="shell.timetables.loadingLower">loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="entries-footer">
+            <button id="addEntry" data-i18n="shell.timetables.addEntry">+ Add entry</button>
+            <button id="revertEntries" data-i18n="shell.timetables.revert">Revert</button>
+            <button id="saveEntries" class="primary" data-i18n="shell.timetables.saveEntries">Save entries</button>
+            <span class="pending" id="pending"></span>
+            <span class="flash" id="entriesFlash"></span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderNav } from './shared/nav.js';
+    import { whenReady } from './shared/dev.js';
+    import { t, ensureLocale } from './shared/i18n.js';
+    renderNav('timetables');
+
+    const { invoke } = window.__TAURI__.core;
+    const id = Number(new URLSearchParams(location.search).get('id') || 0);
+    const flash = document.getElementById('flash');
+
+    // STATE.entries mirrors the server view. _localId is a transient id we
+    // use for new (unsaved) rows + as a stable DOM key while editing. `id`
+    // stays null on new rows until the bulk save creates them in the DB.
+    // `_deleted` rows are kept in the array (struck through in the UI) so the
+    // user can Revert; on Save they're just excluded from the payload (the
+    // backend reconciles by deleting any DB rows whose id isn't in the
+    // submitted list).
+    let STATE = { actions: [], routes: [], formations: [], sections: [], entries: [], original: [], nextLocal: -1 };
+
+    function setFlash(msg, cls) {
+      flash.textContent = msg || '';
+      flash.className = 'flash' + (cls ? ' ' + cls : '');
+    }
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    document.getElementById('cancel').addEventListener('click', () => {
+      location.href = 'timetable-show.html?id=' + id;
+    });
+
+    function populateRouteSelect() {
+      const sel = document.getElementById('f-route_id');
+      sel.innerHTML = '<option value="">' + esc(t('shell.timetables.unset', '(unset)')) + '</option>' + STATE.routes
+        .map(([rid, name]) => `<option value="${rid}">${esc(name)}</option>`).join('');
+    }
+
+    // formations + sections lookups for the dropdowns: we don't ship the full
+    // catalogue (4528 formations) — instead we fetch by route_id once route is
+    // known. For now, populate from the timetable's own related rows + leave
+    // the input free-form via an editable typeahead in a later pass.
+    function populateFormationSelect(currentId, formations) {
+      const sel = document.getElementById('f-formation_id');
+      let opts = '<option value="">' + esc(t('shell.timetables.unset', '(unset)')) + '</option>';
+      const seen = new Set();
+      formations.forEach((f) => {
+        seen.add(f.id);
+        opts += `<option value="${f.id}">${esc(f.name)}${f.class_name ? ' · ' + esc(f.class_name) : ''}</option>`;
+      });
+      if (currentId != null && !seen.has(currentId)) {
+        opts += `<option value="${currentId}">${esc(t('shell.timetables.currentId', '(current: id {id})').replace('{id}', currentId))}</option>`;
+      }
+      sel.innerHTML = opts;
+    }
+    function populateSectionSelect(currentId, sections) {
+      const sel = document.getElementById('f-section_id');
+      let opts = '<option value="">' + esc(t('shell.timetables.unset', '(unset)')) + '</option>';
+      const seen = new Set();
+      sections.forEach((s) => {
+        seen.add(s.id);
+        opts += `<option value="${s.id}">${esc(s.name)}</option>`;
+      });
+      if (currentId != null && !seen.has(currentId)) {
+        opts += `<option value="${currentId}">${esc(t('shell.timetables.currentId', '(current: id {id})').replace('{id}', currentId))}</option>`;
+      }
+      sel.innerHTML = opts;
+    }
+
+    // ---- entries table -----------------------------------------------------
+
+    function actionOptions(currentId) {
+      let opts = '<option value="">' + esc(t('shell.timetables.unset', '(unset)')) + '</option>';
+      let found = false;
+      STATE.actions.forEach(([aid, name]) => {
+        const sel = currentId === aid ? ' selected' : '';
+        if (currentId === aid) found = true;
+        opts += `<option value="${aid}"${sel}>${esc(name)}</option>`;
+      });
+      if (!found && currentId != null) {
+        opts += `<option value="${currentId}" selected>${esc(t('shell.timetables.unknownId', '(unknown id {id})').replace('{id}', currentId))}</option>`;
+      }
+      return opts;
+    }
+
+    function entryRow(e, idx) {
+      // Every editable column on timetable_entries. Read-only: id, timetable_id.
+      const v = (k) => (e[k] == null ? '' : String(e[k]));
+      const cls =
+        (e._deleted ? ' marked' : '') +
+        (e.id == null && !e._deleted ? ' new' : '');
+      return `<tr data-lid="${e._localId}" data-idx="${idx}" class="${cls.trim()}">
+        <td><input type="number" data-k="sort_order" value="${v('sort_order')}" style="width:60px;"></td>
+        <td><select data-k="action_id">${actionOptions(e.action_id)}</select></td>
+        <td><input type="number" data-k="location_id" value="${v('location_id')}"></td>
+        <td><input type="text" data-k="structure" value="${esc(v('structure'))}"></td>
+        <td><input type="text" data-k="structure_number" value="${esc(v('structure_number'))}" style="width:80px;"></td>
+        <td><input type="text" class="time" data-k="time1" value="${esc(v('time1'))}" placeholder="HH:MM:SS"></td>
+        <td><input type="text" class="time" data-k="time2" value="${esc(v('time2'))}" placeholder="HH:MM:SS"></td>
+        <td><input type="text" class="coord" data-k="latitude" value="${esc(v('latitude'))}"></td>
+        <td><input type="text" class="coord" data-k="longitude" value="${esc(v('longitude'))}"></td>
+        <td><input type="number" data-k="tile_x" value="${v('tile_x')}"></td>
+        <td><input type="number" data-k="tile_y" value="${v('tile_y')}"></td>
+        <td><input type="text" data-k="api_name" value="${esc(v('api_name'))}"></td>
+        <td><input type="text" data-k="details" value="${esc(v('details'))}"></td>
+        <td><input type="text" data-k="cargo" value="${esc(v('cargo'))}"></td>
+        <td><input type="text" data-k="waiting_time" value="${esc(v('waiting_time'))}"></td>
+        <td><input type="text" data-k="coord_source" value="${esc(v('coord_source'))}" style="width:80px;"></td>
+        <td><input type="number" data-k="car_stop_sign_id" value="${v('car_stop_sign_id')}"></td>
+        <td><input type="number" data-k="track_marker_id" value="${v('track_marker_id')}"></td>
+        <td>
+          <div class="row-actions">
+            <button data-act="delete" class="danger" title="${esc(t('shell.timetables.markForDeletion', 'Mark for deletion on next Save entries'))}">${esc(t('common.delete', 'Delete'))}</button>
+          </div>
+        </td>
+      </tr>`;
+    }
+
+    function renderEntries() {
+      const body = document.getElementById('entriesBody');
+      document.getElementById('entriesCount').textContent = '· ' + STATE.entries.length;
+      if (!STATE.entries.length) {
+        body.innerHTML = '<tr><td colspan="19" style="text-align:center;color:var(--muted);padding:24px;">' + esc(t('shell.timetables.noEntriesClickAdd', 'no entries — click + Add entry')) + '</td></tr>';
+        updatePending();
+        return;
+      }
+      body.innerHTML = STATE.entries.map(entryRow).join('');
+      // Sync DOM edits back into STATE.entries so the bulk save always sees
+      // the freshest values. Numeric inputs send "" → null; text → string.
+      body.querySelectorAll('[data-k]').forEach((el) => {
+        const tr = el.closest('tr');
+        const lid = Number(tr.getAttribute('data-lid'));
+        const k = el.getAttribute('data-k');
+        const updateOne = () => {
+          const e = STATE.entries.find((x) => x._localId === lid);
+          if (!e) return;
+          const raw = el.value;
+          if (el.type === 'number' || k === 'action_id') {
+            e[k] = (raw === '' || raw == null) ? null : Number(raw);
+          } else {
+            e[k] = raw;
+          }
+          updatePending();
+        };
+        el.addEventListener('input', updateOne);
+      });
+      body.querySelectorAll('button[data-act="delete"]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tr = btn.closest('tr');
+          const lid = Number(tr.getAttribute('data-lid'));
+          const e = STATE.entries.find((x) => x._localId === lid);
+          if (!e) return;
+          // Local-only deletion. New (unsaved) rows are removed outright;
+          // saved rows get marked and stay in the array until Save commits.
+          if (e.id == null) {
+            STATE.entries = STATE.entries.filter((x) => x._localId !== lid);
+          } else {
+            e._deleted = !e._deleted; // toggle on second click (= unmark)
+          }
+          renderEntries();
+        });
+      });
+      updatePending();
+    }
+
+    function updatePending() {
+      // Count what would change if Save were clicked right now.
+      const adds = STATE.entries.filter((e) => e.id == null && !e._deleted).length;
+      const dels = STATE.entries.filter((e) => e.id != null && e._deleted).length;
+      const upds = STATE.entries.filter((e) => {
+        if (e.id == null || e._deleted) return false;
+        const orig = STATE.original.find((o) => o.id === e.id);
+        if (!orig) return false;
+        return ENTRY_KEYS.some((k) => {
+          const a = e[k] == null ? '' : String(e[k]);
+          const b = orig[k] == null ? '' : String(orig[k]);
+          return a !== b;
+        });
+      }).length;
+      const total = adds + dels + upds;
+      const el = document.getElementById('pending');
+      if (!total) { el.textContent = ''; return; }
+      const parts = [];
+      if (adds) parts.push(`<strong>${adds}</strong> ` + esc(t('shell.timetables.pendingAdd', 'add')));
+      if (upds) parts.push(`<strong>${upds}</strong> ` + esc(upds === 1 ? t('shell.timetables.pendingEdit', 'edit') : t('shell.timetables.pendingEdits', 'edits')));
+      if (dels) parts.push(`<strong>${dels}</strong> ` + esc(dels === 1 ? t('shell.timetables.pendingDelete', 'delete') : t('shell.timetables.pendingDeletes', 'deletes')));
+      el.innerHTML = esc(t('shell.timetables.pending', 'pending: ')) + parts.join(' · ');
+    }
+
+    const ENTRY_KEYS = [
+      'action_id','location_id','sort_order','time1','time2','latitude','longitude',
+      'tile_x','tile_y','api_name','structure','structure_number','details','cargo',
+      'waiting_time','coord_source','car_stop_sign_id','track_marker_id',
+    ];
+
+    function freshEntry() {
+      // Sensible defaults for a brand-new row. sort_order = end of list so
+      // the new row appears at the bottom; everything else null.
+      const e = { id: null, _localId: STATE.nextLocal-- };
+      ENTRY_KEYS.forEach((k) => { e[k] = null; });
+      e.sort_order = STATE.entries.length;
+      return e;
+    }
+
+    document.getElementById('addEntry').addEventListener('click', () => {
+      STATE.entries.push(freshEntry());
+      renderEntries();
+      // Scroll new row into view
+      const tr = document.querySelector('#entriesBody tr:last-child');
+      if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.getElementById('revertEntries').addEventListener('click', () => {
+      // Deep-clone the original snapshot back into STATE.entries.
+      STATE.entries = STATE.original.map((o, i) => {
+        const copy = { _localId: -1000 - i }; // distinct from new-row range
+        ENTRY_KEYS.forEach((k) => { copy[k] = o[k] == null ? null : o[k]; });
+        copy.id = o.id;
+        return copy;
+      });
+      renderEntries();
+      setEntriesFlash(t('shell.timetables.revertedToLastLoad', 'reverted to last load'), 'ok');
+    });
+
+    function setEntriesFlash(msg, cls) {
+      const el = document.getElementById('entriesFlash');
+      el.textContent = msg || '';
+      el.className = 'flash' + (cls ? ' ' + cls : '');
+    }
+
+    document.getElementById('saveEntries').addEventListener('click', async () => {
+      setEntriesFlash(t('shell.timetables.savingLower', 'saving…'));
+      const payload = STATE.entries
+        .filter((e) => !e._deleted)
+        .map((e) => {
+          const o = { id: e.id }; // null for new rows
+          ENTRY_KEYS.forEach((k) => { o[k] = e[k]; });
+          return o;
+        });
+      try {
+        const r = await invoke('entries_save', { timetableId: id, entries: payload });
+        // Reload from backend so STATE.original gets the freshly-minted ids
+        // on the new rows + drops the deleted ones.
+        const d = await invoke('timetable_detail', { id });
+        installEntries(d.entries || []);
+        renderEntries();
+        setEntriesFlash(
+          `${t('shell.timetables.saved', 'saved')} · +${r.inserted} ~${r.updated} -${r.deleted}`,
+          'ok'
+        );
+      } catch (e) {
+        setEntriesFlash(t('shell.timetables.saveFailed', 'save failed: ') + e, 'err');
+      }
+    });
+
+    function installEntries(serverEntries) {
+      // Tag each entry with a stable _localId so renderEntries can DOM-key
+      // rows. Snapshot a deep copy into STATE.original for Revert + dirty
+      // detection.
+      let local = 1;
+      STATE.entries = serverEntries.map((e) => {
+        const copy = Object.assign({ _localId: local++ }, e);
+        return copy;
+      });
+      STATE.original = serverEntries.map((e) => Object.assign({}, e));
+      STATE.nextLocal = -1; // negative ids for newly-added rows
+    }
+
+    // ---- header save -------------------------------------------------------
+
+    document.getElementById('save').addEventListener('click', async () => {
+      const $ = (k) => document.getElementById('f-' + k);
+      const trim = (s) => (s == null ? '' : String(s).trim());
+      const empty = (s) => s === '' || s == null;
+      const txt = (id) => empty(trim($(id).value)) ? null : trim($(id).value);
+      const sel = (id) => empty($(id).value) ? null : $(id).value;
+      const num = (id) => empty(trim($(id).value)) ? null : Number($(id).value);
+      const body = {
+        service_name:           txt('service_name'),
+        service:                txt('service'),
+        current_service_name:   txt('current_service_name'),
+        service_type:           sel('service_type'),
+        source:                 sel('source'),
+        bound:                  sel('bound'),
+        start_time:             txt('start_time'),
+        duration:               txt('duration'),
+        playable:               $('playable').checked,
+        conductor_compatible:   $('conductor').checked,
+        route_id:               num('route_id'),
+        formation_id:           num('formation_id'),
+        section_id:             num('section_id'),
+        contributor:            txt('contributor'),
+        coordinates_contributor: txt('coordinates_contributor'),
+        service_images:         txt('service_images'),
+      };
+      setFlash(t('shell.timetables.savingHeader', 'saving header…'));
+      try {
+        await invoke('timetable_update', { id, body });
+        setFlash(t('shell.timetables.headerSaved', 'header saved'), 'ok');
+      } catch (e) {
+        setFlash(t('shell.timetables.headerSaveFailed', 'header save failed: ') + e, 'err');
+      }
+    });
+
+    // ---- initial load ------------------------------------------------------
+
+    async function load() {
+      if (!id) { setFlash(t('shell.timetables.noIdInUrl', 'no id in URL'), 'err'); return; }
+      setFlash(t('shell.timetables.loadingLower', 'loading…'));
+      try {
+        const [d, actions, opts] = await Promise.all([
+          invoke('timetable_detail', { id }),
+          invoke('actions_list'),
+          invoke('timetable_filter_options'),
+        ]);
+        STATE.actions = actions || [];
+        STATE.routes  = opts.routes || [];
+        installEntries(d.entries || []);
+
+        const tt = d.timetable || {};
+        document.getElementById('title').textContent =
+          t('shell.timetables.editPrefix', 'Edit · ') + (tt.service_name || tt.service || tt.current_service_name || t('shell.timetables.untitled', '(untitled)'));
+
+        const $ = (k) => document.getElementById('f-' + k);
+        $('service_name').value             = tt.service_name || '';
+        $('service').value                  = tt.service || '';
+        $('current_service_name').value     = tt.current_service_name || '';
+        $('bound').value                    = tt.bound || '';
+        $('service_type').value             = tt.service_type || '';
+        $('source').value                   = tt.source || '';
+        $('start_time').value               = tt.start_time || '';
+        $('duration').value                 = tt.duration || '';
+        $('playable').checked               = tt.playable === 1 || tt.playable === true;
+        $('conductor').checked              = tt.conductor_compatible === 1 || tt.conductor_compatible === true;
+        populateRouteSelect();
+        $('route_id').value                 = tt.route_id != null ? tt.route_id : '';
+        populateFormationSelect(tt.formation_id, d.formations || []);
+        $('formation_id').value             = tt.formation_id != null ? tt.formation_id : '';
+        populateSectionSelect(tt.section_id, d.sections || []);
+        $('section_id').value               = tt.section_id != null ? tt.section_id : '';
+        $('contributor').value              = tt.contributor || '';
+        $('coordinates_contributor').value  = tt.coordinates_contributor || '';
+        $('service_images').value           = tt.service_images || '';
+
+        renderEntries();
+        setFlash('');
+      } catch (e) {
+        setFlash(t('shell.timetables.loadFailed', 'load failed: ') + e, 'err');
+      }
+    }
+
+    // dev.js (whenReady) gates on dev-mode detection; the locale is loaded by
+    // nav.js, which also re-translates static [data-i18n] markup on language
+    // change. Ensure the locale is ready before we build dynamic chrome.
+    Promise.all([whenReady(), ensureLocale()]).then(load);
+  </script>
+</body>
+</html>
