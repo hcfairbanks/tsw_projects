@@ -1,3 +1,0 @@
-pyautogui
-opencv-python
-Pillow

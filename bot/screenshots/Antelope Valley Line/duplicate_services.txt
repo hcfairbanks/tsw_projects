@@ -1,4 +1,0 @@
-Service 039 | DUPLICATE | LA Union - Metrolink CMF (Non-Revenue) 20:23 00:35 | Train 1 | EMD F125 Metrolink
-Service 001 | DUPLICATE | LA Union - Metrolink CMF (Non-Revenue) 05:21 00:17 | Train 4 | EMD F125 Metrolink
-Service 002 | DUPLICATE | LA Union - Metrolink CMF (Non-Revenue) 05:52 00:38 | Train 4 | EMD F125 Metrolink
-Service 039 | DUPLICATE | Metrolink CMF - LA Union (Non-Revenue) 18:30 00:12 | Train 1 | Rotem Bi-Level Cab Car Metrolink

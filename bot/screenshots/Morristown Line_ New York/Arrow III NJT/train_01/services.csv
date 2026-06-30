@@ -1,9 +1,0 @@
-number,page,click,service_id,service_name,time,duration
-86,page 13,click (2373 851),449,449 Hoboken - Gladstone,21:42:00,00:50:00
-87,page 14,click (2373 575),XT57,XT57 Hoboken Yard Move,21:55:00,00:10:00
-88,page 14,click (2373 644),438,438 Gladstone - Hoboken,22:13:00,00:48:00
-89,page 14,click (2373 713),451,451 Hoboken - Gladstone,22:47:00,00:50:00
-90,page 14,click (2373 782),440,440 Gladstone - Hoboken,23:30:00,00:48:00
-91,page 14,click (2373 851),453,453 Hoboken - Gladstone,23:54:00,00:48:00
-92,page 14,click (2373 920),XT59,XT59 Hoboken Yard Move,00:28:00,00:05:00
-93,page 15,click (2373 851),442,442 Gladstone - Hoboken,00:34:00,00:45:00

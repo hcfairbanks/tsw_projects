@@ -1,2 +1,0 @@
-Service 004 | DUPLICATE | TGV 9854 Bruxelles Midi 06:36 00:33 | Train 1 | TGV Duplex
-Service 051 | DUPLICATE | Return to Depot 21:10 00:03 | Train 1 | TGV Duplex
