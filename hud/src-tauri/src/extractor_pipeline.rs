@@ -886,6 +886,24 @@ pub fn run_pak(
                     crate::extractor_db_writer::write_timetable_coordinates(
                         &tx, tid, &blob, source,
                     )?;
+                    // Travel direction from the path (first → last point),
+                    // stored as `bound`. The per-stop car-stop resolver needs
+                    // it to disambiguate the TWO signs on a through-platform
+                    // (one at each end); without a direction it picks the wrong
+                    // end and the distance-to-stop comes up ~a platform-length
+                    // short. Dominant axis → compass bearing, mirroring hud-go's
+                    // computeBound.
+                    if let (Some(a), Some(b)) = (path.first(), path.last()) {
+                        let d_lat = b.latitude - a.latitude;
+                        let d_lng = b.longitude - a.longitude;
+                        let bound = if d_lat.abs() >= d_lng.abs() {
+                            if d_lat > 0.0 { "northbound" } else { "southbound" }
+                        } else if d_lng > 0.0 { "eastbound" } else { "westbound" };
+                        let _ = tx.execute(
+                            "UPDATE timetables SET bound = ?1 WHERE id = ?2",
+                            rusqlite::params![bound, tid],
+                        );
+                    }
                     // Convert service_path::ServiceCoord → output_format::ServiceCoord
                     // (same wire shape; separate types so the path crate doesn't pull
                     // in serde features the output crate needs).

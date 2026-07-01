@@ -678,8 +678,14 @@ pub fn get_timetable_entries(id: i64) -> Result<Value, String> {
         .query_row("SELECT COALESCE(LOWER(TRIM(bound)),'') FROM timetables WHERE id=?1", [id], |r| r.get(0))
         .unwrap_or_default();
     let mut car_coord: std::collections::HashMap<i64, (f64, f64)> = std::collections::HashMap::new();
+    // ALL car-stop signs per entry (every max_rail_vehicles variant), so the
+    // widget can re-pick by the LIVE consist length at runtime — the same
+    // `car_stop_signs[]` contract db::map_route_data gives the desktop HUD and
+    // hud-go's map_data.go gives its HUD. `car_coord` keeps the stored-car_count
+    // snug-fit as the default; the array drives applyDynamicStopCoords.
+    let mut car_signs: std::collections::HashMap<i64, Vec<serde_json::Value>> = std::collections::HashMap::new();
     if let Some(rid) = route_id {
-        let sql = "SELECT te.id, css.latitude, css.longitude \
+        let sql = "SELECT te.id, css.latitude, css.longitude, css.max_rail_vehicles \
              FROM timetable_entries te JOIN locations l ON l.id=te.location_id \
              JOIN car_stop_signs css ON css.route_id=?1 \
                AND css.platform_name = TRIM(l.name || ' ' || COALESCE(te.structure,'') || ' ' || COALESCE(te.structure_number,'')) \
@@ -693,10 +699,13 @@ pub fn get_timetable_entries(id: i64) -> Result<Value, String> {
                        WHEN 'eastbound' THEN -css.longitude WHEN 'westbound' THEN css.longitude ELSE 0 END";
         if let Ok(mut st) = c.prepare(sql) {
             if let Ok(rows) = st.query_map(rusqlite::params![rid, id, car_count, bound], |r| {
-                Ok((r.get::<_, i64>(0)?, r.get::<_, f64>(1)?, r.get::<_, f64>(2)?))
+                Ok((r.get::<_, i64>(0)?, r.get::<_, f64>(1)?, r.get::<_, f64>(2)?, r.get::<_, i64>(3)?))
             }) {
-                for (eid, la, lo) in rows.flatten() {
+                for (eid, la, lo, mrv) in rows.flatten() {
                     car_coord.entry(eid).or_insert((la, lo)); // first row per entry = best snug-fit
+                    car_signs.entry(eid).or_default().push(json!({
+                        "max_rail_vehicles": mrv, "latitude": la, "longitude": lo,
+                    }));
                 }
             }
         }
@@ -805,6 +814,14 @@ pub fn get_timetable_entries(id: i64) -> Result<Value, String> {
             };
             m.insert("latitude".into(), json!(coord.map(|(la, _)| la)));
             m.insert("longitude".into(), json!(coord.map(|(_, lo)| lo)));
+            // Full sign set for this stop so the widget can re-pick the coord by
+            // the live vehicle count (applyDynamicStopCoords). Omitted on the
+            // origin/spawn row (its coord is the path start, not a car-stop).
+            if !is_first_wait {
+                if let Some(signs) = car_signs.get(&eid) {
+                    m.insert("car_stop_signs".into(), json!(signs));
+                }
+            }
             m.insert("action".into(), json!(act.clone()));
             // GO VIA and PASS are both pass-through points (train doesn't stop) —
             // flag both so the schedule shows "<name> [VIA]" or "As Indicated".

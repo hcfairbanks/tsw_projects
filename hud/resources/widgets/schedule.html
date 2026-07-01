@@ -128,6 +128,34 @@
     var invoke = window.__TAURI__.core.invoke;
     var items = [], nearestIdx = -1, selectedIdx = -1, playerPos = null;
     var curService = null, curId = null, detectedWithoutPos = false;
+    var curVehicleCount = 0;
+
+    // Re-pick each stop's coordinate from its car_stop_signs[] to match the
+    // LIVE consist length — a longer train stops at a different sign than a
+    // short one (the sign shifts up to a platform-length). Mirrors hud-go's /
+    // the desktop HUD's applyDynamicStopCoords: snug-fit ranking is exact match
+    // → smallest sign that still fits → generic max=0 → (last) a sign too short.
+    // The first WAIT FOR SERVICE row is the spawn point (path start), not a
+    // car-stop, so it's left as the backend set it.
+    function applyDynamicStopCoords() {
+      if (!items.length) return;
+      var seenFirstWait = false;
+      items.forEach(function (it) {
+        if (it.action === 'WAIT FOR SERVICE' && !seenFirstWait) { seenFirstWait = true; return; }
+        var signs = it.car_stop_signs;
+        if (!signs || !signs.length) return;
+        var pick = null, best = Infinity;
+        for (var i = 0; i < signs.length; i++) {
+          var max = signs[i].max_rail_vehicles, score;
+          if (max === curVehicleCount)      score = 0;
+          else if (max > curVehicleCount)   score = max - curVehicleCount;
+          else if (max === 0)               score = 99999;
+          else                              score = 99999 + (curVehicleCount - max);
+          if (score < best) { best = score; pick = signs[i]; }
+        }
+        if (pick) { it.latitude = pick.latitude; it.longitude = pick.longitude; }
+      });
+    }
 
     // Paper-mode (high-contrast inverted) toggle. Solid yellowish bg + black
     // text; preference persists across reopens via localStorage.
@@ -252,6 +280,26 @@
       gameNextDist = (d.distanceToStation != null) ? d.distanceToStation : null;
       gameNextName = d.nextStation || null;
 
+      // Live consist length changed (coupled/uncoupled cars, or first read) →
+      // re-pick every stop's car-stop coordinate for the new length, then push
+      // the refreshed selected-stop coord to the dashboard's distance readout.
+      var vc = (typeof d.vehicleCount === 'number') ? d.vehicleCount : curVehicleCount;
+      if (vc !== curVehicleCount && items.length) {
+        curVehicleCount = vc;
+        applyDynamicStopCoords();
+        render();
+        if (selectedIdx >= 0 && items[selectedIdx]) {
+          var s = items[selectedIdx];
+          invoke('set_selected_stop', {
+            name: nameOf(s).replace(' [VIA]', ''),
+            lat: (s.latitude != null) ? s.latitude : null,
+            lng: (s.longitude != null) ? s.longitude : null,
+          }).catch(function () {});
+        }
+      } else if (vc !== curVehicleCount) {
+        curVehicleCount = vc;
+      }
+
       var svc = d.currentServiceName || null;
       // Re-detect if the first lock happened before we had a position —
       // get_active_timetable returns an arbitrary same-named row without one.
@@ -266,6 +314,7 @@
             curId = res.id;
             document.getElementById('ttTitle').innerHTML = esc(res.name) + ' · <span data-source>LIVE</span>';
             items = await invoke('get_timetable_entries', { id: res.id });
+            applyDynamicStopCoords();
             render();
           } else {
             document.getElementById('ttTitle').innerHTML = esc(window.widgetTr('shell.widget.schedule', 'Schedule')) + ' · <span data-source>NOT FOUND</span>';

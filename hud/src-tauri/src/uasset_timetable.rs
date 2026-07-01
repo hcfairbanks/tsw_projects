@@ -973,7 +973,14 @@ fn build_schedule(instrs: &[Instruction]) -> Vec<ScheduleItem> {
         // preceding GoTo — split each criterion into its own row.
         if itype == "LoadUnload" && !seen_load_unload {
             let lu = instr;
-            let arr_ticks = if lu.arrival_time > 0 { lu.arrival_time } else { lu.simulated_arrival };
+            // Real scheduled ArrivalTime only — never the SimulatedArrivalTime
+            // estimate. The simulated value is frequently unset or non-monotonic
+            // for a service and fabricated bogus, out-of-order stop times (e.g. a
+            // stop the game leaves blank reading 12:01 before an earlier stop at
+            // 10:08). When there's no real time, arr_ticks stays 0 → ticks_to_hms
+            // yields "" → the schedule shows "--:--:--". (Duration still falls
+            // back to the simulated times — that's a separate compute path.)
+            let arr_ticks = lu.arrival_time;
             let wt    = secs_to_hms(lu.waiting_time_secs);
             let comp_t = if lu.completion_time > 0 { ticks_to_hms(lu.completion_time) } else { String::new() };
             let wait_t = if arr_ticks > 0 && lu.waiting_time_secs > 0 {
@@ -1033,7 +1040,14 @@ fn build_schedule(instrs: &[Instruction]) -> Vec<ScheduleItem> {
 
         if has_lu {
             let lu = &instrs[i + 1];
-            let arr_ticks = if lu.arrival_time > 0 { lu.arrival_time } else { lu.simulated_arrival };
+            // Real scheduled ArrivalTime only — never the SimulatedArrivalTime
+            // estimate. The simulated value is frequently unset or non-monotonic
+            // for a service and fabricated bogus, out-of-order stop times (e.g. a
+            // stop the game leaves blank reading 12:01 before an earlier stop at
+            // 10:08). When there's no real time, arr_ticks stays 0 → ticks_to_hms
+            // yields "" → the schedule shows "--:--:--". (Duration still falls
+            // back to the simulated times — that's a separate compute path.)
+            let arr_ticks = lu.arrival_time;
             let arr_time = ticks_to_hms(arr_ticks);
 
             let (station, struct_type, struct_num) = split_location(dest);
