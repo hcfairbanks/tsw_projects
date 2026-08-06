@@ -55,7 +55,10 @@
       <div class="crumbs"><a href="train-classes.html" data-i18n="shell.trainClasses.backToList">← Train Classes</a></div>
       <div class="header-row">
         <h1 id="title" data-i18n="common.loading">Loading…</h1>
-        <div class="actions"><button id="back" data-i18n="common.back">Back</button></div>
+        <div class="actions">
+          <button id="back" data-i18n="common.back">Back</button>
+          <button id="deleteBtn" class="dev-only" data-i18n="shell.trainClasses.delete" title="Delete this train class from the catalog" style="border-color:var(--bad);color:var(--bad);">Delete</button>
+        </div>
       </div>
       <div id="err" class="err" style="display:none;"></div>
       <div id="panels"></div>
@@ -65,12 +68,31 @@
   <script type="module">
     import { renderNav } from './shared/nav.js';
     import { t, initPageI18n } from './shared/i18n.js';
+    import { showBusy } from './shared/busy.js';
     renderNav('train-classes');
 
     const { invoke } = window.__TAURI__.core;
     const id = Number(new URLSearchParams(location.search).get('id') || 0);
 
     document.getElementById('back').addEventListener('click', () => history.length > 1 ? history.back() : (location.href = 'train-classes.html'));
+
+    // Delete this class from the catalog (dev-only). Unlinks any formations
+    // that reference it (their class_id is nulled) so nothing is left dangling,
+    // then removes the class. For manual catalog pruning.
+    document.getElementById('deleteBtn').addEventListener('click', async () => {
+      const name = (document.getElementById('title').textContent || '').trim() || t('shell.trainClasses.thisClass', 'this class');
+      const msg = t('shell.trainClasses.deleteConfirm', 'Delete train class "{name}"? This removes it from the catalog.').replace('{name}', name);
+      if (!confirm(msg)) return;
+      const err = document.getElementById('err'); err.style.display = 'none';
+      const busy = showBusy(t('shell.trainClasses.deleting', 'Deleting…'));
+      try {
+        await invoke('delete_train_class', { id });
+        location.href = 'train-classes.html';
+      } catch (e) {
+        busy.close();
+        err.textContent = t('shell.trainClasses.deleteFailed', 'Delete failed: ') + e; err.style.display = '';
+      }
+    });
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"]/g,

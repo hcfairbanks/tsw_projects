@@ -5,19 +5,36 @@
 use rusqlite::{Connection, OpenFlags};
 
 pub fn db_path() -> String {
-    // hud now owns its own copy of tsw_hud.db (4 GB, lives at
-    // `hud/resources/db/tsw_hud.db`). Resolution order:
-    //   1) HUD_DB env var (explicit override — keep for ops + tests)
-    //   2) <hud crate>/../resources/db/tsw_hud.db   (the canonical local copy)
-    //   3) <hud crate>/../resources/tsw_hud.db      (flat fallback)
-    // We deliberately no longer fall back to hud-go/ or hud-rust/ — those
-    // legacy locations now drift relative to hud's own copy (the user has
-    // to re-copy when the Go extractor refreshes them). Returning the
-    // expected local path even when it doesn't exist makes the open error
-    // point at the right spot for debugging.
+    // hud owns its own copy of tsw_hud.db, shipped in `resources/db/` NEXT TO
+    // the exe. Resolution order:
+    //   1) HUD_DB env var (explicit override — keep for ops + tests).
+    //   2) <exe dir>/resources/db/tsw_hud.db  (+ flat fallback) — the deployed
+    //      `hud/hud.exe` AND any relocated copy (e.g. the dated desktop release
+    //      bundle) each carry their own resources/ beside the exe. This MUST
+    //      win so a moved/bundled app reads ITS OWN db, not the dev tree's.
+    //   3) <hud crate>/../resources/db/tsw_hud.db  (+ flat) — dev fallback for
+    //      `cargo run` / running straight from target/ where there's no
+    //      adjacent resources/. Uses the compile-time crate dir, so it only
+    //      resolves on the original build machine.
     if let Ok(p) = std::env::var("HUD_DB") {
         return p;
     }
+    // (2) exe-adjacent resources — the portable, relative-to-the-binary path.
+    if let Some(exe_dir) = std::env::current_exe()
+        .ok()
+        .and_then(|p| p.parent().map(|p| p.to_path_buf()))
+    {
+        let res = exe_dir.join("resources");
+        let primary = res.join("db").join("tsw_hud.db");
+        if primary.exists() {
+            return primary.to_string_lossy().into_owned();
+        }
+        let flat = res.join("tsw_hud.db");
+        if flat.exists() {
+            return flat.to_string_lossy().into_owned();
+        }
+    }
+    // (3) dev fallback: crate-relative (compile-time path).
     let crate_root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let resources = crate_root.join("..").join("resources");
     let primary = resources.join("db").join("tsw_hud.db");
@@ -482,7 +499,39 @@ pub fn routes_list() -> Result<Vec<(i64, String, Option<i64>)>, String> {
     Ok(out)
 }
 pub fn train_classes() -> Result<Vec<(i64, String)>, String> {
-    id_name("SELECT DISTINCT class_id, COALESCE(class_name,'') FROM formations WHERE class_id IS NOT NULL AND COALESCE(class_name,'')!='' ORDER BY class_name")
+    // Name comes from the `train_classes` catalog (the canonical class name),
+    // NOT `formations.class_name` (which is the formation's lead-vehicle label
+    // and often differs). Restricted to classes actually used by a formation so
+    // the dropdown only offers classes that appear on some timetable.
+    id_name(
+        "SELECT DISTINCT tc.id, COALESCE(tc.name,'') \
+         FROM train_classes tc \
+         JOIN formations f ON f.class_id = tc.id \
+         WHERE COALESCE(tc.name,'') != '' \
+         ORDER BY tc.name",
+    )
+}
+
+/// (class_id, route_id) pairs — which train classes run on which route, via the
+/// route's formations. Lets the Timetables filter narrow the Train Class
+/// dropdown to the selected route (a class runs on many routes, so this is a
+/// many-to-many list the client filters + dedupes by class_id).
+pub fn class_routes() -> Result<Vec<(i64, i64)>, String> {
+    let c = conn()?;
+    let mut stmt = c
+        .prepare(
+            "SELECT DISTINCT f.class_id, rf.route_id \
+             FROM route_formations rf \
+             JOIN formations f ON f.id = rf.formation_id \
+             WHERE f.class_id IS NOT NULL",
+        )
+        .map_err(|e| e.to_string())?;
+    let rows = stmt
+        .query_map([], |row| Ok((row.get::<_, i64>(0)?, row.get::<_, i64>(1)?)))
+        .map_err(|e| e.to_string())?;
+    let mut out = Vec::new();
+    for r in rows { out.push(r.map_err(|e| e.to_string())?); }
+    Ok(out)
 }
 /// (name, route_id) for every section — route_id lets the Timetables filter
 /// bar narrow the section dropdown to the selected route.

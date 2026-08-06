@@ -557,6 +557,16 @@ fn main() {
                 eprintln!("[db] ensure_schema: {e}");
             }
 
+            // The shell window is declared `visible: false` so it doesn't flash
+            // at the tauri.conf default size and then visibly snap to the
+            // remembered size. Restore the saved size/position while it's still
+            // hidden, THEN reveal it — one clean appearance at the right size.
+            if let Some(win) = app.get_webview_window("shell") {
+                use tauri_plugin_window_state::{StateFlags, WindowExt};
+                let _ = win.restore_state(StateFlags::all());
+                let _ = win.show();
+            }
+
             // Always-on TSW telemetry poller. Runs on its own thread + tokio
             // runtime so widget windows (and the optional web-HUD server) all
             // see live data without needing to flip the Web HUD tab first.
@@ -703,6 +713,7 @@ fn main() {
             widget_cmds::route_geometry,
             widget_cmds::train_classes_list,
             widget_cmds::train_class_detail,
+            widget_cmds::delete_train_class,
             widget_cmds::train_class_thumbnails,
             widget_cmds::custom_huds_list,
             // dev pages

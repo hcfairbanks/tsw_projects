@@ -1114,6 +1114,7 @@ pub struct TimetableFilterOptions {
     pub countries: Vec<(i64, String, String)>, // (id, name, code)
     pub routes:    Vec<(i64, String, Option<i64>)>, // (id, name, country_id)
     pub classes:   Vec<(i64, String)>,
+    pub class_routes: Vec<(i64, i64)>, // (class_id, route_id) — for route-narrowing the class dropdown
     pub sections:  Vec<(String, Option<i64>)>, // (name, route_id)
 }
 
@@ -1124,6 +1125,7 @@ pub async fn timetable_filter_options() -> Result<TimetableFilterOptions, String
             countries: crate::db::country_list()?,
             routes:    crate::db::routes_list()?,
             classes:   crate::db::train_classes()?,
+            class_routes: crate::db::class_routes()?,
             sections:  crate::db::section_names()?,
         })
     })
@@ -2400,7 +2402,9 @@ pub async fn delete_route(route_id: i64) -> Result<RouteDeleteResult, String> {
             .execute("DELETE FROM timetables WHERE route_id = ?1", [route_id])
             .map_err(|e| e.to_string())? as i64;
 
-        // Route-scoped children.
+        // Route-scoped children. `locations` is included: it's keyed by
+        // route_id (schedule-stop names) and was previously missed, leaving
+        // orphaned rows after a route delete.
         for tbl in [
             "route_coordinates",
             "route_markers",
@@ -2409,6 +2413,7 @@ pub async fn delete_route(route_id: i64) -> Result<RouteDeleteResult, String> {
             "car_stop_signs",
             "track_markers",
             "sections",
+            "locations",
         ] {
             let _ = tx.execute(
                 &format!("DELETE FROM {tbl} WHERE route_id = ?1"),
@@ -2419,7 +2424,12 @@ pub async fn delete_route(route_id: i64) -> Result<RouteDeleteResult, String> {
         tx.execute("DELETE FROM routes WHERE id = ?1", [route_id])
             .map_err(|e| e.to_string())?;
 
-        // Sweep orphan formations + now-empty classes (deleteOrphanFormations).
+        // Sweep formations that no longer belong to ANY route/timetable/section
+        // (dead consist records). We deliberately do NOT sweep train_classes:
+        // in this app `train_classes` is a standalone catalog (the Train Classes
+        // page lists every class, populated from pak_rvds / reconcile), so many
+        // legitimate classes — freight wagons, trailer cars, cab cars — have no
+        // formation lead and would be wrongly deleted by a global orphan sweep.
         let _ = tx.execute(
             "DELETE FROM formations \
              WHERE id NOT IN (SELECT formation_id FROM route_formations WHERE formation_id IS NOT NULL) \
@@ -2428,14 +2438,33 @@ pub async fn delete_route(route_id: i64) -> Result<RouteDeleteResult, String> {
                AND id NOT IN (SELECT formation_id FROM timetables WHERE formation_id IS NOT NULL)",
             [],
         );
-        let _ = tx.execute(
-            "DELETE FROM train_classes \
-             WHERE id NOT IN (SELECT class_id FROM formations WHERE class_id IS NOT NULL)",
-            [],
-        );
 
         tx.commit().map_err(|e| e.to_string())?;
         Ok(RouteDeleteResult { route_name, timetables_deleted })
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+/// Delete a single train class from the catalog (manual pruning). Unlinks any
+/// formations that reference it (sets their `class_id` NULL so no formation is
+/// left with a dangling class), removes its electrification rows, then deletes
+/// the class. Does NOT touch the on-disk thumbnail PNG.
+#[tauri::command]
+pub async fn delete_train_class(id: i64) -> Result<(), String> {
+    tokio::task::spawn_blocking(move || -> Result<(), String> {
+        let mut c = open_rw()?;
+        let tx = c.transaction().map_err(|e| e.to_string())?;
+        let _ = tx.execute("UPDATE formations SET class_id = NULL WHERE class_id = ?1", [id]);
+        let _ = tx.execute("DELETE FROM train_class_electrification WHERE train_class_id = ?1", [id]);
+        let n = tx
+            .execute("DELETE FROM train_classes WHERE id = ?1", [id])
+            .map_err(|e| e.to_string())?;
+        if n == 0 {
+            return Err(format!("train class {id} not found"));
+        }
+        tx.commit().map_err(|e| e.to_string())?;
+        Ok(())
     })
     .await
     .map_err(|e| e.to_string())?

@@ -118,9 +118,17 @@ impl Default for HudState {
     }
 }
 
-/// Root for file-browse + load-route. Same idea as hud-go's appDir —
-/// restricts browse to a safe parent. Now scoped to hud's own crate root.
+/// Root for the web-HUD file browser (`/browse`) + `/load-route`. Same idea as
+/// hud-go's appDir — a safe parent to scope browsing to. Prefer the directory
+/// the running exe lives in so a relocated/bundled build browses ITS OWN folder
+/// (route_data/, resources/, …) rather than the compile-time crate path, which
+/// doesn't exist off the build machine. Dev fallback: the crate dir.
 pub fn app_dir() -> PathBuf {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(dir) = exe.parent() {
+            return dir.to_path_buf();
+        }
+    }
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 

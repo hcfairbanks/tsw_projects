@@ -282,6 +282,36 @@
       section.value = stillValid ? prev : '';
     }
 
+    // Train Class dropdown options, optionally narrowed to one route. Names come
+    // straight from STATE.options.classes (the train_classes catalog). When a
+    // route is selected we keep only classes that run on it, using the
+    // class_routes (class_id, route_id) map (a class runs on many routes, so we
+    // filter to the class_ids present for this route).
+    function classOptionsHtml(routeId) {
+      const classes = (STATE.options && STATE.options.classes) || [];
+      const rid = routeId == null ? '' : String(routeId);
+      let list = classes;
+      if (rid) {
+        const pairs = (STATE.options && STATE.options.class_routes) || [];
+        const allowed = new Set(pairs.filter(([, r]) => String(r) === rid).map(([cid]) => cid));
+        list = classes.filter(([id]) => allowed.has(id));
+      }
+      return ['<option value="">' + esc(t('shell.timetables.allClasses', 'All classes')) + '</option>']
+        .concat(list.map(([id, name]) => `<option value="${id}">${esc(name)}</option>`))
+        .join('');
+    }
+
+    // Rebuild #f-class to match the selected route, dropping a now-invalid class.
+    function syncClassDropdown() {
+      const route = document.getElementById('f-route');
+      const cls = document.getElementById('f-class');
+      if (!route || !cls) return;
+      const prev = cls.value;
+      cls.innerHTML = classOptionsHtml(route.value);
+      const stillValid = Array.from(cls.options).some((o) => o.value === prev);
+      cls.value = stillValid ? prev : '';
+    }
+
     function buildFilters() {
       const o = STATE.options;
       const all = t('common.all', 'All');
@@ -291,8 +321,7 @@
         (o.countries || []).map(([id, name, code]) =>
           `<option value="${id}">${esc(name)}${code ? ' (' + esc(code) + ')' : ''}</option>`));
       const routeOpts = routeOptionsHtml(STATE.filter.country_id);
-      const classOpts = ['<option value="">' + esc(t('shell.timetables.allClasses', 'All classes')) + '</option>'].concat(
-        (o.classes || []).map(([id, name]) => `<option value="${id}">${esc(name)}</option>`));
+      const classOpts = classOptionsHtml(STATE.filter.route_id);
       const sectionOpts = sectionOptionsHtml(STATE.filter.route_id);
 
       const f = document.getElementById('filters');
@@ -307,7 +336,7 @@
           <label>${esc(t('timetables.sectionLabel', 'Section:'))}</label>
           <select id="f-section" class="compact">${sectionOpts}</select>
           <label>${esc(t('shell.timetables.trainClassLabel', 'Train Class:'))}</label>
-          <select id="f-class">${classOpts.join('')}</select>
+          <select id="f-class">${classOpts}</select>
         </div>
         <div class="filter-row">
           <label>${esc(t('timetables.startTimeLabel', 'Start:'))}</label>
@@ -372,11 +401,13 @@
       document.getElementById('f-country').addEventListener('change', () => {
         syncRouteDropdown();
         syncSectionDropdown();
+        syncClassDropdown();
         applyFilters(true);
       });
-      // Route change narrows the Section dropdown to that route's sections.
+      // Route change narrows the Section + Train Class dropdowns to that route.
       document.getElementById('f-route').addEventListener('change', () => {
         syncSectionDropdown();
+        syncClassDropdown();
         applyFilters(true);
       });
     }
@@ -535,7 +566,7 @@
       set('f-search', f.search);     set('f-country', f.country_id);
       syncRouteDropdown();           set('f-route', f.route_id);    // route options depend on country
       syncSectionDropdown();         set('f-section', f.section);   // section options depend on route
-      set('f-class', f.class_id);
+      syncClassDropdown();           set('f-class', f.class_id);    // class options depend on route
       set('f-startMin', f.start_min); set('f-startMax', f.start_max);
       set('f-durMin', f.dur_min);     set('f-durMax', f.dur_max);
       set('f-stopsMin', f.stops_min); set('f-stopsMax', f.stops_max);
@@ -585,6 +616,7 @@
       restoreFilterUI(snap);
       syncRouteDropdown();   // realign route options with the restored country
       syncSectionDropdown(); // realign section options with the restored route
+      syncClassDropdown();   // realign class options with the restored route
       buildHead();
       renderRows();
       updateFooter();
@@ -594,7 +626,7 @@
       try {
         STATE.options = await invoke('timetable_filter_options');
       } catch (e) {
-        STATE.options = { countries: [], routes: [], classes: [], sections: [] };
+        STATE.options = { countries: [], routes: [], classes: [], class_routes: [], sections: [] };
         const errEl = document.getElementById('err');
         errEl.textContent = t('shell.timetables.filterOptionsFailed', 'filter options failed: ') + (e && e.toString());
         errEl.style.display = '';
